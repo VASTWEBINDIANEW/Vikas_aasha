@@ -1,0 +1,434 @@
+﻿@using Vastwebmulti.Areas.ADMIN.Models;
+@using Vastwebmulti.Models;
+@using Microsoft.AspNet.Identity;
+
+<style>
+    #myForm input, #myForm select, #myForm textarea {
+        max-width: 100%;
+        width: 100%;
+        border: 1px solid #ccc;
+        height: 36px;
+        margin: 10px 0;
+        padding: 10px;
+        background: #f1f1f1;
+    }
+
+    #myForm input {
+        padding: 6px 10px;
+    }
+
+    .from_redset {
+        padding: 50px 0;
+        width: 60%;
+        margin: auto;
+    }
+
+        .from_redset label {
+            margin: 0;
+        }
+</style>
+@{
+    var userid = User.Identity.GetUserId();
+    VastwebmultiEntities db = new VastwebmultiEntities();
+    var chej = db.rediantdistresponses.ToList();
+    var admin = db.Retailer_Details.Where(s=>s.RetailerId == userid).ToList();
+
+    var adminfirst = admin[0].RetailerName.Split(' ');
+    var firstname = adminfirst[0];
+    var lastname = "";
+    for (int i = 1; i < adminfirst.Length; i++)
+    {
+        lastname += adminfirst[i] + " ";
+    }
+    var email = admin[0].Email;
+    var phoneno = admin[0].Mobile;
+    var address = admin[0].Address;
+    var pincode = admin[0].Pincode;
+    var lendmark = "";
+
+}
+<section class="content" style=" ">
+    <div class="container-fluid">
+
+        <div class="from_redset">
+           
+
+            <form id="myForm" class="page-header-third" action="@Url.Action("Rediantcreate", "Home")" method="post" enctype="multipart/form-data">
+
+                <div class="logo-change" style="margin-top:0px;">
+                    <h2>
+                        Radiant Form of the Agents
+                    </h2>
+
+                </div>
+
+                <div class="col-md-12">
+
+                    <div class="row">
+
+                     
+            <input type="hidden" value="@chej[0].code" name="distributorCode" required placeholder="Enter Distributor Code" />
+       
+
+                        <div class="col-md-6">
+                            <input type="text" name="firstname" required placeholder="Enter Firstname" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" name="lastname" required placeholder="Enter Lastname" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <select name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="date" name="dob" required />
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="email" required placeholder="Enter Email" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" name="phoneno" required placeholder="Enter Mobile No." />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="number" name="altphoneno" required placeholder="Enter Alternate Mobile No." />
+                        </div>
+
+                        <div class="col-md-6">
+                            @*<input type="text" name="address" required placeholder="Enter Address" />*@
+
+                            <textarea  type="text" name="address" required placeholder="Enter Address" ></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="pancard" required placeholder="Enter Pancard No." />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" name="adhaarno" required placeholder="Enter Adhaar No." />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="number" name="pincode" required placeholder="Enter Pin Code" />
+                        </div>
+
+                        <div class="col-md-6">
+                            @*<input type="text" name="landmark" required placeholder="Enter Landmark" />*@
+
+                            <textarea type="text" name="landmark" required placeholder="Enter Landmark" ></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            @Html.DropDownList("state", ViewBag.state as List<SelectListItem>, "Select Your State", new { @class = "form-control", onchange = "districtChanged(this.value);", required = "required" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <select name="district" id="disss" required>
+                                <option value="">Select Your District</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="accountname" required placeholder="Enter Account Name" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" name="accountno" required placeholder="Enter Account No." />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="bankname" required placeholder="Enter Bank Name" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" name="branch" required placeholder="Enter branch" />
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="ifsc" required placeholder="Enter Ifsc Code" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" name="bank_pincode" required placeholder="Enter Bank Pin Code" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="companyname" required placeholder="Enter Company Name" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" name="shopname" required placeholder="Enter Shop Name" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            @*<input type="text" name="shopaddress" required placeholder="Enter Shop Address" />*@
+
+                            <textarea type="text" name="shopaddress" required placeholder="Enter Shop Address" ></textarea>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.DropDownList("shopstate", ViewBag.state as List<SelectListItem>, "Select Your State", new { @class = "form-control", onchange = "districtChanged1(this.value);", required = "required" })
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <select name="shopdistrict" id="disss1" required>
+                                <option value="">Select Shop District</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" name="shopcity" required placeholder="Enter Shop City" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <input type="text" name="shoparea" required placeholder="Enter Shop Area" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" name="shoppincode" required placeholder="Enter Shop incode" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            @Html.DropDownList("mcc", ViewBag.Mcc as List<SelectListItem>, "Select  MCC", new { @class = "form-control", required = "required" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.DropDownList("bussiness", ViewBag.bussinesstype as List<SelectListItem>, "Select  Bussiness Type", new { @class = "form-control", required = "required" })
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Optional</label>
+                            <input type="text" name="gst" placeholder="Enter Gst" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Optional</label>
+                            <input type="text" name="tan" placeholder="Enter Tan" />
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Optional</label>
+                            <input type="text" name="compan" placeholder="Enter Company Pan" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Aadhar front image</label>
+                            <input type="file" name="aadharimage" accept=".jpg" required />
+                        </div>
+
+                    </div>
+                    
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Aadhar back image </label>
+                            <input type="file" name="aadharimageback" accept=".jpg" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Shop license image</label>
+                            <input type="file" name="shoplicenseimage" accept=".jpg"  required />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Cheque image</label>
+                            <input type="file" name="chequeimage" accept=".jpg" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Pan card image</label>
+                            <input type="file" name="pancardimage" accept=".jpg" required />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Passport size image</label>
+                            <input type="file" name="passportsizeimage" accept=".jpg" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Shop image</label>
+                            <input type="file" name="shopimage" accept=".jpg" required />
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <input type="submit" value="Save" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <script>
+                    function validateFile(input) {
+                        var maxSize = 500000; // 500 KB
+
+                        // Check if a file is selected
+                        if (input.files.length > 0) {
+                            // Check file size (in bytes)
+                            if (input.files[0].size > maxSize) {
+                                alert("File size exceeds the maximum allowed size of 500 KB.");
+                                // Clear the file input to allow selecting a new file
+                                input.value = '';
+                            }
+                        }
+                    }
+                </script>
+
+
+
+
+            </form>
+                    <label style="color:red">@ViewBag.message</label>
+                
+
+
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    function districtChanged(id)
+    {
+         $.ajax({
+           url: '@Url.Action("readiantdstss","Home")',
+            type: 'POST',
+              data: { state: id },
+           cache: false,
+             success: function (response) {
+                 var sel = document.getElementById('disss');
+                 sel.innerHTML = "";
+                 var opt1 = document.createElement("option");
+                 opt1.value = "";
+                 opt1.text = "Select District";
+                 sel.appendChild(opt1);
+                 for (var i = 0; i < response.length; i++) {
+                     var opt = document.createElement("option");
+                     opt.value = response[i].id;
+                     opt.text = response[i].dist;
+                     sel.appendChild(opt);
+                 }
+              }
+            });
+    }
+        function districtChanged1(id)
+    {
+         $.ajax({
+           url: '@Url.Action("readiantdstss","Home")',
+            type: 'POST',
+              data: { state: id },
+           cache: false,
+             success: function (response) {
+                 var sel = document.getElementById('disss1');
+                 sel.innerHTML = "";
+                 var opt1 = document.createElement("option");
+                 opt1.value = "";
+                 opt1.text = "Select Shop District";
+                 sel.appendChild(opt1);
+                 for (var i = 0; i < response.length; i++) {
+                     var opt = document.createElement("option");
+                     opt.value = response[i].id;
+                     opt.text = response[i].dist;
+                     sel.appendChild(opt);
+                 }
+              }
+            });
+    }
+    function onSuccessFunction(data) {
+        console.log(data);
+    }
+</script>

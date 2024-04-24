@@ -1,0 +1,127 @@
+﻿@model Vastwebmulti.Areas.ADMIN.Models.optmergeforsell
+@{
+    ViewBag.Title = "sellrechargeoptList";
+}
+@using Vastwebmulti.Models;
+<style>
+    .page-header-third form{
+        display:flex;
+        
+    }
+
+    #OPTCODEOFAPI{
+        width: 200px;
+        height: 34px;
+        margin:3px;
+    }
+    .page-header-third input {
+        width: 100px;
+        margin: 3px;
+    }
+    #OPTCODEOFAPI input {
+        width: 100px;
+        margin: 3px;
+    }
+    .over{
+        height: 240px;
+        overflow: scroll;
+        overflow-y: scroll;
+    }
+    .over2 {
+        height: 400px;
+        overflow: scroll;
+        overflow-y: scroll;
+    }
+    </style>
+<section class="content classrecharge-report" style=" padding:5px 15px;">
+    <div class="page-header-third">
+        @using (Html.BeginForm("merge_opt1", "Home"))
+        {
+            @Html.DropDownList("OPTCODEOFAPI", ViewBag.OPTCODEOFAPI as SelectList, "Select Api Operator")
+            @Html.DropDownList("OPTCODEOFService", ViewBag.OPTCODEOFService as SelectList, "Select Your Operator")
+            <input type="submit" value="Save" />
+        }
+    </div>
+    <div class="page-header-third over">
+
+        <table class="table ">
+            <tr>
+                <th>API OPERATOR</th>
+                <th>API OPERATORCODE</th>
+                <th>MY OPERATOR</th>
+                <th>MY OPERATORCODE</th>
+
+            </tr>
+            @foreach (var i in Model.optmerge)
+            {
+                <tr>
+                    <td>@i.api_operator</td>
+                    <td>@i.api_optcode</td>
+                    <td>@i.self_operator</td>
+                    <td>@i.self_optcode</td>
+                </tr>
+
+            }
+
+        </table>
+    </div> 
+    
+    <div class="over2">
+        <table class="table">
+            <tr>
+                <th>USER</th>
+                <th>USER Email</th>
+                <th>Farm Name</th>
+                <th>Operator</th>
+                <th>Comm %</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var i in Model.optcomm)
+            {
+        <tr>
+            @{
+                VastwebmultiEntities db = new VastwebmultiEntities();
+                var chk = db.Retailer_Details.Where(s => s.RetailerId == i.userid).ToList();
+            }
+
+            @if (chk.Count > 0)
+            {
+                <td>@i.dlm_Name - Retailer</td>
+            }
+            else
+            {
+                <td>@i.dlm_Name - Distributor</td>
+            }
+            <td>@i.Email</td>
+            <td>@i.farmname</td>
+            <td>@i.operator_1</td>
+            <td>@i.comm %</td>
+            <td>@i.status</td>
+
+            @if (i.status == "Pending")
+            {
+                <td>
+                    <a href="@Url.Action("sellrechargeoptUpdate","Home",new { idno=i.idno ,status="Reject"},"")"><button>Reject</button></a>
+                    <a href="@Url.Action("sellrechargeoptUpdate","Home",new { idno=i.idno ,status="Success"},"")"><button>Success</button></a>
+                </td>
+            }
+            else
+            {
+                <td></td>
+
+            }
+        </tr>
+
+            }
+
+        </table>
+    </div>
+</section>
+
+
+
+
+
+
+
