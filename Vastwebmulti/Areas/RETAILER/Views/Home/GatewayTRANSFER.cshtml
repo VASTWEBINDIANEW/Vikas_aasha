@@ -9,6 +9,32 @@
     var totalcharges = ViewBag.totalchargesamount ?? 0;
 }
 <style>
+
+    /* new css  */
+
+
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .retailer-upitransfer .col-md-3 {
+        margin-top: -7px;
+    }
+
+    /* new css  */
+
     .dropdown-menu.datepicker-dropdown.datepicker {
         margin-top: 96px !important;
     }
@@ -130,15 +156,11 @@
             padding-left: 5px;
         }
 
-    .retailer-upitransfer {
-        margin-bottom: 8px;
-        margin-top: -7px;
-    }
 
-        .retailer-upitransfer .col-md-3 .btn.btn-success {
-            background: #eeebeb !important;
-            color: #555 !important;
-        }
+            .retailer-upitransfer .col-md-3 .btn.btn-success {
+                background: #eeebeb !important;
+                color: #555 !important;
+            }
 
     .gatewaytransfer-retailer-date .trypurchasecewq-new input, .gatewaytransfer-retailer-date .trypurchasecewq-new .custom-date-icon {
         border-color: #555 !important;
@@ -214,23 +236,36 @@
     }
 
     @@media screen and (max-width:992px) {
-        .retailer-upitransfer {
-            width: 100% !important;
+        .col-md-8, .col-md-4.servicepaidreport {
+            padding-left: 15px;
+        }
+
+        .gatewaytransfer-class .col-md-12 button {
+            margin-top: 5px;
+        }
+
+        .retailer-upitransfer .col-md-3 {
+            margin-top: -4px;
+        }
+
+        .retailer-upitransfer .col-md-3 {
+            width: 25%;
             float: left;
         }
 
-            .retailer-upitransfer .col-md-3 {
-                width: 25%;
+            .retailer-upitransfer .col-md-3 label, .retailer-upitransfer .col-md-3 input {
+                width: 100%;
                 float: left;
             }
 
-                .retailer-upitransfer .col-md-3 label, .retailer-upitransfer .col-md-3 input {
-                    width: 100%;
-                    float: left;
-                }
-
         .col-md-12.retailer-upitransfer {
             padding: 0;
+        }
+    }
+
+    @@media screen and (max-width:767px) {
+        .allpage-responshivenew {
+            padding: 0px 0;
         }
     }
 
@@ -299,35 +334,39 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page allpage-responshivenew">
-            <ul style="width:auto;float:left;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
+        <div class="page-header-third">
 
-                <li class="fullbodydycolorbg tmw-total-color-one">
-                    Payment Gateway
-                </li>
-            </ul>
-            <div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
-                <div class="col-md-3">
-                    <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
-                </div>
-                <div class="col-md-3">
-                    <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
-                </div>
+            <div class="bread-same-all-page allpage-responshivenew">
+                <ul style="width:auto;float:left;margin:0;">
+                    <li class="smli">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                        </a>
+                    </li>
 
-                <div class="col-md-3">
-                    <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
-                </div>
+                    <li class="fullbodydycolorbg tmw-total-color-one">
+                        Payment Gateway
+                    </li>
+                </ul>
+                <div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
+                    <div class="col-md-3">
+                        <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
+                    </div>
 
-                <div class="col-md-3">
-                    <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
-                </div>
+                    <div class="col-md-3">
+                        <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
+                    </div>
 
+                    <div class="col-md-3">
+                        <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
+                    </div>
+
+                </div>
             </div>
+
         </div>
 
     </div>
@@ -336,239 +375,243 @@
 
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
-                <div class="fund-trasfer-left fund-user-left">
-                    <ul class="nav nav-tabs tabtypeschages" id="tabs">
-                        <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By Payment Gateway</a></li>
-                    </ul>
-                    <div class="width100 float-left ">
-                        <div id="home" class="width100 float-left tab-pane fade active in min-heightresponsive-inhe changeback-four-design" style="background: var(--second-bg-color);min-height:590px;">
-                            <div class="pay-mode">
-                                @using (Html.BeginForm("GatewayTransfer_new", "Home", FormMethod.Post))
-                                {
-                                    <input type="hidden" id="latss" required name="latss" />
-                                    <input type="hidden" id="longloc" required name="longloc" />
-                                    <div class="pay-mode-first paymt-mode-second gatewaytransfer-class">
-                                        <div class="col-md-12">
-                                            <label>Purchase Amount</label>
-                                            @Html.TextBox("txtamt", "", new { @onkeypress = "return isNumberKey(event)", @placeholder = "Enter Purchase Amount", @required = true })
+                <div class="page-header-third">
+                    <div class="fund-trasfer-left fund-user-left">
+                        <ul class="nav nav-tabs tabtypeschages" id="tabs">
+                            <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By Payment Gateway</a></li>
+                        </ul>
+                        <div class="width100 float-left ">
+                            <div id="home" class="width100 float-left tab-pane fade active in min-heightresponsive-inhe changeback-four-design" style="background: var(--second-bg-color);min-height:590px;">
+                                <div class="pay-mode">
+                                    @using (Html.BeginForm("GatewayTransfer_new", "Home", FormMethod.Post))
+                                    {
+                                        <input type="hidden" id="latss" required name="latss" />
+                                        <input type="hidden" id="longloc" required name="longloc" />
+                                        <div class="pay-mode-first paymt-mode-second gatewaytransfer-class">
+                                            <div class="col-md-12">
+                                                <label>Purchase Amount</label>
+                                                @Html.TextBox("txtamt", "", new { @onkeypress = "return isNumberKey(event)", @placeholder = "Enter Purchase Amount", @required = true })
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button type="button" class="fullbodydycolorbg" onclick="proceed()">
+                                                    Proceed
+                                                </button>
+                                                <button type="button" class="pay-mode-edit" style="color: #000;border: 1px solid var(--border-color);background: var(--second-bg-color);">
+                                                    Change
+                                                </button>
+                                            </div>
+                                            <label id="txtmsgerror" style="color:red;width:100%;float:left;"></label>
+                                            <label style="color:red;position:relative;top:5px;">@ViewBag.msg</label>
                                         </div>
-                                        <div class="col-md-12">
-                                            <button type="button" class="fullbodydycolorbg" onclick="proceed()">
-                                                Proceed
-                                            </button>
-                                            <button type="button" class="pay-mode-edit" style="color: #000;border: 1px solid var(--border-color);background: var(--second-bg-color);">
-                                                Change
-                                            </button>
+                                        <div id="showdata" style="display:none;" class="pay-mode-second pay-mode-second-res">
+                                            <div class="responsive-scroll-sate" style="width:100%;float:left;">
+                                                <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
+                                                    <tr>
+                                                        <th>Transaction Mode</th>
+                                                        <th>Charge&nbsp;(%)</th>
+                                                        <th>Total Charge</th>
+                                                        <th>Net Receiving</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Debit Card</td>
+                                                        <td> <label id="txtdebitcardcharge"></label>  %</td>
+                                                        <td> <label id="txtdebitcard_total"></label></td>
+                                                        <td><label id="txtdebitcard_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>RuPay Card</td>
+                                                        <td> <label id="txtrupay"></label>  %</td>
+                                                        <td> <label id="txtrupay_total"></label></td>
+                                                        <td><label id="txtrupay_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Credit Card</td>
+                                                        <td><label id="txtcc"></label>  %</td>
+                                                        <td><label id="txtcc_total"></label></td>
+                                                        <td><label id="txtcc_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Amex Card</td>
+                                                        <td><label id="txtamex"></label>  %</td>
+                                                        <td><label id="txtamex_total"></label></td>
+                                                        <td><label id="txtamex_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>International Card</td>
+                                                        <td><label id="txtic"></label>  %</td>
+                                                        <td><label id="txtic_total"></label></td>
+                                                        <td><label id="txtic_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Net Banking</td>
+                                                        <td> <label id="txtnet"></label>  %</td>
+                                                        <td> <label id="txtnet_total"></label></td>
+                                                        <td><label id="txtnet_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Wallet's</td>
+                                                        <td> <label id="txtwallet"></label>  %</td>
+                                                        <td> <label id="txtwallet_total"></label></td>
+                                                        <td><label id="txtwallet_total_pay"></label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>UPI</td>
+                                                        <td> <label id="txtupi"></label>  %</td>
+                                                        <td> <label id="txtupi_total"></label></td>
+                                                        <td><label id="txtupi_total_pay"></label></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="pay-mobe-pay">
+                                                <button type="submit" class="fullbodydycolorbg">Proceed To Pay</button>
+                                            </div>
                                         </div>
-                                        <label id="txtmsgerror" style="color:red;width:100%;float:left;"></label>
-                                        <label style="color:red;position:relative;top:5px;">@ViewBag.msg</label>
-                                    </div>
-                                    <div id="showdata" style="display:none;" class="pay-mode-second pay-mode-second-res">
-                                        <div class="responsive-scroll-sate" style="width:100%;float:left;">
-                                            <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                                <tr>
-                                                    <th>Transaction Mode</th>
-                                                    <th>Charge&nbsp;(%)</th>
-                                                    <th>Total Charge</th>
-                                                    <th>Net Receiving</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Debit Card</td>
-                                                    <td> <label id="txtdebitcardcharge"></label>  %</td>
-                                                    <td> <label id="txtdebitcard_total"></label></td>
-                                                    <td><label id="txtdebitcard_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>RuPay Card</td>
-                                                    <td> <label id="txtrupay"></label>  %</td>
-                                                    <td> <label id="txtrupay_total"></label></td>
-                                                    <td><label id="txtrupay_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Credit Card</td>
-                                                    <td><label id="txtcc"></label>  %</td>
-                                                    <td><label id="txtcc_total"></label></td>
-                                                    <td><label id="txtcc_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Amex Card</td>
-                                                    <td><label id="txtamex"></label>  %</td>
-                                                    <td><label id="txtamex_total"></label></td>
-                                                    <td><label id="txtamex_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>International Card</td>
-                                                    <td><label id="txtic"></label>  %</td>
-                                                    <td><label id="txtic_total"></label></td>
-                                                    <td><label id="txtic_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Net Banking</td>
-                                                    <td> <label id="txtnet"></label>  %</td>
-                                                    <td> <label id="txtnet_total"></label></td>
-                                                    <td><label id="txtnet_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Wallet's</td>
-                                                    <td> <label id="txtwallet"></label>  %</td>
-                                                    <td> <label id="txtwallet_total"></label></td>
-                                                    <td><label id="txtwallet_total_pay"></label></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>UPI</td>
-                                                    <td> <label id="txtupi"></label>  %</td>
-                                                    <td> <label id="txtupi_total"></label></td>
-                                                    <td><label id="txtupi_total_pay"></label></td>
-                                                </tr>
-                                            </table>
+                                        <div class="pay-mode-third">
+                                            <ol>
+                                                <li>With the payment gateway you can purchase wallet balance and note that the gateway fee will apply.</li>
+                                                <li>Gateway fees and if there is any credit outstanding then the balance after deduction will be fixed in your wallet.</li>
+                                                <li>
+                                                    Please do not refresh and close this page on transaction processing.
+                                                </li>
+                                            </ol>
                                         </div>
-                                        <div class="pay-mobe-pay">
-                                            <button type="submit" class="fullbodydycolorbg">Proceed To Pay</button>
-                                        </div>
-                                    </div>
-                                    <div class="pay-mode-third">
-                                        <ol>
-                                            <li>With the payment gateway you can purchase wallet balance and note that the gateway fee will apply.</li>
-                                            <li>Gateway fees and if there is any credit outstanding then the balance after deduction will be fixed in your wallet.</li>
-                                            <li>
-                                                Please do not refresh and close this page on transaction processing.
-                                            </li>
-                                        </ol>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="fund-trasfer-right fund-user-right">
-                    <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                        <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                            <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-                                <label class="for-change-fund">
-                                    <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">buy gateway</sub></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                </label>
-                            </a>
-                        </li>
-                        <li class="gatewaytransfer-retailer-date gatewaytransfer-pdfexal" style="width: 72%;float: right;margin-top: 4px;padding-right: 5px;">
-                            <div class="row fund-t-dalear" style="margin:0px;">
-                                @using (Html.BeginForm("GatewayTRANSFER", "Home", FormMethod.Post))
-                                {
-                                    <div class="input-daterange input-group">
-                                        <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:1px;", autocomplete = "off" })
-                                            @*<input type="datetime" id="txt_frm_date" name="txt_frm_date" />*@
-                                        </div>
-                                        <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:4px;margin-top:1px !important;", autocomplete = "off" })
-
-                                            @*  <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 0px !important;" />*@
-                                        </div>
-                                        <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive" style="padding:0px;">
-                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:31px;margin-top:0px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                            </button>
-                                        </div>
-                                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-
-                                            <button id="btnPDF">PDF</button>
-                                            <button id="btnExport">Export</button>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </li>
-
-                    </ul>
-                    <div id="tab-1" class="width100 float-left tab-content current changeback-four-design">
-                        <div class="table-responsive table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th style="width:110px">Mode</th>
-                                        <th>Mode&nbsp;Type</th>
-                                        <th>Amount</th>
-                                        <th>Charges</th>
-                                        <th>Net&nbsp;Received</th>
-                                        <th>Bank RRN</th>
-                                        <th>Transaction&nbsp;Time</th>
-                                        <th>Response&nbsp;Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                <div class="page-header-third">
+                    <div class="fund-trasfer-right fund-user-right">
+                        <ul class="nav nav-tabs responsive-sateulce" id="tabs">
+                            <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
+                                <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
+                                    <label class="for-change-fund">
+                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">buy gateway</sub></span>
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </label>
+                                </a>
+                            </li>
+                            <li class="gatewaytransfer-retailer-date gatewaytransfer-pdfexal" style="width: 72%;float: right;margin-top: 4px;padding-right: 5px;">
+                                <div class="row fund-t-dalear" style="margin:0px;">
+                                    @using (Html.BeginForm("GatewayTRANSFER", "Home", FormMethod.Post))
                                     {
-                                        var sts = item.status;
-                                        var code = "";
-                                        var bankrrn = item.errormsg;
-                                        var color = "";
-                                        var margin = "";
-                                        var padding = "";
-                                        var width = "20px";
-                                        if (sts == "Success")
-                                        {
-                                            code = "../../ashok-images/correct.svg";
-                                            bankrrn = item.bankrrnno;
-                                            color = "green";
-                                        }
-                                        else if (sts == "Failed")
-                                        {
-                                            code = "../../ashok-images/closes.svg";
-                                            color = "red";
-                                        }
-                                        else
-                                        {
-                                            code = "../../ashok-images/clock.svg";
-                                            width = "21px;";
-                                            margin = "0";
-                                            padding = "0";
-                                        }
-                                        <tr>
-                                            <td><img src="@code" style="width:@width;margin-right:0px;float:left; background-color:@color;border-radius: 50%;padding: 3px;padding:@padding;margin:@margin;">&nbsp;@item.mode</td>
-                                            <td>@item.PG_TYPE</td>
-                                            <td>@item.amount</td>
-                                            <td>@item.charge</td>
-                                            <td>@item.totalpay</td>
-                                            <td>@bankrrn</td>
-                                            <td>@item.f_date</td>
-                                            <td>@item.resptime</td>
+                                        <div class="input-daterange input-group">
+                                            <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
+                                                <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
+                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                                </div>
+                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:1px;", autocomplete = "off" })
+                                                @*<input type="datetime" id="txt_frm_date" name="txt_frm_date" />*@
+                                            </div>
+                                            <div class="col-md-5 date-sateclassee trypurchasecewq-new" style="padding-left: 0px;">
+                                                <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
+                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                                </div>
+                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #fff; margin-top:4px;margin-top:1px !important;", autocomplete = "off" })
 
-                                        </tr>
+                                                @*  <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 0px !important;" />*@
+                                            </div>
+                                            <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive" style="padding:0px;">
+                                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:31px;margin-top:0px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
+
+                                                <button id="btnPDF">PDF</button>
+                                                <button id="btnExport">Export</button>
+                                            </div>
+                                        </div>
                                     }
-                                    @*<tr>
-                                            <td><img style="height:20px;width:20px;margin-right:3px;float:left; background-color:red;border-radius: 50%;padding: 3px;" src="../../ashok-images/closes.svg">&nbsp;Sanjay Choudhary</td>
-                                            <td>9166940603</td>
-                                            <td>5000</td>
-                                            <td>50</td>
-                                            <td>4950</td>
-                                            <td>18517104506</td>
-                                            <td>ljuyhggv</td>
-                                        </tr>
+                                </div>
+                            </li>
+
+                        </ul>
+                        <div id="tab-1" class="width100 float-left tab-content current changeback-four-design">
+                            <div class="table-responsive table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead style="background-color:whitesmoke;">
                                         <tr>
-                                            <td> <img style="height:20px;width:20px; background-color:green;border-radius: 50%;padding: 3px;" src="../../ashok-images/correct.svg"> &nbsp;Sanjay Choudhary</td>
-                                            <td>9166940603</td>
-                                            <td>5000</td>
-                                            <td>50</td>
-                                            <td>4950</td>
-                                            <td>18517104506</td>
-                                            <td>ljuyhggv</td>
-                                        </tr>*@
-                                </tbody>
-                            </table>
+                                            <th style="width:110px">Mode</th>
+                                            <th>Mode&nbsp;Type</th>
+                                            <th>Amount</th>
+                                            <th>Charges</th>
+                                            <th>Net&nbsp;Received</th>
+                                            <th>Bank RRN</th>
+                                            <th>Transaction&nbsp;Time</th>
+                                            <th>Response&nbsp;Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var sts = item.status;
+                                            var code = "";
+                                            var bankrrn = item.errormsg;
+                                            var color = "";
+                                            var margin = "";
+                                            var padding = "";
+                                            var width = "20px";
+                                            if (sts == "Success")
+                                            {
+                                                code = "../../ashok-images/correct.svg";
+                                                bankrrn = item.bankrrnno;
+                                                color = "green";
+                                            }
+                                            else if (sts == "Failed")
+                                            {
+                                                code = "../../ashok-images/closes.svg";
+                                                color = "red";
+                                            }
+                                            else
+                                            {
+                                                code = "../../ashok-images/clock.svg";
+                                                width = "21px;";
+                                                margin = "0";
+                                                padding = "0";
+                                            }
+                                            <tr>
+                                                <td><img src="@code" style="width:@width;margin-right:0px;float:left; background-color:@color;border-radius: 50%;padding: 3px;padding:@padding;margin:@margin;">&nbsp;@item.mode</td>
+                                                <td>@item.PG_TYPE</td>
+                                                <td>@item.amount</td>
+                                                <td>@item.charge</td>
+                                                <td>@item.totalpay</td>
+                                                <td>@bankrrn</td>
+                                                <td>@item.f_date</td>
+                                                <td>@item.resptime</td>
+
+                                            </tr>
+                                        }
+                                        @*<tr>
+                                                <td><img style="height:20px;width:20px;margin-right:3px;float:left; background-color:red;border-radius: 50%;padding: 3px;" src="../../ashok-images/closes.svg">&nbsp;Sanjay Choudhary</td>
+                                                <td>9166940603</td>
+                                                <td>5000</td>
+                                                <td>50</td>
+                                                <td>4950</td>
+                                                <td>18517104506</td>
+                                                <td>ljuyhggv</td>
+                                            </tr>
+                                            <tr>
+                                                <td> <img style="height:20px;width:20px; background-color:green;border-radius: 50%;padding: 3px;" src="../../ashok-images/correct.svg"> &nbsp;Sanjay Choudhary</td>
+                                                <td>9166940603</td>
+                                                <td>5000</td>
+                                                <td>50</td>
+                                                <td>4950</td>
+                                                <td>18517104506</td>
+                                                <td>ljuyhggv</td>
+                                            </tr>*@
+                                    </tbody>
+                                </table>
+
+                            </div>
 
                         </div>
 
+
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -618,10 +661,12 @@
         margin: 0;
         padding: 0;
     }
+
         .tab-menur ul li {
             width: 50%;
             text-align: center;
         }
+
         .tab-menur ul li {
             float: left;
         }
