@@ -188,6 +188,10 @@
                         {
                             <p style="font-size:15px;margin-left:-7px;margin-top:-3px;font-weight:normal;padding:1px 11px 1px 11px;margin-bottom:0px;border:1px solid #dddddd;" title="View" data-toggle="modal" data-target="#largeModal">@dmtytpe&nbsp;<span style="font-size:12px;font-weight:bold">UPI</span></p>
                         }
+                        else if (item.Trans_type == "Credit Card")
+                        {
+                            <p style="font-size:15px;margin-left:-7px;margin-top:-3px;font-weight:normal;padding:1px 11px 1px 11px;margin-bottom:0px;border:1px solid #dddddd;" title="View" data-toggle="modal" data-target="#largeModal">@dmtytpe&nbsp;<span style="font-size:12px;font-weight:bold">Credit Card</span></p>
+                        }
                         else
                         {
                             <p style="font-size:15px;margin-left:-7px;margin-top:-3px;font-weight:normal;padding:1px 11px 1px 11px;margin-bottom:0px;border:1px solid #dddddd;" title="View" data-toggle="modal" data-target="#largeModal">@dmtytpe&nbsp;<span style="font-size:12px;font-weight:bold">Verify</span></p>
@@ -233,7 +237,7 @@
                 <td>
                     @if (item.status.Contains("REFUND"))
                     {
-                        <p>-@item.rem_comm</p>  
+                        <p>-@item.rem_comm</p>
                     }
                     else
                     {
@@ -289,12 +293,12 @@
 
                 <td class="printbuttoncss">
                     @*@if (item.status.ToUpper().Contains("REFUND") || item.status.ToUpper() == "FAILED")
-                    {
-                        <center style="float:left;">
-                            <button id="but" disabled href="#" style="border:none;background:none;" data-toggle="tooltip" data-placement="bottom" title="Click To Print Generate Invoice"><i class="material-icons">print</i></button>
+                        {
+                            <center style="float:left;">
+                                <button id="but" disabled href="#" style="border:none;background:none;" data-toggle="tooltip" data-placement="bottom" title="Click To Print Generate Invoice"><i class="material-icons">print</i></button>
 
-                        </center>
-                    }*@
+                            </center>
+                        }*@
                     @if (item.status.ToUpper().Contains("SUCCESS"))
                     {
                         <center style="float:left;">

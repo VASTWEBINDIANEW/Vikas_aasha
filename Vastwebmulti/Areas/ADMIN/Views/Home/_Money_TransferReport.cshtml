@@ -204,41 +204,49 @@
                 <p>
                     @if (item.Trans_type == "IMPS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" ||  item.response_output == "Manual SUCCESS")
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                         {
                         <p>IMPS</p>
-                        }
                     }
-                    else if (item.Trans_type == "NEFT")
+                }
+                else if (item.Trans_type == "NEFT")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS"  || item.response_output == "Manual SUCCESS")
-                        {
                         <p>NEFT</p>
-                        }
                     }
-                    else if (item.Trans_type == "WALLET")
+                }
+                else if (item.Trans_type == "WALLET")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" ||  item.response_output == "Manual SUCCESS")
-                        {
                         <p>WALLET</p>
-                        }
                     }
-                    else if (item.Trans_type == "UPI")
+                }
+                else if (item.Trans_type == "UPI")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" ||  item.response_output == "Manual SUCCESS")
-                        {
                         <p>UPI</p>
-                        }
                     }
-                    else
+                }
+                else if (item.Trans_type == "Credit Card")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" ||  item.response_output == "Manual SUCCESS")
-                        {
+                        <p>Credit Card</p>
+                    }
+
+                }
+                else
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    {
                         <p>Verify</p>
                     }
                 }
-                <input type="text" value="@item.trans_id" readonly style="border-color:transparent;background-color:transparent;" />
-     
+                    <input type="text" value="@item.trans_id" readonly style="border-color:transparent;background-color:transparent;" />
+
                     </p>
                     </p>
                 </td>
