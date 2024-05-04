@@ -3,18 +3,18 @@
 @{
     ViewBag.Title = "Retailer_Microatm_rental_report";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
-        VastwebmultiEntities DB1 = new VastwebmultiEntities();
-        var usernname = DB1.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
-        var favimage = "";
-        if (usernname.Count() > 0)
+    VastwebmultiEntities DB1 = new VastwebmultiEntities();
+    var usernname = DB1.Usernicknames.Where(aa => aa.Role == "Retailer").ToList();
+    var favimage = "";
+    if (usernname.Count() > 0)
+    {
+        if (usernname.SingleOrDefault().Role == "Retailer")
         {
-            if (usernname.SingleOrDefault().Role == "Retailer")
-            {
-                favimage = usernname.SingleOrDefault().NickName;
+            favimage = usernname.SingleOrDefault().NickName;
 
-            }
         }
     }
+}
 
 
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
@@ -22,18 +22,6 @@
 
     /* new css  */
 
-    display{
-        display: block;
-        width:50%;
-    }
-    section.content > div:nth-child(1) {
-        padding-bottom: 5px;
-    }
-    .clearfix > div:nth-child(1) {
-        float: right;
-    }
-    Error in parsing value for ‘z-index’. Declaration dropped. FundTransferRetailer:1:1
-    https://recharge.vastwebindia.com/RETAILER/Home/FundTransferRetailer
 
 
     .layoutt-retailer section.content {
@@ -48,15 +36,19 @@
     .card .body {
         padding: 0px;
     }
+
     .table {
         margin-bottom: 0px;
     }
+
     .cardretailerlager {
         margin-bottom: 0;
     }
+
     .cl_set {
         width: 70%;
     }
+
     .col-md-2.despute-search {
         float: left;
         padding-left: 4px;
@@ -70,19 +62,16 @@
 
     .form-iconmy.form-iconmyss {
         z-index: 9;
-
     }
 
-    @@media only screen and (max-width:990px){
+    @@media only screen and (max-width:990px) {
         .dispute-date {
             width: 45%;
         }
-        .card.class-back-tra-fourdesign table{
+
+        .card.class-back-tra-fourdesign table {
             margin-top: 4px;
         }
-
-
-
     }
 
     @@media screen and (max-width:767px) {
@@ -100,23 +89,22 @@
         }
     }
 
-    @@media only screen and (max-width:480px){
+    @@media only screen and (max-width:480px) {
 
         .cl_set {
             width: 100%;
             margin-bottom: 4px;
         }
+
         .dispute-date {
             width: 70%;
         }
+
             .dispute-date.dispute-datelager.datelager-class input {
                 padding-right: 4px;
                 text-align: right;
             }
-
     }
-
-
 </style>
 <section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
     <div class="container-fluid retailerledger-container" style="height:100vh;">
@@ -156,7 +144,7 @@
         </div>
 
         <div class="row clearfix" style="margin:0;">
-            
+
             <div class="page-header-third">
 
                 <div class="col-md-12" style="padding: 0; margin-bottom: 4px;">
@@ -271,7 +259,7 @@
 
         </div>
 
-        
+
     </div>
 </section>
 

@@ -1,4 +1,5 @@
-﻿<style>
+﻿
+<style>
 
     .loader {
         position: fixed;
@@ -80,22 +81,196 @@
     .Physical-Token {
         display: flex;
         align-items: center;
-        width:100%;
+        width: 100%;
     }
+
         .Physical-Token img {
             width: 15px;
             float: left;
             margin-right: 2px;
         }
+
     .myDiv123 {
         margin: 0px 2px;
     }
+
     #psaidregister {
         font-size: 12px;
     }
 
+    .manual_form {
+        width: 100%;
+        float: left;
+    }
 
+    .manual_form1 {
+        padding: 6px;
+        width: 50%;
+        float: left;
+    }
+
+        .manual_form1 button {
+            width: 100%;
+            padding: 6px 0;
+        }
+
+    .manual_form_m label {
+        width: 100%;
+        float: left;
+        padding-top: 5px;
+    }
+
+    .manual_form_m input {
+        width: 100% !important;
+        float: left;
+        padding-top: 5px;
+    }
+
+    .manual_w {
+        width: 50%;
+        float: left;
+        padding: 5px;
+    }
+
+    #full .manual_w span.select2 {
+        width: 100% !important;
+        height: 32px !important;
+    }
+
+    #full .manual_w .selection {
+        width: 100% !important;
+        height: 32px !important;
+        padding: 0;
+    }
+
+    .manual_w .select2-container .select2-selection--single {
+        height: 32px;
+    }
+
+    #full .manual_w .select2-selection__arrow b {
+        position: relative;
+        top: -12px;
+        margin-right: 9px;
+        float: right;
+    }
+    /* Chrome, Safari, Edge, Opera */
+    .manual_w input::-webkit-outer-spin-button,
+    .manual_w input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    .manual_w input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .sub_b {
+        width: 100%;
+        float: left;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+        .sub_b button {
+            padding: 6px 30px;
+        }
+
+    .manual_w [type="radio"]:not(:checked), .manual_w [type="radio"]:checked {
+        position: sticky;
+        left: initial;
+        opacity: 1;
+        float: initial;
+        margin-right: 4px;
+    }
+
+    .manual_w.Gender input {
+        width: auto !important;
+        height: auto;
+        position: sticky;
+    }
+
+    @@media only screen and (max-width:991px) {
+        .col-md-4.tabspage {
+            float: left;
+        }
+    }
 </style>
+
+
+
+<div class="manual_form">
+    <div class="manual_form1">
+        <button>
+            U T I
+        </button>
+    </div>
+    <div class="manual_form1">
+        <button>
+            Manual New Pancard Form
+        </button>
+    </div>
+</div>
+
+<div class="manual_form_m">
+
+    <form action="/" method="post">
+        <div class="manual_w">
+            <label>Married Status Options</label>
+            <select name="marital_status">
+                <option value="">-Select Married Status-</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+            </select>
+        </div>
+
+        <div class="manual_w">
+            <label>Addhar Number</label>
+            <input type="number" name="name" value="" />
+        </div>
+
+        <div class="manual_w Gender">
+            <label>Gender</label>
+            <input type="radio" name="gender" value="male"> Male
+            <input type="radio" name="gender" value="female"> Female
+        </div>
+
+        <div class="manual_w">
+            <label>Name (As Per Addhar)</label>
+            <input type="text" name="name" value="" />
+        </div>
+
+        <div class="manual_w">
+            <label>DOB (As Per Addhar)</label>
+            <input type="date" name="name" value="" />
+        </div>
+
+        <div class="manual_w">
+            <label>Addhar Register Mobile No.</label>
+            <input type="number" name="name" value="" />
+        </div>
+
+        <div class="manual_w">
+            <label>Father Name</label>
+            <input type="text" name="name" value="" />
+        </div>
+
+        <div class="manual_w">
+            <label>customer Email Id </label>
+            <input type="email" name="name" value="" />
+        </div>
+
+        <div class="manual_w">
+            <label>customer Mobile No.</label>
+            <input type="number" name="name" value="" />
+        </div>
+
+        <div class="sub_b">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+</div>
 
 <div class="loader loaderpancard"></div>
 <div id="failedpancard" style="display:none;">
@@ -109,6 +284,7 @@
                     <a href="https://www.psaonline.utiitsl.com/psapanservices/" target="_blank">
                         <button class="uti-img"><img src="~/ashok-images/uti-logo.png" /><span><strong>U T I</strong><span class="pn-log">Login</span></span></button>
                     </a>
+
                 </div>
             </div>
         </div>
@@ -168,6 +344,7 @@
                     <a href="https://www.psaonline.utiitsl.com/psapanservices/" target="_blank">
                         <button class="uti-img"><img src="~/ashok-images/uti-logo.png" /><span><strong>U T I</strong><span class="pn-log">Login</span></span></button>
                     </a>
+
                 </div>
             </div>
         </div>
@@ -335,7 +512,7 @@
                             $('#buttonm1').show();
 
                         }
-                      
+
 
 
                     </script>
@@ -418,7 +595,7 @@
         // Check if the current value is greater than the previous value
 
         // Double the value in the div
-        
+
         const doubledValue = parseInt(div.textContent) + 107;
         if (i == 0) {
             div.textContent = 107;
@@ -443,7 +620,7 @@
             div.textContent = doubledValue.toString();
             i--;
 
-          
+
 
         }
         else {
@@ -467,7 +644,7 @@
 
         const doubledValue = parseInt(div1.textContent) + 72;
         console.log(doubledValue);
-        
+
         if (j == 0) {
             div1.textContent = 72;
             j++;
@@ -495,7 +672,7 @@
 
         }
         else {
-           j = 0;
+            j = 0;
         }
     }
 
@@ -598,7 +775,7 @@
                   $('.loader').show();
              },
                 success: function (data) {
-                    
+
                 var output = JSON.parse(data);
                 $('.loader').hide();
                 var status = output.status;
@@ -875,7 +1052,7 @@
 <script>
         function purchase() {
            var a= $('#ssdd').val();
-          
+
         if (a > 0 || a > 0) {
             $.ajax({
                 url: '@Url.Action("buyUTIToken","PANCARD")',
@@ -883,7 +1060,7 @@
                 data: { amount: $('#ssdd').val() },
                 type: "POST",
                   beforeSend: function() {
-                  
+
              },
                 success: function (data) {
 
@@ -896,10 +1073,10 @@
                         $('#buttokenerror').text(output.ADDINFO);
                     }
                 },
-               
+
         })
-            
-  
+
+
 
         }
         else {

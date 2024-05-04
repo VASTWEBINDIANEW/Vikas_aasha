@@ -5,6 +5,30 @@
 }
 
 <style>
+
+    /* new css  */
+
+
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+
+    /* new css  */
+
     .loaders443 {
         width: 31px;
         height: 30px;
@@ -283,6 +307,21 @@
         }
     }
 
+    @@media screen and (max-width:767px) {
+        .allpage-responshivenew {
+            padding: 0px 0;
+        }
+
+            .allpage-responshivenew ul li {
+                margin-bottom: 6px;
+            }
+
+        .col-md-8, .col-md-4.servicepaidreport {
+            padding-left: 15px;
+        }
+    }
+
+
     @@media screen and (max-width:766px) {
         .retailer-upilastclass-second .fund-user-right ul.responsive-sateulce li {
             width: 100% !important;
@@ -352,6 +391,10 @@
     }
 
     @@media screen and (max-width:480px) {
+        .scan-outer form .col-md-12.col-sm-12.col-xs-12 .col-md-3.col-sm-3.col-xs-3 {
+            padding: 0;
+        }
+
         .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4 {
             width: 50%;
             margin-bottom: 5px;
@@ -397,37 +440,39 @@
             </ul>
         </div>
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page allpage-responshivenew">
-            <ul style="width:auto;float:left;">
-                <li class="smli">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
-                <li class="smli">
-                    <a href="@Url.Action("UPICollection","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Add Wallet By UPI Collection&nbsp;
-                    </a>
-                </li>
-               @* <li><input type="button" id="btnUPIreq" class="btn btn-success" name="btnUPIreq" value="Show Manual UPI REQ" /></li>*@
-            </ul>
-            @*<div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
-                    <div class="col-md-3">
-                        <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
-                    </div>
-                    <div class="col-md-3">
-                        <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
-                    </div>
+        <div class="page-header-third">
+            <div class="bread-same-all-page allpage-responshivenew">
+                <ul style="width:auto;float:left;margin:0;">
+                    <li class="smli">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                        </a>
+                    </li>
+                    <li class="smli">
+                        <a href="@Url.Action("UPICollection","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Add Wallet By UPI Collection&nbsp;
+                        </a>
+                    </li>
+                    @* <li><input type="button" id="btnUPIreq" class="btn btn-success" name="btnUPIreq" value="Show Manual UPI REQ" /></li>*@
+                </ul>
+                @*<div class="col-md-12 retailer-upitransfer" style="float:right;width:auto;">
+                        <div class="col-md-3">
+                            <label>TOTAL SUCCESS</label> <input type="button" class="btn btn-success col-md-12" style="color:white;" value="@totalsuccess" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>TOTAL Pending</label> <input type="button" class="btn btn-warning  col-md-12" style="color:white;" value="@penamount" />
+                        </div>
 
-                    <div class="col-md-3">
-                        <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
-                    </div>
+                        <div class="col-md-3">
+                            <label>TOTAL Failed</label>  <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalfailamnt" />
+                        </div>
 
-                    <div class="col-md-3">
-                        <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
-                    </div>
+                        <div class="col-md-3">
+                            <label>TOTAL Charges</label> <input type="button" class="btn btn-success  col-md-12" style="color:white;" value="@totalcharges" />
+                        </div>
 
-                </div>*@
+                    </div>*@
+            </div>
         </div>
 
     </div>
@@ -436,376 +481,380 @@
 
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
-                <div class="fund-trasfer-left fund-user-left">
+                <div class="page-header-third">
+                    <div class="fund-trasfer-left fund-user-left">
 
-                    @*<ul class="nav nav-tabs tabtypeschages" id="tabs">
-                            @if (UPIQRBASEPRICEset == null)
-                            {
-                                <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By QR Code (UPI)</a></li>
-                            }
-                            else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
-                            {
-
-                                <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Price Base QR Code(UPI)</a></li>
-
-
-                            }
-                        </ul>*@
-                    <div class="width100 float-left ">
-                        @*@if (UPIQRBASEPRICEset == null)
-                            {*@
-                        <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
-                            <div class="scan-outer">
-                                @if (ViewBag.msg == "OK")
+                        @*<ul class="nav nav-tabs tabtypeschages" id="tabs">
+                                @if (UPIQRBASEPRICEset == null)
                                 {
-                                    if (ViewBag.Api == "RADIANT")
+                                    <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Wallet By QR Code (UPI)</a></li>
+                                }
+                                else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
+                                {
+
+                                    <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true" style="font-size: 18px !important;font-weight: 600;">+ Price Base QR Code(UPI)</a></li>
+
+
+                                }
+                            </ul>*@
+                        <div class="width100 float-left ">
+                            @*@if (UPIQRBASEPRICEset == null)
+                                {*@
+                            <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
+                                <div class="scan-outer">
+                                    @if (ViewBag.msg == "OK")
                                     {
-                                        if (ViewBag.set == "OK")
+                                        if (ViewBag.Api == "RADIANT")
                                         {
-                                            using (Html.BeginForm("Add_balance_UPI_Collection", "Home", FormMethod.Post))
+                                            if (ViewBag.set == "OK")
                                             {
-                                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                                        <label>UPI ID</label>
-                                                    </div>
+                                                using (Html.BeginForm("Add_balance_UPI_Collection", "Home", FormMethod.Post))
+                                                {
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                                            <label>UPI ID</label>
+                                                        </div>
 
-                                                    <div class="col-md-6 col-sm-6 col-xs-6">
-                                                        @Html.TextBox("txtupi_id","", new { @class = "form-control", placeholder = "Enter UPI ID", @required = true })
-                                                    </div>
-                                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                                        <button type="submit" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;line-height: 22px;">
+                                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                                            @Html.TextBox("txtupi_id", "", new { @class = "form-control", placeholder = "Enter UPI ID", @required = true })
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                                            <button type="submit" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;line-height: 22px;">
 
-                                                            Verify
+                                                                Verify
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                                            <label>Name</label>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBox("txtupi_name", "", new { @class = "form-control", placeholder = "Enter Name", @required = true })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+
+                                                        <div class="col-md-3 col-sm-3 col-xs-3">
+                                                            <label>Amount</label>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-9 col-xs-9">
+                                                            @Html.TextBox("txtupi_amount", "", new { @class = "form-control", placeholder = "Enter Amount", @type = "number", @required = true })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                                                        <button type="submit" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
+                                                            Submit
                                                         </button>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-                                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                                        <label>Name</label>
-                                                    </div>
-                                                    <div class="col-md-9 col-sm-9 col-xs-9">
-                                                        @Html.TextBox("txtupi_name","", new { @class = "form-control", placeholder = "Enter Name", @required = true })
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-
-                                                    <div class="col-md-3 col-sm-3 col-xs-3">
-                                                        <label>Amount</label>
-                                                    </div>
-                                                    <div class="col-md-9 col-sm-9 col-xs-9">
-                                                        @Html.TextBox("txtupi_amount","", new { @class = "form-control", placeholder = "Enter Amount", @type = "number", @required = true })
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
-                                                    <button  type="submit" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                        Submit
-                                                    </button>
-                                                </div>
-                                            }
-                                            <p id="txtmsg" style="color: red; text-align: center; font-weight: bold; "> </p>
-                                            if (ViewBag.chkmsg == "DONE")
-                                            {
-                                                <p style="color: green; text-align: center; font-weight: bold; ">
-                                                    Your request processed successfully. Please open your UPI app and respond to the request.
-                                                </p>
-                                            }
-                                            else
-                                            {
-                                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.chkmsg </p>
+                                                }
+                                                <p id="txtmsg" style="color: red; text-align: center; font-weight: bold; "> </p>
+                                                if (ViewBag.chkmsg == "DONE")
+                                                {
+                                                    <p style="color: green; text-align: center; font-weight: bold; ">
+                                                        Your request processed successfully. Please open your UPI app and respond to the request.
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.chkmsg </p>
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
-                                }
-                                <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                    <ol>
-                                        <li>You can Not update the amount in your wallet by scanning the QR code.</li>
-                                        <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                        <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                    </ol>
-                                    <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                        <tr>
-                                            <th colspan="2"><center>Charges</center></th>
-                                        </tr>
-                                        <tr>
-                                            <td>Minimum Fix Charge (In Rupees)</td>
-                                            <td>@ViewBag.min&nbsp;₹</td>
-                                        </tr>
-                                        <tr>
-                                            <td> Charges (In Precentage)</td>
-                                            <td>@ViewBag.charge&nbsp;%</td>
-                                        </tr>
-                                    </table>
+                                    else
+                                    {
+                                        <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                    }
+                                    <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
+                                        <ol>
+                                            <li>You can Not update the amount in your wallet by scanning the QR code.</li>
+                                            <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                            <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                        </ol>
+                                        <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
+                                            <tr>
+                                                <th colspan="2"><center>Charges</center></th>
+                                            </tr>
+                                            <tr>
+                                                <td>Minimum Fix Charge (In Rupees)</td>
+                                                <td>@ViewBag.min&nbsp;₹</td>
+                                            </tr>
+                                            <tr>
+                                                <td> Charges (In Precentage)</td>
+                                                <td>@ViewBag.charge&nbsp;%</td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        @* }*@
-                        @*else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
-                            {
+                            @* }*@
+                            @*else if (UPIQRBASEPRICEset != null && UPIQRBASEPRICEset.status == true)
+                                {
 
-                                <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
-                                    <div class="scan-outer">
-                                        @if (ViewBag.set == "NOTOK")
-                                        {
-                                            <div class="" id="contentshowhide" style="margin: 36px;">
-                                                <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
-                                                    @if (cfreeapi != null || phonepeapi != null)
-                                                    {
-                                                        <li class="tab-link active hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
-                                                        <li class="tab-link hovof" style="width: 50%; text-align: center; background: #c1c1c1; cursor: pointer;"><a style="cursor: pointer;" data-toggle="tab" onclick="requestupi_opt()">UPI&nbsp;Request</a></li>
-                                                        if (phonepeapi != null)
+                                    <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
+                                        <div class="scan-outer">
+                                            @if (ViewBag.set == "NOTOK")
+                                            {
+                                                <div class="" id="contentshowhide" style="margin: 36px;">
+                                                    <ul class="nav nav-tabs tab-seconddesign sign tab-third-design col-md-12" id="tabs" style="display: flex; padding: 0px;">
+                                                        @if (cfreeapi != null || phonepeapi != null)
                                                         {
+                                                            <li class="tab-link active hovof" data-tab="tab-1" style="width: 50%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
+                                                            <li class="tab-link hovof" style="width: 50%; text-align: center; background: #c1c1c1; cursor: pointer;"><a style="cursor: pointer;" data-toggle="tab" onclick="requestupi_opt()">UPI&nbsp;Request</a></li>
+                                                            if (phonepeapi != null)
+                                                            {
 
+                                                            }
                                                         }
-                                                    }
-                                                    else
+                                                        else
+                                                        {
+                                                            <li class="tab-link active hovof" data-tab="tab-1" style="width: 100%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
+                                                        }
+                                                    </ul>
+
+                                                    @using (Html.BeginForm("GenerateQrBasePrice", "Home", FormMethod.Post))
                                                     {
-                                                        <li class="tab-link active hovof" data-tab="tab-1" style="width: 100%; border-right: 1px solid #fff; cursor: pointer; text-align: center; background: #c1c1c1;"><a style="cursor: pointer;" data-toggle="tab" onclick="generateqr_opt();">QR&nbsp;Code</a></li>
+                                                        <div class="genrateamt" style="text-align: center; width: 100%; margin-top: 35px;">
+                                                            <label style="display: block; float: left; margin-top: 35px;">Enter Amount</label>
+                                                            <input class="form-control" type="number" id="txtgenerateamnt" name="txtgenerateamnt" value="" required placeholder="Enter Amount" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                        </div>
+                                                        <div class="genrateamt" style="text-align: center; width: 100%; display:none; " id="cardbox">
+
+
+                                                            <div>
+                                                                <label style="display: block; float: left; margin-top: 15px;">Card Number</label>
+                                                                <input class="form-control" type="text" id="txtdebitCardnumber" name="txtdebitCardnumber" value="" placeholder="Enter Card Number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="19" autocomplete="off" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                            </div>
+                                                            <div>
+                                                                <label style="display: block; float: left; margin-top: 15px;">Name on Card</label>
+                                                                <input class="form-control" type="text" id="txtdebitCardname" name="txtdebitCardname" value="" placeholder="Enter name as on card" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                            </div>
+                                                            <div style="display:flex; flex-direction:row; margin-top: 15px; width:100%;">
+                                                                <div style="flex-direction: column; width: 50%; float: left; margin-right: 20px; ">
+                                                                    <label style="display: block; float: left !important;">Expiry</label><br />
+                                                                    <input class="form-control" type="text" id="inputExpDate" name="inputExpDate" value="" maxlength='5' placeholder="MM/YY" onkeyup="formatString(event);"
+                                                                           style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                                </div>
+                                                                <div style="display:flex; flex-direction:column; float:left; width:50%;">
+                                                                    <label style="display: block; float: left !important; width: 10px;">CVV</label>
+                                                                    <input class="form-control" type="password" id="inputcvv" name="inputcvv" value="" maxlength='3' placeholder="CVV" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                                                                           style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="genrateamt" style="text-align: center; width: 100%; display: none; margin-top: 14px; " id="upibox">
+                                                            <label style="display: block; float:left;">Enter UPI ID</label>
+                                                            <input class="form-control" type="text" id="Requestedupiid" name="Requestedupiid" value="" placeholder="Enter UPI ID" style="display: none; width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
+                                                        </div>
+                                                        <div style="display:flex;">
+                                                            <button onclick="spinnerhd1212()" type="submit" id="upisubmit"
+                                                                    style=" border-radius: 50px; border: none; color: #fff; padding: 5px 10px; width: 100%; margin-top: 20px; font-size: 19px; font-weight: 600; text-align: center; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; }">
+                                                                Generate QR
+                                                            </button>
+                                                            <i id="showspinner44" class="loaders443" style=" margin: 24px 0 0 -37px;display:none;"></i>
+                                                        </div>
                                                     }
-                                                </ul>
 
-                                                @using (Html.BeginForm("GenerateQrBasePrice", "Home", FormMethod.Post))
-                                                {
-                                                    <div class="genrateamt" style="text-align: center; width: 100%; margin-top: 35px;">
-                                                        <label style="display: block; float: left; margin-top: 35px;">Enter Amount</label>
-                                                        <input class="form-control" type="number" id="txtgenerateamnt" name="txtgenerateamnt" value="" required placeholder="Enter Amount" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                    </div>
-                                                    <div class="genrateamt" style="text-align: center; width: 100%; display:none; " id="cardbox">
+                                                </div>
+                                                <div id="upispinner22" style=" display: none; width: 100%; height: 91px; position: absolute; top: -63px; left: 0; ">
+                                                    <img src="~/AdminDesign/images/spinner.gif" style="width: 100%; filter: opacity(0.5); " />
 
-
-                                                        <div>
-                                                            <label style="display: block; float: left; margin-top: 15px;">Card Number</label>
-                                                            <input class="form-control" type="text" id="txtdebitCardnumber" name="txtdebitCardnumber" value="" placeholder="Enter Card Number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="19" autocomplete="off" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-                                                        <div>
-                                                            <label style="display: block; float: left; margin-top: 15px;">Name on Card</label>
-                                                            <input class="form-control" type="text" id="txtdebitCardname" name="txtdebitCardname" value="" placeholder="Enter name as on card" style=" width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                        </div>
-                                                        <div style="display:flex; flex-direction:row; margin-top: 15px; width:100%;">
-                                                            <div style="flex-direction: column; width: 50%; float: left; margin-right: 20px; ">
-                                                                <label style="display: block; float: left !important;">Expiry</label><br />
-                                                                <input class="form-control" type="text" id="inputExpDate" name="inputExpDate" value="" maxlength='5' placeholder="MM/YY" onkeyup="formatString(event);"
-                                                                       style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                            </div>
-                                                            <div style="display:flex; flex-direction:column; float:left; width:50%;">
-                                                                <label style="display: block; float: left !important; width: 10px;">CVV</label>
-                                                                <input class="form-control" type="password" id="inputcvv" name="inputcvv" value="" maxlength='3' placeholder="CVV" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                                                                       style="height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="genrateamt" style="text-align: center; width: 100%; display: none; margin-top: 14px; " id="upibox">
-                                                        <label style="display: block; float:left;">Enter UPI ID</label>
-                                                        <input class="form-control" type="text" id="Requestedupiid" name="Requestedupiid" value="" placeholder="Enter UPI ID" style="display: none; width: 100%; height: 30px; border-radius: 0px; border: 1px solid #555; padding: 0 10px;">
-                                                    </div>
-                                                    <div style="display:flex;">
-                                                        <button onclick="spinnerhd1212()" type="submit" id="upisubmit"
-                                                                style=" border-radius: 50px; border: none; color: #fff; padding: 5px 10px; width: 100%; margin-top: 20px; font-size: 19px; font-weight: 600; text-align: center; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; }">
-                                                            Generate QR
-                                                        </button>
-                                                        <i id="showspinner44" class="loaders443" style=" margin: 24px 0 0 -37px;display:none;"></i>
-                                                    </div>
-                                                }
-
-                                            </div>
-                                            <div id="upispinner22" style=" display: none; width: 100%; height: 91px; position: absolute; top: -63px; left: 0; ">
-                                                <img src="~/AdminDesign/images/spinner.gif" style="width: 100%; filter: opacity(0.5); " />
-
-                                            </div>
-                                            <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" id="gobackshow" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px; margin-top: 15px; display: none; ">
-                                                Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                            </a>
-                                            <div id="MessageShoHidecollect" style="display: none; margin: 7px 89px;"></div>
-                                            <div id="hidemsg1212" style="margin-top: 21px !important; font-size: 20px; font-family: serif; text-align:center;">
-                                                <span id="msgg" style="color: red !important;"></span>
-                                                <span id="msggcollect" style="color: red !important; background-color: white;"></span>
-                                            </div>
-                                        }
-                                        <p style="color:red;text-align:center; font-weight:bold;">@ViewBag.msg </p>
-                                        @if (TempData["QRCodeImage"] != null)
-                                        {
-                                            <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px;">
-                                                Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
-                                            </a>
-                                        }
-                                        <div style="width: 60%;float:none;text-align: center;padding-bottom: 15px;padding-top: 10px;margin: 0px auto;">
+                                                </div>
+                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" id="gobackshow" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px; margin-top: 15px; display: none; ">
+                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
+                                                </a>
+                                                <div id="MessageShoHidecollect" style="display: none; margin: 7px 89px;"></div>
+                                                <div id="hidemsg1212" style="margin-top: 21px !important; font-size: 20px; font-family: serif; text-align:center;">
+                                                    <span id="msgg" style="color: red !important;"></span>
+                                                    <span id="msggcollect" style="color: red !important; background-color: white;"></span>
+                                                </div>
+                                            }
+                                            <p style="color:red;text-align:center; font-weight:bold;">@ViewBag.msg </p>
                                             @if (TempData["QRCodeImage"] != null)
                                             {
-                                                <div id="QrShowHide">
-                                                    <img src="@TempData["QRCodeImage"]" alt="" style=" border:5px solid black;max-width:100%;margin-bottom:21px;" />
-                                                    <div>
-                                                        <span id="countDownShow" style="color: red !important; background-color: white; font-size: 20px; font-family: serif;"></span>
-                                                    </div>
-                                                </div>
-                                                <div id="MessageShoHide" style="display:none;"></div>
-
+                                                <a href="@Url.Action("UPITRANSFER", "Home")" onclick="oncliktoremovetext()" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 18px; font-weight: bold; margin-left: 10px;">
+                                                    Go Back&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px; margin-top: -2px;">
+                                                </a>
                                             }
+                                            <div style="width: 60%;float:none;text-align: center;padding-bottom: 15px;padding-top: 10px;margin: 0px auto;">
+                                                @if (TempData["QRCodeImage"] != null)
+                                                {
+                                                    <div id="QrShowHide">
+                                                        <img src="@TempData["QRCodeImage"]" alt="" style=" border:5px solid black;max-width:100%;margin-bottom:21px;" />
+                                                        <div>
+                                                            <span id="countDownShow" style="color: red !important; background-color: white; font-size: 20px; font-family: serif;"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div id="MessageShoHide" style="display:none;"></div>
+
+                                                }
 
 
-                                        <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                            <ol>
-                                                <li>You can update the amount in your wallet by scanning the QR code.</li>
-                                                <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                                <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                            </ol>
-                                            <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                                <tr>
-                                                    <th><center>Min Amount</center></th>
-                                                    <th><center>Max Amount</center></th>
-                                                </tr>
-                                                <tr>
-                                                    <td>@UPIQRBASEPRICEset.minmium</td>
-                                                    <td>@UPIQRBASEPRICEset.maximium</td>
-                                                </tr>
+                                            <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
+                                                <ol>
+                                                    <li>You can update the amount in your wallet by scanning the QR code.</li>
+                                                    <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                                    <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                                </ol>
+                                                <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
+                                                    <tr>
+                                                        <th><center>Min Amount</center></th>
+                                                        <th><center>Max Amount</center></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@UPIQRBASEPRICEset.minmium</td>
+                                                        <td>@UPIQRBASEPRICEset.maximium</td>
+                                                    </tr>
 
-                                            </table>
+                                                </table>
+                                            </div>
                                         </div>
+
                                     </div>
 
-                                </div>
+                                }*@
 
-                            }*@
-
+                        </div>
                     </div>
                 </div>
             </div>
 
 
             <div class="col-md-8 retailer-upilastclass retailer-upilastclass-second">
-                <div class="fund-trasfer-right fund-user-right">
+                <div class="page-header-third">
+                    <div class="fund-trasfer-right fund-user-right">
 
 
-                    <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                        <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                            <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
-                                <label class="for-change-fund">
-                                    <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">By upi QR Code</sub></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                </label>
-                            </a>
-                        </li>
-                        <li class="upi-retailer-date upi-retailer-datepdf" style="width:75%;float: right;margin-top: 4px;margin-right:1px;">
-                            <div class="row fund-t-dalear fund-t-dalearretailer" style="margin:0;">
-                                @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
-                                {
-                                    <div class="input-daterange input-group">
-                                        <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date")
-
-                                        </div>
-                                        <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
-                                            <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @style = " margin-top: 1px !important;" })
-
-                                        </div>
-
-                                        <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive apiclass-satenewnewclas" style="padding:0px;">
-                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                            </button>
-                                        </div>
-                                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-
-                                            <button>PDF</button>
-                                            <button>Export</button>
-
-                                        </div>
-                                        @*<div class="col-md-2 apiclass-satenew apiclass-satenew-responshive retailer-addupiclass" style="padding:0px;float:right;">
-                                            <button type="button" class="btnssl22" data-toggle="modal" data-target="#fundtransfer" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                UPI Manual Request
-                                            </button>
-                                        </div>*@
-
-                                    </div>
-
-
-                                }
-                            </div>
-                        </li>
-
-                    </ul>
-                    <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
-
-
-                        <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                <thead style="background-color:whitesmoke;">
-
-
-                                    <tr>
-
-                                        <th>Payer&nbsp;Name</th>
-                                        @*<th>Payer&nbsp;Mobile</th>*@
-                                        <th>Amount</th>
-                                        <th>Charges</th>
-                                        <th>Net&nbsp;Received</th>
-                                        <th>Bank RRN</th>
-                                        <th>Transaction&nbsp;Time</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
+                        <ul class="nav nav-tabs responsive-sateulce" id="tabs">
+                            <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
+                                <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
+                                    <label class="for-change-fund">
+                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">By upi QR Code</sub></span>
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </label>
+                                </a>
+                            </li>
+                            <li class="upi-retailer-date upi-retailer-datepdf" style="width:75%;float: right;margin-top: 4px;margin-right:1px;">
+                                <div class="row fund-t-dalear fund-t-dalearretailer" style="margin:0;">
+                                    @using (Html.BeginForm("UPITRANSFER", "Home", FormMethod.Post))
                                     {
-                                        var img = "";
-                                        var bgcolor = "";
-                                        if (item.status.ToUpper() == "SUCCESS")
-                                        {
-                                            img = "../../ashok-images/correct.svg";
-                                            bgcolor = "green";
+                                        <div class="input-daterange input-group">
+                                            <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
+                                                <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
+                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                                </div>
+                                                @Html.TextBox("txt_frm_date")
 
-                                        }
-                                        else if (item.status.ToUpper() == "PENDING")
-                                        {
-                                            img = "../../ashok-images/clkk.png";
-                                            bgcolor = "#FF9800";
-                                        }
-                                        else
-                                        {
-                                            img = "../../ashok-images/closes.svg";
-                                            bgcolor = "red";
-                                        }
+                                            </div>
+                                            <div class="col-md-4 date-sateclassee" style="padding-left: 0px;">
+                                                <div class="custom-date-icon" style="height: 32px;border-top: 0;border-bottom: 0;">
+                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                                </div>
+                                                @Html.TextBox("txt_to_date", "", new { @style = " margin-top: 1px !important;" })
+
+                                            </div>
+
+                                            <div class="col-md-2 apiclass-satenew apiclass-satenew-responshive apiclass-satenewnewclas" style="padding:0px;">
+                                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
+
+                                                <button>PDF</button>
+                                                <button>Export</button>
+
+                                            </div>
+                                            @*<div class="col-md-2 apiclass-satenew apiclass-satenew-responshive retailer-addupiclass" style="padding:0px;float:right;">
+                                                    <button type="button" class="btnssl22" data-toggle="modal" data-target="#fundtransfer" style="border:1px solid #fff;padding:0px 15px;float:left;position:relative;height: 30px;top: 1px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                        UPI Manual Request
+                                                    </button>
+                                                </div>*@
+
+                                        </div>
+
+
+                                    }
+                                </div>
+                            </li>
+
+                        </ul>
+                        <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
+
+
+                            <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
+                                <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
+                                    <thead style="background-color:whitesmoke;">
+
+
                                         <tr>
-                                            <td class="status-failsuccessa"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
-                                            @*<td>9166940603</td>*@
-                                            <td>@item.amt</td>
-                                            <td>@item.charge</td>
-                                            <td>@item.finalpay</td>
-                                            @if (item.ApprovalRefNo == null || item.ApprovalRefNo == "null" || item.ApprovalRefNo == "")
+
+                                            <th>Payer&nbsp;Name</th>
+                                            @*<th>Payer&nbsp;Mobile</th>*@
+                                            <th>Amount</th>
+                                            <th>Charges</th>
+                                            <th>Net&nbsp;Received</th>
+                                            <th>Bank RRN</th>
+                                            <th>Transaction&nbsp;Time</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var img = "";
+                                            var bgcolor = "";
+                                            if (item.status.ToUpper() == "SUCCESS")
                                             {
-                                                <td>@item.BankRRN</td>
+                                                img = "../../ashok-images/correct.svg";
+                                                bgcolor = "green";
+
+                                            }
+                                            else if (item.status.ToUpper() == "PENDING")
+                                            {
+                                                img = "../../ashok-images/clkk.png";
+                                                bgcolor = "#FF9800";
                                             }
                                             else
                                             {
-                                                <td>@item.ApprovalRefNo</td>
+                                                img = "../../ashok-images/closes.svg";
+                                                bgcolor = "red";
                                             }
-                                            <td>@item.txndate</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                            <tr>
+                                                <td class="status-failsuccessa"><img src='@img' style="width: 20px; background:@bgcolor;">&nbsp;@item.PayerName</td>
+                                                @*<td>9166940603</td>*@
+                                                <td>@item.amt</td>
+                                                <td>@item.charge</td>
+                                                <td>@item.finalpay</td>
+                                                @if (item.ApprovalRefNo == null || item.ApprovalRefNo == "null" || item.ApprovalRefNo == "")
+                                                {
+                                                    <td>@item.BankRRN</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@item.ApprovalRefNo</td>
+                                                }
+                                                <td>@item.txndate</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
 
-                            <div id="btnUPIreqnonetableSecond" style="display:none;">
+                                <div id="btnUPIreqnonetableSecond" style="display:none;">
+
+                                </div>
+
 
                             </div>
 
-
                         </div>
 
+
                     </div>
-
-
                 </div>
             </div>
         </div>
