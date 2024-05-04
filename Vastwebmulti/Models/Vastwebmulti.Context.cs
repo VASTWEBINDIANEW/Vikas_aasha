@@ -844,6 +844,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Recharge_excelupload_data> Recharge_excelupload_data { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
         public virtual DbSet<creaditcard_comm> creaditcard_comm { get; set; }
+        public virtual DbSet<pancard_transation_manual> pancard_transation_manual { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
