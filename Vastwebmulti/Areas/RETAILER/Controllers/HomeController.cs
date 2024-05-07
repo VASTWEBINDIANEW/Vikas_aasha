@@ -16639,6 +16639,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
                 request.AddHeader("eskey", encryptUsingPublicKey);
                 request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                request.AddHeader("Type", "AEPS");
                 request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
                 //request.AddHeader("Requestdata", RequestJson);
                 var req1 = new
@@ -16936,6 +16937,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
                 request.AddHeader("eskey", encryptUsingPublicKey);
                 request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                request.AddHeader("Type", "AEPS");
+
                 request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
                 //request.AddHeader("Requestdata", RequestJson);
                 var req1 = new
