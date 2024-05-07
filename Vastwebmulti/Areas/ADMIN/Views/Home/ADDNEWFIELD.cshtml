@@ -5,12 +5,13 @@
     body {
         background: #f3f3f3;
     }
+
     #head {
         font-size: 20px;
         width: 100%;
         float: left;
         text-align: center;
-        background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) ;
+        background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));
         color: #fff;
         height: auto;
         display: flow-root;
@@ -18,6 +19,7 @@
         box-shadow: 0px 0px 5px -2px;
         border-radius: 4px;
     }
+
     .button_o_f {
         float: left;
         display: flex;
@@ -26,15 +28,18 @@
         align-items: center;
         justify-content: end;
     }
+
         .button_o_f a {
             border: 1px solid #fff;
             padding: 6px 18px;
             font-size: 15px;
             color: #fff;
         }
+
     .a_off {
         background: red;
     }
+
     .a_on {
         background: green;
     }
@@ -45,6 +50,7 @@
         float: left;
         width: 100%;
     }
+
     .box_feast {
         width: 25%;
         margin-top: 10px;
@@ -71,6 +77,7 @@
             border-radius: 0.25rem;
             float: left;
         }
+
         .box_feast input {
             padding: 8px 12px;
             font-size: 18px;
@@ -97,7 +104,7 @@
         }
 
     .box_secend {
-        width: 100%;    
+        width: 100%;
         text-align: center;
         height: auto;
         display: flow-root;
@@ -108,6 +115,7 @@
         border-radius: 4px;
         float: left;
     }
+
     .box_secend1 {
         width: 75%;
         margin-top: 10px;
@@ -134,12 +142,12 @@
     <div class="main_s" style="">
         <div id="head">@Session["Servis"]</div>
         <div class="button_o_f">
-            @{ 
+            @{
                 VastwebmultiEntities DB1 = new VastwebmultiEntities();
                 var dds = Convert.ToString(Session["Servis"]);
                 var cher = DB1.ADDNEWSERVICES.Where(s => s.SERVICENAME == dds).SingleOrDefault();
             }
-            @if (cher.status==true)
+            @if (cher.status == true)
             {
                 <a class="a_on" href="@Url.Action("servicestatus12", "Home", new { service = Session["Servis"] }, "")">ON</a>
 
@@ -158,7 +166,7 @@
             <div id="chalange">
 
             </div>
-            
+
             <div>
                 <button onclick="set1()">Submit</button>
             </div>
@@ -174,35 +182,35 @@
         <script>
             function dropp(s) {
                 var chalange = document.getElementById('chalange');
-                
+
                 var chal11 = document.getElementById('yes1' + s).value;
                 if (chal11 == 'Dropdown') {
-                   
+
                     var button = document.createElement('button');
                     button.textContent = 'ADD +';
                     button.setAttribute('onclick', 'subset1(' + s + ')');
-                   
+
                     button.setAttribute('id', 'subset1' + s);
-                   /* chalange.appendChild(button);*/
-                  
+                    /* chalange.appendChild(button);*/
+
                     var chk = document.getElementById('divsss' + s);
                     chk.appendChild(button);
-                   
+
                 }
                 else {
                     var set = document.getElementById('subset1' + s);
                     document.getElementById('divsss' + s).innerHTML = "";
                     chalange.removeChild(set);
-                    
+
                 }
             }
         </script>
         <script>
             function subset1(i) {
-                var div = document.getElementById('divsss'+i);
+                var div = document.getElementById('divsss' + i);
                 var input = document.createElement('input');
-                input.setAttribute('type', 'text'); 
-                input.setAttribute('value', ''); 
+                input.setAttribute('type', 'text');
+                input.setAttribute('value', '');
                 input.setAttribute('class', 'divvs' + i)
                 input.setAttribute('style', 'background: white; border: solid 1px;');
                 input.setAttribute('id', 'divs' + i)
@@ -217,21 +225,21 @@
                 var chalange = document.getElementById('chalange');
                 var chal11 = document.getElementsByClassName('yes');
                 var dfd = chal11.length;
-               
-                    dfd = dfd + 1;
-                
+
+                dfd = dfd + 1;
+
 
                 // Create a new input element
                 var input = document.createElement('input');
                 input.setAttribute('type', 'text'); // Set the input type to text
                 input.setAttribute('value', ''); // Set the initial value of the input
                 input.setAttribute('class', 'yes')
-                input.setAttribute('id', 'yes'+dfd)
+                input.setAttribute('id', 'yes' + dfd)
                 // Create a new select element (dropdown)
                 var dropdown = document.createElement('select');
                 dropdown.setAttribute('class', 'yes1')
                 dropdown.setAttribute('id', 'yes1' + dfd)
-                dropdown.setAttribute('onchange', 'dropp('+dfd+')')
+                dropdown.setAttribute('onchange', 'dropp(' + dfd + ')')
                 // Create options for the dropdown
                 var option1 = document.createElement('option');
                 option1.value = 'text';
@@ -265,16 +273,16 @@
         </script>
         <script>
     function set1() {
-    
+
 
         var sesdf = document.getElementById('head').innerHTML;
         var sesdf1 = sesdf.trimLeft();
         var sesdf2 = sesdf.trimRight();
-       
+
         var elements = document.getElementsByClassName('yes');
         var elements1 = document.getElementsByClassName('yes1');
         var save = '';
-       
+
         debugger;
         for (var i = 0; i < elements.length; i++) {
             var clss = i + 1;
@@ -283,8 +291,8 @@
             var save11 = '';
              var sdd1 = elements1[i].value;
             if (sdd1 == 'Dropdown') {
-                
-                
+
+
                 var divvs = document.getElementsByClassName(class1);
 
                 for (var k = 0; k < divvs.length; k++) {

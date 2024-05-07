@@ -9,15 +9,17 @@
         color: #fff;
         font-size: 24px;
         text-transform: uppercase;
-        text-align:center;
+        text-align: center;
     }
-  select.yes1,input.yes1 {
+
+    select.yes1, input.yes1 {
         margin: 10px;
         width: -moz-available;
         height: 34px;
         border: 1px solid #ccc;
         padding: 0px 7px;
     }
+
     .page-header-third {
         margin: auto;
         height: auto;
@@ -30,6 +32,7 @@
         width: fit-content;
         margin-top: 20px;
     }
+
     .Submit22 button {
         background: #00baf2;
         padding: 2px 21px;
@@ -39,16 +42,18 @@
         border-radius: 4px;
         margin: 11px;
     }
+
     .Submit22 {
         text-align: end;
     }
+
     label {
         text-transform: capitalize;
     }
 </style>
 <div style="margin: 98px 16px 11px 220px;">
-    
-    <div class="page-header-third"  style="width:100%;" ><div id="head">@Session["Servics"]</div></div>
+
+    <div class="page-header-third" style="width:100%;"><div id="head">@Session["Servics"]</div></div>
     <div class="page-header-third">
         @foreach (var i in Model)
         {
@@ -71,12 +76,12 @@
 
                     <div style="width:70%;float:right;">
                         @*<input type="@i.TYPE" placeholder="Enter Your @i.header" class="yes1" /><br>*@
-                        <select class="yes1" >
+                        <select class="yes1">
                             @foreach (var m in opt)
                             {
                                 if (!string.IsNullOrEmpty(m) && m != "Dropdown")
                                 {
-                            <option>@m</option>
+                                    <option>@m</option>
                                 }
                             }
                         </select>
@@ -113,7 +118,7 @@
                 save = save + save1 + 'स' + save2 + 'स';
 
             }
-          
+
 
                 $.ajax({
                     url: '@Url.Action("SAVESERVIESDS")',
@@ -125,16 +130,6 @@
                     location.reload();
                 }
        })
-
-
-
-
-
-
-
-
-
-
 
         }
 

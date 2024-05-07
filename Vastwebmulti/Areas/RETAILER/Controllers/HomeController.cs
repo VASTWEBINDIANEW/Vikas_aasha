@@ -18145,6 +18145,61 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult Delete_ben1(string benid, string mobile)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var tokn = Responsetoken.gettoken();
+                    var responseall = cb.Beneficiary_Delete1(benid, "", tokn, mobile);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public ActionResult Delete_ben_upi(string id)
         {
@@ -19396,7 +19451,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return Json(new { status = "Success", Message = msg }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult Imps_check_transfer(string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
+        public ActionResult Imps_check_transfer(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
         {
             try
             {
@@ -19505,7 +19560,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
                         if (remain >= finalamount)
                         {
-                            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory== "DMT" || aa.catagory== "PAYOUT")).SingleOrDefault();
+                            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
                             if (apinm != null)
                             {
                                 int amt = Convert.ToInt32(amount);
@@ -19513,8 +19568,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 if (apinm.catagory == "PAYOUT")
                                 {
                                     var limitchk = db.transtion_limit.SingleOrDefault();
-                                     amooot = limitchk.Perlimit;
-                                    if (chkkyc == false)
+                                    amooot = limitchk.Perlimit;
+                                    if (string.IsNullOrEmpty(Mode))
+                                    {
+                                        amooot = 100000;
+                                    }
+
+                                    else if (chkkyc == false)
                                     {
                                         if (amooot == 49750)
                                         {
@@ -19524,7 +19584,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 }
                                 else
                                 {
-                                    amooot = 25000;
+                                    if (string.IsNullOrEmpty(Mode))
+                                    {
+                                        amooot = 100000;
+                                    }
+                                    else
+                                    {
+                                        amooot = 25000;
+                                    }
                                 }
                                 if (amt <= amooot)
                                 {
@@ -19612,7 +19679,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult imps_transfer(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc,string customerid)
+        public ActionResult imps_transfer(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc, string customerid)
         {
             var results = ""; var requestsend = ""; var kycsts = "";
             string imagepath = null;
@@ -19662,7 +19729,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var RetailerMob = rem_details.Mobile;
                 var aadhar = rem_details.AadharCard;
                 moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
-                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory== "DMT" || aa.catagory== "PAYOUT")).SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
                 string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 var pin = Encrypt(dmtpin);
@@ -19676,7 +19743,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var typetransfer = "";
                 typetransfer = type;
                 var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
-                if (chkstsotp != null)
+                if (chkstsotp != null && type != "Credit Card")
                 {
                     if (chkstsotp.status == true)
                     {
@@ -19825,19 +19892,27 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 int amt = Convert.ToInt32(amount);
                                 if (apinm.catagory == "PAYOUT")
                                 {
-                                    aomt = 25000;
-                                     amt_chk = 24999;
-                                    if (check_kyc == true)
+                                    if (type == "Credit Card")
                                     {
-                                        var info = db.Sender_aadhar.Where(aa => aa.sendernumber == NUMBER).SingleOrDefault();
-                                        aomt = 49999;
-                                        amt_chk = 49999;
-                                        idprooftype = "aadhar";
-                                        try
+                                        aomt = 100000;
+                                        amt_chk = 100000;
+                                    }
+                                    else
+                                    {
+                                        aomt = 25000;
+                                        amt_chk = 24999;
+                                        if (check_kyc == true)
                                         {
-                                            idproofnumber = info.aadharnumber;
+                                            var info = db.Sender_aadhar.Where(aa => aa.sendernumber == NUMBER).SingleOrDefault();
+                                            aomt = 49999;
+                                            amt_chk = 49999;
+                                            idprooftype = "aadhar";
+                                            try
+                                            {
+                                                idproofnumber = info.aadharnumber;
+                                            }
+                                            catch { }
                                         }
-                                        catch { }
                                     }
                                 }
                                 if (amt <= aomt)
@@ -19881,7 +19956,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             var dmt_apirange = db.rang_of_imps_transaction_retailer.Where(s => s.retailer_id == userid).FirstOrDefault();
                                             try
                                             {
-                                                 if (apiname== "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
+                                                if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
                                                 {
                                                     apiname = "INSTANTPAY";
                                                 }
@@ -19895,7 +19970,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     {
                                                         apiname = "VASTWEB";
                                                     }
-                                                    else if(apinm.api_name == "RADIANT")
+                                                    else if (apinm.api_name == "RADIANT")
                                                     {
                                                         apiname = "RADIANT";
                                                     }
@@ -19919,7 +19994,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     for (int i = 0; i < divide; i++)
                                                     {
                                                         Guid guid = Guid.NewGuid();
-                                                        var respchk = monrytransferunique(userid, 5000, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress,  benCode, customerid);
+                                                        var respchk = monrytransferunique(userid, 5000, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress, benCode, customerid);
                                                         dynamic resp_chk = JsonConvert.SerializeObject(respchk);
                                                         dynamic respchkk = JsonConvert.DeserializeObject(resp_chk);
                                                         Transmsg transaction = new Transmsg
@@ -19934,7 +20009,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     if (sef != 0)
                                                     {
                                                         Guid guid = Guid.NewGuid();
-                                                        var respchk = monrytransferunique(userid, sef, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress,  benCode, customerid);
+                                                        var respchk = monrytransferunique(userid, sef, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress, benCode, customerid);
                                                         dynamic resp_chk = JsonConvert.SerializeObject(respchk);
                                                         dynamic respchkk = JsonConvert.DeserializeObject(resp_chk);
                                                         Transmsg transaction = new Transmsg
@@ -19948,7 +20023,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     }
                                                     var transinfo = JsonConvert.SerializeObject(transactions);
                                                     Response.status = "NOTDEFINE";
-                                                    Response.data= transinfo;
+                                                    Response.data = transinfo;
                                                     var jjj = Response.ToString();
                                                     var jss2 = new JavaScriptSerializer();
                                                     var dict2 = jss2.Deserialize<dynamic>(jjj);
@@ -20075,7 +20150,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Task<IRestResponse> task;
                                                     if (typetransfer == "UPI")
                                                     {
-                                                        if (apiname== "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt)
+                                                        if (apiname == "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt)
                                                         {
                                                             var razorpayinfo = db.razorpay_auth.SingleOrDefault();
                                                             var apikey = razorpayinfo.Apikey;
@@ -20106,7 +20181,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             return cb1.Fund_Transfer_WALLET(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
                                                         });
                                                     }
-                                                    else if (apiname== "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt)
+                                                    else if (typetransfer == "Credit Card")
+                                                    {
+                                                        task = Task.Run(() =>
+                                                        {
+                                                            return cb1.creaditFund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                        });
+                                                    }
+                                                    else if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt)
                                                     {
                                                         var instantpayauth = db.Instantpay_auth.SingleOrDefault();
                                                         string authcode = instantpayauth.authcode;
@@ -20124,7 +20206,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         var radiantauthchk = db.radiantauths.SingleOrDefault();
                                                         var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
                                                         Radiantdmt dmt = new Radiantdmt();
-														dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
                                                         task = Task.Run(() =>
                                                         {
                                                             return dmt.Fundtransfer(radianagentid, radianttoken, NUMBER, benCode, name, type, amount, customerid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
@@ -20142,7 +20224,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     if (isCompletedSuccessfully == true)
                                                     {
                                                         //"{\"Version\":\"1.0\",\"StatusCode\":200,\"Content\":{\"ResponseCode\":1,\"ADDINFO\":{\"status\":\"c\",\"statusCode\":\"DE_101\",\"statusMessage\":\"Your request is in process. Kindly check after sometime\",\"result\":{\"mid\":\"VastWe83136376087116\",\"orderId\":\"25191806TX\",\"paytmOrderId\":\"201910251918250985400278\",\"amount\":\"10.00\",\"commissionAmount\":\"0.00\",\"tax\":\"0.00\",\"rrn\":null}}}}"
-                                                        if (apiname== "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt && typetransfer == "UPI")
+                                                        if (apiname == "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt && typetransfer == "UPI")
                                                         {
                                                             var response = task.Result;
                                                             var responsechk = task.Result.Content.ToString();
@@ -20260,7 +20342,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 }
                                                             }
                                                         }
-                                                        else if (apiname== "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
+                                                        else if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
                                                         {
                                                             var response = task.Result;
                                                             var responsechk = task.Result.Content.ToString();
@@ -20385,7 +20467,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         {
                                                             var responsechk = task.Result.Content.ToString();
                                                             var responsecode1 = task.Result.StatusCode.ToString();
-                                                            if(task.Result.StatusCode == HttpStatusCode.NotAcceptable)
+                                                            if (task.Result.StatusCode == HttpStatusCode.NotAcceptable)
                                                             {
                                                                 var radiantauthchk = db.radiantauths.SingleOrDefault();
                                                                 var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();

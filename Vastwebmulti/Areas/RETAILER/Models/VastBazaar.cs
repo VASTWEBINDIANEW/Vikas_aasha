@@ -407,7 +407,50 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse response = client.Execute(request);
             return response;
         }
+        public IRestResponse creaditFund_Transfer(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
+        {
+            var client = new RestClient(BaseURL + "/api/CREDITCARD/Fund_Transfer");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                remittermobile = remittermobile,
+                beneficiaryid = benid,
+                agentid = agentid,
+                amount = amount,
+                mode = "CREDITCARD",
+                accountno = accountno,
+                bankname = bankname,
+                kyccheck = kyc,
+                aadharno = aadharno,
+                ifsccode = ifsccode
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Beneficiary_Delete1(string beneficiaryid, string remitterid, string token, string SenderNumber)
+        {
+            var client = new RestClient(BaseURL + "/api/CREDITCARD/Beneficiary_Delete");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                Sendernumber = SenderNumber,
+                beneficiaryid = beneficiaryid,
+                remitterid = remitterid
+            };
 
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
         public IRestResponse Fund_Transfer_WALLET(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
         {
             var url = BaseURL + "/api/DMTPAYTM/WALLETTRANSFER";
