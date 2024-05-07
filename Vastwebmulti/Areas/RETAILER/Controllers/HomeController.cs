@@ -16638,6 +16638,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 request.AddHeader("hash", Convert.ToBase64String(hash));
                 request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
                 request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("MerchantID", retailer.AepsMerchandId);
                 request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
                 //request.AddHeader("Requestdata", RequestJson);
                 var req1 = new
@@ -16926,7 +16927,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                 }
                 var client = new RestClient();
-                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerification");
+                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerificationaadhar");
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("content-type", "text/plain");
                 request.AddHeader("cache-control", "no-cache");
@@ -16934,6 +16935,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 request.AddHeader("hash", Convert.ToBase64String(hash));
                 request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
                 request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("MerchantID", retailer.AepsMerchandId);
                 request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
                 //request.AddHeader("Requestdata", RequestJson);
                 var req1 = new
