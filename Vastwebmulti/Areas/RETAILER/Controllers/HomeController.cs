@@ -19725,8 +19725,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var aadhar = rem_details.AadharCard;
                 moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
                 var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                var remwise = db.passbyretailerdmts.Where(s => s.userid == userid).ToList();
                 string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
                 var apiname = apinm == null ? "NO" : apinm.api_name;
+                var apists = "";
+                if (remwise.Count > 0)
+                {
+                    apists = remwise[0].status == false ? "NO" : "Yes";
+                }
                 var pin = Encrypt(dmtpin);
                 var pin_check = (from pi in db.Retailer_Details where pi.RetailerId == userid select pi).Single().PIN;
                 // get mac address
@@ -19880,7 +19886,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
                         if (remain >= finalamount)
                         {
-                            if (apiname != "NO")
+                            if (apiname != "NO" || apists != "NO")
                             {
                                 decimal aomt = 25000;
                                 decimal amt_chk = 25000;
@@ -21893,6 +21899,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             recent.Recent_report_Aeps = null;
             recent.Recent_mPosInfo = null;
             recent.Recent_PAN_CARD_IPAY = db.pancard_transation.Where(aa => aa.Reailerid == userid).OrderByDescending(aa => aa.request_time).Take(10).ToList();
+            return PartialView("_RecentReport", recent);
+        } 
+        public ActionResult PANCARDreportnew_manual()
+        {
+            var userid = User.Identity.GetUserId();
+            Recent_report recent = new Recent_report();
+            recent.Recent_report_imps = null;
+            recent.Recent_report_Aeps = null;
+            recent.Recent_mPosInfo = null;
+            recent.Recent_PAN_CARD_IPAY = null;
+            recent.Recent_pancard_transation_manual = db.pancard_transation_manual.Where(aa => aa.Reailerid == userid).OrderByDescending(aa => aa.request_time).Take(10).ToList(); 
             return PartialView("_RecentReport", recent);
         }
         public ActionResult MPOSreportnew()
@@ -35638,6 +35655,63 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 return Json(chk1[0].Sts);
             }
         }
+        [HttpPost]
+        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender)
+        {
+            var userid = User.Identity.GetUserId();
+            var retailer = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+            var frm = retailer.Frm_Name;
+            char frm1 = frm[0];
+            char frm2 = frm[1];
+            char frm3 = frm[2];
+            char frm4 = frm[3];
+            string fullfrm = frm1.ToString() + frm2.ToString() + frm3.ToString() + frm4.ToString();
+            Random d1 = new Random();
+            var id = d1.Next(999, 9999);
+            var dobs = DateTime.Now;
+            var setdob = dobs.ToString("yyyy/MM/dd ss").Replace("/", "");
+            string reqw = fullfrm + setdob + id;
+            var requestid = reqw.Replace("-", "").Replace(" ", "");
+
+            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                 System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid,output).SingleOrDefault().msg;
+
+            if (procres == "Success")
+            {
+
+                var tokn = Responsetoken.gettoken();
+                VastBazaar vb = new VastBazaar();
+                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile);
+                dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
+
+                if (responseData.StatusCode == 200)
+                {
+                    string res = responseData.Content.ADDINFO.Status;
+                    if (res.ToUpper() == "FAILED")
+                    {
+                        var set = db.pancard_transation_manual.Where(s => s.requestid == requestid).SingleOrDefault();
+                        var resupdate = db.proc_PAN_CARD_Refund_new_manual(set.idno.ToString(), "FAILED","", requestid);
+                    }
+                    string mess = responseData.Content.ADDINFO.Message;
+                    return Json(new { status = responseData.Content.ADDINFO.Status, message = mess });
+                }
+                else
+                {
+                    return Json(new { status = "Failed", message = "Contact to Admin" });
+                }
+            }
+            else if(procres == "CAPINGLOW")
+            {
+                return Json(new { status = "Failed", message = "Balance Low" });
+            }
+            else
+            {
+                return Json(new { status = "Failed", message = "Contact to Admin" });
+            }
+           
+        }
+
         [HttpPost]
         protected override void Dispose(bool disposing)
         {

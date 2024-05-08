@@ -513,6 +513,31 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
+        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile)
+        {
+            var client = new RestClient(BaseURL + "/api/UTI/ManualRequest");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                Title= Title,
+                Gender= Gender,
+                Aadharno= Aadharno,
+                Name= Name,
+                DOB= DOB.ToString("yyyy-MM-dd"),
+                AadharregNumber= AadharregNumber,
+                Fathername= Fathername,
+                Email= Email,
+                Mobile= Mobile
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
         public IRestResponse EKORefund(string t_id, string otp, string token)
         {
             var client = new RestClient(BaseURL + "/api/DMTPAYTM/Refund");

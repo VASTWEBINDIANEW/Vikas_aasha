@@ -186,18 +186,18 @@
                     </td>
                     <td class="text-center">
                         @*@if (item.Status.ToUpper() == "SUCCESS" && item.Trans_Type.ToUpper() == "IMPS_VERIFY" && !String.IsNullOrEmpty(item.recivername))
-                        {
-                            <button class="btn status" style="background: #a4a0a0 !important; word-break: break-all " onclick="RegisterAccount('@item.senderno', '@item.accountno', '@item.ifsccode', '@item.bank_nm', '@item.recivername')">Add <small>Beneficiary</small></button>
-                        }
-                        else if (!item.Status.ToUpper().Contains("REFUND") && item.Status.ToUpper() != "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
-                        {
-                            <button class="btn status" style="background: #a4a0a0 !important;" onclick="PayAgain('@item.senderno', '@item.Trans_Type', '@item.accountno', '@item.amount')">Again Payment</button>
-                        }
-                        else if (item.Status.ToUpper() == "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
-                        {
-                            <button class="btn status" onclick="Dmt_status_check()" style="width: 40%; float: left; line-height: 0.1; padding: 0px;"><p style="text-transform: uppercase; font-size: 8px;">Status</p><br /><span style="margin:0px;font-size:10px;">Check</span></button>
-                            <button class="btn status" data-toggle="modal" data-target="#dmtdetails" onclick="Dmt_more_detail('@item.trans_id')" style="width: 58%; float: right; line-height: 0.1; padding: 0px; background: #878080; border: 1px solid #5b5858; "><p style="font-size: 10px; margin: 6px 12px -11px 0px;">MORE&nbsp;</p><br /><span style="margin: 0px; font-size: 9px;">Details</span><i class="fa fa-angle-right" style="top: 0px; font-size: 29px; margin-left: 4px;"></i></button>
-                        }*@
+                            {
+                                <button class="btn status" style="background: #a4a0a0 !important; word-break: break-all " onclick="RegisterAccount('@item.senderno', '@item.accountno', '@item.ifsccode', '@item.bank_nm', '@item.recivername')">Add <small>Beneficiary</small></button>
+                            }
+                            else if (!item.Status.ToUpper().Contains("REFUND") && item.Status.ToUpper() != "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                            {
+                                <button class="btn status" style="background: #a4a0a0 !important;" onclick="PayAgain('@item.senderno', '@item.Trans_Type', '@item.accountno', '@item.amount')">Again Payment</button>
+                            }
+                            else if (item.Status.ToUpper() == "PENDING" && item.Trans_Type.ToUpper() != "IMPS_VERIFY")
+                            {
+                                <button class="btn status" onclick="Dmt_status_check()" style="width: 40%; float: left; line-height: 0.1; padding: 0px;"><p style="text-transform: uppercase; font-size: 8px;">Status</p><br /><span style="margin:0px;font-size:10px;">Check</span></button>
+                                <button class="btn status" data-toggle="modal" data-target="#dmtdetails" onclick="Dmt_more_detail('@item.trans_id')" style="width: 58%; float: right; line-height: 0.1; padding: 0px; background: #878080; border: 1px solid #5b5858; "><p style="font-size: 10px; margin: 6px 12px -11px 0px;">MORE&nbsp;</p><br /><span style="margin: 0px; font-size: 9px;">Details</span><i class="fa fa-angle-right" style="top: 0px; font-size: 29px; margin-left: 4px;"></i></button>
+                            }*@
                     </td>
                 </tr>
             }
@@ -242,9 +242,10 @@
                     img = "../../ashok-images/closes.svg";
                     color = "red";
                 }
-                var type = item.Type;            
+                var type = item.Type;
                 <tr>
-                    <td><img style="height:17px;width:17px; background-color:@color;" src=@img />@type
+                    <td>
+                        <img style="height:17px;width:17px; background-color:@color;" src=@img />@type
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.BankName)</td>
                     <td>A/c</td>
@@ -266,9 +267,9 @@
                 <th>Time</th>
                 <th>Income</th>
                 <th>TDS</th>
-          
+
                 <th>Total</th>
-            
+
             </tr>
         </thead>
         <tbody>
@@ -276,8 +277,8 @@
             {
 
 
-            <tr>
-                
+                <tr>
+
                     @{
                         var sts = item.status;
 
@@ -292,40 +293,117 @@
 
 
 
-                <td>
-                    @if (item.status.Contains("PENDING"))
-                    {
-                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
+                    <td>
+                        @if (item.status.Contains("PENDING"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
 
 
-                    }
-                    @if (item.status.Contains("Refund"))
-                    {
-                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
+                        }
+                        @if (item.status.Contains("Refund"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
 
-                    }
-                    @if (item.status.Contains("Failed"))
-                    {
-                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
+                        }
+                        @if (item.status.Contains("Failed"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
 
-                    }
-                    @if (item.status.Contains("Success"))
-                    {
-                        <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
+                        }
+                        @if (item.status.Contains("Success"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
 
-                    }
-                </td>
-
-                
+                        }
+                    </td>
 
 
 
-                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                <td>@Html.DisplayFor(modelItem => item.request_time)</td>
-                <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
-                <td>@Html.DisplayFor(modelItem => item.Rem_tds)</td>
-                <td>@Html.DisplayFor(modelItem => item.Rem_final)</td>
+
+
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.request_time)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rem_tds)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rem_final)</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else if (Model.Recent_pancard_transation_manual != null)
+    {
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Amount</th>
+                <th>Time</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Father Name</th>
+                <th>DOB</th>
+                <th>Aadhaar</th>
+                <th>Gender</th>
+                <th>Income</th>
+
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Recent_pancard_transation_manual)
+            {
+
+
+                <tr>
+
+                    @{
+                        var sts = item.status;
+
+
+                        if (item.status.Contains("Refund"))
+                        {
+                            sts = "Refund";
+                        }
+                    }
+
+                    <td>
+                        @if (item.status.Contains("PENDING"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
+
+
+                        }
+                        @if (item.status.Contains("Refund"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
+
+                        }
+                        @if (item.status.Contains("Failed"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
+
+                        }
+                        @if (item.status.Contains("Success"))
+                        {
+                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
+
+                        }
+                    </td>
+
+
+
+
+
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.request_time)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Title) @Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>AAdhar=@Html.DisplayFor(modelItem => item.AadharregNumber)<br />Customer =@Html.DisplayFor(modelItem => item.Mobile)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Fathername)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DOB)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Aadharno)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rem_comm)</td>
+                </tr>
             }
         </tbody>
     }

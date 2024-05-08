@@ -16,9 +16,15 @@ namespace Vastwebmulti.Models
     {
         public int idno { get; set; }
         public string Reailerid { get; set; }
-        public string name { get; set; }
+        public string Title { get; set; }
+        public string Gender { get; set; }
+        public string Aadharno { get; set; }
+        public string Name { get; set; }
+        public Nullable<System.DateTime> DOB { get; set; }
+        public string AadharregNumber { get; set; }
+        public string Fathername { get; set; }
         public string Email { get; set; }
-        public string mobile { get; set; }
+        public string Mobile { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public Nullable<decimal> Rem_comm { get; set; }
         public Nullable<decimal> Rem_tds { get; set; }
@@ -41,5 +47,6 @@ namespace Vastwebmulti.Models
         public string requestid { get; set; }
         public Nullable<System.DateTime> request_time { get; set; }
         public Nullable<System.DateTime> responce_time { get; set; }
+        public string imageurl { get; set; }
     }
 }
