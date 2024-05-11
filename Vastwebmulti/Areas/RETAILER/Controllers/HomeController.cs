@@ -4,6 +4,7 @@ using com.sun.nio.zipfs;
 using CyberPlatOpenSSL;
 using DocumentFormat.OpenXml.Spreadsheet;
 using ikvm.@internal;
+using iTextSharp.text;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
@@ -20931,7 +20932,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
                             task = Task.Run(() =>
                             {
-                                return dmt.Fundtransfer(radianagentid, radianttoken, sender_number, benid, Name, typetransfer, Amount.ToString(), custid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                return dmt.PayoutTransfer(radianagentid, radianttoken, sender_number, Name, Amount.ToString(), radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Accountnumber, bankname, benIFSC, pincode);
                             });
                         }
                         if (task.Result.StatusCode == HttpStatusCode.Created || task.Result.StatusCode == HttpStatusCode.OK)
@@ -20965,12 +20966,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 }
                                 else
                                 {
-                                   // db.Money_transfer_update_by_paytm(Reqid, "FAILED", message, "", task.Result.ToString(), "", 0, 0);
+                                    // db.Money_transfer_update_by_paytm(Reqid, "FAILED", message, "", task.Result.ToString(), "", 0, 0);
                                     //   db.Money_transfer_update_new_new(Reqid, "FAILED", message, "", task.Result.Content, "", 0, 0);
+                                    //dynamic res = new JObject();
+                                    //res.Status = "Failed";
+                                    //res.Message = message;
+                                    //res.Bannrrn = message;
+                                    //res.Amount = Amount;
+                                    //return res;
                                     dynamic res = new JObject();
                                     res.Status = "Pending";
-                                    res.Message = message;
-                                    res.Bannrrn = message;
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
                                     res.Amount = Amount;
                                     return res;
                                 }
@@ -20989,8 +20996,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            db.Money_transfer_update_new_new(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", task.Result.Content, "", 0, 0);
-                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            db.Money_transfer_update_by_paytm(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", task.Result.Content.ToString(), "", 0, 0);
+
+                          //  db.Money_transfer_update_new_new(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", chkkk.Content, "", 0, 0);
+                             dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
                             dynamic res = new JObject();
                             res.Status = "Failed";
                             res.Message = "Please Try After Sometime";
