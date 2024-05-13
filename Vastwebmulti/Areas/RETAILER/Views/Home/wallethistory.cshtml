@@ -5,6 +5,32 @@
 }
 
 <style>
+
+    /* new css  */
+
+
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .date-sateclassee {
+        padding-left: 0px !important;
+        padding-right: 4px;
+    }
+    /* new css  */
+
     section.content {
         margin: 87px 0px 0 164px;
     }
@@ -29,16 +55,73 @@
         padding-left: 1px;
     }
 
+    @@media only screen and (max-width:1366px){
+
+        .wallethistory-responshive {
+            padding-top: 0px;
+        }
+
+
+    }
+
+    @@media screen and (max-width:991px) {
+
+        .padding-both-none-four {
+            float: left;
+            width: 100%;
+        }
+        .bread-same-all-page.wallethistory-newadd ul li:last-child {
+            width: 100%;
+        }
+        .xsl-pdfbutton {
+            width: auto;
+        }
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .col-md-2.apiclass-satenew {
+            float: left;
+        }
+
+    }
+    @@media screen and (max-width:990px) {
+        .bread-same-all-page.wallethistory-newadd.wallethistory-responshive ul li:last-child {
+            
+            width: 100%;
+        }
+        .bread-same-all-page.wallethistory-newadd.wallethistory-responshive .xsl-pdfbutton {
+            display: block;
+        }
+        
+    }
+
     @@media screen and (max-width:766px){
         .fund-tr-history .modal-dialog {
             width: 100% !important;
         }
     }
+    @@media screen and (max-width:600px) {
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+            width: 100% !important;
+            padding: 0 !important;
+            padding-bottom: 4px !important;
+        }
+        .wallethistory-responshive .date-sateclassee.trypurchasecewq .custom-date-icon {
+            display: block;
+        }
+
+
+    }
+    /*@@media screen and (max-width:520px) {
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+            width: 100% !important;
+            padding: 0 !important;
+            padding-bottom: 4px !important;
+        }
+
+        
+    }*/
 
     @@media screen and (max-width:480px) {
         .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq.trypurchasecewq-newadd {
     width: 100% !important;
-    margin-bottom: 10px;
 }
     }
 
@@ -64,93 +147,98 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
+        <div class="page-header-third">
+            <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
 
-            <ul>
-                <li class="smli four-design-noneclass">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
+                <ul style="margin:0;">
+                    <li class="smli four-design-noneclass">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                        </a>
+                    </li>
 
-                <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
-                    Wallet Received History
-                </li>
-                <li>
-                    @using (Ajax.BeginForm("MDTODealer", "Home",
-                                                    new AjaxOptions
-                                                    {
-                                                        InsertionMode = InsertionMode.Replace,
-                                                        UpdateTargetId = "tblshowMasterD"
+                    <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
+                        Wallet Received History
+                    </li>
+                    <li style="margin:0;">
+                        @using (Ajax.BeginForm("MDTODealer", "Home",
+                                                        new AjaxOptions
+                                                        {
+                                                            InsertionMode = InsertionMode.Replace,
+                                                            UpdateTargetId = "tblshowMasterD"
 
-                                                                // LoadingElementId = "progress"
-                                                            }))
-                    {
-                        <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
+                                                            // LoadingElementId = "progress"
+                                                        }))
+                        {
+                            <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
 
-                            <div class="col-md-5 date-sateclassee trypurchasecewq trypurchasecewq-newadd" style="padding-left: 0px;">
+                                <div class="col-md-5 date-sateclassee trypurchasecewq trypurchasecewq-newadd" style="padding-left: 0px;">
 
-                                <select id="ddtrnsfrom" name="ddtrnsfrom" class="form-control">
-                                    <option value="">Select Filter</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Dealer">Dealer</option>
+                                    <select id="ddtrnsfrom" name="ddtrnsfrom" class="form-control">
+                                        <option value="">Select Filter</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Dealer">Dealer</option>
 
-                                </select>
+                                    </select>
 
-                            </div>
-
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                <div class="custom-date-icon" style="height: 32px;border-top:0px;border-bottom:0px;">
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
                                 </div>
-                                <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
-                            </div>
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                <div class="custom-date-icon" style="height: 31px;border-top:0px;border-bottom:0px;margin-top:1px;">
-                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                </div>
-                                <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;" />
-                            </div>
-                            <div class="col-md-2 apiclass-satenew" style="padding:0px;">
-                                <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
-                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                </button>
-                            </div>
-                            <div class="xsl-pdfbutton inputpdfbu-retailer-second" style="text-align:right;">
-                                <button style="width: auto;padding: 0 8px;float:none;"><img src="~/ashok-images/pdf.png" />&nbsp;PDF</button>
 
-                                <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
+                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
+                                    <div class="custom-date-icon" style="height: 32px;border-top:0px;border-bottom:0px;">
+                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                    </div>
+                                    <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
+                                </div>
+                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
+                                    <div class="custom-date-icon" style="height: 31px;border-top:0px;border-bottom:0px;margin-top:1px;">
+                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                    </div>
+                                    <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;" />
+                                </div>
+                                <div class="col-md-2 apiclass-satenew" style="padding:0px;">
+                                    <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
+                                    <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                    </button>
+                                </div>
+                                <div class="xsl-pdfbutton inputpdfbu-retailer-second" style="text-align: right;">
+                                    <button style="width: auto; padding: 0 8px; float: none; margin-right: 0%;"><img src="~/ashok-images/pdf.png" />&nbsp;PDF</button>
+
+                                    <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
                                 background-repeat: no-repeat;
                                 background-position: 4px center;
                                 padding-left: 20px;border-color:#bbbbbb;" />
-                                @*<button><img src="~/ashok-images/xls.png" />XSL</button>*@
+                                    @*<button><img src="~/ashok-images/xls.png" />XSL</button>*@
+                                </div>
+
+                            </div>
+                        }
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    
+
+    <div class=" col-md-12" style="width:100%;float:left;">
+        <div class="row clearfix" style="margin:0;">
+            <div class="page-header-third">
+                <div class="col-md-12 searchtable-second-ret" style="margin-bottom: 5px;width:100%;float:right;padding:0;">
+
+                    <div class="for-search retailer-forsearch-second forsearch-third-retailer four-design-noneclass" style="width:auto;float:right;">
+                        <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" style="padding:5px 5px;" />
+
+                    </div>
+                </div>
+                <div class=" col-md-12 padding-both-none-four" style="padding:0;">
+                    <div class="wallet-history" style="padding:0;">
+                        <div class="table-responsive">
+                            <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
+                                @Html.Action("MDTODealer", new { tabtype = "FundTranferAllReport" })
                             </div>
 
                         </div>
-                    }
-                </li>
-            </ul>
-        </div>
-
-    </div>
-    <div class="col-md-12 searchtable-second-ret" style="margin-bottom: 10px;margin-top: -8px;width:100%;float:right;">
-
-        <div class="for-search retailer-forsearch-second forsearch-third-retailer four-design-noneclass" style="width:auto;float:right;">
-            <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()"  style="padding:5px 5px;"/>
-
-        </div>
-    </div>
-
-    <div class=" col-md-12" style="width:100%;float:left;">
-        <div class="row clearfix">
-            <div class=" col-md-12 padding-both-none-four">
-                <div class="wallet-history" style="padding:0;">
-                    <div class="table-responsive">
-                        <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            @Html.Action("MDTODealer", new { tabtype = "FundTranferAllReport" })
-                        </div>
-
                     </div>
                 </div>
             </div>
