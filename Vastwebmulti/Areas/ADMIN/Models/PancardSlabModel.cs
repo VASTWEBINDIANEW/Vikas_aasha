@@ -9,6 +9,8 @@ namespace Vastwebmulti.Areas.ADMIN.Models
     public class PancardSlabModel
     {
         public List<Pancard_common_comm_new> common { get; set; }
+        public List<Pancard_common_comm_new_manual> commonmanual { get; set; }
+       
         public List<MasterPanComm> Materuser { get; set; }
         public List<DealerPanComm> Dealeruser { get; set; }
         public List<RetailerPanComm> Retaileruser { get; set; }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Vastwebmulti.Models;
 using System.IO;
+using sun.net.idn;
 
 namespace Vastwebmulti.Areas.RETAILER.Models
 {
@@ -313,6 +314,46 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
+        public IRestResponse PayoutTransfer(string agentid, string token, string sendernumber,  string name, string amount,  string clientId, string ClientSecret, string apiKey,string beneAccount,string beneBankName,string beneifsc,string pinCode)
+        {
+            WriteLog("************************* PayoutTransfer *****************************");
+            WriteLog("sendernumber " + sendernumber);
+            WriteLog("amount " + amount);
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            var client = new RestClient(Baseurl + "payout/reedem");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            // request.AlwaysMultipartFormData = true;
+            //  request.AlwaysMultipartFormData = true;
+            var body = new
+            {
+                redeemAmount = amount,
+                beneAccount = beneAccount,
+                beneBankName = beneBankName,
+                beneName = name,
+                beneifsc = beneifsc,
+                benePhoneNo = sendernumber,
+                pinCode = pinCode
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            //       WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+
         public IRestResponse RadiantDistributorCreate(string firstname,string lastname,string email,string phoneno,string address,string dob,string pincode,string landmark,string state,string district,string image , string image1,string clientId,string ClientSecret,string apiKey)
         {
             WriteLog("**************************** RadiantDistributorCreate **********************");

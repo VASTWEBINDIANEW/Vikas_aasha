@@ -844,6 +844,13 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Recharge_excelupload_data> Recharge_excelupload_data { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
         public virtual DbSet<creaditcard_comm> creaditcard_comm { get; set; }
+        public virtual DbSet<Pancard_common_comm_new_manual> Pancard_common_comm_new_manual { get; set; }
+        public virtual DbSet<Pancard_dealer_comm_new_manual> Pancard_dealer_comm_new_manual { get; set; }
+        public virtual DbSet<Pancard_dlm_rem_comm_new_manual> Pancard_dlm_rem_comm_new_manual { get; set; }
+        public virtual DbSet<Pancard_Master_comm_new_manual> Pancard_Master_comm_new_manual { get; set; }
+        public virtual DbSet<Pancard_Retailer_comm_new_manual> Pancard_Retailer_comm_new_manual { get; set; }
+        public virtual DbSet<pancard_transation_manual> pancard_transation_manual { get; set; }
+        public virtual DbSet<passbyretailerdmt> passbyretailerdmts { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23071,6 +23078,101 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("finalamount", typeof(decimal));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DMT_Check_amount_Result>("DMT_Check_amount", retaileridParameter, finalamountParameter, output);
+        }
+    
+        public virtual ObjectResult<proc_insert_PAN_CARD12_manual_Result> proc_insert_PAN_CARD12_manual(string retailerId, string title, string gender, string aadharno, string name1, Nullable<System.DateTime> dOB, string aadharregNumber, string fathername, string email1, string mobile1, Nullable<decimal> amount, string requestid, ObjectParameter output)
+        {
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            var genderParameter = gender != null ?
+                new ObjectParameter("Gender", gender) :
+                new ObjectParameter("Gender", typeof(string));
+    
+            var aadharnoParameter = aadharno != null ?
+                new ObjectParameter("Aadharno", aadharno) :
+                new ObjectParameter("Aadharno", typeof(string));
+    
+            var name1Parameter = name1 != null ?
+                new ObjectParameter("Name1", name1) :
+                new ObjectParameter("Name1", typeof(string));
+    
+            var dOBParameter = dOB.HasValue ?
+                new ObjectParameter("DOB", dOB) :
+                new ObjectParameter("DOB", typeof(System.DateTime));
+    
+            var aadharregNumberParameter = aadharregNumber != null ?
+                new ObjectParameter("AadharregNumber", aadharregNumber) :
+                new ObjectParameter("AadharregNumber", typeof(string));
+    
+            var fathernameParameter = fathername != null ?
+                new ObjectParameter("Fathername", fathername) :
+                new ObjectParameter("Fathername", typeof(string));
+    
+            var email1Parameter = email1 != null ?
+                new ObjectParameter("Email1", email1) :
+                new ObjectParameter("Email1", typeof(string));
+    
+            var mobile1Parameter = mobile1 != null ?
+                new ObjectParameter("Mobile1", mobile1) :
+                new ObjectParameter("Mobile1", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var requestidParameter = requestid != null ?
+                new ObjectParameter("requestid", requestid) :
+                new ObjectParameter("requestid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_insert_PAN_CARD12_manual_Result>("proc_insert_PAN_CARD12_manual", retailerIdParameter, titleParameter, genderParameter, aadharnoParameter, name1Parameter, dOBParameter, aadharregNumberParameter, fathernameParameter, email1Parameter, mobile1Parameter, amountParameter, requestidParameter, output);
+        }
+    
+        public virtual int proc_PAN_CARD_Refund_new_manual(string idno, string status, string couponStatus, string tXN_ID)
+        {
+            var idnoParameter = idno != null ?
+                new ObjectParameter("Idno", idno) :
+                new ObjectParameter("Idno", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var couponStatusParameter = couponStatus != null ?
+                new ObjectParameter("CouponStatus", couponStatus) :
+                new ObjectParameter("CouponStatus", typeof(string));
+    
+            var tXN_IDParameter = tXN_ID != null ?
+                new ObjectParameter("TXN_ID", tXN_ID) :
+                new ObjectParameter("TXN_ID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("proc_PAN_CARD_Refund_new_manual", idnoParameter, statusParameter, couponStatusParameter, tXN_IDParameter);
+        }
+    
+        public virtual ObjectResult<GetCreditDetails_Result> GetCreditDetails(string roleType, string userId, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var roleTypeParameter = roleType != null ?
+                new ObjectParameter("RoleType", roleType) :
+                new ObjectParameter("RoleType", typeof(string));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCreditDetails_Result>("GetCreditDetails", roleTypeParameter, userIdParameter, fromParameter, toParameter);
         }
     }
 }

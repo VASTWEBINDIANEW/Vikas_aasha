@@ -1552,6 +1552,66 @@ namespace Vastwebmulti.Controllers
                         }
                         //}
                     }
+                    else if (Type == "PanCardManual")
+                    {
+                        int idno = 0;
+                        //var req = dbsrs.IMPS_transtion_detsils.Where(aa => aa.trans_id == Reqid);
+                        //var currentresponse = req.SingleOrDefault().Status;
+                        //if (currentresponse == "Pending")
+                        //{
+                        try
+                        {
+                            var name = dbsrs.pancard_transation.Where(a => a.requestid == Reqid).SingleOrDefault();
+
+                            idno = name.idno;
+                            var userid = name.Reailerid;
+                            var role = dbsrs.UserRoles.Where(aa => aa.UserId == userid).SingleOrDefault().RoleId;
+                            var userrole = dbsrs.Roles.Where(aa => aa.RoleId == role).SingleOrDefault().Name;
+                            if (userrole == "API")
+                            {
+                                var url = dbsrs.Money_transfer_Response.Where(aa => aa.apiid == userid);
+                                if (url != null)
+                                {
+                                    var chkurl = url.SingleOrDefault().REsponse_Url;
+                                    chkurl = chkurl.Replace("ooo", Transid).Replace("sss", Status).Replace("ttt", Reqid).Replace("rrr", MSG);
+                                    HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(chkurl);
+                                    WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(25).TotalMilliseconds;
+                                    try
+                                    {
+
+                                        WebResponse Response = WebRequestObject.GetResponse();
+                                        Stream WebStream = Response.GetResponseStream();
+                                        StreamReader Reader = new StreamReader(WebStream);
+                                        var webcontent = Reader.ReadToEnd();
+                                    }
+                                    catch
+                                    { }
+                                }
+                            }
+                        }
+                        catch
+                        { }
+
+                        try
+                        {
+                            if (Status == "Rejected")
+                            {
+
+                                dbsrs.proc_PAN_CARD_Refund_new_manual(idno.ToString(), "Failed", "Rejected", MSG);
+
+                            }
+                            else if (Status == "Approved")
+                            {
+                                dbsrs.proc_PAN_CARD_Refund_new_manual(idno.ToString(), "Success", "Approved", Convert.ToString(Transid));
+
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                        //}
+                    }
                     else if (Type == "Recharge")
                     {
                         try

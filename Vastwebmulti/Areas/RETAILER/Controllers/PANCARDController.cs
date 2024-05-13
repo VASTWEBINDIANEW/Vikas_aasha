@@ -750,6 +750,50 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             
         }
+
+
+        public ActionResult TokenPurchaseReport_new_manual()
+        {
+            var userid = User.Identity.GetUserId();
+            string txt_frm_date = DateTime.Now.ToString();
+            string txt_to_date = DateTime.Now.ToString();
+            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
+            string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
+            var frm_date1 = Convert.ToDateTime(frm_date);
+            var ch = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date1).OrderByDescending(s => s.idno).ToList();
+
+            return View(ch);
+        }
+        [HttpPost]
+        public ActionResult TokenPurchaseReport_new_manual(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            var userid = User.Identity.GetUserId();
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            var frm_date1 = Convert.ToDateTime(frm_date);
+            var to_date1 = Convert.ToDateTime(to_date);
+
+            if (ddl_status == "ALL")
+            {
+                var ch = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date1 && a.request_time < to_date1).OrderByDescending(s => s.idno).ToList();
+                return View(ch);
+            }
+            else
+            {
+                var ch = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date1 && a.request_time < to_date1 && a.status.ToUpper() == ddl_status).OrderByDescending(s => s.idno).ToList();
+                return View(ch);
+            }
+
+
+        }
         public ActionResult PDF_TokenPurchaseReport(string txt_frm_date, string txt_to_date, string ddl_status)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
@@ -816,9 +860,38 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
 
         }
-    
 
-    public ActionResult Excel_TokenPurchase_Report(string txt_frm_date, string txt_to_date, string ddl_status)
+        public ActionResult PDF_TokenPurchaseReport1_manual(string txt_frm_date, string txt_to_date, string ddl_status)
+        {
+            var userid = User.Identity.GetUserId();
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            var frm_date1 = Convert.ToDateTime(frm_date);
+            var to_date1 = Convert.ToDateTime(to_date);
+
+            if (ddl_status == "ALL")
+            {
+                var ch = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date1 && a.request_time < to_date1).OrderByDescending(s => s.idno).ToList();
+                return new ViewAsPdf(ch);
+            }
+            else
+            {
+                var ch = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date1 && a.request_time < to_date1 && a.status.ToUpper() == ddl_status).OrderByDescending(s => s.idno).ToList();
+                return new ViewAsPdf(ch);
+            }
+
+
+
+        }
+        public ActionResult Excel_TokenPurchase_Report(string txt_frm_date, string txt_to_date, string ddl_status)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
@@ -927,6 +1000,80 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 else
                 {
                     dataTbl.Rows.Add("", "", "", "", "", "", "", "", "");
+                }
+                var grid = new GridView();
+                grid.DataSource = dataTbl;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=Excel_TokenPurchase_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+                return View();
+            }
+        } 
+        public ActionResult Excel_TokenPurchase_Report1_manual(string txt_frm_date, string txt_to_date, string ddl_status)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+
+                DateTime frm1 = Convert.ToDateTime(txt_frm_date);
+                DateTime to1 = Convert.ToDateTime(txt_to_date);
+
+                txt_frm_date = frm1.ToString("dd-MM-yyyy");
+                txt_to_date = to1.ToString("dd-MM-yyyy");
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                DateTime frm_date = dt.Date;
+                DateTime to_date = dt1.AddDays(1);
+                var userid = User.Identity.GetUserId();
+
+                ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? null : ddl_status;
+                int pagesize = 2000;
+
+                var proc_Response = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date && a.request_time < to_date).OrderByDescending(s => s.idno).ToList();
+
+                if (ddl_status != "ALL")
+                {
+                   proc_Response = db.pancard_transation_manual.Where(a => a.Reailerid == userid && a.request_time > frm_date && a.request_time < to_date && a.status.ToUpper() == ddl_status).OrderByDescending(s => s.idno).ToList();
+
+                }
+
+                DataTable dataTbl = new DataTable();
+                dataTbl.Columns.Add("Status", typeof(string));
+                dataTbl.Columns.Add("Name", typeof(string));
+                dataTbl.Columns.Add("Mobile", typeof(string));
+                dataTbl.Columns.Add("Email", typeof(string));
+                dataTbl.Columns.Add("Father Name", typeof(string));
+                dataTbl.Columns.Add("DOB", typeof(string));
+                dataTbl.Columns.Add("Aadhaar", typeof(string));
+                dataTbl.Columns.Add("Gender", typeof(string));
+                 dataTbl.Columns.Add("Amount", typeof(string));
+                dataTbl.Columns.Add("Request id", typeof(string));
+                dataTbl.Columns.Add("Request Time", typeof(string));
+                dataTbl.Columns.Add("Remain Pre", typeof(string));
+                dataTbl.Columns.Add("Comm", typeof(string));
+                dataTbl.Columns.Add("TDS", typeof(string));
+                dataTbl.Columns.Add("Remain Post ₹", typeof(string));
+                dataTbl.Columns.Add("Final ", typeof(string));
+                
+                if (proc_Response.Count() > 0)
+                {
+                    foreach (var item in proc_Response)
+                    {
+                        dataTbl.Rows.Add(item.status,item.Name,item.Mobile,item.Email,item.Fathername,item.DOB,item.Aadharno,item.Gender, item.Amount, item.requestid, item.request_time, item.Rem_pre, item.Rem_comm, item.Rem_tds, item.rem_post, item.Rem_final);
+                    }
+                }
+                else
+                {
+                    dataTbl.Rows.Add("", "", "", "", "", "", "", "", "","","", "", "", "", "", "");
                 }
                 var grid = new GridView();
                 grid.DataSource = dataTbl;

@@ -48,7 +48,22 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-
+        public IRestResponse creaditRemitter_details(string mobile, string token)
+        {
+            var client = new RestClient(BaseURL + "/api/CREDITCARD/ben_details");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile = mobile
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
         public IRestResponse Remitter_details_Wallet(string mobile, string token)
         {
             var url = BaseURL + "/api/DMTPAYTM/Benlist";
@@ -505,6 +520,31 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             var data = new
             {
                 t_id = t_id
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile)
+        {
+            var client = new RestClient(BaseURL + "/api/UTI/ManualRequest");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                Title= Title,
+                Gender= Gender,
+                Aadharno= Aadharno,
+                Name= Name,
+                DOB= DOB.ToString("yyyy-MM-dd"),
+                AadharregNumber= AadharregNumber,
+                Fathername= Fathername,
+                Email= Email,
+                Mobile= Mobile
             };
 
             var serializer = new JavaScriptSerializer();
