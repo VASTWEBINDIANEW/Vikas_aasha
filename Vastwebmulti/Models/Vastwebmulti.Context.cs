@@ -851,6 +851,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Pancard_Retailer_comm_new_manual> Pancard_Retailer_comm_new_manual { get; set; }
         public virtual DbSet<pancard_transation_manual> pancard_transation_manual { get; set; }
         public virtual DbSet<passbyretailerdmt> passbyretailerdmts { get; set; }
+        public virtual DbSet<Aeps_aadharpay_comm> Aeps_aadharpay_comm { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23173,6 +23174,65 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("To", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCreditDetails_Result>("GetCreditDetails", roleTypeParameter, userIdParameter, fromParameter, toParameter);
+        }
+    
+        public virtual int Aeps_aadharpay_charges(string retailerid, string status, string type)
+        {
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("Retailerid", retailerid) :
+                new ObjectParameter("Retailerid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Aeps_aadharpay_charges", retaileridParameter, statusParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<AepsChargeAdminReport_Result> AepsChargeAdminReport(string retailerId, string type, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AepsChargeAdminReport_Result>("AepsChargeAdminReport", retailerIdParameter, typeParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<AepsChargeRetailerReport_Result> AepsChargeRetailerReport(string retailerId, string type, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AepsChargeRetailerReport_Result>("AepsChargeRetailerReport", retailerIdParameter, typeParameter, fromParameter, toParameter);
         }
     }
 }

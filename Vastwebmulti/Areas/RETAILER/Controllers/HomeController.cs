@@ -10409,6 +10409,42 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return View(proc_Response);
             }
         }
+
+        public ActionResult AepsChargesReprt()
+        {
+            var retailerId = User.Identity.GetUserId();
+            DateTime dateTime = DateTime.Now;
+            DateTime nextday = dateTime.AddDays(1);
+            string CrunDay = dateTime.ToString("yyyy-MM-dd");
+            string NextDay = nextday.ToString("yyyy-MM-dd");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime CruntDateTime = DateTime.ParseExact(CrunDay, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime NextDayDatetime = DateTime.ParseExact(NextDay, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            var data = db.AepsChargeRetailerReport(retailerId, "All", CruntDateTime, NextDayDatetime).ToList();
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult AepsChargesReprt(string Type, string txt_frm_date, string txt_to_date)
+        {
+            if (Type == "" || Type == null)
+            {
+                Type = "All";
+            }
+            var retailerId = User.Identity.GetUserId();
+            DateTime frm1 = Convert.ToDateTime(txt_frm_date);
+            DateTime to1 = Convert.ToDateTime(txt_to_date);
+
+            txt_frm_date = frm1.ToString("dd-MM-yyyy");
+            txt_to_date = to1.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime frm_date = dt.Date;
+            DateTime to_date = dt1.AddDays(1);
+            var data = db.AepsChargeRetailerReport(retailerId, Type, frm_date, to_date).ToList();
+            return View(data);
+        }
+
         public ActionResult PDF_Money_Transfer_Report(string txt_frm_date, string txt_to_date, string ddl_status, string ddl_Type, string txtnumberfind)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
@@ -16631,45 +16667,73 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                 }
-                var client = new RestClient();
-                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerification");
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("content-type", "text/plain");
-                request.AddHeader("cache-control", "no-cache");
-                request.AddHeader("authorization", "bearer " + token);//OAUTH token
-                request.AddHeader("hash", Convert.ToBase64String(hash));
-                request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
-                request.AddHeader("eskey", encryptUsingPublicKey);
-                request.AddHeader("MerchantID", retailer.AepsMerchandId);
-                request.AddHeader("Type", "AEPS");
-                request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
-                //request.AddHeader("Requestdata", RequestJson);
-                var req1 = new
+                var RemainBlance = db.Remain_reteller_balance.Where(x => x.RetellerId == userid).FirstOrDefault().Remainamount;
+                if (RemainBlance > 1)
                 {
-                    Requestdata = RequestJson,
-                    encryptUsingSessionKey = encryptUsingSessionKey
-                };
-                var jsonnn = JsonConvert.SerializeObject(req1);
-                request.AddParameter("text/plain",
-                    jsonnn, ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-                dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
-                var status = "Failed";
-                var msg1 = "";
-                AEPS2faREQLOG("RequestJson: " + resp1);
-                var sts = resp1.Content.ADDINFO.status;
-                msg1 = resp1.Content.ADDINFO.message;
-                if (sts == "DONE")
-                {
-                    var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
-                    twofacheck.Status = true;
-                    twofacheck.InsertDate = DateTime.Now;
-                    db.SaveChanges();
-                  
-                    status = "Success";
+                    var client = new RestClient();
+                    client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerification");
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("content-type", "text/plain");
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                    request.AddHeader("hash", Convert.ToBase64String(hash));
+                    request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
+                    request.AddHeader("eskey", encryptUsingPublicKey);
+                    request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                    request.AddHeader("Type", "AEPS");
+                    request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                    //request.AddHeader("Requestdata", RequestJson);
+                    var req1 = new
+                    {
+                        Requestdata = RequestJson,
+                        encryptUsingSessionKey = encryptUsingSessionKey
+                    };
+                    var jsonnn = JsonConvert.SerializeObject(req1);
+                    request.AddParameter("text/plain",
+                        jsonnn, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+                    var status = "Failed";
+                    var msg1 = "";
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                        AEPS2faREQLOG("2FA Aeps Response : " + resp1 + " 2FA Time : " + DateTime.Now);
+                        string sts = resp1.Content.ADDINFO.status;
+                        msg1 = resp1.Content.ADDINFO.message;
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), Convert.ToString(sts), "Aeps");
+                        }
+                        catch (Exception ex)
+                        {
+                            AEPS2faREQLOG("Error : " + ex.Message + " Error Time : " + DateTime.Now);
+                        }
+                        if (sts == "DONE")
+                        {
+                            var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                            twofacheck.Status = true;
+                            twofacheck.InsertDate = DateTime.Now;
+                            db.SaveChanges();
+
+                            status = "Success";
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), "NOTDONE", "Aeps");
+                        }
+                        catch { }
+                    }
+                    var viewresponse1 = new { Status = status, Message = msg1 };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
                 }
-                var viewresponse1 = new { Status = status, Message = msg1 };
-                return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    var viewresponse1 = new { Status = "Failed", Message = "Retailer remain balance is low." };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
             }
          }
         public static void AEPS2faREQLOG(string strMessage)
@@ -16929,45 +16993,74 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                 }
-                var client = new RestClient();
-                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerificationaadhar");
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("content-type", "text/plain");
-                request.AddHeader("cache-control", "no-cache");
-                request.AddHeader("authorization", "bearer " + token);//OAUTH token
-                request.AddHeader("hash", Convert.ToBase64String(hash));
-                request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
-                request.AddHeader("eskey", encryptUsingPublicKey);
-                request.AddHeader("MerchantID", retailer.AepsMerchandId);
-                request.AddHeader("Type", "AEPS");
+                var RemainBlance = db.Remain_reteller_balance.Where(x => x.RetellerId == userid).FirstOrDefault().Remainamount;
+                if (RemainBlance > 1)
+                {
+                    var client = new RestClient();
+                    client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerificationaadhar");
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("content-type", "text/plain");
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                    request.AddHeader("hash", Convert.ToBase64String(hash));
+                    request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
+                    request.AddHeader("eskey", encryptUsingPublicKey);
+                    request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                    request.AddHeader("Type", "AEPS");
 
-                request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
-                //request.AddHeader("Requestdata", RequestJson);
-                var req1 = new
-                {
-                    Requestdata = RequestJson,
-                    encryptUsingSessionKey = encryptUsingSessionKey
-                };
-                var jsonnn = JsonConvert.SerializeObject(req1);
-                request.AddParameter("text/plain",
-                    jsonnn, ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-                dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
-                WriteLogAEPSREQLOG("Response " + response.Content);
-                var status = "Failed";
-                var msg1 = "";
-                var sts = resp1.Content.ADDINFO.status;
-                msg1 = resp1.Content.ADDINFO.message;
-                if (sts == "DONE")
-                {
-                    var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
-                    twofacheck.status = true;
-                    twofacheck.insertdate = DateTime.Now;
-                    db.SaveChanges();
-                    status = "Success";
+                    request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                    //request.AddHeader("Requestdata", RequestJson);
+                    var req1 = new
+                    {
+                        Requestdata = RequestJson,
+                        encryptUsingSessionKey = encryptUsingSessionKey
+                    };
+                    var jsonnn = JsonConvert.SerializeObject(req1);
+                    request.AddParameter("text/plain",
+                        jsonnn, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+                    dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                    AEPS2faREQLOG("2FA Aadharpay Response " + response.Content + " Transfer Time : " + DateTime.Now);
+                    var status = "Failed";
+                    var msg1 = "";
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        string sts = resp1.Content.ADDINFO.status;
+                        msg1 = resp1.Content.ADDINFO.message;
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), Convert.ToString(sts), "Aadharpay");
+                        }
+                        catch (Exception ex)
+                        {
+                            AEPS2faREQLOG("Aadharpay Error : " + ex.Message + " Error Time : " + DateTime.Now);
+                        }
+                        if (sts == "DONE")
+                        {
+                            var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
+                            twofacheck.status = true;
+                            twofacheck.insertdate = DateTime.Now;
+                            db.SaveChanges();
+                            status = "Success";
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), "NOTDONE", "Aadharpay");
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                    var viewresponse1 = new { Status = status, Message = msg1 };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
                 }
-                var viewresponse1 = new { Status = status, Message = msg1 };
-                return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    var viewresponse1 = new { Status = "Failed", Message = "Retailer remain balance is low." };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
             }
         }
         public ActionResult RetailerName()
