@@ -43,6 +43,7 @@
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Transfer From</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Transfer To</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Frm Name</th>
+            <th style="padding-left:2px; padding-right:2px;text-align:center;">Name</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Mobile No.</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">District</th>
 
@@ -50,6 +51,7 @@
             <th style="padding-left: 2px;padding-right: 2px;text-align:center;">Admin Credit Amount</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Account Balance</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Due Credit</th>
+            <th style="padding-left:2px; padding-right:2px;text-align:center;">Live Due Credit</th>
             <th style="padding-left:2px; padding-right:2px;text-align:center;">Transfer Time</th>
 
         </tr>
@@ -61,6 +63,7 @@
             foreach (var item in Model)
             {
                 <tr>
+                    <td>@i</td>
                     <td>@item.FromRole</td>
                     <td>@item.ToRole</td>
                     <td>@item.FrmName</td>
@@ -71,6 +74,7 @@
                     <td>@item.Amount</td>
                     <td>@item.ToRemainPose</td>
                     <td>@item.CrPose</td>
+                    <td>@item.livecr</td>
                     <td>@item.TransferTime</td>
                 </tr>
                 i++;
