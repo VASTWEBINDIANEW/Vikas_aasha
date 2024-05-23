@@ -23155,27 +23155,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("proc_PAN_CARD_Refund_new_manual", idnoParameter, statusParameter, couponStatusParameter, tXN_IDParameter);
         }
     
-        public virtual ObjectResult<GetCreditDetails_Result> GetCreditDetails(string roleType, string userId, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
-        {
-            var roleTypeParameter = roleType != null ?
-                new ObjectParameter("RoleType", roleType) :
-                new ObjectParameter("RoleType", typeof(string));
-    
-            var userIdParameter = userId != null ?
-                new ObjectParameter("UserId", userId) :
-                new ObjectParameter("UserId", typeof(string));
-    
-            var fromParameter = from.HasValue ?
-                new ObjectParameter("From", from) :
-                new ObjectParameter("From", typeof(System.DateTime));
-    
-            var toParameter = to.HasValue ?
-                new ObjectParameter("To", to) :
-                new ObjectParameter("To", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCreditDetails_Result>("GetCreditDetails", roleTypeParameter, userIdParameter, fromParameter, toParameter);
-        }
-    
         public virtual int Aeps_aadharpay_charges(string retailerid, string status, string type)
         {
             var retaileridParameter = retailerid != null ?
@@ -23233,6 +23212,27 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("to", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AepsChargeRetailerReport_Result>("AepsChargeRetailerReport", retailerIdParameter, typeParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<GetCreditDetails_Result> GetCreditDetails(string userRole, string userId, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var userRoleParameter = userRole != null ?
+                new ObjectParameter("UserRole", userRole) :
+                new ObjectParameter("UserRole", typeof(string));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCreditDetails_Result>("GetCreditDetails", userRoleParameter, userIdParameter, fromParameter, toParameter);
         }
     }
 }

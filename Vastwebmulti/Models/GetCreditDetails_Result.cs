@@ -13,10 +13,7 @@ namespace Vastwebmulti.Models
     
     public partial class GetCreditDetails_Result
     {
-        public int id { get; set; }
-        public string Transfer_from { get; set; }
         public string FromRole { get; set; }
-        public string Transfer_to { get; set; }
         public string ToRole { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public Nullable<decimal> CrPre { get; set; }
@@ -24,12 +21,10 @@ namespace Vastwebmulti.Models
         public Nullable<decimal> ToRemainPre { get; set; }
         public Nullable<decimal> ToRemainPose { get; set; }
         public string Type { get; set; }
-        public Nullable<decimal> FromRemainPre { get; set; }
-        public Nullable<decimal> FromRemainPose { get; set; }
         public Nullable<System.DateTime> TransferTime { get; set; }
         public string FrmName { get; set; }
-        public Nullable<int> State { get; set; }
-        public Nullable<int> District { get; set; }
+        public string Name { get; set; }
+        public Nullable<decimal> livecr { get; set; }
         public string Mobile { get; set; }
         public string State_name { get; set; }
         public string Dist_Desc { get; set; }

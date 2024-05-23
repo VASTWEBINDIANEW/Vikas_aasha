@@ -422,11 +422,11 @@
                                 <div class="col-md-1 cltu responcive-fify" style="padding: 0px; margin-right: 3px;">
                                     <div class="form-line">
                                         <select class="selectpicker form-control" data-live-search="true" id="ddlusers" name="RoleType" style="margin-top:4px;padding-left:0px; padding-right:0px;text-align:center;" onchange="answers()">
-                                            <option value="Admin">All User</option>
-                                            <option value="Master">Master</option>
+                                            <option value="ALL">All User</option>
+                                            <option value="master">Master</option>
                                             <option value="Dealer">Distributor</option>
                                             <option value="Retailer">Retailer</option>
-                                            <option value="Api User">Api User</option>
+                                            <option value="API">Api User</option>
                                         </select>
                                     </div>
                                 </div>
@@ -492,19 +492,16 @@
                                 <thead style="background-color:whitesmoke;">
                                     <tr style="color: black;font-size: 13px;">
                                         <th>Transfer From</th>
-                                        <th>From RemainPre</th>
-                                        <th>From RemainPost</th>
                                         <th>Transfer To</th>
-                                        <th>Amount</th>
-                                        <th>CrPre</th>
-                                        <th>CrPost</th>
-                                        <th>To RemainPre</th>
-                                        <th>To RemainPost</th>
                                         <th>Frm Name</th>
-                                        <th>Mobile</th>
-                                        <th>State</th>
+                                        <th>Person Name</th>
+                                        <th>Mobile No.</th>
                                         <th>District</th>
-                                        <th>Type</th>
+                                        <th>State</th>
+                                        <th>Admin Credit Amount</th>
+                                        <th>Account Balance</th>
+                                        <th>Due Credit</th>
+                                        <th>Live Due Credit</th>
                                         <th>Transfer Time</th>
                                     </tr>
                                 </thead>
@@ -513,19 +510,16 @@
                                     {
                                         <tr>
                                             <td>@item.FromRole</td>
-                                            <td>@item.FromRemainPre</td>
-                                            <td>@item.FromRemainPose</td>
                                             <td>@item.ToRole</td>
-                                            <td>@item.Amount</td>
-                                            <td>@item.CrPre</td>
-                                            <td>@item.CrPose</td>
-                                            <td>@item.ToRemainPre</td>
-                                            <td>@item.ToRemainPose</td>
                                             <td>@item.FrmName</td>
+                                            <td>@item.Name</td>
                                             <td>@item.Mobile</td>
-                                            <td>@item.State_name</td>
                                             <td>@item.Dist_Desc</td>
-                                            <td>@item.Type</td>
+                                            <td>@item.State_name</td>
+                                            <td>@item.Amount</td>
+                                            <td>@item.ToRemainPose</td>
+                                            <td>@item.CrPose</td>
+                                            <td>@item.livecr</td>
                                             <td>@item.TransferTime</td>
                                         </tr>
                                     }
@@ -590,7 +584,7 @@
     function answers() {
         var selectElement = document.getElementById("ddlusers");
         var selectedValue = selectElement.value;
-        if (selectedValue == 'Master') {
+        if (selectedValue == 'master') {
             document.getElementById('allmaster').style.display = 'block';
             document.getElementById('dlm').style.display = 'none';
             document.getElementById('rem').style.display = 'none';
@@ -608,13 +602,13 @@
             document.getElementById('dlm').style.display = 'none';
             document.getElementById('apiid').style.display = 'none';
         }
-        else if (selectedValue == 'Api User') {
+        else if (selectedValue == 'API') {
             document.getElementById('apiid').style.display = 'block';
             document.getElementById('allmaster').style.display = 'none';
             document.getElementById('dlm').style.display = 'none';
             document.getElementById('rem').style.display = 'none';
         }
-        else if (selectedValue == 'Admin') {
+        else if (selectedValue == 'ALL') {
             document.getElementById('apiid').style.display = 'none';
             document.getElementById('allmaster').style.display = 'none';
             document.getElementById('dlm').style.display = 'none';
