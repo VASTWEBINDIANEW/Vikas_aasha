@@ -35687,7 +35687,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
                 var tokn = Responsetoken.gettoken();
                 VastBazaar vb = new VastBazaar();
-                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile);
+                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid);
                 dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
 
                 if (responseData.StatusCode == 200)
@@ -35716,7 +35716,144 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
            
         }
+        public ActionResult slipview(int Idno)
+        {
+            var chk = db.pancard_transation_manual.SingleOrDefault(s => s.idno == Idno);
+            if (chk != null)
+            {
+                WebClient webClient = new WebClient();
+                string serverPath = Server.MapPath("~/pancardslips/");
+                Directory.CreateDirectory(serverPath); // Ensure directory exists
+                string localFilePath = Path.Combine(serverPath, Path.GetFileName(chk.imageurl));
 
+                try
+                {
+                    // Download the file
+                    webClient.DownloadFile(chk.imageurl, localFilePath);
+
+                    // Update the URL to be relative to the application
+                    chk.imageurl = "pancardslips/" + Path.GetFileName(chk.imageurl);
+
+                    // Save changes to the database
+                    db.SaveChanges();
+
+                    // Redirect to the file
+                    string baseUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath;
+                    /* return Json(url + "/"+ "pancardslips/" + Path.GetFileName(chk.imageurl)); */// Adjust content type as needed
+                    return Json(baseUrl + "/" + "pancardslips/" + Path.GetFileName(chk.imageurl));
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle the exception appropriately
+                    Console.WriteLine("Exception occurred during file download: " + ex.Message);
+                    return HttpNotFound(); 
+                    // Or return an appropriate error response
+                }
+            }
+            else
+            {
+              
+                // Handle the case where the record with the given Idno doesn't exist
+                return HttpNotFound();
+            }
+        }
+        public ActionResult Extracomm_Report()
+        {
+            var userid = User.Identity.GetUserId();
+            var clos = db.daywisesettelecommsts.Where(s => s.retailerid == userid).ToList();
+
+            if (clos.Count > 0 && clos[0].sts == true)
+            {
+                var chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Retailer").ToList();
+                if (chk.Count == 0)
+                {
+                    daywisecommsetforuser d1 = new daywisecommsetforuser();
+                    d1.role = "Retailer";
+                    d1.userid = userid;
+                    d1.Comm_2000_5000 = 0;
+                    d1.Comm_5001_10000 = 0;
+                    d1.Comm_10001_max = 0;
+                    db.daywisecommsetforusers.Add(d1);
+                    db.SaveChanges();
+                }
+                var dfg = db.daywisecomms.Where(s => s.userid == userid).OrderByDescending(s => s.date).ToList();
+                return View(dfg);
+            }
+            else
+            {
+                return RedirectToAction("", "Home");
+            }
+        }
+        [HttpPost]
+         public ActionResult Extracomm_Report(string txt_frm_date, string txt_to_date)
+        {
+            var userid = User.Identity.GetUserId();
+            
+
+            if (txt_frm_date == null && txt_to_date == null)
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+
+            }
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+           
+            var dfg = db.daywisecomms.Where(s => s.userid == userid && s.date>frm_date && s.date<to_date).OrderByDescending(s=>s.date).ToList();
+            return View(dfg);
+        }
+        public ActionResult openingbalance_Report()
+        {
+            var userid = User.Identity.GetUserId();
+            var clos = db.daywisesettelecommsts.Where(s => s.retailerid == userid).ToList();
+
+            if (clos.Count > 0 && clos[0].sts == true)
+            {
+                
+                var dfg = db.closingbalances.Where(s => s.userid == userid).OrderByDescending(s => s.date).ToList();
+                return View(dfg);
+            }
+            else
+            {
+                return RedirectToAction("","Home");
+            }
+        }
+        [HttpPost]
+        public ActionResult openingbalance_Report(string txt_frm_date, string txt_to_date)
+        {
+            var userid = User.Identity.GetUserId();
+
+
+            if (txt_frm_date == null && txt_to_date == null)
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+
+            }
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+
+            var dfg = db.closingbalances.Where(s => s.userid == userid && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
+            return View(dfg);
+        }
         [HttpPost]
         protected override void Dispose(bool disposing)
         {

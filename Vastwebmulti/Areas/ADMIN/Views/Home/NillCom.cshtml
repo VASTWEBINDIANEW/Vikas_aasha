@@ -261,6 +261,7 @@
                                                 <label>Select State (Circle)</label><label id="lblstatecircle" class="form-invalid"></label>
                                                 <div class="">
                                                     <select id="statecircle" name="statecircle" class="form-control for-select2 border-0" onchange="DdlValidationForm();" style="-webkit-appearance:none;">
+                                                        <option value="ALL">ALL</option>
                                                         <option value="Andhra Pradesh">Andhra Pradesh</option>
                                                         <option value="Assam">Assam</option>
                                                         <option value="Bihar Jharkhand">Bihar Jharkhand</option>
@@ -1332,6 +1333,7 @@
 
                     $('#ByAmountOperator').empty()
                    $('#ByAmountOperator').append('<option selected="selected" value="">Please select Operator</option>');
+                   $('#ByAmountOperator').append('<option selected="selected" value="ALL">ALL</option>');
                     $.each(data, function (data, item) {
             $('#ByAmountOperator').append($('<option></option>').text(item.Text).val(item.Value));
 

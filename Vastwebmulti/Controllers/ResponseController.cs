@@ -1561,33 +1561,11 @@ namespace Vastwebmulti.Controllers
                         //{
                         try
                         {
-                            var name = dbsrs.pancard_transation.Where(a => a.requestid == Reqid).SingleOrDefault();
+                            var name = dbsrs.pancard_transation_manual.Where(a => a.requestid == Reqid).SingleOrDefault();
 
                             idno = name.idno;
                             var userid = name.Reailerid;
-                            var role = dbsrs.UserRoles.Where(aa => aa.UserId == userid).SingleOrDefault().RoleId;
-                            var userrole = dbsrs.Roles.Where(aa => aa.RoleId == role).SingleOrDefault().Name;
-                            if (userrole == "API")
-                            {
-                                var url = dbsrs.Money_transfer_Response.Where(aa => aa.apiid == userid);
-                                if (url != null)
-                                {
-                                    var chkurl = url.SingleOrDefault().REsponse_Url;
-                                    chkurl = chkurl.Replace("ooo", Transid).Replace("sss", Status).Replace("ttt", Reqid).Replace("rrr", MSG);
-                                    HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(chkurl);
-                                    WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(25).TotalMilliseconds;
-                                    try
-                                    {
-
-                                        WebResponse Response = WebRequestObject.GetResponse();
-                                        Stream WebStream = Response.GetResponseStream();
-                                        StreamReader Reader = new StreamReader(WebStream);
-                                        var webcontent = Reader.ReadToEnd();
-                                    }
-                                    catch
-                                    { }
-                                }
-                            }
+                       
                         }
                         catch
                         { }
@@ -1605,6 +1583,10 @@ namespace Vastwebmulti.Controllers
                                 dbsrs.proc_PAN_CARD_Refund_new_manual(idno.ToString(), "Success", "Approved", Convert.ToString(Transid));
 
                             }
+                            var name1 = dbsrs.pancard_transation_manual.Where(a => a.requestid == Reqid).SingleOrDefault();
+                            name1.imageurl = Transid;
+
+                            dbsrs.SaveChanges();
                         }
                         catch
                         {
@@ -10527,5 +10509,6 @@ namespace Vastwebmulti.Controllers
             }
             return RedirectToAction("testrecharge");
         }
+
     }
 }

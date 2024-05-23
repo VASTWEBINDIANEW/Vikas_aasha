@@ -977,7 +977,29 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">Manage Passwo
                                     </span>
                                 </a>
                             </li>
+               
+                    var clos = DB1.daywisesettelecommsts.Where(s => s.retailerid == Userid).ToList();
+               
+                    if (clos.Count > 0 && clos[0].sts == true)
+                    {
+                            <li>
+                                <a href="@Url.Action("Extracomm_Report", "Home")">
+                                    <i class="fa fa-extracomm" aria-hidden="true"></i>
+                                    <span>
+                                        Extra comm
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("openingbalance_Report", "Home")">
+                                    <i class="fa fa-extracomm" aria-hidden="true"></i>
+                                    <span>
+                                        Opening Balance
+                                    </span>
+                                </a>
+                            </li>
                         }
+                    }
                         @if (finiancialstatus == "CHKOK")
                         {
                             <li>
@@ -1087,36 +1109,36 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">Manage Passwo
                             </li>
                             if (ViewBag.UPIQR == true)
                             {
-                            <li>
-                                <a href="@Url.Action("UPIQR", "Home")">
-                                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                <li>
+                                    <a href="@Url.Action("UPIQR", "Home")">
+                                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
 
-                                    <span>Add By<div class="for-blink1"> UPI QR</div></span>
-                                </a>
+                                        <span>Add By<div class="for-blink1"> UPI QR</div></span>
+                                    </a>
 
-                            </li>
+                                </li>
                             }
                             if (ViewBag.UPICOLLECTION == true)
                             {
-                            <li>
-                                <a href="@Url.Action("UPICollection", "Home")">
-                                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                <li>
+                                    <a href="@Url.Action("UPICollection", "Home")">
+                                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
 
-                                    <span>Add By<div class="for-blink1"> UPI Collection</div></span>
-                                </a>
+                                        <span>Add By<div class="for-blink1"> UPI Collection</div></span>
+                                    </a>
 
-                            </li>
+                                </li>
                             }
                             if (ViewBag.GATEWAY)
                             {
-                            <li>
-                                <a href="@Url.Action("GatewayTRANSFER", "Home")">
-                                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-                                    <span>Add By<div class="for-blink1"> Gateway</div></span>
-                                    
-                                </a>
+                                <li>
+                                    <a href="@Url.Action("GatewayTRANSFER", "Home")">
+                                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                        <span>Add By<div class="for-blink1"> Gateway</div></span>
 
-                            </li>
+                                    </a>
+
+                                </li>
                             }
                             @*if (ViewBag.CHKUPI != null)
             {
