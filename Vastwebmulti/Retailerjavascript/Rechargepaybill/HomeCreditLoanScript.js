@@ -774,7 +774,7 @@ function Loandropdown(x) {
         document.getElementById("btngetloanviewbill").style.display = "none";
     }
     else if (x === "Ujjivan Small Finance Bank") {
-        document.getElementById("divLoanCustomerid").style.display = "block"; 
+        //document.getElementById("divLoanCustomerid").style.display = "block"; 
         document.getElementById("txtLoanName").style.display = "block";
         document.getElementById("divLoandob").style.display = "none";
         document.getElementById("divLoanpancard").style.display = "none";
@@ -788,10 +788,10 @@ function Loandropdown(x) {
         $("#divLoanAcno").removeClass("col-md-3");
         $("#divLoanmobileno").addClass("col-md-2");
         $("#divLoanmobileno").removeClass("col-md-1");
-        document.getElementById("divLoanmobileno").style.display = "block";
+        document.getElementById("divLoanmobileno").style.display = "none"; // on this
         document.getElementById("divLoanAcno").style.display = "block";
-        document.getElementById("divLoanName").style.display = "block";
-        document.getElementById("btngetloanviewbill").style.display = "none";
+        //document.getElementById("divLoanName").style.display = "block";
+        //document.getElementById("btngetloanviewbill").style.display = "none";
     }
     else if (x === "Volkswagen Finance") {
         document.getElementById("divLoanCustomerid").style.display = "none";
@@ -1426,68 +1426,73 @@ function continuebtnvalidationloan(loanddl, txtacno, mobile, Amount, paymodeLoan
            document.getElementById("divLoanAcno").style.marginTop = "8px";
            event.preventDefault();
            return false;
-       }
+        }
 
-       else if (customerid === "" && loanddl === "Ujjivan Small Finance Bank") {
-           document.getElementById("Loancustomermessage").innerHTML = "Enter Customer no";
-           document.getElementById("Loancustomermessage").style.display = "block";
-           document.getElementById("amountLoanMessage").style.display = "none";
-           document.getElementById("divpayamountloan").style.marginTop = "8px";
-           document.getElementById("divLoanAcno").style.marginTop = "8px";
-           document.getElementById("Loanmessage").style.display = "none";
-           event.preventDefault();
-           return false;
-       }
-
-       else if (Name === "" && loanddl === "Ujjivan Small Finance Bank") {
-           document.getElementById("LoanNamemessage").innerHTML = "Enter Name";
-           document.getElementById("LoanNamemessage").style.display = "block";
-           document.getElementById("amountLoanMessage").style.display = "none";
-           document.getElementById("divpayamountloan").style.marginTop = "8px";
-           document.getElementById("divLoanAcno").style.marginTop = "8px";
-           document.getElementById("Loanmessage").style.display = "none";
-           document.getElementById("Loancustomermessage").style.display = "none";
-           event.preventDefault();
-           return false;
-       }
-
-       else if (mobile === "" && loanddl === "Ujjivan Small Finance Bank") {
-           document.getElementById("Loanmobilemessage").innerHTML = "Please Enter valid Mobile number";
-           document.getElementById("Loanmobilemessage").style.display = "block";
-           document.getElementById("amountLoanMessage").style.display = "none";
-           document.getElementById("divpayamountloan").style.marginTop = "8px";
-           document.getElementById("divLoanAcno").style.marginTop = "8px";
-           document.getElementById("Loanmessage").style.display = "none";
-           document.getElementById("LoanNamemessage").style.display = "none";
-           document.getElementById("Loancustomermessage").style.display = "none";
-           event.preventDefault();
-           return false;
-       }
+        else if (txtacno != "" && loanddl === "Ujjivan Small Finance Bank") {
+            return true;
+        }
 
 
-       else if (mobile !== "" && loanddl === "Ujjivan Small Finance Bank") {
-           var loanmobile = document.getElementById("txtLoanMobileno").value.length;
-           if (loanmobile !== 10) {
-               document.getElementById("Loanmobilemessage").innerHTML = "Number should be [10] digits";
-               document.getElementById("Loanmobilemessage").style.display = "block";
-               document.getElementById("Loanmessage").style.display = "none";
-               document.getElementById("amountLoanMessage").style.display = "none";
-               document.getElementById("divpayamountloan").style.marginTop = "8px";
-               document.getElementById("divLoanAcno").style.marginTop = "8px";
-               event.preventDefault();
-               return false;
-           }
-           else {
-               document.getElementById("Loanmobilemessage").style.display = "none";
-               document.getElementById("Loanmessage").style.display = "none";
-               document.getElementById("amountLoanMessage").style.display = "none";
-               document.getElementById("divpayamountloan").style.marginTop = "8px";
-               document.getElementById("divLoanAcno").style.marginTop = "8px";
-               //$('#myViewpaybillmodel').modal('show');
-               //   event.preventDefault();
-               return true;
-           }
-       }
+       //else if (customerid === "" && loanddl === "Ujjivan Small Finance Bank") {
+       //    document.getElementById("Loancustomermessage").innerHTML = "Enter Customer no";
+       //    document.getElementById("Loancustomermessage").style.display = "block";
+       //    document.getElementById("amountLoanMessage").style.display = "none";
+       //    document.getElementById("divpayamountloan").style.marginTop = "8px";
+       //    document.getElementById("divLoanAcno").style.marginTop = "8px";
+       //    document.getElementById("Loanmessage").style.display = "none";
+       //    event.preventDefault();
+       //    return false;
+       //}
+
+       //else if (Name === "" && loanddl === "Ujjivan Small Finance Bank") {
+       //    document.getElementById("LoanNamemessage").innerHTML = "Enter Name";
+       //    document.getElementById("LoanNamemessage").style.display = "block";
+       //    document.getElementById("amountLoanMessage").style.display = "none";
+       //    document.getElementById("divpayamountloan").style.marginTop = "8px";
+       //    document.getElementById("divLoanAcno").style.marginTop = "8px";
+       //    document.getElementById("Loanmessage").style.display = "none";
+       //    document.getElementById("Loancustomermessage").style.display = "none";
+       //    event.preventDefault();
+       //    return false;
+       //}
+
+       //else if (mobile === "" && loanddl === "Ujjivan Small Finance Bank") {
+       //    document.getElementById("Loanmobilemessage").innerHTML = "Please Enter valid Mobile number";
+       //    document.getElementById("Loanmobilemessage").style.display = "block";
+       //    document.getElementById("amountLoanMessage").style.display = "none";
+       //    document.getElementById("divpayamountloan").style.marginTop = "8px";
+       //    document.getElementById("divLoanAcno").style.marginTop = "8px";
+       //    document.getElementById("Loanmessage").style.display = "none";
+       //    document.getElementById("LoanNamemessage").style.display = "none";
+       //    document.getElementById("Loancustomermessage").style.display = "none";
+       //    event.preventDefault();
+       //    return false;
+       //}
+
+
+       //else if (mobile !== "" && loanddl === "Ujjivan Small Finance Bank") {
+       //    var loanmobile = document.getElementById("txtLoanMobileno").value.length;
+       //    if (loanmobile !== 10) {
+       //        document.getElementById("Loanmobilemessage").innerHTML = "Number should be [10] digits";
+       //        document.getElementById("Loanmobilemessage").style.display = "block";
+       //        document.getElementById("Loanmessage").style.display = "none";
+       //        document.getElementById("amountLoanMessage").style.display = "none";
+       //        document.getElementById("divpayamountloan").style.marginTop = "8px";
+       //        document.getElementById("divLoanAcno").style.marginTop = "8px";
+       //        event.preventDefault();
+       //        return false;
+       //    }
+       //    else {
+       //        document.getElementById("Loanmobilemessage").style.display = "none";
+       //        document.getElementById("Loanmessage").style.display = "none";
+       //        document.getElementById("amountLoanMessage").style.display = "none";
+       //        document.getElementById("divpayamountloan").style.marginTop = "8px";
+       //        document.getElementById("divLoanAcno").style.marginTop = "8px";
+       //        //$('#myViewpaybillmodel').modal('show');
+       //        //   event.preventDefault();
+       //        return true;
+       //    }
+       //}
 
        else if (txtacno === "" && loanddl === "Volkswagen Finance") {
            document.getElementById("Loanmessage").innerHTML = "Enter Loan Account number";
