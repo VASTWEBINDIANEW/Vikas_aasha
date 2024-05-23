@@ -851,7 +851,6 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Pancard_Retailer_comm_new_manual> Pancard_Retailer_comm_new_manual { get; set; }
         public virtual DbSet<pancard_transation_manual> pancard_transation_manual { get; set; }
         public virtual DbSet<passbyretailerdmt> passbyretailerdmts { get; set; }
-        public virtual DbSet<Aeps_aadharpay_comm> Aeps_aadharpay_comm { get; set; }
         public virtual DbSet<passbyapidmt> passbyapidmts { get; set; }
         public virtual DbSet<loanlimit> loanlimits { get; set; }
         public virtual DbSet<loanpermission> loanpermissions { get; set; }
@@ -863,6 +862,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<daywisesettelecommst> daywisesettelecommsts { get; set; }
         public virtual DbSet<daywisecommsetforuser> daywisecommsetforusers { get; set; }
         public virtual DbSet<daywisecomm> daywisecomms { get; set; }
+        public virtual DbSet<Aeps_aadharpay_comm> Aeps_aadharpay_comm { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
