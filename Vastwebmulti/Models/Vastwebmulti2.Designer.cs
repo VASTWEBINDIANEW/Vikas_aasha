@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\clone new assha\new clone of assha\Vastwebmulti\Models\Vastwebmulti.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\AASA WEB CLONE\AAsaWeb\Vastwebmulti\Models\Vastwebmulti.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

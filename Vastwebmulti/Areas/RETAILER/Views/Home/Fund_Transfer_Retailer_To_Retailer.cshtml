@@ -15,7 +15,32 @@
     }
 }
 
+
 <style>
+
+    /* new css  */
+
+
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+
+    /* new css  */
+
     span {
         color: #fff !important;
     }
@@ -261,11 +286,24 @@
 
     @@media screen and (max-width:1366px) {
         .bread-same-all-page.allpage-responshivenew {
-            margin-top: 5px;
+            margin-top: 0px;
         }
 
         .fourthdesign-retailer-allnone .fundtransfer-rtailer-date {
             width: 72% !important;
+        }
+    }
+
+    @@media only screen and (max-width:767px) {
+        .allpage-responshivenew {
+            padding: 0px 0;
+        }
+
+            .allpage-responshivenew ul li {
+                margin-bottom: 6px;
+            }
+        .col-md-8, .col-md-4.servicepaidreport {
+            padding-left: 15px;
         }
     }
 
@@ -326,18 +364,12 @@
             padding-left: 5px !important;
             font-size: 12px;
         }
-
-        .fund-t-dalear .col-md-3.date-sateclassee.trypurchasecewq.trypurchasecewq-new .custom-date-icon {
-            display: none;
-        }
     }
 
     @@media screen and (max-width:420px) {
-        #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
-            margin-top: -88px !important;
-        }
     }
 </style>
+
 <section class="content content-margin-second content-fourdesign-page allpage-four-design-section">
     <div class="container-fluid">
         <!--Four-Design-Page-Header-Start-->
@@ -352,21 +384,23 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page allpage-responshivenew">
-            <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
+        <div class="page-header-third">
+            <div class="bread-same-all-page allpage-responshivenew">
+                <div class="col-md-6" style="width: auto; float: left; padding: 0;">
+                    <ul style="margin:0;">
+                        <li class="smli">
+                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                            </a>
+                        </li>
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        R<sup style="top: -5px;left: 2px;">2</sup>&nbsp;R Transfer
-                    </li>
-                </ul>
+                        <li class="fullbodydycolorbg tmw-total-color-one">
+                            R<sup style="top: -5px;left: 2px;">2</sup>&nbsp;R Transfer
+                        </li>
+                    </ul>
+                </div>
+
             </div>
-
         </div>
 
     </div>
@@ -375,62 +409,65 @@
 
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
-                <div class="fund-trasfer-left fund-user-left">
-                    <ul class="nav nav-tabs tabtypeschages" id="tabs">
-                        <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tabname="ReatilertoRetailer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="ReatilertoRetailer"})" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true">@favimage To&nbsp;@favimage Fund Transfer</a></li>
+                <div class="page-header-third">
+                    <div class="fund-trasfer-left fund-user-left">
+                        <ul class="nav nav-tabs tabtypeschages" id="tabs">
+                            <li class="tab-link current active tabChangeType" style="width:100% !important;" data-tabname="ReatilertoRetailer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="ReatilertoRetailer"})" data-tab="tab-1"><a data-toggle="tab" href="#home" aria-expanded="true">@favimage To&nbsp;@favimage Fund Transfer</a></li>
 
 
 
 
-                    </ul>
+                        </ul>
 
-                    <div class="width100 float-left ">
+                        <div class="width100 float-left ">
 
-                        <div id="home" class="width100 float-left tab-pane fade active in">
+                            <div id="home" class="width100 float-left tab-pane fade active in">
 
-                            @using (Ajax.BeginForm("retailer_To_retailer_fund_transfer", "Home",
-                              new AjaxOptions
-                              {
-                                  InsertionMode = InsertionMode.Replace,
-                                  OnSuccess = "OnSuccess",
-                                  OnFailure = "OnFailure",
-                                  LoadingElementId = "outer-loader",
-                                  UpdateTargetId = "tblshowMasterD",
-                                  // LoadingElementId = "progress"
-                              }))
-                            {
+                                @using (Ajax.BeginForm("retailer_To_retailer_fund_transfer", "Home",
+                                  new AjaxOptions
+                                  {
+                                      InsertionMode = InsertionMode.Replace,
+                                      OnSuccess = "OnSuccess",
+                                      OnFailure = "OnFailure",
+                                      LoadingElementId = "outer-loader",
+                                      UpdateTargetId = "tblshowMasterD",
+                                      // LoadingElementId = "progress"
+                                  }))
+                                {
 
 
-                                <div class="fund-transfer-form minheight-responsivehe changeback-four-design" id="frmdata">
+                                    <div class="fund-transfer-form minheight-responsivehe changeback-four-design" id="frmdata">
 
-                                    <div class="col-md-3 retailer-first retailer-toretailerclass">
-                                        <div class="fullclassdata">
-                                            <div class="">
-                                                <label class="satefontsize">User&nbsp;Email&nbsp;/&nbsp;Mobile</label>
-                                                <input class="form-control" id="RetailerId" name="RetailerId" placeholder="Enter Email ID / Mobile No" minlength="6" required="required" style="padding-top:4px;height:30px;" type="text">
+                                        <div class="col-md-3 retailer-first retailer-toretailerclass">
+                                            <div class="fullclassdata">
+                                                <div class="">
+                                                    <label class="satefontsize">User&nbsp;Email&nbsp;/&nbsp;Mobile</label>
+                                                    <input class="form-control" id="RetailerId" name="RetailerId" placeholder="Enter Email ID / Mobile No" minlength="6" required="required" style="padding-top:4px;height:30px;" type="text">
 
-                                            </div>
-                                            <div class="col-md-12 show-data">
-                                                <div class="row" id="retailerinform" style="display:none;">
-                                                    <div class="nameshow">
-                                                        <table border="1">
-                                                            <tr>
-                                                                <td><label>Firm&nbsp;Name&nbsp;:</label></td>
-                                                                <td><label id="lblfrmname"></label></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><label>Retailer&nbsp;Name:&nbsp;</label></td>
-                                                                <td> <label id="lblreatilername"></label></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><label>Email:&nbsp;</label></td>
-                                                                <td><label id="lblemail"></label></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><label>Mobile:&nbsp;</label> </td>
-                                                                <td><label id="lblmobile"></label></td>
-                                                            </tr>
-                                                        </table>
+                                                </div>
+                                                <div class="col-md-12 show-data">
+                                                    <div class="row" id="retailerinform" style="display:none;">
+                                                        <div class="nameshow">
+                                                            <table border="1">
+                                                                <tr>
+                                                                    <td><label>Firm&nbsp;Name&nbsp;:</label></td>
+                                                                    <td><label id="lblfrmname"></label></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Retailer&nbsp;Name:&nbsp;</label></td>
+                                                                    <td> <label id="lblreatilername"></label></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Email:&nbsp;</label></td>
+                                                                    <td><label id="lblemail"></label></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Mobile:&nbsp;</label> </td>
+                                                                    <td><label id="lblmobile"></label></td>
+                                                                </tr>
+                                                            </table>
+
+                                                        </div>
 
                                                     </div>
 
@@ -439,52 +476,63 @@
                                             </div>
 
                                         </div>
-
-                                    </div>
-                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                        <label>Enter Amount </label>
-                                        <div>
-                                            <input type="text" id="Retaileramount" required name="Retaileramount" placeholder="Enter Amount" />
+                                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                                            <label>Enter Amount </label>
+                                            <div>
+                                                <input type="text" id="Retaileramount" required name="Retaileramount" placeholder="Enter Amount" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
-                                        <label>Comments</label>
-                                        <div>
-                                            <textarea id="txtRetailercomment" style="outline:none;" required name="txtRetailercomment"></textarea>
+                                        <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
+                                            <label>Comments</label>
+                                            <div>
+                                                <textarea id="txtRetailercomment" style="outline:none;" required name="txtRetailercomment"></textarea>
+                                            </div>
                                         </div>
-                                    </div>
 
 
-                                    @if (ViewBag.dmtpin_otp != null)
-                                    {
-                                        if (ViewBag.dmtpin_otp.status == true)
+                                        @if (ViewBag.dmtpin_otp != null)
                                         {
-                                            <div class="col-md-12 col-sm-12 col-xs-12 fund-comment" style="display:none;" id="otpsubmithideshowr2r">
-                                                <label>Enter OTP</label>
-                                                <div style="position:relative;">
+                                            if (ViewBag.dmtpin_otp.status == true)
+                                            {
+                                                <div class="col-md-12 col-sm-12 col-xs-12 fund-comment" style="display:none;" id="otpsubmithideshowr2r">
+                                                    <label>Enter OTP</label>
+                                                    <div style="position:relative;">
 
 
-                                                    <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter OTP" style="background-color: white;" />
-                                                    <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12" id="resendotpr2r" style="display:none;">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('SECOND','R2RPINOTP')">Resend OTP</a>
+                                                        <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter OTP" style="background-color: white;" />
+                                                        <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" id="hideshowotpbtnr2r">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('FIRST','R2RPINOTP')">Send OTP</a>
+                                                <div class="col-md-12" id="resendotpr2r" style="display:none;">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('SECOND','R2RPINOTP')">Resend OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                                <div class="col-md-12" id="hideshowotpbtnr2r">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendr2r('FIRST','R2RPINOTP')">Send OTP</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
+                                                    <label>Transaction PIN</label>
+                                                    <div style="position:relative;">
+
+
+                                                        <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
+                                                        <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
+                                                    </div>
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
@@ -498,48 +546,36 @@
                                                 </div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-12 col-sm-12 col-xs-12 fund-comment">
-                                            <label>Transaction PIN</label>
-                                            <div style="position:relative;">
+                                        <div id="dmtsuccesscodeotpr2r" style="display: none; color: green; margin-left: 17px;"></div>
+                                        <div id="dmterrorcodeotpr2r" style="color: red; margin-left: 17px;"></div>
+                                        <div id="demor2r" style="color: red; margin-left: 17px;"></div>
 
 
-                                                <input type="password" id="txtRetailerdmtpin" required name="txtRetailerdmtpin" autocomplete="new-password" placeholder="Enter Transaction PIN" style="background-color: white;" />
-                                                <i class="bi bi-eye-slash" id="togglePassword" onclick="viewpassotp()" style="position: absolute; right: 5px; top: 5px;"></i>
+
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            @*<div>
+                                                    <button id="btnnshowmaster1" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
+                                                        Submit
+                                                    </button>
+                                                </div>*@
+                                            <div class="new-nextbutton">
+                                                <button class="waves-effect" style="background-color: white;"><a href="@Url.Action("Fund_Transfer_Retailer_To_Retailer", "Home")"> Cancel</a></button>
+                                                <button class="fullbodydycolorbg waves-effect" id="shownoneclass" type="submit" disabled="disabled">Transfer</button>
+
                                             </div>
-                                        </div>
-                                    }
-                                    <div id="dmtsuccesscodeotpr2r" style="display: none; color: green; margin-left: 17px;"></div>
-                                    <div id="dmterrorcodeotpr2r" style="color: red; margin-left: 17px;"></div>
-                                    <div id="demor2r" style="color: red; margin-left: 17px;"></div>
-
-
-
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        @*<div>
-                                                <button id="btnnshowmaster1" class="fullbodydycolorbg" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                    Submit
-                                                </button>
-                                            </div>*@
-                                        <div class="new-nextbutton">
-                                            <button class="waves-effect" style="background-color: white;"><a href="@Url.Action("Fund_Transfer_Retailer_To_Retailer", "Home")"> Cancel</a></button>
-                                            <button class="fullbodydycolorbg waves-effect" id="shownoneclass" type="submit" disabled="disabled">Transfer</button>
 
                                         </div>
+                                        <label id="errorss"></label>
 
                                     </div>
-                                    <label id="errorss"></label>
+                                    <input type="hidden" id="latss" required name="latss" />
+                                    <input type="hidden" id="longloc" required name="longloc" />
+                                }
+                            </div>
 
-                                </div>
-                                <input type="hidden" id="latss" required name="latss" />
-                                <input type="hidden" id="longloc" required name="longloc" />
-                            }
+
+
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
@@ -555,106 +591,108 @@
             </div>
 
             <div class="col-md-8">
+                <div class="page-header-third">
+                    <div class="fund-trasfer-right fund-user-right fundpdf-retailer">
+                        <ul class="nav nav-tabs responsive-sateulce" id="tabs">
+                            <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
+                                <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
 
-                <div class="fund-trasfer-right fund-user-right fundpdf-retailer">
-                    <ul class="nav nav-tabs responsive-sateulce" id="tabs">
-                        <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
-                            <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
+                                    <label class="for-change-fund">
+                                        <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">Fund Transfer</sub></span>
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </label>
+                                </a>
+                            </li>
+                            <li class="fundtransfer-rtailer-date" style="width: auto;float: right;margin-top: 4px;padding-right: 5px;width:70%;">
 
-                                <label class="for-change-fund">
-                                    <span class="fund-fistory">History<sub class="tmw-total-color-one fullbodydycolorbg">Fund Transfer</sub></span>
-                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
-                                </label>
-                            </a>
-                        </li>
-                        <li class="fundtransfer-rtailer-date" style="width: auto;float: right;margin-top: 4px;padding-right: 5px;width:70%;">
+                                <div class="row fund-t-dalear" style="margin:0px;">
 
-                            <div class="row fund-t-dalear" style="margin:0px;">
-
-
-                                <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                    <div class="for-search">
-                                        <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction2()" style="padding-left:5px !important;height:33px !important;" />
-
-                                    </div>
-
-                                </div>
-                                @using (Ajax.BeginForm("MDTODealer", "Home",
-                                                  new AjaxOptions
-                                                  {
-                                                      InsertionMode = InsertionMode.Replace,
-                                                      UpdateTargetId = "tblshowMasterD"
-
-                                                      // LoadingElementId = "progress"
-                                                  }))
-                                {
 
                                     <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                        <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                        </div>
-                                        <input type="datetime" id="txt_frm_date" name="txt_frm_date" style="margin-top:1px;border:1px solid #fff;" />
-                                    </div>
-                                    <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
-                                        <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
-                                        </div>
-                                        <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;border:1px solid #fff;" />
-                                    </div>
+                                        <div class="for-search">
+                                            <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction2()" style="padding-left:5px !important;height:33px !important;" />
 
-                                    <div class="col-md-3 apiclass-satenew last-nwwefrespomg" style="padding:0px;">
-                                        <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height: 31px;margin-top:0px" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                            <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                        </button>
-                                    </div>
-                                }
-                                <div class="fundretailer-pdf" style="width:auto;float:right;padding-right:0;">
+                                        </div>
 
-                                    <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../images/reportimage/xls.png);
+                                    </div>
+                                    @using (Ajax.BeginForm("MDTODealer", "Home",
+                                                      new AjaxOptions
+                                                      {
+                                                          InsertionMode = InsertionMode.Replace,
+                                                          UpdateTargetId = "tblshowMasterD"
+
+                                                          // LoadingElementId = "progress"
+                                                      }))
+                                    {
+
+                                        <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
+                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
+                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                            </div>
+                                            <input type="datetime" id="txt_frm_date" name="txt_frm_date" style="margin-top:1px;border:1px solid #fff;" />
+                                        </div>
+                                        <div class="col-md-3 date-sateclassee trypurchasecewq trypurchasecewq-new" style="padding-left: 0px;">
+                                            <div class="custom-date-icon" style="height: 32px;border-top:0;border-bottom:0;">
+                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                                            </div>
+                                            <input type="datetime" id="txt_to_date" name="txt_to_date" style=" margin-top: 1px !important;border:1px solid #fff;" />
+                                        </div>
+
+                                        <div class="col-md-3 apiclass-satenew last-nwwefrespomg" style="padding:0px;">
+                                            <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height: 31px;margin-top:0px" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                            </button>
+                                        </div>
+                                    }
+                                    <div class="fundretailer-pdf" style="width:auto;float:right;padding-right:0;">
+
+                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../images/reportimage/xls.png);
                 background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;margin-bottom:5px;" />
-                                    <input type="button" id="" value="PDF" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../ashok-images/pdf.png);
+                                        <input type="button" id="" value="PDF" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #7b7777;background:#b1a6a638;width:auto;background-image: url(../../ashok-images/pdf.png);
                  background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;margin-bottom:5px;" />
 
 
+                                    </div>
                                 </div>
+
+                            </li>
+
+                        </ul>
+                        <div id="tab-1" class="width100 float-left tab-content current responsiveinherithe" style="height:74vh;min-height:585px;overflow:auto;">
+                            <div class="for-un">
+                                @*<table>
+                                        <tr>
+                                            <td>
+
+                                                <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
+                                            </td>
+                                            <td>
+                                                <input type="datetime" id="txt_to_date" name="txt_to_date" />
+                                            </td>
+                                            <td>
+                                                <button type="button" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                    <i class="fa fa-search"></i>
+
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>*@
+
                             </div>
+                            <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
+                                @Html.Partial("_Purchase_OrderReports")
 
-                        </li>
+                            </div>
+                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
 
-                    </ul>
-                    <div id="tab-1" class="width100 float-left tab-content current responsiveinherithe" style="height:74vh;min-height:585px;overflow:auto;">
-                        <div class="for-un">
-                            @*<table>
-                                    <tr>
-                                        <td>
-
-                                            <input type="datetime" id="txt_frm_date" name="txt_frm_date" />
-                                        </td>
-                                        <td>
-                                            <input type="datetime" id="txt_to_date" name="txt_to_date" />
-                                        </td>
-                                        <td>
-                                            <button type="button" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <i class="fa fa-search"></i>
-
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </table>*@
-
+                                <img src="~/img/ajax-loader.gif" />
+                            </div>
                         </div>
-                        <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd table-rsponsive-paddfont tablethirddesign-newnew" style="width:100%;">
-                            @Html.Partial("_Purchase_OrderReports")
 
-                        </div>
-                        <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
 
-                            <img src="~/img/ajax-loader.gif" />
-                        </div>
                     </div>
-
-
                 </div>
+
             </div>
         </div>
 
@@ -1223,4 +1261,20 @@
             }
         })
     }
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+               $('.input-daterange').datepicker({
+                format: "yyyy-mm-dd",
+                todayHighlight: true,
+                autoclose: true
+            });
+            var val = '@ViewBag.chk';
+            if (val != "post") {
+                $("#txt_frm_date").datepicker("setDate", new Date());
+                $("#txt_to_date").datepicker("setDate", new Date());
+            }
+        });
 </script>
