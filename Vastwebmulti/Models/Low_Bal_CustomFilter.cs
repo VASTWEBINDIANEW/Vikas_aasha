@@ -45,7 +45,7 @@ namespace Vastwebmulti.Models
                                                 if (smsapionsts != null)
                                                 {
                                                     apiurls = smsapionsts.smsapi;
-                                                    string text = "Your Wallet Balance is Low, Please Add Amount";
+                                                    string text = "Your Wallet Balance is Low, Please Add Amount, Your Current Balance is" + remain.ToString();
                                                     text = string.Format(text, "1230");
 
                                                     var apinamechange = apiurls.Replace("tttt", retailer.Mobile).Replace("mmmm", text);

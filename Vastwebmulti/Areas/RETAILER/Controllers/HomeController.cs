@@ -22030,6 +22030,92 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return PartialView("_FinoCMSReport", report);
         }
         #endregion
+
+        #region Airtel CMS
+        public ActionResult AirtelCMS()
+        {
+            string userid = User.Identity.GetUserId();
+            var from = DateTime.Now.AddDays(-1);
+            var to = DateTime.Now.AddDays(1);
+            var report = db.Airtel_Report_paging("Retailer", userid, "", "", 1, 50, from, to).ToList();
+            return View(report);
+        }
+        public object Airtel_generate_url()
+        {
+            try
+            {
+                var userid = User.Identity.GetUserId();
+                string token = Responsetoken.gettoken();
+                var firmName = db.Retailer_Details.Single(s => s.RetailerId == userid).Frm_Name;
+
+
+                string lattitude = string.Empty;
+                string longitude = string.Empty;
+                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                if (retailer.UserLocation == null)
+                {
+                    insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+                }
+                else
+                {
+                    lattitude = retailer.UserLocation.Lattitude;
+                    longitude = retailer.UserLocation.Longitute;
+                }
+                firmName = firmName.Replace(" ", "");
+                firmName = firmName.Substring(0, 4);
+                string reqid = firmName.ToUpper() + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                var client = new RestClient("http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid + "&lat=" + lattitude + "&logni=" + longitude);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                FinoGenerateUrl fino = new FinoGenerateUrl();
+                fino.reqid = reqid;
+                fino.request = "http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid+ "&lat=" + lattitude + "&logni="+ longitude;
+                fino.response = response.Content;
+                fino.userid = userid;
+                fino.createdAt = DateTime.Now;
+                db.FinoGenerateUrls.Add(fino);
+                db.SaveChanges();
+                dynamic obj = JsonConvert.DeserializeObject(response.Content);
+                var json = obj.Content.ADDINFO;
+                var status = (bool)json.status;
+                if((string)json.redirecturl == null)
+                {
+                    status = false;
+                }
+                if (status == false)
+                {
+                    var message = (string)json.message;
+                    throw new Exception(message);
+                }
+                var url = (string)json.redirecturl;
+                return Json(new { status = true, url }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult Airtel_cms_report(string status = "", string number = "", DateTime? from = null, DateTime? to = null)
+        {
+            string userid = User.Identity.GetUserId();
+            if (from == null || to == null)
+            {
+                from = DateTime.Now.AddDays(-1);
+                to = DateTime.Now.AddDays(1);
+            }
+            else
+            {
+                to = Convert.ToDateTime(to).AddDays(1);
+            }
+            var report = db.Airtel_Report_paging("Retailer", userid, status, number, 1, 1000, from, to).ToList();
+            return PartialView("_AirtelCMSReport", report);
+        }
+        #endregion
+        
+
+
         public ActionResult PANCARDreportnew()
         {
             var userid = User.Identity.GetUserId();
@@ -35988,6 +36074,140 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var dfg = db.closingbalances.Where(s => s.userid == userid && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
             return View(dfg);
         }
+
+        public ActionResult loanrequest()
+        {
+            var userid = User.Identity.GetUserId();
+            var sck = db.loanlimits.ToList();
+            var usrchk = db.loanpermissions.Where(s => s.userid == userid).ToList();
+            if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
+            {
+                var chk = db.loanrequests.Where(s => s.userid == userid).OrderByDescending(s => s.idno).ToList();
+                return View(chk);
+            }
+            else
+            {
+                return RedirectToAction("");
+            }
+
+        }
+        [HttpPost]
+
+        public ActionResult loanrequest(int? Amount, int? days)
+        {
+
+            var userid = User.Identity.GetUserId();
+            var sck = db.loanlimits.ToList();
+            var usrchk = db.loanpermissions.Where(w => w.userid == userid).ToList();
+            if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
+            {
+                var chk = db.loanrequests.Where(s => s.userid == userid && s.status == "Pending").ToList();
+
+                if (chk.Count <= 2)
+                {
+
+                    Random d11 = new Random();
+                    var d2 = d11.Next(99999999, 999999999);
+
+                    loanrequest d1 = new loanrequest();
+                    d1.userid = userid;
+                    d1.status = "Pending";
+                    d1.requesttime = DateTime.Now;
+                    d1.months = days;
+                    d1.amount = Amount;
+                    d1.loanid = d2.ToString();
+                    d1.remainpayment = Amount;
+                    DateTime futureDate = DateTime.Now.AddDays(Convert.ToDouble(days));
+
+
+                    d1.minserverloandate = futureDate;
+
+
+                    // Format the date in "dd-MM-yyyy" format
+
+                    db.loanrequests.Add(d1);
+
+                    db.SaveChanges();
+                    TempData["Message"] = "";
+                }
+                else
+                {
+                    TempData["Message"] = "You can't sent request again";
+                }
+                var chk1 = db.loanrequests.Where(s => s.userid == userid).OrderByDescending(s => s.idno).ToList();
+                return View(chk1);
+            }
+            else
+            {
+                return RedirectToAction("");
+            }
+        }
+        public ActionResult loanrepayment(int ? id)
+        {
+            var userid = User.Identity.GetUserId();
+            var sck = db.loanlimits.ToList();
+            var usrchk = db.loanpermissions.Where(s => s.userid == userid).ToList();
+            if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
+            {
+                var chk = db.loanrequests.Where(s => s.idno == id).ToList();
+
+                return View(chk);
+            }
+            else
+            {
+                return RedirectToAction("");
+            }
+        }
+        [HttpPost]
+        public ActionResult loanrepayment(string Lid , decimal? Amountss)
+        {
+            var userid = User.Identity.GetUserId();
+            var sck = db.loanlimits.ToList();
+            var usrchk = db.loanpermissions.Where(s => s.userid == userid).ToList();
+            if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
+            {
+                var chk = db.loanrequests.Where(s => s.loanid == Lid && s.status == "Success" ).ToList();
+            var cj = db.loanlimits.ToList();
+           if(chk.Count == 1)
+            {
+                if(chk[0].remainpayment== Amountss)
+                {
+                    try
+                    {
+                        db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else if (cj[0].fullorpartialpayment == true && chk[0].remainpayment < Amountss)
+                {
+                    try
+                    {
+                        db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else
+                {
+                    TempData["Message"] = "Enter Valid Amount";
+                }
+
+            }
+
+            return RedirectToAction("loanrequest");
+            }
+            else
+            {
+                return RedirectToAction("");
+            }
+        }
+
+
         [HttpPost]
         protected override void Dispose(bool disposing)
         {

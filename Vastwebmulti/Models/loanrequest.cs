@@ -19,8 +19,11 @@ namespace Vastwebmulti.Models
         public Nullable<decimal> amount { get; set; }
         public Nullable<int> months { get; set; }
         public Nullable<System.DateTime> requesttime { get; set; }
-        public Nullable<System.TimeSpan> response { get; set; }
+        public Nullable<System.DateTime> responsetime { get; set; }
         public Nullable<System.DateTime> minserverloandate { get; set; }
+        public string loanid { get; set; }
+        public Nullable<decimal> remainpayment { get; set; }
+        public string loanstatus { get; set; }
         public string status { get; set; }
     }
 }

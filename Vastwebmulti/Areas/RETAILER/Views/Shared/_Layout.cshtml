@@ -977,29 +977,43 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">Manage Passwo
                                     </span>
                                 </a>
                             </li>
-               
-                    var clos = DB1.daywisesettelecommsts.Where(s => s.retailerid == Userid).ToList();
-               
-                    if (clos.Count > 0 && clos[0].sts == true)
-                    {
-                            <li>
-                                <a href="@Url.Action("Extracomm_Report", "Home")">
-                                    <i class="fa fa-extracomm" aria-hidden="true"></i>
-                                    <span>
-                                        Extra comm
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("openingbalance_Report", "Home")">
-                                    <i class="fa fa-extracomm" aria-hidden="true"></i>
-                                    <span>
-                                        Opening Balance
-                                    </span>
-                                </a>
-                            </li>
+
+                            var clos = DB1.daywisesettelecommsts.Where(s => s.retailerid == Userid).ToList();
+                            var sck = DB1.loanlimits.ToList();
+                            var usrchk = DB1.loanpermissions.Where(s => s.userid == Userid).ToList();
+
+
+                            if (clos.Count > 0 && clos[0].sts == true)
+                            {
+                                <li>
+                                    <a href="@Url.Action("Extracomm_Report", "Home")">
+                                        <i class="fa fa-extracomm" aria-hidden="true"></i>
+                                        <span>
+                                            Extra comm
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("openingbalance_Report", "Home")">
+                                        <i class="fa fa-extracomm" aria-hidden="true"></i>
+                                        <span>
+                                            Opening Balance
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
+                            {
+                                <li>
+                                    <a href="@Url.Action("loanrequest", "Home")">
+                                        <i class="fa fa-extracomm" aria-hidden="true"></i>
+                                        <span>
+                                            Loan Request
+                                        </span>
+                                    </a>
+                                </li>
+                            }
                         }
-                    }
                         @if (finiancialstatus == "CHKOK")
                         {
                             <li>
@@ -2679,7 +2693,7 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">
                                 @if (finiancialstatus == "CHKOK")
                                 {
                                     <li id="AccountOpening" class="listtryp" role="presentation" style="padding:0px;">
-                                        <a href="@Url.Action("FINOCMS", "Home")" aria-expanded="true"><span class="newimgspan"><i><img style="transform:none;height: 21px;text-align: center;margin: 0px auto;position: static;float: none;margin-right: 2px;margin-top: -2px;" src="~/AdminDesign/images/business.svg" /></i>FINO CMS<label class="for-blink1" style="font-size: 8px;position: absolute;top: -4px;right: -17px;">New</label></span></a>
+                                        <a href="@Url.Action("FINOCMS", "Home")" aria-expanded="true"><span class="newimgspan"><i><img style="transform:none;height: 21px;text-align: center;margin: 0px auto;position: static;float: none;margin-right: 2px;margin-top: -2px;" src="~/AdminDesign/images/business.svg" /></i>CMS<label class="for-blink1" style="font-size: 8px;position: absolute;top: -4px;right: -17px;">New</label></span></a>
                                     </li>
                                 }
                                 @if (finiancialstatus == "CHKOK")
