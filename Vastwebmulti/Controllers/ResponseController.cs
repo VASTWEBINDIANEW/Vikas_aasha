@@ -2625,6 +2625,7 @@ namespace Vastwebmulti.Controllers
                             {
                                 throw new Exception(res);
                             }
+
                             var resp = new
                             {
                                 status = true,
