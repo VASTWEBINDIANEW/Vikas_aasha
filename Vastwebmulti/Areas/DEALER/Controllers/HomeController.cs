@@ -11991,7 +11991,53 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             ViewBag.chk = "post";
             return PartialView("_sellRechargeReport", rowdata);
         }
-        //public ActionResult _SimINfo()
+        public ActionResult Extracomm_Report()
+        {
+            var userid = User.Identity.GetUserId();
+            
+                var chk = db.daywisecommsetforusers.Where(s => s.userid == userid && s.role == "Dealer").ToList();
+                if (chk.Count == 0)
+                {
+                    daywisecommsetforuser d1 = new daywisecommsetforuser();
+                    d1.role = "Dealer";
+                    d1.userid = userid;
+                    d1.Comm_2000_5000 = 0;
+                    d1.Comm_5001_10000 = 0;
+                    d1.Comm_10001_max = 0;
+                    db.daywisecommsetforusers.Add(d1);
+                    db.SaveChanges();
+                }
+                var dfg = db.daywisecomms.Where(s => s.dealerid == userid).OrderByDescending(s => s.date).ToList();
+                return View(dfg);
+         
+        }
+        [HttpPost]
+        public ActionResult Extracomm_Report(string txt_frm_date, string txt_to_date)
+        {
+            var userid = User.Identity.GetUserId();
+
+
+            if (txt_frm_date == null && txt_to_date == null)
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+
+            }
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+
+            var dfg = db.daywisecomms.Where(s => s.dealerid == userid && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
+            return View(dfg);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

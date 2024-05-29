@@ -528,7 +528,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile)
+        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile ,string reqid)
         {
             var client = new RestClient(BaseURL + "/api/UTI/ManualRequest");
             var request = new RestRequest(Method.POST);
@@ -544,7 +544,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 AadharregNumber= AadharregNumber,
                 Fathername= Fathername,
                 Email= Email,
-                Mobile= Mobile
+                Mobile= Mobile,
+                Reqid = reqid
             };
 
             var serializer = new JavaScriptSerializer();

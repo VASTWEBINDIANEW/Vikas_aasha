@@ -524,18 +524,25 @@
                                                 @if (i.status.Contains("Failed"))
                                                 {
 
-                                                <div>@i.imageurl</div>
+                                                    <div>@i.imageurl</div>
 
                                                 }
                                                 else if (i.status.Contains("Success"))
                                                 {
-                                                    <a href="~/@i.imageurl" target="_blank">  <button>View</button></a>
+                                                    if (i.imageurl.Contains("/SlipPanCard/"))
+                                                    {
+                                                          <button onclick="views(@i.idno)">View</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="~/@i.imageurl" target="_blank">  <button>View</button></a>
+                                                    }
                                                 }
                                                 else
                                                 {
 
                                                 }
-                                                </td>
+                                            </td>
 
 <td>
                                                 @if (i.status.Contains("PENDING"))
@@ -562,7 +569,25 @@
                         </tbody>
 
                     </table>
+                   
+                    <script>
+                        function views(i) {
+                             
+                            $.ajax({
+                                url: '@Url.Action("slipview", "Home")',
+                                type: "POST",
+                                data: { Idno: i },
+                                cache: false,
+                                success: function (Response) {
+                                    
+                                    window.open(Response, '_blank');
+                                    window.location.reload();
 
+                                }
+                            });
+                        }
+
+                    </script>
                 </div>
 
                 <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">

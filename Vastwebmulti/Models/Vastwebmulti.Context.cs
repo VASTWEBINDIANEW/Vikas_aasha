@@ -851,6 +851,18 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Pancard_Retailer_comm_new_manual> Pancard_Retailer_comm_new_manual { get; set; }
         public virtual DbSet<pancard_transation_manual> pancard_transation_manual { get; set; }
         public virtual DbSet<passbyretailerdmt> passbyretailerdmts { get; set; }
+        public virtual DbSet<passbyapidmt> passbyapidmts { get; set; }
+        public virtual DbSet<loanpermission> loanpermissions { get; set; }
+        public virtual DbSet<closingbalance> closingbalances { get; set; }
+        public virtual DbSet<comm_daywiseslab> comm_daywiseslab { get; set; }
+        public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
+        public virtual DbSet<daywisesettelecomm> daywisesettelecomms { get; set; }
+        public virtual DbSet<daywisesettelecommst> daywisesettelecommsts { get; set; }
+        public virtual DbSet<daywisecommsetforuser> daywisecommsetforusers { get; set; }
+        public virtual DbSet<daywisecomm> daywisecomms { get; set; }
+        public virtual DbSet<Aeps_aadharpay_comm> Aeps_aadharpay_comm { get; set; }
+        public virtual DbSet<loanrequest> loanrequests { get; set; }
+        public virtual DbSet<loanlimit> loanlimits { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23152,6 +23164,170 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("TXN_ID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("proc_PAN_CARD_Refund_new_manual", idnoParameter, statusParameter, couponStatusParameter, tXN_IDParameter);
+        }
+    
+        public virtual int Aeps_aadharpay_charges(string retailerid, string status, string type)
+        {
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("Retailerid", retailerid) :
+                new ObjectParameter("Retailerid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Aeps_aadharpay_charges", retaileridParameter, statusParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<AepsChargeAdminReport_Result> AepsChargeAdminReport(string retailerId, string type, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AepsChargeAdminReport_Result>("AepsChargeAdminReport", retailerIdParameter, typeParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<AepsChargeRetailerReport_Result> AepsChargeRetailerReport(string retailerId, string type, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AepsChargeRetailerReport_Result>("AepsChargeRetailerReport", retailerIdParameter, typeParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<GetCreditDetails_Result> GetCreditDetails(string userRole, string userId, Nullable<System.DateTime> from, Nullable<System.DateTime> to)
+        {
+            var userRoleParameter = userRole != null ?
+                new ObjectParameter("UserRole", userRole) :
+                new ObjectParameter("UserRole", typeof(string));
+    
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("From", from) :
+                new ObjectParameter("From", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("To", to) :
+                new ObjectParameter("To", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCreditDetails_Result>("GetCreditDetails", userRoleParameter, userIdParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<insert_Airtel_Result> insert_Airtel(string userid, string reqid, string number, string optcode, string req_url, Nullable<decimal> amount, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var reqidParameter = reqid != null ?
+                new ObjectParameter("reqid", reqid) :
+                new ObjectParameter("reqid", typeof(string));
+    
+            var numberParameter = number != null ?
+                new ObjectParameter("number", number) :
+                new ObjectParameter("number", typeof(string));
+    
+            var optcodeParameter = optcode != null ?
+                new ObjectParameter("optcode", optcode) :
+                new ObjectParameter("optcode", typeof(string));
+    
+            var req_urlParameter = req_url != null ?
+                new ObjectParameter("req_url", req_url) :
+                new ObjectParameter("req_url", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_Airtel_Result>("insert_Airtel", useridParameter, reqidParameter, numberParameter, optcodeParameter, req_urlParameter, amountParameter, output);
+        }
+    
+        public virtual ObjectResult<update_Airtel_Result> update_Airtel(Nullable<int> id, string status, string operatorId, string response, ObjectParameter output)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var operatorIdParameter = operatorId != null ?
+                new ObjectParameter("operatorId", operatorId) :
+                new ObjectParameter("operatorId", typeof(string));
+    
+            var responseParameter = response != null ?
+                new ObjectParameter("response", response) :
+                new ObjectParameter("response", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<update_Airtel_Result>("update_Airtel", idParameter, statusParameter, operatorIdParameter, responseParameter, output);
+        }
+    
+        public virtual ObjectResult<loanrequestupdatesss_Result> loanrequestupdatesss(string idno, string loanid, string status)
+        {
+            var idnoParameter = idno != null ?
+                new ObjectParameter("idno", idno) :
+                new ObjectParameter("idno", typeof(string));
+    
+            var loanidParameter = loanid != null ?
+                new ObjectParameter("Loanid", loanid) :
+                new ObjectParameter("Loanid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<loanrequestupdatesss_Result>("loanrequestupdatesss", idnoParameter, loanidParameter, statusParameter);
+        }
+    
+        public virtual ObjectResult<loanrequestRepayment_Result> loanrequestRepayment(string idno, string loanid, Nullable<decimal> amount)
+        {
+            var idnoParameter = idno != null ?
+                new ObjectParameter("idno", idno) :
+                new ObjectParameter("idno", typeof(string));
+    
+            var loanidParameter = loanid != null ?
+                new ObjectParameter("Loanid", loanid) :
+                new ObjectParameter("Loanid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<loanrequestRepayment_Result>("loanrequestRepayment", idnoParameter, loanidParameter, amountParameter);
         }
     }
 }

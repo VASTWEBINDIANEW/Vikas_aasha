@@ -305,84 +305,109 @@
                                             foreach (var i in Model)
                                             {
                                                 s++;
-                                                                                <tr>
-                                                                                    <td>@s</td>
+                                                <tr>
+                                                    <td>@s</td>
 
-                                                                                    @{
-                                                                                        var sts = i.status;
-
-
-                                                                                        if (i.status.Contains("Refund"))
-                                                                                        {
-                                                                                            sts = "Refund";
-                                                                                        }
-                                                                                    }
+                                                    @{
+                                                        var sts = i.status;
 
 
+                                                        if (i.status.Contains("Refund"))
+                                                        {
+                                                            sts = "Refund";
+                                                        }
+                                                    }
 
 
 
-                                                                                    <td>
-                                                                                        @if (i.status.Contains("PENDING"))
-                                                                                        {
-                                                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
 
 
-                                                                                        }
-                                                                                        @if (i.status.Contains("Refund"))
-                                                                                        {
-                                                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
+                                                    <td>
+                                                        @if (i.status.Contains("PENDING"))
+                                                        {
+                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png"> @sts
 
-                                                                                        }
-                                                                                        @if (i.status.Contains("Failed"))
-                                                                                        {
-                                                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
 
-                                                                                        }
-                                                                                        @if (i.status.Contains("Success"))
-                                                                                        {
-                                                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
+                                                        }
+                                                        @if (i.status.Contains("Refund"))
+                                                        {
+                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:brown" src="../../ashok-images/backresnd.svg"> @sts
 
-                                                                                        }
-                                                                                    </td>
-                                                                                    <td>@i.Title @i.Name</td>
-                                                                                    <td>AAdhar=@i.AadharregNumber<br />Customer =@i.Mobile</td>
-                                                                                    <td>@i.Email</td>
-                                                                                    <td>@i.Fathername</td>
-                                                                                    <td>@i.DOB</td>
-                                                                                    <td>@i.Aadharno</td>
-                                                                                    <td>@i.Gender</td>
-                                                                                    <td>@i.Amount</td>
+                                                        }
+                                                        @if (i.status.Contains("Failed"))
+                                                        {
+                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:red" src="../../ashok-images/closes.svg"> @sts
 
-                                                                                    <td>@i.requestid</td>
-                                                                                    <td>@i.request_time</td>
-                                                                                    <td>@i.Rem_pre</td>
-                                                                                    <td>@i.Rem_comm</td>
-                                                                                    <td>@i.Rem_tds</td>
-                                                                                    <td>@i.rem_post</td>
-                                                                                    <td>@i.Rem_final</td>
-                                                                                    <td>
-                                                                                        @if (i.status.Contains("Failed"))
-                                                                                        {
+                                                        }
+                                                        @if (i.status.Contains("Success"))
+                                                        {
+                                                            <img style="height: 20px;width: 18px;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:green" src="../../ashok-images/correct.svg"> @sts
 
-                                                                                            <div>@i.imageurl</div>
+                                                        }
+                                                    </td>
+                                                    <td>@i.Title @i.Name</td>
+                                                    <td>AAdhar=@i.AadharregNumber<br />Customer =@i.Mobile</td>
+                                                    <td>@i.Email</td>
+                                                    <td>@i.Fathername</td>
+                                                    <td>@i.DOB</td>
+                                                    <td>@i.Aadharno</td>
+                                                    <td>@i.Gender</td>
+                                                    <td>@i.Amount</td>
 
-                                                                                        }
-                                                                                        else if (i.status.Contains("Success"))
-                                                                                        {
-                                                                                            <a href="~/@i.imageurl" target="_blank">  <button>View</button></a>
-                                                                                        }
-                                                                                        else
-                                                                                        {
+                                                    <td>@i.requestid</td>
+                                                    <td>@i.request_time</td>
+                                                    <td>@i.Rem_pre</td>
+                                                    <td>@i.Rem_comm</td>
+                                                    <td>@i.Rem_tds</td>
+                                                    <td>@i.rem_post</td>
+                                                    <td>@i.Rem_final</td>
+                                                    <td>
+                                                        @if (i.status.Contains("Failed"))
+                                                        {
 
-                                                                                        }
-                                                                                    </td>
-                                                                                </tr>
+                                                            <div>@i.imageurl</div>
+
+                                                        }
+                                                        else if (i.status.Contains("Success"))
+                                                        {
+                                                            if (i.imageurl.Contains("/SlipPanCard/"))
+                                                            {
+                                                                <button onclick="views(@i.idno)">View</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="~/@i.imageurl" target="_blank">  <button>View</button></a>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    </td>
+                                                </tr>
                                             }
                                         }
                                     </tbody>
                                 </table>
+                                <script>
+                        function views(i) {
+                             
+                            $.ajax({
+                                url: '@Url.Action("slipview", "Home")',
+                                type: "POST",
+                                data: { Idno: i },
+                                cache: false,
+                                success: function (Response) {
+                                    window.open(Response, '_blank');
+                                    window.location.reload();
 
+
+                                }
+                            });
+                        }
+
+                                </script>
                             </div>
                         </div>
                     </div>

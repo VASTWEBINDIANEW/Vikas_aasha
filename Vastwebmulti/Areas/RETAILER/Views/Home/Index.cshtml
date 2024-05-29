@@ -1841,6 +1841,7 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139);margin:auto;text-align:center;widt
         var paymodeLoanddl = "";
         var e = document.getElementById(el);
         var loanddl = e.options[e.selectedIndex].text;
+        
         var loanddlvalue = e.options[e.selectedIndex].value;
         var txtacno = $("#txtLoanAccountno").val();
         var mobile = $("#txtLoanMobileno").val();
@@ -1856,6 +1857,7 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139);margin:auto;text-align:center;widt
         var date = $("#txtLoandob").val();
         var pancard = $("#txtLoanpancard").val();
         /* call function*/
+        console.log(txtacno)
         var sts = continuebtnvalidationloan(loanddl, txtacno, mobile, "10", paymodeLoanddl, customerid, Name, date, pancard);
 
         if (sts == true) {
@@ -1874,7 +1876,7 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139);margin:auto;text-align:center;widt
 <!--view loan EMI -->
 <script type="text/javascript">
     function viewLoanbill(optname, loanaccount, mobileno) {
-
+        console.log("optname: " + optname + " loanaccount: " + loanaccount + " mobileno: " + mobileno);
         $('#LoanAccountError').text('');
         $('#LoanMobileError').text('');
         if (!loanaccount.trim() || loanaccount.trim().length < 1) {
@@ -1884,14 +1886,17 @@ box-shadow: 0px 0px 4px 0px rgb(96, 125, 139);margin:auto;text-align:center;widt
             $('#txtLoanAccountno').focus()
             return null;
         }
-        if (!mobileno.trim() || mobileno.trim().length !== 10) {
+        if (optname != "Ujjivan Small Finance Bank") {
+            if (!mobileno.trim() || mobileno.trim().length !== 10) {
 
-            $('#LoanMobileError').text('Enter valid mobile no');
-            $('#LoanMobileError').css('color', 'red')
-            $('#txtLoanMobileno').focus()
+                $('#LoanMobileError').text('Enter valid mobile no');
+                $('#LoanMobileError').css('color', 'red')
+                $('#txtLoanMobileno').focus()
 
-            return null;
+                return null;
+            }
         }
+       
 
 
 swal({
