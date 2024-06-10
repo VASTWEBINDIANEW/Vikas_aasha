@@ -6,6 +6,29 @@
 
 <style>
 
+    /* new css  */
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+     
+    /* new css  */
+
     .col-md-3.buttonPdf button:last-child {
         padding-left: 16px;
     }
@@ -15,12 +38,32 @@
     .referralall-report table, .referralall-report table tr, .referralall-report table tr td, .referralall-report table tr th {
         border-color: #ddd;
     }
+    @@media only screen and (max-width:1169px){
+        .container-fluid.resp_set {
+            padding-left: 15px !important;
+        }
+        .col-md-4.refferal-code {
+            padding-left: 0;
+        }
+
+    }
+
+    @@media only screen and (max-width:767px){
+        .col-md-8.referral-report {
+            padding-left: 0;
+        }
+
+
+
+    }
+
+
 
 
 </style>
 
-<section class="content refferal-code-responshive content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px;margin-right:28px; overflow-x:hidden;">
-    <div class="container-fluid" style="padding-left: 11px; padding-right: 0;height:100vh;">
+<section class="content refferal-code-responshive content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
+    <div class="container-fluid resp_set" style="padding-left: 11px;height:100vh;">
         <!--Four-Design-Page-Header-Start-->
 
         <div class="page-title-box-fourde">
@@ -33,124 +76,143 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="container-fluid" style="padding:0px;padding-bottom:10px;">
-            <div class="bread-same-all-page" style="width:auto;float:left;">
+        <div class="row clearfix" style="">
+            <div class="col-md-12">
+                <div class="page-header-third">
+                    <div class="bread-same-all-page" style="float:left;">
 
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
+                        <ul style="margin:0;">
+                            <li class="smli">
+                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                                </a>
+                            </li>
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Set Referral
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
-
-                <button>PDF</button>
-                <button>Export</button>
-
-            </div>
-        </div>
-        <div class="col-md-4 refferal-code refferal-noneclass">
-            <div class="refferal-codeew changeback-four-design four-design-table-design">
-                <h2>My Referral Code</h2>
-                <div class="code-background code-background-responshive">
-                    <div class="coderetygfhg">
-                        <h3>@ViewBag.refcode</h3>
-                        <p>Referral Kro aur Kamao</p>
-                    </div>
-
-                </div>
-                <div class="Purshasesbasissew Purshasesbasiss">
-
-                    <div class="Businessreferral">
-                        <p class="referralheadertop fullbodydycolorbg">Referral Benefit</p>
-
-                        @foreach (var item in Model.refsetting)
-                        {
-                            <ul class="setreferral-content">
-                                <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
-                                <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
-                                <li><strong>Category</strong><span>@item.category</span></li>
-                                <li><strong>Expiry No. Of Days</strong><span>@item.expnoofday</span></li>
-                                <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
-                                <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
-                            </ul>
-                        }
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @*Four-Design-Refferal-Code-New-Design-Start*@
-
-        <div class="col-md-4 refferal-four-design-retailer">
-            <div class="refferal-fullclass">
-                <div class="refferal-sec-first">
-                    <div class="refer-fourdesign">
-                        <h4>Refer a Friend</h4>
-                    </div>
-                    <div class="refer-fourdesign-se">
-                        <input id="copytexttap" type="text" value="@ViewBag.refcode" readonly="readonly">
-                        <a href="Javascript:void(0);" onclick="copyFunction()">Tap to Copy</a>
-                    </div>
-                    <div class="refferal-img-four">
-                        <img src="~/ashok-images/referral-retailer-four.jpg" />
-                    </div>
-
-                </div>
-
-                <div class="refferal-sec-second">
-                    @foreach (var item in Model.refsetting)
-                    {
-                        <ul class="setreferral-content">
-                            <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
-                            <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
-                            <li><strong>Category</strong><span>@item.category</span></li>
-                            <li><strong>Expery No. Of Days</strong><span>@item.expnoofday</span></li>
-                            <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
-                            <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
+                            <li class="fullbodydycolorbg tmw-total-color-one">
+                                Set Referral
+                            </li>
                         </ul>
-                    }
+                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
+
+                            <button>PDF</button>
+                            <button>Export</button>
+
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
-
         </div>
+        
+        <div class="row clearfix">
+            
+            <div class="col-md-12">
+                <div class="col-md-4 refferal-code refferal-noneclass">
+                    <div class="page-header-third">
+                        <div class="refferal-codeew changeback-four-design four-design-table-design">
+                            <h2>My Referral Code</h2>
+                            <div class="code-background code-background-responshive">
+                                <div class="coderetygfhg">
+                                    <h3>@ViewBag.refcode</h3>
+                                    <p>Referral Kro aur Kamao</p>
+                                </div>
 
-        @*Four-Design-Refferal-Code-New-Design-Start*@
+                            </div>
+                            <div class="Purshasesbasissew Purshasesbasiss">
 
-        <div class="col-md-8 referral-report">
-            <div class="referralall-report changeback-four-design four-design-table-design">
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Referral Type</th>
-                            <th>Received Date</th>
-                            <th>Pre&nbsp;₹</th>
-                            <th>Get&nbsp;Benefit</th>
-                            <th>post&nbsp;₹</th>
-                        </tr>
-                    </thead>
+                                <div class="Businessreferral">
+                                    <p class="referralheadertop fullbodydycolorbg">Referral Benefit</p>
 
-                    <tbody>
-                        @foreach (var item in Model.Refincome)
-                        {
-                            <tr>
-                                <td>@item.RefferalType</td>
-                                <td>@item.RecivedDate</td>
-                                <td>@item.PreParrentRetailerBalance₹</td>
-                                <td>@item.Benifitrecived</td>
-                                <td>@item.@item.sharingvalue₹</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                    @foreach (var item in Model.refsetting)
+                                    {
+                                        <ul class="setreferral-content">
+                                            <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
+                                            <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
+                                            <li><strong>Category</strong><span>@item.category</span></li>
+                                            <li><strong>Expiry No. Of Days</strong><span>@item.expnoofday</span></li>
+                                            <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
+                                            <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
+                                        </ul>
+                                    }
 
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                @*Four-Design-Refferal-Code-New-Design-Start*@
+
+                <div class="col-md-4 refferal-four-design-retailer">
+                    <div class="page-header-third">
+                        <div class="refferal-fullclass">
+                            <div class="refferal-sec-first">
+                                <div class="refer-fourdesign">
+                                    <h4>Refer a Friend</h4>
+                                </div>
+                                <div class="refer-fourdesign-se">
+                                    <input id="copytexttap" type="text" value="@ViewBag.refcode" readonly="readonly">
+                                    <a href="Javascript:void(0);" onclick="copyFunction()">Tap to Copy</a>
+                                </div>
+                                <div class="refferal-img-four">
+                                    <img src="~/ashok-images/referral-retailer-four.jpg" />
+                                </div>
+
+                            </div>
+
+                            <div class="refferal-sec-second">
+                                @foreach (var item in Model.refsetting)
+                                {
+                                    <ul class="setreferral-content">
+                                        <li class="purchasetypere"><strong>Referral type</strong><span>@item.ReferalType</span></li>
+                                        <li><strong>Minimum Bussiness</strong><span>@item.minimiumimit</span></li>
+                                        <li><strong>Category</strong><span>@item.category</span></li>
+                                        <li><strong>Expery No. Of Days</strong><span>@item.expnoofday</span></li>
+                                        <li><strong>Sharing Type</strong><span>@item.SharingType</span></li>
+                                        <li><strong>Sharing Value</strong><span>@item.SharingValue</span></li>
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                @*Four-Design-Refferal-Code-New-Design-Start*@
+
+                <div class="col-md-8 referral-report">
+                    <div class="page-header-third">
+                        <div class="referralall-report changeback-four-design four-design-table-design">
+                            <table border="1">
+                                <thead>
+                                    <tr>
+                                        <th>Referral Type</th>
+                                        <th>Received Date</th>
+                                        <th>Pre&nbsp;₹</th>
+                                        <th>Get&nbsp;Benefit</th>
+                                        <th>post&nbsp;₹</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.Refincome)
+                                    {
+                                        <tr>
+                                            <td>@item.RefferalType</td>
+                                            <td>@item.RecivedDate</td>
+                                            <td>@item.PreParrentRetailerBalance₹</td>
+                                            <td>@item.Benifitrecived</td>
+                                            <td>@item.@item.sharingvalue₹</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
         </div>
