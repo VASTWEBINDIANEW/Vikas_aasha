@@ -2607,6 +2607,7 @@ namespace Vastwebmulti.Controllers
                             {
                                 throw new Exception(res);
                             }
+
                             var resp = new
                             {
                                 status = true,
@@ -2667,6 +2668,96 @@ namespace Vastwebmulti.Controllers
                             }
 
                             string msg = dbsrs.update_fino(fino_obj.id, "Failed", MSG, outpt, output).Single().msg.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            FinoLog("Exception: " + ex.Message);
+                        }
+                    }
+                    else if (Type == "CMS_BALANCE_DEBIT")
+                    {
+                        FinoLog("Fino Init");
+                        FinoLog("Req: " + outpt);
+                        try
+                        {
+                            var fino_obj = dbsrs.AirtelGenerateUrls.Where(s => s.reqid == Status).SingleOrDefault();
+
+                            if (fino_obj == null)
+                            {
+                                throw new Exception("Request Not Initiated");
+                            }
+
+                            decimal amount = Convert.ToDecimal(Reqid);
+
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                            var res = dbsrs.insert_Airtel(fino_obj.userid, fino_obj.reqid, MSG, Transid, fino_obj.request, amount, output).Single().msg.ToString();
+
+                            if (res.ToUpper() != "OK")
+                            {
+                                throw new Exception(res);
+                            }
+                            var resp = new
+                            {
+                                status = true,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        catch (Exception ex)
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = ex.Message
+                            };
+
+                            FinoLog("Exception: " + resp.ToString());
+
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (Type == "AIRTEL_CMS_TRANSACTION_SUCCESS")
+                    {
+                        FinoLog("Airtel Success");
+                        FinoLog("Req: " + outpt);
+                        try
+                        {
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                            var fino_obj = dbsrs.AirtelReports.Where(same_ => same_.reqid == Status).SingleOrDefault();
+
+                            if (fino_obj == null)
+                            {
+                                throw new Exception("Request Not Found");
+                            }
+
+                            string msg = dbsrs.update_Airtel(fino_obj.id, "Success", MSG, outpt, output).Single().msg.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            FinoLog("Exception: " + ex.Message);
+                        }
+                    }
+                    else if (Type == "AIRTEL_CMS_TRANSACTION_FAILED")
+                    {
+                        FinoLog("Airtel Failed");
+                        FinoLog("Req: " + outpt);
+                        try
+                        {
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                            var fino_obj = dbsrs.AirtelReports.Where(same_ => same_.reqid == Status).SingleOrDefault();
+
+                            if (fino_obj == null)
+                            {
+                                throw new Exception("Request Not Found");
+                            }
+
+                            string msg = dbsrs.update_Airtel(fino_obj.id, "Failed", MSG, outpt, output).Single().msg.ToString();
                         }
                         catch (Exception ex)
                         {

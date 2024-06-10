@@ -415,7 +415,7 @@
                                             <div class="col-md-12 col-xs-12">
                                                 <label>select operator</label><label id="lblByAmountOperator" class="form-invalid"></label>
                                                 <div class="">
-                                                    <select name="ByAmountOperator" id="ByAmountOperator" onchange="fnOnBegin();" class="for-select2 form-control" style="-webkit-appearance:none;">
+                                                    <select name="ByAmountOperator" id="ByAmountOperator" onchange="fnonsss();" class="for-select2 form-control" style="-webkit-appearance:none;">
                                                         <option value="">Select Operator</option>
 
                                                     </select>
@@ -2514,7 +2514,34 @@ function () {
 
 @*=-=========by-Amount form validation=========*@
 <script>
+    function fnonsss() {
+           console.log(1);
+         var val = document.getElementById('ByAmountOperator').value;
+           $.ajax({
+            type: 'POST',
+            url: '@Url.Action("apisearch", "Home")',
+               data: { apicd: val},
+               success: function (data) {
+                   
+                $('#ddlPT').empty()
+                   $('#ddlPT').append('<option selected="selected" value="">select API</option>');
+                   var datasss = data.datas;
+                   console.log(datasss);
+
+                   for (var i = 0; i < datasss.length; i++) {
+                       console.log(datasss[i].apiname);
+                       $('#ddlPT').append($('<option></option>').text(datasss[i].apiname).val(datasss[i].apiname));
+                   }
+
+
+
+                  
+
+            }
+        })
+    }
     function fnOnBegin() {
+        console.log(1);
 
         var x1 = $('#ddlusertype').val();
         var x2 = $('#ddluserList').val();
@@ -2576,6 +2603,7 @@ function () {
                 }
             }
         }
+
     }
 </script>
 

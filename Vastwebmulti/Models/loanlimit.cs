@@ -16,7 +16,8 @@ namespace Vastwebmulti.Models
     {
         public int idno { get; set; }
         public Nullable<int> min_days { get; set; }
-        public Nullable<int> charge { get; set; }
+        public Nullable<decimal> charge { get; set; }
         public Nullable<bool> fullorpartialpayment { get; set; }
+        public Nullable<bool> status { get; set; }
     }
 }

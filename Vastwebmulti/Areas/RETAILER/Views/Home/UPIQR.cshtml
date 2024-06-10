@@ -1,13 +1,30 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_upi_txn_details_Result>
+@using Vastwebmulti.Models;
 @{
+    VastwebmultiEntities db = new VastwebmultiEntities();
     ViewBag.Title = "UPIQR";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
 <style>
 
     /* new css  */
-
-
+    .swal2-popup.swal2-modal.swal2-icon-success.swal2-show {
+        width: 40em;
+        font-size: 14px;
+    }
+    #timer {
+        font-weight: 800;
+        padding-left: 10px;
+        padding-right:10px;
+    }
+    .set_time1 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #divamount h3 {
+        padding-bottom: 15px;
+    }
 
     .layoutt-retailer section.content {
         margin-top: 95px;
@@ -23,8 +40,57 @@
         align-items: center;
         justify-content: space-between;
     }
+    .set_time {
+        width: 100%;
+        float: left;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        position: relative;
+    }
+        .set_time::after {
+            content: "";
+            width: 28px;
+            position: absolute;
+            height: 63px;
+            background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+        }
+        .set_time h3 {
+            margin: 0;
+            font-size: 20px;
+        }
 
+    @*#timer {
+        animation: mymove 2s linear infinite;
+    }*@
+    @@keyframes mymove {
+        0% {
+            color: #fff;
+        }
 
+        50% {
+            color: green;
+        }
+
+        100% {
+            color: red;
+        }
+    }
+
+    /* ------- new css -------- */
+
+   
+
+@@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
 
     /* new css  */
 
@@ -645,12 +711,66 @@
                                                 <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.respmsg </p>
                                             }
 
+                                        } 
+                                        else if (ViewBag.Api == "PAYTM")
+                                        {
+                                            if (ViewBag.respmsg == "OK")
+                                            {
+
+                                                <div id="paytmshowgenrateform" style=" margin-top: 18px;">
+                                                    <div class="form-group">
+                                                        <div id="divamount" class="">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <h3 style=" margin-top: 0; ">Enter Amount And Generate QR</h3>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+
+                                                                @Html.TextBox("paytmamounts", "", new { @type = "number", @class = "form-control", placeholder = "Enter Amount" })
+
+                                                            </div>
+
+                                                            <div class="col-md-4 col-sm-4 col-xs-4" style="">
+                                                                <div id="GenrateQr" class="">
+                                                                    <button id="generatte" onclick="generatepaytmqr()" class="btn btn-primary">Generate QR</button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="payidmess" style="color:red"></div>
+                                                        </div>
+
+                                                        
+
+                                                    </div>
+
+                                                </div>
+                                                <div id="paytmqrcodeshow" style="display:none">
+                                                    <div class="set_time">
+
+                                                        <div class="set_time1">
+                                                            <h3>This QR Will Expire After </h3>
+                                                            <div style=" font-size: 20px; " id=timer></div>
+                                                         </div>
+                                                            <h3>Minutes</h3>
+
+                                                            
+                                                        </div>
+                                                        <img id="qrCodeImage" style="width:100%" src="" alt="QR Code will appear here">
+
+                                                    </div>
+                                                
+                                            }
+                                            else
+                                            {
+                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                            }
+
                                         }
                                     }
                                     else
                                     {
                                         <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
                                     }
+                                    @if (ViewBag.Api != "PAYTM")
+                                    {
                                     <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
                                         <ol>
                                             <li>You can Not update the amount in your wallet by scanning the QR code.</li>
@@ -671,6 +791,7 @@
                                             </tr>
                                         </table>
                                     </div>
+                                    }
                                 </div>
                             </div>
                             @* }*@
@@ -950,6 +1071,8 @@
         <span class="spinner"></span>
     </div>
 </div>
+
+
 
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <!-- Custom Js -->
@@ -1386,3 +1509,112 @@
        })
     }
 </script>
+
+<script>
+    function generatepaytmqr() {
+        @{
+            var CHK = db.Upi_Qr_codeGenerator.ToList();
+            }
+
+        var amount = document.getElementById('paytmamounts').value;
+        if (amount.length !== 0 && amount <= @CHK[0].maximium && amount >= @CHK[0].minmium) {
+            $.ajax({
+                url: '@Url.Action("Paytmqrgenerates","Home")',
+                type: 'GET',
+                data: { amount: amount },
+                success: function (response) {
+                    if (response.success) {
+                        var base64Image = response.image;
+                        $('#qrCodeImage').attr('src', 'data:image/png;base64,' + base64Image);
+                        document.getElementById('paytmshowgenrateform').style.display = "none";
+                        document.getElementById('paytmqrcodeshow').style.display = "block";
+
+                        countdown(2, 00, response.txnid);
+
+
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+            Swal.fire({
+                title: "Success!",
+                text: "Your file has been success.",
+                icon: "success"
+            });
+
+        }
+        else {
+            var mess = "Enter amount in between " +@CHK[0].minmium+" To " +@CHK[0].maximium;
+
+            document.getElementById("payidmess").innerHTML = mess;
+        }
+    }
+
+</script>
+<script type="text/javascript">
+var timeoutHandle;
+function countdown(minutes, seconds,txnid) {
+    function tick() {
+        
+        var counter = document.getElementById("timer");
+        counter.innerHTML =
+            minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds--;
+        $.ajax({
+                url: '@Url.Action("Paytmqrresponse","Home")',
+                type: 'GET',
+            data: { txnid: txnid },
+            success: function (response) {
+
+              
+                if (response.res == "Yes") {
+                    
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+
+                }
+                
+             
+                },
+               
+            });
+
+        if (seconds == 0 && minutes == 0) {
+           window.location.reload();
+        }
+        else {
+
+
+            if (seconds >= 0) {
+                timeoutHandle = setTimeout(tick, 1000);
+            } else {
+                if (minutes >= 1) {
+                    // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+                    setTimeout(function () {
+                        countdown(minutes - 1, 59, txnid);
+                    }, 1000);
+                }
+            }
+        }
+
+
+    }
+    tick();
+}
+
+    function Orderss(a) {
+        debugger;
+        console.log(a);
+    }
+</script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

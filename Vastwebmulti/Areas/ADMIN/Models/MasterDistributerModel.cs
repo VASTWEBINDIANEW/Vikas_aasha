@@ -8,6 +8,7 @@ namespace Vastwebmulti.Areas.ADMIN.Models
 {
     public class MasterDistributerModel
     {
+
         [Required(ErrorMessage = "* this field is required")]
         public string SSIS { get; set; }
         [Required(ErrorMessage = "Enter The Name")]
