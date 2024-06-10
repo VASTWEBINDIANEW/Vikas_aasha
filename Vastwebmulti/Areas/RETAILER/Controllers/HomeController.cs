@@ -63,6 +63,12 @@ using static sun.net.dns.ResolverConfiguration;
 using static Vastwebmulti.Areas.ADMIN.Controllers.HomeController;
 using Main = org.vwipl.Main;
 using Random = System.Random;
+using System.Drawing;
+using System.Drawing.Imaging;
+using QRCoder;
+//using paytmresponselibrary;
+
+
 
 namespace Vastwebmulti.Areas.RETAILER.Controllers
 {
@@ -22069,13 +22075,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("Authorization", "Bearer " + token);
                 IRestResponse response = client.Execute(request);
-                FinoGenerateUrl fino = new FinoGenerateUrl();
+                AirtelGenerateUrl fino = new AirtelGenerateUrl();
                 fino.reqid = reqid;
                 fino.request = "http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid+ "&lat=" + lattitude + "&logni="+ longitude;
                 fino.response = response.Content;
                 fino.userid = userid;
                 fino.createdAt = DateTime.Now;
-                db.FinoGenerateUrls.Add(fino);
+                db.AirtelGenerateUrls.Add(fino);
                 db.SaveChanges();
                 dynamic obj = JsonConvert.DeserializeObject(response.Content);
                 var json = obj.Content.ADDINFO;
@@ -31940,6 +31946,51 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             }
                             ViewBag.respmsg = msg;
                         }
+                        else if(apiname.Name == "PAYTM")
+                        {
+                            var client = new RestClient("http://api.vastbazaar.com/api/Paytm/QRStatus");
+                            var request = new RestRequest(Method.POST);
+                            var token = getAuthToken();
+                            request.AddHeader("Authorization", "Bearer " + token);
+                            IRestResponse response = client.Execute(request);
+                            var resp = response.Content;
+                            dynamic respchk = JsonConvert.DeserializeObject(resp);
+                            var addnifo = respchk.Content.ADDINFO;
+                            var status = addnifo.status;
+                            if (status == true)
+                            {
+                                var upiid = addnifo.upiid;
+                                var Cookie = addnifo.Cookie;
+                                var xtoken = addnifo.xtoken;
+
+                                var chkss = db.paytmgatewayinfoes.ToList();
+                                if (chkss.Count == 0)
+                                {
+                                    paytmgatewayinfo d4 = new paytmgatewayinfo();
+                                    d4.upiid = addnifo.upiid;
+                                    d4.Cookie = addnifo.Cookie;
+                                    d4.xtoken = addnifo.xtoken;
+                                    db.paytmgatewayinfoes.Add(d4);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    var chkss1 = db.paytmgatewayinfoes.SingleOrDefault();
+                                    chkss1.upiid = addnifo.upiid;
+                                    chkss1.Cookie = addnifo.Cookie;
+                                    chkss1.xtoken = addnifo.xtoken;
+                               
+                                    db.SaveChanges();
+                                }
+                                var msg = "";
+                                msg = "OK";
+                                ViewBag.respmsg = msg;
+                            }
+                            else
+                            {
+                                ViewBag.msg = "Qr down contact To Admin";
+                            }
+                        }
                         else
                         {
                             ViewBag.msg = "UPI Api Not Set";
@@ -31974,6 +32025,157 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             DateTime to = DateTime.Now.AddDays(1).Date;
             var ch = db.show_upi_txn_details("Retailer", userid, "ALL", from, to);
             return View(ch);
+        }
+
+        public ActionResult Paytmqrgenerates(string amount)
+        {
+            if (!string.IsNullOrEmpty(amount))
+            {
+                var client = new RestClient("http://api.vastbazaar.com/api/Paytm/QRStatus");
+                var request = new RestRequest(Method.POST);
+                var token = getAuthToken();
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                var resp = response.Content;
+                dynamic respchk = JsonConvert.DeserializeObject(resp);
+                var addnifo = respchk.Content.ADDINFO;
+                var status = addnifo.status;
+                if (status == true)
+                {
+                    Random d1 = new Random();
+                    var randomid = d1.Next(999, 9999);
+                    var userid = User.Identity.GetUserId();
+                    var username = db.Admin_details.SingleOrDefault();
+                    var dealeids = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var chkretailername = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var qrinfo = "upi://pay?pa=&pn=Paytm%20Merchant&mc=5499&mode=02&orgid=000000";
+                    Uri uri = new Uri(qrinfo);
+                    var upiid = db.paytmgatewayinfoes.FirstOrDefault();
+                    var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+                    queryParameters["pa"] = upiid.upiid;
+                    queryParameters["tn"] = chkretailername.RetailerName;
+                    queryParameters["am"] = amount;
+                    var frmss = username.WebsiteUrl.ToUpper();
+                    var frm = frmss.Replace("-", "").Replace(".", "").Replace("/", "");
+
+
+
+                    string texn = frm.Substring(0, 3) + randomid.ToString();
+                    queryParameters["tr"] = texn;
+                    var uriBuilder = new UriBuilder(uri)
+                    {
+                        Query = string.Join("&", queryParameters)
+                    };
+                    string newUpiString = uriBuilder.ToString();
+
+                    // Create a new instance of the QRCodeGenerator class
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(newUpiString, QRCodeGenerator.ECCLevel.Q);
+
+
+                    // Create a new instance of the QRCode class
+                    QRCode qrCode = new QRCode(qrCodeData);
+
+                    // Generate the QR code as a Bitmap
+                    using (Bitmap qrCodeImage = qrCode.GetGraphic(20))
+                    {
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            qrCodeImage.Save(memoryStream, ImageFormat.Png);
+                            byte[] byteImage = memoryStream.ToArray();
+                            string base64Image = Convert.ToBase64String(byteImage);
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+
+                            return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Qr code is down Contact To Admin....!", txnid = "" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json(new { success = false, message = "Amount cannot be empty", txnid = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Paytmqrresponse(string txnid)
+        {
+            var chkss1 = db.paytmgatewayinfoes.SingleOrDefault();
+            ServicePointManager.SecurityProtocol =
+          SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            var client = new RestClient("https://dashboard.paytm.com");
+            client.Timeout = -1; // Set timeout if necessary
+            var request = new RestRequest("/api/v3/order/list", Method.POST);
+            request.AddHeader("X-Xsrf-Token", chkss1.xtoken);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddCookie("SESSION", chkss1.Cookie);
+            var body = @"
+{
+    ""bizTypeList"": [ ""ACQUIRING"", ""CASHBACK"", ""SPLIT_PAYMENT"" ],
+    ""pageSize"": 20,
+    ""pageNum"": 1,
+    ""merchantTransId"": """ + txnid + @""",
+    ""isSort"": true
+}";
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            var response = client.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+
+                dynamic respchks = JsonConvert.DeserializeObject(response.Content);
+
+                try
+                {
+                    var succresp = respchks.orderList;
+                    if (succresp != null)
+                    {
+                        var bankarrn = succresp[0].bizOrderId;
+                        var stss = succresp[0].orderStatus;
+                        var name = succresp[0].nickName;
+                        var amountss = succresp[0].payMoneyAmount.value;
+                        decimal amiunts = Convert.ToDecimal(amountss);
+                        System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+
+                        if (cid.amt == amiunts / 100)
+                        {
+                            var msg = db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output).FirstOrDefault().msg;
+                            cid.PayerName = name.ToString();
+                            db.SaveChanges();
+
+                            return Json(new { res = "Yes" }, 0);
+                        }
+                        else
+                        {
+                            return Json(new { res = "No" }, 0);
+                        }
+
+                    }
+                    else
+                    {
+                        return Json(new { res = "No" }, 0);
+                    }
+
+                }
+                catch
+                {
+                    var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+                    if (cid.status == "SUCCESS")
+                    {
+                        return Json(new { res = "Yes" }, 0);
+                    }
+                    else
+                    {
+                        return Json(new { res = "No" }, 0);
+                    }
+
+                }
+
+
+            }
+            return Json("No", 0);
         }
         [HttpPost]
         public ActionResult UPITRANSFER_add_QR()

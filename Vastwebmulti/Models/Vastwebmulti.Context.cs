@@ -863,6 +863,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Aeps_aadharpay_comm> Aeps_aadharpay_comm { get; set; }
         public virtual DbSet<loanrequest> loanrequests { get; set; }
         public virtual DbSet<loanlimit> loanlimits { get; set; }
+        public virtual DbSet<paytmgatewayinfo> paytmgatewayinfoes { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

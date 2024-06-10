@@ -579,10 +579,10 @@
                                                 }
                                                 function editUserWise(role) {
                                                     var userid = "";
-
+                                                    document.getElementById('useridcccomm').value = role;
                                                     $.ajax({
                                                         type: "POST",
-                                                        url: '@Url.Action("Roleswiseuser", "Home")',
+                                                        url: '@Url.Action("dayswiseuser", "Home")',
                                                         data: { role: role, userid: userid },
 
                                                         success: function (result) {
@@ -698,6 +698,82 @@
                                                             document.getElementById('creditcommon').style.display = "contents";
 
                                                             document.getElementById('creditcommon1').style.display = "none";
+
+                                                            var ss = document.getElementById('creditcommon');
+                                                            var ss1 = document.getElementById('creditcommon1');
+                                                            ss.innerHTML = "";
+                                                            ss1.innerHTML = "";
+
+                                                            var tr = document.createElement("tr");
+                                                            var tr1 = document.createElement("tr");
+
+                                                            var td = document.createElement("td");
+                                                            var td1 = document.createElement("td");
+                                                            var td2 = document.createElement("td");
+                                                            var td3 = document.createElement("td");
+                                                            var td4 = document.createElement("td");
+                                                            td4.setAttribute('class', 'clsrole');
+                                                            var td5 = document.createElement("td");
+                                                            var td6 = document.createElement("td");
+                                                            var td7 = document.createElement("td");
+
+
+
+
+                                                            var inp1 = document.createElement("input");
+                                                            inp1.setAttribute('type', 'number');
+                                                            inp1.setAttribute('value', 0);
+                                                            inp1.setAttribute('class', 'cls100');
+                                                            var inp2 = document.createElement("input");
+                                                            inp2.setAttribute('type', 'number');
+                                                            inp2.setAttribute('value', 0);
+                                                            inp2.setAttribute('class', 'cls5000');
+                                                            var inp3 = document.createElement("input");
+                                                            inp3.setAttribute('type', 'number');
+                                                            inp3.setAttribute('value', 0);
+                                                            inp3.setAttribute('class', 'cls10000');
+
+
+                                                            td.textContent = "ALL";
+                                                            td1.textContent = 0;
+                                                            td2.textContent = 0;
+                                                            td3.textContent = 0;
+
+                                                            td4.textContent = "ALL";
+                                                            td5.appendChild(inp1);
+                                                            td6.appendChild(inp2);
+                                                            td7.appendChild(inp3);
+
+
+
+
+                                                            tr.appendChild(td);
+                                                            tr.appendChild(td1);
+                                                            tr.appendChild(td2);
+                                                            tr.appendChild(td3);
+
+
+                                                            tr1.appendChild(td4);
+                                                            tr1.appendChild(td5);
+                                                            tr1.appendChild(td6);
+                                                            tr1.appendChild(td7);
+
+
+
+
+                                                            ss.appendChild(tr);
+                                                            ss1.appendChild(tr1);
+                                                            document.getElementById('ccname').value = "ALL";
+                                                            document.getElementById('ccmobile').value = "ALL";
+                                                            document.getElementById('ccemail').value = "ALL";
+                                                            document.getElementById('btnEdit').style.display = "none";
+                                                            document.getElementById('btnEdit11').style.display = "block";
+                                                            document.getElementById('btnEdit112').style.display = "none";
+                                                            document.getElementById('btnEdit1112').style.display = "none";
+                                                            document.getElementById('creditcommon').style.display = "contents";
+
+
+
                                                         }
                                                     });
 
@@ -865,8 +941,11 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="creditcommon">
+                                                   
+                                                    
                                                 </tbody>
                                                 <tbody id="creditcommon1" style="display:none">
+                                                 
                                                 </tbody>
 
                                             </table>
