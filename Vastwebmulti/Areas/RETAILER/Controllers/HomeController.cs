@@ -31991,6 +31991,56 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 ViewBag.msg = "Qr down contact To Admin";
                             }
                         }
+                        else if(apiname.Name == "PHONE PE")
+                        {
+                            var client = new RestClient("http://api.vastbazaar.com/api/Phonepe/QRStatus");
+                            var request = new RestRequest(Method.POST);
+                            var token = getAuthToken();
+                            request.AddHeader("Authorization", "Bearer " + token);
+                            IRestResponse response = client.Execute(request);
+                            var resp = response.Content;
+                            dynamic respchk = JsonConvert.DeserializeObject(resp);
+                            var addnifo = respchk.Content.ADDINFO;
+                            var status = addnifo.status;
+                            if (status == true)
+                            {
+                                var upiid = addnifo.upiid;
+                                var Fingerprint = addnifo.Fingerprint;
+                                var CKB2N1BHVZ = addnifo.CKB2N1BHVZ;
+                                var gtoken = addnifo.gtoken;
+                                var xtoken = addnifo.xtoken;
+
+                                var chkss = db.paytmgatewayinfoes.ToList();
+                                if (chkss.Count == 0)
+                                {
+                                    Phonepaygatewayinfo d4 = new Phonepaygatewayinfo();
+                                    d4.upiid = upiid;
+                                    d4.XCsrfToken = xtoken;
+                                    d4.CKB2N1BHVZ = CKB2N1BHVZ;
+                                    d4.OCULUS_G_TOKEN = gtoken;
+                                    d4.Fingerprint = Fingerprint;
+                                    db.Phonepaygatewayinfoes.Add(d4);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    var d4 = db.Phonepaygatewayinfoes.SingleOrDefault();
+                                    d4.upiid = upiid;
+                                    d4.XCsrfToken = xtoken;
+                                    d4.CKB2N1BHVZ = CKB2N1BHVZ;
+                                    d4.OCULUS_G_TOKEN = gtoken;
+                                    d4.Fingerprint = Fingerprint;
+                                    db.SaveChanges();
+                                }
+                                var msg = "";
+                                msg = "OK";
+                                ViewBag.respmsg = msg;
+                            }
+                            else
+                            {
+                                ViewBag.msg = "Qr down contact To Admin";
+                            }
+                        }
                         else
                         {
                             ViewBag.msg = "UPI Api Not Set";
@@ -32043,7 +32093,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 if (status == true)
                 {
                     Random d1 = new Random();
-                    var randomid = d1.Next(999, 9999);
+                    var randomid = d1.Next(99999, 999999);
                     var userid = User.Identity.GetUserId();
                     var username = db.Admin_details.SingleOrDefault();
                     var dealeids = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
@@ -32142,6 +32192,150 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         if (cid.amt == amiunts / 100)
                         {
                             var msg = db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output).FirstOrDefault().msg;
+                            cid.PayerName = name.ToString();
+                            db.SaveChanges();
+
+                            return Json(new { res = "Yes" }, 0);
+                        }
+                        else
+                        {
+                            return Json(new { res = "No" }, 0);
+                        }
+
+                    }
+                    else
+                    {
+                        return Json(new { res = "No" }, 0);
+                    }
+
+                }
+                catch
+                {
+                    var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+                    if (cid.status == "SUCCESS")
+                    {
+                        return Json(new { res = "Yes" }, 0);
+                    }
+                    else
+                    {
+                        return Json(new { res = "No" }, 0);
+                    }
+
+                }
+
+
+            }
+            return Json("No", 0);
+        }
+
+        public ActionResult Phonepeqrgenerates(string amount)
+        {
+            if (!string.IsNullOrEmpty(amount))
+            {
+                var client = new RestClient("http://api.vastbazaar.com/api/Phonepe/QRStatus");
+                var request = new RestRequest(Method.POST);
+                var token = getAuthToken();
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                var resp = response.Content;
+                dynamic respchk = JsonConvert.DeserializeObject(resp);
+                var addnifo = respchk.Content.ADDINFO;
+                var status = addnifo.status;
+                if (status == true)
+                {
+                    Random d1 = new Random();
+                    var randomid = d1.Next(99999, 999999);
+                    var userid = User.Identity.GetUserId();
+                    var username = db.Admin_details.SingleOrDefault();
+                    var dealeids = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var chkretailername = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var qrinfo = "upi://pay?mode=02&pa=&purpose=00&mc=7299&pn=PhonePeMerchant&orgid=180001&am=&tr=";
+                    Uri uri = new Uri(qrinfo);
+                    var upiid = db.Phonepaygatewayinfoes.FirstOrDefault();
+                    var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+                    queryParameters["pa"] = upiid.upiid;
+                    queryParameters["tn"] = chkretailername.RetailerName;
+                    queryParameters["am"] = amount;
+                    var frmss = username.WebsiteUrl.ToUpper();
+                    var frm = frmss.Replace("-", "").Replace(".", "").Replace("/", "");
+
+
+
+                    string texn = frm.Substring(0, 4) + randomid.ToString();
+                    queryParameters["tr"] = texn;
+                    var uriBuilder = new UriBuilder(uri)
+                    {
+                        Query = string.Join("&", queryParameters)
+                    };
+                    string newUpiString = uriBuilder.ToString();
+
+                    // Create a new instance of the QRCodeGenerator class
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(newUpiString, QRCodeGenerator.ECCLevel.Q);
+
+
+                    // Create a new instance of the QRCode class
+                    QRCode qrCode = new QRCode(qrCodeData);
+
+                    // Generate the QR code as a Bitmap
+                    using (Bitmap qrCodeImage = qrCode.GetGraphic(20))
+                    {
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            qrCodeImage.Save(memoryStream, ImageFormat.Png);
+                            byte[] byteImage = memoryStream.ToArray();
+                            string base64Image = Convert.ToBase64String(byteImage);
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+
+                            return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Qr code is down Contact To Admin....!", txnid = "" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json(new { success = false, message = "Amount cannot be empty", txnid = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult phonepeqrresponse(string txnid)
+        {
+            var chkss1 = db.Phonepaygatewayinfoes.SingleOrDefault();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            var client = new RestClient("https://web-api.phonepe.com/apis/mi-web/v3/transactions/details");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Csrf-Token", chkss1.XCsrfToken);
+            request.AddHeader("Fingerprint", chkss1.Fingerprint);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddCookie("_CKB2N1BHVZ", chkss1.CKB2N1BHVZ);
+            request.AddCookie("OCULUS_G_TOKEN", chkss1.OCULUS_G_TOKEN);
+            var body = @"{""transactionId"":"""+txnid+@"""}";
+            request.AddJsonBody(body);
+            IRestResponse response = client.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+
+                dynamic respchks = JsonConvert.DeserializeObject(response.Content);
+
+                try
+                {
+                    var succresp = respchks.orderList;
+                    if (succresp != null)
+                    {
+                        var bankarrn = succresp[0].bizOrderId;
+                        var stss = succresp[0].orderStatus;
+                        var name = succresp[0].nickName;
+                        var amountss = succresp[0].payMoneyAmount.value;
+                        decimal amiunts = Convert.ToDecimal(amountss);
+                        System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+
+                        if (cid.amt == amiunts / 100)
+                        {
+                            var msg = db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, output).FirstOrDefault().msg;
                             cid.PayerName = name.ToString();
                             db.SaveChanges();
 
