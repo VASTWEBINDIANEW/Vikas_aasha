@@ -5,6 +5,38 @@
 }
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
 <style>
+
+
+    /* new css  */
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .container-fluid.retailerledger-container {
+        padding-left: 10px;
+    }
+    .col-md-1customerightsearch, .col-md-2.customerightdate {
+        float: left;
+    }
+        .col-md-1customerightsearch button {
+            height: 32px !important;
+        }
+    .datesates {
+        padding-right: 0px;
+    }
+
+    /* new css  */
+
     .table.dataTable thead th, table.dataTable thead td {
         padding: 8px 4px 6px 4px;
     }
@@ -34,16 +66,47 @@
         padding: 4px 5px;
     }
 
+    @@media only screen and (max-width:1169px){
+        .container-fluid.retailerledger-container {
+            padding-left: 15px;
+        }
+
+    }
+
+    @@media only screen and (max-width:767px){
+        .table-responsive.tablethirddesign-new {
+            border: 1px solid var(--border-color);
+            border-top: 0;
+            border-bottom: 0;
+        }
+        
+
+    }
+
     @@media screen and (max-width:766px){
         .col-md-3.buttonPdf {
             display: block;
-            margin-bottom: 10px;
         }
     }
 
+    @@media only screen and (max-width:480px){
+        .customeright {
+            width: 100%;
+            padding-bottom:4px;
+        }
+            .customeright .col-md-1customerightsearch {
+                width: 39%;
+            }
+            .customeright .col-md-2.customerightdate input {
+                text-align: center !important;
+            }
+
+    }
+
+
 </style>
-<section class="content retailerdaybook content-margin-second content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px; overflow-x:hidden;">
-    <div class="container-fluid retailerledger-container" style="padding-left:10px;height:100vh;">
+<section class="content retailerdaybook content-margin-second content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
+    <div class="container-fluid retailerledger-container" style="height:100vh;">
         <!--Four-Design-Page-Header-Start-->
 
         <div class="page-title-box-fourde">
@@ -58,8 +121,10 @@
         <!--Four-Design-Page-Header-End-->
         <div class="row clearfix">
             <div class="col-md-12">
-                <div class="card cardretailerlager class-back-tra-fourdesign fix-bootmmarg-fourdesign">
-                    <div class="bread-same-all-page" style="width:auto;float:left;padding-top: 4px;">
+
+                <div class="page-header-third">
+
+                    <div class="bread-same-all-page" style="width:auto;float:left;">
                         <div class="col-md-6" style="width: auto; float: left; padding: 0;">
                             <ul>
                                 <li class="smli">
@@ -76,129 +141,145 @@
 
                     </div>
 
-                    <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;float:right;width:auto;">
-
-                        <button style="color:#555;"id="btnPDF">PDF</button>
-                        <button style="padding-left:16px;color:#555;"id="btnExport">Export</button>
-
-                    </div>
-                    @using (Html.BeginForm("Retailer_Daybook_Report", "Home", FormMethod.Post))
-                    {
-                        <div class="customeright rightcustomeclass">
-                            <div class="col-md-1customerightsearch">
-                                <center>
-                                    <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:33px;">
-                                        <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                        <span style="top:0px;color:black;">Search</span>
-                                    </button>
-                                </center>
-                            </div>
-                            <div class="col-md-2 customerightdate">
-                                <div class="input-daterange input-group" style="margin-left:-13px;width:90%;">
-                                    <div class="datesate datesates">
-                                        <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", @autocomplete = "off" })
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    }
-
                 </div>
+
+                
             </div>
         </div>
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;">
-                <div class="card class-back-tra-fourdesign">
+                
+                <div class="page-header-third">
+                    <div class="card cardretailerlager class-back-tra-fourdesign fix-bootmmarg-fourdesign" style="float:left;width:100%;">
 
-                    <div class="body" style="padding:7px;padding-left:0;padding-top:0px;">
-                        <div class="table-responsive tablethirddesign-new" style="position:inherit; margin-top:-3px;">
-                            <table class="table table-bordered table-striped table-hover" style="width:100%;font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Firm&nbsp;Name</th>
-                                        <th>Recharge&nbsp;&&nbsp;Bill</th>
-                                        <th>IMPS</th>
-                                        <th>AEPS</th>
-                                        <th>M&nbsp;-&nbsp;POS</th>
-                                        <th>Pancard</th>
-                                        <th>Travel</th>
-                                        <th>Purchase</th>
-                                        <th>Opening&nbsp;Bal</th>
-                                        <th>Closing&nbsp;Bal</th>
-                                        <th>Old&nbsp;Day&nbsp;Refund</th>
-                                        <th>Old&nbsp;Day&nbsp;Failed</th>
-                                        <th>Diff</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model.Daybooklive != null)
-                                    {
-                                        foreach (var item in Model.Daybooklive)
+
+
+                        @using (Html.BeginForm("Retailer_Daybook_Report", "Home", FormMethod.Post))
+                        {
+                            <div class="customeright rightcustomeclass" style="float:left;">
+                                <div class="col-md-2 customerightdate" style="padding-left:0;">
+                                    <div class="input-daterange input-group" style="">
+                                        <div class="datesate datesates">
+                                            <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
+                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", @autocomplete = "off" })
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-1customerightsearch">
+                                    <center>
+                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left:-74px; height:33px;">
+                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
+                                            <span style="top:0px;color:black;">Search</span>
+                                        </button>
+                                    </center>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;float:right;width:auto;">
+
+                                <button style="color:#555;" id="btnPDF">PDF</button>
+                                <button style="padding-left:16px;color:#555;" id="btnExport">Export</button>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+                    <div class="card class-back-tra-fourdesign" style="float:left;width:100%;">
+
+                        <div class="body" style="padding: 7px; padding-left: 0; padding-right: 0; padding-top: 4px;">
+                            <div class="table-responsive tablethirddesign-new" style="position:inherit;">
+                                <table class="table table-bordered table-striped table-hover" style="width:100%;font-size:12px;">
+                                    <thead style="background-color:whitesmoke;">
+                                        <tr>
+                                            <th>Firm&nbsp;Name</th>
+                                            <th>Recharge&nbsp;&&nbsp;Bill</th>
+                                            <th>IMPS</th>
+                                            <th>AEPS</th>
+                                            <th>M&nbsp;-&nbsp;POS</th>
+                                            <th>Pancard</th>
+                                            <th>Travel</th>
+                                            <th>Purchase</th>
+                                            <th>Opening&nbsp;Bal</th>
+                                            <th>Closing&nbsp;Bal</th>
+                                            <th>Old&nbsp;Day&nbsp;Refund</th>
+                                            <th>Old&nbsp;Day&nbsp;Failed</th>
+                                            <th>Diff</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.Daybooklive != null)
                                         {
-                                            <tr>
-                                                <td>
-                                                    @if (item.Frm_Name == null)
-                                                    {
-                                                        @item.RetailerName
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.Frm_Name
-                                                    }
-                                                </td>
-                                                <td>@item.RCH</td>
-                                                <td>@item.IMPS</td>
-                                                <td>@item.AEPS</td>
-                                                <td>0.00</td>
-                                                <td>@item.PAN</td>
-                                                <td>0.00</td>
-                                                <td>@item.PURCHASE</td>
-                                                <td>@item.openbal</td>
-                                                <td>@item.closebal</td>
-                                                <td>@item.OLDDAYREFUND</td>
-                                                <td>@item.OLDDAYFAILED</td>
-                                                <td>@item.DIFF</td>
-                                            </tr>
+                                            foreach (var item in Model.Daybooklive)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @if (item.Frm_Name == null)
+                                                        {
+                                                            @item.RetailerName
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.Frm_Name
+                                                        }
+                                                    </td>
+                                                    <td>@item.RCH</td>
+                                                    <td>@item.IMPS</td>
+                                                    <td>@item.AEPS</td>
+                                                    <td>0.00</td>
+                                                    <td>@item.PAN</td>
+                                                    <td>0.00</td>
+                                                    <td>@item.PURCHASE</td>
+                                                    <td>@item.openbal</td>
+                                                    <td>@item.closebal</td>
+                                                    <td>@item.OLDDAYREFUND</td>
+                                                    <td>@item.OLDDAYFAILED</td>
+                                                    <td>@item.DIFF</td>
+                                                </tr>
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        foreach (var item in Model.DayboolOLD)
+                                        else
                                         {
-                                            <tr>
-                                                <td>
-                                                    @if (item.RetailerName == null)
-                                                    {
-                                                        @item.RetailerName
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.Frm_Name
-                                                    }
-                                                </td>
-                                                <td>@item.RCH</td>
-                                                <td>@item.IMPS</td>
-                                                <td>@item.AEPS</td>
-                                                <td>0.00</td>
-                                                <td>@item.PAN</td>
-                                                <td>0.00</td>
-                                                <td>@item.PURCHASE</td>
-                                                <td>@item.openbal</td>
-                                                <td>@item.closebal</td>
-                                                <td>@item.OLDDAYREFUND</td>
-                                                <td>@item.OLDDAYFAILED</td>
-                                                <td>@item.DIFF</td>
-                                            </tr>
+                                            foreach (var item in Model.DayboolOLD)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @if (item.RetailerName == null)
+                                                        {
+                                                            @item.RetailerName
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.Frm_Name
+                                                        }
+                                                    </td>
+                                                    <td>@item.RCH</td>
+                                                    <td>@item.IMPS</td>
+                                                    <td>@item.AEPS</td>
+                                                    <td>0.00</td>
+                                                    <td>@item.PAN</td>
+                                                    <td>0.00</td>
+                                                    <td>@item.PURCHASE</td>
+                                                    <td>@item.openbal</td>
+                                                    <td>@item.closebal</td>
+                                                    <td>@item.OLDDAYREFUND</td>
+                                                    <td>@item.OLDDAYFAILED</td>
+                                                    <td>@item.DIFF</td>
+                                                </tr>
+                                            }
                                         }
-                                    }
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

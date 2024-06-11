@@ -8,6 +8,32 @@
 
 <style>
 
+    /* new css  */
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0 !important;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+   
+
+    /* new css  */
+
+
     .dropdown-menu {
         margin-top: 81px !important;
     }
@@ -33,11 +59,12 @@
         border: 1px solid #fff;
         text-align: center;
         background: #a4a0a0;
-        padding: 8px 5px;
+        padding: 12px !important;
         padding-left: 5px;
         height: auto !important;
         margin-bottom: 0;
         font-size: 14px !important;
+        height: 76px !important;
     }
 
     .walletunhold-radio input[type="radio"]:checked + label {
@@ -70,11 +97,9 @@
         padding-bottom: 5px;
     }
 
-    @@media screen and (max-width:766px) {
-        .col-md-3.buttonPdf {
-            display: block;
-        }
-    }
+
+
+
 </style>
 <style>
     @@keyframes ldio-zdyd6mf6t5 {
@@ -152,6 +177,9 @@
 
     .walletunhold-radio label {
         float: left;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
 
         .walletunhold-radio label:last-child {
@@ -166,7 +194,7 @@
     .walletunhold-radio {
         width: 100%;
         float: left;
-        padding: 5px 15px;
+        padding: 5px;
         border-bottom: 1px solid #ddd;
         margin-bottom: 15px;
     }
@@ -185,6 +213,7 @@
     .bread-same-all-page ul {
         width: 100%;
         float: left;
+        margin:0px;
     }
 
         .bread-same-all-page ul li {
@@ -219,9 +248,40 @@
     .walletunload-header-table .col-md-2.walletsearchs button {
         background: #fff !important;
     }
+
+    @@media only screen and (max-width:1169px) {
+        .container-fluid.addnewcalsspadd {
+            padding-left: 15px !important;
+        }
+    }
+
+    @@media only screen and (max-width:991px) {
+    }
+
+    @@media only screen and (max-width:767px) {
+    }
+
+    @@media screen and (max-width:766px) {
+        .col-md-3.buttonPdf {
+            display: block;
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+        .walletunhold-radio label {
+            padding: 8px !important;
+            font-size: 11px !important;
+            height: 55px !important;
+        }
+        .col-md-12.colmdwerty h2 {
+            font-size: 18px !important;
+        }
+
+    }
+
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px;">
+<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="">
     <div class="container-fluid addnewcalsspadd" style="padding-left:9px;">
         <!--Four-Design-Page-Header-Start-->
 
@@ -235,116 +295,131 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page" style="width:100%;float:left;">
-            <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
+        <div class="page-header-third">
+            <div class="bread-same-all-page" style="width:100%;float:left;">
+                <div class="col-md-6" style="width: auto; float: left; padding: 0;">
+                    <ul>
+                        <li class="smli">
+                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                            </a>
+                        </li>
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        WalletUnloadReport
-                    </li>
-                </ul>
+                        <li class="fullbodydycolorbg tmw-total-color-one">
+                            Wallet Unload Report
+                        </li>
+                    </ul>
+                </div>
+
             </div>
-
         </div>
 
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
-                <div class="walletunloadfull walletunloadfull-responshive changeback-four-design">
-                    <div class="col-md-4 walletunhold-radio">
-                        <input type="radio" value="bywalletunload" name="group1" id="bywalletunload" onchange="change('bywalletunload')" checked="">
-                        <label for="bywalletunload">POS To Bank Account</label>
-                        <input type="radio" value="byposunload" name="group1" onchange="change('byposunload')" id="byposunload">
-                        <label for="byposunload">POS To Main Wallet</label>
+                <div class="page-header-third">
+                    <div class="walletunloadfull walletunloadfull-responshive changeback-four-design">
+                        <div class="col-md-4 walletunhold-radio">
+                            <input type="radio" value="bywalletunload" name="group1" id="bywalletunload" onchange="change('bywalletunload')" checked="">
+                            <label for="bywalletunload">POS To Bank Account</label>
+                            <input type="radio" value="byposunload" name="group1" onchange="change('byposunload')" id="byposunload">
+                            <label for="byposunload">POS To Main Wallet</label>
 
-                        <input type="radio" value="byposDis" name="group1" onchange="change('byposDis')" id="byposDis">
-                        <label for="byposDis">POS To Distributor</label>
+                            <input type="radio" value="byposDis" name="group1" onchange="change('byposDis')" id="byposDis">
+                            <label for="byposDis">POS To Distributor</label>
 
-                    </div>
+                        </div>
 
-                    <div id="WalletUnload">
-                        <div class="col-md-12 colmdwerty colmdwerty-unlod-value">
-                            <h2 class="" style="color:#555;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;clear:both;">
-                                <strong>Wallet Unload</strong>
+                        <div id="WalletUnload">
+                            <div class="col-md-12 colmdwerty colmdwerty-unlod-value">
+                                <h2 class="" style="color:#555;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;clear:both;">
+                                    <strong>Wallet Unload</strong>
+                                    @using (Ajax.BeginForm("AddWalletToBankRequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loader", OnSuccess = "OnSuccess", OnFailure = "OnFailed", OnComplete = "Competetransection" }))
+                                    {
+                                        if (ViewBag.WalletUnloadlimits != null)
+                                        {
+                                            @*<span class="walletunhold-blance">
+
+                                    @(ViewBag.WalletUnloadlimits==null? "0" : @ViewBag.WalletUnloadlimits.aepsremain)
+
+                                </span>*@
+                                        }
+                                    }
+                                </h2>
+
+
                                 @using (Ajax.BeginForm("AddWalletToBankRequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loader", OnSuccess = "OnSuccess", OnFailure = "OnFailed", OnComplete = "Competetransection" }))
                                 {
-                                    if (ViewBag.WalletUnloadlimits != null)
-                                    {
-                                        @*<span class="walletunhold-blance">
 
-                                                @(ViewBag.WalletUnloadlimits==null? "0" : @ViewBag.WalletUnloadlimits.aepsremain)
+                                    <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
+                                        <div class="col-md-12">
+                                            <div class="form-group" style="margin-top:4px;">
+                                                <div class="" style="border:1px solid #dddddd;">
+                                                    <input class="form-control" id="Amount" name="Amount" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
 
-                                            </span>*@
-                                    }
-                                }
-                            </h2>
-
-
-                            @using (Ajax.BeginForm("AddWalletToBankRequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loader", OnSuccess = "OnSuccess", OnFailure = "OnFailed", OnComplete = "Competetransection" }))
-                            {
-
-                                <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="margin-top:4px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <input class="form-control" id="Amount" name="Amount" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="margin-top:4px;margin-bottom:15px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <select id="Type" name="Type" class="form-control" required="" style="height:29px;">
-                                                    <option value="IMPS">IMPS</option>
-                                                    <option value="NEFT">NEFT</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="margin-top:4px;margin-bottom:15px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <div class="">
-                                                    @Html.DropDownList("BankAccountNo", (IEnumerable<SelectListItem>)ViewBag.remaccounts, "Select Account No", new { @class = "form-control", required = "required", id = "AccountNo", name = "AccountNo" })
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group" style="margin-top:4px;margin-bottom:15px;">
+                                                <div class="" style="border:1px solid #dddddd;">
+                                                    <select id="Type" name="Type" class="form-control" required="" style="height:29px;">
+                                                        <option value="IMPS">IMPS</option>
+                                                        <option value="NEFT">NEFT</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group" style="margin-top:4px;margin-bottom:15px;">
+                                                <div class="" style="border:1px solid #dddddd;">
+                                                    <div class="">
+                                                        @Html.DropDownList("BankAccountNo", (IEnumerable<SelectListItem>)ViewBag.remaccounts, "Select Account No", new { @class = "form-control", required = "required", id = "AccountNo", name = "AccountNo" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
 
-                                    @if (ViewBag.dmtpin_otp != null)
-                                    {
-                                        if (ViewBag.dmtpin_otp.status == true)
+                                        @if (ViewBag.dmtpin_otp != null)
                                         {
-                                            <div class="col-md-12" id="otpsubmithideshow" style="display:none;">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="" style="border:1px solid #dddddd;">
-                                                        <input class="form-control" id="txtdmtpin" name="txtdmtpin" placeholder="Enter OTP"  required="required" style="padding-top:4px;height:30px;" type="text">
+                                            if (ViewBag.dmtpin_otp.status == true)
+                                            {
+                                                <div class="col-md-12" id="otpsubmithideshow" style="display:none;">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpin" name="txtdmtpin" placeholder="Enter OTP" required="required" style="padding-top:4px;height:30px;" type="text">
 
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-12" id="resendotp" style="display:none;">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsend('SECOND','WALLETPINOTP')">Resend OTP</a>
+                                                <div class="col-md-12" id="resendotp" style="display:none;">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsend('SECOND','WALLETPINOTP')">Resend OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12 notshowdmttxt" style="display: none" id="hideshowotpbtn">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsend('FIRST','WALLETPINOTP')">Send OTP</a>
+                                                <div class="col-md-12 notshowdmttxt" style="display: none" id="hideshowotpbtn">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsend('FIRST','WALLETPINOTP')">Send OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12 notshowdmttxt" style="display: none">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpin" name="txtdmtpin" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;" type="text">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
@@ -357,166 +432,165 @@
                                                 </div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
+                                        <div id="dmtsuccesscodeotp" style="display:none; color:green; margin-left:17px;"></div>
+                                        <div id="dmterrorcodeotp" style="color: red; margin-left: 17px;"></div>
+                                        <div id="demo" style="color: red; margin-left: 17px;"></div>
+
+                                        <div class="col-md-12 notshowdmttxt11" style="display: none">
+                                            <div class="form-group" style="margin-top:4px;">
+                                                <div class="" style="border:1px solid #dddddd;">
+                                                    <label class="form-control" id="lbltransectionid" style="padding-top:4px;height:30px;"></label>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-12 notshowdmttxt" style="display: none">
                                             <div class="form-group" style="margin-top:4px;">
                                                 <div class="" style="border:1px solid #dddddd;">
-                                                    <input class="form-control" id="txtdmtpin" name="txtdmtpin" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;" type="text">
+                                                    Bank Info
+                                                    <label class="form-control" id="lblBankinfo" style="padding-top:4px;height:70px;"></label>
 
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                    <div id="dmtsuccesscodeotp" style="display:none; color:green; margin-left:17px;"></div>
-                                    <div id="dmterrorcodeotp" style="color: red; margin-left: 17px;"></div>
-                                    <div id="demo" style="color: red; margin-left: 17px;"></div>
+                                        <div class="col-md-12 walletbuttontr">
+                                            <div class="col-md-12 walleterrowshow">
+                                                <label id="errormsg" style="color:red;"></label>
+                                            </div>
 
-                                    <div class="col-md-12 notshowdmttxt11" style="display: none">
-                                        <div class="form-group" style="margin-top:4px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <label class="form-control" id="lbltransectionid" style="padding-top:4px;height:30px;"></label>
+                                            <div class="form-group" id="firsttimeshow">
+                                                <button type="button" id="btnaskdmtpin" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
+                                                    <span style="top: 0px;color: #fff;margin: 0px;color:#fff;margin:0px;">Check</span>
+                                                </button>
 
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 notshowdmttxt" style="display: none">
-                                        <div class="form-group" style="margin-top:4px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                Bank Info
-                                                <label class="form-control" id="lblBankinfo" style="padding-top:4px;height:70px;"></label>
+
+                                            <div class="form-group notshowdmttxt" style="display:none;">
+                                                <button type="submit" id="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
+                                                    <span style="top:0px;margin:0px;color:#fff;">Transfer</span>
+                                                </button>
 
                                             </div>
+
                                         </div>
+                                        <input type="hidden" id="Hdtransectionidgen" name="Hdtransectionidgen" value="0" />
                                     </div>
-                                    <div class="col-md-12 walletbuttontr">
-                                        <div class="col-md-12 walleterrowshow">
-                                            <label id="errormsg" style="color:red;"></label>
-                                        </div>
-
-                                        <div class="form-group" id="firsttimeshow">
-                                            <button type="button" id="btnaskdmtpin" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
-                                                <span style="top: 0px;color: #fff;margin: 0px;color:#fff;margin:0px;">Check</span>
-                                            </button>
-
-                                        </div>
-
-                                        <div class="form-group notshowdmttxt" style="display:none;">
-                                            <button type="submit" id="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
-                                                <span style="top:0px;margin:0px;color:#fff;">Transfer</span>
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-                                    <input type="hidden" id="Hdtransectionidgen" name="Hdtransectionidgen" value="0" />
-                                </div>
-                            }
+                                }
 
 
 
 
-                        </div>
+                            </div>
 
-                        <div class="col-md-12 wallet-unload">
-                            <h2 class="" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;background:#a4a0a0;">Wallet Unload Charges</h2>
-                            <div class="table-scrool-wallet">
-                                <table class="table table-bordered">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr>
-                                            <th>Min&nbsp;(₹)</th>
-                                            <th>Max(₹)</th>
-                                            <th>IMPS&nbsp;(₹)</th>
-                                            <th>NEFT&nbsp;(₹)</th>
-                                            @*<th>Time</th>*@
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbodyshow">
-                                        @{ int i = 1;}
-                                        @foreach (var item in Model.Charges.OrderBy(a => a.AmtFromTatkal))
-                                        {
+                            <div class="col-md-12 wallet-unload">
+                                <h2 class="" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;background:#a4a0a0;">Wallet Unload Charges</h2>
+                                <div class="table-scrool-wallet">
+                                    <table class="table table-bordered">
+                                        <thead style="background-color:whitesmoke;">
                                             <tr>
-                                                @*<td>@i</td>*@
-                                                @*<td>@item.AmtFromGeneral</td>
-                                                    <td>@item.AmtToGeneral</td>
-                                                    <td>@item.chargeGeneral</td>
-                                                    <td>@item.TimeTakesGeneral</td>*@
-                                                <td>@item.AmtFromTatkal</td>
-                                                @if (@item.AmtToTatkal == 0)
-                                                {
-                                                    <td>---------</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>@item.AmtToTatkal</td>
-                                                }
-                                                <td>@item.chargeTatkal</td>
-                                                <td>@item.chargeTatkalNEFT</td>
-                                                @*<td>@item.TimeTakesTatkal</td>*@
-                                                @*<td>@item.IsEnabled</td>*@
-
+                                                <th>Min&nbsp;(₹)</th>
+                                                <th>Max(₹)</th>
+                                                <th>IMPS&nbsp;(₹)</th>
+                                                <th>NEFT&nbsp;(₹)</th>
+                                                @*<th>Time</th>*@
                                             </tr>
-                                            i++;
-                                        }
+                                        </thead>
+                                        <tbody id="tbodyshow">
+                                            @{ int i = 1;}
+                                            @foreach (var item in Model.Charges.OrderBy(a => a.AmtFromTatkal))
+                                            {
+                                                <tr>
+                                                    @*<td>@i</td>*@
+                                                    @*<td>@item.AmtFromGeneral</td>
+                                        <td>@item.AmtToGeneral</td>
+                                        <td>@item.chargeGeneral</td>
+                                        <td>@item.TimeTakesGeneral</td>*@
+                                                    <td>@item.AmtFromTatkal</td>
+                                                    @if (@item.AmtToTatkal == 0)
+                                                    {
+                                                        <td>---------</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@item.AmtToTatkal</td>
+                                                    }
+                                                    <td>@item.chargeTatkal</td>
+                                                    <td>@item.chargeTatkalNEFT</td>
+                                                    @*<td>@item.TimeTakesTatkal</td>*@
+                                                    @*<td>@item.IsEnabled</td>*@
 
-                                    </tbody>
+                                                </tr>
+                                                i++;
+                                            }
 
-                                </table>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
                             </div>
-
-                        </div>
-                        <div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
-                            <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
-                                <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                                    <div class="ldio-zdyd6mf6t5">
-                                        <div></div><div></div>
+                            <div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
+                                <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
+                                    <div class="loadingio-spinner-ripple-92ar2pfqk5j">
+                                        <div class="ldio-zdyd6mf6t5">
+                                            <div></div><div></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="posunload" style="display:none;">
-                        <div class="col-md-12 colmdwerty">
-                            <h2 class="fullbodydycolorbg" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;">POS Unload</h2>
-                            @using (Ajax.BeginForm("AddWalletToPosRequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loaderpos", OnSuccess = "OnSuccessPOS", OnFailure = "OnFailedPOS", OnComplete = "CompetetransectionPOS" }))
-                            {
-                                <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="margin-top:4px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <input class="form-control" id="Amountpos" name="Amountpos" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
+                        <div id="posunload" style="display:none;">
+                            <div class="col-md-12 colmdwerty">
+                                <h2 class="fullbodydycolorbg" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;">POS Unload</h2>
+                                @using (Ajax.BeginForm("AddWalletToPosRequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loaderpos", OnSuccess = "OnSuccessPOS", OnFailure = "OnFailedPOS", OnComplete = "CompetetransectionPOS" }))
+                                {
+                                    <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
+                                        <div class="col-md-12">
+                                            <div class="form-group" style="margin-top:4px;">
+                                                <div class="" style="border:1px solid #dddddd;">
+                                                    <input class="form-control" id="Amountpos" name="Amountpos" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    @if (ViewBag.dmtpin_otp != null)
-                                    {
-                                        if (ViewBag.dmtpin_otp.status == true)
+                                        @if (ViewBag.dmtpin_otp != null)
                                         {
-                                            <div class="col-md-12" style="display:none;" id="otpsubmithideshowmain">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="" style="border:1px solid #dddddd;">
-                                                        <input class="form-control" id="txtdmtpinpos" name="txtdmtpinpos" placeholder="Enter OTP" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                            if (ViewBag.dmtpin_otp.status == true)
+                                            {
+                                                <div class="col-md-12" style="display:none;" id="otpsubmithideshowmain">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpinpos" name="txtdmtpinpos" placeholder="Enter OTP" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" id="resendotpmain" style="display:none;">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendmain('SECOND','MAINWALLETPINOTP')">Resend OTP</a>
+                                                <div class="col-md-12" id="resendotpmain" style="display:none;">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendmain('SECOND','MAINWALLETPINOTP')">Resend OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" id="hideshowotpbtnmain">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendmain('FIRST','MAINWALLETPINOTP')">Send OTP</a>
+                                                <div class="col-md-12" id="hideshowotpbtnmain">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsendmain('FIRST','MAINWALLETPINOTP')">Send OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpinpos" name="txtdmtpinpos" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
@@ -528,84 +602,84 @@
                                                 </div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
+                                        <div id="dmtsuccesscodeotpmain" style="display: none; color: green; margin-left: 17px;"></div>
+                                        <div id="dmterrorcodeotpmain" style="color: red; margin-left: 17px;"></div>
+                                        <div id="demomain" style="color: red; margin-left: 17px;"></div>
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
+                                                <span style="top:0px;color:#fff;margin:0px;">Transfer</span>
+                                            </button>
+                                        </div>
+                                        <div id="outer-loaderpos" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
+                                            <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
+                                                <div class="loadingio-spinner-ripple-92ar2pfqk5j">
+                                                    <div class="ldio-zdyd6mf6t5">
+                                                        <div></div><div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 walleterrowshow">
+                                            <label id="errormsgPOS" style="color:red;"></label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div id="tabsmyss1" class="tab-content" style="display:none;">
+                            <div class="col-md-12 colmdwerty">
+                                <h2 class="fullbodydycolorbg" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;">POS To Distributor Unload</h2>
+                                @using (Ajax.BeginForm("AddWalletToPosToDistributorrequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loaderposToDealer", OnSuccess = "OnSuccessPOSToDealer", OnFailure = "OnFailedPOS", OnComplete = "CompetetransectionPOS" }))
+                                {
+                                    <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
                                         <div class="col-md-12">
                                             <div class="form-group" style="margin-top:4px;">
                                                 <div class="" style="border:1px solid #dddddd;">
-                                                    <input class="form-control" id="txtdmtpinpos" name="txtdmtpinpos" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                                    <input class="form-control" id="Amountpos1" name="Amountpos1" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                    <div id="dmtsuccesscodeotpmain" style="display: none; color: green; margin-left: 17px;"></div>
-                                    <div id="dmterrorcodeotpmain" style="color: red; margin-left: 17px;"></div>
-                                    <div id="demomain" style="color: red; margin-left: 17px;"></div>
 
-                                    <div class="form-group">
-                                        <button type="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
-                                            <span style="top:0px;color:#fff;margin:0px;">Transfer</span>
-                                        </button>
-                                    </div>
-                                    <div id="outer-loaderpos" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
-                                        <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
-                                            <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                                                <div class="ldio-zdyd6mf6t5">
-                                                    <div></div><div></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 walleterrowshow">
-                                        <label id="errormsgPOS" style="color:red;"></label>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-
-                    <div id="tabsmyss1" class="tab-content" style="display:none;">
-                        <div class="col-md-12 colmdwerty">
-                            <h2 class="fullbodydycolorbg" style="color:#fff;margin:0px;text-align: center;font-size: 24px;padding: 4px 0px;">POS To Distributor Unload</h2>
-                            @using (Ajax.BeginForm("AddWalletToPosToDistributorrequest", "Home", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "outer-loaderposToDealer", OnSuccess = "OnSuccessPOSToDealer", OnFailure = "OnFailedPOS", OnComplete = "CompetetransectionPOS" }))
-                            {
-                                <div class="walletunloadf" style="background:#eae9e9;width: 100%;float: left;padding-top: 20px;">
-                                    <div class="col-md-12">
-                                        <div class="form-group" style="margin-top:4px;">
-                                            <div class="" style="border:1px solid #dddddd;">
-                                                <input class="form-control" id="Amountpos1" name="Amountpos1" onkeypress="return isNumber(event)" placeholder="Enter Amount" required="required" style="padding-top:4px;height:30px;" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if (ViewBag.dmtpin_otp != null)
-                                    {
-                                        if (ViewBag.dmtpin_otp.status == true)
+                                        @if (ViewBag.dmtpin_otp != null)
                                         {
-                                            <div class="col-md-12" style="display:none;" id="otpsubmithideshowdis">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="" style="border:1px solid #dddddd;">
-                                                        <input class="form-control" id="txtdmtpinpos1" name="txtdmtpinpos1" placeholder="Enter OTP" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                            if (ViewBag.dmtpin_otp.status == true)
+                                            {
+                                                <div class="col-md-12" style="display:none;" id="otpsubmithideshowdis">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpinpos1" name="txtdmtpinpos1" placeholder="Enter OTP" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" id="resendotpdis" style="display:none;">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsenddis('SECOND','DISWALLETPINOTP')">Resend OTP</a>
+                                                <div class="col-md-12" id="resendotpdis" style="display:none;">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsenddis('SECOND','DISWALLETPINOTP')">Resend OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" id="hideshowotpbtndis">
-                                                <div class="form-group" style="margin-top:4px;">
-                                                    <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
-                                                        <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsenddis('FIRST','DISWALLETPINOTP')">Send OTP</a>
+                                                <div class="col-md-12" id="hideshowotpbtndis">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="btn waves-effect fullbodydycolorbg" style="float:left; color:#fff;border:1px solid #c7c2c2;">
+                                                            <a class="fullbodydycolorbg" style="cursor: pointer; color: #fff;" onclick="otpsenddis('FIRST','DISWALLETPINOTP')">Send OTP</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-12">
+                                                    <div class="form-group" style="margin-top:4px;">
+                                                        <div class="" style="border:1px solid #dddddd;">
+                                                            <input class="form-control" id="txtdmtpinpos1" name="txtdmtpinpos1" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
                                         }
                                         else
                                         {
@@ -617,93 +691,87 @@
                                                 </div>
                                             </div>
                                         }
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-12">
-                                            <div class="form-group" style="margin-top:4px;">
-                                                <div class="" style="border:1px solid #dddddd;">
-                                                    <input class="form-control" id="txtdmtpinpos1" name="txtdmtpinpos1" placeholder="Enter Transaction Pin" required="required" style="padding-top:4px;height:30px;background:#fff;" autocomplete="new-password" type="password" readonly onfocus="this.removeAttribute('readonly');">
+                                        <div id="dmtsuccesscodeotpdis" style="display: none; color: green; margin-left: 17px;"></div>
+                                        <div id="dmterrorcodeotpdis" style="color: red; margin-left: 17px;"></div>
+                                        <div id="demodis" style="color: red; margin-left: 17px;"></div>
+
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
+                                                <span style="top:0px;color:#fff;margin:0px;">Transfer</span>
+                                            </button>
+                                        </div>
+                                        <div id="outer-loaderposToDealer" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
+                                            <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
+                                                <div class="loadingio-spinner-ripple-92ar2pfqk5j">
+                                                    <div class="ldio-zdyd6mf6t5">
+                                                        <div></div><div></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                    <div id="dmtsuccesscodeotpdis" style="display: none; color: green; margin-left: 17px;"></div>
-                                    <div id="dmterrorcodeotpdis" style="color: red; margin-left: 17px;"></div>
-                                    <div id="demodis" style="color: red; margin-left: 17px;"></div>
-
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn  waves-effect fullbodydycolorbg" style="float:right; color:#fff;padding:5px 20px; height:34px;border:1px solid #c7c2c2;">
-                                            <span style="top:0px;color:#fff;margin:0px;">Transfer</span>
-                                        </button>
-                                    </div>
-                                    <div id="outer-loaderposToDealer" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
-                                        <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
-                                            <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                                                <div class="ldio-zdyd6mf6t5">
-                                                    <div></div><div></div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-12 walleterrowshow">
+                                            <label id="errormsgPOS1" style="color:red;"></label>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 walleterrowshow">
-                                        <label id="errormsgPOS1" style="color:red;"></label>
-                                    </div>
-                                </div>
-                            }
+                                }
+                            </div>
                         </div>
                     </div>
+
                 </div>
+                
             </div>
 
             <div class="col-md-8 walletdata">
-                <div class="card changeback-four-design" style="min-height: inherit; background: #eae9e9; width: 100%; float: left;">
-                    <div class="">
-                        <div class="col-md-12 walletunload-header-table">
-                            @*@using (Html.BeginForm("WalletUnloadReport", "Home", FormMethod.Post))
-                                {*@
-                            @using (Ajax.BeginForm("WalletUnloadReport", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divEmp", OnSuccess = "OnSuccessunload" }))
-                            {
-                                <div class="">
-                                    <div class="row" style="margin:0px;">
-                                        <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
-                                            <button style="border-color: #555 !important; color: #555;" id="btnPDF">PDF</button>
-                                            <button style="border-color: #555 !important; color: #555;" id="btnExport">Export</button>
-                                        </div>
-                                        <div class="col-md-2 walletsearchs" style="width:auto;float:right;padding-right: 0;padding-left: 5px;">
-                                            <center>
-                                                <button type="submit" class="btn waves-effect retailer-search-second" style="margin-top: 3px;width:100%;border: 1px solid #c7c2c2; height:32px;background:transparent;">
-                                                    <i class="fa fa-search" style="top:-1px; font-size:16px;color:black;"></i>
-                                                    <span style="color:black;">Search</span>
-                                                </button>
-                                            </center>
-                                        </div>
-                                        <div class="col-md-6 walletdates walletdates-new walletdates-new-responshive" style="padding-left:0px;padding-right: 0;width:auto;float:right;">
-                                            <div class="form-group" style="margin-bottom:0px;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="unload-date">
-                                                        <div class="form-iconmy " style="border-color:#c7c2c2;height:31px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #c7c2c2; margin-top:3px;height:32px;", autocomplete = "off" })
+                <div class="page-header-third">
+                    <div class="card changeback-four-design" style="min-height: inherit; background: #eae9e9; width: 100%; float: left;">
+                        <div class="">
+                            <div class="col-md-12 walletunload-header-table">
+                                @*@using (Html.BeginForm("WalletUnloadReport", "Home", FormMethod.Post))
+                    {*@
+                                @using (Ajax.BeginForm("WalletUnloadReport", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divEmp", OnSuccess = "OnSuccessunload" }))
+                                {
+                                    <div class="">
+                                        <div class="row" style="margin:0px;">
+                                            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;">
+                                                <button style="border-color: #555 !important; color: #555;" id="btnPDF">PDF</button>
+                                                <button style="border-color: #555 !important; color: #555;" id="btnExport">Export</button>
+                                            </div>
+                                            <div class="col-md-2 walletsearchs" style="width:auto;float:right;padding-right: 0;padding-left: 5px;">
+                                                <center>
+                                                    <button type="submit" class="btn waves-effect retailer-search-second" style="margin-top: 3px;width:100%;border: 1px solid #c7c2c2; height:32px;background:transparent;">
+                                                        <i class="fa fa-search" style="top:-1px; font-size:16px;color:black;"></i>
+                                                        <span style="color:black;">Search</span>
+                                                    </button>
+                                                </center>
+                                            </div>
+                                            <div class="col-md-6 walletdates walletdates-new walletdates-new-responshive" style="padding-left:0px;padding-right: 0;width:auto;float:right;">
+                                                <div class="form-group" style="margin-bottom:0px;">
+                                                    <div class="input-daterange input-group">
+                                                        <div class="unload-date">
+                                                            <div class="form-iconmy " style="border-color:#c7c2c2;height:31px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
+                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #c7c2c2; margin-top:3px;height:32px;", autocomplete = "off" })
+                                                        </div>
+                                                        <div class="unload-date">
+                                                            <div class="form-iconmy" style="border-color:#c7c2c2;height:31px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
+                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #c7c2c2; margin-top:4px;height:32px;", autocomplete = "off" })
+                                                        </div>
                                                     </div>
-                                                    <div class="unload-date">
-                                                        <div class="form-iconmy" style="border-color:#c7c2c2;height:31px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #c7c2c2; margin-top:4px;height:32px;", autocomplete = "off" })
-                                                    </div>
+                                                    <!-- /.input group -->
                                                 </div>
-                                                <!-- /.input group -->
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        </div>
-                        <div id="divEmp" class="col-md-12 tabel-wallets tabel-wallets-responshive changeback-four-design" style="background: #eae9e9; height: 593px; overflow: auto;">
-                            @Html.Partial("_Wallet_unload")
+                                }
+                            </div>
+                            <div id="divEmp" class="col-md-12 tabel-wallets tabel-wallets-responshive changeback-four-design" style="background: #eae9e9; height: 593px; overflow: auto;">
+                                @Html.Partial("_Wallet_unload")
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>

@@ -6,6 +6,32 @@
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
 
 <style>
+    /* new css  */
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .referralall-report {
+        overflow: scroll;
+    }
+    /* new css  */
+
     .col-md-3.buttonPdf button:last-child {
         padding-left: 15px;
     }
@@ -34,6 +60,21 @@
         border-spacing: 0;
     }
 
+    @@media only screen and (max-width:1169px){
+        .container-fluid.resp_set {
+            padding-left: 15px !important;
+        }
+        .col-md-4.servicepaidreport {
+            padding-left: 0;
+        }
+    }
+    @@media only screen and (max-width:767px){
+        .col-md-8, .col-md-4.servicepaidreport {
+            padding-left: 0px;
+        }
+
+    }
+
     @@media screen and (max-width:766px) {
         .col-md-3.buttonPdf {
             display: block;
@@ -41,10 +82,6 @@
 
         .container-fluid {
             padding-bottom: 0px;
-        }
-
-        .content.servicefee-content {
-            padding-right: 20px;
         }
 
         .col-md-4.servicepaidreport {
@@ -56,10 +93,11 @@
             padding-left: 0px;
         }
     }
+
 </style>
 
-<section class="content servicefee-content servicefee-responshive content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px;margin-right:28px; overflow-x:hidden;">
-    <div class="container-fluid" style="padding-left: 11px; padding-right: 0;height:100vh;">
+<section class="content servicefee-content servicefee-responshive content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
+    <div class="container-fluid resp_set" style="padding-left: 11px;height:100vh;">
         <!--Four-Design-Page-Header-Start-->
 
         <div class="page-title-box-fourde">
@@ -73,124 +111,134 @@
 
         <!--Four-Design-Page-Header-End-->
         <div class="container-fluid" style="padding:0px;padding-bottom:10px;">
-            <div class="bread-same-all-page" style="width:auto;float:left;">
+            
+            <div class="page-header-third">
+                <div class="bread-same-all-page" style="float:left;">
 
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                        </a>
-                    </li>
+                    <ul style="margin:0;">
+                        <li class="smli">
+                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                            </a>
+                        </li>
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Service Fee
-                    </li>
-                </ul>
+                        <li class="fullbodydycolorbg tmw-total-color-one">
+                            Service Fee
+                        </li>
+                    </ul>
+                    <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
+
+                        <button>PDF</button>
+                        <button>Export</button>
+
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3 buttonPdf retailer-pdf-second" style="text-align:right;margin:0px;float:right;width:auto;">
-
-                <button>PDF</button>
-                <button>Export</button>
-
-            </div>
+            
         </div>
         <div class="col-md-4 servicepaidreport four-design-table-design">
+            <div class="page-header-third">
+                <div id="tbl1" class="referralall-report changeback-four-design">
+                    <h2 class="fullbodydycolorbg"><img src="~/ashok-images/support(1).svg" /><span>Service Fee</span></h2>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Service's</th>
+                                <th>Type</th>
+                                <th>Mode</th>
+                                <th>Price</th>
+                                <th>Auto Status</th>
 
-            <div id="tbl1" class="referralall-report changeback-four-design">
-                <h2 class="fullbodydycolorbg"><img src="~/ashok-images/support(1).svg" /><span>Service Fee</span></h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Service's</th>
-                            <th>Type</th>
-                            <th>Mode</th>
-                            <th>Price</th>
-                            <th>Auto Status</th>
+                            </tr>
+                        </thead>
 
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var item in Model.PaidList)
-                        {
-                            var type = "Paid";
-                            if (item.IsFree)
+                        <tbody>
+                            @foreach (var item in Model.PaidList)
                             {
-                                type = "Free";
-                            }
-
-                        <tr>
-                            @if (item.ServiceName == "DMT")
-                            {
-                                <td>ACC PAY</td>
-                            }
-                            else
-                            {
-                                <td>@item.ServiceName</td>
-                            }
-
-                            <td>@type</td>
-                            <td>@item.PaymentType</td>
-                            <td>@item.Price</td>
-                            <td class="servicefee-button">
-                                @if (item.AutoSts == "Y")
+                                var type = "Paid";
+                                if (item.IsFree)
                                 {
-                                    <button onclick="statuscheck('@item.ServiceName')">AUTO</button>
-                                }
-                                else
-                                {
-                                    <button onclick="statuscheck('@item.ServiceName')">MANUAL</button>
+                                    type = "Free";
                                 }
 
-                            </td>
+                                <tr>
+                                    @if (item.ServiceName == "DMT")
+                                    {
+                                        <td>ACC PAY</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.ServiceName</td>
+                                    }
 
-                        </tr>
-                        }
-                    </tbody>
-                </table>
+                                    <td>@type</td>
+                                    <td>@item.PaymentType</td>
+                                    <td>@item.Price</td>
+                                    <td class="servicefee-button">
+                                        @if (item.AutoSts == "Y")
+                                        {
+                                            <button onclick="statuscheck('@item.ServiceName')">AUTO</button>
+                                        }
+                                        else
+                                        {
+                                            <button onclick="statuscheck('@item.ServiceName')">MANUAL</button>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
 
             </div>
 
+            
 
         </div>
         <div class="col-md-8 four-design-table-design" style="padding-right:0;">
-            <div class="referralall-report tablethirddesign-new tablethirddesign-newnew changeback-four-design">
-                <table border="1" class="third-design-table fourdesign-data-table">
-                    <thead>
-                        <tr>
-                            <th>Service&nbsp;Name</th>
-                            <th>Mode</th>
-                            <th>Pre&nbsp;₹</th>
-                            <th>Fee</th>
-                            <th>post&nbsp;₹</th>
-                            <th>Purchase&nbsp;Date</th>
-                            <th>Exp&nbsp;Date</th>
-                        </tr>
-                    </thead>
+            <div class="page-header-third">
+                <div class="referralall-report tablethirddesign-new tablethirddesign-newnew changeback-four-design">
+                    <table border="1" class="third-design-table fourdesign-data-table">
+                        <thead>
+                            <tr>
+                                <th>Service&nbsp;Name</th>
+                                <th>Mode</th>
+                                <th>Pre&nbsp;₹</th>
+                                <th>Fee</th>
+                                <th>post&nbsp;₹</th>
+                                <th>Purchase&nbsp;Date</th>
+                                <th>Exp&nbsp;Date</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        @foreach (var item in Model.PaidHistorty)
-                        {
-                        <tr>
-                            @if (@item.ServiceName == "DMT")
+                        <tbody>
+                            @foreach (var item in Model.PaidHistorty)
                             {
-                                <td>ACC PAY</td>
-                            }
-                            else
-                            {
-                                <td>@item.ServiceName</td>
-                            }
+                                <tr>
+                                    @if (@item.ServiceName == "DMT")
+                                    {
+                                        <td>ACC PAY</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.ServiceName</td>
+                                    }
 
-                            <td>@item.PaymentType</td>
-                            <td>@item.RemainPre</td>
-                            <td>@item.AmountPaid</td>
-                            <td>@item.RemainPost</td>
-                            <td>@item.PurchaseDate</td>
-                            <td>@item.ExpiryDate</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
+                                    <td>@item.PaymentType</td>
+                                    <td>@item.RemainPre</td>
+                                    <td>@item.AmountPaid</td>
+                                    <td>@item.RemainPost</td>
+                                    <td>@item.PurchaseDate</td>
+                                    <td>@item.ExpiryDate</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
