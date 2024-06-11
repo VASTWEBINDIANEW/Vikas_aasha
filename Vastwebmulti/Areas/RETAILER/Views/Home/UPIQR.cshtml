@@ -17,6 +17,9 @@
         width: 100%;
         float: left;
         margin-bottom: 16px;
+        margin-top: 0;
+        font-size: 40px;
+        color: #68820d;
     }
     .qr_ex p {
         float: left;
@@ -168,10 +171,11 @@
     /* Success css  */
 
     .set_so {
-        color: var(--main-bg-lcolor);
-        font-size: 40px;
+        color: red;
+        font-size: 72px;
         font-weight: 800;
         text-shadow: 1px 1px 1px #000;
+        margin: 0;
     }
     .qr_ex_button {
         width: 100%;
@@ -196,7 +200,7 @@
     }
         .qr_ex img {
             margin: auto;
-            width: 200px;
+            width: 252px;
         }
 
     .swal2-popup.swal2-modal.swal2-icon-success.swal2-show {
@@ -840,7 +844,7 @@
                                     <div id="qrregenrate" style="display:none">
 
                                         <div class="qr_ex">
-                                            <div style="width: 100%; float: left; padding-bottom: 20px; ">
+                                            <div style="width: 100%; float: left; padding-bottom: 2px; ">
                                                 <img src="https://i.ibb.co/Vv6ynb2/bin-unscreen.gif" alt="QR Code Expired" />
                                             </div>
                                             
@@ -852,9 +856,9 @@
                                             </p>
 
                                             <div class="qr_ex_button">
-                                                <div onclick="generatepaytmqr()" style="cursor: pointer;"><a>Regenerator QR</a></div>
+                                                <div onclick="generatepaytmqr()" style="cursor: pointer;"><a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); ">Re-Generate QR Code</a></div>
 
-                                                <a href="@Url.Action("Dashboard", "Home")">Go To Home</a>
+                                                <a href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
                                             </div>
                                         </div>
 
@@ -877,7 +881,7 @@
                                             </div>
 
                                             
-                                            <h2>Payment Successfull</h2>
+                                            <h2 style="color: #333333;">Payment Successfull</h2>
 
                                             <p>
                                                 Payment has been successfully updated in your wallet. Check the Add Money report if you need more details.
@@ -885,7 +889,7 @@
 
                                             <div class="qr_ex_button">
                                                 <a style="background: #008000; border: 1px solid #e1e1e1; " href="">Ok</a>
-                                                <a style="background: #008000; border: 1px solid #e1e1e1; " href="@Url.Action("Dashboard", "Home")">Go To Home</a>
+                                                <a style="background: #008000; border: 1px solid #e1e1e1; " href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
                                             </div>
                                         </div>
 
