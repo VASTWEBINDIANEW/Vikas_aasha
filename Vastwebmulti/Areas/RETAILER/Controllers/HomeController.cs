@@ -32010,7 +32010,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 var gtoken = addnifo.gtoken;
                                 var xtoken = addnifo.xtoken;
 
-                                var chkss = db.paytmgatewayinfoes.ToList();
+                                var chkss = db.Phonepaygatewayinfoes.ToList();
                                 if (chkss.Count == 0)
                                 {
                                     Phonepaygatewayinfo d4 = new Phonepaygatewayinfo();

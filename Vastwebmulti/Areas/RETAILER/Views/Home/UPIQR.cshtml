@@ -847,7 +847,7 @@
                                             <div style="width: 100%; float: left; padding-bottom: 2px; ">
                                                 <img src="https://i.ibb.co/Vv6ynb2/bin-unscreen.gif" alt="QR Code Expired" />
                                             </div>
-                                            
+
                                             <p class="set_so"><i>Sorry !</i></p>
                                             <h2>QR Code Expired</h2>
 
@@ -864,7 +864,6 @@
 
                                     </div>
                                     <!-- new   --->
-
                                     <!-- new   --->
                                     <div id="successgenrate" style="display:none;">
 
@@ -880,7 +879,7 @@
                                                 </div>
                                             </div>
 
-                                            
+
                                             <h2 style="color: #333333;">Payment Successfull</h2>
 
                                             <p>
@@ -1046,6 +1045,63 @@
                                                         </div>
                                                     </div>
                                                     <img id="qrCodeImage" style="width:100%" src="" alt="QR Code will appear here">
+
+                                                </div>
+
+
+                                            }
+                                            else
+                                            {
+                                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                            }
+
+                                        }
+                                        else if (ViewBag.Api == "PHONE PE")
+                                        {
+                                            if (ViewBag.respmsg == "OK")
+                                            {
+
+                                                <div id="Phonepeshowgenrateform" style=" margin-top: 18px;display:block;">
+                                                    <div class="form-group">
+                                                        <div id="divamount" class="">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <h3 style=" margin-top: 0; ">Enter Amount And Generate QR</h3>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+
+                                                                @Html.TextBox("Phonepeamounts", "", new { @type = "number", @class = "form-control", placeholder = "Enter Amount" })
+
+                                                            </div>
+
+                                                            <div class="col-md-4 col-sm-4 col-xs-4" style="">
+                                                                <div id="GenrateQr" class="">
+                                                                    <button id="generatte" onclick="generatePhonepeqr()" class="btn btn-primary">Generate QR</button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="payidmessss" style="color:red"></div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div id="phonepeqrcodeshow" style="display:none">
+                                                    <div class="set_time">
+
+                                                        <div class="set_time1">
+                                                            <h3>This QR Will Expire After </h3>
+                                                            <div style=" font-size: 20px; " id=timerss></div>
+                                                        </div>
+                                                        <h3>Minutes</h3>
+
+                                                        <div class="pen">
+                                                            <div class="panel">
+                                                                <div class="scroll"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <img id="qrCodeImagess" style="width:100%" src="" alt="QR Code will appear here">
 
                                                 </div>
 
@@ -1912,3 +1968,107 @@ function countdown(minutes, seconds,txnid) {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    function generatePhonepeqr() {
+        debugger;
+        @{
+            var CHK1 = db.Upi_Qr_codeGenerator.ToList();
+            }
+
+        var amount = document.getElementById('Phonepeamounts').value;
+        if (amount.length !== 0 && amount <= @CHK1[0].maximium && amount >= @CHK1[0].minmium) {
+            $.ajax({
+                url: '@Url.Action("Phonepeqrgenerates", "Home")',
+                type: 'GET',
+                data: { amount: amount },
+                success: function (response) {
+                    if (response.success) {
+                        var base64Image = response.image;
+                        $('#qrCodeImagess').attr('src', 'data:image/png;base64,' + base64Image);
+                        document.getElementById('Phonepeshowgenrateform').style.display = "none";
+                        document.getElementById('phonepeqrcodeshow').style.display = "block";
+
+                        document.getElementById('qrregenrate').style.display = 'none';
+                        document.getElementById('successgenrate').style.display = 'none';
+
+                        countdown1(2, 00, response.txnid);
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+
+
+        }
+        else {
+            var mess = "Enter amount in between " +@CHK[0].minmium+" To " +@CHK[0].maximium;
+
+            document.getElementById("payidmessss").innerHTML = mess;
+        }
+    }
+
+</script>
+<script type="text/javascript">
+var timeoutHandle1;
+function countdown1(minutes, seconds,txnid) {
+    function tick1() {
+
+        var counter = document.getElementById("timerss");
+        counter.innerHTML =
+            minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds--;
+        $.ajax({
+                url: '@Url.Action("phonepeqrresponse", "Home")',
+                type: 'GET',
+            data: { txnid: txnid },
+            success: function (response) {
+
+
+                if (response.res == "Yes") {
+
+                    document.getElementById('successgenrate').style.display = 'block';
+                    document.getElementById('qrregenrate').style.display = 'none';
+                    document.getElementById('Phonepeshowgenrateform').style.display = 'none';
+                    document.getElementById('phonepeqrcodeshow').style.display = 'none';
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+
+                },
+
+            });
+
+        if (seconds == 0 && minutes == 0) {
+            document.getElementById('qrregenrate').style.display = 'block';
+            document.getElementById('successgenrate').style.display = 'none';
+            document.getElementById('Phonepeshowgenrateform').style.display = 'none';
+            document.getElementById('phonepeqrcodeshow').style.display = 'none';
+        }
+        else {
+
+
+            if (seconds >= 0) {
+                timeoutHandle1 = setTimeout(tick1, 1000);
+            } else {
+                if (minutes >= 1) {
+                    // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+                    setTimeout(function () {
+                        countdown1(minutes - 1, 59, txnid);
+                    }, 1000);
+                }
+            }
+        }
+
+
+    }
+    tick1();
+}
+
+</script>
