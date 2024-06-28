@@ -22069,13 +22069,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var request = new RestRequest(Method.POST);
                 request.AddHeader("Authorization", "Bearer " + token);
                 IRestResponse response = client.Execute(request);
-                FinoGenerateUrl fino = new FinoGenerateUrl();
+                AirtelGenerateUrl fino = new AirtelGenerateUrl();
                 fino.reqid = reqid;
                 fino.request = "http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid+ "&lat=" + lattitude + "&logni="+ longitude;
                 fino.response = response.Content;
                 fino.userid = userid;
                 fino.createdAt = DateTime.Now;
-                db.FinoGenerateUrls.Add(fino);
+                db.AirtelGenerateUrls.Add(fino);
                 db.SaveChanges();
                 dynamic obj = JsonConvert.DeserializeObject(response.Content);
                 var json = obj.Content.ADDINFO;
