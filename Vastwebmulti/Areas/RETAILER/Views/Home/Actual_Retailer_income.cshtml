@@ -5,9 +5,66 @@
 }
 <link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
 <style>
+
+    /* new css  */
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .col-md-1customerightsearch, .col-md-2.customerightdate {
+        float: left;
+    }
+
+        .col-md-1customerightsearch button {
+            height: 32px !important;
+        }
+
+    .datesates {
+        padding-right: 0px;
+    }
+    .col-md-4.dispute-date.dayend-date {
+        width: 40%;
+        float: left;
+    }
+    .input-daterange input {
+        text-align: end;
+    }
+    /* new css  */
+
+
     .dropdown-menu {
         margin-top: 81px !important;
     }
+
+    @@media only screen and (max-width:1169px){
+        .actual-clearfix .col-lg-12.col-md-12.col-sm-12.col-xs-12 {
+            padding-left: 15px;
+        }
+        .col-md-12.resp_set {
+            padding-left: 15px !important;
+        }
+
+    }
+    @@media screen and (max-width:767px) {
+        .customeright {
+            width: 50%;
+        }
+        .table-responsive.tablethirddesign-new {
+            border: 1px solid var(--border-color);
+            border-top: 0;
+        }
+    }
+
     @@media screen and (max-width:766px){
         .col-md-3.buttonPdf.buttonPdfdispute {
             display: block;
@@ -31,8 +88,30 @@
         }
     }
 
+    @@media only screen and (max-width:480px){
+        .customeright {
+            width: 100%;
+            margin: 0px;
+            padding-bottom: 4px;
+        }
+        .col-md-2.despute-search.dayend-search {
+            width: 39%;
+            margin: 0; 
+        }
+        .col-md-4.dispute-date.dayend-date {
+            width: 61%;
+            float: left;
+        }
+        #txt_frm_date {
+            text-align: center;
+        }
+
+
+    }
+
+
 </style>
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px; ">
+<section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style="">
     <div class="container-fluid" style="height:100vh;">
         <!--Four-Design-Page-Header-Start-->
 
@@ -47,11 +126,12 @@
 
         <!--Four-Design-Page-Header-End-->
         <div class="row clearfix">
-            <div class="col-md-12" style="padding-left: 11px;">
-                <div class="card class-back-tra-fourdesign">
-                    <div class="bread-same-all-page" style="width:auto;float:left;padding-top: 4px;">
+            <div class="col-md-12 resp_set" style="padding-left: 11px;">
+
+                <div class="page-header-third">
+                    <div class="bread-same-all-page" style="width:auto;float:left;">
                         <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul>
+                            <ul style="margin:0;">
                                 <li class="smli">
                                     <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
                                         Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
@@ -66,30 +146,24 @@
                         </div>
 
                     </div>
+                </div>
 
-                    <div class="col-md-4 vwqdffvgg">
+                
+            </div>
+        </div>
+
+        <div class="row clearfix actual-clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="">
+                <div class="page-header-third">
+                    <div class="card class-back-tra-fourdesign" style="width:100%;float:left;">
 
 
-                    </div>
-                    <div class="col-md-4 rewdfgt" style="float: right">
                         @using (Html.BeginForm("Actual_Retailer_income", "Home", FormMethod.Post))
                         {
-                            <div class="row">
-                                <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;float:right;">
 
-                                    <button style="color:#555;"id="btnPDF">PDF</button>
-                                    <button style="color:#555;"id="btnExport">Export</button>
+                            <div class="customeright rightcustomeclass" style="float:left;">
 
-                                </div>
-                                <div class="col-md-2 despute-search dayend-search" style="float:right;">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left: -3px; height:34px;border:1px solid #c7c2c2;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
-                                <div class="col-md-4 dispute-date dayend-date" style="float:right;">
+                                <div class="col-md-4 dispute-date dayend-date" style="float:left;">
                                     <div class="form-group" style="margin-bottom:0px;">
                                         <div class="input-daterange input-group">
                                             <div class="datesate datesates">
@@ -100,69 +174,73 @@
                                         <!-- /.input group -->
                                     </div>
                                 </div>
+                                <div class="col-md-2 despute-search dayend-search" style="float:left;">
+                                    <center>
+                                        <button type="submit" class="btn bg-grey waves-effect retailer-search-second" style="margin-top: 4px; margin-left: -3px; height:34px;border:1px solid #c7c2c2;">
+                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
+                                            <span style="top:-2px;color:black;">Search</span>
+                                        </button>
+                                    </center>
+                                </div>
+                            </div>
+                            
 
+                            <div class="col-md-3 buttonPdf buttonPdfdispute retailer-pdf-second" style="text-align:right;float:right;">
 
-
+                                <button style="color:#555;" id="btnPDF">PDF</button>
+                                <button style="color:#555;" id="btnExport">Export</button>
 
                             </div>
+
                         }
                     </div>
-                </div>
-            </div>
-        </div>
+                    <div class="card class-back-tra-fourdesign"  style="width:100%;float:left;padding-top:4px;">
+                        
 
-        <div class="row clearfix actual-clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-27px;">
-                <div class="card class-back-tra-fourdesign">
-                    <div class="">
-                        <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                            <li class="active" style="color:#9E9E9E; font-size:12px;"></li>
-                        </ol>
-                    </div>
-
-                    <div class="body">
-                        <div class="table-responsive dayend-responsive tablethirddesign-new" style="position:inherit;margin-top:-58px;">
-                            <table class="table table-bordered table-striped table-hover" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.&nbsp;No</th>
-                                        <th>Type</th>
-                                        <th>Total&nbsp;Success</th>
-                                        <th>Total&nbsp;Pending</th>
-                                        <th>Total&nbsp;Failed</th>
-                                        <th>Income</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{int i = 1;}
-                                    @foreach (var item in Model)
-                                    {
+                        <div class="body" style="padding-top: 0; padding-right: 0px;">
+                            <div class="table-responsive dayend-responsive tablethirddesign-new" style="position:inherit;">
+                                <table class="table table-bordered table-striped table-hover" style="width:100%;">
+                                    <thead style="background-color:whitesmoke;">
                                         <tr>
-                                            <td>@i</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Type)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TotalSuccess)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TotalPending)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TotalFailed)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                            <th>Sr.&nbsp;No</th>
+                                            <th>Type</th>
+                                            <th>Total&nbsp;Success</th>
+                                            <th>Total&nbsp;Pending</th>
+                                            <th>Total&nbsp;Failed</th>
+                                            <th>Income</th>
                                         </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-                                    <tr>
-                                        <td><p style="font-size:17px;">Total</p></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><p style="font-size:18px;">@Model.Sum(a => a.Amount)</p></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @{int i = 1;}
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.TotalSuccess)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.TotalPending)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.TotalFailed)</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                    <tfoot style="background-color:whitesmoke;">
+                                        <tr>
+                                            <td><p style="font-size:17px;">Total</p></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><p style="font-size:18px;">@Model.Sum(a => a.Amount)</p></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
+
+
                     </div>
-
-
                 </div>
             </div>
         </div>

@@ -1,13 +1,262 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_upi_txn_details_Result>
+@using Vastwebmulti.Models;
 @{
+    VastwebmultiEntities db = new VastwebmultiEntities();
     ViewBag.Title = "UPIQR";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
 <style>
 
     /* new css  */
+    /**
+ * Extracted from: SweetAlert
+ * Modified by: Success Payment
+ */
+    .qr_ex_buttona {
+        cursor: pointer;
+        background: var(--main-bg-lcolor);
+        border-radius: 3px;
+    }
+    .pen::after {
+        content: "";
+        position: absolute;
+        width: 44px;
+        height: 122px;
+        background: #ffffff4f;
+        z-index: 1;
+        top: -24px;
+        transform: rotate(35deg);
+        animation: l_to_r 4s linear infinite;
+        background-image: linear-gradient(140deg, #FFF0 0%, #FF00AE00 50%, #BFD64100 75%);
+    }
+
+    @@keyframes l_to_r {
+        0% {
+            left: -74px;
+        }
+
+        100% {
+            left: 100%;
+        }
+    }
 
 
+    #successgenrate .qr_ex h2 {
+        font-size: 32px;
+    }
+    #successgenrate .qr_ex p {
+        font-size: 17px;
+    }
+    .qr_ex h2 {
+        width: 100%;
+        float: left;
+        margin-bottom: 16px;
+        margin-top: 0;
+        font-size: 40px;
+        color: #68820d;
+    }
+    .qr_ex p {
+        float: left;
+        width: 100%;
+    }
+
+.success-checkmark {
+  width: 160px;
+  height: 230px;
+  margin: 0 auto;
+}
+.success-checkmark .check-icon {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: content-box;
+  border: 8px solid #4caf50;
+}
+    .success-checkmark .check-icon::before {
+        top: 6px;
+        left: -4px;
+        width: 60px;
+        transform-origin: 100% 50%;
+        border-radius: 100px 0 0 100px;
+    }
+    .success-checkmark .check-icon::after {
+        top: 0;
+        left: 60px;
+        width: 120px;
+        transform-origin: 0 50%;
+        border-radius: 0 100px 100px 0;
+        animation: rotate-circle 4.25s ease-in;
+    }
+.success-checkmark .check-icon::before, .success-checkmark .check-icon::after {
+  content: "";
+  height: 200px;
+  position: absolute;
+  /*background: #ffffff;*/
+  transform: rotate(-45deg);
+}
+.success-checkmark .check-icon .icon-line {
+  height: 10px;
+  background-color: #4caf50;
+  display: block;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 10;
+}
+    .success-checkmark .check-icon .icon-line.line-tip {
+        top: 92px;
+        left: 28px;
+        width: 50px;
+        transform: rotate(45deg);
+        animation: icon-line-tip 0.75s;
+    }
+    .success-checkmark .check-icon .icon-line.line-long {
+        top: 76px;
+        right: 16px;
+        width: 94px;
+        transform: rotate(-45deg);
+        animation: icon-line-long 0.75s;
+    }
+    .success-checkmark .check-icon .icon-circle {
+        top: -8px;
+        left: -8px;
+        z-index: 10;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        position: absolute;
+        box-sizing: content-box;
+        border: 8px solid rgba(76, 175, 80, 0.5);
+    }
+    .success-checkmark .check-icon .icon-fix {
+        top: 16px;
+        width: 10px;
+        left: 52px;
+        z-index: 1;
+        height: 170px;
+        position: absolute;
+        transform: rotate(-45deg);
+        /*background-color: #ffffff;*/
+    }
+
+@@keyframes rotate-circle {
+  0% {
+    transform: rotate(-45deg);
+  }
+  5% {
+    transform: rotate(-45deg);
+  }
+  12% {
+    transform: rotate(-405deg);
+  }
+  100% {
+    transform: rotate(-405deg);
+  }
+}
+@@keyframes icon-line-tip {
+    0% {
+        width: 0;
+        left: 2px;
+        top: 38px;
+    }
+    54% {
+        width: 0;
+        left: 2px;
+        top: 38px;
+    }
+    70% {
+        width: 100px;
+        left: -16px;
+        top: 74px;
+    }
+    84% {
+        width: 34px;
+        left: 42px;
+        top: 96px;
+    }
+    100% {
+        width: 50px;
+        left: 28px;
+        top: 90px;
+    }
+}
+
+@@keyframes icon-line-long {
+    0% {
+        width: 0;
+        right: 92px;
+        top: 108px;
+    }
+    65% {
+        width: 0;
+        right: 92px;
+        top: 108px;
+    }
+    84% {
+        width: 110px;
+        right: 0;
+        top: 70px;
+    }
+    100% {
+        width: 94px;
+        right: 16px;
+        top: 76px;
+    }
+}
+    /* Success css  */
+
+    .set_so {
+        color: red;
+        font-size: 72px;
+        font-weight: 800;
+        text-shadow: 1px 1px 1px #000;
+        margin: 0;
+    }
+    .qr_ex_button {
+        width: 100%;
+        float: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 20px;
+    }
+        .qr_ex_button a {
+            padding: 6px 12px;
+            border: 1px solid var(--main-bg-rcolor);
+            border-radius: 3px;
+            background: var(--main-bg-rcolor);
+            color: #fff;
+        }
+    .qr_ex {
+        width: 100%;
+        float: left;
+        text-align: center;
+        padding: 20px;
+    }
+        .qr_ex img {
+            margin: auto;
+            width: 252px;
+        }
+
+    .swal2-popup.swal2-modal.swal2-icon-success.swal2-show {
+        width: 40em;
+        font-size: 14px;
+    }
+    #timer {
+        font-weight: 800;
+        padding-left: 10px;
+        padding-right:10px;
+    }
+    .set_time1 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 5;
+    }
+    #divamount h3 {
+        padding-bottom: 15px;
+    }
 
     .layoutt-retailer section.content {
         margin-top: 95px;
@@ -23,9 +272,54 @@
         align-items: center;
         justify-content: space-between;
     }
+    .set_time {
+        width: 100%;
+        float: left;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        position: relative;
+        color: #fff;
+    }
 
+        .set_time h3 {
+            margin: 0;
+            font-size: 20px;
+            position: relative;
+            z-index: 5;
+        }
 
+    @*#timer {
+        animation: mymove 2s linear infinite;
+    }*@
+    @@keyframes mymove {
+        0% {
+            color: #fff;
+        }
 
+        50% {
+            color: green;
+        }
+
+        100% {
+            color: red;
+        }
+    }
+
+    /* ------- new css -------- */
+
+    .pen {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background-image: linear-gradient(to right, #f20000, #0f8a28) !important;
+        z-index: 2;
+    }
     /* new css  */
 
     .loaders443 {
@@ -60,11 +354,9 @@
     .datepicker table tr td span {
         color: #555 !important;
     }
-
         .datepicker table tr td span.active {
             color: #fff !important;
         }
-
 
     .tab-menur li a::before {
         content: '';
@@ -75,7 +367,6 @@
         border-radius: 50%;
         margin: 2px 6px 0px 0px;
     }
-
     .tab-menur li a.active-ar::before {
         border-color: var(--main-bg-lcolor);
         background: var(--main-bg-lcolor);
@@ -196,7 +487,6 @@
         width: 40%;
         float: right;
     }
-
         .fundtransfer-retailerupi .modal-dialog .form-group label {
             font-size: 13px;
         }
@@ -213,7 +503,6 @@
     .fundtransfer-retailerupi .modal-dialog {
         width: 40%;
     }
-
         .fundtransfer-retailerupi .modal-dialog .form-group input.btn.btn-default {
             background: #ddd !important;
             float: right;
@@ -262,7 +551,6 @@
         padding-right: 5px;
         padding-top: 1px !important;
     }
-
         .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second button {
             background-color: #fff !important;
             border: 1px solid #555 !important;
@@ -303,6 +591,12 @@
 
         .col-md-12.retailer-upitransfer {
             padding: 0;
+        }
+    }
+
+    @@media screen and (max-width:990px) {
+        #GenrateQr {
+            padding-top: 4px;
         }
     }
 
@@ -390,6 +684,52 @@
     }
 
     @@media screen and (max-width:480px) {
+
+        #successgenrate .qr_ex h2 {
+            font-size: 24px;
+        }
+        #successgenrate .qr_ex p {
+            font-size: 14px;
+        }
+        .success-checkmark {
+            width: 177px;
+            height: 224px;
+        }
+        #successgenrate .qr_ex_button a {
+            margin-bottom: 5px;
+        }
+        .qr_ex_button a {
+            width: 100%;
+            float: left;
+        }
+        .qr_ex_buttona {
+            margin-bottom: 5px;
+            width: 100%;
+            float: left;
+        }
+        .set_so {
+            font-size: 45px;
+        }
+        .qr_ex h2 {
+            font-size: 30px;
+        }
+        .qr_ex img {
+            width: 220px;
+        }
+        .qr_ex_button {
+            display: block;
+        }
+        #divamount h3 {
+            font-size: 18px;
+            padding-bottom: 0;
+        }
+        .set_time h3 {
+            font-size: 16px;
+        }
+        #timer {
+            font-size: 16px !important;
+        }
+
         .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4 {
             width: 50%;
             margin-bottom: 5px;
@@ -421,6 +761,13 @@
     @@media screen and (max-width:420px) {
         #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
             margin-top: -78px !important;
+        }
+        .set_time h3 {
+            font-size: 14px;
+        }
+
+        #timer {
+            font-size: 14px !important;
         }
     }
 
@@ -482,7 +829,6 @@
         <!--Four-Design-Page-Header-End-->
         <div class="page-header-third">
             <div class="bread-same-all-page allpage-responshivenew">
-
                 <ul style="width:auto;float:left;margin:0px;">
                     <li class="smli">
                         <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
@@ -519,7 +865,6 @@
     </div>
 
     <div class="col-md-12">
-
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
                 <div class="page-header-third">
@@ -543,6 +888,56 @@
                                 {*@
                             <div id="home" class="width100 float-left tab-pane fade active in newaddclasstghghg changeback-four-design" style="background: var(--second-bg-color);min-height:599px;">
                                 <div class="scan-outer">
+
+                                    <!-- new   --->
+                                    <div id="qrregenrate" style="display:none">
+
+                                        <div class="qr_ex">
+                                            <div style="width: 100%; float: left; padding-bottom: 2px; ">
+                                                <img src="https://i.ibb.co/Vv6ynb2/bin-unscreen.gif" alt="QR Code Expired" />
+                                            </div>
+                                            <p class="set_so"><i>Sorry !</i></p>
+                                            <h2>QR Code Expired</h2>
+                                            <p>
+                                                QR code has expired, please re-generate a new QR code if you need to make payment. Remember don't use this QR Code after expiry does not receive any benefit.
+                                            </p>
+                                            <div class="qr_ex_button">
+                                                <div onclick="generatepaytmqr()" class="qr_ex_buttona" style=""><a style="display: table; background: var(--main-bg-lcolor);border:none; ">Re-Generate QR Code</a></div>
+
+                                                <a href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- new   --->
+                                    <!-- new   --->
+                                    <div id="successgenrate" style="display:none;">
+
+                                        <div class="qr_ex">
+                                            <div style="width: 100%; float: left; padding-top: 27px; border-radius: 4px;">
+                                                <div class="success-checkmark">
+                                                    <div class="check-icon">
+                                                        <span class="icon-line line-tip"></span>
+                                                        <span class="icon-line line-long"></span>
+                                                        <div class="icon-circle"></div>
+                                                        <div class="icon-fix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h2 style="color: #333333;">Payment Successfull</h2>
+                                            <p>
+                                                Payment has been successfully updated in your wallet. Check the Add Money report if you need more details.
+                                            </p>
+
+                                            <div class="qr_ex_button">
+                                                <a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " href="">Payment Again</a>
+                                                <a style=" " href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- new   --->
+
+
                                     @if (ViewBag.msg == "OK")
                                     {
 
@@ -646,31 +1041,146 @@
                                             }
 
                                         }
+                                        else if (ViewBag.Api == "PAYTM")
+                                        {
+                                            if (ViewBag.respmsg == "OK")
+                                            {
+
+                                                <div id="paytmshowgenrateform" style=" margin-top: 18px;display:block;">
+                                                    <div class="form-group">
+                                                        <div id="divamount" class="">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <h3 style=" margin-top: 0; ">Enter Amount And Generate QR</h3>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+
+                                                                @Html.TextBox("paytmamounts", "", new { @type = "number", @class = "form-control", placeholder = "Enter Amount" })
+
+                                                            </div>
+
+                                                            <div class="col-md-4 col-sm-4 col-xs-4" style="">
+                                                                <div id="GenrateQr" class="">
+                                                                    <button id="generatte" onclick="generatepaytmqr()" class="btn btn-primary">Generate QR</button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="payidmess" style="color:red"></div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div id="paytmqrcodeshow" style="display:none">
+                                                    <div class="set_time">
+
+                                                        <div class="set_time1">
+                                                            <h3>This QR Will Expire After </h3>
+                                                            <div style=" font-size: 20px; " id=timer></div>
+                                                        </div>
+                                                        <h3>Minutes</h3>
+
+                                                        <div class="pen">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <img id="qrCodeImage" style="width:100%" src="" alt="QR Code will appear here">
+
+                                                </div>
+
+
+                                            }
+                                            else
+                                            {
+                                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                            }
+
+                                        }
+                                        else if (ViewBag.Api == "PHONE PE")
+                                        {
+                                            if (ViewBag.respmsg == "OK")
+                                            {
+
+                                                <div id="Phonepeshowgenrateform" style=" margin-top: 18px;display:block;">
+                                                    <div class="form-group">
+                                                        <div id="divamount" class="">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <h3 style=" margin-top: 0; ">Enter Amount And Generate QR</h3>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+
+                                                                @Html.TextBox("Phonepeamounts", "", new { @type = "number", @class = "form-control", placeholder = "Enter Amount" })
+
+                                                            </div>
+
+                                                            <div class="col-md-4 col-sm-4 col-xs-4" style="">
+                                                                <div id="GenrateQr" class="">
+                                                                    <button id="generatte" onclick="generatePhonepeqr()" class="btn btn-primary">Generate QR</button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="payidmessss" style="color:red"></div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div id="phonepeqrcodeshow" style="display:none">
+                                                    <div class="set_time">
+
+                                                        <div class="set_time1">
+                                                            <h3>This QR Will Expire After </h3>
+                                                            <div style=" font-size: 20px; " id=timerss></div>
+                                                        </div>
+                                                        <h3>Minutes</h3>
+
+                                                        <div class="pen">
+                                                            <div class="panel">
+                                                                <div class="scroll"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <img id="qrCodeImagess" style="width:100%" src="" alt="QR Code will appear here">
+
+                                                </div>
+
+
+                                            }
+                                            else
+                                            {
+                                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                            }
+
+                                        }
                                     }
                                     else
                                     {
                                         <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
                                     }
-                                    <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
-                                        <ol>
-                                            <li>You can Not update the amount in your wallet by scanning the QR code.</li>
-                                            <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
-                                            <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
-                                        </ol>
-                                        <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
-                                            <tr>
-                                                <th colspan="2"><center>Charges</center></th>
-                                            </tr>
-                                            <tr>
-                                                <td>Minimum Fix Charge (In Rupees)</td>
-                                                <td>@ViewBag.min&nbsp;₹</td>
-                                            </tr>
-                                            <tr>
-                                                <td> Charges (In Precentage)</td>
-                                                <td>@ViewBag.charge&nbsp;%</td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                    @if (ViewBag.Api != "PAYTM")
+                                    {
+                                        <div class="scan-third scan-third-responshive" style="width:100%;float:left;">
+                                            <ol>
+                                                <li>You can Not update the amount in your wallet by scanning the QR code.</li>
+                                                <li>You can print a hard copy of the QR code and update through all the UPI wallets.</li>
+                                                <li>Refresh the page after the customer's payment process is complete, you will get the transaction status report on the page, and after deducting the Charges on the success transaction, the balance will be updated in your wallet.</li>
+                                            </ol>
+                                            <table class="table table-bordered table-striped table-hover" style="width:96%;margin: 0px 2%;">
+                                                <tr>
+                                                    <th colspan="2"><center>Charges</center></th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Minimum Fix Charge (In Rupees)</td>
+                                                    <td>@ViewBag.min&nbsp;₹</td>
+                                                </tr>
+                                                <tr>
+                                                    <td> Charges (In Precentage)</td>
+                                                    <td>@ViewBag.charge&nbsp;%</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             @* }*@
@@ -812,8 +1322,6 @@
             <div class="col-md-8 retailer-upilastclass retailer-upilastclass-second">
                 <div class="page-header-third">
                     <div class="fund-trasfer-right fund-user-right">
-
-
                         <ul class="nav nav-tabs responsive-sateulce" id="tabs">
                             <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
                                 <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
@@ -861,8 +1369,6 @@
                                                 </div>*@
 
                                         </div>
-
-
                                     }
                                 </div>
                             </li>
@@ -870,11 +1376,9 @@
                         </ul>
                         <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
 
-
                             <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
                                 <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
                                     <thead style="background-color:whitesmoke;">
-
 
                                         <tr>
 
@@ -951,6 +1455,8 @@
     </div>
 </div>
 
+
+
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
@@ -992,9 +1498,6 @@
         margin: 0;
         padding: 0;
     }
-
-
-
         .tab-menur ul li {
             width: 50%;
             text-align: center;
@@ -1379,10 +1882,224 @@
                      document.getElementById("showqrradiantimg").src = dataout.QR;
              }
              else {
-                     $('#txtmsginfo').text(msg)
+                     $('#txtmsginfo').text(msg)    
              }
 
             }
        })
     }
+</script>
+
+<script>
+    function generatepaytmqr() {
+        @{
+            var CHK = db.Upi_Qr_codeGenerator.ToList();
+            }
+
+        var amount = document.getElementById('paytmamounts').value;
+        if (amount.length !== 0 && amount <= @CHK[0].maximium && amount >= @CHK[0].minmium) {
+            $.ajax({
+                url: '@Url.Action("Paytmqrgenerates","Home")',
+                type: 'GET',
+                data: { amount: amount },
+                success: function (response) {
+                    if (response.success) {
+                        var base64Image = response.image;
+                        $('#qrCodeImage').attr('src', 'data:image/png;base64,' + base64Image);
+                        document.getElementById('paytmshowgenrateform').style.display = "none";
+                        document.getElementById('paytmqrcodeshow').style.display = "block";
+
+                        document.getElementById('qrregenrate').style.display = 'none';
+                        document.getElementById('successgenrate').style.display = 'none';
+                       
+                        countdown(2, 00, response.txnid);
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+          
+
+        }
+        else {
+            var mess = "Enter amount in between " +@CHK[0].minmium+" To " +@CHK[0].maximium;
+
+            document.getElementById("payidmess").innerHTML = mess;
+        }
+    }
+
+</script>
+<script type="text/javascript">
+var timeoutHandle;
+function countdown(minutes, seconds,txnid) {
+    function tick() {
+
+        var counter = document.getElementById("timer");
+        counter.innerHTML =
+            minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds--;
+        $.ajax({
+                url: '@Url.Action("Paytmqrresponse","Home")',
+                type: 'GET',
+            data: { txnid: txnid },
+            success: function (response) {
+
+
+                if (response.res == "Yes") {
+
+                    document.getElementById('successgenrate').style.display = 'block';
+                    document.getElementById('qrregenrate').style.display = 'none';
+                    document.getElementById('paytmshowgenrateform').style.display = 'none';
+                    document.getElementById('paytmqrcodeshow').style.display = 'none';
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+
+                },
+
+            });
+
+        if (seconds == 0 && minutes == 0) {
+            document.getElementById('qrregenrate').style.display = 'block';
+            document.getElementById('successgenrate').style.display = 'none';
+            document.getElementById('paytmshowgenrateform').style.display = 'none';
+            document.getElementById('paytmqrcodeshow').style.display = 'none';
+        }
+        else {
+
+
+            if (seconds >= 0) {
+                timeoutHandle = setTimeout(tick, 1000);
+            } else {
+                if (minutes >= 1) {
+                    // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+                    setTimeout(function () {
+                        countdown(minutes - 1, 59, txnid);
+                    }, 1000);
+                }
+            }
+        }
+
+
+    }
+    tick();
+}
+
+    function Orderss(a) {
+        debugger;
+        console.log(a);
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function generatePhonepeqr() {
+        debugger;
+        @{
+            var CHK1 = db.Upi_Qr_codeGenerator.ToList();
+            }
+
+        var amount = document.getElementById('Phonepeamounts').value;
+        if (amount.length !== 0 && amount <= @CHK1[0].maximium && amount >= @CHK1[0].minmium) {
+            $.ajax({
+                url: '@Url.Action("Phonepeqrgenerates", "Home")',
+                type: 'GET',
+                data: { amount: amount },
+                success: function (response) {
+                    if (response.success) {
+                        var base64Image = response.image;
+                        $('#qrCodeImagess').attr('src', 'data:image/png;base64,' + base64Image);
+                        document.getElementById('Phonepeshowgenrateform').style.display = "none";
+                        document.getElementById('phonepeqrcodeshow').style.display = "block";
+
+                        document.getElementById('qrregenrate').style.display = 'none';
+                        document.getElementById('successgenrate').style.display = 'none';
+
+                        countdown1(2, 00, response.txnid);
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+
+
+        }
+        else {
+            var mess = "Enter amount in between " +@CHK[0].minmium+" To " +@CHK[0].maximium;
+
+            document.getElementById("payidmessss").innerHTML = mess;
+        }
+    }
+
+</script>
+<script type="text/javascript">
+var timeoutHandle1;
+function countdown1(minutes, seconds,txnid) {
+    function tick1() {
+
+        var counter = document.getElementById("timerss");
+        counter.innerHTML =
+            minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds--;
+        $.ajax({
+                url: '@Url.Action("phonepeqrresponse", "Home")',
+                type: 'GET',
+            data: { txnid: txnid },
+            success: function (response) {
+
+
+                if (response.res == "Yes") {
+
+                    document.getElementById('successgenrate').style.display = 'block';
+                    document.getElementById('qrregenrate').style.display = 'none';
+                    document.getElementById('Phonepeshowgenrateform').style.display = 'none';
+                    document.getElementById('phonepeqrcodeshow').style.display = 'none';
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 5000);
+
+                }
+
+
+                },
+
+            });
+
+        if (seconds == 0 && minutes == 0) {
+            document.getElementById('qrregenrate').style.display = 'block';
+            document.getElementById('successgenrate').style.display = 'none';
+            document.getElementById('Phonepeshowgenrateform').style.display = 'none';
+            document.getElementById('phonepeqrcodeshow').style.display = 'none';
+        }
+        else {
+
+
+            if (seconds >= 0) {
+                timeoutHandle1 = setTimeout(tick1, 1000);
+            } else {
+                if (minutes >= 1) {
+                    // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+                    setTimeout(function () {
+                        countdown1(minutes - 1, 59, txnid);
+                    }, 1000);
+                }
+            }
+        }
+
+
+    }
+    tick1();
+}
+
 </script>

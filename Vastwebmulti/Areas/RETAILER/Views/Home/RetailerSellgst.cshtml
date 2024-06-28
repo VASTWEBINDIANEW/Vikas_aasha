@@ -6,9 +6,44 @@
 
 
 <style>
-    section.content {
-        margin: 87px 0px 0 164px;
+
+
+
+    /* new css  */
+    .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+        width: 15%;
+        padding-right: 4px;
     }
+    .col-md-2.apiclass-satenew {
+        float: left;
+    }
+    .table-responsive {
+        float: left;
+        width: 100%;
+    }
+
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0 !important;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+
+    /* new css  */
 
     span {
         color: #fff !important;
@@ -40,7 +75,19 @@
     .trypurchasecewq-newadd select {
         padding-left: 1px;
     }
+    @@media only screen and (max-width:767px) {
+        .bread-same-all-page {
+            display: block;
+        }
+        #custnav1 {
+            width: 100%;
+            float: left;
+        }
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+            width: 22%;
+        }
 
+    }
     @@media screen and (max-width:766px) {
         .fund-tr-history .modal-dialog {
             width: 100% !important;
@@ -48,10 +95,13 @@
     }
 
     @@media screen and (max-width:480px) {
-        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq.trypurchasecewq-newadd {
-            width: 100% !important;
-            margin-bottom: 10px;
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .date-sateclassee.trypurchasecewq {
+            width: 37.5%;
         }
+        .row.fund-t-dalear.fund-t-dalear-erfrdfgdf .col-md-2.apiclass-satenew {
+            width: 25%;
+        }
+
     }
 
     @@media screen and (max-width:420px) {
@@ -75,87 +125,101 @@
         </div>
 
         <!--Four-Design-Page-Header-End-->
-        <div class="bread-same-all-page wallethistory-newadd wallethistory-responshive wallethistory-newadd-four">
+        <div class="page-header-third">
+            <div class="bread-same-all-page">
 
-            <ul>
-                <li class="smli four-design-noneclass">
-                    <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                    </a>
-                </li>
+                <ul style="margin:0;">
+                    <li class="smli four-design-noneclass">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
+                        </a>
+                    </li>
 
-                <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
-                   Sell GST
-                </li>
-                <li>
-                    @using (Html.BeginForm("RetailerSellgst", "Home", FormMethod.Post))
-                    {
-                        <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
+                    <li class="fullbodydycolorbg tmw-total-color-one four-design-noneclass">
+                        Sell GST
+                    </li>
+                    <li>
 
+                    </li>
+                </ul>
 
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
+                <div>
+                    @Html.Partial("_menu_invoice")
+                </div>
 
-                            </div>
-                            <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
-                                @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
-
-                            </div>
-                            <div class="col-md-2 apiclass-satenew" style="padding:0px;">
-                                <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
-                                <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
-                                </button>
-                            </div>
-
-
-
-                        </div>
-                    }
-                </li>
-            </ul>
-
+            </div>
         </div>
 
-    </div>
-    @Html.Partial("_menu_invoice")
-    <div class=" col-md-12" style="width:100%;float:left;">
-        <div class="row clearfix">
-            <div class=" col-md-12 padding-both-none-four">
-                <div class="wallet-history" style="padding:0;">
-                    <div class="table-responsive">
-                        <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
-                            <table class="table table-bordered table-striped table-hover third-design-table table-white-third">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Firm Name</th>
-                                        <th>Email</th>
-                                        <th>#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
+        <div class=" col-md-12" style="width:100%;float:left;">
+            <div class="row clearfix">
+                <div class="page-header-third">
+                    <div class="" style="width: 100%; float: left; padding-bottom: 4px;">
+                        @using (Html.BeginForm("RetailerSellgst", "Home", FormMethod.Post))
+                        {
+                            <div class="row fund-t-dalear fund-t-dalear-erfrdfgdf">
 
-                                        <tr>
-                                            <td>@item.Frm_Name</td>
-                                            <td>@item.Email</td>
-                                            <td>
-                                                <button onclick="Download('@item.RetailerId')" type="button" target="_blank" class="btn btn-sm btn-success" style="border-color:transparent !important;background-color:transparent !important;">
-                                                    <i class="fa fa-file-pdf-o fa-2x" style="color:red;"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+
+                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
+                                    @Html.DropDownList("Month", ViewBag.month as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
+
+                                </div>
+                                <div class="col-md-5 date-sateclassee trypurchasecewq" style="padding-left: 0px;">
+                                    @Html.DropDownList("Year", ViewBag.year as SelectList, new { @class = " form-control", @style = "border:1px solid #8e7f7f4d;" })
+
+                                </div>
+                                <div class="col-md-2 apiclass-satenew" style="padding:0px;">
+                                    <input type="hidden" id="tabtype" name="tabtype" value="FundTranferAllReport" />
+                                    <button type="submit" id="btnchangetabbutton" name="btnDsearch" class="btnssl22" style="padding:0px 15px;float:left;height:30px;margin-top:2px;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                        <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>Search
+                                    </button>
+                                </div>
+
+
+
+                            </div>
+                        }
+                    </div>
+                    <div class=" col-md-12 padding-both-none-four" style="padding:0;">
+
+                        <div class="wallet-history" style="padding:0;">
+                            <div class="table-responsive">
+                                <div id="tblshowMasterD" class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
+                                    <table class="table table-bordered table-striped table-hover third-design-table table-white-third">
+                                        <thead style="background-color:whitesmoke;">
+                                            <tr>
+                                                <th>Firm Name</th>
+                                                <th>Email</th>
+                                                <th>#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+
+                                                <tr>
+                                                    <td>@item.Frm_Name</td>
+                                                    <td>@item.Email</td>
+                                                    <td>
+                                                        <button onclick="Download('@item.RetailerId')" type="button" target="_blank" class="btn btn-sm btn-success" style="border-color:transparent !important;background-color:transparent !important;">
+                                                            <i class="fa fa-file-pdf-o fa-2x" style="color:red;"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+    
+    
     <!-------------orderrecive-->
 
 
