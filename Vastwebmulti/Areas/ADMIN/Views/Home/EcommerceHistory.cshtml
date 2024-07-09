@@ -3,7 +3,7 @@
     ViewBag.Title = "EcommerceHistory";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-}
+
 <style>
     .select2-container--default .select2-selection--single {
         border: 1px solid #eee !important;
@@ -115,8 +115,8 @@
             margin-bottom: 10px;
         }
 
-            .responcive-fifty div {
-                margin-right: 3px;
+            .responcive-fifty{
+                margin-right: 0px;
                 margin-bottom: 10px;
             }
 
@@ -152,10 +152,21 @@
     }
 
     @@media screen and (max-width: 600px) {
+        .responcive-full {
+            margin-bottom: 0px !important;
+        }
+
+        .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
+            height: auto;
+        }
         .D_menu {
             width: 100% !important;
         }
-        .responcive-fifty{width: 100% !important;float: left;}
+        .responcive-fifty {
+            width: 100% !important;
+            float: left;
+            margin-bottom: 4px;
+        }
         .responcive-full{width: 100% !important;float: left;}
         .responcive-full .form-group.jjp,.responcive-full .nrr3 input {width: 100% !important;}
         .responcive-full input {width: 100% !important;margin: 0;}
@@ -168,6 +179,8 @@
 
     }
 </style>
+
+
 
 <section class="content">
     <div class="container-fluid">
