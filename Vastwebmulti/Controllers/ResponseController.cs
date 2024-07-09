@@ -70,6 +70,8 @@ namespace Vastwebmulti.Controllers
                 }
 
                 var comm = Request.QueryString["comm"];
+                var lapunumber = Request.QueryString["lapuno"];
+
                 if (comm == "" || comm == null)
                 {
                     comm = "0";
@@ -81,129 +83,86 @@ namespace Vastwebmulti.Controllers
                 objCourse.name = outpt;
                 dbsrs.test1.Add(objCourse);
                 dbsrs.SaveChanges();
-
-                try
+                if (rchid == "CHECKBAL")
                 {
-                    var entry = (from rch in dbsrs.Recharge_info
-                                 where rch.Order_id == rchid
-                                 select new
-                                 {
-                                     Idno = rch.idno,
-                                     Mobile = rch.Mobile,
-                                     Port = rch.portno,
-                                     Amount = rch.amount,
-                                     Provider = rch.optcode,
-                                     Response = rch.Recharge_response,
-                                     userid = rch.Rch_from,
-                                     CurrentStatus = rch.Rstaus,
-                                     OrderId = rch.Order_id
-
-                                 }).SingleOrDefault();
-                    var Apientry = dbsrs.Recharge_info.Where(aa => aa.Order_id == rchid).SingleOrDefault();
-                    int idnn1 = Convert.ToInt32(entry.Idno);
-                    var statusretailerrechargesuccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "Rechsucconline").SingleOrDefault();
-                    var statusretailerrechargefailed = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RechFailedOnline").SingleOrDefault();
-                    var statusretailerrechargeProccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RecProconline").SingleOrDefault();
-
-                    var Emailstatusretailerrechargesuccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "Rechsucconline1").SingleOrDefault().Status;
-                    var Emailstatusretailerrechargefailed = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RechFailedOnline1").SingleOrDefault().Status;
-                    var EmailstatusretailerrechargeProccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RecProconline1").SingleOrDefault().Status;
-
-                    var AdminEmail = dbsrs.Admin_details.SingleOrDefault().email;
-
-                    var role = (from rol in dbsrs.Roles join user in dbsrs.UserRoles on rol.RoleId equals user.RoleId where user.UserId == entry.userid select rol.Name).SingleOrDefault().ToString();
-
-                    if (entry != null)
+                    if (operatorid == "BSNL Recharge")
                     {
-                        var rch = dbsrs.Recharge_info.Where(s => s.Order_id == rchid).Single();
-                        rch.response_output = outpt;
+                        try
+                        {
+                            var infochk = dbsrs.dealer_sim_new.Where(aa => aa.opt_code == "BSNL Recharge" && aa.USERID == lapunumber).SingleOrDefault();
+                            infochk.remaining = Convert.ToDecimal(lapubal);
+                        }
+                        catch { }
+                        try
+                        {
+                            var infochk1 = dbsrs.dealer_sim_new.Where(aa => aa.opt_code == "BSNL Topup" && aa.USERID == lapunumber).SingleOrDefault();
+                            infochk1.remaining = Convert.ToDecimal(lapubal);
+                        }
+                        catch { }
                         dbsrs.SaveChanges();
 
-                        if (entry.CurrentStatus.ToUpper().Contains("REQ"))  // Fixed Status Pending, So Not change Current Status
+                    }
+                    else
+                    {
+                        try
                         {
-                            if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
+                            var infochk = dbsrs.dealer_sim_new.Where(aa => aa.opt_code == operatorid && aa.USERID == lapunumber).SingleOrDefault();
+                            infochk.remaining = Convert.ToDecimal(lapubal);
+                            dbsrs.SaveChanges();
+                        }
+                        catch { }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var entry = (from rch in dbsrs.Recharge_info
+                                     where rch.Order_id == rchid
+                                     select new
+                                     {
+                                         Idno = rch.idno,
+                                         Mobile = rch.Mobile,
+                                         Port = rch.portno,
+                                         Amount = rch.amount,
+                                         Provider = rch.optcode,
+                                         Response = rch.Recharge_response,
+                                         userid = rch.Rch_from,
+                                         CurrentStatus = rch.Rstaus,
+                                         OrderId = rch.Order_id
+
+                                     }).SingleOrDefault();
+                        var Apientry = dbsrs.Recharge_info.Where(aa => aa.Order_id == rchid).SingleOrDefault();
+                        int idnn1 = Convert.ToInt32(entry.Idno);
+                        var statusretailerrechargesuccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "Rechsucconline").SingleOrDefault();
+                        var statusretailerrechargefailed = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RechFailedOnline").SingleOrDefault();
+                        var statusretailerrechargeProccess = dbsrs.SMSSendAlls.Where(a => a.ServiceName == "RecProconline").SingleOrDefault();
+
+                        var Emailstatusretailerrechargesuccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "Rechsucconline1").SingleOrDefault().Status;
+                        var Emailstatusretailerrechargefailed = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RechFailedOnline1").SingleOrDefault().Status;
+                        var EmailstatusretailerrechargeProccess = dbsrs.EmailSendAlls.Where(a => a.ServiceName == "RecProconline1").SingleOrDefault().Status;
+
+                        var AdminEmail = dbsrs.Admin_details.SingleOrDefault().email;
+
+                        var role = (from rol in dbsrs.Roles join user in dbsrs.UserRoles on rol.RoleId equals user.RoleId where user.UserId == entry.userid select rol.Name).SingleOrDefault().ToString();
+
+                        if (entry != null)
+                        {
+                            var rch = dbsrs.Recharge_info.Where(s => s.Order_id == rchid).Single();
+                            rch.response_output = outpt;
+                            dbsrs.SaveChanges();
+
+                            if (entry.CurrentStatus.ToUpper().Contains("REQ"))  // Fixed Status Pending, So Not change Current Status
                             {
-                                dbsrs.recharge_update(entry.Idno.ToString(), "SUCCESS", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
-
-                                if (role == "Retailer")
+                                if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
                                 {
-                                    var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
-                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
-                                    //if (statusretailerrechargesuccess == "Y")
-                                    //{
+                                    dbsrs.recharge_update(entry.Idno.ToString(), "SUCCESS", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
 
-                                    //    try
-                                    //    {
-                                    //        string msgssss = "";
-                                    //        string tempid = "";
-                                    //        string urlss = "";
-
-                                    //        var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                    //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                    //        if (smsstypes != null)
-                                    //        {
-
-                                    //            msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
-                                    //            tempid = smsstypes.Templateid;
-                                    //            urlss = smsapionsts.smsapi;
-
-                                    //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                    //        }
-                                    //    }
-                                    //    catch { }
-                                    //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                    //}
-
-                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
-
-                                    if (Emailstatusretailerrechargesuccess == "Y")
-                                    {
-                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                    }
-                                }
-                                if (Apientry.rch_type == "API")
-                                {
-                                    var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
-                                    if (urlchk != null)
-                                    {
-                                        var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
-                                        var url = urlchk.responseurl.ToString();
-                                        url = url.Replace("rrr", Apientry.refid);
-                                        url = url.Replace("sss", "Success");
-                                        url = url.Replace("ooo", operatorid);
-                                        url = url.Replace("bbb", remainbal);
-
-                                        try
-                                        {
-                                            var client = new RestClient(url);
-                                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                                            var request = new RestRequest(Method.GET);
-                                            IRestResponse response = client.Execute(request);
-
-                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                                            obj.Api_Response_output = url.ToString();
-                                            dbsrs.SaveChanges();
-                                        }
-                                        catch
-                                        {
-                                        }
-                                    }
-                                }
-                            }
-
-                            else if (status.ToUpper() == "FAILED") // Callback Status Failed, So change status according to callback response
-                            {
-
-                                var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == entry.Provider).SingleOrDefault().Operator_id.ToString();
-                                var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-                                if (show == null)
-                                {
-                                    dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                     if (role == "Retailer")
                                     {
                                         var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                         var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
-                                        //if (statusretailerrechargefailed == "Y")
+                                        //if (statusretailerrechargesuccess == "Y")
                                         //{
 
                                         //    try
@@ -213,7 +172,7 @@ namespace Vastwebmulti.Controllers
                                         //        string urlss = "";
 
                                         //        var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                        //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                        //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
                                         //        if (smsstypes != null)
                                         //        {
 
@@ -225,15 +184,14 @@ namespace Vastwebmulti.Controllers
                                         //        }
                                         //    }
                                         //    catch { }
-
-                                        //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                        //    // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
                                         //}
 
-                                        smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
+                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
 
-                                        if (Emailstatusretailerrechargefailed == "Y")
+                                        if (Emailstatusretailerrechargesuccess == "Y")
                                         {
-                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
                                         }
                                     }
                                     if (Apientry.rch_type == "API")
@@ -244,7 +202,7 @@ namespace Vastwebmulti.Controllers
                                             var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
                                             var url = urlchk.responseurl.ToString();
                                             url = url.Replace("rrr", Apientry.refid);
-                                            url = url.Replace("sss", "Failed");
+                                            url = url.Replace("sss", "Success");
                                             url = url.Replace("ooo", operatorid);
                                             url = url.Replace("bbb", remainbal);
 
@@ -265,20 +223,22 @@ namespace Vastwebmulti.Controllers
                                         }
                                     }
                                 }
-                                else
+
+                                else if (status.ToUpper() == "FAILED") // Callback Status Failed, So change status according to callback response
                                 {
-                                    //yeline start
-                                    var mainApi = dbsrs.SRS_API.Where(a => a.apiname == show.ApiPort).SingleOrDefault();
-                                    if (entry.Port == show.ApiPort)          // Because Same operator and same api ON both backup and main api so directly failed
+
+                                    var optcodei = dbsrs.Operator_Code.Where(aa => aa.new_opt_code == entry.Provider).SingleOrDefault().Operator_id.ToString();
+                                    var show = dbsrs.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                    if (show == null)
                                     {
-                                        //ye line end sab me
                                         dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                         if (role == "Retailer")
                                         {
-                                            var RetailerMobile = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault().Mobile;
+                                            var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                             var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                             //if (statusretailerrechargefailed == "Y")
                                             //{
+
                                             //    try
                                             //    {
                                             //        string msgssss = "";
@@ -294,15 +254,20 @@ namespace Vastwebmulti.Controllers
                                             //            tempid = smsstypes.Templateid;
                                             //            urlss = smsapionsts.smsapi;
 
-                                            //            smssend.sendsmsallnew(RetailerMobile, msgssss, urlss, tempid);
+                                            //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
                                             //        }
                                             //    }
                                             //    catch { }
-                                            //    // smssend.sendsmsall(RetailerMobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+
+                                            //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
                                             //}
 
-                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerMobile, entry.Mobile, entry.Amount, operatorid, remainbal);
+                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
 
+                                            if (Emailstatusretailerrechargefailed == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                            }
                                         }
                                         if (Apientry.rch_type == "API")
                                         {
@@ -324,98 +289,26 @@ namespace Vastwebmulti.Controllers
                                                     IRestResponse response = client.Execute(request);
 
                                                     Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                                                    obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
+                                                    obj.Api_Response_output = url.ToString();
                                                     dbsrs.SaveChanges();
                                                 }
-                                                catch (Exception ex)
+                                                catch
                                                 {
-                                                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                                                    obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
-                                                    dbsrs.SaveChanges();
                                                 }
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        var outputchk = backup.recharge(entry.Mobile, entry.Provider, Convert.ToDecimal(entry.Amount), entry.userid, entry.Idno, optcodei, entry.OrderId, ref operatorid);
-                                        if (outputchk == "SUCCESS")
+                                        //yeline start
+                                        var mainApi = dbsrs.SRS_API.Where(a => a.apiname == show.ApiPort).SingleOrDefault();
+                                        if (entry.Port == show.ApiPort)          // Because Same operator and same api ON both backup and main api so directly failed
                                         {
-                                            // dbsrs.recharge_update(entry.Idno.ToString(), "SUCCESS", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
+                                            //ye line end sab me
+                                            dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                             if (role == "Retailer")
                                             {
-                                                var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
-                                                var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
-                                                //if (statusretailerrechargesuccess == "Y")
-                                                //{
-
-                                                //    try
-                                                //    {
-                                                //        string msgssss = "";
-                                                //        string tempid = "";
-                                                //        string urlss = "";
-
-                                                //        var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                                                //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                                                //        if (smsstypes != null)
-                                                //        {
-
-                                                //            msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
-                                                //            tempid = smsstypes.Templateid;
-                                                //            urlss = smsapionsts.smsapi;
-
-                                                //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                                                //        }
-                                                //    }
-                                                //    catch { }
-                                                //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                                                //}
-
-                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
-
-                                                if (Emailstatusretailerrechargesuccess == "Y")
-                                                {
-                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                                                }
-                                            }
-                                            if (Apientry.rch_type == "API")
-                                            {
-                                                var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
-                                                if (urlchk != null)
-                                                {
-                                                    var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
-                                                    var url = urlchk.responseurl.ToString();
-                                                    url = url.Replace("rrr", Apientry.refid);
-                                                    url = url.Replace("sss", "Success");
-                                                    url = url.Replace("ooo", operatorid);
-                                                    url = url.Replace("bbb", remainbal);
-
-                                                    try
-                                                    {
-                                                        var client = new RestClient(url);
-                                                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                                                        var request = new RestRequest(Method.GET);
-                                                        IRestResponse response = client.Execute(request);
-
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                                                        obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
-                                                        dbsrs.SaveChanges();
-                                                    }
-                                                    catch (Exception ex)
-                                                    {
-                                                        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                                                        obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
-                                                        dbsrs.SaveChanges();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else if (outputchk == "FAILED")
-                                        {
-                                            // dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
-                                            if (role == "Retailer")
-                                            {
-                                                var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
+                                                var RetailerMobile = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault().Mobile;
                                                 var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                                 //if (statusretailerrechargefailed == "Y")
                                                 //{
@@ -434,19 +327,15 @@ namespace Vastwebmulti.Controllers
                                                 //            tempid = smsstypes.Templateid;
                                                 //            urlss = smsapionsts.smsapi;
 
-                                                //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                //            smssend.sendsmsallnew(RetailerMobile, msgssss, urlss, tempid);
                                                 //        }
                                                 //    }
                                                 //    catch { }
-                                                //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                //    // smssend.sendsmsall(RetailerMobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
                                                 //}
 
-                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerMobile, entry.Mobile, entry.Amount, operatorid, remainbal);
 
-                                                if (Emailstatusretailerrechargefailed == "Y")
-                                                {
-                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                                                }
                                             }
                                             if (Apientry.rch_type == "API")
                                             {
@@ -482,179 +371,324 @@ namespace Vastwebmulti.Controllers
                                         }
                                         else
                                         {
+                                            var outputchk = backup.recharge(entry.Mobile, entry.Provider, Convert.ToDecimal(entry.Amount), entry.userid, entry.Idno, optcodei, entry.OrderId, ref operatorid);
+                                            if (outputchk == "SUCCESS")
+                                            {
+                                                // dbsrs.recharge_update(entry.Idno.ToString(), "SUCCESS", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
+                                                if (role == "Retailer")
+                                                {
+                                                    var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
+                                                    //if (statusretailerrechargesuccess == "Y")
+                                                    //{
 
+                                                    //    try
+                                                    //    {
+                                                    //        string msgssss = "";
+                                                    //        string tempid = "";
+                                                    //        string urlss = "";
+
+                                                    //        var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //        if (smsstypes != null)
+                                                    //        {
+
+                                                    //            msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
+                                                    //            tempid = smsstypes.Templateid;
+                                                    //            urlss = smsapionsts.smsapi;
+
+                                                    //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //        }
+                                                    //    }
+                                                    //    catch { }
+                                                    //    //   smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                }
+                                                if (Apientry.rch_type == "API")
+                                                {
+                                                    var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
+                                                    if (urlchk != null)
+                                                    {
+                                                        var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
+                                                        var url = urlchk.responseurl.ToString();
+                                                        url = url.Replace("rrr", Apientry.refid);
+                                                        url = url.Replace("sss", "Success");
+                                                        url = url.Replace("ooo", operatorid);
+                                                        url = url.Replace("bbb", remainbal);
+
+                                                        try
+                                                        {
+                                                            var client = new RestClient(url);
+                                                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                                                            var request = new RestRequest(Method.GET);
+                                                            IRestResponse response = client.Execute(request);
+
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                                                            obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
+                                                            dbsrs.SaveChanges();
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                                                            obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
+                                                            dbsrs.SaveChanges();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else if (outputchk == "FAILED")
+                                            {
+                                                // dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
+                                                if (role == "Retailer")
+                                                {
+                                                    var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
+                                                    var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
+                                                    //if (statusretailerrechargefailed == "Y")
+                                                    //{
+                                                    //    try
+                                                    //    {
+                                                    //        string msgssss = "";
+                                                    //        string tempid = "";
+                                                    //        string urlss = "";
+
+                                                    //        var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                    //        var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                    //        if (smsstypes != null)
+                                                    //        {
+
+                                                    //            msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
+                                                    //            tempid = smsstypes.Templateid;
+                                                    //            urlss = smsapionsts.smsapi;
+
+                                                    //            smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                                                    //        }
+                                                    //    }
+                                                    //    catch { }
+                                                    //    //  smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                                                    //}
+
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, entry.Mobile, entry.Amount, operatorid, remainbal);
+
+                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                }
+                                                if (Apientry.rch_type == "API")
+                                                {
+                                                    var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
+                                                    if (urlchk != null)
+                                                    {
+                                                        var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
+                                                        var url = urlchk.responseurl.ToString();
+                                                        url = url.Replace("rrr", Apientry.refid);
+                                                        url = url.Replace("sss", "Failed");
+                                                        url = url.Replace("ooo", operatorid);
+                                                        url = url.Replace("bbb", remainbal);
+
+                                                        try
+                                                        {
+                                                            var client = new RestClient(url);
+                                                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                                                            var request = new RestRequest(Method.GET);
+                                                            IRestResponse response = client.Execute(request);
+
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                                                            obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
+                                                            dbsrs.SaveChanges();
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                                                            obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
+                                                            dbsrs.SaveChanges();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                            }
                                         }
                                     }
                                 }
                             }
+                            //else if (entry.CurrentStatus.ToUpper() == "SUCCESS")    // Fixed Status Success, So Not change Current Status
+                            //{
+                            //    if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
+                            //    {
+                            //        // Update Operator_Id
+                            //        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == entry.Idno select p).SingleOrDefault();
+                            //        obj.OPt_id = operatorid;
+                            //        dbsrs.SaveChanges();
+                            //    }
+                            //    else if (status.ToUpper() == "FAILED")    // Callback Status Failed, So change status according to callback response
+                            //    {
+                            //        dbsrs.recharge_update_success_to_failed(entry.Idno);
+
+                            //        if (role == "Retailer")
+                            //        {
+                            //            var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
+                            //            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
+                            //            if (statusretailerrechargefailed == "Y")
+                            //            {
+                            //                try
+                            //                {
+                            //                    string msgssss = "";
+                            //                    string tempid = "";
+                            //                    string urlss = "";
+
+                            //                    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                            //                    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                            //                    if (smsstypes != null)
+                            //                    {
+
+                            //                        msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
+                            //                        tempid = smsstypes.Templateid;
+                            //                        urlss = smsapionsts.smsapi;
+
+                            //                        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                            //                    }
+                            //                }
+                            //                catch { }
+
+
+
+                            //                // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
+                            //            }
+                            //            if (Emailstatusretailerrechargefailed == "Y")
+                            //            {
+                            //                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                            //            }
+                            //        }
+                            //        if (Apientry.rch_type == "API")
+                            //        {
+                            //            var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
+                            //            if (urlchk != null)
+                            //            {
+                            //                var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
+                            //                var url = urlchk.responseurl.ToString();
+                            //                url = url.Replace("rrr", Apientry.refid);
+                            //                url = url.Replace("sss", "Failed");
+                            //                url = url.Replace("ooo", operatorid);
+                            //                url = url.Replace("bbb", remainbal);
+
+                            //                try
+                            //                {
+                            //                    var client = new RestClient(url);
+                            //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                            //                    var request = new RestRequest(Method.GET);
+                            //                    IRestResponse response = client.Execute(request);
+
+                            //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                            //                    obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
+                            //                    dbsrs.SaveChanges();
+                            //                }
+                            //                catch (Exception ex)
+                            //                {
+                            //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                            //                    obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
+                            //                    dbsrs.SaveChanges();
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                            //else if (entry.CurrentStatus.ToUpper() == "FAILED") // Fixed Status Failed, So Not change Current Status
+                            //{
+                            //    if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
+                            //    {
+                            //        dbsrs.recharge_update_failed_to_success(entry.Idno);
+                            //        if (role == "Retailer")
+                            //        {
+                            //            var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
+                            //            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
+                            //            if (statusretailerrechargesuccess == "Y")
+                            //            {
+
+                            //                try
+                            //                {
+                            //                    string msgssss = "";
+                            //                    string tempid = "";
+                            //                    string urlss = "";
+
+                            //                    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                            //                    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                            //                    if (smsstypes != null)
+                            //                    {
+
+                            //                        msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
+                            //                        tempid = smsstypes.Templateid;
+                            //                        urlss = smsapionsts.smsapi;
+
+                            //                        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
+                            //                    }
+                            //                }
+                            //                catch { }
+
+                            //                // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
+                            //            }
+                            //            if (Emailstatusretailerrechargesuccess == "Y")
+                            //            {
+                            //                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                            //            }
+                            //        }
+                            //        if (Apientry.rch_type == "API")
+                            //        {
+                            //            var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
+                            //            if (urlchk != null)
+                            //            {
+                            //                var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
+                            //                var url = urlchk.responseurl.ToString();
+                            //                url = url.Replace("rrr", Apientry.refid);
+                            //                url = url.Replace("sss", "Success");
+                            //                url = url.Replace("ooo", operatorid);
+                            //                url = url.Replace("bbb", remainbal);
+
+                            //                try
+                            //                {
+                            //                    var client = new RestClient(url);
+                            //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                            //                    var request = new RestRequest(Method.GET);
+                            //                    IRestResponse response = client.Execute(request);
+
+                            //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                            //                    obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
+                            //                    dbsrs.SaveChanges();
+                            //                }
+                            //                catch (Exception ex)
+                            //                {
+                            //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
+                            //                    obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
+                            //                    dbsrs.SaveChanges();
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+
+                            var ent = dbsrs.Recharge_info.Where(about => about.idno == entry.Idno).SingleOrDefault();
+                            ent.response_output = outpt;
+                            dbsrs.SaveChanges();
                         }
-                        //else if (entry.CurrentStatus.ToUpper() == "SUCCESS")    // Fixed Status Success, So Not change Current Status
-                        //{
-                        //    if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
-                        //    {
-                        //        // Update Operator_Id
-                        //        Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == entry.Idno select p).SingleOrDefault();
-                        //        obj.OPt_id = operatorid;
-                        //        dbsrs.SaveChanges();
-                        //    }
-                        //    else if (status.ToUpper() == "FAILED")    // Callback Status Failed, So change status according to callback response
-                        //    {
-                        //        dbsrs.recharge_update_success_to_failed(entry.Idno);
-
-                        //        if (role == "Retailer")
-                        //        {
-                        //            var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
-                        //            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
-                        //            if (statusretailerrechargefailed == "Y")
-                        //            {
-                        //                try
-                        //                {
-                        //                    string msgssss = "";
-                        //                    string tempid = "";
-                        //                    string urlss = "";
-
-                        //                    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                        //                    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGEFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                        //                    if (smsstypes != null)
-                        //                    {
-
-                        //                        msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
-                        //                        tempid = smsstypes.Templateid;
-                        //                        urlss = smsapionsts.smsapi;
-
-                        //                        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                        //                    }
-                        //                }
-                        //                catch { }
-
-
-
-                        //                // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge");
-                        //            }
-                        //            if (Emailstatusretailerrechargefailed == "Y")
-                        //            {
-                        //                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + entry.Mobile + ".Amount :" + entry.Amount + " is FAILED.Transaction id: " + operatorid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-                        //            }
-                        //        }
-                        //        if (Apientry.rch_type == "API")
-                        //        {
-                        //            var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
-                        //            if (urlchk != null)
-                        //            {
-                        //                var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
-                        //                var url = urlchk.responseurl.ToString();
-                        //                url = url.Replace("rrr", Apientry.refid);
-                        //                url = url.Replace("sss", "Failed");
-                        //                url = url.Replace("ooo", operatorid);
-                        //                url = url.Replace("bbb", remainbal);
-
-                        //                try
-                        //                {
-                        //                    var client = new RestClient(url);
-                        //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                        //                    var request = new RestRequest(Method.GET);
-                        //                    IRestResponse response = client.Execute(request);
-
-                        //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                        //                    obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
-                        //                    dbsrs.SaveChanges();
-                        //                }
-                        //                catch (Exception ex)
-                        //                {
-                        //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                        //                    obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
-                        //                    dbsrs.SaveChanges();
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //else if (entry.CurrentStatus.ToUpper() == "FAILED") // Fixed Status Failed, So Not change Current Status
-                        //{
-                        //    if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
-                        //    {
-                        //        dbsrs.recharge_update_failed_to_success(entry.Idno);
-                        //        if (role == "Retailer")
-                        //        {
-                        //            var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
-                        //            var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
-                        //            if (statusretailerrechargesuccess == "Y")
-                        //            {
-
-                        //                try
-                        //                {
-                        //                    string msgssss = "";
-                        //                    string tempid = "";
-                        //                    string urlss = "";
-
-                        //                    var smsapionsts = dbsrs.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                        //                    var smsstypes = dbsrs.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RECHARGESUCCESS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                        //                    if (smsstypes != null)
-                        //                    {
-
-                        //                        msgssss = string.Format(smsstypes.Templates, entry.Mobile, entry.Amount, operatorid, remainbal);
-                        //                        tempid = smsstypes.Templateid;
-                        //                        urlss = smsapionsts.smsapi;
-
-                        //                        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                        //                    }
-                        //                }
-                        //                catch { }
-
-                        //                // smssend.sendsmsall(RetailerDetails.Mobile, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge");
-                        //            }
-                        //            if (Emailstatusretailerrechargesuccess == "Y")
-                        //            {
-                        //                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + entry.Mobile + ".Amount " + entry.Amount + ".Transaction id: " + operatorid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-                        //            }
-                        //        }
-                        //        if (Apientry.rch_type == "API")
-                        //        {
-                        //            var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
-                        //            if (urlchk != null)
-                        //            {
-                        //                var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
-                        //                var url = urlchk.responseurl.ToString();
-                        //                url = url.Replace("rrr", Apientry.refid);
-                        //                url = url.Replace("sss", "Success");
-                        //                url = url.Replace("ooo", operatorid);
-                        //                url = url.Replace("bbb", remainbal);
-
-                        //                try
-                        //                {
-                        //                    var client = new RestClient(url);
-                        //                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                        //                    var request = new RestRequest(Method.GET);
-                        //                    IRestResponse response = client.Execute(request);
-
-                        //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                        //                    obj.Api_Response_output = String.Format("Url: {0}, Response: {1}", url, response.Content);
-                        //                    dbsrs.SaveChanges();
-                        //                }
-                        //                catch (Exception ex)
-                        //                {
-                        //                    Recharge_info obj = (from p in dbsrs.Recharge_info where p.idno == idnn1 select p).Single();
-                        //                    obj.Api_Response_output = String.Format("Callback API Send Error - Url: {0}, Error: {1}", url, ex.Message);
-                        //                    dbsrs.SaveChanges();
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
-                        var ent = dbsrs.Recharge_info.Where(about => about.idno == entry.Idno).SingleOrDefault();
-                        ent.response_output = outpt;
-                        dbsrs.SaveChanges();
                     }
-                }
-                catch (Exception ex)
-                {
-                    using (VastwebmultiEntities db = new VastwebmultiEntities())
+                    catch (Exception ex)
                     {
-                        //test1 t1 = new test1();
-                        //t1.name = String.Format("Callback Exception - Message: {0}, Stack: {1}, InnerMsg: {2}, InnerStack: {3}, Time: {4}", ex.Message, ex.StackTrace, ex.InnerException?.Message, ex.InnerException?.StackTrace, DateTime.Now.ToString());
-                        //dbsrs.test1.Add(t1);
-                        //dbsrs.SaveChanges();
+                        using (VastwebmultiEntities db = new VastwebmultiEntities())
+                        {
+                            //test1 t1 = new test1();
+                            //t1.name = String.Format("Callback Exception - Message: {0}, Stack: {1}, InnerMsg: {2}, InnerStack: {3}, Time: {4}", ex.Message, ex.StackTrace, ex.InnerException?.Message, ex.InnerException?.StackTrace, DateTime.Now.ToString());
+                            //dbsrs.test1.Add(t1);
+                            //dbsrs.SaveChanges();
+                        }
                     }
                 }
                 return View();

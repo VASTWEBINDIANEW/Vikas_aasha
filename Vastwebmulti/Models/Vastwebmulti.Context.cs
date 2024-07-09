@@ -23331,5 +23331,22 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<loanrequestRepayment_Result>("loanrequestRepayment", idnoParameter, loanidParameter, amountParameter);
         }
+    
+        public virtual int BlockAmountStatusOnandOff(Nullable<int> id, string statuschk, string blockTime)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var statuschkParameter = statuschk != null ?
+                new ObjectParameter("statuschk", statuschk) :
+                new ObjectParameter("statuschk", typeof(string));
+    
+            var blockTimeParameter = blockTime != null ?
+                new ObjectParameter("BlockTime", blockTime) :
+                new ObjectParameter("BlockTime", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BlockAmountStatusOnandOff", idParameter, statuschkParameter, blockTimeParameter);
+        }
     }
 }
