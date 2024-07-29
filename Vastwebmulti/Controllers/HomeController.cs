@@ -2587,7 +2587,7 @@ namespace Vastwebmulti.Controllers
         }
         public ActionResult about_us()
         {
-            return View();
+                return View();
         }
         public ActionResult recharge_api()
         {
@@ -2670,6 +2670,10 @@ namespace Vastwebmulti.Controllers
             return View();
         }
         public ActionResult allblog()
+        {
+            return View();
+        }
+        public ActionResult RefundCancellation()
         {
             return View();
         }
