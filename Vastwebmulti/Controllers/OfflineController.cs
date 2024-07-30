@@ -181,7 +181,7 @@ namespace Vastwebmulti.Controllers
                                     db.SaveChanges();
                                 }
 
-                                var ch = db.Recharge_retailer(remid.RetailerId, second, first, Convert.ToInt32(third), "Offline", "", "", "", "", "", "", "", 0, OrderId, "", output).Single().msg;
+                                var ch = db.Recharge_retailer(remid.RetailerId, second, first, Convert.ToInt32(third), "Offline", "", "", "", "", "", "", "", 0, OrderId, "",false, output).Single().msg;
 
                                 if (ch == "OKK")
                                 {

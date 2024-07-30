@@ -1769,7 +1769,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         catch { }
                                         var billduedate = "";
-                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, output).Single().msg.ToString();
+                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
                                         //else if()
                                         if (result.ToUpper() == "OKK")
                                         {
@@ -4528,7 +4528,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, output).Single().msg.ToString();
+                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
                                 //else if()
                                 if (result.ToUpper() == "OKK")
                                 {
