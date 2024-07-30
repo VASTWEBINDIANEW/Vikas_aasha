@@ -490,7 +490,6 @@
 
 <section class="content" >
     <div class="container-fluid" style="height:inherit !important;min-height:inherit !important;">
-
         <!--Four-Design-Admin-page-Header-Section-Start-->
         <div class="page-title-box-fourde-admin">
             <h3>AddSIM</h3>
@@ -1143,11 +1142,27 @@
                 else {
                     document.getElementById('LOGINMESSAGE12').innerHTML = data2.list;
                 }
+            }
+        });
+    }    
+</script>
+<script>
+    function Checkbal(s) {
+        document.getElementById('lodersd1').style.display = 'block';
+        $.ajax({
+            url: '@Url.Action("CheckbalSiminfo", "Home")',
+            type: "POST",
+            data: { idno: s },
+            cache: false,
+            success: function (data2) {
 
+                document.getElementById('lodersd1').style.display = 'none';
+                document.getElementById('updatestatusd23').style.display = 'block';
+                document.getElementById('LOGINMESSAGE12').innerHTML = data2.list;
+              // location.reload();
             }
         });
     }
-    
 </script>
 <script>
 
