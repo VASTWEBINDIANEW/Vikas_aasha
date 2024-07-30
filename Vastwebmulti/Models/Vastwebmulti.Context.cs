@@ -14337,7 +14337,7 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<history_norton_Result>("history_norton", roleParameter, useridParameter, fromParameter, toParameter, statusParameter);
         }
     
-        public virtual ObjectResult<Recharge_retailer_Result> Recharge_retailer(string rch_from, string rech_no, string network, Nullable<decimal> amount, string rch_type, string optional1, string optional2, string optional3, string optional4, string ipaddress, string macaddress, string imeino, Nullable<decimal> servicefee, string fId, string billduedate, ObjectParameter output)
+        public virtual ObjectResult<Recharge_retailer_Result> Recharge_retailer(string rch_from, string rech_no, string network, Nullable<decimal> amount, string rch_type, string optional1, string optional2, string optional3, string optional4, string ipaddress, string macaddress, string imeino, Nullable<decimal> servicefee, string fId, string billduedate, Nullable<bool> dlmsellsts, ObjectParameter output)
         {
             var rch_fromParameter = rch_from != null ?
                 new ObjectParameter("rch_from", rch_from) :
@@ -14399,7 +14399,11 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("billduedate", billduedate) :
                 new ObjectParameter("billduedate", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Recharge_retailer_Result>("Recharge_retailer", rch_fromParameter, rech_noParameter, networkParameter, amountParameter, rch_typeParameter, optional1Parameter, optional2Parameter, optional3Parameter, optional4Parameter, ipaddressParameter, macaddressParameter, imeinoParameter, servicefeeParameter, fIdParameter, billduedateParameter, output);
+            var dlmsellstsParameter = dlmsellsts.HasValue ?
+                new ObjectParameter("dlmsellsts", dlmsellsts) :
+                new ObjectParameter("dlmsellsts", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Recharge_retailer_Result>("Recharge_retailer", rch_fromParameter, rech_noParameter, networkParameter, amountParameter, rch_typeParameter, optional1Parameter, optional2Parameter, optional3Parameter, optional4Parameter, ipaddressParameter, macaddressParameter, imeinoParameter, servicefeeParameter, fIdParameter, billduedateParameter, dlmsellstsParameter, output);
         }
     
         public virtual int SRS_Rch_Resend_old(string id, ObjectParameter output)
