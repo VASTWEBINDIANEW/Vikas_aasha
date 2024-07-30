@@ -856,7 +856,7 @@
                                             </p>
 
                                             <div class="qr_ex_button">
-                                                <div onclick="generatepaytmqr()" style="cursor: pointer;"><a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); ">Re-Generate QR Code</a></div>
+                                                <div onclick="location.reload();" style="cursor: pointer;"><a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); ">Re-Generate QR Code</a></div>
 
                                                 <a href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
                                             </div>
@@ -1103,6 +1103,63 @@
                                                     </div>
                                                     <img id="qrCodeImagess" style="width:100%" src="" alt="QR Code will appear here">
 
+                                                </div>
+
+
+                                            }
+                                            else
+                                            {
+                                                <p style="color: red; text-align: center; font-weight: bold; ">@ViewBag.msg </p>
+                                            }
+
+                                        }
+                                        else if (ViewBag.Api == "BHARAT PE")
+                                        {
+                                            if (ViewBag.respmsg == "OK")
+                                            {
+
+                                                <div id="bharatpeshowgenrateform" style=" margin-top: 18px;display:block;">
+                                                    <div class="form-group">
+                                                        <div id="divamount" class="">
+                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                <h3 style=" margin-top: 0; ">Enter Amount And Generate QR</h3>
+                                                            </div>
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+
+                                                                @Html.TextBox("bharatpeamounts", "", new { @type = "number", @class = "form-control", placeholder = "Enter Amount" })
+
+                                                            </div>
+
+                                                            <div class="col-md-4 col-sm-4 col-xs-4" style="">
+                                                                <div id="GenrateQr" class="">
+                                                                    <button id="generattes" onclick="generatebharatpeqr()" class="btn btn-primary">Generate QR</button>
+                                                                </div>
+                                                            </div>
+                                                            <div id="bharatidmesssss" style="color:red"></div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div id="bharatpeqrcodeshow" style="display:none">
+                                                    <div class="set_time">
+
+                                                        <div class="set_time1">
+                                                            <h3>This QR Will Expire After </h3>
+                                                            <div style=" font-size: 20px; " id=timerssss></div>
+                                                        </div>
+                                                        <h3>Minutes</h3>
+
+                                                        <div class="pen">
+                                                            <div class="panel">
+                                                                <div class="scroll"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <img id="qrCodeImagesss" style="width:100%" src="" alt="QR Code will appear here">
+                                                    <button id="utrsubmitbutton">Enter UTR NO.</button>
                                                 </div>
 
 
@@ -2070,5 +2127,133 @@ function countdown1(minutes, seconds,txnid) {
     }
     tick1();
 }
+    function generatebharatpeqr() {
 
+        @{
+            var CHK11 = db.Upi_Qr_codeGenerator.ToList();
+            }
+
+        var amount = document.getElementById('bharatpeamounts').value;
+        if (amount.length !== 0 && amount <= @CHK11[0].maximium && amount >= @CHK11[0].minmium) {
+            $.ajax({
+                url: '@Url.Action("bharatpeqrgenerates", "Home")',
+                type: 'GET',
+                data: { amount: amount },
+                success: function (response) {
+                    if (response.success) {
+                        countdown11(2, 00, response.txnid);
+                        var butrr = document.getElementById('utrsubmitbutton');
+                        butrr.setAttribute('onclick', 'bharatpayutr("' +response.txnid+'")')
+                        var base64Image = response.image;
+                        $('#qrCodeImagesss').attr('src', 'data:image/png;base64,' + base64Image);
+
+                        document.getElementById('bharatpeshowgenrateform').style.display = "none";
+                        document.getElementById('bharatpeqrcodeshow').style.display = "block";
+
+                        document.getElementById('qrregenrate').style.display = 'none';
+                        document.getElementById('successgenrate').style.display = 'none';
+
+                       
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + xhr.responseText);
+                }
+            });
+
+
+        }
+        else {
+            var mess = "Enter amount in between " +@CHK11[0].minmium+" To " +@CHK11[0].maximium;
+
+            document.getElementById("bharatidmesssss").innerHTML = mess;
+        }
+
+    }
+
+    var timeoutHandle11;
+    function countdown11(minutes, seconds,txnid) {
+        debugger;
+    function tick11() {
+
+        var counter = document.getElementById("timerssss");
+        counter.innerHTML =
+            minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds--;
+       
+
+        if (seconds == 0 && minutes == 0) {
+            bharatpayutr(txnid);
+            document.getElementById('qrregenrate').style.display = 'block';
+            document.getElementById('successgenrate').style.display = 'none';
+            document.getElementById('bharatpeshowgenrateform').style.display = 'none';
+            document.getElementById('bharatpeqrcodeshow').style.display = 'none';
+        }
+        else {
+
+
+            if (seconds >= 0) {
+                timeoutHandle11 = setTimeout(tick11, 1000);
+            } else {
+                if (minutes >= 1) {
+                    // countdown(mins-1);   never reach “00″ issue solved:Contributed by Victor Streithorst
+                    setTimeout(function () {
+                        countdown11(minutes - 1, 59, txnid);
+                    }, 1000);
+                }
+            }
+        }
+
+
+    }
+    tick11();
+    }
+
+    function bharatpayutr(txnid) {
+        Swal.fire({
+            title: "Enter UTR No.",
+
+            html: '<input id="QRutrbharatpe" style ="width: 100%;height: 30px; font-size: 15px;" Type="Text">',
+
+            showDenyButton: true,
+
+            confirmButtonText: "Submit",
+            denyButtonText: `Cencle`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                var utrs = document.getElementById('QRutrbharatpe').value;
+                $.ajax({
+                    url: "@Url.Action("bharatpeqrresponse","Home")",
+                    type: 'GET',
+                    data: { txnid: txnid, Utr: utrs },
+                    success: function (data){
+                        if (data.res == "Yes") {
+                            Swal.fire({
+                                title: "Success",
+
+                                icon: "success",
+
+                            });
+                            setTimeout(function () {
+                                location.reload();
+                            }, 3000);
+                        }
+                        else {
+
+                        }
+                }
+
+
+                });
+            }
+            else if (result.isDenied) {
+
+            }
+
+        });
+    }
+   
 </script>

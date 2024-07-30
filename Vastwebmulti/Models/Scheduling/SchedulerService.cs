@@ -49,6 +49,17 @@ namespace Vastwebmulti.Models.Scheduling
 
                 await scheduler.ScheduleJob(job3, trigger3);
 
+                var job4 = JobBuilder.Create<Phonepe>()
+    .WithIdentity("ExecuteTaskServiceCallJob4", "group4")
+    .Build();
+                var trigger4 = TriggerBuilder.Create()
+                    .WithIdentity("ExecuteTaskServiceCallTrigger4", "group4")
+                    .WithCronSchedule(ScheduleCronExpression1)
+                    .Build();
+
+                await scheduler.ScheduleJob(job4, trigger4);
+
+
                 //var job4 = JobBuilder.Create<Radaint>()
                 //           .WithIdentity("ExecuteTaskServiceCallJob4", "group4")
                 //           .Build();

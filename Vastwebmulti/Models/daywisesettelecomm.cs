@@ -21,5 +21,6 @@ namespace Vastwebmulti.Models
         public Nullable<int> dayscounts { get; set; }
         public Nullable<decimal> sharedcomm { get; set; }
         public Nullable<bool> sts { get; set; }
+        public Nullable<System.DateTime> insertdate { get; set; }
     }
 }

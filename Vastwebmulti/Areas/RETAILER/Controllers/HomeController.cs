@@ -1769,7 +1769,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         catch { }
                                         var billduedate = "";
-                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, output).Single().msg.ToString();
+                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
                                         //else if()
                                         if (result.ToUpper() == "OKK")
                                         {
@@ -4528,7 +4528,19 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, output).Single().msg.ToString();
+                                VastBazaartoken Responsetoken = new VastBazaartoken();
+                                var client21 = new RestClient("http://API.VASTBAZAAR.COM/api/Web/Siminfosts");
+
+                                var request21 = new RestRequest(Method.POST);
+                                var token21 = Responsetoken.gettoken();
+                                request21.AddHeader("authorization", "bearer " + token21);
+                                // request21.AddHeader("content-type", "application/json");
+
+                                var response21 = client21.Execute(request21);
+                                dynamic json21 = JsonConvert.DeserializeObject(response21.Content);
+                                var statsus = json21.Content.ADDINFO.Status;
+                              
+                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, statsus, output).Single().msg.ToString();
                                 //else if()
                                 if (result.ToUpper() == "OKK")
                                 {
@@ -32040,6 +32052,53 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             {
                                 ViewBag.msg = "Qr down contact To Admin";
                             }
+                        } 
+                        else if(apiname.Name == "BHARAT PE")
+                        {
+                            var client = new RestClient("http://api.vastbazaar.com/api/BharatPe/QRStatus");
+                            var request = new RestRequest(Method.POST);
+                            var token = getAuthToken();
+                            request.AddHeader("Authorization", "Bearer " + token);
+                            IRestResponse response = client.Execute(request);
+                            var resp = response.Content;
+                            dynamic respchk = JsonConvert.DeserializeObject(resp);
+                            var addnifo = respchk.Content.ADDINFO;
+                            var status = addnifo.status;
+                            if (status == true)
+                            {
+                                var upiid = addnifo.upiid;
+                                
+                                var session = addnifo.session;
+                                var xtoken = addnifo.xtoken;
+
+                                var chkss = db.bharatpaygetwayinfoes.ToList();
+                                if (chkss.Count == 0)
+                                {
+                                    bharatpaygetwayinfo d4 = new bharatpaygetwayinfo();
+                                    d4.upiid = upiid;
+                                    d4.token = xtoken;
+                                    d4.session = session;
+                                    
+                                    db.bharatpaygetwayinfoes.Add(d4);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    var d4 = db.bharatpaygetwayinfoes.SingleOrDefault();
+                                    d4.upiid = upiid;
+                                    d4.token = xtoken;
+                                    d4.session = session;
+
+                                    db.SaveChanges();
+                                }
+                                var msg = "";
+                                msg = "OK";
+                                ViewBag.respmsg = msg;
+                            }
+                            else
+                            {
+                                ViewBag.msg = "Qr down contact To Admin";
+                            }
                         }
                         else
                         {
@@ -32137,7 +32196,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                             var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
 
-                            return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                            if (procmsg == "OK")
+                            {
+                                return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Something Went Wrong", txnid = "" }, JsonRequestBehavior.AllowGet);
+                            }
+                           
                         }
                     }
                 }
@@ -32152,16 +32219,20 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
         public ActionResult Paytmqrresponse(string txnid)
         {
-            var chkss1 = db.paytmgatewayinfoes.SingleOrDefault();
-            ServicePointManager.SecurityProtocol =
-          SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            var client = new RestClient("https://dashboard.paytm.com");
-            client.Timeout = -1; // Set timeout if necessary
-            var request = new RestRequest("/api/v3/order/list", Method.POST);
-            request.AddHeader("X-Xsrf-Token", chkss1.xtoken);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddCookie("SESSION", chkss1.Cookie);
-            var body = @"
+            var chkss = db.Upi_txn_details.Where(s => s.refid == txnid && s.status.ToUpper() == "PENDING").ToList();
+            if (chkss.Count == 1)
+            {
+
+                var chkss1 = db.paytmgatewayinfoes.SingleOrDefault();
+                ServicePointManager.SecurityProtocol =
+              SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                var client = new RestClient("https://dashboard.paytm.com");
+                client.Timeout = -1; // Set timeout if necessary
+                var request = new RestRequest("/api/v3/order/list", Method.POST);
+                request.AddHeader("X-Xsrf-Token", chkss1.xtoken);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddCookie("SESSION", chkss1.Cookie);
+                var body = @"
 {
     ""bizTypeList"": [ ""ACQUIRING"", ""CASHBACK"", ""SPLIT_PAYMENT"" ],
     ""pageSize"": 20,
@@ -32169,32 +32240,58 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
     ""merchantTransId"": """ + txnid + @""",
     ""isSort"": true
 }";
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            var response = client.Execute(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-
-                dynamic respchks = JsonConvert.DeserializeObject(response.Content);
-
-                try
+                request.AddParameter("application/json", body, ParameterType.RequestBody);
+                var response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var succresp = respchks.orderList;
-                    if (succresp != null)
-                    {
-                        var bankarrn = succresp[0].bizOrderId;
-                        var stss = succresp[0].orderStatus;
-                        var name = succresp[0].nickName;
-                        var amountss = succresp[0].payMoneyAmount.value;
-                        decimal amiunts = Convert.ToDecimal(amountss);
-                        System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
 
-                        if (cid.amt == amiunts / 100)
+                    dynamic respchks = JsonConvert.DeserializeObject(response.Content);
+
+                    try
+                    {
+                        var succresp = respchks.orderList;
+                        if (succresp != null)
                         {
-                            var msg = db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output).FirstOrDefault().msg;
+                            var bankarrn = succresp[0].bizOrderId;
+                            var stss = succresp[0].orderStatus;
+                            var name = succresp[0].nickName;
+                            var amountss = succresp[0].payMoneyAmount.value;
+                            decimal amiunts = Convert.ToDecimal(amountss);
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
                             cid.PayerName = name.ToString();
                             db.SaveChanges();
+                            if (cid.amt == amiunts / 100)
+                            {
+                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output);
 
+                                var chk = db.Upi_txn_details.Where(s => s.refid == txnid).ToList();
+                                if (chk.Count > 0)
+                                {
+                                    return Json(new { res = "Yes" }, 0);
+                                }
+                                else
+                                {
+                                    return Json(new { res = "No" }, 0);
+                                }
+                            }
+                            else
+                            {
+                                return Json(new { res = "No" }, 0);
+                            }
+
+                        }
+                        else
+                        {
+                            return Json(new { res = "No" }, 0);
+                        }
+
+                    }
+                    catch
+                    {
+                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+                        if (cid.status == "SUCCESS")
+                        {
                             return Json(new { res = "Yes" }, 0);
                         }
                         else
@@ -32203,27 +32300,9 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         }
 
                     }
-                    else
-                    {
-                        return Json(new { res = "No" }, 0);
-                    }
+
 
                 }
-                catch
-                {
-                    var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
-                    if (cid.status == "SUCCESS")
-                    {
-                        return Json(new { res = "Yes" }, 0);
-                    }
-                    else
-                    {
-                        return Json(new { res = "No" }, 0);
-                    }
-
-                }
-
-
             }
             return Json("No", 0);
         }
@@ -32287,8 +32366,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             string base64Image = Convert.ToBase64String(byteImage);
                             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                             var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
-
-                            return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                            if (procmsg == "OK")
+                            {
+                                return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Something Went Wrong", txnid = "" }, JsonRequestBehavior.AllowGet);
+                            }
                         }
                     }
                 }
@@ -32303,42 +32388,72 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
         public ActionResult phonepeqrresponse(string txnid)
         {
-            var chkss1 = db.Phonepaygatewayinfoes.SingleOrDefault();
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            var client = new RestClient("https://web-api.phonepe.com/apis/mi-web/v3/transactions/details");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("X-Csrf-Token", chkss1.XCsrfToken);
-            request.AddHeader("Fingerprint", chkss1.Fingerprint);
-            request.AddHeader("Content-Type", "application/json");
-            request.AddCookie("_CKB2N1BHVZ", chkss1.CKB2N1BHVZ);
-            request.AddCookie("OCULUS_G_TOKEN", chkss1.OCULUS_G_TOKEN);
-            var body = @"{""transactionId"":"""+txnid+@"""}";
-            request.AddJsonBody(body);
-            IRestResponse response = client.Execute(request);
-            if (response.StatusCode == HttpStatusCode.OK)
+            var chkss = db.Upi_txn_details.Where(s => s.refid == txnid && s.status.ToUpper() == "PENDING").ToList();
+            if (chkss.Count == 1)
             {
-
-                dynamic respchks = JsonConvert.DeserializeObject(response.Content);
-
-                try
+                var chkss1 = db.Phonepaygatewayinfoes.SingleOrDefault();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                var client = new RestClient("https://web-api.phonepe.com/apis/mi-web/v3/transactions/details");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("X-Csrf-Token", chkss1.XCsrfToken);
+                request.AddHeader("Fingerprint", chkss1.Fingerprint);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddCookie("_CKB2N1BHVZ", chkss1.CKB2N1BHVZ);
+                request.AddCookie("OCULUS_G_TOKEN", chkss1.OCULUS_G_TOKEN);
+                var body = @"{""transactionId"":""" + txnid + @"""}";
+                request.AddJsonBody(body);
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var succresp = respchks.orderList;
-                    if (succresp != null)
-                    {
-                        var bankarrn = succresp[0].bizOrderId;
-                        var stss = succresp[0].orderStatus;
-                        var name = succresp[0].nickName;
-                        var amountss = succresp[0].payMoneyAmount.value;
-                        decimal amiunts = Convert.ToDecimal(amountss);
-                        System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
 
-                        if (cid.amt == amiunts / 100)
+                    dynamic respchks = JsonConvert.DeserializeObject(response.Content);
+
+                    try
+                    {
+                        var succresp = respchks.success;
+                        if (succresp == true)
                         {
-                            var msg = db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, output).FirstOrDefault().msg;
+                            var bankarrn = respchks.data.utr;
+                            var stss = respchks.data.payResponseCode;
+                            var name = respchks.data.customerDetails.userName;
+                            var amountss = respchks.data.amount;
+                            decimal amiunts = Convert.ToDecimal(amountss);
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
                             cid.PayerName = name.ToString();
                             db.SaveChanges();
+                            if (cid.amt == amiunts / 100)
+                            {
+                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, output);
 
+
+                                var chk = db.Upi_txn_details.Where(s => s.refid == txnid).ToList();
+                                if (chk.Count > 0)
+                                {
+                                    return Json(new { res = "Yes" }, 0);
+                                }
+                                else
+                                {
+                                    return Json(new { res = "No" }, 0);
+                                }
+                            }
+                            else
+                            {
+                                return Json(new { res = "No" }, 0);
+                            }
+
+                        }
+                        else
+                        {
+                            return Json(new { res = "No" }, 0);
+                        }
+
+                    }
+                    catch
+                    {
+                        var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+                        if (cid.status == "SUCCESS")
+                        {
                             return Json(new { res = "Yes" }, 0);
                         }
                         else
@@ -32347,27 +32462,171 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         }
 
                     }
-                    else
-                    {
-                        return Json(new { res = "No" }, 0);
-                    }
+
 
                 }
-                catch
+            }
+            return Json("No", 0);
+        }
+
+        public ActionResult bharatpeqrgenerates(string amount)
+        {
+            if (!string.IsNullOrEmpty(amount))
+            {
+                var client = new RestClient("http://api.vastbazaar.com/api/BharatPe/QRStatus");
+                var request = new RestRequest(Method.POST);
+                var token = getAuthToken();
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                var resp = response.Content;
+                dynamic respchk = JsonConvert.DeserializeObject(resp);
+                var addnifo = respchk.Content.ADDINFO;
+                var status = addnifo.status;
+                if (status == true)
                 {
-                    var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
-                    if (cid.status == "SUCCESS")
-                    {
-                        return Json(new { res = "Yes" }, 0);
-                    }
-                    else
-                    {
-                        return Json(new { res = "No" }, 0);
-                    }
+                    Random d1 = new Random();
+                    var randomid = d1.Next(99999, 999999);
+                    var userid = User.Identity.GetUserId();
+                    var username = db.Admin_details.SingleOrDefault();
+                    var dealeids = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var chkretailername = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                    var qrinfo = "upi://pay?mode=02&pa=&purpose=00&mc=7299&pn=PhonePeMerchant&orgid=180001&am=&tr=";
+                    Uri uri = new Uri(qrinfo);
+                    var upiid = db.bharatpaygetwayinfoes.FirstOrDefault();
+                    var queryParameters = HttpUtility.ParseQueryString(uri.Query);
+                    queryParameters["pa"] = upiid.upiid;
+                    queryParameters["tn"] = chkretailername.RetailerName;
+                    queryParameters["am"] = amount;
+                    var frmss = username.WebsiteUrl.ToUpper();
+                    var frm = frmss.Replace("-", "").Replace(".", "").Replace("/", "");
 
+
+
+                    string texn = frm.Substring(0, 4) + randomid.ToString();
+                    queryParameters["tr"] = texn;
+                    var uriBuilder = new UriBuilder(uri)
+                    {
+                        Query = string.Join("&", queryParameters)
+                    };
+                    string newUpiString = uriBuilder.ToString();
+
+                    // Create a new instance of the QRCodeGenerator class
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(newUpiString, QRCodeGenerator.ECCLevel.Q);
+
+
+                    // Create a new instance of the QRCode class
+                    QRCode qrCode = new QRCode(qrCodeData);
+
+                    // Generate the QR code as a Bitmap
+                    using (Bitmap qrCodeImage = qrCode.GetGraphic(20))
+                    {
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            qrCodeImage.Save(memoryStream, ImageFormat.Png);
+                            byte[] byteImage = memoryStream.ToArray();
+                            string base64Image = Convert.ToBase64String(byteImage);
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+
+                            if (procmsg == "OK")
+                            {
+                                return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Something Went Wrong", txnid = "" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
                 }
+                else
+                {
+                    return Json(new { success = false, message = "Qr code is down Contact To Admin....!", txnid = "" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return Json(new { success = false, message = "Amount cannot be empty", txnid = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult bharatpeqrresponse(string txnid, string Utr)
+        {
+            var chkss = db.Upi_txn_details.Where(s => s.refid == txnid && s.status.ToUpper() == "PENDING").ToList();
+            if (chkss.Count == 1)
+            {
+                var cgh = db.Upi_txn_details.Where(s => s.BankRRN == Utr).ToList();
+                if (cgh.Count == 0)
+                {
+                    var chkss1 = db.bharatpaygetwayinfoes.SingleOrDefault();
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                    var client = new RestClient("https://enterprise.bharatpe.in/v1/api/transaction/recon?utr=" + Utr);
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("XSRF-TOKEN", chkss1.token);
+                    request.AddCookie("bharatpe_session", chkss1.session);
+                    IRestResponse response = client.Execute(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+
+                        dynamic respchks = JsonConvert.DeserializeObject(response.Content);
+
+                        try
+                        {
+                            var succresp = respchks.success;
+                            if (succresp == true)
+                            {
+
+                                var bankarrn = respchks.data.utr;
+                                string stss = respchks.data.status;
+                                string name = respchks.data.received_from;
+                                string amountss = respchks.data.amount;
+                                decimal amiunts = Convert.ToDecimal(amountss);
+                                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                var cid = db.Upi_txn_details.Where(s => s.refid == txnid).SingleOrDefault();
+                                cid.PayerName = name.ToString();
+                                db.SaveChanges();
+                                if (cid.amt == amiunts)
+                                {
+                                    db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Bharatpe", null, null, null, null, output);
+
+                                    var chk = db.Upi_txn_details.Where(s => s.refid == txnid).ToList();
+                                    if (chk.Count > 0)
+                                    {
+                                        return Json(new { res = "Yes" }, 0);
+                                    }
+                                    else
+                                    {
+                                        return Json(new { res = "No" }, 0);
+                                    }
+                                }
+                                else
+                                {
+                                    return Json(new { res = "No" }, 0);
+                                }
+
+                            }
+                            else
+                            {
+                                return Json(new { res = "No" }, 0);
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            var cid = db.Upi_txn_details.Where(s => s.refid == txnid).ToList();
+                            if (cid[0].status == "SUCCESS")
+                            {
+                                return Json(new { res = "Yes" }, 0);
+                            }
+                            else
+                            {
+                                return Json(new { res = "No" }, 0);
+                            }
+
+                        }
 
 
+                    }
+                }
             }
             return Json("No", 0);
         }

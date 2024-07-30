@@ -1408,7 +1408,7 @@
             height: auto !important;
             width: 1px;
         }
-</style> 
+</style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 <section class="content outside-logo-page" style="position: relative;">
@@ -1446,7 +1446,7 @@
                                 @if (backgapp.Count == 0)
                                 {
                                     @*<input type="color" id="backcolor1" onchange="updbackgr()" />
-                                    <input type="color" id="backcolor2" onchange="updbackgr()" />*@
+                                        <input type="color" id="backcolor2" onchange="updbackgr()" />*@
 
                                     <div class="ps_setcolor">
                                         <div class="ps_set">
@@ -1659,16 +1659,16 @@
 
                             </div>
                             @*<div>App background Color</div>
-                            <div>
-                                <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
-                                <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
+                                <div>
+                                    <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
+                                    <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
 
-                            </div>
-                            <div>App Font Color</div>
-                            <div>
-                                <input type="color" value="" id="appcol3" onchange="colorprint1()" />
+                                </div>
+                                <div>App Font Color</div>
+                                <div>
+                                    <input type="color" value="" id="appcol3" onchange="colorprint1()" />
 
-                            </div>*@
+                                </div>*@
 
 
 
@@ -1838,8 +1838,8 @@
 
                                 <div class="app_all_s">
 
-                                    <button onclick="optsents()" style="padding: 6px 88px;">SAVE</button>
-
+                                    <button onclick="optsents()" style="padding: 6px 88px;" id="savehidd">SAVE</button>
+                                    <img src="~/img/ajax-loader.gif" id="saveshow" style="display:none"/>
                                 </div>
                             </div>
 
@@ -1850,12 +1850,12 @@
                                 <CENTER>
 
                                     <div class="page-header-third" style="padding:20px;">
-                                        <input type="number" id="otpicon" />
+                                        <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
 
                                         <div class="bs_btton">
                                             <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
-document.getElementById('opthide').style.display = 'block';">
-                                                back
+document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
+                                                back       
                                             </button>
 
                                             <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
@@ -2048,7 +2048,7 @@ document.getElementById('opthide').style.display = 'block';">
                             <div class="table-container">
                                 <table id="faqlist"></table>
                             </div>
-                            
+
                             <script>
                                 $.ajax({
                                     type: "POST",
@@ -2188,9 +2188,9 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
         </div>
 
     </div>
-  
+
 </section>
- 
+
 <script>
   function colorprint(s) {
 
@@ -2291,27 +2291,33 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
 <script>
                     function savedateicon() {
                         var otp = document.getElementById('otpicon').value;
-                        var col11 = document.getElementById('col1').innerHTML;
-                        var col12 = document.getElementById('col2').innerHTML;
-                        var col13 = document.getElementById('col3').innerHTML;
-                        var col14 = document.getElementById('col4').innerHTML;
-                                                $.ajax({
-                            type: "POST",
-                                                    url: '@Url.Action("icondesignsave", "Home")',
-                                                    data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
-                            success: function (result) {
-                                if (result == "Success") {
-                                ToastrMessage();
-                                toastr.success("Successfully Updated");
-                                    document.getElementById('optshow').style.display = 'none';
-                                    document.getElementById('opthide').style.display = 'block';
-                            }
-                            else {
-                                ToastrMessage();
-                                    toastr.success(result);
-                            }
-                              }
-                             });
+                        if (otp > 999 && otp <= 9999) {
+                            var col11 = document.getElementById('col1').innerHTML;
+                            var col12 = document.getElementById('col2').innerHTML;
+                            var col13 = document.getElementById('col3').innerHTML;
+                            var col14 = document.getElementById('col4').innerHTML;
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("icondesignsave", "Home")',
+                                data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
+                                success: function (result) {
+                                    if (result == "Success") {
+                                        ToastrMessage();
+                                        toastr.success("Successfully Updated");
+                                        document.getElementById('optshow').style.display = 'none';
+                                        document.getElementById('opthide').style.display = 'block';
+                                    }
+                                    else {
+                                        ToastrMessage();
+                                        toastr.error(result);
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            ToastrMessage();
+                            toastr.error('Enter otp in 4 digit');
+                        }
                     }
 </script>
 <script>
@@ -2351,7 +2357,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
 
 
             gradientStops.forEach(function (stop) {
-                
+
                 stop.setAttribute('rx', arre[d]);
                 stop.setAttribute('ry', arre[d]);
             });
@@ -2377,7 +2383,9 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
     }
 </script>
 <script>
-                    function optsents() {
+    function optsents() {
+        document.getElementById('savehidd').style.display = 'none';
+        document.getElementById('saveshow').style.display = 'block';
                           $.ajax({
                               type: "POST",
                               url: '@Url.Action("otpforchangeicon","Home")',
@@ -2390,12 +2398,13 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                               }
                               else {
                                   ToastrMessage();
-                                      toastr.success(result);
+                                      toastr.error(result);
                               }
       }
   });
 
-
+        //document.getElementById('savehidd').style.display = 'block';
+        //document.getElementById('saveshow').style.display = 'none';
                     }
 </script>
 <script>
@@ -2412,7 +2421,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                             }
                             else {
                                 ToastrMessage();
-                                    toastr.success(result.Mess);
+                                    toastr.error(result.Mess);
                                 }
 
                                 var cls = document.getElementsByClassName("manatory");
@@ -2443,7 +2452,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                               }
                              });
                     }
-</script>  
+</script>
 <script>
     function ToastrMessage() {
         toastr.options = {
@@ -2489,7 +2498,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
 
                                 }
                                 else {
-                                    toastr.success(result);
+                                    toastr.error(result);
                                 }
 
                               }
@@ -2500,9 +2509,9 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
      $.ajax({
                             type: "POST",
                            url: '@Url.Action("sliderimages", "Home")',
-                              
+
          success: function (result) {
-           
+
              var s = 0;
              for (var i = 0; i < result.image.length; i++) {
                  var imgg = result.image[i];
@@ -2521,20 +2530,20 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                  //console.log(result.Type[i]);
                  //console.log(result.Lang[i]);
                  //console.log(s);
-                
+
                  //console.log("checksave('" + imgg + "','" + result[i].catagory + "','" + result[i].Type + "','" + result[i].Lang + "'," + s + ")");
 
                  ses12.setAttribute("style", "opacity: 100%; position: static;");
 
                  var ses14 = document.createElement('span');
-                 
+
                  //var ses1 = document.getElementById('div');
                  var text = document.createTextNode(result.catagory[i]);
                 /* ses.textContent = result[i].catagory + result[i].Type + result[i].Lang;*/
                  ses.style.float = "Left";
                  var img = document.createElement('img');
                  img.src = imgg;
-                 
+
                  ses14.appendChild(text);
                  ses11.appendChild(ses14);
                  ses11.appendChild(ses12);
@@ -2546,7 +2555,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                  ses.classList.add("secdiv");
                  set.classList.add("firstdiv");
                  s++;
-             
+
              }
 
 
@@ -2582,6 +2591,6 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                     }
                 });
             }
-        
+
     }
 </script>

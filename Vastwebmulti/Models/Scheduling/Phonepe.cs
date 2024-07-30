@@ -146,6 +146,7 @@ namespace Vastwebmulti.Models.Scheduling
             {
                 try
                 {
+                    
                     string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
                     StreamWriter log;
                     FileStream fileStream = null;

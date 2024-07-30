@@ -854,9 +854,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<passbyapidmt> passbyapidmts { get; set; }
         public virtual DbSet<loanpermission> loanpermissions { get; set; }
         public virtual DbSet<closingbalance> closingbalances { get; set; }
-        public virtual DbSet<comm_daywiseslab> comm_daywiseslab { get; set; }
         public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
-        public virtual DbSet<daywisesettelecomm> daywisesettelecomms { get; set; }
         public virtual DbSet<daywisesettelecommst> daywisesettelecommsts { get; set; }
         public virtual DbSet<daywisecommsetforuser> daywisecommsetforusers { get; set; }
         public virtual DbSet<daywisecomm> daywisecomms { get; set; }
@@ -865,6 +863,13 @@ namespace Vastwebmulti.Models
         public virtual DbSet<loanlimit> loanlimits { get; set; }
         public virtual DbSet<paytmgatewayinfo> paytmgatewayinfoes { get; set; }
         public virtual DbSet<Phonepaygatewayinfo> Phonepaygatewayinfoes { get; set; }
+        public virtual DbSet<comm_daywiseslab> comm_daywiseslab { get; set; }
+        public virtual DbSet<bharatpaygetwayinfo> bharatpaygetwayinfoes { get; set; }
+        public virtual DbSet<daywisesettelecomm> daywisesettelecomms { get; set; }
+        public virtual DbSet<appwebloginsetting> appwebloginsettings { get; set; }
+        public virtual DbSet<User_number_status> User_number_status { get; set; }
+        public virtual DbSet<appimei> appimeis { get; set; }
+        public virtual DbSet<totalimeino> totalimeinoes { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -14337,71 +14342,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<history_norton_Result>("history_norton", roleParameter, useridParameter, fromParameter, toParameter, statusParameter);
         }
     
-        public virtual ObjectResult<Recharge_retailer_Result> Recharge_retailer(string rch_from, string rech_no, string network, Nullable<decimal> amount, string rch_type, string optional1, string optional2, string optional3, string optional4, string ipaddress, string macaddress, string imeino, Nullable<decimal> servicefee, string fId, string billduedate, ObjectParameter output)
-        {
-            var rch_fromParameter = rch_from != null ?
-                new ObjectParameter("rch_from", rch_from) :
-                new ObjectParameter("rch_from", typeof(string));
-    
-            var rech_noParameter = rech_no != null ?
-                new ObjectParameter("rech_no", rech_no) :
-                new ObjectParameter("rech_no", typeof(string));
-    
-            var networkParameter = network != null ?
-                new ObjectParameter("network", network) :
-                new ObjectParameter("network", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("amount", amount) :
-                new ObjectParameter("amount", typeof(decimal));
-    
-            var rch_typeParameter = rch_type != null ?
-                new ObjectParameter("rch_type", rch_type) :
-                new ObjectParameter("rch_type", typeof(string));
-    
-            var optional1Parameter = optional1 != null ?
-                new ObjectParameter("optional1", optional1) :
-                new ObjectParameter("optional1", typeof(string));
-    
-            var optional2Parameter = optional2 != null ?
-                new ObjectParameter("optional2", optional2) :
-                new ObjectParameter("optional2", typeof(string));
-    
-            var optional3Parameter = optional3 != null ?
-                new ObjectParameter("optional3", optional3) :
-                new ObjectParameter("optional3", typeof(string));
-    
-            var optional4Parameter = optional4 != null ?
-                new ObjectParameter("optional4", optional4) :
-                new ObjectParameter("optional4", typeof(string));
-    
-            var ipaddressParameter = ipaddress != null ?
-                new ObjectParameter("ipaddress", ipaddress) :
-                new ObjectParameter("ipaddress", typeof(string));
-    
-            var macaddressParameter = macaddress != null ?
-                new ObjectParameter("macaddress", macaddress) :
-                new ObjectParameter("macaddress", typeof(string));
-    
-            var imeinoParameter = imeino != null ?
-                new ObjectParameter("imeino", imeino) :
-                new ObjectParameter("imeino", typeof(string));
-    
-            var servicefeeParameter = servicefee.HasValue ?
-                new ObjectParameter("servicefee", servicefee) :
-                new ObjectParameter("servicefee", typeof(decimal));
-    
-            var fIdParameter = fId != null ?
-                new ObjectParameter("fId", fId) :
-                new ObjectParameter("fId", typeof(string));
-    
-            var billduedateParameter = billduedate != null ?
-                new ObjectParameter("billduedate", billduedate) :
-                new ObjectParameter("billduedate", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Recharge_retailer_Result>("Recharge_retailer", rch_fromParameter, rech_noParameter, networkParameter, amountParameter, rch_typeParameter, optional1Parameter, optional2Parameter, optional3Parameter, optional4Parameter, ipaddressParameter, macaddressParameter, imeinoParameter, servicefeeParameter, fIdParameter, billduedateParameter, output);
-        }
-    
         public virtual int SRS_Rch_Resend_old(string id, ObjectParameter output)
         {
             var idParameter = id != null ?
@@ -23330,6 +23270,92 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("Amount", typeof(decimal));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<loanrequestRepayment_Result>("loanrequestRepayment", idnoParameter, loanidParameter, amountParameter);
+        }
+    
+        public virtual ObjectResult<Recharge_retailer_Result> Recharge_retailer(string rch_from, string rech_no, string network, Nullable<decimal> amount, string rch_type, string optional1, string optional2, string optional3, string optional4, string ipaddress, string macaddress, string imeino, Nullable<decimal> servicefee, string fId, string billduedate, Nullable<bool> dlmsellsts, ObjectParameter output)
+        {
+            var rch_fromParameter = rch_from != null ?
+                new ObjectParameter("rch_from", rch_from) :
+                new ObjectParameter("rch_from", typeof(string));
+    
+            var rech_noParameter = rech_no != null ?
+                new ObjectParameter("rech_no", rech_no) :
+                new ObjectParameter("rech_no", typeof(string));
+    
+            var networkParameter = network != null ?
+                new ObjectParameter("network", network) :
+                new ObjectParameter("network", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var rch_typeParameter = rch_type != null ?
+                new ObjectParameter("rch_type", rch_type) :
+                new ObjectParameter("rch_type", typeof(string));
+    
+            var optional1Parameter = optional1 != null ?
+                new ObjectParameter("optional1", optional1) :
+                new ObjectParameter("optional1", typeof(string));
+    
+            var optional2Parameter = optional2 != null ?
+                new ObjectParameter("optional2", optional2) :
+                new ObjectParameter("optional2", typeof(string));
+    
+            var optional3Parameter = optional3 != null ?
+                new ObjectParameter("optional3", optional3) :
+                new ObjectParameter("optional3", typeof(string));
+    
+            var optional4Parameter = optional4 != null ?
+                new ObjectParameter("optional4", optional4) :
+                new ObjectParameter("optional4", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var macaddressParameter = macaddress != null ?
+                new ObjectParameter("macaddress", macaddress) :
+                new ObjectParameter("macaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            var servicefeeParameter = servicefee.HasValue ?
+                new ObjectParameter("servicefee", servicefee) :
+                new ObjectParameter("servicefee", typeof(decimal));
+    
+            var fIdParameter = fId != null ?
+                new ObjectParameter("fId", fId) :
+                new ObjectParameter("fId", typeof(string));
+    
+            var billduedateParameter = billduedate != null ?
+                new ObjectParameter("billduedate", billduedate) :
+                new ObjectParameter("billduedate", typeof(string));
+    
+            var dlmsellstsParameter = dlmsellsts.HasValue ?
+                new ObjectParameter("dlmsellsts", dlmsellsts) :
+                new ObjectParameter("dlmsellsts", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Recharge_retailer_Result>("Recharge_retailer", rch_fromParameter, rech_noParameter, networkParameter, amountParameter, rch_typeParameter, optional1Parameter, optional2Parameter, optional3Parameter, optional4Parameter, ipaddressParameter, macaddressParameter, imeinoParameter, servicefeeParameter, fIdParameter, billduedateParameter, dlmsellstsParameter, output);
+        }
+    
+        public virtual ObjectResult<extracommhistory_Result> extracommhistory(string retailerid, string dealerid, string masterid)
+        {
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("retailerid", retailerid) :
+                new ObjectParameter("retailerid", typeof(string));
+    
+            var dealeridParameter = dealerid != null ?
+                new ObjectParameter("dealerid", dealerid) :
+                new ObjectParameter("dealerid", typeof(string));
+    
+            var masteridParameter = masterid != null ?
+                new ObjectParameter("masterid", masterid) :
+                new ObjectParameter("masterid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<extracommhistory_Result>("extracommhistory", retaileridParameter, dealeridParameter, masteridParameter);
         }
     }
 }
