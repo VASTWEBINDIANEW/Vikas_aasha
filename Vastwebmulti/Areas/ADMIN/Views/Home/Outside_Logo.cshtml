@@ -10,6 +10,10 @@
 <style>
 
     /*   */
+    .all_themeimg .container11 {
+        margin-bottom: 10px;
+    }
+
     .app_set {
         width: 50%;
         float: left;
@@ -918,7 +922,7 @@
 
     .zooma-thumbnail img {
         display: block;
-        width: 80px;
+        width: 100%;
         height: auto;
         opacity: 0.5;
         padding: 10px;
@@ -1179,6 +1183,93 @@
             height: auto !important;
             width: 1px;
         }
+        .product__thumbnails img {
+            width: 100%;
+        }
+
+    @@media only screen and (max-width:1169px) {
+        .ls-closed section.content {
+            margin-left: 0;
+        }
+        .popup-content {
+            width: 100%;
+            right: 0px;
+        }
+        .product__thumbnails img {
+            padding: 4px;
+        }
+
+
+    }
+    @@media only screen and (max-width:1024px) {
+        .ls-closed .bars::after, .ls-closed .bars::before {
+            left: 2px;
+            top: 12px;
+        }
+    }
+    @@media only screen and (max-width:767px) {
+        #sidebar-open {
+            top: 0px;
+            left: 3px;
+        }
+        .product__description h1 {
+            font-size: 18px;
+        }
+        .product__description p {
+            font-size: 18px;
+        }
+        .product__description span {
+            font-size: 18px;
+        }
+        .product__description a {
+            font-size: 16px;
+        }
+
+
+    }
+    @@media only screen and (max-width:600px) {
+        .product__focus {
+            max-width: 83%;
+            width: 83% !important;
+            min-width: 83% !important;
+        }
+        .product__thumbnails{
+            width: 15%;
+            float: left;
+        }
+
+    }
+    @@media only screen and (max-width:480px) {
+        .theam-button button {
+            width: 31%;
+            margin: 0;
+            margin-bottom: 4px;
+            margin-right: 4px;
+        }
+        .thame-active i {
+            margin-right: 4px;
+        }
+        .product__description h1 {
+            font-size: 12px;
+        }
+        .product__description p {
+            font-size: 12px;
+        }
+        .product__description span {
+            font-size: 12px;
+            padding: 2px 9px 2px 18px;
+        }
+        .product__description a {
+            font-size: 10px;
+        }
+        .product__description {
+            padding: 4px;
+            margin-top: 4px;
+        }
+
+
+    }
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -2490,9 +2581,9 @@ document.getElementById('opthide').style.display = 'block';">
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-fornt" style="margin:35px 0px;">
-                <div class="card login-back-img page-header-third" style="padding-bottom: 18px; ">
+                <div class="card login-back-img page-header-third all_themeimg" style="padding-bottom: 18px; ">
                     <div><h2 style="font-size: 22px;">Select for Front Theme</h2></div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                         <div class="container11">
                             <img src="~/images/desgin_one-1.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
@@ -2505,7 +2596,7 @@ document.getElementById('opthide').style.display = 'block';">
                         </div>
 
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                         <div class="container11">
                             <img src="~/images/desgin2-2.png" alt="Avatar" class="image" style="width:100%">
                             <div class="middle">
@@ -2517,7 +2608,7 @@ document.getElementById('opthide').style.display = 'block';">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 
                         <div class="container11">
                             <img src="~/images/desgin3.png" alt="Avatar" class="image" style="width:100%">
@@ -2530,7 +2621,7 @@ document.getElementById('opthide').style.display = 'block';">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 
                         <div class="container11">
                             <img src="~/images/desgin4.png" alt="Avatar" class="image" style="width:100%">
@@ -2544,57 +2635,55 @@ document.getElementById('opthide').style.display = 'block';">
                         </div>
                     </div>
 
-                    <div style=" margin-top: 15px; width: 100%; float: left;">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <div class="container11">
-                                <img src="~/images/desgin5.png" alt="Avatar" class="image" style="width:100%">
-                                <div class="middle">
-                                    <div><button class="text5" id="myButton4">View <i class="fa fa-eye"></i></button></div>
-                                </div>
-                                <div class="designch">
-                                    <p style="margin:0px;">Theme-5</p>
-                                    <span><del>₹5000</del> Free</span>
-                                </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="container11">
+                            <img src="~/images/desgin5.png" alt="Avatar" class="image" style="width:100%">
+                            <div class="middle">
+                                <div><button class="text5" id="myButton4">View <i class="fa fa-eye"></i></button></div>
                             </div>
-
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-
-                            <div class="container11">
-                                <img src="~/images/desgin6.png" alt="Avatar" class="image" style="width:100%">
-                                <div class="middle">
-                                    <div><button class="text5" id="myButton5">View <i class="fa fa-eye"></i></button></div>
-                                </div>
-                                <div class="designch">
-                                    <p style="margin:0px;">Theme-6</p>
-                                    <span><del>₹5000</del> Free</span>
-                                </div>
+                            <div class="designch">
+                                <p style="margin:0px;">Theme-5</p>
+                                <span><del>₹5000</del> Free</span>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 
-                            <div class="container11">
-                                <img src="~/images/desgin7.png" alt="Avatar" class="image" style="width:100%">
-                                <div class="middle">
-                                    <div><button class="text5" id="myButton6">View <i class="fa fa-eye"></i></button></div>
-                                </div>
-                                <div class="designch">
-                                    <p style="margin:0px;">Theme-7</p>
-                                    <span><del>₹5000</del> Free</span>
-                                </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                        <div class="container11">
+                            <img src="~/images/desgin6.png" alt="Avatar" class="image" style="width:100%">
+                            <div class="middle">
+                                <div><button class="text5" id="myButton5">View <i class="fa fa-eye"></i></button></div>
+                            </div>
+                            <div class="designch">
+                                <p style="margin:0px;">Theme-6</p>
+                                <span><del>₹5000</del> Free</span>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 
-                            <div class="container11">
-                                <img src="~/images/desgin8.png" alt="Avatar" class="image" style="width:100%">
-                                <div class="middle">
-                                    <div><button class="text5" id="myButton7">View <i class="fa fa-eye"></i></button></div>
-                                </div>
-                                <div class="designch">
-                                    <p style="margin:0px;">Theme-8</p>
-                                    <span>₹5000/- Pro</span>
-                                </div>
+                        <div class="container11">
+                            <img src="~/images/desgin7.png" alt="Avatar" class="image" style="width:100%">
+                            <div class="middle">
+                                <div><button class="text5" id="myButton6">View <i class="fa fa-eye"></i></button></div>
+                            </div>
+                            <div class="designch">
+                                <p style="margin:0px;">Theme-7</p>
+                                <span><del>₹5000</del> Free</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                        <div class="container11">
+                            <img src="~/images/desgin8.png" alt="Avatar" class="image" style="width:100%">
+                            <div class="middle">
+                                <div><button class="text5" id="myButton7">View <i class="fa fa-eye"></i></button></div>
+                            </div>
+                            <div class="designch">
+                                <p style="margin:0px;">Theme-8</p>
+                                <span>₹5000/- Pro</span>
                             </div>
                         </div>
                     </div>
