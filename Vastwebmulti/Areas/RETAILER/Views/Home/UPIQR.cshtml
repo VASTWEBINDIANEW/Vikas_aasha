@@ -10,9 +10,43 @@
     /* new css  */
     /**
  * Extracted from: SweetAlert
- * Modified by: Istiak Tridip
+ * Modified by: Success Payment
  */
+    .qr_ex_buttona {
+        cursor: pointer;
+        background: var(--main-bg-lcolor);
+        border-radius: 3px;
+    }
+    .pen::after {
+        content: "";
+        position: absolute;
+        width: 44px;
+        height: 122px;
+        background: #ffffff4f;
+        z-index: 1;
+        top: -24px;
+        transform: rotate(35deg);
+        animation: l_to_r 4s linear infinite;
+        background-image: linear-gradient(140deg, #FFF0 0%, #FF00AE00 50%, #BFD64100 75%);
+    }
 
+    @@keyframes l_to_r {
+        0% {
+            left: -74px;
+        }
+
+        100% {
+            left: 100%;
+        }
+    }
+
+
+    #successgenrate .qr_ex h2 {
+        font-size: 32px;
+    }
+    #successgenrate .qr_ex p {
+        font-size: 17px;
+    }
     .qr_ex h2 {
         width: 100%;
         float: left;
@@ -27,83 +61,83 @@
     }
 
 .success-checkmark {
-  width: 80px;
-  height: 115px;
+  width: 160px;
+  height: 230px;
   margin: 0 auto;
 }
 .success-checkmark .check-icon {
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   position: relative;
   border-radius: 50%;
   box-sizing: content-box;
-  border: 4px solid #4caf50;
+  border: 8px solid #4caf50;
 }
-.success-checkmark .check-icon::before {
-  top: 3px;
-  left: -2px;
-  width: 30px;
-  transform-origin: 100% 50%;
-  border-radius: 100px 0 0 100px;
-}
-.success-checkmark .check-icon::after {
-  top: 0;
-  left: 30px;
-  width: 60px;
-  transform-origin: 0 50%;
-  border-radius: 0 100px 100px 0;
-  animation: rotate-circle 4.25s ease-in;
-}
+    .success-checkmark .check-icon::before {
+        top: 6px;
+        left: -4px;
+        width: 60px;
+        transform-origin: 100% 50%;
+        border-radius: 100px 0 0 100px;
+    }
+    .success-checkmark .check-icon::after {
+        top: 0;
+        left: 60px;
+        width: 120px;
+        transform-origin: 0 50%;
+        border-radius: 0 100px 100px 0;
+        animation: rotate-circle 4.25s ease-in;
+    }
 .success-checkmark .check-icon::before, .success-checkmark .check-icon::after {
   content: "";
-  height: 100px;
+  height: 200px;
   position: absolute;
   /*background: #ffffff;*/
   transform: rotate(-45deg);
 }
 .success-checkmark .check-icon .icon-line {
-  height: 5px;
+  height: 10px;
   background-color: #4caf50;
   display: block;
-  border-radius: 2px;
+  border-radius: 4px;
   position: absolute;
   z-index: 10;
 }
-.success-checkmark .check-icon .icon-line.line-tip {
-  top: 46px;
-  left: 14px;
-  width: 25px;
-  transform: rotate(45deg);
-  animation: icon-line-tip 0.75s;
-}
-.success-checkmark .check-icon .icon-line.line-long {
-  top: 38px;
-  right: 8px;
-  width: 47px;
-  transform: rotate(-45deg);
-  animation: icon-line-long 0.75s;
-}
-.success-checkmark .check-icon .icon-circle {
-  top: -4px;
-  left: -4px;
-  z-index: 10;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  position: absolute;
-  box-sizing: content-box;
-  border: 4px solid rgba(76, 175, 80, 0.5);
-}
-.success-checkmark .check-icon .icon-fix {
-  top: 8px;
-  width: 5px;
-  left: 26px;
-  z-index: 1;
-  height: 85px;
-  position: absolute;
-  transform: rotate(-45deg);
-  /*background-color: #ffffff;*/
-}
+    .success-checkmark .check-icon .icon-line.line-tip {
+        top: 92px;
+        left: 28px;
+        width: 50px;
+        transform: rotate(45deg);
+        animation: icon-line-tip 0.75s;
+    }
+    .success-checkmark .check-icon .icon-line.line-long {
+        top: 76px;
+        right: 16px;
+        width: 94px;
+        transform: rotate(-45deg);
+        animation: icon-line-long 0.75s;
+    }
+    .success-checkmark .check-icon .icon-circle {
+        top: -8px;
+        left: -8px;
+        z-index: 10;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        position: absolute;
+        box-sizing: content-box;
+        border: 8px solid rgba(76, 175, 80, 0.5);
+    }
+    .success-checkmark .check-icon .icon-fix {
+        top: 16px;
+        width: 10px;
+        left: 52px;
+        z-index: 1;
+        height: 170px;
+        position: absolute;
+        transform: rotate(-45deg);
+        /*background-color: #ffffff;*/
+    }
 
 @@keyframes rotate-circle {
   0% {
@@ -120,53 +154,54 @@
   }
 }
 @@keyframes icon-line-tip {
-  0% {
-    width: 0;
-    left: 1px;
-    top: 19px;
-  }
-  54% {
-    width: 0;
-    left: 1px;
-    top: 19px;
-  }
-  70% {
-    width: 50px;
-    left: -8px;
-    top: 37px;
-  }
-  84% {
-    width: 17px;
-    left: 21px;
-    top: 48px;
-  }
-  100% {
-    width: 25px;
-    left: 14px;
-    top: 45px;
-  }
+    0% {
+        width: 0;
+        left: 2px;
+        top: 38px;
+    }
+    54% {
+        width: 0;
+        left: 2px;
+        top: 38px;
+    }
+    70% {
+        width: 100px;
+        left: -16px;
+        top: 74px;
+    }
+    84% {
+        width: 34px;
+        left: 42px;
+        top: 96px;
+    }
+    100% {
+        width: 50px;
+        left: 28px;
+        top: 90px;
+    }
 }
+
 @@keyframes icon-line-long {
-  0% {
-    width: 0;
-    right: 46px;
-    top: 54px;
-  }
-  65% {
-    width: 0;
-    right: 46px;
-    top: 54px;
-  }
-  84% {
-    width: 55px;
-    right: 0px;
-    top: 35px;
-  }
-  100% {
-    width: 47px;
-    right: 8px;
-    top: 38px;
-  }
+    0% {
+        width: 0;
+        right: 92px;
+        top: 108px;
+    }
+    65% {
+        width: 0;
+        right: 92px;
+        top: 108px;
+    }
+    84% {
+        width: 110px;
+        right: 0;
+        top: 70px;
+    }
+    100% {
+        width: 94px;
+        right: 16px;
+        top: 76px;
+    }
 }
     /* Success css  */
 
@@ -246,6 +281,7 @@
         justify-content: center;
         padding: 10px;
         position: relative;
+        color: #fff;
     }
 
         .set_time h3 {
@@ -274,19 +310,6 @@
 
     /* ------- new css -------- */
 
-
-
-    @@keyframes keyframes {
-  0% {
-    transform: translate3d(0,0,0);
-  }
-  100% {
-    transform: translate3d(0,-396px,0);
-  }
-}
-
-
-
     .pen {
         position: absolute;
         top: 0px;
@@ -294,34 +317,9 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
-        background-color: transparent;
+        background-image: linear-gradient(to right, #f20000, #0f8a28) !important;
         z-index: 2;
     }
-
-    .panel {
-        background-color: #bfbfbfa8;
-        padding: 3rem;
-        overflow: hidden;
-        position: relative;
-        left: -200%;
-        top: -500%;
-        margin: 0 auto;
-        height: 1000%;
-        width: 400%;
-        transform: rotate(20deg);
-    }
-
-    .scroll {
-        background: repeating-linear-gradient( 45deg, rgba(27, 57, 89, 0), rgba(27, 57, 89, 0) 40px, rgb(179, 179, 179) 40px, rgb(179, 179, 179) 80px );
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        height: 400%;
-        width: 100%;
-        z-index: 1;
-        animation: keyframes 5s linear infinite;
-    }
-
     /* new css  */
 
     .loaders443 {
@@ -356,11 +354,9 @@
     .datepicker table tr td span {
         color: #555 !important;
     }
-
         .datepicker table tr td span.active {
             color: #fff !important;
         }
-
 
     .tab-menur li a::before {
         content: '';
@@ -371,7 +367,6 @@
         border-radius: 50%;
         margin: 2px 6px 0px 0px;
     }
-
     .tab-menur li a.active-ar::before {
         border-color: var(--main-bg-lcolor);
         background: var(--main-bg-lcolor);
@@ -492,7 +487,6 @@
         width: 40%;
         float: right;
     }
-
         .fundtransfer-retailerupi .modal-dialog .form-group label {
             font-size: 13px;
         }
@@ -509,7 +503,6 @@
     .fundtransfer-retailerupi .modal-dialog {
         width: 40%;
     }
-
         .fundtransfer-retailerupi .modal-dialog .form-group input.btn.btn-default {
             background: #ddd !important;
             float: right;
@@ -558,7 +551,6 @@
         padding-right: 5px;
         padding-top: 1px !important;
     }
-
         .upi-retailer-datepdf .col-md-3.buttonPdf.retailer-pdf-second button {
             background-color: #fff !important;
             border: 1px solid #555 !important;
@@ -599,6 +591,12 @@
 
         .col-md-12.retailer-upitransfer {
             padding: 0;
+        }
+    }
+
+    @@media screen and (max-width:990px) {
+        #GenrateQr {
+            padding-top: 4px;
         }
     }
 
@@ -686,6 +684,52 @@
     }
 
     @@media screen and (max-width:480px) {
+
+        #successgenrate .qr_ex h2 {
+            font-size: 24px;
+        }
+        #successgenrate .qr_ex p {
+            font-size: 14px;
+        }
+        .success-checkmark {
+            width: 177px;
+            height: 224px;
+        }
+        #successgenrate .qr_ex_button a {
+            margin-bottom: 5px;
+        }
+        .qr_ex_button a {
+            width: 100%;
+            float: left;
+        }
+        .qr_ex_buttona {
+            margin-bottom: 5px;
+            width: 100%;
+            float: left;
+        }
+        .set_so {
+            font-size: 45px;
+        }
+        .qr_ex h2 {
+            font-size: 30px;
+        }
+        .qr_ex img {
+            width: 220px;
+        }
+        .qr_ex_button {
+            display: block;
+        }
+        #divamount h3 {
+            font-size: 18px;
+            padding-bottom: 0;
+        }
+        .set_time h3 {
+            font-size: 16px;
+        }
+        #timer {
+            font-size: 16px !important;
+        }
+
         .retailer-upilastclass-second ul.responsive-sateulce li .col-md-4 {
             width: 50%;
             margin-bottom: 5px;
@@ -717,6 +761,13 @@
     @@media screen and (max-width:420px) {
         #leftsidebar.sidebar.retailer-header-left, .second-design #leftsidebar.retailer-header-left.header-left-newresponshive.newresponshive-secondde {
             margin-top: -78px !important;
+        }
+        .set_time h3 {
+            font-size: 14px;
+        }
+
+        #timer {
+            font-size: 14px !important;
         }
     }
 
@@ -778,7 +829,6 @@
         <!--Four-Design-Page-Header-End-->
         <div class="page-header-third">
             <div class="bread-same-all-page allpage-responshivenew">
-
                 <ul style="width:auto;float:left;margin:0px;">
                     <li class="smli">
                         <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
@@ -815,7 +865,6 @@
     </div>
 
     <div class="col-md-12">
-
         <div class="row clearfix four-design-table-design">
             <div class="col-md-4">
                 <div class="page-header-third">
@@ -847,14 +896,11 @@
                                             <div style="width: 100%; float: left; padding-bottom: 2px; ">
                                                 <img src="https://i.ibb.co/Vv6ynb2/bin-unscreen.gif" alt="QR Code Expired" />
                                             </div>
-
                                             <p class="set_so"><i>Sorry !</i></p>
                                             <h2>QR Code Expired</h2>
-
                                             <p>
                                                 QR code has expired, please re-generate a new QR code if you need to make payment. Remember don't use this QR Code after expiry does not receive any benefit.
                                             </p>
-
                                             <div class="qr_ex_button">
                                                 <div onclick="location.reload();" style="cursor: pointer;"><a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); ">Re-Generate QR Code</a></div>
 
@@ -878,20 +924,16 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                             <h2 style="color: #333333;">Payment Successfull</h2>
-
                                             <p>
                                                 Payment has been successfully updated in your wallet. Check the Add Money report if you need more details.
                                             </p>
 
                                             <div class="qr_ex_button">
-                                                <a style="background: #008000; border: 1px solid #e1e1e1; " href="">Ok</a>
-                                                <a style="background: #008000; border: 1px solid #e1e1e1; " href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
+                                                <a style="background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " href="">Payment Again</a>
+                                                <a style=" " href="@Url.Action("Dashboard", "Home")">Go To Dashboard</a>
                                             </div>
                                         </div>
-
                                     </div>
                                     <!-- new   --->
 
@@ -1039,9 +1081,7 @@
                                                         <h3>Minutes</h3>
 
                                                         <div class="pen">
-                                                            <div class="panel">
-                                                                <div class="scroll"></div>
-                                                            </div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <img id="qrCodeImage" style="width:100%" src="" alt="QR Code will appear here">
@@ -1339,8 +1379,6 @@
             <div class="col-md-8 retailer-upilastclass retailer-upilastclass-second">
                 <div class="page-header-third">
                     <div class="fund-trasfer-right fund-user-right">
-
-
                         <ul class="nav nav-tabs responsive-sateulce" id="tabs">
                             <li class="tab-link current active firstclassactive" data-tab="tab-1" style="width:22%;">
                                 <a data-toggle="tab" aria-expanded="true" style="padding: 0px 10px;float:left;">
@@ -1388,8 +1426,6 @@
                                                 </div>*@
 
                                         </div>
-
-
                                     }
                                 </div>
                             </li>
@@ -1397,11 +1433,9 @@
                         </ul>
                         <div id="tab-1" class="width100 float-left tab-content current changeback-four-design" style="overflow:auto;">
 
-
                             <div class="table-responsive tblshowMasterclassadd tablethirddesign-newnew" style="width:100%;overflow:auto;">
                                 <table id="btnUPIreqnonetable" class="table table-bordered table-striped table-hover fourdesign-data-table">
                                     <thead style="background-color:whitesmoke;">
-
 
                                         <tr>
 
@@ -1521,9 +1555,6 @@
         margin: 0;
         padding: 0;
     }
-
-
-
         .tab-menur ul li {
             width: 50%;
             text-align: center;

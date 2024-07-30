@@ -447,6 +447,7 @@ function discoverAvdm() {
             cache: false,
             crossDomain: true,
             success: function (data, status, xhr) {
+       
                 //  console.log("success()");
                 var ct = xhr.getResponseHeader("content-type") || "";
                 // console.log(ct);
@@ -463,12 +464,13 @@ function discoverAvdm() {
                 } else {
                     $doc = data;
                 }
-
+          
                 //if (ct.indexOf('TEXT/XML') > -1) {
                 //    console.log('TEXT/XML response');
                 //}
 
                 var status = $($doc).find('RDService').attr('status');
+              
 
                 //var $doc = $.parseXML(data);
                 //console.log("2");
@@ -478,6 +480,7 @@ function discoverAvdm() {
                 //console.log("3");
                 var CmbData1 = $($doc).find('RDService').attr('status');
                 var CmbData2 = $($doc).find('RDService').attr('info');
+                console.log("CmbData2 " + CmbData2)
                 //   console.log("CmbData1 " + CmbData1);
                 //   console.log("CmbData2 " + CmbData2);
 
@@ -508,8 +511,9 @@ function discoverAvdm() {
                         RdStatus = true;
                         return;
                     }
-                    else if (RegExp('\\b' + 'Startek' + '\\b').test(CmbData2) == true) {
+                    else if (RegExp('\\b' + 'Startek' + '\\b').test(CmbData2) == true || RegExp('\\b' + 'L1 provided by Access Computech' + '\\b').test(CmbData2) == true) {
                         DeviceKonsi = 'Startek';
+                       
                         //  closeNav();
                         // console.log("Startek found");
                         //$("#txtDeviceInfo").val(data); aj

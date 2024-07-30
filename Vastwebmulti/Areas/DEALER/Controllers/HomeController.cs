@@ -29,6 +29,7 @@ using Vastwebmulti.Hubs;
 using Vastwebmulti.Models;
 using System.Net;
 using Org.BouncyCastle.Asn1.Mozilla;
+using com.google.gson;
 
 namespace Vastwebmulti.Areas.DEALER.Controllers
 {
@@ -11306,23 +11307,19 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                   }).ToList().OrderByDescending(a => a.insertdate);
                 ViewBag.sellercomm = descdetail;
                 ViewBag.isReport = "1";
-
             }
-            catch (Exception ex)
+            catch
             { }
             return PartialView("_Edit_Seller_Commission");
         }
-
         public ActionResult AddSIM()
-        {
-           
+        {           
             var dealerid = User.Identity.GetUserId();
             SimDetail_Info d1 = new SimDetail_Info();
             d1.data1 = db.dealer_sim_new.Where(s => s.dlmid == dealerid).OrderByDescending(s=>s.idno).ToList();
             d1.message = "";
             return View(d1);
         }
-
        [HttpPost]
        public object EditSIMINFO(int? idno)
         {
@@ -11338,7 +11335,6 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
             return Json(new {list= chk , lst1 = Decrypt(chk[0].Password) , list2 = rchpin }, JsonRequestBehavior.AllowGet);
         }
-
         [HttpPost]
         public ActionResult EditSIMINFO1( string Simnumber,string Password, string Circlecode,string RechargePin, string Imeino, string minbal , string Daylimit,string Operator, string posid, string Macaddress)
         {        SimDetail_Info d1 = new SimDetail_Info();
@@ -11421,10 +11417,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
               
         }
-
-
         [HttpPost]
-
         public async Task<ActionResult> simonoff(string switch1, int? idno)
         {  var messege = "";
             try
@@ -11530,6 +11523,39 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 d11.data1 = db.dealer_sim_new.Where(s => s.dlmid == dealerid1).OrderByDescending(s => s.idno).ToList();
                 d11.message = messege;
                 return PartialView("_SimINfo", d11);
+            }
+        }
+        [HttpPost]
+        public ActionResult CheckbalSiminfo(int idno)
+        {
+            var userid = User.Identity.GetUserId();
+            var chk = db.dealer_sim_new.Where(s => s.idno == idno).SingleOrDefault();
+            if(chk!=null)
+            {
+                var chk2 = "";
+                if (chk.opt_code == "BSNL Topup")
+                {
+                    chk2 = "B";
+                }
+                else
+                {
+                    chk2 = db.operatorcommforsells.Where(s => s.optname == chk.opt_code).SingleOrDefault().optcode;
+                }
+                var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
+                var dlmemail = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault().Email;
+                var client2 = new RestClient("https://www.vastwebindia.com/DLMAPI/CheckBalance?OptCode=" + chk2 + "&userid=" + chk.USERID + "&Email=" + dlmemail + "&Operator=" + chk2 + "&Registeremail=" + check1.API_ID);
+                var request2 = new RestRequest(Method.POST);
+                request2.AddHeader("Content-Type", "application/json"); // Add headers if necessary
+
+                // Execute the request asynchronously
+                var response2 = client2.Execute(request2);
+                dynamic json2 = JsonConvert.DeserializeObject(response2.Content);
+                string message = json2.Message;
+                return Json(new { list = message }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { list = "Please Try After Sometime" }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]

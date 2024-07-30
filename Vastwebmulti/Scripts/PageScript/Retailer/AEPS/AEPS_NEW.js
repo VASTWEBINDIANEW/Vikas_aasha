@@ -508,7 +508,8 @@ function discoverAvdm() {
                         RdStatus = true;
                         return;
                     }
-                    else if (RegExp('\\b' + 'Startek' + '\\b').test(CmbData2) == true) {
+                    else if (RegExp('\\b' + 'Startek' + '\\b').test(CmbData2) == true || RegExp('\\b' + 'L1 provided by Access Computech' + '\\b').test(CmbData2) == true) {
+
                         DeviceKonsi = 'Startek';
                         //  closeNav();
                         //  console.log("Startek found");
@@ -721,6 +722,7 @@ function CaptureAvdm() {
                 $doc = data;
             }
             var xmlText = new XMLSerializer().serializeToString($doc);
+            console.log(xmlText)
             $('#pidata_doc').val(xmlText);
             $("#capxml").val(xmlText);
             var errInfo = $($doc).find('Resp').attr('errInfo');

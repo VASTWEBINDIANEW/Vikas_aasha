@@ -4528,19 +4528,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                VastBazaartoken Responsetoken = new VastBazaartoken();
-                                var client21 = new RestClient("http://API.VASTBAZAAR.COM/api/Web/Siminfosts");
-
-                                var request21 = new RestRequest(Method.POST);
-                                var token21 = Responsetoken.gettoken();
-                                request21.AddHeader("authorization", "bearer " + token21);
-                                // request21.AddHeader("content-type", "application/json");
-
-                                var response21 = client21.Execute(request21);
-                                dynamic json21 = JsonConvert.DeserializeObject(response21.Content);
-                                var statsus = json21.Content.ADDINFO.Status;
-                              
-                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, statsus, output).Single().msg.ToString();
+                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
                                 //else if()
                                 if (result.ToUpper() == "OKK")
                                 {

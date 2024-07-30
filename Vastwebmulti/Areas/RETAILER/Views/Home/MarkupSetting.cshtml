@@ -10,11 +10,52 @@
     .buttonPdf{display:block !important;}
     .clsshide-button {padding: 5px 17px !important;border: 1px solid #dddddd;color: #555;background: transparent;}
     .col-md-3.buttonPdf button:last-child {padding-left: 15px;}
+    /* new css  */
 
+    .layoutt-retailer section.content {
+        margin-top: 95px;
+        padding-top: 5px;
+    }
+
+    .bread-same-all-page li {
+        margin: 6px 0;
+    }
+
+    .table {
+        margin-bottom: 0px;
+    }
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    @@media only screen and (max-width:1169px) {
+        .actual-clearfix .col-lg-12.col-md-12.col-sm-12.col-xs-12 {
+            padding-left: 15px !important;
+        }
+    }
+
+    @@media only screen and (max-width:991px) {
+
+        
+    }
+
+    @@media only screen and (max-width:767px) {
+        .table-responsive > .table-bordered {
+            border: 1px solid var(--border-color);
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+    }
+
+    /* new css  */
 </style>
 
 
-<section class="content content-fourdesign-page allpage-four-design-section" style="margin:90px 0px 0px 0px; overflow-x:hidden;">
+<section class="content content-fourdesign-page allpage-four-design-section" style="overflow-x:hidden;">
     <div class="container-fluid" style="height:100vh;">
         <!--Four-Design-Page-Header-Start-->
 
@@ -31,10 +72,10 @@
         <div class="row clearfix actual-clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:0px;padding-left: 11px;">
                 <div class="card class-back-tra-fourdesign">
-                    <div class="" style="width:100%;float:left;">
+                    <div class="page-header-third" style="width:100%;float:left;">
                         <div class="bread-same-all-page" style="width:auto;float:left;">
 
-                            <ul>
+                            <ul style="margin:0;">
                                 <li class="smli">
                                     <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
                                         Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
@@ -47,7 +88,7 @@
                             </ul>
                         </div>
 
-                        <div class="col-md-3 buttonPdf retailer-pdf-second fourdesign-marbin-b" style="text-align:right;margin:0px;float:right;width:auto;padding-top: 3px;padding-left: 5px;margin-bottom:10px;">
+                        <div class="col-md-3 buttonPdf retailer-pdf-second fourdesign-marbin-b" style="text-align:right;margin:0px;float:right;width:auto;">
 
                             <button style="color:#555 !important;">PDF</button>
                             <button style="color:#555 !important;">Export</button>
@@ -55,43 +96,46 @@
                         </div>
                     </div>
 
-                    <div class="body" style="margin-top:-12px;padding:7px;padding-left:0;padding-right:0;width:100%;float:left;">
-                        <div class="table-responsive dayend-responsive dayend-responsiveclas tablethirddesign-new tablethirddesign-newnew" style="position:inherit;margin-top:19px;">
-                            <table id="example" class="table table-bordered showhidesate" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr</th>
-                                        <th>Particulars</th>
-                                        <th>Amount</th>
-                                        <th>Description</th>
-                                        <th>Last&nbsp;Updated&nbsp;Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ var i = 1;}
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr role="row" class="odd htmltbl-@item.idno">
-                                            <td>@i</td>
-                                            <td>@item.Role</td>
-                                            <td class="relativetdcss" style="position: relative;">
-                                                <span id="spans-@item.idno" class="amountfont-size clssshow">@item.Amount</span>
-                                                <input type="text" id="editamountmarkup-@item.idno" class="clsshide" style="display:none;position: absolute;bottom: 5px;padding: 5px 0;width: 121px;border: 1px solid #ddd;padding-left:5px;" />
-                                            </td>
-                                            <td>Description</td>
-                                            <td><span id="sndte-@item.idno"> @item.Date</span></td>
-                                            <td>
-                                                <button id="butedit-@item.idno" class="clssshow" onclick="EditFunction('@item.idno','@item.Role')" style="background-color:transparent;color:#03a9f4; border:none;">
-                                                    <p style="padding:5px 20px;border:1px solid #dddddd;color:#555;">Edit</p>
-                                                </button>
-                                                <button id="savechangeamount-@item.idno" class="clsshide clsshide-button" onclick="savedatamarkupsetting('@item.idno')" style="display:none;padding: 5px 17px;">Save</button>
-                                            </td>
+                    <div class="body" style="padding:7px;padding-left:0;padding-right:0;width:100%;float:left;">
+                        <div class="page-header-third">
+                            <div class="table-responsive dayend-responsive dayend-responsiveclas tablethirddesign-new tablethirddesign-newnew" style="position:inherit;">
+                                <table id="example" class="table table-bordered showhidesate" style="width:100%;">
+                                    <thead style="background-color:whitesmoke;">
+                                        <tr>
+                                            <th>Sr</th>
+                                            <th>Particulars</th>
+                                            <th>Amount</th>
+                                            <th>Description</th>
+                                            <th>Last&nbsp;Updated&nbsp;Date</th>
+                                            <th>Action</th>
                                         </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @{ var i = 1;}
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr role="row" class="odd htmltbl-@item.idno">
+                                                <td>@i</td>
+                                                <td>@item.Role</td>
+                                                <td class="relativetdcss" style="position: relative;">
+                                                    <span id="spans-@item.idno" class="amountfont-size clssshow">@item.Amount</span>
+                                                    <input type="text" id="editamountmarkup-@item.idno" class="clsshide" style="display:none;position: absolute;bottom: 5px;padding: 5px 0;width: 121px;border: 1px solid #ddd;padding-left:5px;" />
+                                                </td>
+                                                <td>Description</td>
+                                                <td><span id="sndte-@item.idno"> @item.Date</span></td>
+                                                <td>
+                                                    <button id="butedit-@item.idno" class="clssshow" onclick="EditFunction('@item.idno','@item.Role')" style="background-color:transparent;color:#03a9f4; border:none;">
+                                                        <p style="padding:5px 20px;border:1px solid #dddddd;color:#555;">Edit</p>
+                                                    </button>
+                                                    <button id="savechangeamount-@item.idno" class="clsshide clsshide-button" onclick="savedatamarkupsetting('@item.idno')" style="display:none;padding: 5px 17px;">Save</button>
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
