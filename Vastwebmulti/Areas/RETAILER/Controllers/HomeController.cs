@@ -32182,7 +32182,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             byte[] byteImage = memoryStream.ToArray();
                             string base64Image = Convert.ToBase64String(byteImage);
                             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", "Paytm", output).FirstOrDefault().msg;
 
                             if (procmsg == "OK")
                             {
@@ -32353,7 +32353,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             byte[] byteImage = memoryStream.ToArray();
                             string base64Image = Convert.ToBase64String(byteImage);
                             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", "Phonepe", output).FirstOrDefault().msg;
                             if (procmsg == "OK")
                             {
                                 return Json(new { success = true, image = base64Image, txnid = texn }, JsonRequestBehavior.AllowGet);
@@ -32389,8 +32389,11 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 request.AddCookie("_CKB2N1BHVZ", chkss1.CKB2N1BHVZ);
                 request.AddCookie("OCULUS_G_TOKEN", chkss1.OCULUS_G_TOKEN);
                 var body = @"{""transactionId"":""" + txnid + @"""}";
-                request.AddJsonBody(body);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", body, ParameterType.RequestBody);
+                //    request.AddJsonBody(body);
                 IRestResponse response = client.Execute(request);
+                string stscode = response.StatusCode.ToString();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
 
@@ -32515,7 +32518,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             byte[] byteImage = memoryStream.ToArray();
                             string base64Image = Convert.ToBase64String(byteImage);
                             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", output).FirstOrDefault().msg;
+                            var procmsg = db.insert_Upi_Txn("retailer", userid, Convert.ToDecimal(amount), texn, upiid.upiid, "Admin", "BharatPe", output).FirstOrDefault().msg;
 
                             if (procmsg == "OK")
                             {

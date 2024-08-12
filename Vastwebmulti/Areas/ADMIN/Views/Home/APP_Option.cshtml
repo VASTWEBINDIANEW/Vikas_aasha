@@ -7,9 +7,47 @@
 <script src="/path/to/cdn/jquery.min.js"></script>
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
+    /*  new cssv   */
+    .but_df button {
+        margin: 0 !important;
+        border-radius: 2px;
+    }
+    .but_df{
+        margin: 0 !important;
+    }
+    #opthidess {
+        float: left;
+        position: relative;
+    }
+    #otpiconss {
+        padding: 8px;
+    }
+    #optshowss button {
+        margin: 0;
+        margin-left: 5px;
+    }
+    #optshowss div{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .center_isetss {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 386px;
+    }
+    .but_df {
+        float: left;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .br_setb {
+        width: 70%;
+        float: left;
+    }
     /*  new css   */
-
-
 
     .secdiv {
         width: 25%;
@@ -301,14 +339,21 @@
     }
 
     #opthide {
-        width: 70%;
         float: left;
         position: relative;
     }
 
-    #optshow {
-        width: 70%;
+    #optshow div{
         float: left;
+        display: flex;
+        align-items: center;
+    }
+        #optshow button {
+            margin: 0;
+            margin-left: 5px;
+        }
+    #otpicon {
+        padding: 8px;
     }
 
     .appc_autol1 {
@@ -1419,6 +1464,7 @@
 
             var chksd = db.application_color.ToList();
             var chksd123 = db.appicons.ToList();
+            var chksd123ss = db.fronticons.ToList();
             var manatoryfilDS = db.manatorypermisions.ToList();
             var backgapp = db.backroundColorofapps.ToList();
             var loginss = db.Login_to_sim.ToList();
@@ -1446,7 +1492,7 @@
                                 @if (backgapp.Count == 0)
                                 {
                                     @*<input type="color" id="backcolor1" onchange="updbackgr()" />
-                                        <input type="color" id="backcolor2" onchange="updbackgr()" />*@
+                                    <input type="color" id="backcolor2" onchange="updbackgr()" />*@
 
                                     <div class="ps_setcolor">
                                         <div class="ps_set">
@@ -1659,16 +1705,16 @@
 
                             </div>
                             @*<div>App background Color</div>
-                                <div>
-                                    <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
-                                    <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
+                            <div>
+                                <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
+                                <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
 
-                                </div>
-                                <div>App Font Color</div>
-                                <div>
-                                    <input type="color" value="" id="appcol3" onchange="colorprint1()" />
+                            </div>
+                            <div>App Font Color</div>
+                            <div>
+                                <input type="color" value="" id="appcol3" onchange="colorprint1()" />
 
-                                </div>*@
+                            </div>*@
 
 
 
@@ -1681,7 +1727,37 @@
                 </div>
             </div>
         </div>
+
         <div class="row clearfix">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+
+
+                <div class="card login-back-img page-header-third">
+                    <h2 class="but_df">
+                        <button style="background: var(--main-bg-lcolor)" onclick="deshbackss()" id="dback">Dashboard icon</button>
+                        <button id="fback" onclick="frontbackss()">Front icon</button>
+                        <script>
+                            function frontbackss()
+                            {
+                                document.getElementById('dback').style.background = '#F6F5F5';
+                                document.getElementById('fback').style.background = 'var(--main-bg-lcolor)';
+                                document.getElementById('iconsettingshow').style.display = 'none';
+                                document.getElementById('iconsettinghide').style.display = 'contents';
+                            }
+                            function deshbackss() {
+                                document.getElementById('fback').style.background = '#F6F5F5';
+                                document.getElementById('dback').style.background = 'var(--main-bg-lcolor)';
+                                document.getElementById('iconsettinghide').style.display = 'none';
+                                document.getElementById('iconsettingshow').style.display = 'contents';
+                            }
+                        </script>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row clearfix" id="iconsettingshow">
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
 
@@ -1689,11 +1765,12 @@
                 <div class="card login-back-img page-header-third">
 
                     <div class="thame-headding">
-                        <h2>App icon Design/Color</h2>
+
+                        <h2 style="float: left; width: 100%;">App Dashboard icon Design/Color</h2>
                     </div>
 
                     <div style="height: 510px;">
-                        <div id="opthide">
+                        <div class="br_setb">
 
                             <div class="appc_auto0">
                                 <div class="appc_auto">
@@ -1837,55 +1914,64 @@
                                 <div style="display:none" id="col4"></div>
 
                                 <div class="app_all_s">
+                                    <div id="opthide">
+                                        <button onclick="optsents()" style="padding: 6px 88px;" id="savehidd">SAVE</button>
+                                        <img src="~/icegif-1263.gif" id="saveshow" style="display:none" />
+                                    </div>
+                                    <div id="optshow" style="display:none">
+                                        <div>
+                                            <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
 
-                                    <button onclick="optsents()" style="padding: 6px 88px;" id="savehidd">SAVE</button>
-                                    <img src="~/img/ajax-loader.gif" id="saveshow" style="display:none"/>
+                                            <button style="color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
 
                         </div>
-                        <div id="optshow" style="display:none">
-                            <div class="optshow_c">
-                                <CENTER>
+                        @*<div id="optshow">
+                                                    <div class="optshow_c">
+                                                        <CENTER>
 
-                                    <div class="page-header-third" style="padding:20px;">
-                                        <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
+                                                            <div class="page-header-third" style="padding:20px;" id="optshow">
+                                                                <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
 
-                                        <div class="bs_btton">
-                                            <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
-document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
-                                                back       
-                                            </button>
+                                                                <div class="bs_btton">
+                                                                    <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
+                        document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
+                                                                        back
+                                                                    </button>
 
-                                            <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
-                                        </div>
+                                                                    <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+                                                                </div>
 
 
-                                    </div>
+                                                            </div>
 
-                                </CENTER>
-                            </div>
-                        </div>
+                                                        </CENTER>
+                                                    </div>
+                                                </div>*@
 
                         <div class="appi_set" style="float:right">
 
                             <div class="page-header-third">
 
                                 <div class="center_iset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                    <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" shape="rounded" class="bgcolores"></rect>
-                                    <g transform="matrix(0.88,0,0,0.88,30.71999816894538,30.72)">
-                                    <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse" stroke-width="45" style="stroke-width: 45;">
-                                    <stop stop-opacity="1" class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
-                                    <stop stop-opacity="1" class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
-                                    <stop stop-opacity="1" class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
-                                    <stop stop-opacity="1" class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
-                                    <stop stop-opacity="1" class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
-        </linearGradient>
-                                    <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264h0c27.364 0 49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(&quot;#a&quot;); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;" fill="none" stroke-width="45" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"></path>
-    </g>
-</svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                    <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
+                                    <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
+                                    <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
+                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
+                                    <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
+                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
+                                    <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
+                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
+            </linearGradient>
+                                    <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#a); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
+        </g>
+    </svg>
                                 </div>
 
                             </div>
@@ -1904,6 +1990,253 @@ document.getElementById('opthide').style.display = 'block';document.getElementBy
             </div>
 
         </div>
+
+        <div class="row clearfix" id="iconsettinghide" style="display:none">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+
+
+                <div class="card login-back-img page-header-third">
+
+                    <div class="thame-headding">
+                        <h2>App Front icon Design/Color</h2>
+                    </div>
+
+                    <div style="height: 510px;">
+                        <div class="br_setb">
+
+                            <div class="appc_auto0">
+                                <div class="appc_auto">
+
+                                    <div class="page-header-third">
+
+                                        <div class="thame-headding" style=" color: white;">
+                                            <h2 style="background-color: #878787;">App Front Icon Color/Background Color</h2>
+                                        </div>
+
+                                        <div class="appc_autol1">
+                                            <div class="appc_autol">
+                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(0)" onmouseout="whitemess1ss(0)" />  Primary Color</div>
+                                                <div>
+                                                    <input type="color" value="@chksd123ss[0].color1" id="appcolorssss" onchange="appiconcolorss(1 ,0)" />
+                                                    <div class="whitemesss" style="display:none">
+                                                        Please do not use white color
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="appc_autol">
+                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(1)" onmouseout="whitemess1ss(1)" />  Secondary Color</div>
+                                                <div>
+                                                    <input type="color" value="@chksd123ss[0].color2" id="appcolor12ss" onchange="appiconcolorss(2 ,0)" />
+
+                                                </div>
+                                                <div class="whitemesss" style="display:none">
+                                                    Please do not use white color
+                                                </div>
+                                            </div>
+                                            <div class="appc_autol">
+                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(2)" onmouseout="whitemess1ss(2)" />  Background Color</div>
+                                                <div>
+                                                    <input type="color" value="@chksd123ss[0].background_color" id="appBGcolorss" onchange="appiconcolorss(3 ,0)" />
+
+                                                </div>
+                                                <div class="whitemesss" style="display:none">
+                                                    Please do not use white color
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="appc_auto">
+
+                                    <div class="page-header-third">
+                                        <div class="thame-headding" style="color: white;">
+                                            <h2 style="background: #878787;">App Front Icon Themes</h2>
+                                        </div>
+
+                                        <div class="appc_autol1">
+                                            @if (chksd123ss[0].icon_design == "1")
+                                            {
+                                                <button id="sef0ss" onclick="appiconcolorss(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef0ss" onclick="appiconcolorss(4 ,0)"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "10")
+                                            {
+
+
+                                                <button id="sef1ss" onclick="appiconcolorss(4 ,1)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef1ss" onclick="appiconcolorss(4 ,1)"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "20")
+                                            {
+                                                <button id="sef2ss" onclick="appiconcolorss(4 ,2)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef2ss" onclick="appiconcolorss(4 ,2)"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "30")
+                                            {
+                                                <button id="sef3ss" onclick="appiconcolorss(4 ,3)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef3ss" onclick="appiconcolorss(4 ,3)"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "100")
+                                            {
+                                                <button id="sef4ss" onclick="appiconcolorss(4 ,4)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef4ss" onclick="appiconcolorss(4 ,4)"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "200")
+                                            {
+                                                <button id="sef5ss" onclick="appiconcolorss(4 ,5)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef5ss" onclick="appiconcolorss(4 ,5)"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                            }
+                                            @if (chksd123ss[0].icon_design == "300")
+                                            {
+
+
+                                                <button id="sef6ss" onclick="appiconcolorss(4 ,6)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef6ss" onclick="appiconcolorss(4 ,6)"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>}
+                                            @if (chksd123ss[0].icon_design == "400")
+                                            {
+
+
+                                                <button id="sef7ss" onclick="appiconcolorss(4 ,7)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef7ss" onclick="appiconcolorss(4 ,7)"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>}
+                                            @if (chksd123ss[0].icon_design == "500")
+                                            {
+
+
+                                                <button id="sef8ss" onclick="appiconcolorss(4 ,8)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="sef8ss" onclick="appiconcolorss(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div style="display:none" id="col1ss"></div>
+                                <div style="display:none" id="col2ss"></div>
+                                <div style="display:none" id="col3ss"></div>
+                                <div style="display:none" id="col4ss"></div>
+
+                                <div class="app_all_s">
+                                    <div id="opthidess">
+                                        <button onclick="optsentsss()" style="padding: 6px 88px;" id="savehiddss">SAVE</button>
+                                        <img src="~/icegif-1263.gif" id="saveshowss" style="display: none; width: 13%;" />
+                                    </div>
+                                    <div id="optshowss" style="display:none">
+                                        <div>
+                                            <input type="number" id="otpiconss" placeholder="Enter Otp" max="4" />
+
+                                            <button style="color: #fff; background: green; " onclick="savedateiconss()">Submit</button>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div id="optshowss" style="display:none">
+                            <div class="optshow_c">
+                                <CENTER>
+
+                                    <div class="page-header-third" style="padding:20px;">
+                                        <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
+
+                                        <div class="bs_btton">
+                                            <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
+document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
+                                                back
+                                            </button>
+
+                                            <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+                                        </div>
+
+
+                                    </div>
+
+                                </CENTER>
+                            </div>
+                        </div>
+
+                        <div class="appi_set" style="float:right">
+
+                            <div class="page-header-third">
+
+                                <div class="center_isetss">
+                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                    <rect width="512" height="512" rx="@chksd123ss[0].icon_design" ry="@chksd123ss[0].icon_design" fill="@chksd123ss[0].background_color" class="bgcoloresss"></rect>
+                                    <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
+                                    <linearGradient id="b" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
+                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0"></stop>
+                                    <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.021"></stop>
+                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.293"></stop>
+                                    <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.554"></stop>
+                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.796"></stop>
+            </linearGradient>
+                                    <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#b); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
+        </g>
+    </svg>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2178,14 +2511,26 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                 </div>
             </div>
         </div>
-        <div class="login-slider-status">
-            <h2 style="margin-left: 10px;">APP SLIDER IMAGES</h2> <a href="@Url.Action("APPImagesshow","Home")" style=" margin: 18px; float: right; padding: 6px 35px;background:green;color:white">Selected Images</a>
+
+        <div class="row clearfix">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
 
 
+                <div class="card login-back-img page-header-third">
+                    <div class="login-slider-status">
+                        <h2 style="margin-left: 10px;">APP SLIDER IMAGES</h2> <a href="@Url.Action("APPImagesshow","Home")" style=" margin: 18px; float: right; padding: 6px 35px;background:green;color:white">Selected Images</a>
+
+
+                    </div>
+                    <div id="sliderImages">
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="sliderImages">
 
-        </div>
+        
 
     </div>
 
@@ -2306,6 +2651,40 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                                         toastr.success("Successfully Updated");
                                         document.getElementById('optshow').style.display = 'none';
                                         document.getElementById('opthide').style.display = 'block';
+                                        document.getElementById('savehidd').style.display = 'block';
+                                        document.getElementById('saveshow').style.display = 'none';
+                                    }
+                                    else {
+                                        ToastrMessage();
+                                        toastr.error(result);
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            ToastrMessage();
+                            toastr.error('Enter otp in 4 digit');
+                        }
+    }
+    function savedateiconss() {
+                        var otp = document.getElementById('otpiconss').value;
+                        if (otp > 999 && otp <= 9999) {
+                            var col11 = document.getElementById('col1ss').innerHTML;
+                            var col12 = document.getElementById('col2ss').innerHTML;
+                            var col13 = document.getElementById('col3ss').innerHTML;
+                            var col14 = document.getElementById('col4ss').innerHTML;
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("iconfrontdesignsave", "Home")',
+                                data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
+                                success: function (result) {
+                                    if (result == "Success") {
+                                        ToastrMessage();
+                                        toastr.success("Successfully Updated");
+                                        document.getElementById('optshowss').style.display = 'none';
+                                        document.getElementById('opthidess').style.display = 'contents';
+                                        document.getElementById('savehiddss').style.display = 'block';
+                                        document.getElementById('saveshowss').style.display = 'none';
                                     }
                                     else {
                                         ToastrMessage();
@@ -2320,68 +2699,159 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                         }
                     }
 </script>
-<script>
-    function appiconcolor(s, d) {
-        if (s == 1) {
-            var gradientStops = document.querySelectorAll('.coloew1');
-            var coloer1 = document.getElementById('appcolor11').value;
+@*<script>
+        function appiconcolor(s, d) {
+            if (s === 1) {
+                var gradientStops = document.querySelectorAll('.coloew1');
+                var color = document.getElementById('appcolor11').value;
 
-            gradientStops.forEach(function (stop) {
-                stop.setAttribute('stop-color', coloer1);
-            });
-            document.getElementById('col1').innerHTML = coloer1;
-        } else if (s == 2) {
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('stop-color', color);
+                });
+                document.getElementById('col1').innerHTML = color;
+            } else if (s === 2) {
+                var gradientStops = document.querySelectorAll('.coloew2');
+                var color = document.getElementById('appcolor12').value;
 
-            var gradientStops = document.querySelectorAll('.coloew2');
-            var coloer1 = document.getElementById('appcolor12').value;
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('stop-color', color);
+                });
+                document.getElementById('col2').innerHTML = color;
+            } else if (s === 3) {
+                var gradientStops = document.querySelectorAll('.bgcolores');
+                var color = document.getElementById('appBGcolor').value;
 
-            gradientStops.forEach(function (stop) {
-                stop.setAttribute('stop-color', coloer1);
-            });
-            document.getElementById('col2').innerHTML = coloer1;
-        } else if (s == 3) {
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('fill', color);
+                });
+                document.getElementById('col3').innerHTML = color;
+            } else if (s === 4) {
+                var arr = [1, 10, 20, 30, 100, 200, 300, 400, 500];
+                var gradientStops = document.querySelectorAll('.bgcolores');
 
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('rx', arr[d]);
+                    stop.setAttribute('ry', arr[d]);
+                });
+                document.getElementById('col4').innerHTML = arr[d];
 
-            var gradientStops = document.querySelectorAll('.bgcolores');
-            var coloer1 = document.getElementById('appBGcolor').value;
-
-            gradientStops.forEach(function (stop) {
-                stop.setAttribute('fill', coloer1);
-            });
-            document.getElementById('col3').innerHTML = coloer1;
-        } else if (s == 4) {
-            var arre = [1, 10, 20, 30, 100, 200, 300, 400, 500];
-
-            var gradientStops = document.querySelectorAll('.bgcolores');
-
-
-
-            gradientStops.forEach(function (stop) {
-
-                stop.setAttribute('rx', arre[d]);
-                stop.setAttribute('ry', arre[d]);
-            });
-            document.getElementById('col4').innerHTML = arre[d];
-
-            document.getElementById('sef0').style.background = "revert-layer";
-            document.getElementById('sef1').style.background = "revert-layer";
-            document.getElementById('sef2').style.background = "revert-layer";
-            document.getElementById('sef3').style.background = "revert-layer";
-            document.getElementById('sef4').style.background = "revert-layer";
-            document.getElementById('sef5').style.background = "revert-layer";
-            document.getElementById('sef6').style.background = "revert-layer";
-            document.getElementById('sef7').style.background = "revert-layer";
-            document.getElementById('sef8').style.background = "revert-layer";
-            document.getElementById('sef' + d).style.background = "var(--main-bg-lcolor)";
-
-
-
+                for (var i = 0; i <= 8; i++) {
+                    document.getElementById('sef' + i).classList.remove('selected');
+                }
+                document.getElementById('sef' + d).classList.add('selected');
+            }
         }
-        else {
 
+        function appiconcolorss(s, d) {
+            if (s === 1) {
+                var gradientStops = document.querySelectorAll('.coloewsss');
+                var color = document.getElementById('appcolorssss').value;
+
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('stop-color', color);
+                });
+                document.getElementById('col1ss').innerHTML = color;
+            } else if (s === 2) {
+                var gradientStops = document.querySelectorAll('.coloew2ss');
+                var color = document.getElementById('appcolor12ss').value;
+
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('stop-color', color);
+                });
+                document.getElementById('col2ss').innerHTML = color;
+            } else if (s === 3) {
+                var gradientStops = document.querySelectorAll('.bgcoloresss');
+                var color = document.getElementById('appBGcolorss').value;
+
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('fill', color);
+                });
+                document.getElementById('col3ss').innerHTML = color;
+            } else if (s === 4) {
+                var arr = [1, 10, 20, 30, 100, 200, 300, 400, 500];
+                var gradientStops = document.querySelectorAll('.bgcoloresss');
+
+                gradientStops.forEach(function (stop) {
+                    stop.setAttribute('rx', arr[d]);
+                    stop.setAttribute('ry', arr[d]);
+                });
+                document.getElementById('col4ss').innerHTML = arr[d];
+
+                for (var i = 0; i <= 8; i++) {
+                    document.getElementById('sef' + i + 'ss').classList.remove('selected');
+                }
+                document.getElementById('sef' + d + 'ss').classList.add('selected');
+            }
+        }
+    </script>*@
+
+<script>
+    function setGradientColor(s, color, prefix, className) {
+        var gradientStops = document.querySelectorAll(className);
+
+        gradientStops.forEach(function (stop) {
+            stop.setAttribute('stop-color', color);
+        });
+        document.getElementById('col' + s + prefix).innerHTML = color;
+    }
+
+    function setBackgroundColor(color, prefix) {
+        debugger;
+        var gradientStops = document.querySelectorAll('.bgcolores' + prefix);
+        gradientStops.forEach(function (stop) {
+            stop.setAttribute('fill', color);
+        });
+        console.log('col3' + prefix);
+        document.getElementById('col3' + prefix).innerHTML = color;
+    }
+
+    function setRadius(d, prefix) {
+        var arr = [1, 10, 20, 30, 100, 200, 300, 400, 500];
+        var gradientStops = document.querySelectorAll('.bgcolores' + prefix);
+
+        gradientStops.forEach(function (stop) {
+            stop.setAttribute('rx', arr[d]);
+            stop.setAttribute('ry', arr[d]);
+        });
+        document.getElementById('col4' + prefix).innerHTML = arr[d];
+
+        for (var i = 0; i <= 8; i++) {
+            document.getElementById('sef' + i + prefix).style.background ='lightgray';
+        }
+        document.getElementById('sef' + d + prefix).style.background ='var(--main-bg-lcolor)';
+    }
+
+    function appiconcolor(s, d) {
+        if (s === 1) {
+            var color = document.getElementById('appcolor11').value;
+            setGradientColor(s, color, '', '.coloew1');
+        } else if (s === 2) {
+            var color = document.getElementById('appcolor12').value;
+            setGradientColor(s, color, '', '.coloew2');
+        } else if (s === 3) {
+            var color = document.getElementById('appBGcolor').value;
+            setBackgroundColor(color, '');
+        } else if (s === 4) {
+            setRadius(d, '');
+        }
+    }
+
+    function appiconcolorss(s, d) {
+        if (s === 1) {
+            var color = document.getElementById('appcolorssss').value;
+            setGradientColor(s, color, 'ss', '.coloewsss');
+        } else if (s === 2) {
+            var color = document.getElementById('appcolor12ss').value;
+            setGradientColor(s, color, 'ss', '.coloew2ss');
+        } else if (s === 3) {
+            var color = document.getElementById('appBGcolorss').value;
+            setBackgroundColor(color, 'ss');
+        } else if (s === 4) {
+            setRadius(d, 'ss');
         }
     }
 </script>
+
 <script>
     function optsents() {
         document.getElementById('savehidd').style.display = 'none';
@@ -2395,6 +2865,29 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                                   toastr.success("PASSCODE SENT SUCCESSFULLY");
                                       document.getElementById('optshow').style.display = 'block';
                                       document.getElementById('opthide').style.display = 'none';
+                              }
+                              else {
+                                  ToastrMessage();
+                                      toastr.error(result);
+                              }
+      }
+  });
+
+        //document.getElementById('savehidd').style.display = 'block';
+        //document.getElementById('saveshow').style.display = 'none';
+    }
+    function optsentsss() {
+        document.getElementById('savehiddss').style.display = 'none';
+        document.getElementById('saveshowss').style.display = 'block';
+                          $.ajax({
+                              type: "POST",
+                              url: '@Url.Action("otpforchangeicon", "Home")',
+                              success: function (result) {
+                                  if (result == "Success") {
+                                  ToastrMessage();
+                                  toastr.success("PASSCODE SENT SUCCESSFULLY");
+                                      document.getElementById('optshowss').style.display = 'block';
+                                      document.getElementById('opthidess').style.display = 'none';
                               }
                               else {
                                   ToastrMessage();
@@ -2594,3 +3087,4 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
 
     }
 </script>
+<script src="https://kit.fontawesome.com/a4c00a89bc.js" crossorigin="anonymous"></script>

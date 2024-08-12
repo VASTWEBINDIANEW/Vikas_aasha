@@ -854,7 +854,6 @@ namespace Vastwebmulti.Models
         public virtual DbSet<passbyapidmt> passbyapidmts { get; set; }
         public virtual DbSet<loanpermission> loanpermissions { get; set; }
         public virtual DbSet<closingbalance> closingbalances { get; set; }
-        public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
         public virtual DbSet<daywisesettelecommst> daywisesettelecommsts { get; set; }
         public virtual DbSet<daywisecommsetforuser> daywisecommsetforusers { get; set; }
         public virtual DbSet<daywisecomm> daywisecomms { get; set; }
@@ -870,6 +869,8 @@ namespace Vastwebmulti.Models
         public virtual DbSet<User_number_status> User_number_status { get; set; }
         public virtual DbSet<appimei> appimeis { get; set; }
         public virtual DbSet<totalimeino> totalimeinoes { get; set; }
+        public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
+        public virtual DbSet<fronticon> fronticons { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -22330,35 +22331,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<gstreport_monthly_Result>("gstreport_monthly", fromParameter, toParameter, roleParameter);
         }
     
-        public virtual ObjectResult<insert_Upi_Txn_Result> insert_Upi_Txn(string type, string userid, Nullable<decimal> amount, string refid, string payervpa, string dealerid, ObjectParameter output)
-        {
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            var useridParameter = userid != null ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("amount", amount) :
-                new ObjectParameter("amount", typeof(decimal));
-    
-            var refidParameter = refid != null ?
-                new ObjectParameter("refid", refid) :
-                new ObjectParameter("refid", typeof(string));
-    
-            var payervpaParameter = payervpa != null ?
-                new ObjectParameter("payervpa", payervpa) :
-                new ObjectParameter("payervpa", typeof(string));
-    
-            var dealeridParameter = dealerid != null ?
-                new ObjectParameter("Dealerid", dealerid) :
-                new ObjectParameter("Dealerid", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_Upi_Txn_Result>("insert_Upi_Txn", typeParameter, useridParameter, amountParameter, refidParameter, payervpaParameter, dealeridParameter, output);
-        }
-    
         public virtual ObjectResult<update_UPI_TXN_Result> update_UPI_TXN(string refid, string status, string bankrrn, string appname, string approvalrefno, string responsecode, string txnref, string launcherror, ObjectParameter output)
         {
             var refidParameter = refid != null ?
@@ -23356,6 +23328,56 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("masterid", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<extracommhistory_Result>("extracommhistory", retaileridParameter, dealeridParameter, masteridParameter);
+        }
+    
+        public virtual int BlockAmountStatusOnandOff(Nullable<int> id, string statuschk, string blockTime)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var statuschkParameter = statuschk != null ?
+                new ObjectParameter("statuschk", statuschk) :
+                new ObjectParameter("statuschk", typeof(string));
+    
+            var blockTimeParameter = blockTime != null ?
+                new ObjectParameter("BlockTime", blockTime) :
+                new ObjectParameter("BlockTime", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("BlockAmountStatusOnandOff", idParameter, statuschkParameter, blockTimeParameter);
+        }
+    
+        public virtual ObjectResult<insert_Upi_Txn_Result> insert_Upi_Txn(string type, string userid, Nullable<decimal> amount, string refid, string payervpa, string dealerid, string appname, ObjectParameter output)
+        {
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var refidParameter = refid != null ?
+                new ObjectParameter("refid", refid) :
+                new ObjectParameter("refid", typeof(string));
+    
+            var payervpaParameter = payervpa != null ?
+                new ObjectParameter("payervpa", payervpa) :
+                new ObjectParameter("payervpa", typeof(string));
+    
+            var dealeridParameter = dealerid != null ?
+                new ObjectParameter("Dealerid", dealerid) :
+                new ObjectParameter("Dealerid", typeof(string));
+    
+            var appnameParameter = appname != null ?
+                new ObjectParameter("appname", appname) :
+                new ObjectParameter("appname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_Upi_Txn_Result>("insert_Upi_Txn", typeParameter, useridParameter, amountParameter, refidParameter, payervpaParameter, dealeridParameter, appnameParameter, output);
         }
     }
 }
