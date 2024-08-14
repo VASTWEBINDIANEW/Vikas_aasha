@@ -66,6 +66,7 @@ using Random = System.Random;
 using System.Drawing;
 using System.Drawing.Imaging;
 using QRCoder;
+using Vastwebmulti.Models.Scheduling;
 //using paytmresponselibrary;
 
 
@@ -32394,6 +32395,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 //    request.AddJsonBody(body);
                 IRestResponse response = client.Execute(request);
                 string stscode = response.StatusCode.ToString();
+                upiresponsetask.WriteLogUPI("Response Time : " + DateTime.Now + "\n Response data : " + stscode);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
 

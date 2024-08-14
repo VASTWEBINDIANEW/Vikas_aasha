@@ -9,7 +9,7 @@ namespace Vastwebmulti.Models.Scheduling
     {
         private static readonly string ScheduleCronExpression = "0 0 3 * * ?";
         private static readonly string ScheduleCronExpression1 = "0 */10 * ? * *";
-        private static readonly string ScheduleCronExpression2 = "*/2 * * * *";
+        private static readonly string ScheduleCronExpression2 = "0 */2 * * * ? *"; // Updated cron expression
 
         public static async System.Threading.Tasks.Task StartAsync()
         {
@@ -84,6 +84,7 @@ namespace Vastwebmulti.Models.Scheduling
             }
             catch (Exception ex)
             {
+                upiresponsetask.WriteLogUPI("The Error Message : " + ex + " Error Time - " + DateTime.Now);
             }
         }
     }
