@@ -33,21 +33,55 @@ namespace Vastwebmulti.Models.Scheduling
                     foreach (var i in paytmlist)
                     {
                        
-                        d2.Paytmqrresponse(i.refid);
+                        dynamic s = d2.Paytmqrresponse(i.refid);
+                        var jsonData = s.Data;
+                        WriteLogUPI("Response Time: " + DateTime.Now + "\n" + "Response: " + jsonData);
                     }   
 
                     foreach(var i in phonepelist)
                     {
-                        d2.phonepeqrresponse(i.refid);
+                        dynamic s = d2.phonepeqrresponse(i.refid);
+                        var jsonData = s.Data;
+                        WriteLogUPI("Response Time: " + DateTime.Now + "\n" + "Response: " + jsonData);
                     }
-
-
-
-
                }
 
             });
             return task;
+        }
+        public static void WriteLogUPI(string strMessage)
+        {
+            try
+            {
+                using (VastwebmultiEntities db = new VastwebmultiEntities())
+                {
+                    var WebsiteName = db.Admin_details.FirstOrDefault().Companyname.ToUpper();
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "SchedulingResponse-" + WebsiteName + "-" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
