@@ -16455,7 +16455,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 bankname = "";
             }
             var userid = User.Identity.GetUserId();
-            var apinm = "RADIANT";
+           var apinm = "RADIANT";
             if (apinm == "RADIANT")
             {
                 var radiantauthchk = db.radiantauths.SingleOrDefault();
