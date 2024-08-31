@@ -15415,213 +15415,139 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult Money_transfer2()
         {
             string userid = User.Identity.GetUserId();
-            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory== "PAYOUT" || aa.catagory== "DMT")).SingleOrDefault();
-            if (apinm != null)
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
-                ViewBag.openapi = apinm.api_name;
-                var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+                //////////////////////Check E KYC///////////////////////////
+                var isvalid = true;
+                var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekyc == null)
                 {
-                    //////////////////////Check E KYC///////////////////////////
-                   var  isvalid= true;
-                    var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
-                    if (checkekyc == null)
+                    isvalid = false;
+                    ViewBag.req = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekyc.isvalid;
+                    if (sts == false)
                     {
                         isvalid = false;
-                        ViewBag.req = "REQUIREDOTP";
+                        ViewBag.req = "REQUIREDSCAN";
+                    }
+                }
+                /////////////////// 2 FaVerification////////////////
+                if (isvalid == true)
+                {
+                    var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (twofacheck == null)
+                    {
+                        Aeps_2Fa_Status item = new Aeps_2Fa_Status();
+                        item.userid = userid;
+                        item.Status = false;
+                        item.AepsMerchantId = ChkKYC.AepsMerchandId;
+                        item.InsertDate = DateTime.Now;
+                        db.Aeps_2Fa_Status.Add(item);
+                        db.SaveChanges();
+                        isvalid = false;
+                        ViewBag.req = "2FAREQUIRED";
                     }
                     else
                     {
-                        var sts = checkekyc.isvalid;
-                        if (sts == false)
+                        var insertdate = Convert.ToDateTime(twofacheck.InsertDate).Date;
+                        var currentdate = DateTime.Now.Date;
+                        if (insertdate == currentdate)
                         {
-                            isvalid = false;
-                            ViewBag.req = "REQUIREDSCAN";
-                        }
-                    }
-
-                    // is checkbankshow
-                    var bankshow = db.TwofaBankShows.Where(aa => aa.userid == userid).SingleOrDefault();
-                    if(bankshow==null)
-                    {
-                        ViewBag.showbank = true;
-                    }
-                    else
-                    {
-                        ViewBag.showbank = false;
-                    }
-
-                    // Check Daily 2FA
-                    var checkdaily2fa = db.TwofaDailyStatus.Where(aa => aa.userid == userid).ToList();
-                    if (checkdaily2fa.Count() == 0)
-                    {
-                        ViewBag.daily2fa_AEPS = false;
-                        ViewBag.daily2fa_Aadhar = false;
-                    }
-                    else
-                    {
-                        ViewBag.daily2fa_AEPS = false;
-                        ViewBag.daily2fa_Aadhar = false;
-                        var checkaeps = checkdaily2fa.Where(aa => aa.type == "AEPS" && aa.expdate>=DateTime.Now).OrderByDescending(aa=>aa.expdate).Take(1).ToList();
-                        if(checkaeps.Count()>0)
-                        {
-                            ViewBag.daily2fa_AEPS = true;
-                        }
-                        var checkaadhar = checkdaily2fa.Where(aa => aa.type == "AADHAR" && aa.expdate >= DateTime.Now).OrderByDescending(aa => aa.expdate).Take(1).ToList();
-                        if (checkaeps.Count() > 0)
-                        {
-                            ViewBag.daily2fa_Aadhar = true;
-                        }
-                    }
-
-
-                    // isvalid = true;
-                    /////////////////// 2 FaVerification////////////////
-                    //if (isvalid == true)
-                    //{
-                        var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
-                        if (twofacheck == null)
-                        {
-                            Aeps_2Fa_Status item = new Aeps_2Fa_Status();
-                            item.userid = userid;
-                            item.Status = false;
-                            item.AepsMerchantId = ChkKYC.AepsMerchandId;
-                            item.InsertDate = DateTime.Now;
-                            db.Aeps_2Fa_Status.Add(item);
-                            db.SaveChanges();
-                            isvalid = false;
-                            ViewBag.req = "2FAREQUIRED";
-                        }
-                        else
-                        {
-                            var insertdate = Convert.ToDateTime(twofacheck.InsertDate).Date;
-                            var currentdate = DateTime.Now.Date;
-                            if (insertdate == currentdate)
+                            if (twofacheck.Status == false)
                             {
-                                if (twofacheck.Status == false)
-                                {
-                                    isvalid = false;
-                                    ViewBag.req = "2FAREQUIRED";
-                                }
-                            }
-                            else
-                            {
-                                twofacheck.Status = false;
-                                db.SaveChanges();
                                 isvalid = false;
                                 ViewBag.req = "2FAREQUIRED";
                             }
                         }
-                 //   }
-                    /////////////////// 2 FaVerification////////////////
-                    //if (isvalid == true)
-                    //{
-                        var twofacheckaadhar = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
-                        if (twofacheckaadhar == null)
-                        {
-                            Aeps_2Fa_Status_aadharpay item = new Aeps_2Fa_Status_aadharpay
-                            {
-                                userid = userid,
-                                status = false,
-                                AepsMerchantId = ChkKYC.AepsMerchandId,
-                                insertdate = DateTime.Now
-                            };
-                            db.Aeps_2Fa_Status_aadharpay.Add(item);
-                            db.SaveChanges();
-                            isvalid = false;
-                            ViewBag.reqaadhar = "2FAREQUIRED_ADDHARPAY";
-                        }
                         else
                         {
-                            var insertdate = Convert.ToDateTime(twofacheckaadhar.insertdate).Date;
-                            var currentdate = DateTime.Now.Date;
-                            if (insertdate == currentdate)
-                            {
-                                if (twofacheckaadhar.status == false)
-                                {
-                                    isvalid = false;
-                                    ViewBag.reqaadhar = "2FAREQUIRED_ADDHARPAY";
-                                }
-                            }
-                            else
-                            {
-                                 twofacheckaadhar.status = false;
-                                db.SaveChanges();
-                                isvalid = false;
-                                ViewBag.reqaadhar = "2FAREQUIRED_ADDHARPAY";
-                            }
+                            twofacheck.Status = false;
+                            db.SaveChanges();
+                            isvalid = false;
+                            ViewBag.req = "2FAREQUIRED";
                         }
-                    //}
-                    ///////////////Check DMT Service Fee///////////////////////
-                   
-					   var isfree = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().IsFree;
-                    var allservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL").SingleOrDefault().IsFree;
-                    if (isfree == true && allservice == true)
-                    {
-                        ViewBag.chkcharge = "DONE";
                     }
-                    else
+                }
+
+                /////////////////// 2 FaVerification////////////////
+
+
+
+                ///////////////Check DMT Service Fee///////////////////////
+                var isfree = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().IsFree;
+                var allservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL").SingleOrDefault().IsFree;
+                if (isfree == true && allservice == true)
+                {
+                    ViewBag.chkcharge = "DONE";
+                }
+                else
+                {
+                    if (isfree == true)
                     {
-                        if (isfree == true)
+                        if (allservice == false)
                         {
-                            if (allservice == false)
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
                             {
-                                var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
-                                if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
                                 {
-                                    var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                    if (chkklatestdate != null)
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
                                     {
-                                        var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
-                                        if (expiredate == DateTime.Now.Date)
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
                                         {
-                                            var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
-                                            var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
-                                            System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                            System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                            if (chkadminallservice != null && retailerautorenseting == "ALL")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            else if (chkadminperservice != null && retailerautorenseting == "PER")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            ViewBag.chkcharge = "DONE";
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        else
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
                                         {
-                                            ViewBag.chkcharge = "NOTDONE";
-                                            ViewData["chksertype"] = "NOTDONE";
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
+
+                                        ViewBag.chkcharge = "DONE";
                                     }
                                     else
                                     {
                                         ViewBag.chkcharge = "NOTDONE";
                                         ViewData["chksertype"] = "NOTDONE";
                                     }
+
                                 }
-                                //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
-                                //if (chk == "Y")
-                                //{
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
-                                //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
-                                //}
-                                var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                if (chkk != null)
+                                else
                                 {
-                                    var expiredate = chkk.ExpiryDate;
-                                    if (expiredate >= DateTime.Now)
-                                    {
-                                        ViewBag.chkcharge = "DONE";
-                                    }
-                                    else
-                                    {
-                                        ViewBag.chkcharge = "ALLNOTDONE";
-                                        ViewData["chksertype"] = "ALLNOTDONE";
-                                    }
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
                                 }
                                 else
                                 {
@@ -15629,60 +15555,40 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     ViewData["chksertype"] = "ALLNOTDONE";
                                 }
                             }
-                        }
-                        if (isfree == false)
-                        {
-                            if (allservice == false)
+                            else
                             {
-                                var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
-                                if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                                ViewBag.chkcharge = "ALLNOTDONE";
+                                ViewData["chksertype"] = "ALLNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == false)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
                                 {
-                                    var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                    if (chkklatestdate != null)
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
                                     {
-                                        var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
-                                        if (expiredate == DateTime.Now.Date)
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
                                         {
-                                            var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
-                                            var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
-                                            System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                            System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                            if (chkadminallservice != null && retailerautorenseting == "ALL")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            else if (chkadminperservice != null && retailerautorenseting == "PER")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            ViewBag.chkcharge = "DONE";
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        else
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
                                         {
-                                            ViewBag.chkcharge = "BOTHNOTDONE";
-                                            ViewData["chksertype"] = "BOTHNOTDONE";
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                    }
-                                    else
-                                    {
-                                        ViewBag.chkcharge = "BOTHNOTDONE";
-                                        ViewData["chksertype"] = "BOTHNOTDONE";
-                                    }
-                                }
-                                //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
-                                //if (chk == "Y")
-                                //{
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
-                                //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
-                                //}
-                                var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                if (chkk != null)
-                                {
-                                    var expiredate = chkk.ExpiryDate;
-                                    if (expiredate >= DateTime.Now)
-                                    {
                                         ViewBag.chkcharge = "DONE";
                                     }
                                     else
@@ -15697,60 +15603,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     ViewData["chksertype"] = "BOTHNOTDONE";
                                 }
                             }
-                        }
-                        if (isfree == false)
-                        {
-                            if (allservice == true)
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
                             {
-                                var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
-                                if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
                                 {
-                                    var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                    if (chkklatestdate != null)
-                                    {
-                                        var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
-                                        if (expiredate == DateTime.Now.Date)
-                                        {
-                                            var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
-                                            var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
-                                            System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                            System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                            if (chkadminallservice != null && retailerautorenseting == "ALL")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            else if (chkadminperservice != null && retailerautorenseting == "PER")
-                                            {
-                                                var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
-                                            }
-                                            ViewBag.chkcharge = "DONE";
-                                        }
-                                        else
-                                        {
-                                            ViewBag.chkcharge = "NOTDONE";
-                                            ViewData["chksertype"] = "NOTDONE";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ViewBag.chkcharge = "NOTDONE";
-                                        ViewData["chksertype"] = "NOTDONE";
-                                    }
+                                    ViewBag.chkcharge = "DONE";
                                 }
-                                //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
-                                //if (chk == "Y")
-                                //{
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
-                                //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
-                                //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
-                                //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
-                                //}
-                                var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
-                                if (chkk != null)
+                                else
                                 {
-                                    var expiredate = chkk.ExpiryDate;
-                                    if (expiredate >= DateTime.Now)
+                                    ViewBag.chkcharge = "BOTHNOTDONE";
+                                    ViewData["chksertype"] = "BOTHNOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "BOTHNOTDONE";
+                                ViewData["chksertype"] = "BOTHNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == true)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
                                     {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+
                                         ViewBag.chkcharge = "DONE";
                                     }
                                     else
@@ -15765,26 +15674,41 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     ViewData["chksertype"] = "NOTDONE";
                                 }
                             }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "NOTDONE";
+                                ViewData["chksertype"] = "NOTDONE";
+                            }
                         }
                     }
-                    Recent_report recent = new Recent_report();
-                    recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
-                    recent.Recent_report_Aeps = null;
-                    recent.Recent_PAN_CARD_IPAY = null;
-                    recent.Recent_mPosInfo = null;
-                    return View(recent);
                 }
-                else
-                {
-                    ViewBag.ChkKYC = "Firstly Complete Your Full KYC !";
-                    return RedirectToAction("Profile");
-                }
-            }
-            else
-            {
-                ViewBag.openapi = "VASTWEB";
-                ViewBag.chkcharge = "DONE";
-                ViewData["chksertype"] = "DONE";
+
                 Recent_report recent = new Recent_report();
                 recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
                 recent.Recent_report_Aeps = null;
@@ -15792,6 +15716,80 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 recent.Recent_mPosInfo = null;
                 return View(recent);
             }
+            else
+            {
+                ViewBag.ChkKYC = "Firstly Complete Your Full KYC !";
+                return RedirectToAction("Profile");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CheckAAdharPay()
+        {
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                //////////////////////Check E KYC///////////////////////////
+                var isvalid = true;
+                var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekyc == null)
+                {
+                    isvalid = false;
+                    ViewBag.req = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekyc.isvalid;
+                    if (sts == false)
+                    {
+                        isvalid = false;
+                        ViewBag.req = "REQUIREDSCAN";
+                    }
+                }
+                if (isvalid == true)
+                {
+                    var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (twofacheck == null)
+                    {
+                        Aeps_2Fa_Status_aadharpay item = new Aeps_2Fa_Status_aadharpay
+                        {
+                            userid = userid,
+                            status = false,
+                            AepsMerchantId = ChkKYC.AepsMerchandId,
+                            insertdate = DateTime.Now
+                        };
+                        db.Aeps_2Fa_Status_aadharpay.Add(item);
+                        db.SaveChanges();
+                        isvalid = false;
+                        ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                        return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                    }
+                    else
+                    {
+                        var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                        var currentdate = DateTime.Now.Date;
+                        if (insertdate == currentdate)
+                        {
+                            if (twofacheck.status == false)
+                            {
+                                isvalid = false;
+                                ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                                return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                            }
+                        }
+                        else
+                        {
+                            twofacheck.status = false;
+                            db.SaveChanges();
+                            isvalid = false;
+                            ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                            return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                        }
+                    }
+                }
+            }
+            return Json(new { success = true });
         }
         [HttpPost]
         public ActionResult GenrateOtpEKYC()
@@ -36529,7 +36527,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender)
+        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender, string state)
         {
             var userid = User.Identity.GetUserId();
             var retailer = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
@@ -36546,16 +36544,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             string reqw = fullfrm + setdob + id;
             var requestid = reqw.Replace("-", "").Replace(" ", "");
 
-            System.Data.Entity.Core.Objects.ObjectParameter output = new
-                 System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid,output).SingleOrDefault().msg;
+            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid, state, output).SingleOrDefault().msg;
 
             if (procres == "Success")
             {
 
                 var tokn = Responsetoken.gettoken();
                 VastBazaar vb = new VastBazaar();
-                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid);
+                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state);
                 dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
 
                 if (responseData.StatusCode == 200)

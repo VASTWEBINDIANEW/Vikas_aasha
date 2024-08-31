@@ -321,12 +321,9 @@
             float: right;
         }
 
-        }
 
         input#Mobile {
             width: 100%;
-            top: -10px !important;
-            position: absolute;
         }
 
         input#btnsendOTP_Email {
@@ -397,7 +394,17 @@ margin-top: 10px;}
 
 
     <style type="text/css">
+        .Login_body .gg {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+        }
 
+
+        .login_header img {
+            width: 100px;
+        }
 
         .loadingio-spinner-gear-94vo528ab8 {
             width: 100%;
@@ -474,14 +481,15 @@ margin-top: 10px;}
         }
 
         .width_set {
-            width: 90%;
+            width: 70%;
             margin: auto;
         }
 
         .Login_body .row.gg .gg-item {
-            padding: 15px;
-            border: 5px solid var(--main-bg-lcolor);
+            padding: 20px;
+            border: none;
         }
+
         .span5 h1 {
             font-size: 17px;
             text-align: center;
@@ -489,31 +497,39 @@ margin-top: 10px;}
             color: var(--main-bg-lcolor);
             font-weight: 600;
         }
+
         #carousel {
             width: 100%;
             height: 480px;
         }
+
         .item img {
             width: auto;
             float: left;
             height: 480px;
         }
-            #horizontalTab .item {
-                height: auto;
-            }
+
+        #horizontalTab .item {
+            height: auto;
+        }
+
         #login {
             background: var(--main-bg-rcolor) !important;
         }
+
         .list-inline img {
             height: 45px;
             width: 45px;
         }
+
         .list-inline {
             text-align: center;
         }
+
         hr {
             margin: 8px 0;
         }
+
         .new_user {
             text-align: center;
             font-size: 16px;
@@ -521,6 +537,7 @@ margin-top: 10px;}
             justify-content: center;
             align-items: center;
         }
+
             .new_user button {
                 background: transparent;
                 font-size: 16px;
@@ -530,28 +547,33 @@ margin-top: 10px;}
                 padding: 0;
                 width: auto;
             }
+
         .Login_body .resp-tabs-list {
             height: auto;
             margin-bottom: 0;
         }
+
             .Login_body .resp-tabs-list #singin {
                 display: none;
             }
+
         .footer {
             color: #fff;
         }
+
         .Login_body .footer p {
             color: #fff;
         }
-        @@media only screen and (max-width:480px){
+
+        @@media only screen and (max-width:480px) {
             .width_set {
                 width: 100%;
             }
+
             .container-fluid {
                 padding: 0;
             }
         }
-            
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
@@ -559,7 +581,7 @@ margin-top: 10px;}
 </head>
 
 <body class="body Login_body" style="background: url(@background);background-size: @size; background-repeat:@repeat; height:@height; background-image : @backgroundImage;">
-   
+
     <div class="width_set">
         <div class="login_header">
             <a class="d-flex align-items-center" href="@Url.Action("Index1", "Home")">
@@ -571,13 +593,10 @@ margin-top: 10px;}
 
         <div class="main custome-loginpage mt-4" style="width: 100%;float: left;">
             <div id="horizontalTab">
-
-
-
                 <div class="container-fluid">
-                    <div class="row gg" style="padding-top:0 !important;">
+                    <div class="row gg" style="padding:0px !important;">
 
-                        <div class="col-md-8 col-sm-12 col-xs-12 border-md gg-item">
+                        <div class="col-md-7 col-sm-12 col-xs-12 border-md gg-item">
 
 
                             @if (ViewBag.Loginsilder != null)
@@ -627,11 +646,11 @@ margin-top: 10px;}
                             }
                         </div>
 
-                        <div class="col-md-4 col-sm-12 col-xs-12 border-md gg-item">
+                        <div class="col-md-5 col-sm-12 col-xs-12 border-md gg-item">
                             <div class="span5">
 
                                 <a class="d-flex align-items-center" href="@Url.Action("Index1", "Home")">
-                                    <img src="@Url.Content("~/"+@logoimage)" alt="@Firm_Name" style="width: 160px; height: 70px; margin: auto;">
+                                    <img src="@Url.Content("~/"+@logoimage)" alt="@Firm_Name" style="width: 120px;margin: auto;">
                                 </a>
                                 <h1>Welcome to @Firm_Name</h1>
                                 <div class="resp-tabs-list">
@@ -658,7 +677,7 @@ margin-top: 10px;}
                                         </script>
                                     }
                                     <button class="resp-tab-item" id="singin" value="singin">Sign In</button>
-                                    
+
                                 </div>
 
                                 <div class="resp-tabs-container">
@@ -668,117 +687,117 @@ margin-top: 10px;}
                                         @Html.Hidden("latloc")
                                         @Html.Hidden("longloc")
                                         @Html.Hidden("hdaddress")
-                                    <div class="tab-1 resp-tab-content" id="signinform">
-                                        <div class="login-top">
+                                        <div class="tab-1 resp-tab-content" id="signinform">
+                                            <div class="login-top">
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="for-border-effect" style="position:relative;">
-                                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Enter Registered Email Id / Mobile No", @required = "" })
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="for-border-effect" style="position:relative;">
+                                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Enter Registered Email Id / Mobile No", @required = "" })
 
-                                                        <div class="focus-border"><i></i></div>
+                                                            <div class="focus-border"><i></i></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="for-border-effect">
-                                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Enter Password", @required = "" })
-                                                        <div class="focus-border"><i></i></div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="for-border-effect">
+                                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Enter Password", @required = "" })
+                                                            <div class="focus-border"><i></i></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="login-bottom">
-                                                <ul>
-                                                    <li>
-                                                        <label>@Html.CheckBoxFor(m => m.RememberMe)&nbsp;Remember Me&nbsp;?</label>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" onclick="show(this.id)" id="forgetpass">Forgot password&nbsp;?</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <div class="submit" style="float:none;">
-                                                <div class="loadingio-spinner-gear-94vo528ab8 first-login" style="display:none;">
-                                                    <div class="loader"></div>
+                                                <div class="login-bottom">
+                                                    <ul>
+                                                        <li>
+                                                            <label>@Html.CheckBoxFor(m => m.RememberMe)&nbsp;Remember Me&nbsp;?</label>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" onclick="show(this.id)" id="forgetpass">Forgot password&nbsp;?</a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
 
-                                                <input id="login" type="submit" value="LOGIN" class="fullbodydycolorbg" />
-                                                <span id="login-error" class="locationafterbefore"></span>
-                                                <span id="login-error1"></span>
-                                                <span id="login-error2" class="locationafterbefore" style="display:none"></span>
-                                            </div>
+                                                <div class="submit" style="float:none;">
+                                                    <div class="loadingio-spinner-gear-94vo528ab8 first-login" style="display:none;">
+                                                        <div class="loader"></div>
+                                                    </div>
 
-                                            @*<input id="login" type="submit" value="LOGIN" class="fullbodydycolorbg">*@
+                                                    <input id="login" type="submit" value="LOGIN" class="fullbodydycolorbg" />
+                                                    <span id="login-error" class="locationafterbefore"></span>
+                                                    <span id="login-error1"></span>
+                                                    <span id="login-error2" class="locationafterbefore" style="display:none"></span>
+                                                </div>
+
+                                                @*<input id="login" type="submit" value="LOGIN" class="fullbodydycolorbg">*@
+
+                                            </div>
+                                            <ul class="list-inline mt-2">
+
+                                                <li class="list-inline-item">
+
+                                                    @if (ViewBag.Afac != "")
+                                                    {
+                                                        <a href="@ViewBag.Afac" target="_blank"><img src="~/AdminDesign/images/facebook.svg" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/AdminDesign/images/facebook.svg" />
+                                                    }
+
+                                                </li>
+                                                <li class="list-inline-item">
+
+                                                    @if (ViewBag.Atwi != "")
+                                                    {
+                                                        <a href="@ViewBag.Atwi" target="_blank"><img src="~/AdminDesign/images/twitter.svg" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/AdminDesign/images/twitter.svg" />
+                                                    }
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    @if (ViewBag.AInstagra != "")
+                                                    {
+                                                        <a href="@ViewBag.AInstagra" target="_blank"><img src="~/AdminDesign/images/instagram-sketched.svg" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/AdminDesign/images/instagram-sketched.svg" />
+                                                    }
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    @if (ViewBag.Alinked != "")
+                                                    {
+                                                        <a href="@ViewBag.Alinked" target="_blank"><img src="~/AdminDesign/images/linkedin.svg" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/AdminDesign/images/linkedin.svg" />
+                                                    }
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    @if (ViewBag.AYoutub != "")
+                                                    {
+                                                        <a href="@ViewBag.AYoutub" target="_blank"><img style="height: 60px;" src="~/AdminDesign/images/youtube.svg" /></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img style="height: 60px;" src="~/AdminDesign/images/youtube.svg" />
+                                                    }
+                                                </li>
+                                            </ul>
+                                            <hr />
+
+                                            <div class="new_user">New User? <button class="resp-tab-item" id="singup" value="singup"> Create a account.</button> </div>
 
                                         </div>
-                                        <ul class="list-inline mt-2">
-
-                                            <li class="list-inline-item">
-
-                                                @if (ViewBag.Afac != "")
-                                                {
-                                                    <a href="@ViewBag.Afac" target="_blank"><img src="~/AdminDesign/images/facebook.svg" /></a>
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/AdminDesign/images/facebook.svg" />
-                                                }
-
-                                            </li>
-                                            <li class="list-inline-item">
-
-                                                @if (ViewBag.Atwi != "")
-                                                {
-                                                    <a href="@ViewBag.Atwi" target="_blank"><img src="~/AdminDesign/images/twitter.svg" /></a>
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/AdminDesign/images/twitter.svg" />
-                                                }
-                                            </li>
-                                            <li class="list-inline-item">
-                                                @if (ViewBag.AInstagra != "")
-                                                {
-                                                    <a href="@ViewBag.AInstagra" target="_blank"><img src="~/AdminDesign/images/instagram-sketched.svg" /></a>
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/AdminDesign/images/instagram-sketched.svg" />
-                                                }
-                                            </li>
-                                            <li class="list-inline-item">
-                                                @if (ViewBag.Alinked != "")
-                                                {
-                                                    <a href="@ViewBag.Alinked" target="_blank"><img src="~/AdminDesign/images/linkedin.svg" /></a>
-                                                }
-                                                else
-                                                {
-                                                    <img src="~/AdminDesign/images/linkedin.svg" />
-                                                }
-                                            </li>
-                                            <li class="list-inline-item">
-                                                @if (ViewBag.AYoutub != "")
-                                                {
-                                                    <a href="@ViewBag.AYoutub" target="_blank"><img style="height: 60px;" src="~/AdminDesign/images/youtube.svg" /></a>
-                                                }
-                                                else
-                                                {
-                                                    <img style="height: 60px;" src="~/AdminDesign/images/youtube.svg" />
-                                                }
-                                            </li>
-                                        </ul>
-                                        <hr />
-                                        
-                                        <div class="new_user">New User? <button class="resp-tab-item" id="singup" value="singup"> Create a account.</button> </div>
-
-                                    </div>
 
 
                                     }
@@ -1023,19 +1042,19 @@ margin-top: 10px;}
 
 
             <div class="footer">
-                <center> 
-                <h5> &copy; 2019 - @DateTime.Now.Year All Rights Reserved | @Firm_Name </h5>
-                <p>CUSTOMER SUPPORT - @CustCareNo,@mobile</p>
-                
+                <center>
+                    <h5> &copy; 2019 - @DateTime.Now.Year All Rights Reserved | @Firm_Name </h5>
+                    <p>CUSTOMER SUPPORT - @CustCareNo,@mobile</p>
+
                 </center>
             </div>
 
         </div>
     </div>
-    
-    
+
+
     <!--.main-->
-   
+
 
 
     <script src="~/NewLoginDesign/js/jquery-2.1.4.min.js"></script>
@@ -1123,7 +1142,7 @@ margin-top: 10px;}
 
         $("#ForgtFrm").submit(function (e) {
 
-           
+
 
             if ($("#ForgtFrm").valid()) {
                 // ajax call
@@ -1167,7 +1186,7 @@ margin-top: 10px;}
 
 
 
-   
+
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -1224,7 +1243,7 @@ margin-top: 10px;}
         })
     </script>
 
-   
+
 
 </body>
 </html>
@@ -1313,7 +1332,7 @@ margin-top: 10px;}
                 break;
         }
     }
-    
+
 
     $('#UpdateForm').submit(function (e) {
         if (location.protocol == 'https:' || location.href.includes("http://localhost/")) {
@@ -1551,7 +1570,7 @@ margin-top: 10px;}
         var resend_btn_otp = document.getElementById('resend_btn_otp');
         var otp_continer_inputs = document.getElementById('otp_continer_inputs');
         otp_continer_inputs.classList.add('hidden');
-        
+
 
         $('input[name="Mobile"]').keyup(e => {
             $('#mobile_err').text('');
@@ -1772,12 +1791,12 @@ margin-top: 10px;}
         var resend_btn_otp_email = document.getElementById('resend_btn_otp_email');
 
         $('#otp_continer_inputs_email').hide();
-        
+
     })
     function getCodeBoxElement(index) {
         return document.getElementById('codeBox' + index);
     }
-    
+
     function onFocusEvent(index) {
         for (item = 1; item < index; item++) {
             const currentElement = getCodeBoxElement(item);
@@ -1798,7 +1817,7 @@ margin-top: 10px;}
     $('#btnsendOTP_Email').hide();
     disable_inputs();
 
-    
+
 
 
 

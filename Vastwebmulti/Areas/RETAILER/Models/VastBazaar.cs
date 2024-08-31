@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -528,7 +529,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile ,string reqid)
+        public IRestResponse pancardnew(string token,string Title, string Gender, string Aadharno, string Name,DateTime DOB,string AadharregNumber, string Fathername, string Email, string Mobile ,string reqid, string state)
         {
             var client = new RestClient(BaseURL + "/api/UTI/ManualRequest");
             var request = new RestRequest(Method.POST);
@@ -545,7 +546,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 Fathername= Fathername,
                 Email= Email,
                 Mobile= Mobile,
-                Reqid = reqid
+                Reqid = reqid,
+                State = state
             };
 
             var serializer = new JavaScriptSerializer();
