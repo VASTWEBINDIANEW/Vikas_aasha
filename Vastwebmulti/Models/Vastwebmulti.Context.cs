@@ -23006,7 +23006,7 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DMT_Check_amount_Result>("DMT_Check_amount", retaileridParameter, finalamountParameter, output);
         }
     
-        public virtual ObjectResult<proc_insert_PAN_CARD12_manual_Result> proc_insert_PAN_CARD12_manual(string retailerId, string title, string gender, string aadharno, string name1, Nullable<System.DateTime> dOB, string aadharregNumber, string fathername, string email1, string mobile1, Nullable<decimal> amount, string requestid, ObjectParameter output)
+        public virtual ObjectResult<proc_insert_PAN_CARD12_manual_Result> proc_insert_PAN_CARD12_manual(string retailerId, string title, string gender, string aadharno, string name1, Nullable<System.DateTime> dOB, string aadharregNumber, string fathername, string email1, string mobile1, Nullable<decimal> amount, string requestid, string state, ObjectParameter output)
         {
             var retailerIdParameter = retailerId != null ?
                 new ObjectParameter("RetailerId", retailerId) :
@@ -23056,7 +23056,11 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("requestid", requestid) :
                 new ObjectParameter("requestid", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_insert_PAN_CARD12_manual_Result>("proc_insert_PAN_CARD12_manual", retailerIdParameter, titleParameter, genderParameter, aadharnoParameter, name1Parameter, dOBParameter, aadharregNumberParameter, fathernameParameter, email1Parameter, mobile1Parameter, amountParameter, requestidParameter, output);
+            var stateParameter = state != null ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_insert_PAN_CARD12_manual_Result>("proc_insert_PAN_CARD12_manual", retailerIdParameter, titleParameter, genderParameter, aadharnoParameter, name1Parameter, dOBParameter, aadharregNumberParameter, fathernameParameter, email1Parameter, mobile1Parameter, amountParameter, requestidParameter, stateParameter, output);
         }
     
         public virtual int proc_PAN_CARD_Refund_new_manual(string idno, string status, string couponStatus, string tXN_ID)

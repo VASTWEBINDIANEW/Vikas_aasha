@@ -36527,7 +36527,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender)
+        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender, string state)
         {
             var userid = User.Identity.GetUserId();
             var retailer = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
@@ -36544,16 +36544,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             string reqw = fullfrm + setdob + id;
             var requestid = reqw.Replace("-", "").Replace(" ", "");
 
-            System.Data.Entity.Core.Objects.ObjectParameter output = new
-                 System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid,output).SingleOrDefault().msg;
+            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid, state, output).SingleOrDefault().msg;
 
             if (procres == "Success")
             {
 
                 var tokn = Responsetoken.gettoken();
                 VastBazaar vb = new VastBazaar();
-                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid);
+                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state);
                 dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
 
                 if (responseData.StatusCode == 200)

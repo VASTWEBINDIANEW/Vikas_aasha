@@ -360,7 +360,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 message = "Pan Card Status is Off Contact Your Admin.";
                 //retailer pan status
             }
-
             var results = "{'status':'" + status + "','msg':'" + message + "'}";
             var json1 = JsonConvert.DeserializeObject(results);
             var json = JsonConvert.SerializeObject(json1);
