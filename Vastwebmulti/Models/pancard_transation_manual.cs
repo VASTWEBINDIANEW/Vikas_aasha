@@ -48,5 +48,6 @@ namespace Vastwebmulti.Models
         public Nullable<System.DateTime> request_time { get; set; }
         public Nullable<System.DateTime> responce_time { get; set; }
         public string imageurl { get; set; }
+        public string State { get; set; }
     }
 }

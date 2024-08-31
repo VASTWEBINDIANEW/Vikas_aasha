@@ -1059,15 +1059,20 @@
 
                         </ul>
                     </div>
+                   @{ var chkd = DB1.Recharge_sell_by_dealer.Where(s => s.Dealerid == userid && s.registration_Status == true && s.Status == true).ToList();
+                       if (chkd.Count > 0)
+                       {
                     <div class="w-100 float reports-heading">
 
                         <h3 style="margin:0;" class="dealerwallethed"><img src="~/ashok-images/commerce.svg" style="width:20px;" /><span style="padding-left:7px;">Seller</span></h3>
                         <ul class="w-100 float-left reporst-menu" style="padding:0;padding-left: 12px;">
-                            <li><a href="@Url.Action("Dealer_Seller","Home")"><p>Seller Setting</p></a></li>
+                            <li><a href="@Url.Action("ADDSELLINGOPT", "Home")"><p>Seller Setting</p></a></li>
+                            <li><a href="@Url.Action("sellRechargeReport", "Home")"><p>Seller Report</p></a></li>
                         </ul>
                     </div>
+                           }
 
-
+                   }
 
 
                     <li class="heding-reportlishow">

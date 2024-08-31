@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.daywisesettelecommst>
+﻿@model IEnumerable<Vastwebmulti.Models.extracommhistory_Result>
 @using Vastwebmulti.Models
 @{
     VastwebmultiEntities db = new VastwebmultiEntities();
@@ -306,7 +306,7 @@
             </ul>
         </div>
         <!--Four-Design-Admin-page-Header-Section-End-->
-        @{ 
+        @{
             var chk = db.daywisesettelecomms.ToList();
         }
 
@@ -422,6 +422,14 @@
 
 
         </div>
+        <style>
+            .idsdds {
+                width: 230px;
+                height: 34px;
+                text-align: center;
+                font-size: 15px;
+            }
+        </style>
         <div class="row clearfix">
 
             <div class="col-lg-12 col-md-12 gift-card-top all-type-third">
@@ -430,8 +438,30 @@
                     {
                         <div class="">
                             <div class="col-md-4 gift-select">
-                                <div class="form-line selecthotel-third" style="width: 146px;">
-                                    @Html.DropDownList("allretailer", ViewBag.retailer as SelectList, "All Retailer", new { id = "allretailer", @class = "select-s form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:32px;" })
+                                <div class="form-line selecthotel-third" style="width: 100%;">
+                                    @{
+                                        var set = db.Superstokist_details.ToList();
+
+                                    }
+                                    <select id="maststs" class="idsdds" name="maststs" onchange="changeidss()">
+                                        <option value="">ALL Master</option>
+                                        @foreach (var i in set)
+                                        {
+                                            <option value="@i.SSId">@i.FarmName</option>
+                                        }
+                                    </select>
+
+
+                                    <select id="dealesds" class="idsdds" name="dealesds" onchange="changeretailrsidss()">
+                                        <option value="">ALL Dealer</option>
+
+                                    </select>
+
+
+                                    <select id="retailss" class="idsdds" name="retailss">
+                                        <option value="">ALL Retailer</option>
+
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third" style="padding:0px;padding-left:5px;">
@@ -452,7 +482,11 @@
 
                         </div>
                     }
+                    <div>
+                        <a href="@Url.Action("allonoffextracommsts","Home", new { sts=true})"><button style=" padding: 4px 15px; margin: 1px; float: right; color: white; background: green;">ALL ON</button></a>
+                        <a href="@Url.Action("allonoffextracommsts","Home", new { sts=false})"><button style=" padding: 4px 15px; margin: 1px; float: right; color: white; background: red;">ALL OFF</button></a>
 
+                    </div>
                 </div>
 
 
@@ -554,6 +588,60 @@
 <script>
 
     $('#allretailer').select2();
+
+
+</script>
+<script>
+function changeidss() {
+            var masterid = document.getElementById('maststs').value;
+            $.ajax({
+                url: "@Url.Action("GetDealerDetails","Home")",
+                data: { masterId: masterid },
+                success: function (data) {
+                    var dealer = document.getElementById('dealesds');
+                    dealer.innerHTML = '';
+                    var option1 = document.createElement('option');
+                    option1.value = "";
+                    option1.text = "ALL Dealer";
+                    dealer.appendChild(option1);
+                    data.forEach(dealerDetail => {
+                        var option = document.createElement('option');
+                        option.value = dealerDetail.DealerId;
+                        option.text = dealerDetail.FarmName;
+                        dealer.appendChild(option);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+    }
+
+
+    function changeretailrsidss() {
+        var masterid = document.getElementById('dealesds').value;
+            $.ajax({
+                url: "@Url.Action("GetReailerDetails","Home")",
+                data: { masterId: masterid },
+                success: function (data) {
+                    var dealer = document.getElementById('retailss');
+                    dealer.innerHTML = '';
+                    var option1 = document.createElement('option');
+                    option1.value = "";
+                    option1.text = "ALL Retailer";
+                    dealer.appendChild(option1);
+                    data.forEach(dealerDetail => {
+                        var option = document.createElement('option');
+                        option.value = dealerDetail.RetailerId;
+                        option.text = dealerDetail.Frm_Name;
+                        dealer.appendChild(option);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
 
 
 </script>

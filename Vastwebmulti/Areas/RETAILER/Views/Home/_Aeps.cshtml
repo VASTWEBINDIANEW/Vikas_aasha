@@ -331,7 +331,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                     <span class="checkmark"></span>
                 </label>
                 <label class="col-md-4 container" style="width:25%;">
-                    <input type="radio" name="radio" id="radio4" value="aadharpay"><p>Aadhar&nbsp;Pay<sup class="aadharnewpayclass">New</sup></p>
+                    <input type="radio" name="radio" id="radio4" value="aadharpay" onclick="CheckAAdharPay();"><p>Aadhar&nbsp;Pay<sup class="aadharnewpayclass">New</sup></p>
                     <span class="checkmark"></span>
                 </label>
             </div>
@@ -344,7 +344,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         </form>
     </div>
 
-    <div class="with-click-block">
+    <div class="with-click-block" id="AAdharpay2FaRequired">
 
         <div class="cash-add">
             <div  class="container-fluid otp_page">
@@ -611,6 +611,23 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 <script src="~/Scripts/PageScript/Retailer/AEPS/AEPS_NEW.js"></script>
 
 <script>
+     function CheckAAdharPay() {
+        $.ajax({
+            url: '@Url.Action("CheckAAdharPay", "Home")',
+            type: "POST",
+            success: function (data) {
+                if (data.Status == "2FAREQUIRED_ADDHARPAY") {
+                    $('#aadhar2facheck').show();
+                    $('#AAdharpay2FaRequired').hide();
+                    $('#divotpsend').hide();
+                    $('#verifyotp').hide();
+                    $('#scancheck').show();
+                }
+            },
+            error: function (data) {
+            }
+            })
+    }
     function scanagain() {
          $.ajax({
             url: '@Url.Action("chk1","Home")',

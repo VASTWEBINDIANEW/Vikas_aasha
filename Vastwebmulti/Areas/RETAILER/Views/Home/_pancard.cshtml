@@ -1,4 +1,8 @@
-﻿
+﻿@using Vastwebmulti.Models;
+@{ 
+    VastwebmultiEntities db = new VastwebmultiEntities();
+    var State = db.State_Desc.Select(x => x.State_name).ToList();
+}
 <style>
 
     .loader {
@@ -281,6 +285,18 @@
     <div class="manual_w">
         <label>customer Mobile No.</label>
         <input type="number" name="name" value="" id="pancustmno" />
+    </div>
+
+    <div class="manual_w">
+        <label>State</label>
+        <select name="Title" id="UserState">
+            <option value="">-Select State-</option>
+            @foreach (var item in State)
+            {
+                <option value="@item">@item</option>
+            }
+
+        </select>
     </div>
 
     <div class="sub_b">
@@ -1207,6 +1223,7 @@
             var panfathername = document.getElementById('panfathername').value;
             var panemail = document.getElementById('panemail').value;
             var pancustmno = document.getElementById('pancustmno').value;
+            var userstate = document.getElementById('UserState').value;
 
             if (isBlank(panmarrigests)) {
                 document.getElementById('mess').innerHTML = 'Please Select Title';
@@ -1240,20 +1257,26 @@
                                             document.getElementById('mess').innerHTML = 'Please Enter Customer Mobile No.';
                                         }
                                         else {
-                                            $.ajax({
-                                                url: '@Url.Action("pancardmanual", "Home")',
-                                                data: { msts: panmarrigests, adharno: panadharno, name: panname, dob: pandob, mobile: panmobno, father: panfathername, Email: panemail, cmobile: pancustmno, gender: panradio },
-                                                cache: false,
-                                                type: "POST",
-                                                dataType: 'json',
+                                            if (isBlank(userstate)) {
+                                                document.getElementById('mess').innerHTML = 'Please Select State.'
+                                            }
+                                            else {
+                                                $.ajax({
+                                                    url: '@Url.Action("pancardmanual", "Home")',
+                                                    data: { msts: panmarrigests, adharno: panadharno, name: panname, dob: pandob, mobile: panmobno, father: panfathername, Email: panemail, cmobile: pancustmno, gender: panradio, state: userstate },
+                                                    cache: false,
+                                                    type: "POST",
+                                                    dataType: 'json',
 
-                                                success: function (data) {
+                                                    success: function (data) {
                                                     document.getElementById('mess').innerHTML = data.message;
-                                                    if (data.status = "Pending") {
-                                                        PANCARD_manual();
+                                                       if (data.status = "Pending") {
+                                                           PANCARD_manual();
+                                                       }
                                                     }
-                                                }
-                                            });
+                                                });
+                                            }
+
                                         }
                                     }
                                 }

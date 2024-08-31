@@ -29,6 +29,7 @@ using Vastwebmulti.Hubs;
 using Vastwebmulti.Models;
 using System.Net;
 using Org.BouncyCastle.Asn1.Mozilla;
+using com.google.gson;
 
 namespace Vastwebmulti.Areas.DEALER.Controllers
 {
@@ -11306,23 +11307,19 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                   }).ToList().OrderByDescending(a => a.insertdate);
                 ViewBag.sellercomm = descdetail;
                 ViewBag.isReport = "1";
-
             }
-            catch (Exception ex)
+            catch
             { }
             return PartialView("_Edit_Seller_Commission");
         }
-
         public ActionResult AddSIM()
-        {
-           
+        {           
             var dealerid = User.Identity.GetUserId();
             SimDetail_Info d1 = new SimDetail_Info();
             d1.data1 = db.dealer_sim_new.Where(s => s.dlmid == dealerid).OrderByDescending(s=>s.idno).ToList();
             d1.message = "";
             return View(d1);
         }
-
        [HttpPost]
        public object EditSIMINFO(int? idno)
         {
@@ -11338,7 +11335,6 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
             return Json(new {list= chk , lst1 = Decrypt(chk[0].Password) , list2 = rchpin }, JsonRequestBehavior.AllowGet);
         }
-
         [HttpPost]
         public ActionResult EditSIMINFO1( string Simnumber,string Password, string Circlecode,string RechargePin, string Imeino, string minbal , string Daylimit,string Operator, string posid, string Macaddress)
         {        SimDetail_Info d1 = new SimDetail_Info();
@@ -11421,17 +11417,26 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
               
         }
-
-
         [HttpPost]
-
         public async Task<ActionResult> simonoff(string switch1, int? idno)
         {  var messege = "";
             try
                 {
                 if (!string.IsNullOrEmpty(switch1) && idno != null)
                 {
-                    
+                    VastBazaartoken Responsetoken = new VastBazaartoken();
+                    var client21 = new RestClient("http://API.VASTBAZAAR.COM/api/Web/Siminfosts");
+
+                    var request21 = new RestRequest(Method.POST);
+                    var token21 = Responsetoken.gettoken();
+                    request21.AddHeader("authorization", "bearer " + token21);
+                    // request21.AddHeader("content-type", "application/json");
+
+                    var response21 = client21.Execute(request21);
+                    dynamic json21 = JsonConvert.DeserializeObject(response21.Content);
+                    var statsus = json21.Content.ADDINFO.Status;
+                    if (statsus == true)
+                    {
                         var drop21 = "";
                         var chek = db.dealer_sim_new.Where(s => s.idno == idno).SingleOrDefault();
                         if (chek.opt_code == "BSNL Topup")
@@ -11492,6 +11497,11 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         }
 
                         db.SaveChanges();
+                    }
+                    else
+                    {
+                        messege = "Current Status is Off , Contact to Admin";
+                    }
 
                     }
             else
@@ -11516,47 +11526,98 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             }
         }
         [HttpPost]
+        public ActionResult CheckbalSiminfo(int idno)
+        {
+            var userid = User.Identity.GetUserId();
+            var chk = db.dealer_sim_new.Where(s => s.idno == idno).SingleOrDefault();
+            if(chk!=null)
+            {
+                var chk2 = "";
+                if (chk.opt_code == "BSNL Topup")
+                {
+                    chk2 = "B";
+                }
+                else
+                {
+                    chk2 = db.operatorcommforsells.Where(s => s.optname == chk.opt_code).SingleOrDefault().optcode;
+                }
+                var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
+                var dlmemail = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault().Email;
+                var client2 = new RestClient("https://www.vastwebindia.com/DLMAPI/CheckBalance?OptCode=" + chk2 + "&userid=" + chk.USERID + "&Email=" + dlmemail + "&Operator=" + chk2 + "&Registeremail=" + check1.API_ID);
+                var request2 = new RestRequest(Method.POST);
+                request2.AddHeader("Content-Type", "application/json"); // Add headers if necessary
+
+                // Execute the request asynchronously
+                var response2 = client2.Execute(request2);
+                dynamic json2 = JsonConvert.DeserializeObject(response2.Content);
+                string message = json2.Message;
+                return Json(new { list = message }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { list = "Please Try After Sometime" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
         public object Loginbysiminfo(int ? idno)
         {
             try
             {
-                var chk = db.dealer_sim_new.Where(s => s.idno == idno).ToList();
-                if (chk.Count > 0)
+                VastBazaartoken Responsetoken = new VastBazaartoken();
+                var client21 = new RestClient("http://API.VASTBAZAAR.COM/api/Web/Siminfosts");
+              
+                var request21 = new RestRequest(Method.POST);
+                var token21 = Responsetoken.gettoken();
+                request21.AddHeader("authorization", "bearer " + token21);
+               // request21.AddHeader("content-type", "application/json");
+
+                var response21 = client21.Execute(request21);
+                dynamic json21 = JsonConvert.DeserializeObject(response21.Content);
+                var statsus = json21.Content.ADDINFO.Status;
+                if (statsus == true)
                 {
-                    var chk1 = db.dealer_sim_new.Where(s => s.idno == idno).SingleOrDefault();
-                    var chk2 = "";
-                    if (chk1.opt_code == "BSNL Topup")
+                    var chk = db.dealer_sim_new.Where(s => s.idno == idno).ToList();
+                    if (chk.Count > 0)
                     {
-                        chk2 = "B";
+                        var chk1 = db.dealer_sim_new.Where(s => s.idno == idno).SingleOrDefault();
+                        var chk2 = "";
+                        if (chk1.opt_code == "BSNL Topup")
+                        {
+                            chk2 = "B";
+                        }
+                        else
+                        {
+                            chk2 = db.operatorcommforsells.Where(s => s.optname == chk1.opt_code).SingleOrDefault().optcode;
+                        }
+                        var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
+
+                        var client2 = new RestClient("https://www.vastwebindia.com/DLMAPI/LoginSimInfo?loginid=" + chk1.USERID + "&password=" + Decrypt(chk1.Password) + "&imeino=" + chk1.Imeino + "&Operator=" + chk2 + "&Registeremail=" + check1.API_ID);
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Content-Type", "application/json"); // Add headers if necessary
+
+                        // Execute the request asynchronously
+                        var response2 = client2.Execute(request2);
+                        dynamic json2 = JsonConvert.DeserializeObject(response2.Content);
+
+                        string message = json2.Message;
+                        var mess = "Otp Sent Successfully";
+                        if (message.ToUpper() == mess.ToUpper())
+                        {
+                            message = "OTP";
+                        }
+
+                        return Json(new { list = message }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        chk2 = db.operatorcommforsells.Where(s => s.optname == chk1.opt_code).SingleOrDefault().optcode;
+                        return Json(new { list = "Something Went Wrong" }, JsonRequestBehavior.AllowGet);
                     }
-                    var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
-
-                    var client2 = new RestClient("https://www.vastwebindia.com/DLMAPI/LoginSimInfo?loginid=" + chk1.USERID + "&password=" + Decrypt(chk1.Password) + "&imeino=" + chk1.Imeino + "&Operator=" + chk2 + "&Registeremail=" + check1.API_ID);
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Content-Type", "application/json"); // Add headers if necessary
-
-                    // Execute the request asynchronously
-                    var response2 = client2.Execute(request2);
-                    dynamic json2 = JsonConvert.DeserializeObject(response2.Content);
-
-                    string message = json2.Message;
-                    var mess = "Otp Sent Successfully";
-                    if (message.ToUpper() == mess.ToUpper())
-                    {
-                        message = "OTP";
-                    }
-
-                    return Json(new { list = message }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(new { list = "Something Went Wrong" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { list = "Current Status is Off , Contact to Admin" }, JsonRequestBehavior.AllowGet);
                 }
-             }
+            }
             catch (Exception ex)
             {
                 return Json(new { list = "Please Try Again" }, JsonRequestBehavior.AllowGet);
@@ -11602,85 +11663,104 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
            
             SimDetail_Info d11 = new SimDetail_Info();
             try
-            {  
+            {
+                VastBazaartoken Responsetoken = new VastBazaartoken();
+                var client21 = new RestClient("http://API.VASTBAZAAR.COM/api/Web/Siminfosts");
+
+                var request21 = new RestRequest(Method.POST);
+                var token21 = Responsetoken.gettoken();
+                request21.AddHeader("authorization", "bearer " + token21);
+                // request21.AddHeader("content-type", "application/json");
+
+                var response21 = client21.Execute(request21);
+                dynamic json21 = JsonConvert.DeserializeObject(response21.Content);
+                var statsus = json21.Content.ADDINFO.Status;
+                if (statsus == true)
+                {
+
                     if (!string.IsNullOrEmpty(drop2))
                     {
-                      var  drop21 = db.operatorcommforsells.Where(s => s.optname == drop2).SingleOrDefault().optcode;
-                      var checkr = db.dealer_sim_new.Where(s => s.USERID == USERID && s.opt_code == drop2).ToList();
-                   if(checkr.Count == 0) 
-                   {
-                        var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
-                        var checkdlm = db.Dealer_Details.Where(s => s.DealerId == dealerid).SingleOrDefault();
-                        var client = new RestClient("https://www.vastwebindia.com/DLMAPI/SimRegister");
-                        var request = new RestRequest(Method.POST);
-                        request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                        request.AddParameter("RegisterEmail", (check1.API_ID != null) ? check1.API_ID : "");
-                        request.AddParameter("Email", (checkdlm.Email != null) ? checkdlm.Email : "");
-                        request.AddParameter("Simnumber", (USERID != null) ? USERID : "");
-                        request.AddParameter("Password", (Password != null) ? Password : "");
-                        request.AddParameter("Circlecode", (Zone != null) ? Zone : "");
-                        request.AddParameter("RechargePin", (RechargePin != null) ? RechargePin : "");
-                        request.AddParameter("Imeino", (Imeino != null) ? Imeino : "");
-                        request.AddParameter("minbal", (minbal != null) ? minbal : "");
-                        request.AddParameter("Daylimit", (Daylimit != null) ? Daylimit : "");
-                        request.AddParameter("Operator", (drop21 != null) ? drop21 : "");
-                        request.AddParameter("posid", (posid != null) ? posid : "");
-                        request.AddParameter("Macaddress", (Macaddress != null) ? Macaddress : "");
-
-
-                        var response = client.Execute(request);
-                        dynamic json = JsonConvert.DeserializeObject(response.Content);
-
-                        if (json.Responsecode == 1)
+                        var drop21 = db.operatorcommforsells.Where(s => s.optname == drop2).SingleOrDefault().optcode;
+                        var checkr = db.dealer_sim_new.Where(s => s.USERID == USERID && s.opt_code == drop2).ToList();
+                        if (checkr.Count == 0)
                         {
-                            dealer_sim_new d1 = new dealer_sim_new();
-                            d1.dlmid = dealerid;
-                            d1.opt_code = drop2;
-                            d1.Zone = Zone;
-                            d1.USERID = USERID;
-                            d1.Password = Encrypt(Password);
-                            d1.RechargePin = (string.IsNullOrEmpty(RechargePin))?RechargePin : Encrypt(RechargePin);
-                            d1.Imeino = Imeino;
-                            d1.DaylimitMax = Convert.ToInt32(Daylimit);
-                            d1.Etopminbal = minbal;
-                            d1.posid = posid;
-                            d1.Macaddress = Macaddress;
-                            d1.remaining = 0;
-                            d1.status = false;
-                            d1.checks = false;
-                            d1.login = false;
-                            d1.Remark = Remark;
-                            db.dealer_sim_new.Add(d1);
-                            db.SaveChanges();
-                            d11.message = json.Message;
-                            if (drop2 == "BSNL Recharge")
+                            var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
+                            var checkdlm = db.Dealer_Details.Where(s => s.DealerId == dealerid).SingleOrDefault();
+                            var client = new RestClient("https://www.vastwebindia.com/DLMAPI/SimRegister");
+                            var request = new RestRequest(Method.POST);
+                            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                            request.AddParameter("RegisterEmail", (check1.API_ID != null) ? check1.API_ID : "");
+                            request.AddParameter("Email", (checkdlm.Email != null) ? checkdlm.Email : "");
+                            request.AddParameter("Simnumber", (USERID != null) ? USERID : "");
+                            request.AddParameter("Password", (Password != null) ? Password : "");
+                            request.AddParameter("Circlecode", (Zone != null) ? Zone : "");
+                            request.AddParameter("RechargePin", (RechargePin != null) ? RechargePin : "");
+                            request.AddParameter("Imeino", (Imeino != null) ? Imeino : "");
+                            request.AddParameter("minbal", (minbal != null) ? minbal : "");
+                            request.AddParameter("Daylimit", (Daylimit != null) ? Daylimit : "");
+                            request.AddParameter("Operator", (drop21 != null) ? drop21 : "");
+                            request.AddParameter("posid", (posid != null) ? posid : "");
+                            request.AddParameter("Macaddress", (Macaddress != null) ? Macaddress : "");
+
+
+
+                            var response = client.Execute(request);
+                            dynamic json = JsonConvert.DeserializeObject(response.Content);
+
+                            if (json.Responsecode == 1)
                             {
-                               dealer_sim_new d2 = new dealer_sim_new();
-                               d2.dlmid = dealerid;
-                               d2.opt_code = "BSNL Topup";
-                               d2.Zone = Zone;
-                               d2.USERID = USERID;
-                               d2.Password = Encrypt(Password);
-                               d2.RechargePin = (string.IsNullOrEmpty(RechargePin)) ? RechargePin : Encrypt(RechargePin);
-                               d2.Imeino = Imeino;
-                               d2.DaylimitMax = Convert.ToInt32(Daylimit);
-                               d2.Etopminbal = minbal;
-                               d2.posid = posid;
-                               d2.Macaddress = Macaddress;
-                               d2.remaining = 0;
-                               d2.status = false;
-                               d2.checks = false;
-                               d2.login = false;
-                               d2.Remark = Remark;
-                               db.dealer_sim_new.Add(d2);
-                               db.SaveChanges();
-                                    
+                                dealer_sim_new d1 = new dealer_sim_new();
+                                d1.dlmid = dealerid;
+                                d1.opt_code = drop2;
+                                d1.Zone = Zone;
+                                d1.USERID = USERID;
+                                d1.Password = Encrypt(Password);
+                                d1.RechargePin = (string.IsNullOrEmpty(RechargePin)) ? RechargePin : Encrypt(RechargePin);
+                                d1.Imeino = Imeino;
+                                d1.DaylimitMax = Convert.ToInt32(Daylimit);
+                                d1.Etopminbal = minbal;
+                                d1.posid = posid;
+                                d1.Macaddress = Macaddress;
+                                d1.remaining = 0;
+                                d1.status = false;
+                                d1.checks = false;
+                                d1.login = false;
+                                d1.Remark = Remark;
+                                db.dealer_sim_new.Add(d1);
+                                db.SaveChanges();
+                                d11.message = json.Message;
+                                if (drop2 == "BSNL Recharge")
+                                {
+                                    dealer_sim_new d2 = new dealer_sim_new();
+                                    d2.dlmid = dealerid;
+                                    d2.opt_code = "BSNL Topup";
+                                    d2.Zone = Zone;
+                                    d2.USERID = USERID;
+                                    d2.Password = Encrypt(Password);
+                                    d2.RechargePin = (string.IsNullOrEmpty(RechargePin)) ? RechargePin : Encrypt(RechargePin);
+                                    d2.Imeino = Imeino;
+                                    d2.DaylimitMax = Convert.ToInt32(Daylimit);
+                                    d2.Etopminbal = minbal;
+                                    d2.posid = posid;
+                                    d2.Macaddress = Macaddress;
+                                    d2.remaining = 0;
+                                    d2.status = false;
+                                    d2.checks = false;
+                                    d2.login = false;
+                                    d2.Remark = Remark;
+                                    db.dealer_sim_new.Add(d2);
+                                    db.SaveChanges();
+
+                                }
                             }
                         }
                     }
-                }
 
-              
+                }
+                else
+                {
+                    d11.message = "Current Status is Off , Contact to Admin";
+                }
                 d11.data1 = db.dealer_sim_new.Where(s => s.dlmid == dealerid).OrderByDescending(s => s.idno).ToList();
               
                 return PartialView("_SimINfo",d11);
@@ -11744,6 +11824,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         {
             try
             {
+
                 var dealerid = User.Identity.GetUserId();
                 var entry = db.dealer_sim.SingleOrDefault(a => a.idno == Idno);
                 entry.dailyhome_limit = dailyhome_limit;
@@ -11839,35 +11920,44 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         }
         [HttpPost]
         public ActionResult ADDSELLINGOPT(string drop1 , string drop2, decimal comm1)
-        {
-            var userid = User.Identity.GetUserId();
-            var chk1 = db.operatorcommforsellStatus.Where(s => s.userid == userid && s.operator_1 == drop2).ToList();
-            if(chk1.Count == 0)
-            { var dlm = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
-                operatorcommforsellStatu d1 = new operatorcommforsellStatu();
-                d1.userid = userid;
-                d1.dlm_Name = dlm.DealerName;
-                d1.farmname = dlm.FarmName;
-                d1.Email = dlm.Email;
-                d1.Timing = DateTime.Now;
-                d1.operator_1 = drop2;
-                d1.comm = comm1;
-                d1.status = "Pending";
-                db.operatorcommforsellStatus.Add(d1);
-                db.SaveChanges();
+        {var userid = User.Identity.GetUserId();
+            var chkd = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == userid && s.registration_Status == true && s.Status == true).ToList();
+            if (chkd.Count > 0)
+            {
+
+                var chk1 = db.operatorcommforsellStatus.Where(s => s.userid == userid && s.operator_1 == drop2).ToList();
+                if (chk1.Count == 0)
+                {
+                    var dlm = db.Dealer_Details.Where(s => s.DealerId == userid).SingleOrDefault();
+                    operatorcommforsellStatu d1 = new operatorcommforsellStatu();
+                    d1.userid = userid;
+                    d1.dlm_Name = dlm.DealerName;
+                    d1.farmname = dlm.FarmName;
+                    d1.Email = dlm.Email;
+                    d1.Timing = DateTime.Now;
+                    d1.operator_1 = drop2;
+                    d1.comm = comm1;
+                    d1.status = "Pending";
+                    db.operatorcommforsellStatus.Add(d1);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var chk34 = db.operatorcommforsellStatus.Where(s => s.userid == userid && s.operator_1 == drop2).SingleOrDefault();
+                    chk34.Timing = DateTime.Now;
+
+                    chk34.comm = comm1;
+                    chk34.status = "Pending";
+                    db.SaveChanges();
+                }
+
+                var chk = db.operatorcommforsellStatus.Where(s => s.userid == userid).OrderByDescending(s => s.idno).ToList();
+                return PartialView("optsellforrcharge", chk);
             }
             else
             {
-                var chk34 = db.operatorcommforsellStatus.Where(s => s.userid == userid && s.operator_1 == drop2).SingleOrDefault();
-                chk34.Timing = DateTime.Now;
-              
-                chk34.comm = comm1;
-                chk34.status = "Pending";
-                db.SaveChanges();
+                return RedirectToAction("Recharge_Report");
             }
-
-            var chk = db.operatorcommforsellStatus.Where(s => s.userid == userid).OrderByDescending(s=>s.idno).ToList();
-            return PartialView("optsellforrcharge", chk);
         }
 
 
@@ -11955,41 +12045,49 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         public ActionResult sellRechargeReport(string txt_frm_date, string txt_to_date, string ddl_status, string Operator)
         {
             var userid = User.Identity.GetUserId();
-            DateTime frm1 = Convert.ToDateTime(txt_frm_date);
-            DateTime to1 = Convert.ToDateTime(txt_to_date);
-
-            txt_frm_date = frm1.ToString("dd-MM-yyyy");
-            txt_to_date = to1.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-
-            var operator_value = db.operatorcommforsells.Distinct().ToList();
-            ViewBag.Operator = new SelectList(operator_value, "optname", "optname");
-
-            var rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid).ToList();
-
-            if (!string.IsNullOrEmpty(ddl_status) || !string.IsNullOrEmpty(Operator))
+            var chkd = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == userid && s.registration_Status == true && s.Status == true).ToList();
+            if (chkd.Count > 0)
             {
-                if (!string.IsNullOrEmpty(ddl_status) && !string.IsNullOrEmpty(Operator))
+                DateTime frm1 = Convert.ToDateTime(txt_frm_date);
+                DateTime to1 = Convert.ToDateTime(txt_to_date);
+
+                txt_frm_date = frm1.ToString("dd-MM-yyyy");
+                txt_to_date = to1.ToString("dd-MM-yyyy");
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+                DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+                DateTime frm_date = Convert.ToDateTime(dt).Date;
+                DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+
+                var operator_value = db.operatorcommforsells.Distinct().ToList();
+                ViewBag.Operator = new SelectList(operator_value, "optname", "optname");
+
+                var rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid).ToList();
+
+                if (!string.IsNullOrEmpty(ddl_status) || !string.IsNullOrEmpty(Operator))
                 {
-                    rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.Rstaus.ToUpper() == ddl_status.ToUpper() && s.optcode == Operator).ToList();
+                    if (!string.IsNullOrEmpty(ddl_status) && !string.IsNullOrEmpty(Operator))
+                    {
+                        rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.Rstaus.ToUpper() == ddl_status.ToUpper() && s.optcode == Operator).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(ddl_status))
+                    {
+                        rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.Rstaus.ToUpper() == ddl_status.ToUpper()).ToList();
+                    }
+                    else
+                    {
+                        rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.optcode == Operator).ToList();
+                    }
                 }
-                else if (!string.IsNullOrEmpty(ddl_status))
-                {
-                    rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.Rstaus.ToUpper() == ddl_status.ToUpper()).ToList();
-                }
-                else
-                {
-                    rowdata = db.Selling_Recharge_info.Where(s => s.Rch_time > frm_date && s.Rch_time < to_date && s.Dealer_id == userid && s.optcode == Operator).ToList();
-                }
+                ViewBag.Operator = new SelectList(operator_value, "OptType", "optname");
+                ViewBag.chk = "post";
+                return PartialView("_sellRechargeReport", rowdata);
             }
-            ViewBag.Operator = new SelectList(operator_value, "OptType", "optname");
-            ViewBag.chk = "post";
-            return PartialView("_sellRechargeReport", rowdata);
+            else
+            {
+                return RedirectToAction("Recharge_Report");
+            }
         }
         public ActionResult Extracomm_Report()
         {
