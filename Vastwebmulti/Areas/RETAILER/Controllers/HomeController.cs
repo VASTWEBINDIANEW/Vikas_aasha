@@ -67,6 +67,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using QRCoder;
 using Vastwebmulti.Models.Scheduling;
+using Remotion.FunctionalProgramming;
+using java.util;
 //using paytmresponselibrary;
 
 
@@ -33164,6 +33166,113 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             TempData["respmsgreq"] = msg;
             return RedirectToAction("UPICollection");
         }
+        public static string EncryptCard(string plainText, string key)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(key);
+                aes.IV = GenerateIV(aes.BlockSize / 8);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
+                        {
+                            streamWriter.Write(plainText);
+                        }
+                    }
+                    byte[] iv = aes.IV;
+                    byte[] encrypted = memoryStream.ToArray();
+                    byte[] result = new byte[iv.Length + encrypted.Length];
+                    Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+                    Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
+                    return Convert.ToBase64String(result);
+                }
+            }
+        }
+        private static byte[] GenerateIV(int size)
+        {
+            byte[] iv = new byte[size];
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(iv);
+            }
+            return iv;
+        }
+        [HttpPost]
+        public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber, string CVV, string Exp, string Otp)
+        {
+            string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
+            var DcCardNumber = Cardnumber;
+            var RetailerId = User.Identity.GetUserId();
+            Guid newGuid = Guid.NewGuid();
+            string timestamp = DateTime.Now.ToString("yyyyMMddHHmm");
+            string RequestId = newGuid + "-" + timestamp;
+            var EnCardNumber = EncryptCard(Cardnumber, key);
+            var EnCVV = EncryptCard(CVV, key);
+            var EnExp = EncryptCard(Exp, key);
+            var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
+            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            var msg = db.PaymentGateway_Fund_insert("Retailer", RetailerId, Amount, RequestId, "", DcCardNumber, output).SingleOrDefault().msg;
+            if(msg == "OK")
+            {
+                var tokn = Responsetoken.gettoken();
+                Models.Vastbillpay vb = new Models.Vastbillpay();
+                var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
+                var Content = Response.Content.ToString();
+                dynamic json = JsonConvert.DeserializeObject(Content);
+                var ADDINFO = json.Content.ADDINFO.ToString();
+                dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                string Status = json1.Status;
+                string Message = json1.Message;
+                bool IsSendOtp = json1.Issendotp;
+                if (Status == "Pending" && IsSendOtp)
+                {
+                    return Json(new { Status = Status, Issendotp = IsSendOtp , Message = Message, RequestId = RequestId });
+                }
+                else
+                {
+                    var response = db.GetWayCreditCardFund(RequestId, "NetBanking", "", Status, Message, "", output).SingleOrDefault().msg;
+                    return Json(new { Status = Status, Message = Message, RequestId = RequestId });
+                }
+            }
+            else
+            {
+                return Json(new { Status = "Reject", Message = msg, RequestId = RequestId });
+            }
+        }
+        [HttpPost]
+        public ActionResult CreditCardFundTransfer(decimal Amount, string CardNumber, string Month, string Year, string CVV, string Otp, string RequestId)
+        {
+            string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
+            var RetailerId = User.Identity.GetUserId();
+            Month = Month.Length == 1 ? "0" + Month : Month;
+            var Exp = Month + "/" + Year;
+            var EnCardNumber = EncryptCard(CardNumber, key);
+            var EnCVV = EncryptCard(CVV, key);
+            var EnExp = EncryptCard(Exp, key);
+            var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
+            var tokn = Responsetoken.gettoken();
+            Models.Vastbillpay vb = new Models.Vastbillpay();
+            var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
+            var Content = Response.Content.ToString();
+            dynamic json = JsonConvert.DeserializeObject(Content);
+            var ADDINFO = json.Content.ADDINFO.ToString();
+            dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+            string Status = json1.Status;
+            string Message = json1.Message;
+            string csctransid = json1.csctransid;
+            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            if (Status.ToUpper() == "SUCCESS")
+            {
+                var response = db.GetWayCreditCardFund(RequestId, "NetBanking", "", Status, Message, csctransid, output).SingleOrDefault().msg;
+            }
+            else
+            {
+                var response = db.GetWayCreditCardFund(RequestId, "NetBanking", "", Status, Message, csctransid, output).SingleOrDefault().msg;
+            }
+            return RedirectToAction("GatewayTRANSFER", "Home");
+        }
         public ActionResult GatewayTRANSFER()
         {
             ViewBag.msg = TempData["msg"];
@@ -33181,6 +33290,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.totalfailedamount = totalFailed;
             ViewBag.totalpendingamount = totalpending;
             ViewBag.totalchargesamount = totalcharges;
+            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Name == "CREDITCARD").FirstOrDefault().Sts;
             return View(chk);
         }
         [HttpPost]
@@ -33199,6 +33309,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.totalfailedamount = totalFailed;
             ViewBag.totalpendingamount = totalpending;
             ViewBag.totalchargesamount = totalcharges;
+            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Name == "CREDITCARD").FirstOrDefault().Sts;
             return View(chk);
         }
         public ActionResult PDFGatewayTRANSFER(DateTime txt_frm_date, DateTime txt_to_date)
@@ -33350,7 +33461,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         var phonepeauth = db.phonepeauths.SingleOrDefault();
                                         if (phonepeauth != null)
                                         {
-                                            var msg = db.PaymentGateway_Fund_insert("Retailer", userid, txtamt, uniqueid, "", output).SingleOrDefault().msg;
+                                            var msg = db.PaymentGateway_Fund_insert("Retailer", userid, txtamt, uniqueid, "", "", output).SingleOrDefault().msg;
                                             if (msg == "OK")
                                             {
                                                 var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -33426,7 +33537,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         var auth = db.Gateway_Auth.SingleOrDefault();
                                         if (auth != null)
                                         {
-                                            var msg = db.PaymentGateway_Fund_insert("Retailer", userid, txtamt, uniqueid, "", output).SingleOrDefault().msg;
+                                            var msg = db.PaymentGateway_Fund_insert("Retailer", userid, txtamt, uniqueid, "", "", output).SingleOrDefault().msg;
                                             if (msg == "OK")
                                             {
                                                 // PAYU Gateway 
@@ -36527,7 +36638,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-        public ActionResult pancardmanual( string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender, string state)
+        public ActionResult pancardmanual(string msts, string adharno, string name, DateTime dob, string mobile, string father, string Email, string cmobile, string gender, string state)
         {
             var userid = User.Identity.GetUserId();
             var retailer = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
