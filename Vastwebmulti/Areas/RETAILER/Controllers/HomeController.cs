@@ -15816,6 +15816,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var apinm = "RADIANT";
             if (apinm == "RADIANT")
             {
+
                 Radiantdmt radi = new Radiantdmt();
                 var radiantauthchk = db.radiantauths.SingleOrDefault();
                 var tokenchk = db.radianttokens.SingleOrDefault();
