@@ -871,6 +871,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<totalimeino> totalimeinoes { get; set; }
         public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
         public virtual DbSet<fronticon> fronticons { get; set; }
+        public virtual DbSet<CreditCardCharge> CreditCardCharges { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -21217,31 +21218,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_paymentgateway_dlm_rem_userSlab_again", dlmidParameter, creditCardstsParameter, debitCardstsParameter, netbankingstsParameter, cashcardstsParameter, walletstsParameter, upistsParameter, debitupto2000Parameter, debitabove2000Parameter, creditcardParameter, netbankingParameter, walletParameter, uPIParameter, creditcardmaxParameter, netbankmaxParameter, debitmaxParameter, upimaxParameter, walletmaxParameter, axisParameter, othersParameter, creditsettlementParameter);
         }
     
-        public virtual ObjectResult<PaymentGateway_Fund_insert_Result> PaymentGateway_Fund_insert(string role, string userid, Nullable<decimal> amount, string txnid, string type, ObjectParameter output)
-        {
-            var roleParameter = role != null ?
-                new ObjectParameter("role", role) :
-                new ObjectParameter("role", typeof(string));
-    
-            var useridParameter = userid != null ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("amount", amount) :
-                new ObjectParameter("amount", typeof(decimal));
-    
-            var txnidParameter = txnid != null ?
-                new ObjectParameter("txnid", txnid) :
-                new ObjectParameter("txnid", typeof(string));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Result>("PaymentGateway_Fund_insert", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, output);
-        }
-    
         public virtual ObjectResult<Select_Retailer_Details_all_Result> Select_Retailer_Details_all(string userid, string searchfor, string alterdby)
         {
             var useridParameter = userid != null ?
@@ -23006,7 +22982,7 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DMT_Check_amount_Result>("DMT_Check_amount", retaileridParameter, finalamountParameter, output);
         }
     
-        public virtual ObjectResult<proc_insert_PAN_CARD12_manual_Result> proc_insert_PAN_CARD12_manual(string retailerId, string title, string gender, string aadharno, string name1, Nullable<System.DateTime> dOB, string aadharregNumber, string fathername, string email1, string mobile1, Nullable<decimal> amount, string requestid, ObjectParameter output)
+        public virtual ObjectResult<proc_insert_PAN_CARD12_manual_Result> proc_insert_PAN_CARD12_manual(string retailerId, string title, string gender, string aadharno, string name1, Nullable<System.DateTime> dOB, string aadharregNumber, string fathername, string email1, string mobile1, Nullable<decimal> amount, string requestid, string state, ObjectParameter output)
         {
             var retailerIdParameter = retailerId != null ?
                 new ObjectParameter("RetailerId", retailerId) :
@@ -23056,7 +23032,11 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("requestid", requestid) :
                 new ObjectParameter("requestid", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_insert_PAN_CARD12_manual_Result>("proc_insert_PAN_CARD12_manual", retailerIdParameter, titleParameter, genderParameter, aadharnoParameter, name1Parameter, dOBParameter, aadharregNumberParameter, fathernameParameter, email1Parameter, mobile1Parameter, amountParameter, requestidParameter, output);
+            var stateParameter = state != null ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_insert_PAN_CARD12_manual_Result>("proc_insert_PAN_CARD12_manual", retailerIdParameter, titleParameter, genderParameter, aadharnoParameter, name1Parameter, dOBParameter, aadharregNumberParameter, fathernameParameter, email1Parameter, mobile1Parameter, amountParameter, requestidParameter, stateParameter, output);
         }
     
         public virtual int proc_PAN_CARD_Refund_new_manual(string idno, string status, string couponStatus, string tXN_ID)
@@ -23378,6 +23358,77 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("appname", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_Upi_Txn_Result>("insert_Upi_Txn", typeParameter, useridParameter, amountParameter, refidParameter, payervpaParameter, dealeridParameter, appnameParameter, output);
+        }
+    
+        public virtual ObjectResult<CreditCardChargReport_Result> CreditCardChargReport(string dealerId, string retailerId)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CreditCardChargReport_Result>("CreditCardChargReport", dealerIdParameter, retailerIdParameter);
+        }
+    
+        public virtual ObjectResult<PaymentGateway_Fund_insert_Result> PaymentGateway_Fund_insert(string role, string userid, Nullable<decimal> amount, string txnid, string type, string cardNumber, ObjectParameter output)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Result>("PaymentGateway_Fund_insert", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, cardNumberParameter, output);
+        }
+    
+        public virtual ObjectResult<GetWayCreditCardFund_Result> GetWayCreditCardFund(string txnid, string mode, string cardname, string status, string errormsg, string paumoneyid, ObjectParameter output)
+        {
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var modeParameter = mode != null ?
+                new ObjectParameter("mode", mode) :
+                new ObjectParameter("mode", typeof(string));
+    
+            var cardnameParameter = cardname != null ?
+                new ObjectParameter("cardname", cardname) :
+                new ObjectParameter("cardname", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var errormsgParameter = errormsg != null ?
+                new ObjectParameter("errormsg", errormsg) :
+                new ObjectParameter("errormsg", typeof(string));
+    
+            var paumoneyidParameter = paumoneyid != null ?
+                new ObjectParameter("paumoneyid", paumoneyid) :
+                new ObjectParameter("paumoneyid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWayCreditCardFund_Result>("GetWayCreditCardFund", txnidParameter, modeParameter, cardnameParameter, statusParameter, errormsgParameter, paumoneyidParameter, output);
         }
     }
 }

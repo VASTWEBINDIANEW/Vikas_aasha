@@ -20,7 +20,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 if (radiantauthinfo != null)
                 {
                     System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+                    string Baseurl = "https://aceneobank.com/apiService/";
                     var client = new RestClient(Baseurl + "apiLogin");
                     var request = new RestRequest(Method.POST);
                     //request.AlwaysMultipartFormData = true;
@@ -66,7 +66,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("sendernumber " + sendernumber);
 	
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
 			WriteLog("Request " + Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
 			var client = new RestClient(Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
             var request = new RestRequest(Method.GET);
@@ -93,7 +93,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Name " + Name);
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/CreateCustomer");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -128,7 +128,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 			WriteLog("sendernumber "+ sendernumber);
 			WriteLog("Otp " + Otp);
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/VerifyCustomer");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -162,7 +162,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Accountnumber " + Accountnumber);
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/AddBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -201,7 +201,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("*************************** DeleteBeneficiary ************************");
             WriteLog("ID " + id);
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/DeleteBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -238,7 +238,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Accountnumber " + Accountnumber);
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/VerifyBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -279,7 +279,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("customerid " + customerid);
             WriteLog("amount " + amount);
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/Moneytransfer");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -320,7 +320,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("sendernumber " + sendernumber);
             WriteLog("amount " + amount);
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "payout/reedem");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -359,7 +359,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("**************************** RadiantDistributorCreate **********************");
 		
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11|  SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "StoreDistributorDetails");
             var request = new RestRequest(Method.POST);
             request.AddHeader("clientId", clientId);
@@ -404,7 +404,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("******************************** RadiantAgentCreate **************************");
 
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "StoredetailsAgent");
             var request = new RestRequest(Method.POST);
             request.AddHeader("clientId", clientId);
@@ -475,7 +475,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("************************** Radiantstate **************************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "getState");
             var request = new RestRequest(Method.GET);
             request.AddHeader("clientId", clientId);
@@ -494,7 +494,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("******************** RadiantgetMcc **********************************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "getMcc");
             var request = new RestRequest(Method.GET);
             request.AddHeader("clientId", clientId);
@@ -506,6 +506,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             {
 				WriteLog("Response Code " + responsecheck.StatusCode);
 				WriteLog("Response " + responsecheck.Content);
+                WriteLog("yescode" + responsecheck);
             }
             catch { }
 			return responsecheck;
@@ -514,7 +515,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
             WriteLog("********************* customerparamsAsync ***********************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "billpay/customer-params");
 			var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -546,7 +547,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
             WriteLog("********************** BillFetch ****************************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "billpay/bill-fetch");
 			var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -568,7 +569,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 			request.AddParameter("application/json", reqbody,ParameterType.RequestBody);
 			IRestResponse responsecheck = client.Execute(request);
             try
-            {WriteLog("Response Code " + responsecheck.StatusCode);
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
 				WriteLog("Response " + responsecheck.Content);
 			}
             catch { }
@@ -578,7 +580,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************** BillPay **********************************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "billpay/bill-pay");
 			var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -615,7 +617,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
 			WriteLog("********************* Billvalidation *****************************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "billpay/bill-validation");
 			var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -651,7 +653,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 	    public IRestResponse AEPSbankDetails(string agentid,string token,string clientId,string ClientSecret,string apiKey)
         {
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/bankDetails");
 			var request = new RestRequest(Method.GET);
             request.AddHeader("X-Root-id", agentid);
@@ -669,7 +671,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 			WriteLog("********************* customerparamsAsync ***********************");
 			
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/twoFactorAuth");
 			var request = new RestRequest(Method.POST);
 			request.AddHeader("X-Root-id", agentid);
@@ -708,7 +710,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
 			WriteLog("********************* customerparamsAsync ***********************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/cashwithdrawal");
 			var request = new RestRequest(Method.POST);
 
@@ -750,7 +752,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
 			WriteLog("********************* customerparamsAsync ***********************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/BalanceEnquiry");
 			var request = new RestRequest(Method.POST);
 			request.AddHeader("X-Root-id", agentid);
@@ -790,7 +792,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
 			WriteLog("********************* customerparamsAsync ***********************");
 			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/MiniStatement");
 			var request = new RestRequest(Method.POST);
 
@@ -832,7 +834,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 		{
 			WriteLog("********************* customerparamsAsync ***********************");
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+			string Baseurl = "https://aceneobank.com/apiService/";
 			var client = new RestClient(Baseurl + "AEPS/AadhaarPay");
 			var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -873,7 +875,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycSendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "AEPS/ekycSendOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("apiKey", apiKey);
@@ -899,7 +901,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycVerifyOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "AEPS/ekycVerifyOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("apiKey", apiKey);
@@ -927,7 +929,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycAuthBiometric *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "AEPS/EkycAuthBiometric");
             var request = new RestRequest(Method.POST);
             request.AddHeader("apiKey", apiKey);
@@ -955,7 +957,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycStatusCheck *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
 
             var client = new RestClient(Baseurl + "AEPS/EkycStatusCheck/"+ agent_id);
             var request = new RestRequest(Method.GET);
@@ -973,7 +975,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/sendOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
@@ -1008,7 +1010,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycAuthBiometric *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "listDistributor");
             var request = new RestRequest(Method.POST);
             request.AddHeader("apiKey", apiKey);
@@ -1037,7 +1039,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* EkycAuthBiometric *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "listAgent");
             var request = new RestRequest(Method.POST);
             request.AddHeader("apiKey", apiKey);
@@ -1066,7 +1068,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/orderCreate");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);
@@ -1098,7 +1100,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/collect/payOrder");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);
@@ -1133,7 +1135,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/upiVerify");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);
@@ -1168,7 +1170,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/upiVerify");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);
@@ -1200,7 +1202,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/UPIATMsubscriptionCheck");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1231,7 +1233,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/subscriptionOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1263,7 +1265,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/subscription");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1296,7 +1298,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/Unsubscription");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1329,7 +1331,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/sendOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1361,7 +1363,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/verifyOTP");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1393,7 +1395,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/statusCheck");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentId);
@@ -1423,7 +1425,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/checkIntentStatus");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);
@@ -1455,7 +1457,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.dev.acepe.co.in/apiService/";
+            string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/checkCollectStatus");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agent_id);

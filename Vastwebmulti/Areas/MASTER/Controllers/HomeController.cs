@@ -10135,7 +10135,7 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
                 }
                 if (kycstatus == "FULLKYC")
                 {
-                    var msg = db.PaymentGateway_Fund_insert("Master", userid, txtamt, txnid, ddl_type, output).SingleOrDefault().msg;
+                    var msg = db.PaymentGateway_Fund_insert("Master", userid, txtamt, txnid, ddl_type,"", output).SingleOrDefault().msg;
                     if (msg == "OK")
                     {
                         var dropcategory = "DC,CC,NB,UPI,CASH";
