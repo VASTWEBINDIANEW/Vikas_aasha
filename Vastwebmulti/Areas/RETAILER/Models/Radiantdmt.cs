@@ -11,8 +11,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 {
     public class Radiantdmt
     {
-        public void Token(out string accesstoken, out string agentID,string clientId,string ClientSecret,string apiKey,string userid,string password)
+        public void Token(out string accesstoken, out string agentID, string clientId, string ClientSecret, string apiKey, string userid, string password)
         {
+            WriteLog("Token  *******************");
             accesstoken = ""; agentID = "";
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
@@ -28,12 +29,46 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                     request.AddHeader("ClientSecret", ClientSecret);
                     //request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
                     request.AddHeader("apiKey", apiKey);
-                    request.AddParameter("agentID", userid);
-                    request.AddParameter("agentSecret", password);
+                    //request.AddParameter("agentID", userid);
+                    //request.AddParameter("agentSecret", password);
+                    var body = new
+                    {
+                        agentID = userid,
+                        agentSecret = password
+
+                    };
+                    var jsonbody = JsonConvert.SerializeObject(body);
+                    WriteLog("Request " + jsonbody);
+                    request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+
+
                     IRestResponse responsecheck = client.Execute(request);
+
+                    try
+                    {
+                        WriteLog("API URL " + Baseurl + "apiLogin");
+                        WriteLog("clientId " + clientId);
+                        WriteLog("ClientSecret " + ClientSecret);
+                        WriteLog("apiKey " + apiKey);
+                        WriteLog("agentID " + userid);
+                        WriteLog("agentSecret " + password);
+
+
+                    }
+                    catch { }
+
+
+                    WriteLog("Token Api Response Code " + responsecheck.StatusCode);
+                    try
+                    {
+                        WriteLog("Token Api Response " + responsecheck.Content);
+                    }
+                    catch { }
                     if (responsecheck.StatusCode == HttpStatusCode.OK)
                     {
                         var outputresp = responsecheck.Content;
+                        WriteLog("Token Api Response " + outputresp);
+
                         dynamic respchk = JsonConvert.DeserializeObject<dynamic>(outputresp);
                         if (respchk.success == true)
                         {
@@ -60,74 +95,85 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 }
             }
         }
-        public IRestResponse Getbenificry(string agentid, string sendernumber, string token,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse Getbenificry(string agentid, string sendernumber, string token, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("************************ Getbenificry ************************************");
             WriteLog("sendernumber " + sendernumber);
-	
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
-			WriteLog("Request " + Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
-			var client = new RestClient(Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
+            WriteLog("Request " + Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
+            var client = new RestClient(Baseurl + "dmt/getBeneficiers?agent_id=" + agentid + "&senderno=" + sendernumber + "");
             var request = new RestRequest(Method.GET);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
             request.AddHeader("Authorization", "Bearer " + token + "");
+            try
+            {
+                WriteLog("Header X-Root-id " + agentid);
+                WriteLog("Header clientId " + clientId);
+                WriteLog("Header ClientSecret " + ClientSecret);
+                WriteLog("Header apiKey " + apiKey);
+                WriteLog("Header Authorization " + "Bearer " + token + "");
+
+            }
+            catch { }
             IRestResponse responsecheck = client.Execute(request);
             try
             {
                 WriteLog("Response Code " + responsecheck.StatusCode);
                 WriteLog("Response " + responsecheck.Content);
-			}
+            }
             catch { }
             return responsecheck;
         }
-        public IRestResponse CreateSendernumber(string agentid, string token, string sendernumber, string Name,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse CreateSendernumber(string agentid, string token, string sendernumber, string Name, string clientId, string ClientSecret, string apiKey)
         {
-			WriteLog("************************ CreateSendernumber ************************************");
+            WriteLog("************************ CreateSendernumber ************************************");
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Name " + Name);
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/CreateCustomer");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
             request.AddHeader("Authorization", "Bearer " + token + "");
             //  request.AlwaysMultipartFormData = true;
-            var body = new {
-				agent_id= agentid,
-				senderno= sendernumber,
-				sendername= Name
-			};
-            var jsonbody=JsonConvert.SerializeObject(body);
-			WriteLog("Request " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+            var body = new
+            {
+                agent_id = agentid,
+                senderno = sendernumber,
+                sendername = Name
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + response.StatusCode);
-				WriteLog("Response " + response.Content);
+                WriteLog("Response Code " + response.StatusCode);
+                WriteLog("Response " + response.Content);
             }
             catch { }
-			return response;
+            return response;
         }
-        public IRestResponse Verifyotp(string agentid, string token, string sendernumber, string Otp,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse Verifyotp(string agentid, string token, string sendernumber, string Otp, string clientId, string ClientSecret, string apiKey)
         {
-			WriteLog("************************ Verifyotp ************************************");
-			WriteLog("sendernumber "+ sendernumber);
-			WriteLog("Otp " + Otp);
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            WriteLog("************************ Verifyotp ************************************");
+            WriteLog("sendernumber " + sendernumber);
+            WriteLog("Otp " + Otp);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/VerifyCustomer");
             var request = new RestRequest(Method.POST);
@@ -140,35 +186,35 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             //request.AlwaysMultipartFormData = true;
             var body = new
             {
-				otp= Otp,
-				agent_id= agentid,
-				senderno= sendernumber
-			};
-			var jsonbody = JsonConvert.SerializeObject(body);
-			WriteLog("Request " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+                otp = Otp,
+                agent_id = agentid,
+                senderno = sendernumber
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + response.StatusCode);
-				WriteLog("Response " + response.Content);
+                WriteLog("Response Code " + response.StatusCode);
+                WriteLog("Response " + response.Content);
             }
             catch { }
-			return response;
+            return response;
         }
-        public IRestResponse AddBeneficiary(string agentid, string token, string sendernumber, string Name, string Accountnumber, string bankname, string ifsccode,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse AddBeneficiary(string agentid, string token, string sendernumber, string Name, string Accountnumber, string bankname, string ifsccode, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("****************************** AddBeneficiary *********************************");
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Accountnumber " + Accountnumber);
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/AddBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
@@ -176,38 +222,38 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             //  request.AlwaysMultipartFormData = true;
             var body = new
             {
-				agent_id=agentid,
-				senderno= sendernumber,
-				mobileno= sendernumber,
-				name= Name,
-				accountno= Accountnumber,
-				bankname= bankname,
-				ifsccode= ifsccode
-			};
-			var jsonbody = JsonConvert.SerializeObject(body);
-			WriteLog("Request  " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+                agent_id = agentid,
+                senderno = sendernumber,
+                mobileno = sendernumber,
+                name = Name,
+                accountno = Accountnumber,
+                bankname = bankname,
+                ifsccode = ifsccode
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request  " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response  " + responsecheck.Content);
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response  " + responsecheck.Content);
             }
             catch { }
-			return responsecheck;
+            return responsecheck;
         }
-        public IRestResponse DeleteBeneficiary(string agentid, string token, string id,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse DeleteBeneficiary(string agentid, string token, string id, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("*************************** DeleteBeneficiary ************************");
             WriteLog("ID " + id);
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/DeleteBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-        //    request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //    request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
@@ -216,76 +262,76 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             // request.AlwaysMultipartFormData = true;
             var body = new
             {
-				agent_id= agentid,
-				id= id
-			};
-			var jsonbody = JsonConvert.SerializeObject(body);
-			WriteLog("Request " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+                agent_id = agentid,
+                id = id
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
 
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
             }
             catch { }
-			return responsecheck;
+            return responsecheck;
         }
-        public IRestResponse VerifyBeneficiary(string agentid, string token, string sendernumber, string Name, string Accountnumber, string bankname, string ifsccode, string id,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse VerifyBeneficiary(string agentid, string token, string sendernumber, string Name, string Accountnumber, string bankname, string ifsccode, string id, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("*************************** VerifyBeneficiary *******************************");
             WriteLog("sendernumber " + sendernumber);
             WriteLog("Accountnumber " + Accountnumber);
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/VerifyBeneficiar");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-         //   request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //   request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
             request.AddHeader("Authorization", "Bearer " + token + "");
             //  request.AlwaysMultipartFormData = true;
             var body = new
             {
-				agent_id=agentid,
-				mobileno= sendernumber,
-				name= Name,
-				accountno= Accountnumber,
-				bankname= bankname,
-				ifsccode= ifsccode,
-				id= id,
-				customermobile= sendernumber
-			};
-			var jsonbody = JsonConvert.SerializeObject(body);
-			WriteLog("Request " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+                agent_id = agentid,
+                mobileno = sendernumber,
+                name = Name,
+                accountno = Accountnumber,
+                bankname = bankname,
+                ifsccode = ifsccode,
+                id = id,
+                customermobile = sendernumber
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
             }
             catch { }
-			return responsecheck;
+            return responsecheck;
         }
-        public IRestResponse Fundtransfer(string agentid, string token, string sendernumber, string benid, string name, string paymode, string amount, string customerid,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse Fundtransfer(string agentid, string token, string sendernumber, string benid, string name, string paymode, string amount, string customerid, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("************************* Fundtransfer *****************************");
             WriteLog("sendernumber " + sendernumber);
             WriteLog("benid " + benid);
             WriteLog("customerid " + customerid);
             WriteLog("amount " + amount);
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "dmt/Moneytransfer");
             var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
@@ -293,28 +339,28 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             //  request.AlwaysMultipartFormData = true;
             var body = new
             {
-				customerid= customerid,
-				senderno= sendernumber,
-				beneficierid= benid,
-				benefmobile= sendernumber,
-				benefname= name,
-				paymode= paymode,
-				amount= amount,
-				agent_id= agentid
-			};
-			var jsonbody = JsonConvert.SerializeObject(body);
-			WriteLog("Request " + jsonbody);
-			request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
+                customerid = customerid,
+                senderno = sendernumber,
+                beneficierid = benid,
+                benefmobile = sendernumber,
+                benefname = name,
+                paymode = paymode,
+                amount = amount,
+                agent_id = agentid
+            };
+            var jsonbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + jsonbody);
+            request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
             catch { }
             return responsecheck;
         }
-        public IRestResponse PayoutTransfer(string agentid, string token, string sendernumber,  string name, string amount,  string clientId, string ClientSecret, string apiKey,string beneAccount,string beneBankName,string beneifsc,string pinCode)
+        public IRestResponse PayoutTransfer(string agentid, string token, string sendernumber, string name, string amount, string clientId, string ClientSecret, string apiKey, string beneAccount, string beneBankName, string beneifsc, string pinCode)
         {
             WriteLog("************************* PayoutTransfer *****************************");
             WriteLog("sendernumber " + sendernumber);
@@ -326,7 +372,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
             request.AddHeader("Authorization", "Bearer " + token + "");
             // request.AlwaysMultipartFormData = true;
@@ -342,7 +388,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 pinCode = pinCode
             };
             var jsonbody = JsonConvert.SerializeObject(body);
-            //       WriteLog("Request " + jsonbody);
+            WriteLog("Request " + jsonbody);
             request.AddParameter("application/json", jsonbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -353,12 +399,11 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-
-        public IRestResponse RadiantDistributorCreate(string firstname,string lastname,string email,string phoneno,string address,string dob,string pincode,string landmark,string state,string district,string image , string image1,string clientId,string ClientSecret,string apiKey)
+        public IRestResponse RadiantDistributorCreate(string firstname, string lastname, string email, string phoneno, string address, string dob, string pincode, string landmark, string state, string district, string image, string image1, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("**************************** RadiantDistributorCreate **********************");
-		
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11|  SecurityProtocolType.Tls12;
+
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "StoreDistributorDetails");
             var request = new RestRequest(Method.POST);
@@ -368,8 +413,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("content-type", "application/json");
             var body = new
             {
-                firstname= firstname,
-                lastname= lastname,
+                firstname = firstname,
+                lastname = lastname,
                 email = email,
                 phoneno = phoneno,
                 address = address,
@@ -380,101 +425,101 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 district = district,
                 ekycimagefront = image,
                 ekycimageback = image1,
-                Edit= "Enable"
+                Edit = "Enable"
             };
             var reqbody = JsonConvert.SerializeObject(body);
             WriteLog("Request " + reqbody);
-			request.AddParameter("application/json", reqbody, ParameterType.RequestBody); 
-            IRestResponse responsecheck = client.Execute(request);
-            try
-            {
-                WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-            catch { }
-			
-			return responsecheck;
-        }
-        public IRestResponse RadiantAgentCreate(string gst ,string tan,string compan,  string distributorCode,string firstname,string lastname,string gender,string dob,string email,string phoneno,string altphoneno,
-            string address,string pancard,string adhaarno,string pincode,string landmark,string district,string state,string accountname,string accountno,
-            string bankname,string branch,string ifsc,string bank_pincode,string companyname,string shopname,string shopaddress,string shopstate,string shopcity,
-            string shopdistrict,string shoparea,string shoppincode,string mcc,string bussiness,string aadharimage,string aadharimageback ,string panimage,string chequeimage,
-            string pancardimage,string passportsizeimage,string shopimage,string shoplicenseimage,string clientId,string ClientSecret,string apiKey)
-        {
-            WriteLog("******************************** RadiantAgentCreate **************************");
-
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.com/apiService/";
-            var client = new RestClient(Baseurl + "StoredetailsAgent");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-            request.AddHeader("distributorCode", distributorCode);
-            request.AddHeader("apiKey", apiKey);
-            request.AddHeader("content-type", "application/json");
-            var body = new
-            {
-                gst = gst,
-                tan =  tan,
-                compan = compan,
-                firstname = firstname,
-                lastname=lastname,
-                gender= gender,
-                dob= dob,
-                email= email,
-                phoneno= phoneno,
-                kyctype= "aadhaar",
-                altphoneno= altphoneno,
-                address= address,
-                pancard= pancard,
-                adhaarno= adhaarno,
-                pincode= pincode,
-                landmark= landmark,
-                district= district,
-                state= state,
-                accountname= accountname,
-                accountno= accountno,
-                bankname= bankname,
-                branch=branch,
-                ifsc= ifsc,
-                bank_pincode= bank_pincode,
-                companyname= companyname,
-                shopname= shopname,
-                shopaddress= shopaddress,
-                shopstate= shopstate,
-                shopcity= shopcity,
-                shopdistrict= shopdistrict,
-                shoparea= shoparea,
-                shoppincode= shoppincode,
-                mcc= mcc,
-                bussiness= bussiness,
-                ekycimage= aadharimage,
-                panimage= panimage,
-                chequeimage= chequeimage,
-                aadharimagefront = aadharimage,
-                 aadharimageback = aadharimageback,
-                pancardimage= pancardimage,
-                passportsizeimage= passportsizeimage,
-                shopimage= shopimage,
-                shoplicenseimage= shoplicenseimage
-            };
-            var reqbody = JsonConvert.SerializeObject(body);
-            WriteLog("Request " + reqbody);
-			request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
                 WriteLog("Response Code " + responsecheck.StatusCode);
                 WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
 
-			}
+            return responsecheck;
+        }
+        public IRestResponse RadiantAgentCreate(string gst, string tan, string compan, string distributorCode, string firstname, string lastname, string gender, string dob, string email, string phoneno, string altphoneno,
+            string address, string pancard, string adhaarno, string pincode, string landmark, string district, string state, string accountname, string accountno,
+            string bankname, string branch, string ifsc, string bank_pincode, string companyname, string shopname, string shopaddress, string shopstate, string shopcity,
+            string shopdistrict, string shoparea, string shoppincode, string mcc, string bussiness, string aadharimage, string aadharimageback, string panimage, string chequeimage,
+            string pancardimage, string passportsizeimage, string shopimage, string shoplicenseimage, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("******************************** RadiantAgentCreate **************************");
+
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "StoredetailsAgent");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            //request.AddHeader("distributorCode", distributorCode);
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                gst = gst,
+                tan = tan,
+                compan = compan,
+                firstname = firstname,
+                lastname = lastname,
+                gender = gender,
+                dob = dob,
+                email = email,
+                phoneno = phoneno,
+                kyctype = "aadhaar",
+                altphoneno = altphoneno,
+                address = address,
+                pancard = pancard,
+                adhaarno = adhaarno,
+                pincode = pincode,
+                landmark = landmark,
+                district = district,
+                state = state,
+                accountname = accountname,
+                accountno = accountno,
+                bankname = bankname,
+                branch = branch,
+                ifsc = ifsc,
+                bank_pincode = bank_pincode,
+                companyname = companyname,
+                shopname = shopname,
+                shopaddress = shopaddress,
+                shopstate = shopstate,
+                shopcity = shopcity,
+                shopdistrict = shopdistrict,
+                shoparea = shoparea,
+                shoppincode = shoppincode,
+                mcc = mcc,
+                bussiness = bussiness,
+                ekycimage = aadharimage,
+                //panimage= panimage,
+                chequeimage = chequeimage,
+                aadharimagefront = aadharimage,
+                aadharimageback = aadharimageback,
+                pancardimage = panimage,
+                passportsizeimage = passportsizeimage,
+                shopimage = shopimage,
+                shoplicenseimage = shoplicenseimage
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code rediant create " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+
+            }
             catch { }
             return responsecheck;
         }
-        public IRestResponse Radiantstate(string clientId,string ClientSecret,string apiKey)
+        public IRestResponse Radiantstate(string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("************************** Radiantstate **************************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "getState");
             var request = new RestRequest(Method.GET);
@@ -485,15 +530,15 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response "+ responsecheck.Content);
-			}
-			catch { }
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
             return responsecheck;
         }
-        public IRestResponse RadiantgetMcc(string clientId,string ClientSecret,string apiKey)
+        public IRestResponse RadiantgetMcc(string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("******************** RadiantgetMcc **********************************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "getMcc");
             var request = new RestRequest(Method.GET);
@@ -504,122 +549,121 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-                WriteLog("yescode" + responsecheck);
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
             }
             catch { }
-			return responsecheck;
+            return responsecheck;
         }
-		public IRestResponse customerparamsAsync(string agentid, string token, string clientId,string ClientSecret,string billerid,string apiKey)
-		{
+        public IRestResponse customerparamsAsync(string agentid, string token, string clientId, string ClientSecret, string billerid, string apiKey)
+        {
             WriteLog("********************* customerparamsAsync ***********************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "billpay/customer-params");
-			var request = new RestRequest(Method.POST);
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "billpay/customer-params");
+            var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
             request.AddHeader("Authorization", "Bearer " + token);
-			request.AddHeader("content-type", "application/json");
-			var requestBody = new
-			{
-				agent = agentid,
-				billerid = billerid
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            request.AddHeader("content-type", "application/json");
+            var requestBody = new
+            {
+                agent = agentid,
+                billerid = billerid
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
             WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-            try
-            {
-                WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-            catch { }
-			return responsecheck;
-		}
-		public IRestResponse BillFetch(string agentid, string token, string clientId, string ClientSecret, string distributorCode, string billerid,string paramName,string paramValue,string apiKey)
-		{
-            WriteLog("********************** BillFetch ****************************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "billpay/bill-fetch");
-			var request = new RestRequest(Method.POST);
-            request.AddHeader("X-Root-id", agentid);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-            request.AddHeader("Authorization", "Bearer " + token + "");
-			request.AddHeader("content-type", "application/json");
-            var body = new
-            {
-				agent=agentid,
-				billerid,
-				paramName,
-				paramValue
-			};
-            var reqbody = JsonConvert.SerializeObject(body);
-            WriteLog("Request " + reqbody);
-			request.AddParameter("application/json", reqbody,ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-            try
-            {
-                WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-            catch { }
-			return responsecheck;
-		}
-        public IRestResponse BillPay(string agentid,string token,string clientId,string ClientSecret,string billerid,string billcategory,string billpaymentid,string billermode,string amount,string apiKey)
-        {
-            WriteLog("********************** BillPay **********************************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "billpay/bill-pay");
-			var request = new RestRequest(Method.POST);
-            request.AddHeader("X-Root-id", agentid);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-          //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-
-
-            request.AddHeader("Authorization", "Bearer " + token + "");
-			request.AddHeader("content-type", "application/json");
-			var body = new
-			{
-				agent = agentid,
-				billerid,
-				billcategory,
-				billpaymentid,
-				billermode,
-				amount
-			};
-			var reqbody = JsonConvert.SerializeObject(body);
-            WriteLog("Request " + reqbody);
-			request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
             try
             {
                 WriteLog("Response Code " + responsecheck.StatusCode);
                 WriteLog("Response " + responsecheck.Content);
-			}
+            }
             catch { }
-			return responsecheck;
-		}
-		public IRestResponse Billvalidation(string agentid, string token, string clientId, string ClientSecret, string distributorCode, string billerid, string paramName, string paramValue, string amount,string apiKey)
-		{
-			WriteLog("********************* Billvalidation *****************************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "billpay/bill-validation");
-			var request = new RestRequest(Method.POST);
+            return responsecheck;
+        }
+        public IRestResponse BillFetch(string agentid, string token, string clientId, string ClientSecret, string distributorCode, string billerid, string paramName, string paramValue, string apiKey)
+        {
+            WriteLog("********************** BillFetch ****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "billpay/bill-fetch");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent = agentid,
+                billerid,
+                paramName,
+                paramValue
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse BillPay(string agentid, string token, string clientId, string ClientSecret, string billerid, string billcategory, string billpaymentid, string billermode, string amount, string apiKey)
+        {
+            WriteLog("********************** BillPay **********************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "billpay/bill-pay");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            //  request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+
+
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent = agentid,
+                billerid,
+                billcategory,
+                billpaymentid,
+                billermode,
+                amount
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse Billvalidation(string agentid, string token, string clientId, string ClientSecret, string distributorCode, string billerid, string paramName, string paramValue, string amount, string apiKey)
+        {
+            WriteLog("********************* Billvalidation *****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "billpay/bill-validation");
+            var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
@@ -629,33 +673,33 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
             request.AddHeader("Authorization", "Bearer " + token + "");
 
-			request.AddHeader("content-type", "application/json");
-			var body = new
-			{
-				agent = agentid,
-				billerid,
-				paramName,
-				paramValue,
-				amount
-			};
-			var reqbody = JsonConvert.SerializeObject(body);
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent = agentid,
+                billerid,
+                paramName,
+                paramValue,
+                amount
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
             WriteLog("Request " + reqbody);
-			request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
             try
             {
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
             }
             catch { }
-			return responsecheck;
-		}
-	    public IRestResponse AEPSbankDetails(string agentid,string token,string clientId,string ClientSecret,string apiKey)
+            return responsecheck;
+        }
+        public IRestResponse AEPSbankDetails(string agentid, string token, string clientId, string ClientSecret, string apiKey)
         {
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/bankDetails");
-			var request = new RestRequest(Method.GET);
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/bankDetails");
+            var request = new RestRequest(Method.GET);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
@@ -663,215 +707,215 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("apiKey", apiKey);
 
             request.AddHeader("Authorization", "Bearer " + token + "");
-			IRestResponse responsecheck = client.Execute(request);
+            IRestResponse responsecheck = client.Execute(request);
             return responsecheck;
-		}
-		public IRestResponse AEPStwoFactorAuth(string agentid,string token,string data,string latitude,string longitude,string aadhaarNo,string nationalbankidentification,string remarks,string bank,string type,string clientId,string ClientSecret,string apiKey)
-		{
-			WriteLog("********************* customerparamsAsync ***********************");
-			
+        }
+        public IRestResponse AEPStwoFactorAuth(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string type, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("********************* customerparamsAsync ***********************");
+
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/twoFactorAuth");
-			var request = new RestRequest(Method.POST);
-			request.AddHeader("X-Root-id", agentid);
-			request.AddHeader("clientId", clientId);
-			request.AddHeader("ClientSecret", ClientSecret);
-			//request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-
-            request.AddHeader("Authorization", "Bearer " + token);
-			request.AddHeader("content-type", "application/json");
-			var requestBody = new
-			{
-				agent_id = agentid,
-				data,
-				latitude,
-				longitude,
-				aadhaarNo,
-				nationalbankidentification,
-				remarks,
-				bank,
-				type
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-			WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-			try
-			{
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-			catch { }
-			return responsecheck;
-		}
-		public IRestResponse AEPScashwithdrawal(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber,string transcationamount,string clientId,string ClientSecret,string apiKey)
-		{
-			WriteLog("********************* customerparamsAsync ***********************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/cashwithdrawal");
-			var request = new RestRequest(Method.POST);
-
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/twoFactorAuth");
+            var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-
-            request.AddHeader("Authorization", "Bearer " + token);
-			request.AddHeader("content-type", "application/json");
-			var requestBody = new
-			{
-				agent_id = agentid,
-				data,
-				latitude,
-				longitude,
-				aadhaarNo,
-				nationalbankidentification,
-				remarks,
-				bank,
-				mobilenumber,
-				transcationamount,
-				type="CW"
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-			WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-			try
-			{
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-			catch { }
-			return responsecheck;
-		}
-		public IRestResponse AEPSBalanceEnquiry(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber,string clientId,string ClientSecret,string apiKey)
-		{
-			WriteLog("********************* customerparamsAsync ***********************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/BalanceEnquiry");
-			var request = new RestRequest(Method.POST);
-			request.AddHeader("X-Root-id", agentid);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            //request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
             request.AddHeader("Authorization", "Bearer " + token);
             request.AddHeader("content-type", "application/json");
             var requestBody = new
-			{
-				agent_id = agentid,
-				data,
-				latitude,
-				longitude,
-				aadhaarNo,
-				nationalbankidentification,
-				remarks,
-				bank,
-				mobilenumber,
-				type = "BE"
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-			WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-			try
-			{
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-			catch { }
-			return responsecheck;
-		}
-		public IRestResponse AEPSMiniStatement(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber,string clientId,string ClientSecret,string apiKey)
-		{
-			WriteLog("********************* customerparamsAsync ***********************");
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/MiniStatement");
-			var request = new RestRequest(Method.POST);
+            {
+                agent_id = agentid,
+                data,
+                latitude,
+                longitude,
+                aadhaarNo,
+                nationalbankidentification,
+                remarks,
+                bank,
+                type
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            WriteLog("Request " + jsonRequestBody);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse AEPScashwithdrawal(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber, string transcationamount, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("********************* customerparamsAsync ***********************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/cashwithdrawal");
+            var request = new RestRequest(Method.POST);
 
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-        //    request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
-
             request.AddHeader("Authorization", "Bearer " + token);
-			request.AddHeader("content-type", "application/json");
-			var requestBody = new
-			{
-				agent_id = agentid,
-				data,
-				latitude,
-				longitude,
-				aadhaarNo,
-				nationalbankidentification,
-				remarks,
-				bank,
-				mobilenumber,
-				type = "MS"
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-			WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-			try
-			{
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-			catch { }
-			return responsecheck;
-		}
-		public IRestResponse AEPSAadhaarPay(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber,string transcationamount,string clientId,string ClientSecret,string apiKey)
-		{
-			WriteLog("********************* customerparamsAsync ***********************");
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-			string Baseurl = "https://aceneobank.com/apiService/";
-			var client = new RestClient(Baseurl + "AEPS/AadhaarPay");
-			var request = new RestRequest(Method.POST);
+            request.AddHeader("content-type", "application/json");
+            var requestBody = new
+            {
+                agent_id = agentid,
+                data,
+                latitude,
+                longitude,
+                aadhaarNo,
+                nationalbankidentification,
+                remarks,
+                bank,
+                mobilenumber,
+                transcationamount,
+                type = "CW"
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            WriteLog("Request " + jsonRequestBody);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse AEPSBalanceEnquiry(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("********************* customerparamsAsync ***********************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/BalanceEnquiry");
+            var request = new RestRequest(Method.POST);
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
             request.AddHeader("Authorization", "Bearer " + token);
-			request.AddHeader("content-type", "application/json");
-			var requestBody = new
-			{
-				agent_id = agentid,
-				data,
-				latitude,
-				longitude,
-				aadhaarNo,
-				nationalbankidentification,
-				remarks,
-				bank,
-				mobilenumber,
-				transcationamount,
-				type = "AP"
-			};
-			string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
-			WriteLog("Request " + jsonRequestBody);
-			request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
-			IRestResponse responsecheck = client.Execute(request);
-			try
-			{
-				WriteLog("Response Code " + responsecheck.StatusCode);
-				WriteLog("Response " + responsecheck.Content);
-			}
-			catch { }
-			return responsecheck;
-		}
-        public IRestResponse EkycSendOTP(string agentid, string aadhaarNo,string apiKey)
+            request.AddHeader("content-type", "application/json");
+            var requestBody = new
+            {
+                agent_id = agentid,
+                data,
+                latitude,
+                longitude,
+                aadhaarNo,
+                nationalbankidentification,
+                remarks,
+                bank,
+                mobilenumber,
+                type = "BE"
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            WriteLog("Request " + jsonRequestBody);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse AEPSMiniStatement(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("********************* customerparamsAsync ***********************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/MiniStatement");
+            var request = new RestRequest(Method.POST);
+
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            //    request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+
+
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var requestBody = new
+            {
+                agent_id = agentid,
+                data,
+                latitude,
+                longitude,
+                aadhaarNo,
+                nationalbankidentification,
+                remarks,
+                bank,
+                mobilenumber,
+                type = "MS"
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            WriteLog("Request " + jsonRequestBody);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse AEPSAadhaarPay(string agentid, string token, string data, string latitude, string longitude, string aadhaarNo, string nationalbankidentification, string remarks, string bank, string mobilenumber, string transcationamount, string clientId, string ClientSecret, string apiKey)
+        {
+            WriteLog("********************* customerparamsAsync ***********************");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "AEPS/AadhaarPay");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var requestBody = new
+            {
+                agent_id = agentid,
+                data,
+                latitude,
+                longitude,
+                aadhaarNo,
+                nationalbankidentification,
+                remarks,
+                bank,
+                mobilenumber,
+                transcationamount,
+                type = "AP"
+            };
+            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+            WriteLog("Request " + jsonRequestBody);
+            request.AddParameter("application/json", jsonRequestBody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse EkycSendOTP(string agentid, string aadhaarNo, string apiKey)
         {
             WriteLog("********************* EkycSendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -897,7 +941,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse EkycVerifyOTP(string agentid, string otp,string primaryKeyId,string encodeTxnId,string apiKey)
+        public IRestResponse EkycVerifyOTP(string agentid, string otp, string primaryKeyId, string encodeTxnId, string apiKey)
         {
             WriteLog("********************* EkycVerifyOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -925,7 +969,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse EkycAuthBiometric(string agent_id, string primaryKeyId, string encodeTxnId,string data,string apiKey)
+        public IRestResponse EkycAuthBiometric(string agent_id, string primaryKeyId, string encodeTxnId, string data, string apiKey)
         {
             WriteLog("********************* EkycAuthBiometric *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -937,7 +981,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             var body = new
             {
                 agent_id,
-                primaryKeyId ,
+                primaryKeyId,
                 encodeTxnId,
                 data
             };
@@ -953,13 +997,13 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse EkycStatusCheck(string agent_id,string apiKey)
+        public IRestResponse EkycStatusCheck(string agent_id, string apiKey)
         {
             WriteLog("********************* EkycStatusCheck *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
 
-            var client = new RestClient(Baseurl + "AEPS/EkycStatusCheck/"+ agent_id);
+            var client = new RestClient(Baseurl + "AEPS/EkycStatusCheck/" + agent_id);
             var request = new RestRequest(Method.GET);
             request.AddHeader("apiKey", apiKey);
             IRestResponse responsecheck = client.Execute(request);
@@ -971,7 +1015,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIsendOTP(string agentid,string token,string clientId,string ClientSecret,string distributorCode,string cusMobile,string cusName,string amount,string apiKey)
+        public IRestResponse UPIsendOTP(string agentid, string token, string clientId, string ClientSecret, string distributorCode, string cusMobile, string cusName, string amount, string apiKey)
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -981,12 +1025,12 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("X-Root-id", agentid);
             request.AddHeader("clientId", clientId);
             request.AddHeader("ClientSecret", ClientSecret);
-           // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
             request.AddHeader("apiKey", apiKey);
 
 
             request.AddHeader("Authorization", "Bearer " + token + "");
-         
+
             request.AddHeader("content-type", "application/json");
             var body = new
             {
@@ -995,7 +1039,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 amount,
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             //request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1006,7 +1050,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse DistributorStatus(string distCode, string clientId,string ClientSecret,string apiKey)
+        public IRestResponse DistributorStatus(string distCode, string clientId, string ClientSecret, string apiKey)
         {
             WriteLog("********************* EkycAuthBiometric *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -1019,8 +1063,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("content-type", "application/json");
             var body = new
             {
-                fromDate="",
-                toDate="",
+                fromDate = "",
+                toDate = "",
                 distCode,
             };
             var reqbody = JsonConvert.SerializeObject(body);
@@ -1056,6 +1100,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
+            dynamic responseData = JsonConvert.DeserializeObject(responsecheck.Content);
             try
             {
                 WriteLog("Response Code " + responsecheck.StatusCode);
@@ -1064,9 +1109,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse WalletCreateOrder(string agent_id, string clientId,string ClientSecret,string apiKey,string token,string amount,string type)
+        public IRestResponse WalletCreateOrder(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string amount, string type)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* WalletCreateOrder *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/orderCreate");
@@ -1085,7 +1130,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 type,
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1096,9 +1141,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse WallepayOrder(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string amount, string orderId,string payerVpa,string payerName,string remarks)
+        public IRestResponse WallepayOrder(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string amount, string orderId, string payerVpa, string payerName, string remarks)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* WallepayOrder *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/collect/payOrder");
@@ -1120,8 +1165,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 remarks
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
-             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
             {
@@ -1131,9 +1176,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse collectPayVerify(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string payerVpa,string orderId,string amount,string payerName,string remarks)
+        public IRestResponse collectPayVerify(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string payerVpa, string orderId, string amount, string payerName, string remarks)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* collectPayVerify *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/upiVerify");
@@ -1155,7 +1200,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 remarks
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             //request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1168,7 +1213,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         }
         public IRestResponse collectPayStatus(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string orderId)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* collectPayStatus *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/upiVerify");
@@ -1184,10 +1229,10 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             {
                 agent_id,
                 orderId,
-                type= "collect",
+                type = "collect",
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             //request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1198,9 +1243,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIATMsubscriptionCheck(string agentId, string clientId,string ClientSecret,string apiKey,string token)
+        public IRestResponse UPIATMsubscriptionCheck(string agentId, string clientId, string ClientSecret, string apiKey, string token)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMsubscriptionCheck *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/UPIATMsubscriptionCheck");
@@ -1215,10 +1260,10 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             var body = new
             {
                 agentId,
-                flag="app"
+                flag = "app"
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             //request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1231,7 +1276,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         }
         public IRestResponse UPIATMsubscriptionOTP(string agentId, string clientId, string ClientSecret, string apiKey, string token)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMsubscriptionOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/subscriptionOTP");
@@ -1245,12 +1290,12 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             request.AddHeader("content-type", "application/json");
             var body = new
             {
-                otp_type= "Send",
+                otp_type = "Send",
                 flag = "app",
                 agentId
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1261,9 +1306,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIATMsubscription(string agentId, string clientId, string ClientSecret, string apiKey, string token,string otp)
+        public IRestResponse UPIATMsubscription(string agentId, string clientId, string ClientSecret, string apiKey, string token, string otp)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMsubscription *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/subscription");
@@ -1280,10 +1325,10 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 otp,
                 flag = "app",
                 agentId,
-                subscription= "subscribe"
+                subscription = "subscribe"
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1296,7 +1341,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         }
         public IRestResponse UPIATMUnsubscription(string agentId, string clientId, string ClientSecret, string apiKey, string token, string otp)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMUnsubscription *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "wallet/Unsubscription");
@@ -1316,7 +1361,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 subscription = "Unsubscription"
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             //request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1327,9 +1372,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIATMsendOTP(string agentId, string clientId, string ClientSecret, string apiKey, string token, string cusMobile,string cusName,string amount)
+        public IRestResponse UPIATMsendOTP(string agentId, string clientId, string ClientSecret, string apiKey, string token, string cusMobile, string cusName, string amount)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/sendOTP");
@@ -1348,7 +1393,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 amount
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1361,7 +1406,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         }
         public IRestResponse UPIATMverifyOTP(string agentId, string clientId, string ClientSecret, string apiKey, string token, string otpRef_id, string refId, string otp)
         {
-            WriteLog("********************* UPIsendOTP *****************************");
+            WriteLog("********************* UPIATMverifyOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             string Baseurl = "https://aceneobank.com/apiService/";
             var client = new RestClient(Baseurl + "upiAtm/verifyOTP");
@@ -1380,7 +1425,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 otp
             };
             var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
+            WriteLog("Request " + reqbody);
             request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             try
@@ -1391,7 +1436,106 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIATMstatusCheck(string agentId, string clientId, string ClientSecret, string apiKey, string token,  string refId)
+        public IRestResponse RadiantUPIStatus(string agentId, string clientId, string ClientSecret, string apiKey, string token, string refId)
+        {
+            WriteLog("********************* Radiant UPI Status  *****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "upiAtm/statusCheck");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentId);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                refId,
+            };
+
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse UPIIntentStatusCheck(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string orderId)
+        {
+            WriteLog("********************* UPIIntentStatusCheck *****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "wallet/checkIntentStatus");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agent_id);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent_id,
+                orderId,
+                type = "intent",
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse UPICollectionStatusCheck(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string orderId)
+        {
+            WriteLog("********************* UPICollectionStatusCheck *****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "wallet/checkCollectStatus");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agent_id);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            WriteLog("Header " + "X-Root-id" + agent_id);
+            WriteLog("Header " + "clientId" + clientId);
+            WriteLog("Header " + "ClientSecret" + ClientSecret);
+            WriteLog("Header " + "apiKey" + apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent_id,
+                orderId,
+                type = "collect",
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+        }
+        public IRestResponse UPIATMstatusCheck(string agentId, string clientId, string ClientSecret, string apiKey, string token, string refId)
         {
             WriteLog("********************* UPIsendOTP *****************************");
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -1421,104 +1565,40 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
-        public IRestResponse UPIIntentStatusCheck(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string orderId)
-        {
-            WriteLog("********************* UPIsendOTP *****************************");
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.com/apiService/";
-            var client = new RestClient(Baseurl + "wallet/checkIntentStatus");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("X-Root-id", agent_id);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-            request.AddHeader("Authorization", "Bearer " + token + "");
-            request.AddHeader("content-type", "application/json");
-            var body = new
-            {
-                agent_id,
-                orderId,
-                type= "intent",
-            };
-            var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
-            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
-            IRestResponse responsecheck = client.Execute(request);
-            try
-            {
-                WriteLog("Response Code " + responsecheck.StatusCode);
-                WriteLog("Response " + responsecheck.Content);
-            }
-            catch { }
-            return responsecheck;
-        }
-        public IRestResponse UPICollectionStatusCheck(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string orderId)
-        {
-            WriteLog("********************* UPIsendOTP *****************************");
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string Baseurl = "https://aceneobank.com/apiService/";
-            var client = new RestClient(Baseurl + "wallet/checkCollectStatus");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("X-Root-id", agent_id);
-            request.AddHeader("clientId", clientId);
-            request.AddHeader("ClientSecret", ClientSecret);
-            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
-            request.AddHeader("apiKey", apiKey);
-            request.AddHeader("Authorization", "Bearer " + token + "");
-            request.AddHeader("content-type", "application/json");
-            var body = new
-            {
-                agent_id,
-                orderId,
-                type = "intent",
-            };
-            var reqbody = JsonConvert.SerializeObject(body);
-            //WriteLog("Request " + reqbody);
-            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
-            IRestResponse responsecheck = client.Execute(request);
-            try
-            {
-                WriteLog("Response Code " + responsecheck.StatusCode);
-                WriteLog("Response " + responsecheck.Content);
-            }
-            catch { }
-            return responsecheck;
-        }
 
         public static void WriteLog(string strMessage)
-		{
-			using (VastwebmultiEntities db = new VastwebmultiEntities())
-			{
-				try
-				{
-					string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
-					StreamWriter log;
-					FileStream fileStream = null;
-					DirectoryInfo logDirInfo = null;
-					FileInfo logFileInfo;
-					string logFilePath = "C:\\Logs\\";
-					logFilePath = logFilePath + "Radiant-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
-					logFileInfo = new FileInfo(logFilePath);
-					logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
-					if (!logDirInfo.Exists) logDirInfo.Create();
-					if (!logFileInfo.Exists)
-					{
-						fileStream = logFileInfo.Create();
-					}
-					else
-					{
-						fileStream = new FileStream(logFilePath, FileMode.Append);
-					}
-					log = new StreamWriter(fileStream);
-					log.WriteLine(strMessage);
-					log.Close();
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "Radiant WEB-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
 
-				}
-				catch (Exception ex)
-				{ }
-			}
+                }
+                catch (Exception ex)
+                { }
+            }
 
-		}
-	}
+        }
+    }
 }

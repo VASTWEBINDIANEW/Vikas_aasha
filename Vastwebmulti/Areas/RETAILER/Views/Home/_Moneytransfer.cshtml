@@ -1314,7 +1314,7 @@
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
                     var statuscode = output.statuscode;
-                    
+
                     if (statuscode == "TXN") {
                         $('#remlist').show();
                         var name = output.data.remitter.name;
@@ -1401,8 +1401,8 @@
                         if (respout.success == true) {
                             $('#remlist').show();
                             var name = respout.customer.name;
-                            var totallimit = respout.customer.totallimit;
-                            var remaininglimit = respout.customer.totallimit;
+                            var totallimit = 50000; //respout.customer.totallimit;
+                            var remaininglimit = 50000;// respout.customer.totallimit;
                             var custid = respout.customer.id;
                             $('#hidecustid').val(custid)
                             $('#imgshow').hide();
@@ -1435,11 +1435,11 @@
                             $('#benlistttable').html('')
                             for (i = 0; i < respout.benes.length; i++) {
                                 var id = respout.benes[i].id;
-                                var name = respout.benes[i].name;
-                                var account = respout.benes[i].accountNumber;
-                                var bank = respout.benes[i].bankName;
-                                var ifsc = respout.benes[i].ifscCode;
-                                var bankname = respout.benes[i].bankName;
+                                var name = respout.benes[i].fname;
+                                var account = respout.benes[i].AccountNumber;
+                                var bank = respout.benes[i].bankname;
+                                var ifsc = respout.benes[i].ifsc;
+                                var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
                                 console.log(bankname)
@@ -1454,7 +1454,7 @@
                         else if (respout.success == false) {
                             var msginfo = respout.message;
                             console.log(msginfo)
-                            if (msginfo.includes("Sender data not found")) {
+                            if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
                                 $('#sendername').val("");
                                 $('#remlist').hide();
                                 $('#newsender').text(senderno);
@@ -1680,7 +1680,8 @@
                     $('#otpsenderno').text(senderno);
                     $('#otpsendername').text(name);
                     $('#otpbenid').text("");
-                    $('#otpshow').show();
+                   // $('#otpshow').show();
+                    senderdetails("change");
                 }
                 else {
                     msg = "⚠  " + msg;
