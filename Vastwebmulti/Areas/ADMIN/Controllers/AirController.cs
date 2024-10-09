@@ -15,7 +15,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Vastwebmulti.Areas.RETAILER.Models;
 using Vastwebmulti.Models;
-
+                                          
 namespace Vastwebmulti.Areas.ADMIN.Controllers
 {
     //Remote
@@ -24,7 +24,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
     {
         //string VastbazaarBaseUrl = "http://localhost:62146/";
 
-        string VastbazaarBaseUrl = "http://api.vastbazaar.com/";
+        string VastbazaarBaseUrl =  "http://api.vastbazaar.com/";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         VastwebmultiEntities db = new VastwebmultiEntities();

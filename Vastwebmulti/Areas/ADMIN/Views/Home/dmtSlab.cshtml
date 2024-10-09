@@ -21,6 +21,7 @@
         padding: 0 10px;
         margin-bottom: 4px;
     }
+
     #divComm11 {
         width: 100%;
         float: left;
@@ -462,34 +463,34 @@
                                                 <a href="@Url.Action("dmtSlab", "Home")" id="Comm" class="btn bg-blue-grey waves-effect fullbodydycolorbg">Common Slab<p>For New Users</p></a>
                                                 <button type="button" id="Mdbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Master', 'EditFormUserWise')">MD Slab<p>Exsiting Users</p></button>
                                                 <button type="button" id="Dlmbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Dealer', 'EditFormUserWise')">Distributor Slab<p>Exsiting Users</p></button>
-                                                <button type="button" id="Rembtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise1('RDealer', 'EditFormUserWise')">Retailer Slab<p>Exsiting Users</p></button>
+                                                <button type="button" id="Rembtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Retailer', 'EditFormUserWise')">Retailer Slab<p>Exsiting Users</p></button>
                                                 <button type="button" id="Apibtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('API', 'EditFormUserWise')">API user Slab<p>Exsiting Users</p></button>
                                                 <button type="button" id="Whitebtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Whitelabel', 'EditFormUserWise')">White Label Slab<p>Exsiting Users</p></button>
                                             </div>
+                                            <div class="page-header-third" style="float:right;width:auto;">
+                                                <button id="btnEdit" type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important;" onclick="funcEdit(this, 'EditFormComm')"><img src="~/AdminDesign/images/edit.svg" style="width:13px;"><span style="color:#3c3c3c;">Edit</span></button>
+                                                @*<button id="btnEdit11" type="button" class="btn  waves-effect btn-first" style="display:none; width: auto; padding: 7px 15px !important; float: right !important;" onclick="editddff()"><img src="~/AdminDesign/images/edit.svg" style="width:13px;"><span style="color:#3c3c3c;">Edit</span></button>*@
+                                                @* <button id="btnEdit112" type="button" class="btn  waves-effect btn-first" style="display:none; width: auto; padding: 7px 15px !important; float: right !important;" onclick="Savedmtdata()"><span style="color:#3c3c3c;">Save</span></button>*@
 
-                                            <button id="btnEdit" type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important;" onclick="funcEdit(this, 'EditFormComm')"><img src="~/AdminDesign/images/edit.svg" style="width:13px;"><span style="color:#3c3c3c;">Edit</span></button>
-                                            <button id="btnEdit11" type="button" class="btn  waves-effect btn-first" style="display:none; width: auto; padding: 7px 15px !important; float: right !important;" onclick="editddff()"><img src="~/AdminDesign/images/edit.svg" style="width:13px;"><span style="color:#3c3c3c;">Edit</span></button>
-                                            <button id="btnEdit112" type="button" class="btn  waves-effect btn-first" style="display:none; width: auto; padding: 7px 15px !important; float: right !important;" onclick="Savedmtdata()"><span style="color:#3c3c3c;">Save</span></button>
-
-                                            @{ 
-                                                var col = db.Imps_Charge_type.ToList();
-                                                var color = "";
-                                                var text = "";
-                                                if(col[0].fixedsts== true)
-                                                {
-                                                    color = "Green";
-                                                    text = "ON";
+                                                @{
+                                                    var col = db.Imps_Charge_type.ToList();
+                                                    var color = "";
+                                                    var text = "";
+                                                    if (col[0].fixedsts == true)
+                                                    {
+                                                        color = "Green";
+                                                        text = "ON";
+                                                    }
+                                                    else
+                                                    {
+                                                        color = "Red";
+                                                        text = "OFF";
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    color = "Red";
-                                                    text = "OFF";
-                                                }
-                                            }
-                                            
-                                            <button id="fixchargests" type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important; background-color:@color" onclick="updatefixcharge()"><span style="color:white;">Fix Charge @text</span></button>
 
-                                            <script>
+                                                <button id="fixchargests" type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important; background-color:@color" onclick="updatefixcharge()"><span style="color:white;">Fix Charge @text</span></button>
+
+                                                <script>
 
                                                 function updatefixcharge() {
                                                     $.ajax({
@@ -515,7 +516,7 @@
                                                 }
                                                 function editddff() {
                                                     var chk = document.getElementById('getvalules').value;
-
+                                                    alert(chk)
                                                     if (chk != "") {
                                                         document.getElementById('tbodyshowss').style.display = "none";
                                                         document.getElementById('tbodyshowh').style.display = "contents";
@@ -524,93 +525,93 @@
                                                     }
 
                                                 }
-                                            </script>
+                                                </script>
 
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="table-responsive page-header-third">
-                                        <div id="divEditFormComm" class=" table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;">
-                                            @Html.Partial("_Common_Money_transfer_new", Model)
-                                        </div>
-                                        <div id="divComm11" class=" table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;display:none">
+                                        <div class="table-responsive page-header-third">
+                                            <div id="divEditFormComm" class=" table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;">
+                                                @Html.Partial("_Common_Money_transfer_new", Model)
+                                            </div>
+                                            <div id="divComm11" class=" table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;display:none">
 
-                                        </div>
-                                        <div style="display:none">
-                                            <input type="hidden" value="" id="usseersss" />
-                                            <input type="hidden" value="" id="rolenames" />
-                                        </div>
-                                        <table id="tblhide" class="table table-bordered slab-table example-second thpadding-second third-design-table" style="display:none">
-                                            <thead class="navbar" style="position:initial;">
-                                                <tr>
-                                                    <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                    <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(₹)</th>
-                                                    <th colspan="2" style="text-align:center">Charge&nbsp;100&nbsp;>&nbsp;1K</th>
-                                                    <th colspan="2" style="text-align:center">Charge&nbsp;1001&nbsp;>&nbsp;2K</th>
-                                                    <th colspan="2" style="text-align:center">Charge&nbsp;2001&nbsp;>&nbsp;3K</th>
-                                                    <th colspan="2" style="text-align:center">Charge&nbsp;3001&nbsp;>&nbsp;4K</th>
-                                                    <th colspan="2" style="text-align:center">Charge&nbsp;4001&nbsp;>&nbsp;5K</th>
+                                            </div>
+                                            <div style="display:none">
+                                                <input type="hidden" value="" id="usseersss" />
+                                                <input type="hidden" value="" id="rolenames" />
+                                            </div>
+                                            <table id="tblhide" class="table table-bordered slab-table example-second thpadding-second third-design-table" style="display:none">
+                                                <thead class="navbar" style="position:initial;">
+                                                    <tr>
+                                                        <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                        <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(₹)</th>
+                                                        <th colspan="2" style="text-align:center">Charge&nbsp;100&nbsp;>&nbsp;1K</th>
+                                                        <th colspan="2" style="text-align:center">Charge&nbsp;1001&nbsp;>&nbsp;2K</th>
+                                                        <th colspan="2" style="text-align:center">Charge&nbsp;2001&nbsp;>&nbsp;3K</th>
+                                                        <th colspan="2" style="text-align:center">Charge&nbsp;3001&nbsp;>&nbsp;4K</th>
+                                                        <th colspan="2" style="text-align:center">Charge&nbsp;4001&nbsp;>&nbsp;5K</th>
 
-                                                </tr>
-                                                <tr style="color: #333333; font-weight: 600; font-size: 11px;">
-                                                    <td>Charge</td>
-                                                    <td>Active</td>
-                                                    <td>
-                                                        Charge
-                                                    </td>
-                                                    <td>Active</td>
-                                                    <td>
-                                                        Charge
-                                                    </td>
-                                                    <td>Active</td>
-                                                    <td>
-                                                        Charge
-                                                    </td>
-                                                    <td>Active</td>
-                                                    <td>
-                                                        Charge
-                                                    </td>
-                                                    <td>Active</td>
-
+                                                    </tr>
+                                                    <tr style="color: #333333; font-weight: 600; font-size: 11px;">
+                                                        <td>Charge</td>
+                                                        <td>Active</td>
+                                                        <td>
+                                                            Charge
+                                                        </td>
+                                                        <td>Active</td>
+                                                        <td>
+                                                            Charge
+                                                        </td>
+                                                        <td>Active</td>
+                                                        <td>
+                                                            Charge
+                                                        </td>
+                                                        <td>Active</td>
+                                                        <td>
+                                                            Charge
+                                                        </td>
+                                                        <td>Active</td>
 
 
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbodyshowss" style="display:none">
-                                                <tr>
-                                                    <td id="usertype"></td>
-                                                    <td id="Verify_comm"></td>
-                                                    <td id="Comm_1"></td>
-                                                    <td>%</td>
-                                                    <td id="Comm_2"></td>
-                                                    <td>%</td>
-                                                    <td id="Comm_3"></td>
-                                                    <td>%</td>
-                                                    <td id="Comm_4"></td>
-                                                    <td>%</td>
-                                                    <td id="Comm_5"></td>
-                                                    <td>%</td>
-                                                </tr>
-                                            </tbody>
-                                
-                                        <tbody id="tbodyshowh" style="display:none">
-                                            <tr>
-                                                <td ><input type="text" id="usertype1" value="" readonly="readonly"/> </td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Verify_comm1"  value=""/></td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_11" value=""/></td>
-                                                <td>%</td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_21" value=""/></td>
-                                                <td>%</td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_31" value=""/></td>
-                                                <td>%</td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_41" value=""/></td>
-                                                <td>%</td>
-                                                <td > <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_51" value=""/></td>
-                                                <td>%</td>
-                                            </tr>
-                                        </tbody>
-                                        </table>
 
-                                        <script>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbodyshowss" style="display:none">
+                                                    <tr>
+                                                        <td id="usertype"></td>
+                                                        <td id="Verify_comm"></td>
+                                                        <td id="Comm_1"></td>
+                                                        <td>%</td>
+                                                        <td id="Comm_2"></td>
+                                                        <td>%</td>
+                                                        <td id="Comm_3"></td>
+                                                        <td>%</td>
+                                                        <td id="Comm_4"></td>
+                                                        <td>%</td>
+                                                        <td id="Comm_5"></td>
+                                                        <td>%</td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <tbody id="tbodyshowh" style="display:none">
+                                                    <tr>
+                                                        <td><input type="text" id="usertype1" value="" readonly="readonly" /> </td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Verify_comm1" value="" /></td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_11" value="" /></td>
+                                                        <td>%</td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_21" value="" /></td>
+                                                        <td>%</td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_31" value="" /></td>
+                                                        <td>%</td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_41" value="" /></td>
+                                                        <td>%</td>
+                                                        <td> <input type="text" style=" border: 1px solid; border-color: gainsboro;" id="Comm_51" value="" /></td>
+                                                        <td>%</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <script>
                                             function Savedmtdata() {
                                                 var roles = document.getElementById('rolenames').value;
                                                 var userid = document.getElementById('usseersss').value;
@@ -648,137 +649,7 @@
                                                     }
                                                 });
                                             }
-                                            function editUserWise(userRole, frmId) {
-                                                document.getElementById('btnEdit').style.display = "none";
-                                                document.getElementById('btnEdit11').style.display = "block";
-                                                document.getElementById('tbodyshowss').style.display = "none";
-                                                document.getElementById('tbodyshowh').style.display = "none";
-                                                document.getElementById('btnEdit112').style.display = "none";
-         $.ajax({
-                url: '@Url.Action("_UserDMTSlab_DMT2_new", "Home")',
-                type: 'POST',
-             data: { role: userRole },
-             success: function (data) {
-                 var element = document.getElementById("Mdbtn");
-                 var element1 = document.getElementById("Dlmbtn");
-                 var element2 = document.getElementById("Rembtn");
-                 var element3 = document.getElementById("Apibtn");
-                 var element4 = document.getElementById("Whitebtn");
-                 var element5 = document.getElementById("Comm");
-                 element5.classList.remove("fullbodydycolorbg");
-                 element5.classList.remove("bg-grey");
-                 var hhh = document.getElementById('divComm11');
-                 if (userRole == "Master") {
-                     element.classList.add("fullbodydycolorbg");
-                     element1.classList.remove("fullbodydycolorbg");
-                     element2.classList.remove("fullbodydycolorbg");
-                     element3.classList.remove("fullbodydycolorbg");
-                     element4.classList.remove("fullbodydycolorbg");
-                 }
-                 else if (userRole == "Dealer")
-                 {
-                     element.classList.remove("fullbodydycolorbg");
-                     element1.classList.add("fullbodydycolorbg");
-                     element2.classList.remove("fullbodydycolorbg");
-                     element3.classList.remove("fullbodydycolorbg");
-                     element4.classList.remove("fullbodydycolorbg");
-                 }
-                 else if (userRole == "Retailer"){
-                     element.classList.remove("fullbodydycolorbg");
-                     element1.classList.remove("fullbodydycolorbg");
-                     element2.classList.add("fullbodydycolorbg");
-                     element3.classList.remove("fullbodydycolorbg");
-                     element4.classList.remove("fullbodydycolorbg");
 
-                 }
-                 else if (userRole == "API") {
-                     element.classList.remove("fullbodydycolorbg");
-                     element1.classList.remove("fullbodydycolorbg");
-                     element2.classList.remove("fullbodydycolorbg");
-                     element3.classList.add("fullbodydycolorbg");
-                     element4.classList.remove("fullbodydycolorbg");
-                 }
-                 else if (userRole == "Whitelabel") {
-                     element.classList.remove("fullbodydycolorbg");
-                     element1.classList.remove("fullbodydycolorbg");
-                     element2.classList.remove("fullbodydycolorbg");
-                     element3.classList.remove("fullbodydycolorbg");
-                     element4.classList.add("fullbodydycolorbg");
-                 }
-
-
-
-                 var set = document.createElement("select");
-                 set.setAttribute("onchange", "getvalue(\'" + userRole + "\')")
-                 if (userRole == "Retailerdlm") {
-                     userRole = "Dealers";
-                 }
-                 set.id = "getvalules";
-                 var set1 = document.createElement("option");
-                 set1.value = "";
-                 set1.text = userRole+" All Users";
-                 set.appendChild(set1);
-                 for (var i = 0; i < data.userid.length; i++) {
-                     var set2 = document.createElement("option");
-                     set2.text = data.farmname[i];
-                     set2.value = data.userid[i];
-                     set.appendChild(set2);
-                 }
-                 var hhh = document.getElementById('divComm11');
-                 document.getElementById('divEditFormComm').style.display = "none";
-                 document.getElementById('divComm11').style.display = "inline-table";
-                 document.getElementById('tblhide').style.display = "inline-table";
-                 hhh.innerHTML = "";
-
-
-                 var createinput = document.createElement("input");
-                 createinput.id = "frmnme";
-
-                 createinput.setAttribute("placeholder", "User Name")
-                 createinput.setAttribute("readonly", "readonly")
-                 createinput.setAttribute("value", "")
-
-                 var createinput1 = document.createElement("input");
-                 createinput1.id = "Emls";
-                 createinput1.placeholder = "User Email";
-                 createinput1.setAttribute("placeholder", "User Email")
-                 createinput1.setAttribute("readonly", "readonly")
-                 createinput1.setAttribute("value", "")
-                 var createinput2 = document.createElement("input");
-                 createinput2.id = "mbss";
-                 createinput2.setAttribute("placeholder", "User Mobile no.")
-                 createinput2.setAttribute("readonly", "readonly")
-                 createinput2.setAttribute("value", "")
-
-
-
-                 var createinput3 = document.createElement("input");
-                 createinput3.id = "usrdf";
-                 createinput3.style = "Display:none"
-                 createinput3.setAttribute("readonly", "readonly")
-                 createinput3.setAttribute("value", "")
-
-                 var createinput4 = document.createElement("input");
-                 createinput4.id = "Rolessd";
-                 createinput4.style = "Display:none"
-                 createinput4.setAttribute("readonly", "readonly")
-                 createinput4.setAttribute("value", "")
-
-                 hhh.appendChild(set);
-
-                 hhh.appendChild(createinput);
-                 hhh.appendChild(createinput1);
-                 hhh.appendChild(createinput2);
-                 hhh.appendChild(createinput3);
-                 hhh.appendChild(createinput4);
-                },
-                error: function (data) {
-                }
-            });
-
-
-
-                                            }
 
                                             function getvalue(role) {
 
@@ -1086,16 +957,16 @@
 
 
 
-                                        </script>
+                                            </script>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
 </section>
 <div id="div_Loader" style="display:none;">
     <div class="loadingio-spinner-gear-94vo528ab8">
@@ -1206,7 +1077,80 @@
         //alert(FormId);
         $("#" + FormId + "").submit();
     }
- 
+        function editUserWise(userRole, frmId) {
+          roleshow = userRole;
+           $('#div_Loader').show();
+          $('#btnsubmit').hide();
+        $('#btnsubmituser').hide();
+        $('#btnsubmitusercommon').hide();
+        $('#btnEdit').show();
+        //alert(userRole);
+        var url = '@Url.Action("_UserDMT2Slab", "Home")';
+        $.post(url, { role: userRole }, function (data) {
+              $('#div_Loader').hide();
+            $("#divEditFormComm").html(data);
+            FormId = frmId;
+            $("#role").val(userRole);
+              if (userRole == "Retailer") {
+                $('#retailerdrop').show();
+                $('#allshow').hide();
+        }
+        else {
+                $('#retailerdrop').hide();
+                $('#allshow').show();
+        }
+        })
+            .fail(function (xhr, status, error) {
+                $('#div_Loader').hide();
+              alert("error");
+              //var err = eval("(" + xhr.responseText + ")");
+              //alert(err.Message);
+              console.log(xhr.responseText);
+          })
+          .always(function () {
+          });
+        if(userRole=="Master")
+        {
+            $("#Mdbtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
+            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+        }
+        if (userRole == "Dealer") {
+            $("#Dlmbtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
+            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+        }
+        if (userRole == "Retailer") {
+            $("#Rembtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
+            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+        }
+        if (userRole == "API") {
+            $("#Apibtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
+            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+        }
+        if (userRole == "Whitelabel") {
+            $("#Whitebtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
+            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
+        }
+    }
     function ddlUserIdChange() {
         var ddlVal = $('#ddlUserId').val();
         var role = $("#role").val();
@@ -1215,7 +1159,7 @@
         $('#btnsubmitusercommon').hide();
         $('#btnEdit').show();
         //alert(ddlVal);
-        var url = '@Url.Action("_UserDMTSlab_DMT2", "Home")';
+        var url = '@Url.Action("_UserDMT2Slab", "Home")';
         $.post(url, { role: role, userid: ddlVal }, function (data) {
             $("#divEditFormComm").html(data);
           })
@@ -1238,7 +1182,7 @@
 
         var role = $("#role").val();
         //alert(ddlVal);
-        var url = '@Url.Action("_UserDMTSlab_DMT2", "Home")';
+        var url = '@Url.Action("_UserDMT2Slab", "Home")';
         $.post(url, { role: role, userid: ddlVal }, function (data) {
             $("#divEditFormComm").html(data);
         })
@@ -1256,7 +1200,7 @@
         $('#btnsubmituser').hide();
          $('#btnsubmitusercommon').hide();
         $('#btnEdit').show();
-        var url = '@Url.Action("_UserDMTSlab_DMT2", "Home")';
+        var url = '@Url.Action("_UserDMT2Slab", "Home")';
         $.post(url, { role: role, dlmid: dlmid }, function (data) {
             $("#divEditFormComm").html(data);
             $('#retailerdrop').show();
@@ -1277,7 +1221,7 @@
         $('#btnsubmituser').hide();
          $('#btnsubmitusercommon').hide();
         $('#btnEdit').show();
-        var url = '@Url.Action("_UserDMTSlab_DMT2", "Home")';
+        var url = '@Url.Action("_UserDMT2Slab", "Home")';
         $.post(url, { role: role, userid: ddlVal,dlmid: dlmid }, function (data) {
             $("#divEditFormComm").html(data);
             $('#retailerdrop').show();
