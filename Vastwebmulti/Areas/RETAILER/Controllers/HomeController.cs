@@ -15866,45 +15866,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 if (string.IsNullOrEmpty(retailer.AepsMerchandId))
                 {
-
-                    var reque = new
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
-                        merchantName = retailer.RetailerName,
-                        stateid = retailer.State,
-                        latitude = lattitude,
-                        longitude = longitude,
-                        merchantPhoneNumber = retailer.Mobile,
-                        merchantPinCode = retailer.Pincode,
-                        merchantCityName = city,
-                        merchantAddress = retailer.Address,
-                        userPan = retailer.PanCard,
-                        retilerid = retailer.Email,
-                        OTP = ""
-                    };
-                    var resquestchk = JsonConvert.SerializeObject(reque);
-                    var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                    client2.Timeout = -1;
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Authorization", "Bearer " + token);
-                    request2.AddHeader("Content-Type", "application/json");
-                    request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                    IRestResponse response2 = client2.Execute(request2);
-                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-                    var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
-                    var message = resp.Content.ADDINFO.status.ToString();
-                    if (stscode2 == "TXN")
-                    {
-                        var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                        var pin = resp.Content.ADDINFO.data.pin.ToString();
-                        retailer.AepsMerchandId = ouletid;
-                        retailer.AepsMPIN = pin;
-                        db.SaveChanges();
-                        retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var viewresponse = new { Status = "Failed", Message = message };
-                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
@@ -16077,44 +16095,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    var reque = new
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
-                        merchantName = retailer.RetailerName,
-                        stateid = retailer.State,
-                        latitude = lattitude,
-                        longitude = longitude,
-                        merchantPhoneNumber = retailer.Mobile,
-                        merchantPinCode = retailer.Pincode,
-                        merchantCityName = city,
-                        merchantAddress = retailer.Address,
-                        userPan = retailer.PanCard,
-                        retilerid = retailer.Email,
-                        OTP = ""
-                    };
-                    var resquestchk = JsonConvert.SerializeObject(reque);
-                    var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                    client2.Timeout = -1;
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Authorization", "Bearer " + token);
-                    request2.AddHeader("Content-Type", "application/json");
-                    request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                    IRestResponse response2 = client2.Execute(request2);
-                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-                    var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
-                    var message = resp.Content.ADDINFO.status.ToString();
-                    if (stscode2 == "TXN")
-                    {
-                        var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                        var pin = resp.Content.ADDINFO.data.pin.ToString();
-                        retailer.AepsMerchandId = ouletid;
-                        retailer.AepsMPIN = pin;
-                        db.SaveChanges();
-                        retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var viewresponse = new { Status = "Failed", Message = message };
-                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
@@ -16306,44 +16343,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    var reque = new
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
-                        merchantName = retailer.RetailerName,
-                        stateid = retailer.State,
-                        latitude = lattitude,
-                        longitude = longitude,
-                        merchantPhoneNumber = retailer.Mobile,
-                        merchantPinCode = retailer.Pincode,
-                        merchantCityName = city,
-                        merchantAddress = retailer.Address,
-                        userPan = retailer.PanCard,
-                        retilerid = retailer.Email,
-                        OTP = ""
-                    };
-                    var resquestchk = JsonConvert.SerializeObject(reque);
-                    var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                    client2.Timeout = -1;
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Authorization", "Bearer " + token);
-                    request2.AddHeader("Content-Type", "application/json");
-                    request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                    IRestResponse response2 = client2.Execute(request2);
-                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-                    var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
-                    var message = resp.Content.ADDINFO.status.ToString();
-                    if (stscode2 == "TXN")
-                    {
-                        var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                        var pin = resp.Content.ADDINFO.data.pin.ToString();
-                        retailer.AepsMerchandId = ouletid;
-                        retailer.AepsMPIN = pin;
-                        db.SaveChanges();
-                        retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var viewresponse = new { Status = "Failed", Message = message };
-                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
@@ -16591,44 +16647,65 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
                 if (retailer.AepsMerchandId == "")
                 {
-                    var reque = new
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
-                        merchantName = retailer.RetailerName,
-                        stateid = retailer.State,
-                        latitude = lattitude,
-                        longitude = longitude,
-                        merchantPhoneNumber = retailer.Mobile,
-                        merchantPinCode = retailer.Pincode,
-                        merchantCityName = city,
-                        merchantAddress = retailer.Address,
-                        userPan = retailer.PanCard,
-                        retilerid = retailer.Email,
-                        OTP = ""
-                    };
-                    var resquestchk = JsonConvert.SerializeObject(reque);
-                    var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                    client2.Timeout = -1;
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Authorization", "Bearer " + token);
-                    request2.AddHeader("Content-Type", "application/json");
-                    request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                    IRestResponse response2 = client2.Execute(request2);
-                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-                    var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
-                    var message = resp.Content.ADDINFO.status.ToString();
-                    if (stscode2 == "TXN")
-                    {
-                        var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                        var pin = resp.Content.ADDINFO.data.pin.ToString();
-                        retailer.AepsMerchandId = ouletid;
-                        retailer.AepsMPIN = pin;
-                        db.SaveChanges();
-                        retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var viewresponse = new { Status = "Failed", Message = message };
-                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+
+
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
@@ -16917,44 +16994,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
                 if (retailer.AepsMerchandId == "")
                 {
-                    var reque = new
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
-                        merchantName = retailer.RetailerName,
-                        stateid = retailer.State,
-                        latitude = lattitude,
-                        longitude = longitude,
-                        merchantPhoneNumber = retailer.Mobile,
-                        merchantPinCode = retailer.Pincode,
-                        merchantCityName = city,
-                        merchantAddress = retailer.Address,
-                        userPan = retailer.PanCard,
-                        retilerid = retailer.Email,
-                        OTP = ""
-                    };
-                    var resquestchk = JsonConvert.SerializeObject(reque);
-                    var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                    client2.Timeout = -1;
-                    var request2 = new RestRequest(Method.POST);
-                    request2.AddHeader("Authorization", "Bearer " + token);
-                    request2.AddHeader("Content-Type", "application/json");
-                    request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                    IRestResponse response2 = client2.Execute(request2);
-                    dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-                    var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
-                    var message = resp.Content.ADDINFO.status.ToString();
-                    if (stscode2 == "TXN")
-                    {
-                        var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                        var pin = resp.Content.ADDINFO.data.pin.ToString();
-                        retailer.AepsMerchandId = ouletid;
-                        retailer.AepsMPIN = pin;
-                        db.SaveChanges();
-                        retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var viewresponse = new { Status = "Failed", Message = message };
-                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
@@ -23169,44 +23265,63 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 {
                                                     if (ouletid == null || ouletid == "")
                                                     {
-                                                        var reque = new
+                                                        string companyBankAccountNumber = retailer.Bankaccountno;
+                                                        string bankIfscCode = retailer.Ifsccode;
+                                                        string companyBankName = retailer.bankname;
+                                                        string bankBranchName = retailer.bankAddress;
+                                                        string bankAccountName = retailer.accountholder;
+                                                        if (string.IsNullOrEmpty(companyBankAccountNumber))
                                                         {
-                                                            merchantName = retailer.RetailerName,
-                                                            stateid = retailer.State,
-                                                            latitude = lattitude,
-                                                            longitude = longitude,
-                                                            merchantPhoneNumber = retailer.Mobile,
-                                                            merchantPinCode = retailer.Pincode,
-                                                            merchantCityName = distname,
-                                                            merchantAddress = retailer.Address,
-                                                            userPan = retailer.PanCard,
-                                                            retilerid = retailer.Email,
-                                                            OTP = ""
-                                                        };
-                                                        var resquestchk = JsonConvert.SerializeObject(reque);
-                                                        var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
-                                                        client.Timeout = -1;
-                                                        var request = new RestRequest(Method.POST);
-                                                        request.AddHeader("Authorization", "Bearer " + token);
-                                                        request.AddHeader("Content-Type", "application/json");
-                                                        request.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
-                                                        IRestResponse response = client.Execute(request);
-                                                        dynamic resp = JsonConvert.DeserializeObject(response.Content);
-                                                        var stscode = resp.Content.ADDINFO.statuscode.ToString();
-                                                        var message = resp.Content.ADDINFO.status.ToString();
-                                                        if (stscode == "TXN")
-                                                        {
-                                                            ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
-                                                            var pin = resp.Content.ADDINFO.data.pin.ToString();
-                                                            retailer.AepsMerchandId = ouletid;
-                                                            retailer.AepsMPIN = pin;
-                                                            db.SaveChanges();
-                                                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                                                            var message = "Please Update Your Bank Information, On the Profile.";
+                                                            var viewresponse = new { Status = "Failed", Message = message };
+                                                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
                                                         }
                                                         else
                                                         {
-                                                            var viewresponse = new { Status = "Failed", Message = message, userinfo = reminfo };
-                                                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                                                            var reque = new
+                                                            {
+                                                                merchantName = retailer.RetailerName,
+                                                                stateid = retailer.State,
+                                                                latitude = lattitude,
+                                                                longitude = longitude,
+                                                                merchantPhoneNumber = retailer.Mobile,
+                                                                merchantPinCode = retailer.Pincode,
+                                                                merchantCityName = distname,
+                                                                merchantAddress = retailer.Address,
+                                                                userPan = retailer.PanCard,
+                                                                retilerid = retailer.Email,
+                                                                OTP = "",
+                                                                companyBankAccountNumber,
+                                                                bankIfscCode,
+                                                                companyBankName,
+                                                                bankBranchName,
+                                                                bankAccountName
+                                                            };
+                                                            var resquestchk = JsonConvert.SerializeObject(reque);
+                                                            var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                                                            client.Timeout = -1;
+                                                            var request = new RestRequest(Method.POST);
+                                                            request.AddHeader("Authorization", "Bearer " + token);
+                                                            request.AddHeader("Content-Type", "application/json");
+                                                            request.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                                                            IRestResponse response = client.Execute(request);
+                                                            dynamic resp = JsonConvert.DeserializeObject(response.Content);
+                                                            var stscode = resp.Content.ADDINFO.statuscode.ToString();
+                                                            var message = resp.Content.ADDINFO.status.ToString();
+                                                            if (stscode == "TXN")
+                                                            {
+                                                                ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                                                                var pin = resp.Content.ADDINFO.data.pin.ToString();
+                                                                retailer.AepsMerchandId = ouletid;
+                                                                retailer.AepsMPIN = pin;
+                                                                db.SaveChanges();
+                                                                retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                                                            }
+                                                            else
+                                                            {
+                                                                var viewresponse = new { Status = "Failed", Message = message, userinfo = reminfo };
+                                                                return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                                                            }
                                                         }
                                                     }
                                                     if (ouletid != null)
