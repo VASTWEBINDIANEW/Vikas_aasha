@@ -15866,6 +15866,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 if (string.IsNullOrEmpty(retailer.AepsMerchandId))
                 {
+
                     var reque = new
                     {
                         merchantName = retailer.RetailerName,
