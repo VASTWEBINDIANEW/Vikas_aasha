@@ -5,6 +5,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.10.4/viewer.min.js" integrity="sha512-2HLzgJH7ZNywnEDB1HqijieFxszStt3QXS8Qk9m/VMUV/asMWlz9PmibHsvWIz9rtKOOr28z8zu1iJ3pf/TTHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style type="text/css">
 
+    #deletedusernotshowbtn ul li {
+        width: 33.333% !important;
+        float: left;
+        margin: 0 !important;
+        padding: 2px;
+    }
+
+      /* new css */
+
     @@keyframes ldio-zdyd6mf6t5 {
         0% {
             top: 96px;
@@ -648,7 +657,7 @@
                                 </div>
                             </div>
                         </div><!--.row-->
-                        <div>
+                        <div  style="display: flex; align-items: center; padding-top: 10px;">
                             <label>Bulk Payment Mode</label>
                             <button class="btn" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white;" title="Click here to change mode" id="bulkpayment" data-toggle="tab" onclick="bulkpaymentsetting()"></button>
                         </div>
@@ -662,13 +671,16 @@
                                     <button type="button" value="SaveChange" class="btn special-iii btnssl2233 btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
                                 </li>
                                 @*<li class="two">
-                                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                    </li>*@
+                                      <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
+                                  </li>*@
                                 <li class="three" id="isemailveryfy">
-                                    <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify()"><span style="color:#777;">Email Verify</span></button>
+                                    <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify('Email')"><span style="color:#777;">Email Verify</span></button>
                                 </li>
                                 <li class="four">
                                     <button type="button" value="Delet" class="btn btn-first button-third" onclick="Deleteuser()"><span style="color:#777;">Delete User</span></button>
+                                </li>
+                                <li class="five" id="isMobileveryfy">
+                                    <button type="button" value="Mobile_Verify" class="btn btn-first button-third" onclick="EmailVerify('Mobile')"><span style="color:#777;">Mobile No Verify</span></button>
                                 </li>
                                 <li>
                                     <button type="button" class="btn waves-effect btn-first button-third" data-dismiss="modal">
@@ -1817,6 +1829,12 @@
                 else {
                     $('#isemailveryfy').show();
                 }
+                if (data2.list[0].PhoneNumberConfirmed == true) {
+                    $('#isMobileveryfy').hide();
+                }
+                else {
+                    $('#isMobileveryfy').show();
+                }
 
                 if (pancarddoc == null) {
                     $("#pandocnotshow").show();
@@ -2051,12 +2069,12 @@
 }
 </script>
 <script>
-    function EmailVerify() {
+    function EmailVerify(type) {
         var RetailerId = $('#RetailerId').val();
          $.ajax({
             url: '@Url.Action("emailverifyforRetailer","Home")',
             type: "POST",
-            data: { RetailerId: RetailerId },
+            data: { RetailerId: RetailerId, Type: type },
              cache: false,
              dataType: "html",
              success: function (data2) {

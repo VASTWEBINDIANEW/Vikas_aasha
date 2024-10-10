@@ -69,6 +69,11 @@ using QRCoder;
 using Vastwebmulti.Models.Scheduling;
 using Remotion.FunctionalProgramming;
 using java.util;
+using static iTextSharp.text.pdf.PdfDocument;
+using OfficeOpenXml.FormulaParsing.Excel.Operators;
+using DocumentFormat.OpenXml.Wordprocessing;
+using sun.misc;
+using System.Reflection;
 //using paytmresponselibrary;
 
 
@@ -33201,6 +33206,65 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             return iv;
         }
         [HttpPost]
+        public ActionResult GetDiscountedAmount()
+        {
+            try
+            {
+                var token = Responsetoken.gettoken();
+                var client = new RestClient("http://api.vastbazaar.com/api/CREDITCARD/BillAmount");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("authorization", "bearer " + token + "");
+                request.AddHeader("content-type", "application/json");
+                IRestResponse Response = client.Execute(request);
+                if (Response != null && Response.StatusCode == System.Net.HttpStatusCode.OK && !string.IsNullOrEmpty(Response.Content))
+                {
+                    var Content = Response.Content.ToString();
+                    dynamic json = JsonConvert.DeserializeObject(Content);
+                    var ADDINFO = json.Content.ADDINFO.ToString();
+                    return Json(new { Status = true, Addinfo = ADDINFO });
+                }
+                else
+                {
+                    return Json(new { Status = false, Message = "Try after some time" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Status = false, Message = ex.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult GetHoldAmount(int Id)
+        {
+            try
+            {
+                var UserId = User.Identity.GetUserId();
+                var token = Responsetoken.gettoken();
+                var client = new RestClient("http://api.vastbazaar.com/api/CREDITCARD/HoldAmount?Idno=" + Id + "&Retailerid=" + UserId);
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("authorization", "bearer " + token + "");
+                request.AddHeader("content-type", "application/json");
+                IRestResponse Response = client.Execute(request);
+                if (Response != null && Response.StatusCode == System.Net.HttpStatusCode.OK && !string.IsNullOrEmpty(Response.Content))
+                {
+                    var Content = Response.Content.ToString();
+                    dynamic json = JsonConvert.DeserializeObject(Content);
+                    var ADDINFO = json.Content.ADDINFO.ToString();
+                    dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                    return Json(new { Status = true, Addinfo = ADDINFO });
+                }
+                else
+                {
+                    return Json(new { Status = false, Message = "Try after some time" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Status = false, Message = ex.Message });
+            }
+           
+        }
+        [HttpPost]
         public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber, string CVV, string Exp, string Otp)
         {
             string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
@@ -33291,7 +33355,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.totalfailedamount = totalFailed;
             ViewBag.totalpendingamount = totalpending;
             ViewBag.totalchargesamount = totalcharges;
-            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Name == "CREDITCARD").FirstOrDefault().Sts;
+            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Sts == true).FirstOrDefault().Name;
             return View(chk);
         }
         [HttpPost]
@@ -33310,7 +33374,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.totalfailedamount = totalFailed;
             ViewBag.totalpendingamount = totalpending;
             ViewBag.totalchargesamount = totalcharges;
-            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Name == "CREDITCARD").FirstOrDefault().Sts;
+            ViewBag.CREDITCARDSTATUS = db.Payment_GateWay_API.Where(x => x.Sts == true).FirstOrDefault().Name;
             return View(chk);
         }
         public ActionResult PDFGatewayTRANSFER(DateTime txt_frm_date, DateTime txt_to_date)
