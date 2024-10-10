@@ -10,12 +10,12 @@
         background: red;
         color: white;
     }
+
     .on {
         width: 30%;
         background: green;
         color: white;
     }
-  
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-          
+
         <div class="" style="width: 100%; float: left; margin-top: 8px;">
             <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
                 <table class="table table-bordered table-striped example-second" style="width:100%;">
@@ -87,18 +87,23 @@
                             foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.api_name</td>
+                                    <td>
+                                        <select id="apis+@item.idno" onchange="updateapi(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                            <option>VASTWEB</option>
+                                            <option @(item.api_name == "RADIANT" ? "selected" : "")>RADIANT</option>
+                                        </select>
+                                    </td>
                                     <td>@item.catagory</td>
                                     <td class="updatests">
                                         @if (item.status == true)
                                         {
 
 
-                                            <button class="on" onclick="updates(false,@item.idno , @deta )">ON</button>
+                                            <button class="btn btn-primary"  onclick="updates(false,@item.idno , @deta )">ON</button>
                                         }
                                         else
                                         {
-                                            <button class="off" onclick="updates(true,@item.idno, @deta )">OFF</button>
+                                            <button class="btn btn-primary" onclick="updates(true,@item.idno, @deta )">OFF</button>
                                         }
 
                                     </td>
@@ -114,12 +119,26 @@
     </div>
 
     <script>
-        function updates(s , id , cls) {
+        function updates(s , id) {
 
             $.ajax({
     url: '@Url.Action("updatestsmoneyapi", "Home")',
                 cache: false,
                 data: { idno: id, sts: s },
+    type: "GET",
+                success: function (data) {
+                    location.reload();
+    }
+});
+        }
+
+        function updateapi(idno) {
+            var idss = 'apis+' + idno;
+            var value = document.getElementById(idss).value;
+            $.ajax({
+    url: '@Url.Action("updatestsmoneyapiyes", "Home")',
+                cache: false,
+                data: { idno: idno, cat: value },
     type: "GET",
                 success: function (data) {
                     location.reload();
