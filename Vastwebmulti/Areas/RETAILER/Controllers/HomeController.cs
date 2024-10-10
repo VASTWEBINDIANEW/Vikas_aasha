@@ -21174,7 +21174,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     res.Amount = Amount;
                                     return res;
                                 }
-                                else if (txnSts.ToUpper().Contains("AWAITED") || txnSts.ToUpper() == "INPROGRESS" || txnSts.ToUpper() == "INPROCESS")
+                                else if (txnSts.ToUpper().Contains("AWAITED") || txnSts.ToUpper() == "INPROGRESS" || txnSts.ToUpper() == "PENDING")
                                 {
                                     dynamic res = new JObject();
                                     res.Status = "Pending";
@@ -21358,7 +21358,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     res.Amount = Amount;
                                     return res;
                                 }
-                                else if (txnSts.ToUpper().Contains("AWAITED"))
+                                else if (txnSts.ToUpper().Contains("AWAITED") || txnSts.ToUpper()=="PENDING")
                                 {
                                     dynamic res = new JObject();
                                     res.Status = "Pending";
@@ -21367,13 +21367,22 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     res.Amount = Amount;
                                     return res;
                                 }
-                                else
+                                else if(txnSts.ToUpper()=="FAILED")
                                 {
                                     db.Money_transfer_update_new_new(Reqid, "FAILED", message, "", task.Result.Content, "", 0, 0);
                                     dynamic res = new JObject();
                                     res.Status = "Failed";
                                     res.Message = message;
                                     res.Bannrrn = message;
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else
+                                {
+                                    dynamic res = new JObject();
+                                    res.Status = "Pending";
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
                                     res.Amount = Amount;
                                     return res;
                                 }
