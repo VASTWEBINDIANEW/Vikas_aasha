@@ -872,6 +872,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
         public virtual DbSet<fronticon> fronticons { get; set; }
         public virtual DbSet<CreditCardCharge> CreditCardCharges { get; set; }
+        public virtual DbSet<CreditCardBillPaymentCharge> CreditCardBillPaymentCharges { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23429,6 +23430,19 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("paumoneyid", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWayCreditCardFund_Result>("GetWayCreditCardFund", txnidParameter, modeParameter, cardnameParameter, statusParameter, errormsgParameter, paumoneyidParameter, output);
+        }
+    
+        public virtual ObjectResult<CreditCardBillPaymentChargReport_Result> CreditCardBillPaymentChargReport(string dealerId, string retailerId)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CreditCardBillPaymentChargReport_Result>("CreditCardBillPaymentChargReport", dealerIdParameter, retailerIdParameter);
         }
     }
 }
