@@ -650,6 +650,17 @@
 
                                         </div>
                                     </div>
+                                    <div class="col-md-2 cltu left-space-no responcive-fify marginleft-third-respon" style="padding: 0px;">
+                                        <div class="">
+                                            @Html.DropDownList("APINM", new List<SelectListItem>
+                                      {
+                                   new SelectListItem{ Text="All API",Value="ALL"},
+                                   new SelectListItem{Text="VASTWEB",Value="VASTWEB"},
+                                   new SelectListItem{Text="RADIANT",Value="RADIANT"},
+                                  }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-2 responcive-fify" style="display:none;padding:0px;padding-right: 3px; margin-bottom: 10px" id="allmaster">
                                         <div class="">
@@ -751,6 +762,7 @@
                                                 <tr>
                                                     <th>S.R.</th>
                                                     <th>#&nbsp;User's&nbsp;Information</th>
+                                                    <th>API Name</th>
                                                     <th>Mode/Req&nbsp;ID</th>
                                                     <th>Sender&nbsp;Number</th>
                                                     <th>Beneficiary&nbsp;A/C</th>
@@ -761,13 +773,10 @@
                                                     <th>Api&nbsp;Bal</th>
                                                     <th>Request&nbsp;Time</th>
                                                     <th>Bank&nbsp;UTR</th>
-                                                    <th>
-                                                        <center><span data-toggle="tooltip" title="Success" style="float: left;">Action</span></center>
-                                                    </th>
+                                                    <th><center><span data-toggle="tooltip" title="Success" style="float: left;">Action</span></center></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="trow" class="alin chnj">
-
                                                 @{
                                                     Html.RenderAction("_Money_TransferReport", "Home", new { Model = Model });
                                                 }

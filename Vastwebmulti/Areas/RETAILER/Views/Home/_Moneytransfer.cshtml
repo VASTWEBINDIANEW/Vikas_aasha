@@ -242,8 +242,47 @@
         }
     }
 </style>
+<style>
+    .button-container {
+        display: flex; /* Use flexbox to align the buttons side by side */
+        justify-content: center; /* Center the buttons horizontally */
+        gap: 10px; /* Add space between the buttons */
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff; /* Primary color */
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Secondary color */
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Darker shade on hover */
+        }
+</style>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
+    <div class="button-container">
+        @if (ViewBag.moneysts1 == true)
+        {
+            <a href="@Url.Action("Money_transfer2", "Home")" class="btn">BANK1</a>
+        }
+        @if (ViewBag.moneysts2 == true)
+        {
+            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">BANK2</a>
+        }
+    </div>
     <fieldset>
         <legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">

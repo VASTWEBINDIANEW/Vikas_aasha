@@ -62,7 +62,14 @@
                         <div style="margin-left:-13px;">
                             @Html.Partial("_menuapinm")
                         </div>
-
+                        <div style="padding-top:10px;" class="col col-md-12">
+                            <div class="col col-md-3">
+                                <a href="@Url.Action("money_api_statss","Home")" class="btn btn-danger"> BANK1 </a>
+                            </div>
+                            <div class="col col-md-3">
+                                <a href="@Url.Action("money_api_statss1","Home")" class="btn btn-default"> BANK2 </a>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -76,6 +83,7 @@
                         <tr>
                             <th>API&nbsp;Name</th>
                             <th>API&nbsp;Category</th>
+                            <th>Slab Name</th>
                             <th>Edit</th>
 
                         </tr>
@@ -89,9 +97,22 @@
                                 <tr>
                                     <td>
                                         <select id="apis+@item.idno" onchange="updateapi(@item.idno)" class="btn btn-secondary dropdown-toggle">
-                                            <option>VASTWEB</option>
+                                            @if (item.catagory != "DMT")
+                                            {
+                                                <option>VASTWEB</option>
+                                            }
                                             <option @(item.api_name == "RADIANT" ? "selected" : "")>RADIANT</option>
+                                         
                                         </select>
+                                    </td>
+                                    <td>
+                                        @if (item.catagory == "PAYOUT")
+                                        {
+                                            <select id="apis1+@item.idno" onchange="updateapiSlab(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                                <option>Slab1</option>
+                                                <option @(item.Slabnm == "Slab2" ? "selected" : "")>Slab2</option>
+                                            </select>
+                                        }
                                     </td>
                                     <td>@item.catagory</td>
                                     <td class="updatests">
@@ -99,7 +120,7 @@
                                         {
 
 
-                                            <button class="btn btn-primary"  onclick="updates(false,@item.idno , @deta )">ON</button>
+                                            <button class="btn btn-primary" onclick="updates(false,@item.idno , @deta )">ON</button>
                                         }
                                         else
                                         {
@@ -145,6 +166,23 @@
     }
 });
         }
+
+        function updateapiSlab(idno) {
+            var idss = 'apis1+' + idno;
+            var value = document.getElementById(idss).value;
+            $.ajax({
+    url: '@Url.Action("updatestsmoneyapiyesSlab", "Home")',
+                cache: false,
+                data: { idno: idno, cat: value },
+    type: "GET",
+                success: function (data) {
+                    location.reload();
+    }
+});
+        }
+
+
+
     </script>
 
 
