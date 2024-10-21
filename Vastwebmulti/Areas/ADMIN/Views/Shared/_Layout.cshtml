@@ -4825,9 +4825,8 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                     <div class="col-md-12" style="padding:0;">
                         <div class="col-md-12 modalbutton-show modalbutton-show-second modalnewclass-fourdesi" style="padding:0;">
                             <button onclick="showdayleftinfo()" class="btn btn-default">WEBSITE&nbsp;RENEWAL</button>
-
-                            <button onclick="ssldatashow()" class="btn btn-default">SSL&nbsp;PACK</button>
-
+                            <button onclick="ssldatashow('SSL')" class="btn btn-default">SSL&nbsp;Web</button>
+                            <button onclick="ssldatashow('APPSSL')" class="btn btn-default">SSL&nbsp;App</button>
                             <button onclick="emailShow()" class="btn btn-default">BUSINESS&nbsp;EMAIL</button>
                             <button onclick="smsShow()" class="btn btn-default">SMS&nbsp;PACK</button>
                             <button onclick="whatsappShow()" class="btn btn-default">WHATSAPP&nbsp;PACK</button>
@@ -4885,8 +4884,8 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                         </button>
                                     </div>
                                     @*<div class="onoffswitch" style="float:left;margin-right: 5px;border: 0px;border-left: 1px solid var(--border-color); width: 110px;" id="masterref">
-                                            <button class="change-class costom-on" id="masterotpoff" onclick="RoleWiseOTP('master','Y')" style="border: 1px solid var(--border-color); padding: 0px 10px; margin-right: 5px; height: 30px;color: #555;border-left: 0px;">Auto Renew</button>
-                                        </div>*@
+                            <button class="change-class costom-on" id="masterotpoff" onclick="RoleWiseOTP('master','Y')" style="border: 1px solid var(--border-color); padding: 0px 10px; margin-right: 5px; height: 30px;color: #555;border-left: 0px;">Auto Renew</button>
+                        </div>*@
 
                                     <button class="form-head-check">
                                         <input type="checkbox" id="websitecheck" checked="checked" />
@@ -5168,6 +5167,119 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                 <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
                                     <button onclick="otherpayment('SSL','3')">GO</button>
                                     <button onclick="otherpayment('SSL','3')">To Pay</button>
+                                </div>
+                                <label class="lblotherpayment" style=" margin-top: 59px;"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Appssl_show" style="display:none;">
+                        <div class="second-form">
+                            <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
+                                @*<h3>SSl Security</h3>*@
+                                <div class="due-date" style="margin-left: 0px;">
+                                    <span>
+                                        <p style="font-size:10px;">Due</p>
+                                        <p>Date</p>
+                                    </span>
+                                    <input id="Appsslduedatetxt" type="text" readonly style="width:80% !important" />
+                                </div>
+                                <div class="form-head-button">
+                                    <button class="form-head-check">
+                                        <input type="checkbox" id="Appsslcheck" checked readonly="readonly" />
+                                        <label for="sslcheck">GST Invoice</label>
+                                    </button>
+                                    <button class="more-info-second">
+                                        more info
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="first-form-bot">
+                                <div class="form-bot-inner-second" style="text-align:left;">
+                                    <button onclick="onclickssl11()">
+                                        <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
+                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                            <span id="Appsslt1" style="color: #000;line-height: 20px;font-size: 30px;"></span><span style="color: #000;line-height: 20px;font-size: 30px;">-Year Plan</span>
+                                        </p>
+                                        <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 15px;margin-top: 10px;">Complete SSL Security</p>
+                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Now Available - </span>Rs <label id="1stAppsslprice"></label>/-</p>
+
+                                    </button>
+                                </div>
+                                <div class="form-bot-inner-second">
+                                    <button onclick="onclickssl22()">
+                                        <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
+                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                            <span id="Appsslt2" style="color: #000;line-height: 20px;font-size: 30px;"></span><span style="color: #000;line-height: 20px;font-size: 30px;">-Years Plan</span>
+                                        </p>
+                                        <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 15px;margin-top: 10px;">Complete SSL Security</p>
+                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Now Available - </span>Rs <label id="2ndAppsslprice"></label>/-</p>
+
+                                    </button>
+                                </div>
+                                <div class="form-bot-inner-second" style="text-align:right;">
+                                    <button onclick="onclickssl33()">
+                                        <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
+                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                            <span id="Appsslt3" style="color: #000;line-height: 20px;font-size: 30px;"></span><span style="color: #000;line-height: 20px;font-size: 30px;">-Years Plan</span>
+                                        </p>
+                                        <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 15px;margin-top: 10px;">Complete SSL Security</p>
+                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Now Available - </span>Rs <label id="3rdAppsslprice"></label>/-</p>
+
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="second-form-on" style="display:none;">
+                            <div class="second-form-close">&#10006;</div>
+                            <ul style="padding-top: 12px;">
+                                <li>SSL stands for Secure Sockets Layer and, in short, it's the standard technology for keeping an internet connection secure and safeguarding any sensitive data that is being sent between two systems.</li>
+                                <li>Preventing criminals from reading and modifying any information transferred, including potential personal details. The two systems can be a server and a client (for example, a shopping website and browser) or server to server.</li>
+                                <li>This SSL valid for one domain.</li>
+                                <li>SSL Secures applicable with www and without www.</li>
+                            </ul>
+                        </div>
+                        <div id="Appssl1qr" class="second-form-button" style="display:none;">
+                            <div class="second-form-close-button">&#10006;</div>
+                            <div class="first-form-button-left">
+                                <p>Net Amount - <label id="Appsslamt1"></label>/-</p>
+                                <p>Gst IN - <label id="Appsslgstamt1"></label>/-</p>
+                                <p>Total Amount - <label id="Appssltotalamt1"></label>/-</p>
+                            </div>
+                            <div class="first-form-button-right">
+                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
+                                    <button onclick="otherpayment('APPSSL','1')">GO</button>
+                                    <button onclick="otherpayment('APPSSL','1')">To Pay</button>
+                                </div>
+                                <label class="lblotherpayment" style=" margin-top: 59px;"></label>
+                            </div>
+                        </div>
+                        <div id="Appssl2qr" class="second-form-button" style="display:none;">
+                            <div class="second-form-close-button">&#10006;</div>
+                            <div class="first-form-button-left">
+                                <p>Net Amount - <label id="Appsslamt2"></label>/-</p>
+                                <p>Gst IN - <label id="Appsslgstamt2"></label>/-</p>
+                                <p>Total Amount - <label id="Appssltotalamt2"></label>/-</p>
+                            </div>
+                            <div class="first-form-button-right">
+                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
+                                    <button onclick="otherpayment('APPSSL','2')">GO</button>
+                                    <button onclick="otherpayment('APPSSL','2')">To Pay</button>
+                                </div>
+                                <label class="lblotherpayment" style=" margin-top: 59px;"></label>
+                            </div>
+                        </div>
+                        <div id="Appssl3qr" class="second-form-button" style="display:none;">
+                            <div class="second-form-close-button">&#10006;</div>
+                            <div class="first-form-button-left">
+                                <p>Net Amount - <label id="Appsslamt3"></label>/-</p>
+                                <p>Gst IN - <label id="Appsslgstamt3"></label>/-</p>
+                                <p>Total Amount - <label id="Appssltotalamt3"></label>/-</p>
+                            </div>
+                            <div class="first-form-button-right">
+                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
+                                    <button onclick="otherpayment('APPSSL','3')">GO</button>
+                                    <button onclick="otherpayment('APPSSL','3')">To Pay</button>
                                 </div>
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
@@ -5555,8 +5667,8 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                     <button onclick="onclickupi3()">
                                         <img src="~/AdminDesign/images/UPI.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                            <span style="color: #000;display:none; line-height: 20px;font-size: 26px;" id="upit3"></span>
-                                            <span style="color: #000;line-height: 20px;font-size: 26px;"> Life Time </span>
+                                            <span style="color: #000;line-height: 20px;font-size: 26px;" id="upit3"></span>
+                                            <span style="color: #000;line-height: 20px;font-size: 26px;">-Months</span>
                                         </p>
                                         <p style="color: var(--main-bg-rcolor);text-transform:capitalize;font-size: 14px;margin-top: 10px;">Charges For UPI Transaction</p>
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="3rdupiprice"></label>/-</p>
@@ -5627,12 +5739,12 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                             <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
                                 <h3>One Time Registration Fee</h3>
                                 @*<div class="due-date" style="margin-left: 0px;">
-                                        <span>
-                                            <p style="font-size:10px;">Remain</p>
-                                            <p>SMS</p>
-                                        </span>
-                                        <input type="text" />
-                                    </div>*@
+                        <span>
+                            <p style="font-size:10px;">Remain</p>
+                            <p>SMS</p>
+                        </span>
+                        <input type="text" />
+                    </div>*@
                                 <div class="form-head-button">
                                     <button class="form-head-check">
                                         <input type="checkbox" id="whitecheck" checked readonly="readonly" />
@@ -5739,12 +5851,12 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                 <h3>IRCTC Agent Token</h3>
 
                                 @*<div class="due-date" style="margin-left: 0px;">
-                                        <span>
-                                            <p style="font-size:10px;">Remain</p>
-                                            <p>SMS</p>
-                                        </span>
-                                        <input type="text" />
-                                    </div>*@
+                        <span>
+                            <p style="font-size:10px;">Remain</p>
+                            <p>SMS</p>
+                        </span>
+                        <input type="text" />
+                    </div>*@
                                 <div class="form-head-button">
                                     <button class="form-head-check">
                                         <input type="checkbox" id="mposcheck" checked readonly="readonly" disabled />
@@ -5761,78 +5873,78 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
                             <div id="irctcshowdatatable" class="first-form-bot">
                                 @*<div class="form-bot-inner-second" style="text-align:left;">
-                                        <button onclick="irctc1()">
+                        <button onclick="irctc1()">
 
-                                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">10</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc1"></label> Rupees Per Token</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
+                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">10</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc1"></label> Rupees Per Token</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
 
-                                        </button>
-                                    </div>*@
+                        </button>
+                    </div>*@
                                 @*<div class="form-bot-inner-second">
-                                        <button onclick="irctc1()">
-                                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="irctc12" style="color: #000;line-height: 20px;font-size: 26px;">50</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc2"></label> Rupees Per Token</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
+                        <button onclick="irctc1()">
+                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="irctc12" style="color: #000;line-height: 20px;font-size: 26px;">50</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc2"></label> Rupees Per Token</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
 
-                                        </button>
-                                    </div>*@
+                        </button>
+                    </div>*@
                                 @*<div class="form-bot-inner-second" style="text-align:right;">
-                                        <button onclick="irctc1()">
-                                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">100</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc3"></label> Rupees Per Token</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
+                        <button onclick="irctc1()">
+                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">100</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc3"></label> Rupees Per Token</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
 
-                                        </button>
-                                    </div>*@
+                        </button>
+                    </div>*@
 
                             </div>
 
                             @*<div class="first-form-bot">
-                                    <div class="form-bot-inner-second" style="text-align:left;">
-                                        <button onclick="onclickmpos1()">
-                                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="mpost1" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stmposprice"></label> Rupees Per Device</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
+                    <div class="form-bot-inner-second" style="text-align:left;">
+                        <button onclick="onclickmpos1()">
+                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="mpost1" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stmposprice"></label> Rupees Per Device</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
 
-                                        </button>
-                                    </div>
-                                    <div class="form-bot-inner-second">
-                                        <button onclick="onclickmpos2()">
-                                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="mpost2" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="2ndmposprice"></label> Rupees Per Device</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndmpospricet2"></label>/-</p>
+                        </button>
+                    </div>
+                    <div class="form-bot-inner-second">
+                        <button onclick="onclickmpos2()">
+                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="mpost2" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="2ndmposprice"></label> Rupees Per Device</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndmpospricet2"></label>/-</p>
 
-                                        </button>
-                                    </div>
-                                    <div class="form-bot-inner-second" style="text-align:right;">
-                                        <button onclick="onclickmpos3()">
-                                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                                <span id="mpost3" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
-                                            </p>
-                                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="3rdmposprice"></label> Rupees Per Device</p>
-                                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="3rdmpospricet3"></label>/-</p>
+                        </button>
+                    </div>
+                    <div class="form-bot-inner-second" style="text-align:right;">
+                        <button onclick="onclickmpos3()">
+                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
+                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
+                                <span id="mpost3" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
+                            </p>
+                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="3rdmposprice"></label> Rupees Per Device</p>
+                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="3rdmpospricet3"></label>/-</p>
 
-                                        </button>
-                                    </div>
+                        </button>
+                    </div>
 
-                                </div>*@
+                </div>*@
                         </div>
                         <div class="second-form-on" style="display:none;">
                             <div class="second-form-close">&#10006;</div>
@@ -5857,58 +5969,58 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                     <button onclick="otherpayment('IRCTC','sdfsd')">To Pay</button>
                                 </div>
                                 @*<div class="comfirsmclasscss" id="irctc20" style="width:41%;float:right;height:149px;background:#fff;">
-                                        <button onclick="otherpayment('IRCTC','20')">GO</button>
-                                        <button onclick="otherpayment('IRCTC','20')">To Pay</button>
-                                    </div>
-                                    <div class="comfirsmclasscss"  id="irctc50"  style="width:41%;float:right;height:149px;background:#fff;">
-                                        <button onclick="otherpayment('IRCTC','50')">GO</button>
-                                        <button onclick="otherpayment('IRCTC','50')">To Pay</button>
-                                    </div>*@
+                        <button onclick="otherpayment('IRCTC','20')">GO</button>
+                        <button onclick="otherpayment('IRCTC','20')">To Pay</button>
+                    </div>
+                    <div class="comfirsmclasscss"  id="irctc50"  style="width:41%;float:right;height:149px;background:#fff;">
+                        <button onclick="otherpayment('IRCTC','50')">GO</button>
+                        <button onclick="otherpayment('IRCTC','50')">To Pay</button>
+                    </div>*@
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
                         @*<div id="mpos2qr" class="second-form-button" style="display:none;">
-                                <div class="second-form-close-button">&#10006;</div>
-                                <div class="first-form-button-left">
-                                    <p>Net Amount - <label id="mposamt2"></label>/-</p>
-                                    <p>Gst IN - <label id="mposgstamt2"></label>/-</p>
-                                    <p>Total Amount - <label id="mpostotalamt2"></label>/-</p>
-                                </div>
-                                <div class="first-form-button-right">
-                                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                                        <button onclick="otherpayment('MPOS','2')">GO</button>
-                                        <button onclick="otherpayment('MPOS','2')">To Pay</button>
-                                    </div>
-                                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
-                                </div>
-                            </div>
-                            <div id="mpos3qr" class="second-form-button" style="display:none;">
-                                <div class="second-form-close-button">&#10006;</div>
-                                <div class="first-form-button-left">
-                                    <p>Net Amount - <label id="mposamt3"></label>/-</p>
-                                    <p>Gst IN - <label id="mposgstamt3"></label>/-</p>
-                                    <p>Total Amount - <label id="mpostotalamt3"></label>/-</p>
-                                </div>
-                                <div class="first-form-button-right">
-                                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                                        <button onclick="otherpayment('MPOS','3')">GO</button>
-                                        <button onclick="otherpayment('MPOS','3')">To Pay</button>
-                                    </div>
-                                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
-                                </div>
-                            </div>*@
+                <div class="second-form-close-button">&#10006;</div>
+                <div class="first-form-button-left">
+                    <p>Net Amount - <label id="mposamt2"></label>/-</p>
+                    <p>Gst IN - <label id="mposgstamt2"></label>/-</p>
+                    <p>Total Amount - <label id="mpostotalamt2"></label>/-</p>
+                </div>
+                <div class="first-form-button-right">
+                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
+                        <button onclick="otherpayment('MPOS','2')">GO</button>
+                        <button onclick="otherpayment('MPOS','2')">To Pay</button>
+                    </div>
+                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
+                </div>
+            </div>
+            <div id="mpos3qr" class="second-form-button" style="display:none;">
+                <div class="second-form-close-button">&#10006;</div>
+                <div class="first-form-button-left">
+                    <p>Net Amount - <label id="mposamt3"></label>/-</p>
+                    <p>Gst IN - <label id="mposgstamt3"></label>/-</p>
+                    <p>Total Amount - <label id="mpostotalamt3"></label>/-</p>
+                </div>
+                <div class="first-form-button-right">
+                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
+                        <button onclick="otherpayment('MPOS','3')">GO</button>
+                        <button onclick="otherpayment('MPOS','3')">To Pay</button>
+                    </div>
+                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
+                </div>
+            </div>*@
                     </div>
                     <div id="Microatm_show" style="display:none;">
                         <div class="second-form">
                             <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
                                 <h3>Micro ATM Price</h3>
                                 @*<div class="due-date" style="margin-left: 0px;">
-                                        <span>
-                                            <p style="font-size:10px;">Remain</p>
-                                            <p>SMS</p>
-                                        </span>
-                                        <input type="text" />
-                                    </div>*@
+                        <span>
+                            <p style="font-size:10px;">Remain</p>
+                            <p>SMS</p>
+                        </span>
+                        <input type="text" />
+                    </div>*@
                                 <div class="form-head-button form-head-button-mictoatm">
 
                                     <button class="form-head-check addclassmicroatm">
@@ -6379,7 +6491,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                 var value1 = $('#qramt2').text();
                 var gst = parseFloat(value1) * 18 / 100;
                 var total = parseFloat(value1) + parseFloat(gst);
-                $('#qrgst2').text(gst);
+                $('#`').text(gst);
                 $('#qrtotal2').text(total);
             }
 
@@ -6468,13 +6580,14 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
     <!------------Website-------------------->
     <!---------------SSL--------------------->
     <script>
-          function ssldatashow() {
+          function ssldatashow(SSLTYPE) {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("sslpricelist", "Home")',
+                data: { SSLTYPE: SSLTYPE },
                 cache: false,
                 success: function (data) {
-                     $('.lblotherpayment').text('')
+                  $('.lblotherpayment').text('')
                   $('.comfirsmclasscss').show();
                     var firstprice = data.First.p1;
                     var Secondprice = data.Second.p2;
@@ -6488,31 +6601,65 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                     var total = parseFloat(firstprice) + parseFloat(gst);
                     var total1 = parseFloat(Secondprice) + parseFloat(gst1);
                     var total2 = parseFloat(thirdprice) + parseFloat(gst2);
+                    $('.second-form').show();
+                    if (data.SSlTYPE == "SSL") {
+                        $('#Appssl1qr').hide();
+                        $('#Appssl2qr').hide();
+                        $('#Appssl3qr').hide();
 
-                    $('#sslduedatetxt').val(duedate);
-                    $('#1stsslprice').text(firstprice);
-                    $('#2ndsslprice').text(Secondprice);
-                    $('#3rdsslprice').text(thirdprice);
+                        $('#sslduedatetxt').val(duedate);
+                        $('#1stsslprice').text(firstprice);
+                        $('#2ndsslprice').text(Secondprice);
+                        $('#3rdsslprice').text(thirdprice);
 
-                    $('#sslamt1').text(firstprice);
-                    $('#sslamt2').text(Secondprice);
-                    $('#sslamt3').text(thirdprice);
+                        $('#sslamt1').text(firstprice);
+                        $('#sslamt2').text(Secondprice);
+                        $('#sslamt3').text(thirdprice);
 
-                    $('#sslt1').text(data.First.t1);
-                    $('#sslt2').text(data.Second.t2);
-                    $('#sslt3').text(data.Third.t3);
+                        $('#sslt1').text(data.First.t1);
+                        $('#sslt2').text(data.Second.t2);
+                        $('#sslt3').text(data.Third.t3);
 
-                    $('#sslgstamt1').text(gst);
-                    $('#sslgstamt2').text(gst1);
-                    $('#sslgstamt3').text(gst2);
+                        $('#sslgstamt1').text(gst);
+                        $('#sslgstamt2').text(gst1);
+                        $('#sslgstamt3').text(gst2);
 
-                    $('#ssltotalamt1').text(total);
-                    $('#ssltotalamt2').text(total1);
-                    $('#ssltotalamt3').text(total2);
+                        $('#ssltotalamt1').text(total);
+                        $('#ssltotalamt2').text(total1);
+                        $('#ssltotalamt3').text(total2);
+                        $('#ssl_show').show();
+                        $('#Appssl_show').hide();
+                    }
+                    else {
+                        
+                        $('#ssl1qr').hide();
+                        $('#ssl2qr').hide();
+                        $('#ssl3qr').hide();
 
+                        $('#Appsslduedatetxt').val(duedate);
+                        $('#1stAppsslprice').text(firstprice);
+                        $('#2ndAppsslprice').text(Secondprice);
+                        $('#3rdAppsslprice').text(thirdprice);
 
+                        $('#Appsslamt1').text(firstprice);
+                        $('#Appsslamt2').text(Secondprice);
+                        $('#Appsslamt3').text(thirdprice);
+
+                        $('#Appsslt1').text(data.First.t1);
+                        $('#Appsslt2').text(data.Second.t2);
+                        $('#Appsslt3').text(data.Third.t3);
+
+                        $('#Appsslgstamt1').text(gst);
+                        $('#Appsslgstamt2').text(gst1);
+                        $('#Appsslgstamt3').text(gst2);
+
+                        $('#Appssltotalamt1').text(total);
+                        $('#Appssltotalamt2').text(total1);
+                        $('#Appssltotalamt3').text(total2);
+                        $('#ssl_show').hide();
+                        $('#Appssl_show').show();
+                    }
                     $('#website_show').hide();
-                    $('#ssl_show').show();
                     $('#Email_show').hide();
                     $('#Sms_show').hide();
                     $('#whatsapp_show').hide();
@@ -6544,6 +6691,9 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
             $('#ssl1qr').show();
             $('#ssl2qr').hide();
             $('#ssl3qr').hide();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').hide();
             $('.second-form').hide();
         }
         function onclickssl2() {
@@ -6564,6 +6714,9 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
             $('#ssl1qr').hide();
             $('#ssl2qr').show();
             $('#ssl3qr').hide();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').hide();
             $('.second-form').hide();
         }
         function onclickssl3() {
@@ -6584,13 +6737,86 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
             $('#ssl1qr').hide();
             $('#ssl2qr').hide();
             $('#ssl3qr').show();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').hide();
+            $('.second-form').hide();
+        }
+        function onclickssl11() {
+            var val = $('#Appsslcheck').is(":checked");
+
+            if (val == false) {
+                var value1 = $('#Appsslamt1').text();
+                $('#Appsslgstamt1').text(0);
+                $('#Appssltotalamt1').text(value1);
+            }
+            else {
+                var value1 = $('#Appsslamt1').text();
+                var gst = parseFloat(value1) * 18 / 100;
+                var total = parseFloat(value1) + parseFloat(gst);
+                $('#Appsslgstamt1').text(gst);
+                $('#Appssltotalamt1').text(total);
+            }
+            $('#ssl1qr').hide();
+            $('#ssl2qr').hide();
+            $('#ssl3qr').hide();
+            $('#Appssl1qr').show();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').hide();
+
+            $('.second-form').hide();
+        }
+        function onclickssl22() {
+            var val = $('#Appsslcheck').is(":checked");
+
+            if (val == false) {
+                var value1 = $('#Appsslamt2').text();
+                $('#Appsslgstamt2').text(0);
+                $('#Appssltotalamt2').text(value1);
+            }
+            else {
+                var value1 = $('#Appsslamt2').text();
+                var gst = parseFloat(value1) * 18 / 100;
+                var total = parseFloat(value1) + parseFloat(gst);
+                $('#Appsslgstamt2').text(gst);
+                $('#Appssltotalamt2').text(total);
+            }
+            $('#ssl1qr').hide();
+            $('#ssl2qr').hide();
+            $('#ssl3qr').hide();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').show();
+            $('#Appssl3qr').hide();
+            $('.second-form').hide();
+        }
+        function onclickssl33() {
+            var val = $('#Appsslcheck').is(":checked");
+
+            if (val == false) {
+                var value1 = $('#Appsslamt3').text();
+                $('#Appsslgstamt3').text(0);
+                $('#Appssltotalamt3').text(value1);
+            }
+            else {
+                var value1 = $('#Appsslamt3').text();
+                var gst = parseFloat(value1) * 18 / 100;
+                var total = parseFloat(value1) + parseFloat(gst);
+                $('#Appsslgstamt3').text(gst);
+                $('#Appssltotalamt3').text(total);
+            }
+            $('#ssl1qr').hide();
+            $('#ssl2qr').hide();
+            $('#ssl3qr').hide();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').show();
             $('.second-form').hide();
         }
         $(".second-form-close-button").click(function () {
             $('.second-form').show();
-            $('#ssl1qr').hide();
-            $('#ssl2qr').hide();
-            $('#ssl3qr').hide();
+            $('#Appssl1qr').hide();
+            $('#Appssl2qr').hide();
+            $('#Appssl3qr').hide();
         })
     </script>
 
@@ -7753,6 +7979,18 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                 }
                 else if (qu == "3") {
                     quantity = $('#sslt3').text();
+                }
+            }
+            if (servicenm == "APPSSL") {
+                gststs = $('#Appsslcheck').is(":checked");
+                if (qu == "1") {
+                    quantity = $('#Appsslt1').text();
+                }
+                else if (qu == "2") {
+                    quantity = $('#Appsslt2').text();
+                }
+                else if (qu == "3") {
+                    quantity = $('#Appsslt3').text();
                 }
             }
             else if (servicenm == "EMAIL") {
