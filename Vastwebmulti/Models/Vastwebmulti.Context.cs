@@ -871,6 +871,19 @@ namespace Vastwebmulti.Models
         public virtual DbSet<totalimeino> totalimeinoes { get; set; }
         public virtual DbSet<daysfordayswisesettele> daysfordayswisesetteles { get; set; }
         public virtual DbSet<fronticon> fronticons { get; set; }
+        public virtual DbSet<CreditCardCharge> CreditCardCharges { get; set; }
+        public virtual DbSet<CreditCardBillPaymentCharge> CreditCardBillPaymentCharges { get; set; }
+        public virtual DbSet<money_api_status1> money_api_status1 { get; set; }
+        public virtual DbSet<paytm_imps_api_comm1> paytm_imps_api_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_common_comm1> paytm_imps_common_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_dealer_comm1> paytm_imps_dealer_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_dlm_rem_comm1> paytm_imps_dlm_rem_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_master_comm1> paytm_imps_master_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_retailer_comm1> paytm_imps_retailer_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_whitelabel_comm_comm1> paytm_imps_whitelabel_comm_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_whitelabel_comm1> paytm_imps_whitelabel_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_whitelabel_dealer_comm1> paytm_imps_whitelabel_dealer_comm1 { get; set; }
+        public virtual DbSet<paytm_imps_whitelabel_Retailer_comm1> paytm_imps_whitelabel_Retailer_comm1 { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -21217,31 +21230,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Update_paymentgateway_dlm_rem_userSlab_again", dlmidParameter, creditCardstsParameter, debitCardstsParameter, netbankingstsParameter, cashcardstsParameter, walletstsParameter, upistsParameter, debitupto2000Parameter, debitabove2000Parameter, creditcardParameter, netbankingParameter, walletParameter, uPIParameter, creditcardmaxParameter, netbankmaxParameter, debitmaxParameter, upimaxParameter, walletmaxParameter, axisParameter, othersParameter, creditsettlementParameter);
         }
     
-        public virtual ObjectResult<PaymentGateway_Fund_insert_Result> PaymentGateway_Fund_insert(string role, string userid, Nullable<decimal> amount, string txnid, string type, ObjectParameter output)
-        {
-            var roleParameter = role != null ?
-                new ObjectParameter("role", role) :
-                new ObjectParameter("role", typeof(string));
-    
-            var useridParameter = userid != null ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("amount", amount) :
-                new ObjectParameter("amount", typeof(decimal));
-    
-            var txnidParameter = txnid != null ?
-                new ObjectParameter("txnid", txnid) :
-                new ObjectParameter("txnid", typeof(string));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Result>("PaymentGateway_Fund_insert", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, output);
-        }
-    
         public virtual ObjectResult<Select_Retailer_Details_all_Result> Select_Retailer_Details_all(string userid, string searchfor, string alterdby)
         {
             var useridParameter = userid != null ?
@@ -21812,35 +21800,6 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("photo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("update_sender_aadhar", txnidParameter, statusParameter, statuscodeParameter, nameParameter, photoParameter);
-        }
-    
-        public virtual ObjectResult<proc_InsertWalletToBankAmountTransfer_Result> proc_InsertWalletToBankAmountTransfer(string userid, Nullable<decimal> amount, string type, string requestId, string transectionID, string accountNumber, ObjectParameter status, ObjectParameter message)
-        {
-            var useridParameter = userid != null ?
-                new ObjectParameter("Userid", userid) :
-                new ObjectParameter("Userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(string));
-    
-            var requestIdParameter = requestId != null ?
-                new ObjectParameter("RequestId", requestId) :
-                new ObjectParameter("RequestId", typeof(string));
-    
-            var transectionIDParameter = transectionID != null ?
-                new ObjectParameter("TransectionID", transectionID) :
-                new ObjectParameter("TransectionID", typeof(string));
-    
-            var accountNumberParameter = accountNumber != null ?
-                new ObjectParameter("AccountNumber", accountNumber) :
-                new ObjectParameter("AccountNumber", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_Result>("proc_InsertWalletToBankAmountTransfer", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
         }
     
         public virtual ObjectResult<spWhitelabel_Insert_SuperStokist_To_Dealer_Result> spWhitelabel_Insert_SuperStokist_To_Dealer(string whitelabelid, string ssid, string dlmid, Nullable<decimal> balance, Nullable<decimal> comm, string type, string comment, string fundby, string collectionBy, string bankName, string admin_AccountNo, string head, ObjectParameter output)
@@ -23382,6 +23341,216 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("appname", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<insert_Upi_Txn_Result>("insert_Upi_Txn", typeParameter, useridParameter, amountParameter, refidParameter, payervpaParameter, dealeridParameter, appnameParameter, output);
+        }
+    
+        public virtual ObjectResult<CreditCardChargReport_Result> CreditCardChargReport(string dealerId, string retailerId)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CreditCardChargReport_Result>("CreditCardChargReport", dealerIdParameter, retailerIdParameter);
+        }
+    
+        public virtual ObjectResult<PaymentGateway_Fund_insert_Result> PaymentGateway_Fund_insert(string role, string userid, Nullable<decimal> amount, string txnid, string type, string cardNumber, ObjectParameter output)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Result>("PaymentGateway_Fund_insert", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, cardNumberParameter, output);
+        }
+    
+        public virtual ObjectResult<GetWayCreditCardFund_Result> GetWayCreditCardFund(string txnid, string mode, string cardname, string status, string errormsg, string paumoneyid, ObjectParameter output)
+        {
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var modeParameter = mode != null ?
+                new ObjectParameter("mode", mode) :
+                new ObjectParameter("mode", typeof(string));
+    
+            var cardnameParameter = cardname != null ?
+                new ObjectParameter("cardname", cardname) :
+                new ObjectParameter("cardname", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var errormsgParameter = errormsg != null ?
+                new ObjectParameter("errormsg", errormsg) :
+                new ObjectParameter("errormsg", typeof(string));
+    
+            var paumoneyidParameter = paumoneyid != null ?
+                new ObjectParameter("paumoneyid", paumoneyid) :
+                new ObjectParameter("paumoneyid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWayCreditCardFund_Result>("GetWayCreditCardFund", txnidParameter, modeParameter, cardnameParameter, statusParameter, errormsgParameter, paumoneyidParameter, output);
+        }
+    
+        public virtual ObjectResult<CreditCardBillPaymentChargReport_Result> CreditCardBillPaymentChargReport(string dealerId, string retailerId)
+        {
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CreditCardBillPaymentChargReport_Result>("CreditCardBillPaymentChargReport", dealerIdParameter, retailerIdParameter);
+        }
+    
+        public virtual ObjectResult<Money_transfer_by_paytm1_Result> Money_transfer_by_paytm1(string userid, Nullable<decimal> amount, Nullable<decimal> finalamount, string sendernumber, string accountno, string banknm, string ifsccode, string common_req_id, string req_id, string reqtype, string req_from, string kycstatus, string impsrequest, string apiname, string ipaddress, string macaddress, string imeino, Nullable<decimal> apiprebal, Nullable<decimal> apipostbal, string dmtType, string idprooftype, string idproofnumber, string uniqueid, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var finalamountParameter = finalamount.HasValue ?
+                new ObjectParameter("finalamount", finalamount) :
+                new ObjectParameter("finalamount", typeof(decimal));
+    
+            var sendernumberParameter = sendernumber != null ?
+                new ObjectParameter("sendernumber", sendernumber) :
+                new ObjectParameter("sendernumber", typeof(string));
+    
+            var accountnoParameter = accountno != null ?
+                new ObjectParameter("accountno", accountno) :
+                new ObjectParameter("accountno", typeof(string));
+    
+            var banknmParameter = banknm != null ?
+                new ObjectParameter("banknm", banknm) :
+                new ObjectParameter("banknm", typeof(string));
+    
+            var ifsccodeParameter = ifsccode != null ?
+                new ObjectParameter("ifsccode", ifsccode) :
+                new ObjectParameter("ifsccode", typeof(string));
+    
+            var common_req_idParameter = common_req_id != null ?
+                new ObjectParameter("common_req_id", common_req_id) :
+                new ObjectParameter("common_req_id", typeof(string));
+    
+            var req_idParameter = req_id != null ?
+                new ObjectParameter("req_id", req_id) :
+                new ObjectParameter("req_id", typeof(string));
+    
+            var reqtypeParameter = reqtype != null ?
+                new ObjectParameter("reqtype", reqtype) :
+                new ObjectParameter("reqtype", typeof(string));
+    
+            var req_fromParameter = req_from != null ?
+                new ObjectParameter("req_from", req_from) :
+                new ObjectParameter("req_from", typeof(string));
+    
+            var kycstatusParameter = kycstatus != null ?
+                new ObjectParameter("kycstatus", kycstatus) :
+                new ObjectParameter("kycstatus", typeof(string));
+    
+            var impsrequestParameter = impsrequest != null ?
+                new ObjectParameter("impsrequest", impsrequest) :
+                new ObjectParameter("impsrequest", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var macaddressParameter = macaddress != null ?
+                new ObjectParameter("macaddress", macaddress) :
+                new ObjectParameter("macaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            var apiprebalParameter = apiprebal.HasValue ?
+                new ObjectParameter("apiprebal", apiprebal) :
+                new ObjectParameter("apiprebal", typeof(decimal));
+    
+            var apipostbalParameter = apipostbal.HasValue ?
+                new ObjectParameter("apipostbal", apipostbal) :
+                new ObjectParameter("apipostbal", typeof(decimal));
+    
+            var dmtTypeParameter = dmtType != null ?
+                new ObjectParameter("DmtType", dmtType) :
+                new ObjectParameter("DmtType", typeof(string));
+    
+            var idprooftypeParameter = idprooftype != null ?
+                new ObjectParameter("idprooftype", idprooftype) :
+                new ObjectParameter("idprooftype", typeof(string));
+    
+            var idproofnumberParameter = idproofnumber != null ?
+                new ObjectParameter("idproofnumber", idproofnumber) :
+                new ObjectParameter("idproofnumber", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_by_paytm1_Result>("Money_transfer_by_paytm1", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, idprooftypeParameter, idproofnumberParameter, uniqueidParameter, output);
+        }
+    
+        public virtual ObjectResult<proc_InsertWalletToBankAmountTransfer_Result> proc_InsertWalletToBankAmountTransfer(string userid, Nullable<decimal> amount, string type, string requestId, string transectionID, string accountNumber, ObjectParameter status, ObjectParameter message)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("Userid", userid) :
+                new ObjectParameter("Userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var requestIdParameter = requestId != null ?
+                new ObjectParameter("RequestId", requestId) :
+                new ObjectParameter("RequestId", typeof(string));
+    
+            var transectionIDParameter = transectionID != null ?
+                new ObjectParameter("TransectionID", transectionID) :
+                new ObjectParameter("TransectionID", typeof(string));
+    
+            var accountNumberParameter = accountNumber != null ?
+                new ObjectParameter("AccountNumber", accountNumber) :
+                new ObjectParameter("AccountNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_Result>("proc_InsertWalletToBankAmountTransfer", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
         }
     }
 }

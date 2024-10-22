@@ -242,8 +242,47 @@
         }
     }
 </style>
+<style>
+    .button-container {
+        display: flex; /* Use flexbox to align the buttons side by side */
+        justify-content: center; /* Center the buttons horizontally */
+        gap: 10px; /* Add space between the buttons */
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff; /* Primary color */
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Secondary color */
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Darker shade on hover */
+        }
+</style>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
+    <div class="button-container">
+        @if (ViewBag.moneysts1 == true)
+        {
+            <a href="@Url.Action("Money_transfer2", "Home")" class="btn">BANK1</a>
+        }
+        @if (ViewBag.moneysts2 == true)
+        {
+            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">BANK2</a>
+        }
+    </div>
     <fieldset>
         <legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">
@@ -1314,7 +1353,7 @@
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
                     var statuscode = output.statuscode;
-                    
+
                     if (statuscode == "TXN") {
                         $('#remlist').show();
                         var name = output.data.remitter.name;
@@ -1401,8 +1440,8 @@
                         if (respout.success == true) {
                             $('#remlist').show();
                             var name = respout.customer.name;
-                            var totallimit = respout.customer.totallimit;
-                            var remaininglimit = respout.customer.totallimit;
+                            var totallimit = 50000; //respout.customer.totallimit;
+                            var remaininglimit = 50000;// respout.customer.totallimit;
                             var custid = respout.customer.id;
                             $('#hidecustid').val(custid)
                             $('#imgshow').hide();
@@ -1435,11 +1474,11 @@
                             $('#benlistttable').html('')
                             for (i = 0; i < respout.benes.length; i++) {
                                 var id = respout.benes[i].id;
-                                var name = respout.benes[i].name;
-                                var account = respout.benes[i].accountNumber;
-                                var bank = respout.benes[i].bankName;
-                                var ifsc = respout.benes[i].ifscCode;
-                                var bankname = respout.benes[i].bankName;
+                                var name = respout.benes[i].fname;
+                                var account = respout.benes[i].AccountNumber;
+                                var bank = respout.benes[i].bankname;
+                                var ifsc = respout.benes[i].ifsc;
+                                var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
                                 console.log(bankname)
@@ -1454,7 +1493,7 @@
                         else if (respout.success == false) {
                             var msginfo = respout.message;
                             console.log(msginfo)
-                            if (msginfo.includes("Sender data not found")) {
+                            if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
                                 $('#sendername').val("");
                                 $('#remlist').hide();
                                 $('#newsender').text(senderno);
@@ -1680,7 +1719,8 @@
                     $('#otpsenderno').text(senderno);
                     $('#otpsendername').text(name);
                     $('#otpbenid').text("");
-                    $('#otpshow').show();
+                   // $('#otpshow').show();
+                    senderdetails("change");
                 }
                 else {
                     msg = "⚠  " + msg;

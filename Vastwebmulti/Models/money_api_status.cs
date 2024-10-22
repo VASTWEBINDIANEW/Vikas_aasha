@@ -18,5 +18,6 @@ namespace Vastwebmulti.Models
         public string api_name { get; set; }
         public string catagory { get; set; }
         public Nullable<bool> status { get; set; }
+        public string Slabnm { get; set; }
     }
 }

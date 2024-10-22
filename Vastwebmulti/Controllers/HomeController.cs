@@ -2463,7 +2463,7 @@ namespace Vastwebmulti.Controllers
             Contect.Subject = model.SuperstokistName;
             DB.tblWhiteFront_ContactData.Add(Contect);
             DB.SaveChanges();
-            TempData["front"] = "Contect Us Data Uploaded Successfully";
+            TempData["front"] = "Contact Us Data Uploaded Successfully";
             return RedirectToAction("Index");
         }
 
