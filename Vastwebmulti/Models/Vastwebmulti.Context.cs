@@ -21802,35 +21802,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("update_sender_aadhar", txnidParameter, statusParameter, statuscodeParameter, nameParameter, photoParameter);
         }
     
-        public virtual ObjectResult<proc_InsertWalletToBankAmountTransfer_Result> proc_InsertWalletToBankAmountTransfer(string userid, Nullable<decimal> amount, string type, string requestId, string transectionID, string accountNumber, ObjectParameter status, ObjectParameter message)
-        {
-            var useridParameter = userid != null ?
-                new ObjectParameter("Userid", userid) :
-                new ObjectParameter("Userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(string));
-    
-            var requestIdParameter = requestId != null ?
-                new ObjectParameter("RequestId", requestId) :
-                new ObjectParameter("RequestId", typeof(string));
-    
-            var transectionIDParameter = transectionID != null ?
-                new ObjectParameter("TransectionID", transectionID) :
-                new ObjectParameter("TransectionID", typeof(string));
-    
-            var accountNumberParameter = accountNumber != null ?
-                new ObjectParameter("AccountNumber", accountNumber) :
-                new ObjectParameter("AccountNumber", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_Result>("proc_InsertWalletToBankAmountTransfer", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
-        }
-    
         public virtual ObjectResult<spWhitelabel_Insert_SuperStokist_To_Dealer_Result> spWhitelabel_Insert_SuperStokist_To_Dealer(string whitelabelid, string ssid, string dlmid, Nullable<decimal> balance, Nullable<decimal> comm, string type, string comment, string fundby, string collectionBy, string bankName, string admin_AccountNo, string head, ObjectParameter output)
         {
             var whitelabelidParameter = whitelabelid != null ?
@@ -23551,6 +23522,35 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("uniqueid", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_by_paytm1_Result>("Money_transfer_by_paytm1", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, idprooftypeParameter, idproofnumberParameter, uniqueidParameter, output);
+        }
+    
+        public virtual ObjectResult<proc_InsertWalletToBankAmountTransfer_Result> proc_InsertWalletToBankAmountTransfer(string userid, Nullable<decimal> amount, string type, string requestId, string transectionID, string accountNumber, ObjectParameter status, ObjectParameter message)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("Userid", userid) :
+                new ObjectParameter("Userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var requestIdParameter = requestId != null ?
+                new ObjectParameter("RequestId", requestId) :
+                new ObjectParameter("RequestId", typeof(string));
+    
+            var transectionIDParameter = transectionID != null ?
+                new ObjectParameter("TransectionID", transectionID) :
+                new ObjectParameter("TransectionID", typeof(string));
+    
+            var accountNumberParameter = accountNumber != null ?
+                new ObjectParameter("AccountNumber", accountNumber) :
+                new ObjectParameter("AccountNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_Result>("proc_InsertWalletToBankAmountTransfer", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
         }
     }
 }
