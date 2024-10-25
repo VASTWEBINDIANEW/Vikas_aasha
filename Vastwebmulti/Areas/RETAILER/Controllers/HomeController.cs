@@ -33138,7 +33138,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                 if (response.Status == "Success")
                                                 {
                                                     var tokn = Responsetoken.gettoken();
-                                                    var responsechk1 = vb.WalletUnloadrRquest(tokn, Email, Convert.ToDecimal(response.Amount), "", AccountNumber, BankName, IFSCCode, AccountholderName, RequestId, Type);
+                                                    var responsechk1 = vb.WalletUnloadrRquest(tokn, Email, Amount, "", AccountNumber, BankName, IFSCCode, AccountholderName, RequestId, Type);
                                                     var responsechk = responsechk1.Content.ToString();
                                                     dynamic json = JsonConvert.DeserializeObject(responsechk);
                                                     var respcode = json.Content.ResponseCode.ToString();
