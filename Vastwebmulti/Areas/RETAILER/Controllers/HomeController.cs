@@ -19110,6 +19110,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     string companyBankName = retailer.bankname;
                     string bankBranchName = retailer.bankAddress;
                     string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
                         var message = "Please Update Your Bank Information, On the Profile.";
@@ -19135,7 +19137,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankIfscCode,
                             companyBankName,
                             bankBranchName,
-                            bankAccountName
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
                         var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
