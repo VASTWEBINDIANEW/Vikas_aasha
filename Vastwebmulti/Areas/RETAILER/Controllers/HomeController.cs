@@ -19142,7 +19142,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             aadhaarNumber
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_UAT");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
