@@ -36883,6 +36883,62 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             TempData["respmsgreq"] = msg;
             return RedirectToAction("UPICollection");
         }
+        public ActionResult VerifyUPIID(string upiid)
+        {
+            var userid = User.Identity.GetUserId();
+            Radiantdmt radi = new Radiantdmt();
+            var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+            var name = ""; var Message = ""; var sts = false;
+            if (radiantresponse != null)
+            {
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var tokenchk = db.radianttokens.SingleOrDefault();
+                if (tokenchk == null)
+                {
+                    radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                }
+                else
+                {
+                    radianttoken = tokenchk.accessToken;
+                    radianagentid = tokenchk.agentID;
+                }
+
+                var respchk = radi.collectPayVerify(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, upiid);
+
+                if (respchk.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic dyresp = JsonConvert.DeserializeObject(respchk.Content);
+                    var statuschk = dyresp.success;
+                    Message = dyresp.result.message;
+                    if (statuschk == true)
+                    {
+                        sts = true;
+                        name = dyresp.result.name;
+                    }
+                }
+                else
+                {
+                    Message = "something went wrong";
+                    try
+                    {
+                        dynamic dyresp = JsonConvert.DeserializeObject(respchk.Content);
+                        Message = dyresp.result.message;
+                    }
+                    catch { }
+                }
+            }
+            else
+            {
+                Message = "Api Key is Missing";
+            }
+            var outchk = new
+            {
+                name,
+                Message,
+                sts
+            };
+            return Json(outchk, JsonRequestBehavior.AllowGet);
+        }
         public static string EncryptCard(string plainText, string key)
         {
             using (Aes aes = Aes.Create())

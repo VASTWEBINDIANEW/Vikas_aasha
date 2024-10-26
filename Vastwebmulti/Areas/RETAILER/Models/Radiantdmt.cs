@@ -1565,6 +1565,40 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             catch { }
             return responsecheck;
         }
+        public IRestResponse collectPayVerify(string agent_id, string clientId, string ClientSecret, string apiKey, string token, string payerVpa)
+        {
+
+            WriteLog("********************* collectPayVerify *****************************");
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string Baseurl = "https://aceneobank.com/apiService/";
+            var client = new RestClient(Baseurl + "wallet/upiVerify");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agent_id);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            // request.AddHeader("distributorCode", "70359687666670616055318500299916_Si6zudoNA+/VffLEesneSA==");
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            request.AddHeader("content-type", "application/json");
+            var body = new
+            {
+                agent_id,
+                payerVpa
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
+
+
+        }
 
         public static void WriteLog(string strMessage)
         {
