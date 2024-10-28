@@ -6924,12 +6924,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                     else
                     {
-                        msg = "Agent ID is pending. Please wait for approval.";
+                        msg = "EKYC is pending. Please wait for approval.";
                     }
                 }
                 else
                 {
-                    msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                    msg = "KYC not Done! Please go to your profile and Complete Ekyc Process.";
                 }
             }
             else
@@ -7226,13 +7226,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            msg = "Agent ID is pending. Please wait for approval.";
+                            msg = "EKYC is pending. Please wait for approval.";
                             Response = "ERROR";
                         }
                     }
                     else
                     {
-                        msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                        msg = "KYC not Done! Please go to your profile and Complete Ekyc Process..";
                         Response = "ERROR";
                     }
                 }
@@ -15950,7 +15950,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error_decribe = "Agent ID is pending. Please wait for approval.";
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
                                 var json1 = JsonConvert.DeserializeObject(results);
                                 var json = JsonConvert.SerializeObject(json1);
@@ -15961,7 +15961,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error_decribe = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error_decribe = "KYC not Done! Please go to your profile and Complete Ekyc Process..";
                             var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
                             var json1 = JsonConvert.DeserializeObject(results);
                             var json = JsonConvert.SerializeObject(json1);
@@ -16121,7 +16121,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 }
                                 else
                                 {
-                                    var error = "Agent ID is pending. Please wait for approval.";
+                                    var error = "EKYC is pending. Please wait for approval..";
                                     var results = "{'status':'" + error + "','statuscode':'failure'}";
                                     var jss = new JavaScriptSerializer();
                                     var dict = jss.Deserialize<dynamic>(results);
@@ -16130,7 +16130,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                                var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -16291,7 +16291,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID is pending. Please wait for approval.";
+                                var error = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -16300,7 +16300,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process..";
                             var results = "{'status':'" + error + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -16447,7 +16447,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error_decribe = "Agent ID is pending. Please wait for approval.";
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -16456,7 +16456,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error_decribe = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -16600,7 +16600,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID is pending. Please wait for approval.";
+                                var error = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -16609,7 +16609,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -19856,7 +19856,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var viewresponse11 = new { Status = "Failed", Message = "Agent ID is pending. Please wait for approval." };
+                            var viewresponse11 = new { Status = "Failed", Message = "EKYC is pending. Please wait for approval." };
                             return Json(viewresponse11, JsonRequestBehavior.AllowGet);
                         }
                     }
@@ -19868,7 +19868,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
                 else
                 {
-                    var viewresponse11 = new { Status = "Failed", Message = "Agent ID not created! Please go to your profile and create a new Agent ID." };
+                    var viewresponse11 = new { Status = "Failed", Message = "EKYC not Done! Please go to your profile and Complete Ekyc Process." };
                     return Json(viewresponse11, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -20200,14 +20200,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            string msg = "Agent ID is pending. Please wait for approval.";
+                            string msg = "EKYC is pending. Please wait for approval.";
                             var viewresponse11 = new { Status = "Failed", Message = msg };
                             return Json(viewresponse11, JsonRequestBehavior.AllowGet);
                         }
                     }
                     else
                     {
-                        string msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                        string msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                         var viewresponse11 = new { Status = "Failed", Message = msg };
                         return Json(viewresponse11, JsonRequestBehavior.AllowGet);
                     }
@@ -20671,7 +20671,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error_decribe = "Agent ID is pending. Please wait for approval.";
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
                                 var json1 = JsonConvert.DeserializeObject(results);
                                 var json = JsonConvert.SerializeObject(json1);
@@ -20682,7 +20682,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error_decribe = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
                             var json1 = JsonConvert.DeserializeObject(results);
                             var json = JsonConvert.SerializeObject(json1);
@@ -21104,7 +21104,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 }
                                 else
                                 {
-                                    var error = "Agent ID is pending. Please wait for approval.";
+                                    var error = "EKYC is pending. Please wait for approval.";
                                     var results = "{'status':'" + error + "','statuscode':'failure'}";
                                     var jss = new JavaScriptSerializer();
                                     var dict = jss.Deserialize<dynamic>(results);
@@ -21113,7 +21113,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                                var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -21274,7 +21274,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID is pending. Please wait for approval.";
+                                var error = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -21283,7 +21283,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -21429,7 +21429,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error_decribe = "Agent ID is pending. Please wait for approval.";
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -21438,7 +21438,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error_decribe = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -21581,7 +21581,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                var error = "Agent ID is pending. Please wait for approval.";
+                                var error = "EKYC is pending. Please wait for approval.";
                                 var results = "{'status':'" + error + "','statuscode':'failure'}";
                                 var jss = new JavaScriptSerializer();
                                 var dict = jss.Deserialize<dynamic>(results);
@@ -21590,7 +21590,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         else
                         {
-                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                             var results = "{'status':'" + error + "','statuscode':'failure'}";
                             var jss = new JavaScriptSerializer();
                             var dict = jss.Deserialize<dynamic>(results);
@@ -26798,14 +26798,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         }
                                                         else
                                                         {
-                                                            string msg = "Agent ID is pending. Please wait for approval.";
+                                                            string msg = "EKYC is pending. Please wait for approval.";
                                                             var viewresponse = new { Status = "Failed", Message = msg, userinfo = reminfo };
                                                             return Json(viewresponse, JsonRequestBehavior.AllowGet);
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        string msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                                                        string msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                                                         var viewresponse = new { Status = "Failed", Message = msg, userinfo = reminfo };
                                                         return Json(viewresponse, JsonRequestBehavior.AllowGet);
                                                     }
@@ -35650,12 +35650,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     }
                                     else
                                     {
-                                        msg = "Agent ID is pending. Please wait for approval.";
+                                        msg = "EKYC is pending. Please wait for approval.";
                                     }
                                 }
                                 else
                                 {
-                                    msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                                    msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                                 }
                             }
                             else
@@ -36545,12 +36545,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         }
                         else
                         {
-                            msg = "Agent ID is pending. Please wait for approval.";
+                            msg = "EKYC is pending. Please wait for approval.";
                         }
                     }
                     else
                     {
-                        msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                        msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                     }
                 }
                 else
@@ -36868,12 +36868,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     }
                     else
                     {
-                        msg = "Agent ID is pending. Please wait for approval.";
+                        msg = "EKYC is pending. Please wait for approval.";
                     }
                 }
                 else
                 {
-                    msg = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                    msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
                 }
             }
             else
@@ -40153,97 +40153,105 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         }
         public ActionResult Rediantcreate()
         {
-            var userid = User.Identity.GetUserId();
-            var chkss = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
-            if (chkss.Count > 0)
+            try
+            {
+                var userid = User.Identity.GetUserId();
+                var chkss = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
+                if (chkss.Count > 0)
+                {
+                    return RedirectToAction("Profile");
+                }
+                ViewBag.message = "";
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                Radiantdmt data = new Radiantdmt();
+                var check1 = data.RadiantgetMcc(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                var chek = data.Radiantstate(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                if (chek.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chek.Content);
+                    var dis = responseData.dst;
+                    var states = responseData.states;
+                    List<rediantdisids> rediantstateList = new List<rediantdisids>();
+                    foreach (var item in states)
+                    {
+                        rediantdisids d1 = new rediantdisids();
+                        d1.id = item.id;
+                        d1.state_code = item.state_code;
+
+                        d1.state = item.state;
+
+                        rediantstateList.Add(d1);
+                    }
+                    // Use rediantstateList instead of rediantstateids in the Select method
+                    ViewBag.state = rediantstateList.Select(a => new SelectListItem
+                    {
+                        Text = a.state,
+                        Value = a.state_code.ToString()
+                    }).ToList();
+                }
+                else
+                {
+                    ViewBag.message = "Server issue";
+                }
+                if (check1.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic responseData1 = Newtonsoft.Json.JsonConvert.DeserializeObject(check1.Content);
+                    var mcc = responseData1.mcc;
+                    var bissiness = responseData1.bussiness;
+                    List<rediantMcc> rediantMcclist = new List<rediantMcc>();
+                    foreach (var item in mcc)
+                    {
+                        rediantMcc d1 = new rediantMcc();
+                        d1.id = item.id;
+                        d1.category = item.category;
+
+                        d1.mcc = item.mcc;
+
+                        rediantMcclist.Add(d1);
+                    }
+                    // Use rediantstateList instead of rediantstateids in the Select method
+                    ViewBag.Mcc = rediantMcclist.Select(a => new SelectListItem
+                    {
+                        Text = a.category,
+                        Value = a.mcc.ToString()
+                    }).ToList();
+
+                    List<rediantbussinesstype> rediantbussinesstypelist = new List<rediantbussinesstype>();
+                    foreach (var item in bissiness)
+                    {
+                        rediantbussinesstype d1 = new rediantbussinesstype();
+                        d1.id = item.id;
+                        d1.bussinesstype = item.bussinesstype;
+
+                        rediantbussinesstypelist.Add(d1);
+                    }
+                    // Use rediantstateList instead of rediantstateids in the Select method
+                    ViewBag.bussinesstype = rediantbussinesstypelist.Select(a => new SelectListItem
+                    {
+                        Text = a.bussinesstype,
+                        Value = a.id.ToString()
+                    }).ToList();
+                }
+                else
+                {
+                    ViewBag.message = "Server issue";
+                }
+                return View();
+            }
+            catch
             {
                 return RedirectToAction("Profile");
             }
-            ViewBag.message = "";
-            var radiantauthchk = db.radiantauths.SingleOrDefault();
-            Radiantdmt data = new Radiantdmt();
-            var check1 = data.RadiantgetMcc(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
-            var chek = data.Radiantstate(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
-            if (chek.StatusCode == HttpStatusCode.OK)
-            {
-                dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chek.Content);
-                var dis = responseData.dst;
-                var states = responseData.states;
-                List<rediantdisids> rediantstateList = new List<rediantdisids>();
-                foreach (var item in states)
-                {
-                    rediantdisids d1 = new rediantdisids();
-                    d1.id = item.id;
-                    d1.state_code = item.state_code;
-
-                    d1.state = item.state;
-
-                    rediantstateList.Add(d1);
-                }
-                // Use rediantstateList instead of rediantstateids in the Select method
-                ViewBag.state = rediantstateList.Select(a => new SelectListItem
-                {
-                    Text = a.state,
-                    Value = a.state_code.ToString()
-                }).ToList();
-            }
-            else
-            {
-                ViewBag.message = "Server issue";
-            }
-            if (check1.StatusCode == HttpStatusCode.OK)
-            {
-                dynamic responseData1 = Newtonsoft.Json.JsonConvert.DeserializeObject(check1.Content);
-                var mcc = responseData1.mcc;
-                var bissiness = responseData1.bussiness;
-                List<rediantMcc> rediantMcclist = new List<rediantMcc>();
-                foreach (var item in mcc)
-                {
-                    rediantMcc d1 = new rediantMcc();
-                    d1.id = item.id;
-                    d1.category = item.category;
-
-                    d1.mcc = item.mcc;
-
-                    rediantMcclist.Add(d1);
-                }
-                // Use rediantstateList instead of rediantstateids in the Select method
-                ViewBag.Mcc = rediantMcclist.Select(a => new SelectListItem
-                {
-                    Text = a.category,
-                    Value = a.mcc.ToString()
-                }).ToList();
-
-                List<rediantbussinesstype> rediantbussinesstypelist = new List<rediantbussinesstype>();
-                foreach (var item in bissiness)
-                {
-                    rediantbussinesstype d1 = new rediantbussinesstype();
-                    d1.id = item.id;
-                    d1.bussinesstype = item.bussinesstype;
-
-                    rediantbussinesstypelist.Add(d1);
-                }
-                // Use rediantstateList instead of rediantstateids in the Select method
-                ViewBag.bussinesstype = rediantbussinesstypelist.Select(a => new SelectListItem
-                {
-                    Text = a.bussinesstype,
-                    Value = a.id.ToString()
-                }).ToList();
-            }
-            else
-            {
-                ViewBag.message = "Server issue";
-            }
-            return View();
             
         }
         [HttpPost]
         public ActionResult Rediantcreate(string gst , string tan , string compan, string distributorCode, string firstname, string lastname, string gender, string dob, string email, string phoneno, string altphoneno,
             string address, string pancard, string adhaarno, string pincode, string landmark, string district, string state, string accountname, string accountno,
-            string bankname, string branch, string ifsc, string bank_pincode, string companyname, string shopname, string shopaddress, string shopstate, string shopcity,
+            string bankname, string branch, string ifsc, string bank_pincode, string companyname,  string shopaddress, string shopstate, string shopcity,
             string shopdistrict, string shoparea, string shoppincode, string mcc, string bussiness, HttpPostedFileBase aadharimage ,HttpPostedFileBase aadharimageback, HttpPostedFileBase panimage, HttpPostedFileBase chequeimage,
             HttpPostedFileBase pancardimage, HttpPostedFileBase passportsizeimage, HttpPostedFileBase shopimage, HttpPostedFileBase shoplicenseimage)
         {
+            string shopname = companyname;
             var userid = User.Identity.GetUserId();
             var chkss = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
             if(chkss.Count > 0)
