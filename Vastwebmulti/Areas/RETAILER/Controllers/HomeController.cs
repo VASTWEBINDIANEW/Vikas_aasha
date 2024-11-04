@@ -74,6 +74,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Operators;
 using DocumentFormat.OpenXml.Wordprocessing;
 using sun.misc;
 using System.Reflection;
+using com.sun.imageio.plugins.common;
 //using paytmresponselibrary;
 
 
@@ -19139,10 +19140,15 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankBranchName,
                             bankAccountName,
                             ipAddress,
-                            aadhaarNumber
+                            aadhaarNumber,
+                            emailid=retailer.Email,
+                            firmname=retailer.Frm_Name,
+                            merchantPanImage= "",
+                            maskedAadharImage= "",
+                            backgroundImageOfShop=""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_UAT");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
@@ -19343,6 +19349,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     string companyBankName = retailer.bankname;
                     string bankBranchName = retailer.bankAddress;
                     string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
                         var message = "Please Update Your Bank Information, On the Profile.";
@@ -19368,10 +19376,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankIfscCode,
                             companyBankName,
                             bankBranchName,
-                            bankAccountName
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
@@ -19592,6 +19607,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     string companyBankName = retailer.bankname;
                     string bankBranchName = retailer.bankAddress;
                     string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
                         var message = "Please Update Your Bank Information, On the Profile.";
@@ -19617,10 +19634,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankIfscCode,
                             companyBankName,
                             bankBranchName,
-                            bankAccountName
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
@@ -19896,6 +19920,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     string companyBankName = retailer.bankname;
                     string bankBranchName = retailer.bankAddress;
                     string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
                         var message = "Please Update Your Bank Information, On the Profile.";
@@ -19923,10 +19949,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankIfscCode,
                             companyBankName,
                             bankBranchName,
-                            bankAccountName
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
@@ -20243,6 +20276,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     string companyBankName = retailer.bankname;
                     string bankBranchName = retailer.bankAddress;
                     string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
                     {
                         var message = "Please Update Your Bank Information, On the Profile.";
@@ -20268,10 +20303,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankIfscCode,
                             companyBankName,
                             bankBranchName,
-                            bankAccountName
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
-                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                         client2.Timeout = -1;
                         var request2 = new RestRequest(Method.POST);
                         request2.AddHeader("Authorization", "Bearer " + token);
@@ -26845,6 +26887,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         string companyBankName = retailer.bankname;
                                                         string bankBranchName = retailer.bankAddress;
                                                         string bankAccountName = retailer.accountholder;
+                                                        string aadhaarNumber = retailer.AadharCard;
+                                                        var ipAddress = GetComputer_InternetIP();
                                                         if (string.IsNullOrEmpty(companyBankAccountNumber))
                                                         {
                                                             var message = "Please Update Your Bank Information, On the Profile.";
@@ -26870,10 +26914,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 bankIfscCode,
                                                                 companyBankName,
                                                                 bankBranchName,
-                                                                bankAccountName
+                                                                bankAccountName,
+                                                                ipAddress,
+                                                                aadhaarNumber,
+                                                                emailid = retailer.Email,
+                                                                firmname = retailer.Frm_Name,
+                                                                merchantPanImage = "",
+                                                                maskedAadharImage = "",
+                                                                backgroundImageOfShop = ""
                                                             };
                                                             var resquestchk = JsonConvert.SerializeObject(reque);
-                                                            var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS");
+                                                            var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
                                                             client.Timeout = -1;
                                                             var request = new RestRequest(Method.POST);
                                                             request.AddHeader("Authorization", "Bearer " + token);
@@ -40423,6 +40474,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
             return View();
         }
+ 
         public ActionResult readiantdstss(int state)
         {
             var radiantauthchk = db.radiantauths.SingleOrDefault();

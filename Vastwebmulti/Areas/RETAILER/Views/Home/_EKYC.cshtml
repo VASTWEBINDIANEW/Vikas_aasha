@@ -284,6 +284,7 @@
 <script src="~/Scripts/PageScript/Retailer/AEPS/Aeps_validate.js"></script>
 <script>
     function Genrateotpekyc() {
+  
         $('#verifyotperr').text("")
             $.ajax({
                 url: '@Url.Action("GenrateOtpEKYC", "Home")',
@@ -293,9 +294,12 @@
                     $(".loader").show();
                 },
                 success: function (data) {
+
+                  
                     var output = data; //JSON.parse(data);
                     var status = output.Status;
                     var msg = output.Message;
+                  
                     if (status == "Success") {
                         var primarykey = output.primarykey;
                         var encodetxnid = output.encodetxnid;
