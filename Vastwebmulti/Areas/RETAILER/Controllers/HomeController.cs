@@ -36954,7 +36954,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     radianagentid = tokenchk.agentID;
                 }
 
+
+
                 var respchk = radi.collectPayVerify(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, upiid);
+
 
                 if (respchk.StatusCode == HttpStatusCode.OK)
                 {
@@ -40296,110 +40299,140 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             
         }
         [HttpPost]
-        public ActionResult Rediantcreate(string gst , string tan , string compan, string distributorCode, string firstname, string lastname, string gender, string dob, string email, string phoneno, string altphoneno,
-            string address, string pancard, string adhaarno, string pincode, string landmark, string district, string state, string accountname, string accountno,
-            string bankname, string branch, string ifsc, string bank_pincode, string companyname,  string shopaddress, string shopstate, string shopcity,
-            string shopdistrict, string shoparea, string shoppincode, string mcc, string bussiness, HttpPostedFileBase aadharimage ,HttpPostedFileBase aadharimageback, HttpPostedFileBase panimage, HttpPostedFileBase chequeimage,
-            HttpPostedFileBase pancardimage, HttpPostedFileBase passportsizeimage, HttpPostedFileBase shopimage, HttpPostedFileBase shoplicenseimage)
+        public ActionResult Rediantcreate(string gst, string tan, string compan, string distributorCode, string firstname, string lastname, string gender, string dob, string email, string phoneno, string altphoneno,
+        string address, string pancard, string adhaarno, string pincode, string landmark, string district, string state, string accountname, string accountno,
+        string bankname, string branch, string ifsc, string bank_pincode, string companyname, string shopaddress, string shopstate, string shopcity,
+        string shopdistrict, string shoparea, string shoppincode, string mcc, string bussiness, HttpPostedFileBase aadharimage, HttpPostedFileBase aadharimageback, HttpPostedFileBase panimage, HttpPostedFileBase chequeimage,
+        HttpPostedFileBase pancardimage, HttpPostedFileBase passportsizeimage, HttpPostedFileBase shopimage, HttpPostedFileBase shoplicenseimage)
         {
             string shopname = companyname;
             var userid = User.Identity.GetUserId();
             var chkss = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
-            if(chkss.Count > 0)
+            if (chkss.Count > 0)
             {
                 return RedirectToAction("Profile");
             }
-                    byte[] fileBytes;
-                    using (var ms = new MemoryStream())
-                    {
-                        aadharimage.InputStream.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    var aadharimagebase64 = Convert.ToBase64String(fileBytes);
-
-                   
-                    using (var ms = new MemoryStream())
-                    {
-                        panimage.InputStream.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    
-
-                    var panimagebase64 = Convert.ToBase64String(fileBytes);
-
-            using (var ms = new MemoryStream())
+            byte[] fileBytes;
+            var aadharimagebase64 = "";
+            try
             {
-                chequeimage.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    aadharimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                aadharimagebase64 = Convert.ToBase64String(fileBytes);
             }
+            catch { }
+            var panimagebase64 = "";
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    pancardimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                panimagebase64 = Convert.ToBase64String(fileBytes);
+            }
+            catch { }
+            var chequeimagebase64 = "";
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    chequeimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
 
-            var chequeimagebase64 = Convert.ToBase64String(fileBytes);
-
-
-            using (var ms = new MemoryStream())
-            {
-                pancardimage.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                chequeimagebase64 = Convert.ToBase64String(fileBytes);
             }
-            var pancardimagebase64 = Convert.ToBase64String(fileBytes);
-            using (var ms = new MemoryStream())
+            catch { }
+            var pancardimagebase64 = "";
+            try
             {
-                passportsizeimage.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    pancardimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                pancardimagebase64 = Convert.ToBase64String(fileBytes);
             }
-            var passportsizeimagebase64 = Convert.ToBase64String(fileBytes);
-            using (var ms = new MemoryStream())
+            catch { }
+            var passportsizeimagebase64 = "";
+            try
             {
-                shopimage.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    passportsizeimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                passportsizeimagebase64 = Convert.ToBase64String(fileBytes);
             }
-            var shopimagebase64 = Convert.ToBase64String(fileBytes);
-            using (var ms = new MemoryStream())
+            catch { }
+            var shopimagebase64 = "";
+            try
             {
-                shoplicenseimage.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    shopimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                shopimagebase64 = Convert.ToBase64String(fileBytes);
             }
-            var shoplicenseimagebase64 = Convert.ToBase64String(fileBytes);
-
-             using (var ms = new MemoryStream())
+            catch { }
+            var shoplicenseimagebase64 = "";
+            try
             {
-                aadharimageback.InputStream.CopyTo(ms);
-                fileBytes = ms.ToArray();
+                using (var ms = new MemoryStream())
+                {
+                    shoplicenseimage.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                shoplicenseimagebase64 = Convert.ToBase64String(fileBytes);
             }
-            var aadharimagebackbase64 = Convert.ToBase64String(fileBytes);
+            catch { }
+            var aadharimagebackbase64 = "";
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    aadharimageback.InputStream.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                aadharimagebackbase64 = Convert.ToBase64String(fileBytes);
+            }
+            catch { }
             var radiantauthchk = db.radiantauths.SingleOrDefault();
             Radiantdmt data1 = new Radiantdmt();
-                    var chek1 = data1.RadiantAgentCreate( gst,  tan, compan,distributorCode,  firstname,  lastname,  gender,  dob,  email,  phoneno,  altphoneno,
-             address,  pancard,  adhaarno,  pincode,  landmark,  district,  state,  accountname,  accountno,
-             bankname,  branch,  ifsc,  bank_pincode,  companyname,  shopname,  shopaddress,  shopstate,  shopcity,
-             shopdistrict,  shoparea,  shoppincode,  mcc,  bussiness, aadharimagebase64, aadharimagebackbase64, panimagebase64, chequeimagebase64,
-             pancardimagebase64, passportsizeimagebase64, shopimagebase64, shoplicenseimagebase64, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
-                    dynamic responseData11 = Newtonsoft.Json.JsonConvert.DeserializeObject(chek1.Content);
-                    if (chek1.StatusCode == HttpStatusCode.OK)
-                    {
-                       rediantremtresponse d1 = new rediantremtresponse();
-                       d1.userid = userid;
-                       d1.username = responseData11.data.username;
-                       d1.agent_id = responseData11.data.agent_id;
-                       d1.agent_code = responseData11.data.agent_code;
-                       d1.password = responseData11.data.password;
-                       d1.requesttime = DateTime.Now;
-                       db.rediantremtresponses.Add(d1);
-                       db.SaveChanges();
-                    }
-                    ViewBag.message = responseData11.message;
-                    if (ViewBag.message == "" || ViewBag.message == null)
-                    {
-                        var erroes = responseData11.errors;
-                        var set = "";
-                        foreach (var item in erroes)
-                        {
-                            set += item;
-                        }
-                        ViewBag.message = set;
-                    }
+            var chek1 = data1.RadiantAgentCreate(gst, tan, compan, distributorCode, firstname, lastname, gender, dob, email, phoneno, altphoneno,
+     address, pancard, adhaarno, pincode, landmark, district, state, accountname, accountno,
+     bankname, branch, ifsc, bank_pincode, companyname, shopname, shopaddress, shopstate, shopcity,
+     shopdistrict, shoparea, shoppincode, mcc, bussiness, aadharimagebase64, aadharimagebackbase64, panimagebase64, chequeimagebase64,
+     pancardimagebase64, passportsizeimagebase64, shopimagebase64, shoplicenseimagebase64, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+            dynamic responseData11 = Newtonsoft.Json.JsonConvert.DeserializeObject(chek1.Content);
+            if (chek1.StatusCode == HttpStatusCode.OK)
+            {
+                rediantremtresponse d1 = new rediantremtresponse();
+                d1.userid = userid;
+                d1.username = responseData11.data.username;
+                d1.agent_id = responseData11.data.agent_id;
+                d1.agent_code = responseData11.data.agent_code;
+                d1.password = responseData11.data.password;
+                d1.requesttime = DateTime.Now;
+                db.rediantremtresponses.Add(d1);
+                db.SaveChanges();
+            }
+            ViewBag.message = responseData11.message;
+            if (ViewBag.message == "" || ViewBag.message == null)
+            {
+                var erroes = responseData11.errors;
+                var set = "";
+                foreach (var item in erroes)
+                {
+                    set += item;
+                }
+                ViewBag.message = set;
+            }
             Radiantdmt data = new Radiantdmt();
             var check1 = data.RadiantgetMcc(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
             var chek = data.Radiantstate(radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
@@ -40468,13 +40501,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Value = a.id.ToString()
                 }).ToList();
             }
-            if(ViewBag.message=="User created successfully")
+            if (ViewBag.message == "User created successfully")
             {
                 return RedirectToAction("Profile");
             }
             return View();
         }
- 
+
         public ActionResult readiantdstss(int state)
         {
             var radiantauthchk = db.radiantauths.SingleOrDefault();
