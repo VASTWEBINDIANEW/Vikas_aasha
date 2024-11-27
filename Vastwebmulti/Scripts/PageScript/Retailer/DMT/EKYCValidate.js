@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+   
     //document.getElementById("loadermoney").style.display = "block";
 });
 //////////////////////////////////////////
@@ -406,7 +407,7 @@ function discoverAvdmFirstNode(PortNo) {
     return res;
 }
 
-function discoverAvdm() {
+function discoverAvdmP() {
     // openNav();
     var SuccessFlag = 0;
 
@@ -480,7 +481,7 @@ function discoverAvdm() {
                 //console.log("3");
                 var CmbData1 = $($doc).find('RDService').attr('status');
                 var CmbData2 = $($doc).find('RDService').attr('info');
-                console.log("CmbData2 " + CmbData2)
+                
                 //   console.log("CmbData1 " + CmbData1);
                 //   console.log("CmbData2 " + CmbData2);
 
@@ -572,8 +573,7 @@ function discoverAvdm() {
                 }
             },
             error: function (jqXHR, ajaxOptions, thrownError) {
-                console.log("error()", jqXHR, ajaxOptions, thrownError);
-                console.log(thrownError);
+
                 if (i == "8005" && OldPort == true) {
                     OldPort = false;
                     i = "11099";
@@ -662,7 +662,7 @@ function deviceInfoAvdm() {
 
 }
 
-function CaptureAvdm() {
+function CaptureAvdmP() {
     var captureJson = {};
     var strWadh = "";
     var strOtp = "";
@@ -678,7 +678,9 @@ function CaptureAvdm() {
 
     if (DeviceKonsi == "Mantra") {
         //Matra
-        XML = '<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="' + Fcount + '" fType="' + Ftype + '" iCount="' + Icount + '" pCount="' + Pcount + '" pgCount="' + pgCount + '"' + strOtp + ' format="' + Dtype + '"   pidVer="' + Pidver + '" timeout="' + Timeout + '" pTimeout="' + pTimeout + '" posh="UNKNOWN" env="' + Env + '" /> ' + DemoFinalString + '<CustOpts><Param name="mantrakey" value="' + txtCK + '" /></CustOpts> </PidOptions>';
+        XML = '<?xml version="1.0"?> <PidOptions ver="1.0"> <Opts fCount="' + Fcount + '" fType="' + Ftype + '" iCount="' + Icount + '" pCount="' + Pcount + '" pgCount="' + pgCount + '"' + strOtp + ' format="' + Dtype + '"   pidVer="' + Pidver + '" timeout="' + Timeout + '" pTimeout="' + pTimeout + '"' + strWadh + ' posh="UNKNOWN" env="' + Env + '" /> ' + DemoFinalString + '<CustOpts><Param name="mantrakey" value="' + txtCK + '" /></CustOpts> </PidOptions>';
+
+
     } else if (DeviceKonsi == "Morpho") {
         //Morpho
         //  XML = '<PidOptions ver=\"1.0\">' + '<Opts fCount=\"1\" fType=\"0\" iCount=\"\" iType=\"\" pCount=\"\" pType=\"\" format=\"0\" pidVer=\"2.0\" timeout=\"10000\" otp=\"\" "' + strOtp +'" posh=\"UNKNOWN\"/>' + '</PidOptions>';
@@ -731,16 +733,19 @@ function CaptureAvdm() {
             }
             var serializer = new XMLSerializer();
             var xmlString = serializer.serializeToString($doc);
-            $("#capxml").val(xmlString);
+       
+            $("#capxmlP").val(xmlString);
             var errInfo = $($doc).find('Resp').attr('errInfo');
-            console.log("errInfo => " + errInfo);
+         
             try {
+               
                 //console.log("================ PidOptions=======================");
                 //console.log(txtPidOptions);
                 //console.log("================= Capture data ======================");
                 //console.log(txtPidData);
                 //console.log("==================XML to JS =====================");
                 if ($($doc).find('Resp').attr("errCode") == 0) {
+              
                     captureJson.PidDatatype = $($doc).find('Data').attr('type');
                     captureJson.Piddata = $($doc).find('Data').text();
                     captureJson.ci = $($doc).find('Skey').attr('ci');
@@ -771,6 +776,8 @@ function CaptureAvdm() {
                         $("#device_srno").val($($doc).find('DeviceInfo additional_info Param').attr("value"));
                     } catch (err) { }
                     $('#Devicefind').show();
+              
+  
                     $('#txtdevice').val(DeviceKonsi);
                     $("#cap").val(JSON.stringify(captureJson));
                     //  $("#scanimage").hide();
@@ -779,14 +786,18 @@ function CaptureAvdm() {
                     //  $("#fingImgBlack").hide();
                     //  $("#fingImgGreen").show();
                     //   $("#AEPS").submit();
+
                 } else {
                     $('#Devicefind').hide();
+
                     $("#Devicerror").show();
                     $('#deviceerror8').text($($doc).find('Resp').attr("errInfo"));
                     $('#deviceerror9').text("Please Try again");
                     $('#againscanclick').text("scan again");
                 }
-            } catch (err) { console.log(err); }
+            } catch (err) {
+                
+            }
         },
         error: function (jqXHR, ajaxOptions, thrownError) {
             //$('#txtPidOptions').val(XML);
@@ -815,20 +826,21 @@ function getHttpError(jqXHR) {
     }
     return err;
 }
-function scanfing() {
+function scanfingP() {
     //$("#fingImgGreen").hide();
     //$("#fingImgBlack").show();
     //if (!$("#remember_me_2").is(":checked")) {
     //    $("#remember_me_2-error").show();
     //    return false;
     //}
-    discoverAvdm();
+    discoverAvdmP();
     if (RdStatus) {
         // $("#response2").text("Tap on " + DeviceKonsi + " scanner !");
         //alert("Tap on " + DeviceKonsi + " scanner !");
         //document.getElementById("loadermoney").style.display = "block";
-        CaptureAvdm();
+        CaptureAvdmP();
         $("#loadaeps1").hide();
+  
         //  $('#AEPSFOUND').show();
     }
     else {

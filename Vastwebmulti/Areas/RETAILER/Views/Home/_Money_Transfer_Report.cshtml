@@ -290,8 +290,20 @@
                 <td>
                     @item.bank_trans_id
                 </td>
+                <td>
+                @if (item.DmtType == "DMTN")
+                {
+                    if(item.status.ToUpper()=="PENDING")
+                            {
+                                <button type="button" class="btn btn-primary" onclick="Refund('@item.trans_id')"> Refund </button>
+                            }
+                    
+                     }
+                    </td>
 
-                <td class="printbuttoncss">
+
+
+                    <td class="printbuttoncss">
                     @*@if (item.status.ToUpper().Contains("REFUND") || item.status.ToUpper() == "FAILED")
                         {
                             <center style="float:left;">
