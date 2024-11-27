@@ -1453,6 +1453,79 @@
             height: auto !important;
             width: 1px;
         }
+/* new css   */
+
+    textarea {
+        width: 100%;
+    }
+
+@@media only screen and (max-width:1024px){
+    #sidebar-open {
+        top: 30px;
+        left: -145px;
+    }
+    .app_set button {
+        margin: auto !important;
+        text-align: center;
+        margin-top: 8px !important;
+    }
+    
+    .app_set {
+        width: 100% !important;
+    }
+    .secdiv {
+        width: 50%;
+    }
+    .app_set .page-header-third {
+        height: auto !important;
+        padding-bottom: 20px !important;
+    }
+
+}
+
+    @@media only screen and (max-width:767px) {
+        .appi_set {
+            width: 100%;
+            padding: 15px;
+        }
+        .br_setb {
+            width: 100%;
+        }
+        #sidebar-open {
+            top: 1px;
+            left: -6px;
+            padding:10px;
+            margin-bottom:10px;
+
+        }
+
+        
+    }
+
+    @@media only screen and (max-width:600px) {
+        .ps_setcolor {
+            width: 100%;
+        }
+        .ps_setmob {
+            width: 100%;
+            float: left;
+        }
+        .app_set2 {
+            display: block;
+        }
+        .secdiv {
+            width: 100%;
+        }
+        .appc_autol1 {
+            display: block;
+        }
+            .appc_autol1 button {
+                width: 33.333%;
+            }
+
+    }
+
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -1476,6 +1549,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
                 <div class="card login-back-img page-header-third">
                     <div class="login-slider-status">
+
                         <h2>APP Background Color/Button Color/Text Color</h2>
 
 
@@ -1492,7 +1566,7 @@
                                 @if (backgapp.Count == 0)
                                 {
                                     @*<input type="color" id="backcolor1" onchange="updbackgr()" />
-                                    <input type="color" id="backcolor2" onchange="updbackgr()" />*@
+                        <input type="color" id="backcolor2" onchange="updbackgr()" />*@
 
                                     <div class="ps_setcolor">
                                         <div class="ps_set">
@@ -1705,16 +1779,16 @@
 
                             </div>
                             @*<div>App background Color</div>
-                            <div>
-                                <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
-                                <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
+                <div>
+                    <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
+                    <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
 
-                            </div>
-                            <div>App Font Color</div>
-                            <div>
-                                <input type="color" value="" id="appcol3" onchange="colorprint1()" />
+                </div>
+                <div>App Font Color</div>
+                <div>
+                    <input type="color" value="" id="appcol3" onchange="colorprint1()" />
 
-                            </div>*@
+                </div>*@
 
 
 
@@ -2363,7 +2437,7 @@ document.getElementById('opthide').style.display = 'block';document.getElementBy
                                 <h2 style="background: #878787; color: white">Create FAQ Questions & Answers</h2>
                             </div>
 
-                            <div style="display: grid; align-items: center;  padding: 2px 15px;">
+                            <div style="padding: 2px 15px;">
                                 <h4>Question</h4>
                                 <textarea style="font-size: medium; padding: 3px;" id="faqq"></textarea>
                                 <h4>Answer</h4>

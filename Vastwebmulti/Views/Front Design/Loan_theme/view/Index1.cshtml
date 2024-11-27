@@ -3,6 +3,130 @@
 @{
     ViewBag.Title = "Index1";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    string urllinks = @ViewBag.urllink;
+
+    VastwebmultiEntities db2 = new VastwebmultiEntities();
+    var notshow = db2.tblMenus.Where(a => (a.MenuName == "CARDS" || a.MenuName == "TRAVEL") && a.Status == "Y" && a.Role == "ADMIN").ToList();
+
+    var Card = db2.tblMenus.Where(a => a.MenuName == "CARDS" && a.Role == "ADMIN").SingleOrDefault().Status;
+    var Travel = db2.tblMenus.Where(a => a.MenuName == "TRAVEL" && a.Role == "ADMIN").SingleOrDefault().Status;
+
+}
+
+@{
+    VastwebmultiEntities db = new VastwebmultiEntities();
+    var allcolor1 = db.tblMenuColors.ToList();
+    var selectedcolor1 = allcolor1.Count == 0 ? "" : allcolor1.SingleOrDefault().SelectedColor;
+    var menucolor1 = allcolor1.Count == 0 ? "" : allcolor1.SingleOrDefault().MenuColor;
+    var col = "";
+    var outercolor = db.changecolors.Where(p => p.Role == "ADMIN").ToList();
+    if (outercolor.Count > 0)
+    {
+        if (outercolor.SingleOrDefault().Role == "ADMIN")
+        {
+            col = outercolor.Where(p => p.Role == "ADMIN").SingleOrDefault().multipaloutercolor;
+        }
+    }
+    else
+    {
+        col = "";
+    }
+    var color = col;
+    var Apk_Version = "";
+    var apkversion = db.uploaded_apklink.SingleOrDefault();
+    if (apkversion != null)
+    {
+        if (!string.IsNullOrWhiteSpace(apkversion.Apk_Version))
+        {
+            Apk_Version = apkversion.Apk_Version;
+        }
+
+    }
+    var logoimage = "";
+    var logo = db.tblHeaderLogoes.Where(p => p.Role == "ADMIN").ToList();
+    if (logo.Count > 0)
+    {
+        if (logo.SingleOrDefault().Role == "ADMIN")
+        {
+            logoimage = logo.Where(p => p.Role == "ADMIN").SingleOrDefault().LogoImage;
+        }
+    }
+    else
+    {
+        logoimage = "images/Default_Logo.png";
+    }
+
+    var aboutbac = db.tblAboutUsBackgroundColorChanges.Where(p => p.Role == "ADMIN").ToList();
+    var aboutbaccolor = aboutbac.Count == 0 ? "" : aboutbac.SingleOrDefault().MultipalAboutUsColor;
+
+    var service = db.tblServiceOuterColors.Where(p => p.Role == "ADMIN").ToList();
+    var servicecolor = service.Count == 0 ? "" : service.SingleOrDefault().ServiceBackGroundcolor;
+
+    ViewBag.Services = db.tblServices.Where(p => p.Role == "ADMIN").ToList();
+
+    ViewBag.product = db.tblProducts.ToList();
+
+    var productcolor = db.tblProductBackColors.ToList();
+    var productbackcolor = productcolor.Count == 0 ? "" : productcolor.SingleOrDefault().ProductBackColor;
+
+    ViewBag.works = db.tblWorks.ToList();
+    var workbackcolor1 = db.tblWorkbackColors.ToList();
+    var workbackcolor = workbackcolor1.Count == 0 ? "" : workbackcolor1.SingleOrDefault().WorkBackColor;
+
+    var border = db.Admin_Outer_Border.ToList();
+    var bordersize = border.Count == 0 ? "" : border.SingleOrDefault().Border;
+
+    ViewBag.card = db.tblCards.Where(p => p.Role == "ADMIN").ToList();
+    var cardbackcolor1 = db.tblCardBackColors.Where(p => p.Role == "ADMIN").ToList();
+    var cardbackcolor = cardbackcolor1.Count == 0 ? "" : cardbackcolor1.SingleOrDefault().CardBackColor;
+    ViewBag.about = db.tblAboutUsContents.Where(p => p.Role == "ADMIN").ToList();
+    ViewBag.address = db.tblContects.ToList();
+    var st = db.tblMenus.Where(p => p.Role == "ADMIN").ToList();
+    var homests = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "HOME").SingleOrDefault().Status;
+    var aboutsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "ABOUT").SingleOrDefault().Status;
+    var servicests = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "SERVICES").SingleOrDefault().Status;
+    var productsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "PRODUCTS").SingleOrDefault().Status;
+    var worksts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "WORKS ").SingleOrDefault().Status;
+    //var cardsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "CARDS").SingleOrDefault().Status;
+    var travelsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "TRAVEL").SingleOrDefault().Status;
+    var dthsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "DTHCONNECTION").SingleOrDefault().Status;
+    var teamsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "TEAM").SingleOrDefault().Status;
+    var contactsts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "CONTACTUS").SingleOrDefault().Status;
+    var whychoosests = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "WHYCHOOSEUS").SingleOrDefault().Status;
+    var newupdatasts = st.Count == 0 ? "" : st.Where(aa => aa.MenuName == "NEWUPDATE").SingleOrDefault().Status;
+
+
+}
+
+@{
+    var favimage = "";
+    var faviconlogo = db2.tblfavicons.Where(p => p.Role == "ADMIN").ToList();
+    if (faviconlogo.Count() > 0)
+    {
+        if (faviconlogo.SingleOrDefault().Role == "ADMIN")
+        {
+            favimage = faviconlogo.SingleOrDefault().faviconimage;
+        }
+    }
+    else
+    {
+
+        <link rel="icon" href="" type="image/x-icon" />
+    }
+    var admindetail = db2.Admin_details.ToList();
+    var mailid = admindetail.SingleOrDefault().email;
+    var mobile = admindetail.SingleOrDefault().mobile;
+    var Address = admindetail.SingleOrDefault().Address;
+    var Firm_Name = admindetail.SingleOrDefault().Companyname;
+    var SupportMail = admindetail.SingleOrDefault().email1;
+    var CustCareNo = "+91" + admindetail.SingleOrDefault().mobile1;
+    var PinCode = admindetail.SingleOrDefault().pincode;
+
+    int state = Convert.ToInt32(admindetail.SingleOrDefault().State);
+    int district = Convert.ToInt32(admindetail.SingleOrDefault().District);
+    var City = db2.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
+    var State = db2.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
+
 
 }
 <section id="hero" class="d-flex align-items-center">
@@ -117,9 +241,9 @@
                 <div class="col-lg-6 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
 
                     <div class="content">
-                        <h4>Ezybaazaar - INSTANT PERSONAL LOANS PLATFORM</h4>
+                        <h4>@Firm_Name - INSTANT PERSONAL LOANS PLATFORM</h4>
                         <p>
-                            <h4>At Ezybaazaar, our mission is to build financial services that are  <strong>simple, affordable and accessible</strong>in digital way.</h4>
+                            <h4>At @Firm_Name, our mission is to build financial services that are  <strong>simple, affordable and accessible</strong>in digital way.</h4>
                         </p>
                     </div>
 
@@ -144,10 +268,10 @@
                             </li>
 
                             <li>
-                                <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed" href="#"><span>03</span> Why Ezybaazaar? <svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
+                                <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed" href="#"><span>03</span> Why @Firm_Name? <svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
                                 <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
                                     <p>
-                                        Ezybaazaar offers to help you to get instant personal loans to middle class Indians at attractive interest rates through its online which can be easy & hassel free & users can check their loan eligibility along with the loan amount and interest rate offered.
+                                        @Firm_Name offers to help you to get instant personal loans to middle class Indians at attractive interest rates through its online which can be easy & hassel free & users can check their loan eligibility along with the loan amount and interest rate offered.
                                     </p>
                                 </div>
                             </li>
@@ -157,7 +281,7 @@
 
                 </div>
 
-                <div class="col-lg-6 align-items-stretch order-1 order-lg-2 img" style='background-image: url("img/Ezybaazaar1.png");' data-aos="zoom-in" data-aos-delay="150">
+                <div class="col-lg-6 align-items-stretch order-1 order-lg-2 img" style='' data-aos="zoom-in" data-aos-delay="150">
                     &nbsp;
 
                     <video style="padding: 113px 0px 0 0px;" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
@@ -178,7 +302,7 @@
                     <img src="~/MainFrontDesign/Loan_theme_css/img/Ezybaazaar2.png" class="img-fluid" alt="">
                 </div>
                 <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-                    <h3>WHY Ezybaazaar</h3>
+                    <h3>WHY @Firm_Name</h3>
                     <p class="fst-italic">
 
                     </p>
@@ -470,7 +594,7 @@
                 </div>
                 <div class="col-lg-6 pt-4 pt-lg-0">
                     <p>
-                        Ezybaazaar is a digital platform which provides you loans upto ₹50 lakhs instantly through a completely paperless process in any cities of India.
+                        @Firm_Name is a digital platform which provides you loans upto ₹50 lakhs instantly through a completely paperless process in any cities of India.
                     </p>
                     <a href="#" class="btn-learn-more">Give it a Try</a>
                 </div>
@@ -478,12 +602,12 @@
 
                 </p>
                 <p>
-                    Ezybaazaar is a personal loan provider and has collaboration with more than 82 banks and non-banking finance companies to fulfill your financial needs.
+                    @Firm_Name is a personal loan provider and has collaboration with more than 82 banks and non-banking finance companies to fulfill your financial needs.
 
-                    Whether you’re looking to consolidate debt, fund a home renovation project, or cover unexpected expenses, Ezybaazaar offers a range of loan options to suit your specific needs.
+                    Whether you’re looking to consolidate debt, fund a home renovation project, or cover unexpected expenses, @Firm_Name offers a range of loan options to suit your specific needs.
                     With competitive interest rates, flexible repayment terms, and a simple online application process, getting the cash you need has never been easier.
-                    Ezybaazaar also offers personalized customer support and guidance throughout the entire borrowing process, ensuring that you feel confident and informed every step of the way.
-                    So if you’re in need of a loan, consider Ezybaazaar as your trusted financial partner.
+                    @Firm_Name also offers personalized customer support and guidance throughout the entire borrowing process, ensuring that you feel confident and informed every step of the way.
+                    So if you’re in need of a loan, consider @Firm_Name as your trusted financial partner.
                 </p>
             </div>
 
@@ -494,17 +618,17 @@
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
-                <h2>Benefits and Features of Ezybaazaar's Personal Loan</h2>
+                <h2>Benefits and Features of @Firm_Name's Personal Loan</h2>
                 <p>
-                    Ezybaazaar offers quick and easy personal loans online to meet all your financial needs. With our user-friendly web journey process, you can apply for a loan from the convenience of  home using  your smartphone.
+                    @Firm_Name offers quick and easy personal loans online to meet all your financial needs. With our user-friendly web journey process, you can apply for a loan from the convenience of  home using  your smartphone.
                     We provide instant loans for medical emergencies, business ventures, purchasing new mobile phones, or even a vacation. Our fast and hassle-free application process takes only 2 minutes, making easy for to apply–even for new to the process.
-                    Count on Ezybaazaar for all your personal loan needs.
+                    Count on @Firm_Name for all your personal loan needs.
                 </p>
                 <p><br><br><br></p>
 
             </div>
             <div>
-                <p>Top 6 reasons to choose Ezybaazaar instant personal loans</p>
+                <p>Top 6 reasons to choose @Firm_Name instant personal loans</p>
                 <br><br>
                 <ul style="list-style-type: disc; margin-left: 20px;">
                     <li> Get any amount from Rs. 5,000 to Rs. 10,00,000</li>
@@ -523,7 +647,7 @@
                         <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6a3.939 3.939 0 0 0-3.934 3.934h2C10.066 8.867 10.934 8 12 8s1.934.867 1.934 1.934c0 .598-.481 1.032-1.216 1.626a9.208 9.208 0 0 0-.691.599c-.998.997-1.027 2.056-1.027 2.174V15h2l-.001-.633c.001-.016.033-.386.441-.793c.15-.15.339-.3.535-.458c.779-.631 1.958-1.584 1.958-3.182A3.937 3.937 0 0 0 12 6m-1 10h2v2h-2z" /><path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8" /></svg> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1" href="#">No Collateral Required<svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
                         <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
                             <p>
-                                Ezybaazaar offers hassle-free personal loans without collateral, making the application process fast, straightforward, and accessible for unexpected expenses. Contact us today to learn more about their personal loan options and achieve your financial goals.
+                                @Firm_Name offers hassle-free personal loans without collateral, making the application process fast, straightforward, and accessible for unexpected expenses. Contact us today to learn more about their personal loan options and achieve your financial goals.
                         </div>
                     </li>
 
@@ -551,7 +675,7 @@
                         <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6a3.939 3.939 0 0 0-3.934 3.934h2C10.066 8.867 10.934 8 12 8s1.934.867 1.934 1.934c0 .598-.481 1.032-1.216 1.626a9.208 9.208 0 0 0-.691.599c-.998.997-1.027 2.056-1.027 2.174V15h2l-.001-.633c.001-.016.033-.386.441-.793c.15-.15.339-.3.535-.458c.779-.631 1.958-1.584 1.958-3.182A3.937 3.937 0 0 0 12 6m-1 10h2v2h-2z" /><path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8" /></svg> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed" href="#">Easy Approval<svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
                         <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                             <p>
-                                While getting a loan may have been a tedious and time-consuming process in the past, with Ezybaazaar it's a breeze. You no longer have to go through endless paperwork, long wait times, and numerous visits to the bank. With Ezybaazaar, your loan can get approved within minutes, giving you more time to focus on what matters most to you. Whether you need a personal loan, a business loan, or a loan for any other purpose, Ezybaazaar is there to help. So why wait? Apply for a loan today and get the funds you need in no time.
+                                While getting a loan may have been a tedious and time-consuming process in the past, with @Firm_Name it's a breeze. You no longer have to go through endless paperwork, long wait times, and numerous visits to the bank. With @Firm_Name, your loan can get approved within minutes, giving you more time to focus on what matters most to you. Whether you need a personal loan, a business loan, or a loan for any other purpose, @Firm_Name is there to help. So why wait? Apply for a loan today and get the funds you need in no time.
                         </div>
                     </li>
 
@@ -564,16 +688,16 @@
                     </li>
 
                     <li data-aos="fade-up" data-aos-delay="400">
-                        <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6a3.939 3.939 0 0 0-3.934 3.934h2C10.066 8.867 10.934 8 12 8s1.934.867 1.934 1.934c0 .598-.481 1.032-1.216 1.626a9.208 9.208 0 0 0-.691.599c-.998.997-1.027 2.056-1.027 2.174V15h2l-.001-.633c.001-.016.033-.386.441-.793c.15-.15.339-.3.535-.458c.779-.631 1.958-1.584 1.958-3.182A3.937 3.937 0 0 0 12 6m-1 10h2v2h-2z" /><path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8" /></svg> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed" href="https://Ezybaazaar.com/">FAQ<svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
+                        <svg class="icon-help" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6a3.939 3.939 0 0 0-3.934 3.934h2C10.066 8.867 10.934 8 12 8s1.934.867 1.934 1.934c0 .598-.481 1.032-1.216 1.626a9.208 9.208 0 0 0-.691.599c-.998.997-1.027 2.056-1.027 2.174V15h2l-.001-.633c.001-.016.033-.386.441-.793c.15-.15.339-.3.535-.458c.779-.631 1.958-1.584 1.958-3.182A3.937 3.937 0 0 0 12 6m-1 10h2v2h-2z" /><path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8" /></svg> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed" href="">FAQ<svg class="icon-show" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M16.293 9.293L12 13.586L7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z" /></svg><svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m6.293 13.293l1.414 1.414L12 10.414l4.293 4.293l1.414-1.414L12 7.586z" /></svg></a>
                         <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
                             <p>
                                 <div>
                                     <h2>Frequently Asked Questions for Personal Loans</h2>
                                     <ul style="list-style-type: decimal; margin-left: 20px;">
-                                        <li>Is collateral/security required for an instant personal loan from Ezybaazaar?</li>
-                                        <p>Ezybaazaar instant loans are unsecured loans, hence you do not have to provide collateral or security of any sort.</p>
+                                        <li>Is collateral/security required for an instant personal loan from @Firm_Name?</li>
+                                        <p>@Firm_Name instant loans are unsecured loans, hence you do not have to provide collateral or security of any sort.</p>
 
-                                        <li>What documents do I need to get an instant personal loan from Ezybaazaar?</li>
+                                        <li>What documents do I need to get an instant personal loan from @Firm_Name?</li>
                                         <p>Our documentation requirements are minimal. We will only require the following:</p>
                                         <ul style="list-style-type: disc; margin-left: 20px;">
                                             <li>Your PAN number</li>
@@ -582,23 +706,23 @@
                                             <li>Please note that we may require proof of address as well as a bank statement based on your profile.</li>
                                         </ul>
 
-                                        <li>Is it safe to get an instant personal loan online from Ezybaazaar?</li>
-                                        <p>Ezybaazaar’s security systems are designed to be in line with those of the best banks in the country. You can be rest assured knowing that all your data is safe and secure as we use 256-bit data encryption for data management.</p>
+                                        <li>Is it safe to get an instant personal loan online from @Firm_Name?</li>
+                                        <p>@Firm_Name’s security systems are designed to be in line with those of the best banks in the country. You can be rest assured knowing that all your data is safe and secure as we use 256-bit data encryption for data management.</p>
 
-                                        <li>What happens to my existing instant loan if I avail a top-up loan from Ezybaazaar?</li>
+                                        <li>What happens to my existing instant loan if I avail a top-up loan from @Firm_Name?</li>
                                         <p>When you take a top-up loan, we generate a new loan account for you. This new instant loan account has the due amount of the existing loan along with the top-up loan amount.</p>
 
-                                        <li>What are the applicable interest rates for my instant personal loan from Ezybaazaar?</li>
+                                        <li>What are the applicable interest rates for my instant personal loan from @Firm_Name?</li>
                                         <p>On your screen, you should be able to see a column called 'Monthly EMI'. That is the amount you will be paying each month. The Loan term column tells you the duration of the loan, and you will have to pay your 'Monthly EMI' every month for that duration. The interest column is for your information only, and specifies the entire interest you are paying on that loan amount in the entire duration. It is not related to the amount you will be paying.</p>
 
-                                        <li>Will there be a credit report inquiry when I apply for an instant loan from Ezybaazaar?</li>
-                                        <p>Yes, there will be a credit report enquiry made whenever you avail an instant loan from Ezybaazaar. This enquiry will only be made after you submit the loan application.</p>
+                                        <li>Will there be a credit report inquiry when I apply for an instant loan from @Firm_Name?</li>
+                                        <p>Yes, there will be a credit report enquiry made whenever you avail an instant loan from @Firm_Name. This enquiry will only be made after you submit the loan application.</p>
 
-                                        <li>Is there any way to contact a Ezybaazaar loan through a call?</li>
+                                        <li>Is there any way to contact a @Firm_Name loan through a call?</li>
                                         <p>You can contact our representatives through the options given below:</p>
                                         <ul style="list-style-type: disc; margin-left: 20px;">
-                                            <li>You can send us an email to care@Ezybaazaar.in</li>
-                                            <li>You can also contact us through the Ezybaazaar Loans App</li>
+                                            <li>You can send us an email to @SupportMail</li>
+                                            <li>You can also contact us through the @Firm_Name Loans App</li>
                                             <li>To contact us for other purposes, please click <a href="#">here</a>.</li>
                                         </ul>
                                     </ul>
@@ -633,14 +757,10 @@
                                     <i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><g fill="currentColor"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" /><path d="M8 8a2 2 0 1 1 0-4a2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6a3 3 0 0 0 0 6" /></g></svg></i>
                                     <h4>Location:</h4>
                                     <p>
-                                        Office<br>
-                                        No. 48, <br>
-                                        Sunshine Commercial Comp.<br>
-                                        Bldg. No.3,<br>
-                                        Nr. Railway Station,<br>
-                                        Nallasopara (E) 401 209<br>
-                                        <strong>Phone:</strong>+91 8983022033<br>
-                                        <strong>Email:</strong> ezybaazaar3@gmail.com
+                                        @Address<br>
+                                        <strong>Phone:</strong>@CustCareNo<br>
+                                        <strong>Phone:</strong>@mobile<br>
+                                        <strong>Email:</strong> @SupportMail
                                         <br>
                                     </p>
                                 </div>
@@ -650,7 +770,7 @@
                                 <div class="email">
                                     <i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2l7-4.2V4a1 1 0 0 0-1-1zm13 2.383l-4.708 2.825L15 11.105zm-.034 6.876l-5.64-3.471L8 9.583l-1.326-.795l-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" /></svg></i>
                                     <h4>Email:</h4>
-                                    <p>ezybaazaar3@gmail.com</p>
+                                    <p>@SupportMail</p>
                                 </div>
                             </div>
 
@@ -658,7 +778,8 @@
                                 <div class="phone">
                                     <i><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><g fill="currentColor"><path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" /><path d="M8 14a1 1 0 1 0 0-2a1 1 0 0 0 0 2" /></g></svg></i>
                                     <h4>Call:</h4>
-                                    <p>+91 8983022033</p>
+                                    <p style=" margin-bottom: 0;">@CustCareNo</p>
+                                    <p>+91 @mobile</p>
                                 </div>
                             </div>
                         </div>
