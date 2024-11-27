@@ -696,7 +696,7 @@
 
                                             <div class="col-md-6" style="margin:0;">
                                                 <h2 style="font-size: 18px; margin: 0; color: #fff;">
-                                                    Rediant Agent
+                                                   EKYC Profile
                                                 </h2>
                                             </div>
                                             
@@ -705,15 +705,11 @@
 
                                                     var userid = User.Identity.GetUserId();
                                                     var set = DB1.rediantremtresponses.Where(s => s.userid == userid).ToList();
-                                                    var set2 = DB1.rediantdistresponses.ToList();
                                                     var set1 = DB1.radiantauths.ToList();
                                                 }
                                                 @if (set.Count == 0)
                                                 {
-
                                                     <a href="@Url.Action("Rediantcreate", "Home")"><button style="float: right; margin: 0px !important; border: 1px solid #fff; background: green; color: #fff; "> Create </button></a>
-
-
                                                 }
                                                 else
                                                 {
