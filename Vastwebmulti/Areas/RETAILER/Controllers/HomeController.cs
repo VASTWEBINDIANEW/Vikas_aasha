@@ -18640,7 +18640,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult Money_transfer2()
         {
             var money1 = false; var money2 = false;
-            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT").SingleOrDefault();
+            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT").SingleOrDefault();
             if (moneyapists_dmt.status == true || moneyapists_payout.status == true)
             {
