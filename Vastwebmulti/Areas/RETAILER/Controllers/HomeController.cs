@@ -44240,7 +44240,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     radianagentid = tokenchk.agentID;
                 }
 
+
+
                 var respchk = radi.collectPayVerify(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, upiid);
+
 
                 if (respchk.StatusCode == HttpStatusCode.OK)
                 {
@@ -47871,7 +47874,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
                 var tokn = Responsetoken.gettoken();
                 VastBazaar vb = new VastBazaar();
-                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state);
+                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state, retailer.Mobile);
                 dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
 
                 if (responseData.StatusCode == 200)
