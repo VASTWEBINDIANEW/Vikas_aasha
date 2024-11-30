@@ -18635,20 +18635,6806 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
         #endregion
 
+
+        /// <summary>
+        /// PPI
+        /// 
+
+        #region MONEYTRANSFER DMT PPI
+        [HttpGet]
+        public ActionResult Money_transferPPI()
+        {
+            var money1 = false; 
+            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMTPPI").SingleOrDefault();
+            if (moneyapists_dmt.status == true)
+            {
+                money1 = true;
+            }
+            
+
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                //////////////////////Check E KYC///////////////////////////
+                var isvalid = true;
+                var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekyc == null)
+                {
+                    isvalid = false;
+                    ViewBag.req = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekyc.isvalid;
+                    if (sts == false)
+                    {
+                        isvalid = false;
+                        ViewBag.req = "REQUIREDSCAN";
+                    }
+                }
+                /////////////////// 2 FaVerification////////////////
+                if (isvalid == true)
+                {
+                    var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (twofacheck == null)
+                    {
+                        Aeps_2Fa_Status item = new Aeps_2Fa_Status();
+                        item.userid = userid;
+                        item.Status = false;
+                        item.AepsMerchantId = ChkKYC.AepsMerchandId;
+                        item.InsertDate = DateTime.Now;
+                        db.Aeps_2Fa_Status.Add(item);
+                        db.SaveChanges();
+                        isvalid = false;
+                        ViewBag.req = "2FAREQUIRED";
+                    }
+                    else
+                    {
+                        var insertdate = Convert.ToDateTime(twofacheck.InsertDate).Date;
+                        var currentdate = DateTime.Now.Date;
+                        if (insertdate == currentdate)
+                        {
+                            if (twofacheck.Status == false)
+                            {
+                                isvalid = false;
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                        }
+                        else
+                        {
+                            twofacheck.Status = false;
+                            db.SaveChanges();
+                            isvalid = false;
+                            ViewBag.req = "2FAREQUIRED";
+                        }
+                    }
+                }
+
+                /////////////////// 2 FaVerification////////////////
+
+
+
+                ///////////////Check DMT Service Fee///////////////////////
+                var isfree = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().IsFree;
+                var allservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL").SingleOrDefault().IsFree;
+                if (isfree == true && allservice == true)
+                {
+                    ViewBag.chkcharge = "DONE";
+                }
+                else
+                {
+                    if (isfree == true)
+                    {
+                        if (allservice == false)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "NOTDONE";
+                                        ViewData["chksertype"] = "NOTDONE";
+                                    }
+
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "ALLNOTDONE";
+                                    ViewData["chksertype"] = "ALLNOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "ALLNOTDONE";
+                                ViewData["chksertype"] = "ALLNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == false)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "BOTHNOTDONE";
+                                        ViewData["chksertype"] = "BOTHNOTDONE";
+                                    }
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "BOTHNOTDONE";
+                                    ViewData["chksertype"] = "BOTHNOTDONE";
+                                }
+                            }
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "BOTHNOTDONE";
+                                    ViewData["chksertype"] = "BOTHNOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "BOTHNOTDONE";
+                                ViewData["chksertype"] = "BOTHNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == true)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "NOTDONE";
+                                        ViewData["chksertype"] = "NOTDONE";
+                                    }
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "NOTDONE";
+                                ViewData["chksertype"] = "NOTDONE";
+                            }
+                        }
+                    }
+                }
+
+                Recent_report recent = new Recent_report();
+                recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
+                recent.Recent_report_Aeps = null;
+                recent.Recent_PAN_CARD_IPAY = null;
+                recent.Recent_mPosInfo = null;
+                return View(recent);
+            }
+            else
+            {
+                ViewBag.ChkKYC = "Firstly Complete Your Full KYC !";
+                return RedirectToAction("Profile");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CheckAAdharPayPPI()
+        {
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                //////////////////////Check E KYC///////////////////////////
+                var isvalid = true;
+                var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekyc == null)
+                {
+                    isvalid = false;
+                    ViewBag.req = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekyc.isvalid;
+                    if (sts == false)
+                    {
+                        isvalid = false;
+                        ViewBag.req = "REQUIREDSCAN";
+                    }
+                }
+                if (isvalid == true)
+                {
+                    var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (twofacheck == null)
+                    {
+                        Aeps_2Fa_Status_aadharpay item = new Aeps_2Fa_Status_aadharpay
+                        {
+                            userid = userid,
+                            status = false,
+                            AepsMerchantId = ChkKYC.AepsMerchandId,
+                            insertdate = DateTime.Now
+                        };
+                        db.Aeps_2Fa_Status_aadharpay.Add(item);
+                        db.SaveChanges();
+                        isvalid = false;
+                        ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                        return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                    }
+                    else
+                    {
+                        var insertdate = Convert.ToDateTime(twofacheck.insertdate).Date;
+                        var currentdate = DateTime.Now.Date;
+                        if (insertdate == currentdate)
+                        {
+                            if (twofacheck.status == false)
+                            {
+                                isvalid = false;
+                                ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                                return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                            }
+                        }
+                        else
+                        {
+                            twofacheck.status = false;
+                            db.SaveChanges();
+                            isvalid = false;
+                            ViewBag.req = "2FAREQUIRED_ADDHARPAY";
+                            return Json(new { Status = "2FAREQUIRED_ADDHARPAY" });
+                        }
+                    }
+                }
+            }
+            return Json(new { success = true });
+        }
+        [HttpPost]
+        public ActionResult GenrateOtpEKYCPPI()
+        {
+            var userid = User.Identity.GetUserId();
+            var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
+            if (retailer.UserLocation == null)
+            {
+                insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+            }
+            else
+            {
+                lattitude = retailer.UserLocation.Lattitude;
+                longitude = retailer.UserLocation.Longitute;
+            }
+
+            var token = string.Empty;
+            token = getAuthToken();
+            var apinm = "";
+            if (apinm == "RADIANT")
+            {
+
+                Radiantdmt radi = new Radiantdmt();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var tokenchk = db.radianttokens.SingleOrDefault();
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (tokenchk == null)
+                {
+                    radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                }
+                else
+                {
+                    radianttoken = tokenchk.accessToken;
+                    radianagentid = tokenchk.agentID;
+                }
+                var respchk = radi.EkycSendOTP(radianagentid, retailer.AadharCard, radiantauthchk.APIKey);
+                if ((respchk.StatusCode == HttpStatusCode.OK))
+                {
+                    dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                    if (dresp.success == true)
+                    {
+                        string primaryKeyId = dresp.data.primaryKeyId;
+                        string encodeTxnId = dresp.data.encodeTxnId;
+                        string msg1 = dresp.message;
+                        var viewresponse1 = new { Status = "Success", Message = msg1, primarykey = primaryKeyId, encodetxnid = encodeTxnId };
+                        return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        string msg1 = dresp.message;
+                        var viewresponse = new { Status = "Failed", Message = msg1 };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if ((respchk.StatusCode == HttpStatusCode.Created))
+                {
+                    dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                    string msg1 = dresp.message;
+                    var viewresponse = new { Status = "Failed", Message = msg1 };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please Try After Some Time" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(retailer.AepsMerchandId))
+                {
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
+                    {
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
+                var request1 = new RestRequest(Method.POST);
+                request1.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response1 = client1.Execute(request1);
+                var respsuper = response1.Content;
+                dynamic chkresp = JsonConvert.DeserializeObject(respsuper);
+                var stscode = chkresp.Content.ADDINFO.stscode.ToString();
+                if (stscode == "0")
+                {
+                    var msg = chkresp.Content.ADDINFO.message.ToString();
+                    var viewresponse = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var superid = chkresp.Content.ADDINFO.data.superid.ToString();
+                var superusername = chkresp.Content.ADDINFO.data.superusername.ToString();
+                AepsModel reqObject = new AepsModel();
+                var req = new
+                {
+                    superMerchantId = superid,
+                    merchantLoginId = retailer.AepsMerchandId,
+                    transactionType = "EKY",
+                    mobileNumber = retailer.Mobile,
+                    aadharNumber = retailer.AadharCard,
+                    panNumber = retailer.PanCard,
+                    matmSerialNumber = "",
+                    latitude = lattitude,
+                    longitude = longitude
+                };
+                dynamic RequestJson = JsonConvert.SerializeObject(req);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var client = new RestClient();
+                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/ICICSendOtp");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("content-type", "text/plain");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                request.AddHeader("hash", Convert.ToBase64String(hash));
+                request.AddHeader("deviceIMEI", "352801082418919"); //can pass Unique device Id
+                request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                request.AddHeader("Requestdata", RequestJson);
+                request.AddParameter("text/plain",
+                    encryptUsingSessionKey, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                var msg1 = ""; var primarykey = 0; var encodetxnid = "";
+                var status = "Failed";
+                var sts = resp1.Content.ADDINFO.status;
+                msg1 = resp1.Content.ADDINFO.message;
+                if (sts == true)
+                {
+                    var statusCode = resp1.Content.ADDINFO.statusCode;
+                    if (statusCode == 10000)
+                    {
+                        status = "Success";
+                        primarykey = resp1.Content.ADDINFO.data.primaryKeyId;
+                        encodetxnid = resp1.Content.ADDINFO.data.encodeFPTxnId;
+                    }
+                }
+                var viewresponse1 = new { Status = status, Message = msg1, primarykey = primarykey, encodetxnid = encodetxnid };
+                return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult VerifyotpEkycPPI(string otp, string primaryhide, string encodehide)
+        {
+            var userid = User.Identity.GetUserId();
+            var token = string.Empty;
+            token = getAuthToken();
+            var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
+            if (retailer.UserLocation == null)
+            {
+                insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+            }
+            else
+            {
+                lattitude = retailer.UserLocation.Lattitude;
+                longitude = retailer.UserLocation.Longitute;
+            }
+            var Apiname = "";
+            if (Apiname == "RADIANT")
+            {
+                Radiantdmt api = new Radiantdmt();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var tokenchk = db.radianttokens.SingleOrDefault();
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (tokenchk == null)
+                {
+                    api.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                }
+                else
+                {
+                    radianttoken = tokenchk.accessToken;
+                    radianagentid = tokenchk.agentID;
+                }
+
+                var respchk = api.EkycVerifyOTP(radianagentid, otp, primaryhide, encodehide, radiantauthchk.APIKey);
+                if ((respchk.StatusCode == HttpStatusCode.OK))
+                {
+                    dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                    if (dresp.success == true)
+                    {
+                        string primaryKeyId = dresp.data.primaryKeyId;
+                        string encodeTxnId = dresp.data.encodeTxnId;
+                        string msg1 = dresp.message;
+                        var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (chk == null)
+                        {
+                            ekycCheck ekyc = new ekycCheck();
+                            ekyc.userid = userid;
+                            ekyc.aadharcard = retailer.AadharCard;
+                            ekyc.devicename = "";
+                            ekyc.devicesrno = "";
+                            ekyc.encodeFPTxnId = encodeTxnId;
+                            ekyc.mobilenumber = retailer.Mobile;
+                            ekyc.insertdate = DateTime.Now;
+                            ekyc.updatedate = DateTime.Now;
+                            ekyc.isvalid = false;
+                            ekyc.primaryKeyId = Convert.ToInt32(primaryKeyId);
+                            db.ekycChecks.Add(ekyc);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            chk.aadharcard = retailer.AadharCard;
+                            chk.encodeFPTxnId = encodeTxnId;
+                            chk.primaryKeyId = Convert.ToInt32(primaryKeyId);
+                            chk.insertdate = DateTime.Now;
+                            chk.updatedate = DateTime.Now;
+                            db.SaveChanges();
+                        }
+                        var viewresponse1 = new { Status = "Success", Message = msg1 };
+                        return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        string msg1 = dresp.message;
+                        var viewresponse = new { Status = "Failed", Message = msg1 };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if ((respchk.StatusCode == HttpStatusCode.Created))
+                {
+                    dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                    string msg1 = dresp.message;
+                    var viewresponse = new { Status = "Failed", Message = msg1 };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please Try After Some Time" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+
+                if (retailer.AepsMerchandId == "")
+                {
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
+                    {
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
+                var request1 = new RestRequest(Method.POST);
+                request1.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response1 = client1.Execute(request1);
+                var respsuper = response1.Content;
+                dynamic chkresp = JsonConvert.DeserializeObject(respsuper);
+                var stscode = chkresp.Content.ADDINFO.stscode.ToString();
+                if (stscode == "0")
+                {
+                    var msg = chkresp.Content.ADDINFO.message.ToString();
+                    var viewresponse = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var superid = chkresp.Content.ADDINFO.data.superid.ToString();
+                var superusername = chkresp.Content.ADDINFO.data.superusername.ToString();
+                AepsModel reqObject = new AepsModel();
+                var req = new
+                {
+                    superMerchantId = superid,
+                    merchantLoginId = retailer.AepsMerchandId,
+                    otp = otp,
+                    primaryKeyId = primaryhide,
+                    encodeFPTxnId = encodehide
+                };
+                dynamic RequestJson = JsonConvert.SerializeObject(req);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var client = new RestClient();
+                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/ICICValidateOTP");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("content-type", "text/plain");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                request.AddHeader("hash", Convert.ToBase64String(hash));
+                request.AddHeader("deviceIMEI", "352801082418919"); //can pass Unique device Id
+                request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                request.AddHeader("Requestdata", RequestJson);
+                request.AddParameter("text/plain",
+                    encryptUsingSessionKey, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                var status = "Failed";
+                var msg1 = "";
+                var sts = resp1.Content.ADDINFO.status;
+                msg1 = resp1.Content.ADDINFO.message;
+                if (sts == true)
+                {
+                    var statusCode = resp1.Content.ADDINFO.statusCode;
+                    if (statusCode == 10000)
+                    {
+                        status = "Success";
+                        var primaryKeyId = resp1.Content.ADDINFO.data.primaryKeyId;
+                        var encodeFPTxnId = resp1.Content.ADDINFO.data.encodeFPTxnId;
+                        var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (chk == null)
+                        {
+                            ekycCheck ekyc = new ekycCheck();
+                            ekyc.userid = userid;
+                            ekyc.aadharcard = retailer.AadharCard;
+                            ekyc.devicename = "";
+                            ekyc.devicesrno = "";
+                            ekyc.encodeFPTxnId = encodeFPTxnId;
+                            ekyc.mobilenumber = retailer.Mobile;
+                            ekyc.insertdate = DateTime.Now;
+                            ekyc.updatedate = DateTime.Now;
+                            ekyc.isvalid = false;
+                            ekyc.primaryKeyId = Convert.ToInt32(primaryKeyId);
+                            db.ekycChecks.Add(ekyc);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            chk.aadharcard = retailer.AadharCard;
+                            chk.encodeFPTxnId = encodeFPTxnId;
+                            chk.primaryKeyId = Convert.ToInt32(primaryKeyId);
+                            chk.insertdate = DateTime.Now;
+                            chk.updatedate = DateTime.Now;
+                            db.SaveChanges();
+                        }
+                    }
+                }
+                var viewresponse1 = new { Status = status, Message = msg1 };
+                return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult ValidateDeviceinfoPPI(string cap, string devicesrno, string devicenm)
+        {
+            var userid = User.Identity.GetUserId();
+            var token = string.Empty;
+            token = getAuthToken();
+            var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
+            if (retailer.UserLocation == null)
+            {
+                insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+            }
+            else
+            {
+                lattitude = retailer.UserLocation.Lattitude;
+                longitude = retailer.UserLocation.Longitute;
+            }
+            var apinm = "";
+
+
+            if (apinm == "RADIANT")
+            {
+
+                Radiantdmt api = new Radiantdmt();
+                var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (chk == null)
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please regenerate the OTP first then try again" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    Radiantdmt radi = new Radiantdmt();
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    var tokenchk = db.radianttokens.SingleOrDefault();
+
+                    var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (tokenchk == null)
+                    {
+                        radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                    }
+                    else
+                    {
+                        radianttoken = tokenchk.accessToken;
+                        radianagentid = tokenchk.agentID;
+                    }
+
+                    var respchk = api.EkycAuthBiometric(radianagentid, chk.primaryKeyId.ToString(), chk.encodeFPTxnId, cap, radiantauthchk.APIKey);
+                    if (respchk.StatusCode == HttpStatusCode.OK)
+                    {
+                        dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                        string msg = dresp.message;
+                        if (dresp.success == true)
+                        {
+                            chk.devicename = devicenm;
+                            chk.devicesrno = devicesrno;
+                            chk.updatedate = DateTime.Now;
+                            chk.isvalid = true;
+                            db.SaveChanges();
+                            var viewresponse1 = new { Status = "Success", Message = msg };
+                            return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            db.ekycChecks.Remove(chk);
+                            db.SaveChanges();
+                            var viewresponse1 = new { Status = "Failed", Message = msg };
+                            return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (respchk.StatusCode == HttpStatusCode.Created)
+                    {
+                        dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                        string msg = dresp.message;
+                        db.ekycChecks.Remove(chk);
+                        db.SaveChanges();
+                        var viewresponse1 = new { Status = "Failed", Message = msg };
+                        return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        db.ekycChecks.Remove(chk);
+                        db.SaveChanges();
+                        var viewresponse1 = new { Status = "Failed", Message = "Please Try After Some Time" };
+                        return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            else
+            {
+
+
+
+                if (retailer.AepsMerchandId == "")
+                {
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
+                    {
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
+                var request1 = new RestRequest(Method.POST);
+                request1.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response1 = client1.Execute(request1);
+                var respsuper = response1.Content;
+                dynamic chkresp = JsonConvert.DeserializeObject(respsuper);
+                var stscode = chkresp.Content.ADDINFO.stscode.ToString();
+                if (stscode == "0")
+                {
+                    var msg = chkresp.Content.ADDINFO.message.ToString();
+                    var viewresponse = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var superid = chkresp.Content.ADDINFO.data.superid.ToString();
+                var superusername = chkresp.Content.ADDINFO.data.superusername.ToString();
+                var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (chk == null)
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please regenerate the OTP first then try again" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var req = new
+                {
+                    superMerchantId = superid,
+                    merchantLoginId = retailer.AepsMerchandId,
+                    primaryKeyId = chk.primaryKeyId,
+                    encodeFPTxnId = chk.encodeFPTxnId,
+                    requestRemarks = retailer.Frm_Name,
+                    cardnumberORUID = new CardnumberOruid { adhaarNumber = retailer.AadharCard, nationalBankIdentificationNumber = null },
+                    captureResponse = JsonConvert.DeserializeObject<CaptureResponse>(cap),
+                };
+                dynamic RequestJson = JsonConvert.SerializeObject(req);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var client = new RestClient();
+                client = new RestClient(VastbazaarBaseUrl + "api/AEPS/ICICIFingerverify");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("content-type", "text/plain");
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                request.AddHeader("hash", Convert.ToBase64String(hash));
+                request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
+                request.AddHeader("eskey", encryptUsingPublicKey);
+                request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                //request.AddHeader("Requestdata", RequestJson);
+                var req1 = new
+                {
+                    Requestdata = RequestJson,
+                    encryptUsingSessionKey = encryptUsingSessionKey
+                };
+                var jsonnn = JsonConvert.SerializeObject(req1);
+                request.AddParameter("text/plain",
+                    jsonnn, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                var status = "Failed";
+                var msg1 = "";
+                var sts = resp1.Content.ADDINFO.status;
+                msg1 = resp1.Content.ADDINFO.message;
+                var statusCode = 0;
+                if (sts == true)
+                {
+                    statusCode = resp1.Content.ADDINFO.statusCode;
+                    if (statusCode == 10000)
+                    {
+                        status = "Success";
+                        chk.devicename = devicenm;
+                        chk.devicesrno = devicesrno;
+                        chk.updatedate = DateTime.Now;
+                        chk.isvalid = true;
+                        db.SaveChanges();
+                    }
+                }
+                else if (sts == false)
+                {
+                    statusCode = resp1.Content.ADDINFO.statusCode;
+                    if ((statusCode == 10005) || (statusCode == 10002))
+                    {
+                        var ekycchk = db.ekycChecks.Where(aa => aa.userid == userid && aa.isvalid == false).SingleOrDefault();
+                        if (ekycchk != null)
+                        {
+                            db.ekycChecks.Remove(ekycchk);
+                        }
+                        //Remove merchanat
+                        retailer.AepsMerchandId = "";
+                        retailer.AepsMPIN = "";
+                        db.SaveChanges();
+                    }
+                }
+                var viewresponse1 = new { Status = status, Message = msg1 };
+                return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Validate2FAPPI(string cap, string capxml, string devicesrno, string devicenm, string iin, string bankname)
+        {
+            if (iin == null)
+            {
+                iin = "";
+            }
+            if (bankname == null)
+            {
+                bankname = "";
+            }
+            var userid = User.Identity.GetUserId();
+            var apinm = "";
+            if (apinm == "RADIANT")
+            {
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                if (radiantauthchk != null)
+                {
+                    var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (radiantresponse != null)
+                    {
+                        if (radiantresponse.Sts == "Approved")
+                        {
+                            Radiantdmt radi = new Radiantdmt();
+                            var tokenchk = db.radianttokens.SingleOrDefault();
+                            if (tokenchk == null)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            }
+                            else
+                            {
+                                radianttoken = tokenchk.accessToken;
+                                radianagentid = tokenchk.agentID;
+                            }
+                            string lattitude1 = string.Empty;
+                            string longitude1 = string.Empty;
+                            var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            if (retailer1.UserLocation == null)
+                            {
+                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                            }
+                            else
+                            {
+                                lattitude1 = retailer1.UserLocation.Lattitude;
+                                longitude1 = retailer1.UserLocation.Longitute;
+                            }
+                            var remark = retailer1.Frm_Name;
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            }
+                            if (respchk.StatusCode == HttpStatusCode.OK)
+                            {
+                                var checkbankshow = db.TwofaBankShows.Where(aa => aa.userid == userid).SingleOrDefault();
+                                if (checkbankshow == null)
+                                {
+                                    TwofaBankShow bankshow = new TwofaBankShow
+                                    {
+                                        userid = userid,
+                                        isshow = true
+                                    };
+                                    db.TwofaBankShows.Add(bankshow);
+                                    db.SaveChanges();
+                                }
+
+                                var checkdaily2fa = db.TwofaDailyStatus.Where(aa => aa.userid == userid && aa.type == "AEPS").SingleOrDefault();
+                                if (checkdaily2fa == null)
+                                {
+                                    TwofaDailyStatu two = new TwofaDailyStatu();
+                                    two.userid = userid;
+                                    two.type = "AEPS";
+                                    two.insertdate = DateTime.Now;
+                                    two.expdate = DateTime.Now.AddDays(1).Date;
+                                    db.TwofaDailyStatus.Add(two);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    if (checkdaily2fa.expdate >= DateTime.Now)
+                                    {
+                                        var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                                        twofacheck.Status = true;
+                                        twofacheck.InsertDate = DateTime.Now;
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        checkdaily2fa.expdate = DateTime.Now.AddDays(1).Date;
+                                        db.SaveChanges();
+                                    }
+                                }
+
+
+
+                                var viewresponse11 = new { Status = "Success", Message = "" };
+                                return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                                string msg = dresp.message;
+                                var viewresponse11 = new { Status = "Failed", Message = msg };
+                                return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var viewresponse11 = new { Status = "Failed", Message = "EKYC is pending. Please wait for approval." };
+                            return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var viewresponse11 = new { Status = "Failed", Message = "Authentication is required! Please contact the administrator." };
+                        return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var viewresponse11 = new { Status = "Failed", Message = "EKYC not Done! Please go to your profile and Complete Ekyc Process." };
+                    return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var token = string.Empty;
+                token = getAuthToken();
+                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+                string lattitude = string.Empty;
+                string longitude = string.Empty;
+                if (retailer.UserLocation == null)
+                {
+                    insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+                }
+                else
+                {
+                    lattitude = retailer.UserLocation.Lattitude;
+                    longitude = retailer.UserLocation.Longitute;
+                }
+                if (retailer.AepsMerchandId == "")
+                {
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
+                    {
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+
+
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
+                var request1 = new RestRequest(Method.POST);
+                request1.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response1 = client1.Execute(request1);
+                var respsuper = response1.Content;
+                dynamic chkresp = JsonConvert.DeserializeObject(respsuper);
+                var stscode = chkresp.Content.ADDINFO.stscode.ToString();
+                if (stscode == "0")
+                {
+                    var msg = chkresp.Content.ADDINFO.message.ToString();
+                    var viewresponse = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var superid = chkresp.Content.ADDINFO.data.superid.ToString();
+                var superusername = chkresp.Content.ADDINFO.data.superusername.ToString();
+                var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (chk == null)
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please regenerate the OTP first then try again" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var admin_details = db.Admin_details.SingleOrDefault();
+                var infoadmin = admin_details.WebsiteUrl.Replace(".", "");
+                AepsModelNew reqObject = new AepsModelNew();
+                reqObject.captureResponse = JsonConvert.DeserializeObject<CaptureResponse>(cap.ToString());
+                reqObject.cardnumberORUID = new CardnumberOruid { adhaarNumber = retailer.AadharCard, nationalBankIdentificationNumber = 607152 };
+                reqObject.latitude = Convert.ToDouble(lattitude);
+                reqObject.longitude = Convert.ToDouble(longitude);
+                reqObject.requestRemarks = "";
+                reqObject.transactionType = "AUO";
+                reqObject.merchantUserName = retailer.AepsMerchandId;
+                reqObject.merchantPin = CreateMD5(retailer.AepsMPIN);
+                reqObject.superMerchantId = superid;
+                reqObject.merchantTranId = infoadmin + DateTime.Now.ToString("dd-MM-yyy hh-mm-ss").Replace("-", "").Replace(" ", "");
+                reqObject.mobileNumber = retailer.Mobile;
+                reqObject.serviceType = "AEPS";
+                dynamic RequestJson = JsonConvert.SerializeObject(reqObject);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var RemainBlance = db.Remain_reteller_balance.Where(x => x.RetellerId == userid).FirstOrDefault().Remainamount;
+                if (RemainBlance > 1)
+                {
+                    var client = new RestClient();
+                    client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerification");
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("content-type", "text/plain");
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                    request.AddHeader("hash", Convert.ToBase64String(hash));
+                    request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
+                    request.AddHeader("eskey", encryptUsingPublicKey);
+                    request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                    request.AddHeader("Type", "AEPS");
+                    request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                    //request.AddHeader("Requestdata", RequestJson);
+                    var req1 = new
+                    {
+                        Requestdata = RequestJson,
+                        encryptUsingSessionKey = encryptUsingSessionKey
+                    };
+                    var jsonnn = JsonConvert.SerializeObject(req1);
+                    request.AddParameter("text/plain",
+                        jsonnn, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+                    var status = "Failed";
+                    var msg1 = "";
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                        AEPS2faREQLOG("2FA Aeps Response : " + resp1 + " 2FA Time : " + DateTime.Now);
+                        string sts = resp1.Content.ADDINFO.status;
+                        msg1 = resp1.Content.ADDINFO.message;
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), Convert.ToString(sts), "Aeps");
+                        }
+                        catch (Exception ex)
+                        {
+                            AEPS2faREQLOG("Error : " + ex.Message + " Error Time : " + DateTime.Now);
+                        }
+                        if (sts == "DONE")
+                        {
+                            var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                            twofacheck.Status = true;
+                            twofacheck.InsertDate = DateTime.Now;
+                            db.SaveChanges();
+
+                            status = "Success";
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), "NOTDONE", "Aeps");
+                        }
+                        catch { }
+                    }
+                    var viewresponse1 = new { Status = status, Message = msg1 };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var viewresponse1 = new { Status = "Failed", Message = "Retailer remain balance is low." };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        public static void AEPS2faREQLOGPPI(string strMessage)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "AEPS2faREQLOG-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+                }
+                catch (Exception ex)
+                { }
+            }
+        }
+        [HttpPost]
+        public ActionResult Validate2FAAadharPPI(string cap, string capxml, string devicesrno, string devicenm, string iin, string bankname)
+        {
+            var userid = User.Identity.GetUserId();
+            var apinm = "";
+            if (apinm == "RADIANT")
+            {
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                if (radiantauthchk != null)
+                {
+                    var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (radiantresponse != null)
+                    {
+                        if (radiantresponse.Sts == "Approved")
+                        {
+                            Radiantdmt radi = new Radiantdmt();
+                            var tokenchk = db.radianttokens.SingleOrDefault();
+                            if (tokenchk == null)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            }
+                            else
+                            {
+                                radianttoken = tokenchk.accessToken;
+                                radianagentid = tokenchk.agentID;
+                            }
+                            string lattitude1 = string.Empty;
+                            string longitude1 = string.Empty;
+                            var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            if (retailer1.UserLocation == null)
+                            {
+                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                            }
+                            else
+                            {
+                                lattitude1 = retailer1.UserLocation.Lattitude;
+                                longitude1 = retailer1.UserLocation.Longitute;
+                            }
+                            var remark = retailer1.Frm_Name;
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            }
+                            if (respchk.StatusCode == HttpStatusCode.OK)
+                            {
+                                var checkbankshow = db.TwofaBankShows.Where(aa => aa.userid == userid).SingleOrDefault();
+                                if (checkbankshow == null)
+                                {
+                                    TwofaBankShow bankshow = new TwofaBankShow
+                                    {
+                                        userid = userid,
+                                        isshow = true
+                                    };
+                                    db.TwofaBankShows.Add(bankshow);
+                                    db.SaveChanges();
+                                }
+
+                                var checkdaily2fa = db.TwofaDailyStatus.Where(aa => aa.userid == userid && aa.type == "AADHAR").SingleOrDefault();
+                                if (checkdaily2fa == null)
+                                {
+                                    TwofaDailyStatu two = new TwofaDailyStatu();
+                                    two.userid = userid;
+                                    two.type = "AADHAR";
+                                    two.insertdate = DateTime.Now;
+                                    two.expdate = DateTime.Now.AddDays(1).Date;
+                                    db.TwofaDailyStatus.Add(two);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    if (checkdaily2fa.expdate >= DateTime.Now)
+                                    {
+                                        var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
+                                        twofacheck.status = true;
+                                        twofacheck.insertdate = DateTime.Now;
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        checkdaily2fa.expdate = DateTime.Now.AddDays(1).Date;
+                                        db.SaveChanges();
+                                    }
+                                }
+
+
+
+                                var viewresponse11 = new { Status = "Success", Message = "" };
+                                return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                dynamic dresp = JsonConvert.DeserializeObject(respchk.Content);
+                                string msg = dresp.message;
+                                var viewresponse11 = new { Status = "Failed", Message = msg };
+                                return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            string msg = "EKYC is pending. Please wait for approval.";
+                            var viewresponse11 = new { Status = "Failed", Message = msg };
+                            return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        string msg = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                        var viewresponse11 = new { Status = "Failed", Message = msg };
+                        return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    string msg = "Authentication is required! Please contact the administrator.";
+                    var viewresponse11 = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse11, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var token = string.Empty;
+                token = getAuthToken();
+                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+                string lattitude = string.Empty;
+                string longitude = string.Empty;
+                if (retailer.UserLocation == null)
+                {
+                    insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
+                }
+                else
+                {
+                    lattitude = retailer.UserLocation.Lattitude;
+                    longitude = retailer.UserLocation.Longitute;
+                }
+                if (retailer.AepsMerchandId == "")
+                {
+                    string companyBankAccountNumber = retailer.Bankaccountno;
+                    string bankIfscCode = retailer.Ifsccode;
+                    string companyBankName = retailer.bankname;
+                    string bankBranchName = retailer.bankAddress;
+                    string bankAccountName = retailer.accountholder;
+                    string aadhaarNumber = retailer.AadharCard;
+                    var ipAddress = GetComputer_InternetIP();
+                    if (string.IsNullOrEmpty(companyBankAccountNumber))
+                    {
+                        var message = "Please Update Your Bank Information, On the Profile.";
+                        var viewresponse = new { Status = "Failed", Message = message };
+                        return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var reque = new
+                        {
+                            merchantName = retailer.RetailerName,
+                            stateid = retailer.State,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            merchantPhoneNumber = retailer.Mobile,
+                            merchantPinCode = retailer.Pincode,
+                            merchantCityName = city,
+                            merchantAddress = retailer.Address,
+                            userPan = retailer.PanCard,
+                            retilerid = retailer.Email,
+                            OTP = "",
+                            companyBankAccountNumber,
+                            bankIfscCode,
+                            companyBankName,
+                            bankBranchName,
+                            bankAccountName,
+                            ipAddress,
+                            aadhaarNumber,
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
+                        };
+                        var resquestchk = JsonConvert.SerializeObject(reque);
+                        var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
+                        client2.Timeout = -1;
+                        var request2 = new RestRequest(Method.POST);
+                        request2.AddHeader("Authorization", "Bearer " + token);
+                        request2.AddHeader("Content-Type", "application/json");
+                        request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
+                        IRestResponse response2 = client2.Execute(request2);
+                        dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                        var stscode2 = resp.Content.ADDINFO.statuscode.ToString();
+                        var message = resp.Content.ADDINFO.status.ToString();
+                        if (stscode2 == "TXN")
+                        {
+                            var ouletid = resp.Content.ADDINFO.data.outlet_id.ToString();
+                            var pin = resp.Content.ADDINFO.data.pin.ToString();
+                            retailer.AepsMerchandId = ouletid;
+                            retailer.AepsMPIN = pin;
+                            db.SaveChanges();
+                            retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                        }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = message };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                var client1 = new RestClient("http://api.vastbazaar.com/api/AEPS/supermerchant?merchant=" + retailer.AepsMerchandId + "");
+                var request1 = new RestRequest(Method.POST);
+                request1.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response1 = client1.Execute(request1);
+                var respsuper = response1.Content;
+                dynamic chkresp = JsonConvert.DeserializeObject(respsuper);
+                var stscode = chkresp.Content.ADDINFO.stscode.ToString();
+                if (stscode == "0")
+                {
+                    var msg = chkresp.Content.ADDINFO.message.ToString();
+                    var viewresponse = new { Status = "Failed", Message = msg };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var superid = chkresp.Content.ADDINFO.data.superid.ToString();
+                var superusername = chkresp.Content.ADDINFO.data.superusername.ToString();
+                var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (chk == null)
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Please regenerate the OTP first then try again" };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var admin_details = db.Admin_details.SingleOrDefault();
+                var infoadmin = admin_details.WebsiteUrl.Replace(".", "");
+                AepsModelNew reqObject = new AepsModelNew();
+                reqObject.captureResponse = JsonConvert.DeserializeObject<CaptureResponse>(cap);
+                reqObject.cardnumberORUID = new CardnumberOruid { adhaarNumber = retailer.AadharCard, nationalBankIdentificationNumber = 607152 };
+                reqObject.latitude = Convert.ToDouble(lattitude);
+                reqObject.longitude = Convert.ToDouble(longitude);
+                reqObject.requestRemarks = "";
+                reqObject.transactionType = "AUO";
+                reqObject.merchantUserName = retailer.AepsMerchandId;
+                reqObject.merchantPin = CreateMD5(retailer.AepsMPIN);
+                reqObject.superMerchantId = superid;
+                reqObject.merchantTranId = infoadmin + DateTime.Now.ToString("dd-MM-yyy hh-mm-ss").Replace("-", "").Replace(" ", "");
+                reqObject.mobileNumber = retailer.Mobile;
+                reqObject.serviceType = "AP";
+                dynamic RequestJson = JsonConvert.SerializeObject(reqObject);
+                byte[] hash = Main.generateSha256Hash(Encoding.ASCII.GetBytes(RequestJson));
+                byte[] skey = Main.generateSessionKey();
+                string encryptUsingSessionKey = Main.encryptUsingSessionKey(skey, Encoding.ASCII.GetBytes(RequestJson));
+                string encryptUsingPublicKey = Main.encryptUsingPublicKey(skey);
+                if (string.IsNullOrWhiteSpace(encryptUsingSessionKey) || string.IsNullOrWhiteSpace(encryptUsingPublicKey))
+                {
+                    var viewresponse = new { Status = "Failed", Message = "Failed to initiate request." };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
+                var RemainBlance = db.Remain_reteller_balance.Where(x => x.RetellerId == userid).FirstOrDefault().Remainamount;
+                if (RemainBlance > 1)
+                {
+                    var client = new RestClient();
+                    client = new RestClient(VastbazaarBaseUrl + "api/AEPS/2FAVerificationaadhar");
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("content-type", "text/plain");
+                    request.AddHeader("cache-control", "no-cache");
+                    request.AddHeader("authorization", "bearer " + token);//OAUTH token
+                    request.AddHeader("hash", Convert.ToBase64String(hash));
+                    request.AddHeader("deviceIMEI", devicesrno); //can pass Unique device Id
+                    request.AddHeader("eskey", encryptUsingPublicKey);
+                    request.AddHeader("MerchantID", retailer.AepsMerchandId);
+                    request.AddHeader("Type", "AEPS");
+
+                    request.AddHeader("trnTimestamp", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+                    //request.AddHeader("Requestdata", RequestJson);
+                    var req1 = new
+                    {
+                        Requestdata = RequestJson,
+                        encryptUsingSessionKey = encryptUsingSessionKey
+                    };
+                    var jsonnn = JsonConvert.SerializeObject(req1);
+                    request.AddParameter("text/plain",
+                        jsonnn, ParameterType.RequestBody);
+                    IRestResponse response = client.Execute(request);
+                    dynamic resp1 = JsonConvert.DeserializeObject(response.Content);
+                    AEPS2faREQLOG("2FA Aadharpay Response " + response.Content + " Transfer Time : " + DateTime.Now);
+                    var status = "Failed";
+                    var msg1 = "";
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        string sts = resp1.Content.ADDINFO.status;
+                        msg1 = resp1.Content.ADDINFO.message;
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), Convert.ToString(sts), "Aadharpay");
+                        }
+                        catch (Exception ex)
+                        {
+                            AEPS2faREQLOG("Aadharpay Error : " + ex.Message + " Error Time : " + DateTime.Now);
+                        }
+                        if (sts == "DONE")
+                        {
+                            var twofacheck = db.Aeps_2Fa_Status_aadharpay.Where(aa => aa.userid == userid).SingleOrDefault();
+                            twofacheck.status = true;
+                            twofacheck.insertdate = DateTime.Now;
+                            db.SaveChanges();
+                            status = "Success";
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            db.Aeps_aadharpay_charges(Convert.ToString(userid), "NOTDONE", "Aadharpay");
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                    var viewresponse1 = new { Status = status, Message = msg1 };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var viewresponse1 = new { Status = "Failed", Message = "Retailer remain balance is low." };
+                    return Json(viewresponse1, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+        public ActionResult RetailerNamePPI()
+        {
+            var userid = User.Identity.GetUserId();
+            var name = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault().RetailerName;
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateremnamePPI(string name)
+        {
+            var userid = User.Identity.GetUserId();
+            var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            reminfo.RetailerName = name;
+            //Remove merchanat
+            reminfo.AepsMerchandId = "";
+            reminfo.AepsMPIN = "";
+            var chk = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+            if (chk != null)
+            {
+                db.ekycChecks.Remove(chk);
+            }
+            db.SaveChanges();
+            return Json("Update", JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult BindBankDdllistPPI()
+        {
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                VastBazaar cb = new VastBazaar();
+                var responseall = cb.Bank_details("123", Responsetoken.gettoken());
+                var responsechk = responseall.Content;
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+                var ser = JsonConvert.SerializeObject(ADDINFO);
+                json = JsonConvert.DeserializeObject(ser);
+                JArray a = (JArray)json["data"];
+                IList<BankNameModel> Details = a.ToObject<IList<BankNameModel>>();
+                List<SelectListItem> customers = new List<SelectListItem>();
+                foreach (var item in Details)
+                {
+                    customers.Add(new SelectListItem
+                    {
+                        Value = item.branch_ifsc,
+                        Text = item.bank_name
+                    });
+                }
+                //for (int i = 0; i < 10; i++)
+                //{
+                //    customers.Add(new SelectListItem
+                //    {
+                //        Value = entities.Customers.ToList()[i].CustomerID,
+                //        Text = entities.Customers.ToList()[i].ContactName
+                //    });
+                //}
+                return Json(new { data = customers }, JsonRequestBehavior.AllowGet);
+                // var result=  new SelectList(Details, "branch_ifsc", "bank_name");
+                // return json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult SenderdetailsPPI(string senderno)
+        {
+            var check = "OK"; var errormsg = "";
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMTPPI").SingleOrDefault();
+            if (apinm != null)
+            {
+                var userid = User.Identity.GetUserId();
+                if (apinm.api_name == "VASTWEB")
+                {
+                    var remdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Dealer_Details.Where(aa => aa.DealerId == remdetails.DealerId).SingleOrDefault();
+                    if (dlmdetails.moneysts == true)
+                    {
+                        if (remdetails.moneysts == true)
+                        {
+                            var checkfreeservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault();
+                            if (checkfreeservice.IsFree == false)
+                            {
+                                var servicecheck = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (servicecheck != null)
+                                {
+                                    var expdate = servicecheck.ExpiryDate;
+                                    var currentdate = DateTime.Now;
+                                    if (expdate <= currentdate)
+                                    {
+                                        check = "NOTOK";
+                                        errormsg = "Account Transfer Service is Expired.";
+                                    }
+                                }
+                                else
+                                {
+                                    check = "NOTOK";
+                                    errormsg = "Firstlly Purchase this Service.";
+                                }
+                            }
+                            var PPIAgentCheck = db.PPIAgents.Where(aa => aa.Retailer_id == userid).SingleOrDefault();
+                            if(PPIAgentCheck==null)
+                            {
+                                var tokn = Responsetoken.gettoken();
+                                var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var statename = db.State_Desc.Where(aa => aa.State_id == reminfo.State).SingleOrDefault();
+                                VastBazaar vast = new VastBazaar();
+                               var respchk= vast.Agent_register_PPI(reminfo.Mobile, tokn, userid, statename.State_name, reminfo.RetailerName, reminfo.Pincode.ToString(), reminfo.Email, reminfo.PanCard, reminfo.Frm_Name, reminfo.Address);
+                                if(respchk.StatusCode==HttpStatusCode.OK)
+                                {
+                                    dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
+                                    if(dyrespchk.Content.ADDINFO.status==true)
+                                    {
+                                        PPIAgent pp = new PPIAgent();
+                                        pp.Retailer_id = userid;
+                                        pp.Status = true;
+                                        pp.Insertdate = DateTime.Now;
+                                        db.PPIAgents.Add(pp);
+                                        db.SaveChanges();
+                                      //  PPIAge
+
+                                        //PPIAgents ppinfo = new PPIAgent();
+                                        //ppinfo.
+                                    }
+                                    else
+                                    {
+                                        string errorchk = dyrespchk.Content.ADDINFO.message;
+                                        check = "NOTOK";
+                                        errormsg = errorchk;
+                                    }
+                                }
+                                else
+                                {
+                                    check = "NOTOK";
+                                    errormsg = "Please Try After Sometime";
+                                }
+                            }
+                            if (check == "OK")
+                            {
+                                VastBazaar cb = new VastBazaar();
+                                var tokenapi = Responsetoken.gettoken();
+                                string currentUrl = Request.Url.ToString();
+                                var responseall = cb.Remitter_details_PPI(senderno, tokenapi,userid, currentUrl);
+                                var responsechk = responseall.Content.ToString();
+                                var responsecode1 = responseall.StatusCode.ToString();
+                                var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
+                                var responsechk1 = responseall1.Content.ToString();
+                                var responsecode11 = responseall1.StatusCode.ToString();
+                                if (responsecode1 == "OK" && responsecode11 == "OK")
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    var respcode = json.Content.ResponseCode.ToString();
+                                    var ADDINFO = json.Content.ADDINFO;
+                                    var stscode = ADDINFO.statuscode;
+                                    json = JsonConvert.SerializeObject(ADDINFO);
+
+                                    dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
+                                    var respcode1 = json1.Content.ResponseCode.ToString();
+                                    var ADDINFO1 = json1.Content.ADDINFO;
+                                    var stscode1 = ADDINFO1.statuscode;
+                                    json1 = JsonConvert.SerializeObject(ADDINFO1);
+                                    if (stscode == "TXN" && stscode1 == "TXN")
+                                    {
+                                        //dynamic jobject = JsonConvert.DeserializeObject(json.ToString());
+                                        dynamic jobject = JsonConvert.DeserializeObject(json);
+                                        try
+                                        {
+                                            bool isArray = jobject.data.beneficiary.item.Type == JTokenType.Array;
+                                            if (isArray == false)
+                                            {
+                                                json = json.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
+                                                int modificationIndex = json.IndexOf("}},", json.IndexOf("beneficiary"));
+                                                if (modificationIndex > 0)
+                                                {
+                                                    json = json.Remove(modificationIndex, 2).Insert(modificationIndex, "}]}");
+                                                }
+                                            }
+                                        }
+                                        catch
+                                        { }
+                                        dynamic jobject1 = JsonConvert.DeserializeObject(json1);
+                                        try
+                                        {
+                                            bool isArray1 = jobject1.data.beneficiary.item.Type == JTokenType.Array;
+                                            if (isArray1 == false)
+                                            {
+                                                json1 = json1.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
+                                                int modificationIndex1 = json1.IndexOf("}},", json1.IndexOf("beneficiary"));
+                                                if (modificationIndex1 > 0)
+                                                {
+                                                    json1 = json1.Remove(modificationIndex1, 2).Insert(modificationIndex1, "}]}");
+                                                }
+                                            }
+                                        }
+                                        catch
+                                        { }
+                                    }
+                                    //   var results = JsonConvert.SerializeObject(json);
+                                    // var jss = new JavaScriptSerializer();
+                                    //  var dict = jss.Deserialize<dynamic>(json);
+                                    return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    //dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    // var error = json.error.ToString();
+                                    var error_decribe = "Some Error Occer";
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                    var json = JsonConvert.SerializeObject(results);
+                                    //  var jss = new JavaScriptSerializer();
+                                    //  var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error_decribe = errormsg;
+                                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                var json1 = JsonConvert.DeserializeObject(results);
+                                var json = JsonConvert.SerializeObject(json1);
+                                //   var jss = new JavaScriptSerializer();
+                                //   var dict = jss.Deserialize<dynamic>(results);
+                                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error_decribe = "Money Status Off";
+                            var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                            var json1 = JsonConvert.DeserializeObject(results);
+                            var json = JsonConvert.SerializeObject(json1);
+                            // var jss = new JavaScriptSerializer();
+                            // var dict = jss.Deserialize<dynamic>(results);
+                            return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "Money Status Off, Contact Distributor OR Customer Care.";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                        var json1 = JsonConvert.DeserializeObject(results);
+                        var json = JsonConvert.SerializeObject(json1);
+                        //  var jss = new JavaScriptSerializer();
+                        // var dict = jss.Deserialize<dynamic>(results);
+                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+
+                                if ((respchk.StatusCode == HttpStatusCode.OK) || (respchk.StatusCode == HttpStatusCode.Created))
+                                {
+                                    var apiresp = respchk.Content;
+                                    dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                                    var results = "{'status':'" + respout + "','statuscode':'RDT'}";
+                                    var json1 = JsonConvert.DeserializeObject(results);
+                                    var json = JsonConvert.SerializeObject(json1);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    var error_decribe = "Something Went Wrong";
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                    var json1 = JsonConvert.DeserializeObject(results);
+                                    var json = JsonConvert.SerializeObject(json1);
+                                    //       var jss = new JavaScriptSerializer();
+                                    //         var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
+                                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                var json1 = JsonConvert.DeserializeObject(results);
+                                var json = JsonConvert.SerializeObject(json1);
+                                //       var jss = new JavaScriptSerializer();
+                                //         var dict = jss.Deserialize<dynamic>(results);
+                                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                            var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                            var json1 = JsonConvert.DeserializeObject(results);
+                            var json = JsonConvert.SerializeObject(json1);
+                            //       var jss = new JavaScriptSerializer();
+                            //         var dict = jss.Deserialize<dynamic>(results);
+                            return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                        var json1 = JsonConvert.DeserializeObject(results);
+                        var json = JsonConvert.SerializeObject(json1);
+                        //       var jss = new JavaScriptSerializer();
+                        //         var dict = jss.Deserialize<dynamic>(results);
+                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO API OPEN";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                    var json1 = JsonConvert.DeserializeObject(results);
+                    var json = JsonConvert.SerializeObject(json1);
+                    //       var jss = new JavaScriptSerializer();
+                    //         var dict = jss.Deserialize<dynamic>(results);
+                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO API OPEN";
+                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                var json1 = JsonConvert.DeserializeObject(results);
+                var json = JsonConvert.SerializeObject(json1);
+                //   var jss = new JavaScriptSerializer();
+                //  var dict = jss.Deserialize<dynamic>(results);
+                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult UPI_SenderdetailsPPI(string senderno)
+        {
+            var check = "OK"; var errormsg = "";
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    string userid = User.Identity.GetUserId();
+                    var remdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Dealer_Details.Where(aa => aa.DealerId == remdetails.DealerId).SingleOrDefault();
+                    if (dlmdetails.moneysts == true)
+                    {
+                        if (remdetails.moneysts == true)
+                        {
+                            var checkfreeservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault();
+                            if (checkfreeservice.IsFree == false)
+                            {
+                                var servicecheck = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (servicecheck != null)
+                                {
+                                    var expdate = servicecheck.ExpiryDate;
+                                    var currentdate = DateTime.Now;
+                                    if (expdate <= currentdate)
+                                    {
+                                        check = "NOTOK";
+                                        errormsg = "Account Transfer Service is Expired.";
+                                    }
+                                }
+                                else
+                                {
+                                    check = "NOTOK";
+                                    errormsg = "Firstlly Purchase this Service.";
+                                }
+                            }
+                            if (check == "OK")
+                            {
+                                VastBazaar cb = new VastBazaar();
+                                var tokenapi = Responsetoken.gettoken();
+                                var responseall = cb.Remitter_details_UPI(senderno, tokenapi);
+                                var responsechk = responseall.Content.ToString();
+                                var responsecode1 = responseall.StatusCode.ToString();
+                                if (responsecode1 == "OK")
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    var respcode = json.Content.ResponseCode.ToString();
+                                    var ADDINFO = json.Content.ADDINFO;
+                                    var addinforesp = JsonConvert.SerializeObject(ADDINFO);
+                                    var results = new
+                                    {
+                                        Response = addinforesp,
+                                        statuscode = "TXN"
+                                    };
+                                    return Json(results, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    var result = new
+                                    {
+                                        Response = "Some Error Occer",
+                                        statuscode = "ERR"
+                                    };
+                                    return Json(result, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var result = new
+                                {
+                                    Response = errormsg,
+                                    statuscode = "ERR"
+                                };
+                                return Json(result, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var result = new
+                            {
+                                Response = "Money Status Off",
+                                statuscode = "ERR"
+                            };
+                            return Json(result, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var result = new
+                        {
+                            Response = "Money Status Off, Contact Distributor OR Customer Care.",
+                            statuscode = "ERR"
+                        };
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var result = new
+                    {
+                        Response = "NO API OPEN",
+                        statuscode = "ERR"
+                    };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var result = new
+                {
+                    Response = "NO API OPEN",
+                    statuscode = "ERR"
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Wallet_SenderdetailsPPI(string senderno)
+        {
+            var check = "OK"; var errormsg = "";
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    string userid = User.Identity.GetUserId();
+                    var remdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Dealer_Details.Where(aa => aa.DealerId == remdetails.DealerId).SingleOrDefault();
+                    if (dlmdetails.moneysts == true)
+                    {
+                        if (remdetails.moneysts == true)
+                        {
+                            var checkfreeservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault();
+                            if (checkfreeservice.IsFree == false)
+                            {
+                                var servicecheck = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (servicecheck != null)
+                                {
+                                    var expdate = servicecheck.ExpiryDate;
+                                    var currentdate = DateTime.Now;
+                                    if (expdate <= currentdate)
+                                    {
+                                        check = "NOTOK";
+                                        errormsg = "Account Transfer Service is Expired.";
+                                    }
+                                }
+                                else
+                                {
+                                    check = "NOTOK";
+                                    errormsg = "Firstlly Purchase this Service.";
+                                }
+                            }
+                            if (check == "OK")
+                            {
+                                VastBazaar cb = new VastBazaar();
+                                var tokenapi = Responsetoken.gettoken();
+                                var responseall = cb.Remitter_details_Wallet(senderno, tokenapi);
+                                var responsechk = responseall.Content.ToString();
+                                var responsecode1 = responseall.StatusCode.ToString();
+                                if (responsecode1 == "OK")
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    var respcode = json.Content.ResponseCode.ToString();
+                                    var ADDINFO = json.Content.ADDINFO;
+                                    var addinforesp = JsonConvert.SerializeObject(ADDINFO);
+                                    var results = new
+                                    {
+                                        Response = addinforesp,
+                                        statuscode = "TXN"
+                                    };
+                                    return Json(results, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    var result = new
+                                    {
+                                        Response = "Some Error Occer",
+                                        statuscode = "ERR"
+                                    };
+                                    return Json(result, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var result = new
+                                {
+                                    Response = errormsg,
+                                    statuscode = "ERR"
+                                };
+                                return Json(result, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var result = new
+                            {
+                                Response = "Money Status Off",
+                                statuscode = "ERR"
+                            };
+                            return Json(result, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var result = new
+                        {
+                            Response = "Money Status Off, Contact Distributor OR Customer Care.",
+                            statuscode = "ERR"
+                        };
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var result = new
+                    {
+                        Response = "NO API OPEN",
+                        statuscode = "ERR"
+                    };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var result = new
+                {
+                    Response = "NO API OPEN",
+                    statuscode = "ERR"
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult InsertRem_MposIDPPI(string mposmarchantid)
+        {
+            var RetailerID = User.Identity.GetUserId();
+            var result = db.Retailer_Details.Where(x => x.RetailerId == RetailerID).SingleOrDefault();
+            if (result != null)
+            {
+                if (result.PSAStatus == "Y" && result.AadhaarStatus == "Y" && result.ShopwithSalfieStatus == "Y" && result.pancardPath != null && result.aadharcardPath != null && result.ShopwithSalfie != null)
+                {
+                    string mposid = result.PartnerID;
+                    if (string.IsNullOrEmpty(mposid))
+                    {
+                        result.PartnerID = mposmarchantid;
+                        db.SaveChanges();
+                        return Json("success", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("failed", JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json("KYCDue", JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json("failed", JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Register_benPPI(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname)
+        {
+            try
+            {
+                var RetailerID = User.Identity.GetUserId();
+                ifsccode = ifsccode.ToUpper();
+                var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
+                var reciep_mobile = mob;
+                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "PAYOUT" || aa.catagory == "DMT")).SingleOrDefault();
+                if (apinm != null)
+                {
+                    if (apinm.api_name == "VASTWEB")
+                    {
+                        VastBazaar cb = new VastBazaar();
+                        var responsechk = "";
+                        var responsecode1 = "";
+                        var tokn = Responsetoken.gettoken();
+                        var responseall = cb.Beneficiary_register("", benname, senderno, ifsccode, account, tokn, originalifsccode);
+                        responsechk = responseall.Content.ToString();
+                        responsecode1 = responseall.StatusCode.ToString();
+                        if (responsecode1 == "OK")
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            var respcode = json.Content.ResponseCode.ToString();
+                            var ADDINFO = json.Content.ADDINFO;
+                            var stscode = ADDINFO.statuscode;
+                            var results = JsonConvert.SerializeObject(ADDINFO);
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            var error = json.error.ToString();
+                            var error_decribe = json["error_description"].ToString();
+                            var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (apinm.api_name == "RADIANT")
+                    {
+                        var userid = User.Identity.GetUserId();
+                        var radiantauthchk = db.radiantauths.SingleOrDefault();
+                        if (radiantauthchk != null)
+                        {
+                            var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                            if (radiantresponse != null)
+                            {
+                                if (radiantresponse.Sts == "Approved")
+                                {
+                                    Radiantdmt dmt = new Radiantdmt();
+                                    var tokenchk = db.radianttokens.SingleOrDefault();
+                                    if (tokenchk == null)
+                                    {
+                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    }
+                                    else
+                                    {
+                                        radianttoken = tokenchk.accessToken;
+                                        radianagentid = tokenchk.agentID;
+                                    }
+                                    var responseinfo = dmt.AddBeneficiary(radianagentid, radianttoken, senderno, benname, account, bankname, ifsccode, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                    if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                    {
+                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                        responseinfo = dmt.AddBeneficiary(radianagentid, radianttoken, senderno, benname, account, bankname, ifsccode, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                    }
+
+                                    if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                    {
+                                        dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                        if (json.success == true)
+                                        {
+                                            string message = json.message;
+                                            var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                            var jss = new JavaScriptSerializer();
+                                            var dict = jss.Deserialize<dynamic>(results);
+                                            return Json(dict, JsonRequestBehavior.AllowGet);
+                                        }
+                                        else
+                                        {
+                                            var error = "";
+                                            try
+                                            {
+                                                error = json.errors.senderno[0].ToString();
+                                            }
+                                            catch { }
+                                            if (string.IsNullOrEmpty(error))
+                                            {
+                                                try
+                                                {
+                                                    error = json.message;
+                                                }
+                                                catch { }
+                                            }
+                                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                            var jss = new JavaScriptSerializer();
+                                            var dict = jss.Deserialize<dynamic>(results);
+                                            return Json(dict, JsonRequestBehavior.AllowGet);
+                                        }
+                                    }
+
+                                    else
+                                    {
+                                        var error = "Something Went Wrong, Try After Some Time";
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var error = "EKYC is pending. Please wait for approval.";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                                var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error = "Authentication is required! Please contact the administrator.";
+                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "NO Api Open";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message.ToString();
+                var results = "{'Message':'" + msg + "','Response':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Register_senderPPI(string senderno, string name)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var token = Responsetoken.gettoken();
+                    var responseall = cb.Remitter_Register(senderno, name, "332311", token);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var userid = User.Identity.GetUserId();
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+                                if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                    if (json.success == true)
+                                    {
+                                        string message = json.message;
+                                        var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        var error = "";
+                                        try
+                                        {
+                                            error = json.errors.senderno[0].ToString();
+                                        }
+                                        catch { }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.errors.sendername[0].ToString();
+                                            }
+                                            catch { }
+                                        }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.message;
+                                            }
+                                            catch { }
+                                        }
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+
+                                else
+                                {
+                                    var error = "Something Went Wrong, Try After Some Time";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error = "EKYC is pending. Please wait for approval.";
+                                var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Otp_verify_senderPPI(string senderno, string otp, string benid)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var responsechk = "";
+                    var responsecode1 = "";
+                    var tokn = Responsetoken.gettoken();
+                    var responseall = cb.Beneficiary_register_Validate(benid, benid, otp, tokn, senderno);
+                    responsechk = responseall.Content.ToString();
+                    responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        //  var error = json.error.ToString();
+                        // var error_decribe = json["error_description"].ToString();
+                        var Status = "Some Techincal Issue";
+                        var results = "{'status':'" + Status + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var userid = User.Identity.GetUserId();
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var responseinfo = dmt.Verifyotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    responseinfo = dmt.Verifyotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+                                if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                    if (json.success == true)
+                                    {
+                                        string message = json.message;
+                                        var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        var error = "";
+                                        try
+                                        {
+                                            error = json.errors.senderno[0].ToString();
+                                        }
+                                        catch { }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.message;
+                                            }
+                                            catch { }
+                                        }
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+
+                                else
+                                {
+                                    var error = "Something Went Wrong, Try After Some Time";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
+                                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                            var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Delete_benPPI(string benid, string mobile)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var tokn = Responsetoken.gettoken();
+                    var responseall = cb.Beneficiary_Delete(benid, "", tokn, mobile);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var userid = User.Identity.GetUserId();
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var responseinfo = dmt.DeleteBeneficiary(radianagentid, radianttoken, benid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    responseinfo = dmt.DeleteBeneficiary(radianagentid, radianttoken, benid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+                                if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                    if (json.success == true)
+                                    {
+                                        string message = json.message;
+                                        var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        var error = "";
+                                        try
+                                        {
+                                            error = json.errors.id[0].ToString();
+                                        }
+                                        catch { }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.message;
+                                                error = error.Replace("'", "");
+                                            }
+                                            catch { }
+                                        }
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var error = "Something Went Wrong, Try After Some Time";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error = "EKYC is pending. Please wait for approval.";
+                                var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult Delete_ben1PPI(string benid, string mobile)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var tokn = Responsetoken.gettoken();
+                    var responseall = cb.Beneficiary_Delete1(benid, "", tokn, mobile);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Delete_ben_upiPPI(string id)
+        {
+            VastBazaar cb = new VastBazaar();
+            var tokn = Responsetoken.gettoken();
+            var responseall = cb.Beneficiary_Delete_UPI(id, tokn);
+            var responsechk = responseall.Content.ToString();
+            var responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var ADDINFO = json.Content.ADDINFO;
+                var resspp = JsonConvert.SerializeObject(ADDINFO);
+                return Json(resspp, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var ADDINFO = json.Content.ADDINFO;
+                var resspp = JsonConvert.SerializeObject(ADDINFO);
+                return Json(resspp, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Delete_ben_walletPPI(string id)
+        {
+            VastBazaar cb = new VastBazaar();
+            var tokn = Responsetoken.gettoken();
+            var responseall = cb.Beneficiary_Delete_wallet(id, tokn);
+            var responsechk = responseall.Content.ToString();
+            var responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var ADDINFO = json.Content.ADDINFO;
+                var resspp = JsonConvert.SerializeObject(ADDINFO);
+                return Json(resspp, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var ADDINFO = json.Content.ADDINFO;
+                var resspp = JsonConvert.SerializeObject(ADDINFO);
+                return Json(resspp, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Verify_accountPPI(string NUMBER, string account, string benIFSC, string bankname, string uniqueid, string idno, string name)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "ACCOUNT VERIFY")).SingleOrDefault();
+            if (apinm != null)
+            {
+                bankname = HttpUtility.UrlDecode(bankname);
+                name = HttpUtility.UrlDecode(name);
+                string userid = User.Identity.GetUserId();
+                // get mac address
+                var macaddress = GetMACAddress();
+                //Ip current Ip Address
+                var Ipaddress = GetComputer_InternetIP();
+                moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
+                string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+                var tokn = Responsetoken.gettoken();
+                var requestsend = ""; var apiname = "";
+                if (apinm.api_name == "RADIANT")
+                {
+                    requestsend = "https://aceneobank.dev.acepe.co.in/apiService/dmt/VerifyBeneficiar?agent_id=" + radianagentid + "&mobileno=" + NUMBER + "&name=" + name + "&accountno=" + account + "&bankname=" + bankname + "&ifsccode=" + benIFSC + "&id=" + idno + "";
+                    apiname = "RADIANT";
+                }
+                else if (apinm.api_name == "INSTANTPAY")
+                {
+
+                    var req = new
+                    {
+
+                        payee = new
+                        {
+
+                            accountNumber = account,
+                            bankIfsc = benIFSC
+                        },
+
+                        externalRef = CommonTranid,
+                        consent = "Y",
+                        pennyDrop = "YES",
+                        latitude = "20.5936",
+                        longitude = "78.9628",
+
+                    };
+
+                    var body = JsonConvert.SerializeObject(req);
+                    apiname = "INSTANTPAY";
+                }
+                else
+                {
+                    requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + benIFSC + "\",\"agentid\":\"" + CommonTranid + "\"}";
+                    apiname = "VASTWEB";
+                }
+                System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var ch = db.Money_transfer_by_paytm(userid, 0, 0, NUMBER, account, bankname, benIFSC, CommonTranid, CommonTranid, "IMPS_VERIFY", "ONLINE", "N", requestsend, apiname, Ipaddress, macaddress, "", 0, 0, "DMT2", "", "", uniqueid, outputchk).Single().msg;
+                if (ch == "RETAILERLOW")
+                {
+                    var results = "{'status':'Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "DEALERLOW")
+                {
+                    var results = "{'status':'Dealer Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "MASTERLOW")
+                {
+                    var results = "{'status':'Master Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "STATUSDOWN")
+                {
+                    var results = "{'status':'Your Account Transfer status inactive please contact to Admin','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "CAPPINGLOW")
+                {
+                    var results = "{'status':'Capping Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                //else if (checks.status == false)
+                //{
+                else
+                {
+                    bool isCompletedSuccessfully = false;
+                    Task<IRestResponse> task = null;
+                    if (apiname == "VASTWEB")
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        VastBazaar cb1 = new VastBazaar();
+                        task = Task.Run(() =>
+                        {
+                            return cb1.Beneficiary_Account_verify(NUMBER, account, benIFSC, CommonTranid, tokn, bankname);
+                        });
+                        isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                        if (isCompletedSuccessfully == true)
+                        {
+                            var responsechk = task.Result.Content.ToString();
+                            var responsecode1 = task.Result.StatusCode.ToString();
+                            if (responsecode1 == "OK")
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                var respcode = json.Content.ResponseCode.ToString();
+                                var ADDINFO = json.Content.ADDINFO;
+                                var stscode = ADDINFO.statuscode;
+                                if (stscode == "TXN")
+                                {
+                                    var receiverName = ADDINFO.data.benename.ToString();
+                                    var bankrefno = ADDINFO.data.bankrefno.ToString();
+                                    //money transfer update procedure
+                                    db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+                                    var ADDINFO1 = new
+                                    {
+                                        statuscode = stscode,
+                                        status = ADDINFO.status,
+                                        data = new
+                                        {
+                                            payee = new
+                                            {
+                                                name = ADDINFO.data.benename
+                                            }
+                                        }
+                                    };
+                                    var ser = JsonConvert.SerializeObject(ADDINFO1);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                                else if (stscode == "TUP")
+                                {
+                                    var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(results1);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+                                    var ADDINFO1 = new
+                                    {
+                                        statuscode = stscode,
+                                        status = ADDINFO.status,
+                                        data = new
+                                        {
+                                            payee = new
+                                            {
+                                                name = ADDINFO.data.benename
+                                            }
+                                        }
+                                    };
+                                    var ser = JsonConvert.SerializeObject(ADDINFO1);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                if (json == "Invalid response..")
+                                {
+                                    var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", json, "", 0, 0);
+                                    var error = json.error.ToString();
+                                    var error_decribe = json["error_description"].ToString();
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results1);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (apiname == "RADIANT")
+                    {
+                        var radiantauthchk = db.radiantauths.SingleOrDefault();
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        System.Threading.Thread.Sleep(1000);
+                        Radiantdmt dmt = new Radiantdmt();
+                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+
+                        var respchkkk = dmt.VerifyBeneficiary(radianagentid, radianttoken, NUMBER, name, account, bankname, benIFSC, idno, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                        if (respchkkk.StatusCode == HttpStatusCode.NotAcceptable)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            respchkkk = dmt.VerifyBeneficiary(radianagentid, radianttoken, NUMBER, name, account, bankname, benIFSC, idno, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                        }
+                        if (respchkkk.StatusCode == HttpStatusCode.Created || respchkkk.StatusCode == HttpStatusCode.OK)
+                        {
+                            dynamic respchk = JsonConvert.DeserializeObject(respchkkk.Content);
+                            bool status = respchk.success;
+                            if (status == true)
+                            {
+                                string message = respchk.data.beneName;
+                                string bankrefno = "";
+                                try
+                                {
+                                    bankrefno = respchk.clientReferenceId;
+                                }
+                                catch { }
+                                db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, message, respchkkk.Content, "", 0, 0);
+                                var respmsg = new
+                                {
+                                    status = message,
+                                    statuscode = "RADIT"
+                                };
+                                var ser = JsonConvert.SerializeObject(respmsg);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                                //var results1 = "{'status':''++'','statuscode':'RADIT'}";
+                                //var jss1 = new JavaScriptSerializer();
+                                //var dict1 = jss1.Deserialize<dynamic>(results1);
+                                //return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                var message = "";
+                                try
+                                {
+                                    message = respchk.errors.mobileno[0].ToString();
+                                }
+                                catch { }
+                                if (string.IsNullOrEmpty(message))
+                                {
+                                    try
+                                    {
+                                        message = respchk.message;
+                                    }
+                                    catch { }
+                                }
+                                db.Money_transfer_update_new_new(CommonTranid, "FAILED", message, "", respchkkk.Content, "", 0, 0);
+                                var respmsg = new
+                                {
+                                    status = message,
+                                    statuscode = "RADIT"
+                                };
+                                var ser = JsonConvert.SerializeObject(respmsg);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            db.Money_transfer_update_new_new(CommonTranid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", task.Result.Content, "", 0, 0);
+                            var results1 = "{'status':'Please Try After Sometime','statuscode':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results1);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (apiname == "INSTANTPAY")
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        task = Task.Run(() =>
+                        {
+                            return payout_pool2(NUMBER, account, benIFSC, CommonTranid);
+                        });
+                        isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                        if (isCompletedSuccessfully == true)
+                        {
+                            var responsechk = task.Result.Content.ToString();
+                            //InstantPayLog("responsechk " + responsechk);
+                            //InstantPayLog2("responsechk " + responsechk);
+                            var responsecode1 = task.Result.StatusCode.ToString();
+                            //InstantPayLog("Response Content: " + responsecode1);
+                            //InstantPayLog2("Response Content: " + responsecode1);
+                            if (responsecode1 == "OK")
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                //InstantPayLog("Response Content: " + "Yes");
+                                //InstantPayLog2("Response Content: " + "Yes");
+                                //InstantPayLog("ADDINFO: " + json);
+                                //InstantPayLog2("ADDINFO: " + json);
+                                var ADDINFO = json;
+
+                                var stscode = ADDINFO.statuscode;
+                                // InstantPayLog("ADDINFO: " + ADDINFO);
+                                // InstantPayLog2("ADDINFO: " + ADDINFO);
+                                // InstantPayLog("stscode: " + stscode);
+                                // InstantPayLog2("stscode: " + stscode);
+                                if (stscode == "TXN")
+                                {
+                                    var receiverName = ADDINFO.data.payee.name.ToString();
+                                    var bankrefno = ADDINFO.data.txnReferenceId.ToString();
+                                    //  InstantPayLog("receiverName: " + receiverName);
+                                    //  InstantPayLog2("receiverName: " + receiverName);
+                                    //  InstantPayLog("bankrefno: " + bankrefno);
+                                    //  InstantPayLog2("bankrefno: " + bankrefno);
+                                    //money transfer update procedure
+                                    db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+                                    var ser = JsonConvert.SerializeObject(ADDINFO);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                                //else if (stscode == "TUP")
+                                //{
+                                //    string sts = "PENDING"; string bankrrn = ""; string nm = "";
+                                //    try
+                                //    {
+                                //        Thread.Sleep(2000);
+                                //        var resp = updatechk(CommonTranid); // 1st
+                                //                                            //    string ser = JsonConvert.SerializeObject(resp);
+                                //        dynamic respp = JsonConvert.DeserializeObject(resp);
+                                //        sts = respp.Content.ADDINFO.status;
+                                //        bankrrn = respp.Content.ADDINFO.bankrrn;
+                                //        nm = respp.Content.ADDINFO.name;
+
+                                //        if (sts.ToUpper() == "PENDING")
+                                //        {
+                                //            Thread.Sleep(2000);
+                                //            resp = updatechk(CommonTranid); // 2nd
+                                //                                            //  ser = JsonConvert.SerializeObject(resp);
+                                //            respp = JsonConvert.DeserializeObject(resp);
+                                //            sts = respp.Content.ADDINFO.status;
+                                //            bankrrn = respp.Content.ADDINFO.bankrrn;
+                                //            nm = respp.Content.ADDINFO.name;
+                                //            if (sts.ToUpper() == "PENDING")
+                                //            {
+                                //                Thread.Sleep(2000);
+                                //                resp = updatechk(CommonTranid); // 3rd
+                                //                                                //  ser = JsonConvert.SerializeObject(resp);
+                                //                respp = JsonConvert.DeserializeObject(resp);
+                                //                sts = respp.Content.ADDINFO.status;
+                                //                bankrrn = respp.Content.ADDINFO.bankrrn;
+                                //                nm = respp.Content.ADDINFO.name;
+                                //                if (sts.ToUpper() == "PENDING")
+                                //                {
+                                //                    Thread.Sleep(2000);
+                                //                    resp = updatechk(CommonTranid); // 4th
+                                //                                                    //  ser = JsonConvert.SerializeObject(resp);
+                                //                    respp = JsonConvert.DeserializeObject(resp);
+                                //                    sts = respp.Content.ADDINFO.status;
+                                //                    bankrrn = respp.Content.ADDINFO.bankrrn;
+                                //                    nm = respp.Content.ADDINFO.name;
+                                //                }
+                                //            }
+                                //        }
+                                //    }
+                                //    catch { }
+
+                                //    if (sts.ToUpper() == "SUCCESS")
+                                //    {
+                                //        string receiverName = nm; string bankrefno = bankrrn;
+                                //        //money transfer update procedure
+                                //        db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+                                //        var ser = JsonConvert.SerializeObject(ADDINFO);
+                                //        var jss1 = new JavaScriptSerializer();
+                                //        var dict1 = jss1.Deserialize<dynamic>(ser);
+                                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                //    }
+                                //    else if (sts.ToUpper() == "FAILED")
+                                //    {
+                                //        db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+                                //        var ser = JsonConvert.SerializeObject(ADDINFO);
+                                //        var jss1 = new JavaScriptSerializer();
+                                //        var dict1 = jss1.Deserialize<dynamic>(ser);
+                                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                //    }
+                                //    else
+                                //    {
+                                //        var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                                //        var jss1 = new JavaScriptSerializer();
+                                //        var dict1 = jss1.Deserialize<dynamic>(results1);
+                                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                //    }
+                                //}
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+                                    var ser = JsonConvert.SerializeObject(ADDINFO);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+
+
+                                if (json == "Invalid response..")
+                                {
+                                    var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", json, "", 0, 0);
+                                    var error = json.error.ToString();
+                                    var error_decribe = json["error_description"].ToString();
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string sts = "PENDING"; string bankrrn = ""; string nm = "";
+                            try
+                            {
+                                Thread.Sleep(2000);
+                                var resp = updatechk(CommonTranid); // 1st
+                                                                    //  string ser = JsonConvert.SerializeObject(resp);
+                                dynamic respp = JsonConvert.DeserializeObject(resp);
+                                sts = respp.Content.ADDINFO.status;
+                                bankrrn = respp.Content.ADDINFO.bankrrn;
+                                nm = respp.Content.ADDINFO.name;
+
+                                if (sts.ToUpper() == "PENDING")
+                                {
+                                    Thread.Sleep(2000);
+                                    resp = updatechk(CommonTranid); // 2nd
+                                                                    //   ser = JsonConvert.SerializeObject(resp);
+                                    respp = JsonConvert.DeserializeObject(resp);
+                                    sts = respp.Content.ADDINFO.status;
+                                    bankrrn = respp.Content.ADDINFO.bankrrn;
+                                    nm = respp.Content.ADDINFO.name;
+                                    if (sts.ToUpper() == "PENDING")
+                                    {
+                                        Thread.Sleep(2000);
+                                        resp = updatechk(CommonTranid); // 3rd
+                                                                        //  ser = JsonConvert.SerializeObject(resp);
+                                        respp = JsonConvert.DeserializeObject(resp);
+                                        sts = respp.Content.ADDINFO.status;
+                                        bankrrn = respp.Content.ADDINFO.bankrrn;
+                                        nm = respp.Content.ADDINFO.name;
+                                        if (sts.ToUpper() == "PENDING")
+                                        {
+                                            Thread.Sleep(2000);
+                                            resp = updatechk(CommonTranid); // 4th
+                                                                            //ser = JsonConvert.SerializeObject(resp);
+                                            respp = JsonConvert.DeserializeObject(resp);
+                                            sts = respp.Content.ADDINFO.status;
+                                            bankrrn = respp.Content.ADDINFO.bankrrn;
+                                            nm = respp.Content.ADDINFO.name;
+                                        }
+                                    }
+                                }
+                            }
+                            catch { }
+
+                            if (sts.ToUpper() == "SUCCESS")
+                            {
+                                var msgchk = new
+                                {
+                                    statuscode = "TXN",
+                                    status = "Success",
+                                    Local = "Online",
+                                    data = new
+                                    {
+                                        benename = nm
+                                    }
+                                };
+                                string receiverName = nm; string bankrefno = bankrrn;
+                                //money transfer update procedure
+                                db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, msgchk.ToString(), "", 0, 0);
+                                var ser = JsonConvert.SerializeObject(msgchk);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                            else if (sts.ToUpper() == "FAILED")
+                            {
+                                var msgchk = new
+                                {
+                                    statuscode = "TTP",
+                                    status = bankrrn,
+                                    Local = "Online",
+                                    data = new
+                                    {
+                                        benename = nm
+                                    }
+                                };
+                                db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", msgchk.ToString(), "", 0, 0);
+                                var ser = JsonConvert.SerializeObject(msgchk);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results1);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var results1 = "{'status':'No API OPEN','statuscode':'Pending'}";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results1);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            else
+            {
+                var results1 = "{'status':'No Api Open','statuscode':'Failed'}";
+                var jss1 = new JavaScriptSerializer();
+                var dict1 = jss1.Deserialize<dynamic>(results1);
+                return Json(dict1, JsonRequestBehavior.AllowGet);
+            }
+            //}
+            //else
+            //{
+            //    var intantpaychk = db.Instantpay_auth.SingleOrDefault();
+            //    if (intantpaychk != null)
+            //    {
+            //        System.Threading.Thread.Sleep(1000);
+            //        VastBazaar cb1 = new VastBazaar();
+            //        Task<IRestResponse> task = Task.Run(() =>
+            //        {
+            //            return payout_pool2(NUMBER, account, benIFSC, CommonTranid, intantpaychk.authcode, intantpaychk.clientid, intantpaychk.clientsecret, intantpaychk.endpointip);
+            //        });
+            //        bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+            //        if (isCompletedSuccessfully == true)
+            //        {
+            //            var responsechk = task.Result.Content.ToString();
+            //            //InstantPayLog("responsechk " + responsechk);
+            //            //InstantPayLog2("responsechk " + responsechk);
+            //            var responsecode1 = task.Result.StatusCode.ToString();
+            //            //InstantPayLog("Response Content: " + responsecode1);
+            //            //InstantPayLog2("Response Content: " + responsecode1);
+            //            if (responsecode1 == "OK")
+            //            {
+            //                dynamic json = JsonConvert.DeserializeObject(responsechk);
+            //                //InstantPayLog("Response Content: " + "Yes");
+            //                //InstantPayLog2("Response Content: " + "Yes");
+            //                //InstantPayLog("ADDINFO: " + json);
+            //                //InstantPayLog2("ADDINFO: " + json);
+            //                var ADDINFO = json;
+            //                var stscode = ADDINFO.statuscode;
+            //                // InstantPayLog("ADDINFO: " + ADDINFO);
+            //                // InstantPayLog2("ADDINFO: " + ADDINFO);
+            //                // InstantPayLog("stscode: " + stscode);
+            //                // InstantPayLog2("stscode: " + stscode);
+            //                if (stscode == "TXN")
+            //                {
+            //                    var receiverName = ADDINFO.data.payee.name.ToString();
+            //                    var bankrefno = ADDINFO.data.txnReferenceId.ToString();
+            //                    //  InstantPayLog("receiverName: " + receiverName);
+            //                    //  InstantPayLog2("receiverName: " + receiverName);
+            //                    //  InstantPayLog("bankrefno: " + bankrefno);
+            //                    //  InstantPayLog2("bankrefno: " + bankrefno);
+            //                    //money transfer update procedure
+            //                    db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+            //                    var ser = JsonConvert.SerializeObject(ADDINFO);
+            //                    var jss1 = new JavaScriptSerializer();
+            //                    var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                    return Json(dict1, JsonRequestBehavior.AllowGet);
+            //                }
+            //                //else if (stscode == "TUP")
+            //                //{
+            //                //    string sts = "PENDING"; string bankrrn = ""; string nm = "";
+            //                //    try
+            //                //    {
+            //                //        Thread.Sleep(2000);
+            //                //        var resp = updatechk(CommonTranid); // 1st
+            //                //                                            //    string ser = JsonConvert.SerializeObject(resp);
+            //                //        dynamic respp = JsonConvert.DeserializeObject(resp);
+            //                //        sts = respp.Content.ADDINFO.status;
+            //                //        bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                //        nm = respp.Content.ADDINFO.name;
+            //                //        if (sts.ToUpper() == "PENDING")
+            //                //        {
+            //                //            Thread.Sleep(2000);
+            //                //            resp = updatechk(CommonTranid); // 2nd
+            //                //                                            //  ser = JsonConvert.SerializeObject(resp);
+            //                //            respp = JsonConvert.DeserializeObject(resp);
+            //                //            sts = respp.Content.ADDINFO.status;
+            //                //            bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                //            nm = respp.Content.ADDINFO.name;
+            //                //            if (sts.ToUpper() == "PENDING")
+            //                //            {
+            //                //                Thread.Sleep(2000);
+            //                //                resp = updatechk(CommonTranid); // 3rd
+            //                //                                                //  ser = JsonConvert.SerializeObject(resp);
+            //                //                respp = JsonConvert.DeserializeObject(resp);
+            //                //                sts = respp.Content.ADDINFO.status;
+            //                //                bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                //                nm = respp.Content.ADDINFO.name;
+            //                //                if (sts.ToUpper() == "PENDING")
+            //                //                {
+            //                //                    Thread.Sleep(2000);
+            //                //                    resp = updatechk(CommonTranid); // 4th
+            //                //                                                    //  ser = JsonConvert.SerializeObject(resp);
+            //                //                    respp = JsonConvert.DeserializeObject(resp);
+            //                //                    sts = respp.Content.ADDINFO.status;
+            //                //                    bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                //                    nm = respp.Content.ADDINFO.name;
+            //                //                }
+            //                //            }
+            //                //        }
+            //                //    }
+            //                //    catch { }
+            //                //    if (sts.ToUpper() == "SUCCESS")
+            //                //    {
+            //                //        string receiverName = nm; string bankrefno = bankrrn;
+            //                //        //money transfer update procedure
+            //                //        db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+            //                //        var ser = JsonConvert.SerializeObject(ADDINFO);
+            //                //        var jss1 = new JavaScriptSerializer();
+            //                //        var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+            //                //    }
+            //                //    else if (sts.ToUpper() == "FAILED")
+            //                //    {
+            //                //        db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+            //                //        var ser = JsonConvert.SerializeObject(ADDINFO);
+            //                //        var jss1 = new JavaScriptSerializer();
+            //                //        var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+            //                //    }
+            //                //    else
+            //                //    {
+            //                //        var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+            //                //        var jss1 = new JavaScriptSerializer();
+            //                //        var dict1 = jss1.Deserialize<dynamic>(results1);
+            //                //        return Json(dict1, JsonRequestBehavior.AllowGet);
+            //                //    }
+            //                //}
+            //                else
+            //                {
+            //                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+            //                    var ser = JsonConvert.SerializeObject(ADDINFO);
+            //                    var jss1 = new JavaScriptSerializer();
+            //                    var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                    return Json(dict1, JsonRequestBehavior.AllowGet);
+            //                }
+            //            }
+            //            else
+            //            {
+            //                dynamic json = JsonConvert.DeserializeObject(responsechk);
+            //                if (json == "Invalid response..")
+            //                {
+            //                    var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+            //                    var jss = new JavaScriptSerializer();
+            //                    var dict = jss.Deserialize<dynamic>(results);
+            //                    return Json(dict, JsonRequestBehavior.AllowGet);
+            //                }
+            //                else
+            //                {
+            //                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", json, "", 0, 0);
+            //                    var error = json.error.ToString();
+            //                    var error_decribe = json["error_description"].ToString();
+            //                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+            //                    var jss = new JavaScriptSerializer();
+            //                    var dict = jss.Deserialize<dynamic>(results);
+            //                    return Json(dict, JsonRequestBehavior.AllowGet);
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+            //            string sts = "PENDING"; string bankrrn = ""; string nm = "";
+            //            try
+            //            {
+            //                Thread.Sleep(2000);
+            //                var resp = updatechk(CommonTranid); // 1st
+            //                                                    //  string ser = JsonConvert.SerializeObject(resp);
+            //                dynamic respp = JsonConvert.DeserializeObject(resp);
+            //                sts = respp.Content.ADDINFO.status;
+            //                bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                nm = respp.Content.ADDINFO.name;
+            //                if (sts.ToUpper() == "PENDING")
+            //                {
+            //                    Thread.Sleep(2000);
+            //                    resp = updatechk(CommonTranid); // 2nd
+            //                                                    //   ser = JsonConvert.SerializeObject(resp);
+            //                    respp = JsonConvert.DeserializeObject(resp);
+            //                    sts = respp.Content.ADDINFO.status;
+            //                    bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                    nm = respp.Content.ADDINFO.name;
+            //                    if (sts.ToUpper() == "PENDING")
+            //                    {
+            //                        Thread.Sleep(2000);
+            //                        resp = updatechk(CommonTranid); // 3rd
+            //                                                        //  ser = JsonConvert.SerializeObject(resp);
+            //                        respp = JsonConvert.DeserializeObject(resp);
+            //                        sts = respp.Content.ADDINFO.status;
+            //                        bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                        nm = respp.Content.ADDINFO.name;
+            //                        if (sts.ToUpper() == "PENDING")
+            //                        {
+            //                            Thread.Sleep(2000);
+            //                            resp = updatechk(CommonTranid); // 4th
+            //                                                            //ser = JsonConvert.SerializeObject(resp);
+            //                            respp = JsonConvert.DeserializeObject(resp);
+            //                            sts = respp.Content.ADDINFO.status;
+            //                            bankrrn = respp.Content.ADDINFO.bankrrn;
+            //                            nm = respp.Content.ADDINFO.name;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //            catch { }
+            //            if (sts.ToUpper() == "SUCCESS")
+            //            {
+            //                var msgchk = new
+            //                {
+            //                    statuscode = "TXN",
+            //                    status = "Success",
+            //                    Local = "Online",
+            //                    data = new
+            //                    {
+            //                        benename = nm
+            //                    }
+            //                };
+            //                string receiverName = nm; string bankrefno = bankrrn;
+            //                //money transfer update procedure
+            //                db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, msgchk.ToString(), "", 0, 0);
+            //                var ser = JsonConvert.SerializeObject(msgchk);
+            //                var jss1 = new JavaScriptSerializer();
+            //                var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                return Json(dict1, JsonRequestBehavior.AllowGet);
+            //            }
+            //            else if (sts.ToUpper() == "FAILED")
+            //            {
+            //                var msgchk = new
+            //                {
+            //                    statuscode = "TTP",
+            //                    status = bankrrn,
+            //                    Local = "Online",
+            //                    data = new
+            //                    {
+            //                        benename = nm
+            //                    }
+            //                };
+            //                db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", msgchk.ToString(), "", 0, 0);
+            //                var ser = JsonConvert.SerializeObject(msgchk);
+            //                var jss1 = new JavaScriptSerializer();
+            //                var dict1 = jss1.Deserialize<dynamic>(ser);
+            //                return Json(dict1, JsonRequestBehavior.AllowGet);
+            //            }
+            //            else
+            //            {
+            //                var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+            //                var jss1 = new JavaScriptSerializer();
+            //                var dict1 = jss1.Deserialize<dynamic>(results1);
+            //                return Json(dict1, JsonRequestBehavior.AllowGet);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        var results1 = "{'status':'API Auth Not Inserted','statuscode':'Pending'}";
+            //        var jss1 = new JavaScriptSerializer();
+            //        var dict1 = jss1.Deserialize<dynamic>(results1);
+            //        return Json(dict1, JsonRequestBehavior.AllowGet);
+            //    }
+            //}
+        }
+        public static IRestResponse payout_pool2PPI(string number, string accountno, string ifsccode, string agentid)
+        {
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            var client = new RestClient("https://api.instantpay.in/identity/verifyBankAccount");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Ipay-Auth-Code", "1");
+            request.AddHeader("X-Ipay-Client-Id", "YWY3OTAzYzNlM2ExZTJlOd8RsJaA5ZaXKX8VZQl0vyQ=");
+            request.AddHeader("X-Ipay-Client-Secret", "19478f95fc1f6f419bf94e3d757f0399a2f3cbb587b2425f91bfca692aff9f78");
+            request.AddHeader("X-Ipay-Endpoint-Ip", "103.182.218.4");
+            request.AddHeader("Content-Type", "application/json");
+
+            var req = new
+            {
+
+                payee = new
+                {
+
+                    accountNumber = accountno,
+                    bankIfsc = ifsccode
+                },
+
+                externalRef = agentid,
+                consent = "Y",
+                pennyDrop = "YES",
+                latitude = "20.5936",
+                longitude = "78.9628",
+
+            };
+
+            var body = JsonConvert.SerializeObject(req);
+
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            InstantPayLog("Response Content: " + response.Content);
+            InstantPayLog2("Response Content: " + response.Content);
+            return response;
+        }
+
+        [HttpPost]
+        public ActionResult Verify_account_VPAPPI(string account, string uniqueid, string NUMBER)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "ACCOUNT VERIFY").SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    string userid = User.Identity.GetUserId();
+                    // get mac address
+                    var macaddress = GetMACAddress();
+                    //Ip current Ip Address
+                    var Ipaddress = GetComputer_InternetIP();
+                    moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
+                    string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+                    var tokn = Responsetoken.gettoken();
+                    var requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"agentid\":\"" + CommonTranid + "\"}";
+                    System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                    var ch = db.Money_transfer_by_paytm(userid, 0, 0, NUMBER, account, "", "", CommonTranid, CommonTranid, "IMPS_VERIFY", "ONLINE", "N", requestsend, apinm.api_name, Ipaddress, macaddress, "", 0, 0, "DMT2", "", "", uniqueid, outputchk).Single().msg;
+                    if (ch == "RETAILERLOW")
+                    {
+                        var results = "{'status':'Remain Balance Low.','statuscode':'failure' }";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (ch == "DEALERLOW")
+                    {
+                        var results = "{'status':'Dealer Remain Balance Low.','statuscode':'failure' }";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (ch == "MASTERLOW")
+                    {
+                        var results = "{'status':'Master Remain Balance Low.','statuscode':'failure' }";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (ch == "STATUSDOWN")
+                    {
+                        var results = "{'status':'Your Account Transfer status inactive please contact to Admin','statuscode':'failure' }";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (ch == "CAPPINGLOW")
+                    {
+                        var results = "{'status':'Capping Low.','statuscode':'failure' }";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        VastBazaar cb1 = new VastBazaar();
+                        Task<IRestResponse> task = Task.Run(() =>
+                        {
+                            return cb1.Remitter_Verify_UPI(NUMBER, account, tokn, CommonTranid);
+                        });
+                        bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                        if (isCompletedSuccessfully == true)
+                        {
+                            var responsechk = task.Result.Content.ToString();
+                            var responsecode1 = task.Result.StatusCode.ToString();
+                            if (responsecode1 == "OK")
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                var respcode = json.Content.ResponseCode.ToString();
+                                var ADDINFO = json.Content.ADDINFO;
+                                var stscode = ADDINFO.statuscode;
+                                if (stscode == "TXN")
+                                {
+                                    var receiverName = ADDINFO.data.benename.ToString();
+                                    //  var bankrefno = ADDINFO.data.bankrefno.ToString();
+                                    //money transfer update procedure
+                                    db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", "", receiverName, ADDINFO.ToString(), "", 0, 0);
+                                    var ADDINFO1 = new
+                                    {
+                                        statuscode = stscode,
+                                        status = ADDINFO.status,
+                                        data = new
+                                        {
+                                            benename = ADDINFO.data.benename
+                                        }
+                                    };
+                                    var ser = JsonConvert.SerializeObject(ADDINFO1);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                                else if (stscode == "TUP")
+                                {
+                                    var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(results1);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+                                    var ADDINFO1 = new
+                                    {
+                                        statuscode = stscode,
+                                        status = ADDINFO.status,
+                                        data = new
+                                        {
+                                            payee = new
+                                            {
+                                                name = ADDINFO.data.benename
+                                            }
+                                        }
+                                    };
+                                    var ser = JsonConvert.SerializeObject(ADDINFO1);
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(ser);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                if (json == "Invalid response..")
+                                {
+                                    var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", json, "", 0, 0);
+                                    var error = json.error.ToString();
+                                    var error_decribe = json["error_description"].ToString();
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results1);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else
+                {
+                    var results = "{'status':'Not Allow','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var results = "{'status':'Not Api Open','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public static IRestResponse payout_pool2PPI(string number, string accountno, string ifsccode, string agentid, string authcode, string clientid, string clientsecret, string endpointip)
+        {
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            var client = new RestClient("https://api.instantpay.in/identity/verifyBankAccount");
+            var instantpayauth =
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Ipay-Auth-Code", authcode);
+            request.AddHeader("X-Ipay-Client-Id", clientid);
+            request.AddHeader("X-Ipay-Client-Secret", clientsecret);
+            request.AddHeader("X-Ipay-Endpoint-Ip", endpointip);
+            request.AddHeader("Content-Type", "application/json");
+            var req = new
+            {
+                payee = new
+                {
+                    accountNumber = accountno,
+                    bankIfsc = ifsccode
+                },
+                externalRef = agentid,
+                consent = "Y",
+                pennyDrop = "YES",
+                latitude = "20.5936",
+                longitude = "78.9628",
+            };
+            var body = JsonConvert.SerializeObject(req);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            InstantPayLog("Response Content: " + response.Content);
+            InstantPayLog2("Response Content: " + response.Content);
+            return response;
+        }
+        public static void InstantPayLogPPI(string strMessage, string filename = "INSTANTPAY_PAY")
+        {
+            try
+            {
+                StreamWriter log;
+                FileStream fileStream = null;
+                DirectoryInfo logDirInfo = null;
+                FileInfo logFileInfo;
+                string logFilePath = "C:\\Logs\\";
+                logFilePath = logFilePath + filename + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                logFileInfo = new FileInfo(logFilePath);
+                logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                if (!logDirInfo.Exists) logDirInfo.Create();
+                if (!logFileInfo.Exists)
+                {
+                    fileStream = logFileInfo.Create();
+                }
+                else
+                {
+                    fileStream = new FileStream(logFilePath, FileMode.Append);
+                }
+                log = new StreamWriter(fileStream);
+                log.WriteLine(strMessage);
+                log.Close();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        public static void InstantPayLog2PPI(string strMessage, string filename = "INSTANTPAY_PAY")
+        {
+            try
+            {
+                StreamWriter log;
+                FileStream fileStream = null;
+                DirectoryInfo logDirInfo = null;
+                FileInfo logFileInfo;
+                string logFilePath = "C:\\Logs\\";
+                logFilePath = logFilePath + filename + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + strMessage;
+                logFileInfo = new FileInfo(logFilePath);
+                logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                if (!logDirInfo.Exists) logDirInfo.Create();
+                if (!logFileInfo.Exists)
+                {
+                    fileStream = logFileInfo.Create();
+                }
+                else
+                {
+                    fileStream = new FileStream(logFilePath, FileMode.Append);
+                }
+                log = new StreamWriter(fileStream);
+                log.WriteLine(strMessage);
+                log.Close();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        public dynamic updatechkPPI(string agentid)
+        {
+            dynamic response = (object)null;
+            var tokn = Responsetoken.gettoken();
+            var client = new RestClient("http://api.vastbazaar.com/api/DMTPAYTM/statuscheck?agentid=" + agentid + "");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Bearer " + tokn);
+            Task<IRestResponse> task = Task.Run(() =>
+            {
+                return client.Execute(request);
+            });
+            bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(3000));
+            if (isCompletedSuccessfully == true)
+            {
+                response = task.Result.Content;
+            }
+            else
+            {
+                response = new
+                {
+                    Version = "1.0",
+                    StatusCode = 200,
+                    Content = new
+                    {
+                        ResponseCode = 0,
+                        ADDINFO = new
+                        {
+                            status = "Pending",
+                            bankrrn = "",
+                            name = ""
+                        }
+                    }
+                };
+            }
+            return response;
+        }
+        //[HttpPost]
+        //public ActionResult Verify_account_again(string NUMBER, string account, string benIFSC, string bankname, string uniqueid)
+        //{
+        //    var apinm = db.money_api_name.Where(aa => aa.status == "Y").SingleOrDefault();
+        //    string userid = User.Identity.GetUserId();
+        //    var currentsts = db.IMPS_transtion_detsils.Where(aa => aa.accountno == account && aa.ifsccode == benIFSC && aa.senderno == NUMBER).OrderByDescending(aa => aa.trans_time).Take(1).SingleOrDefault();
+        //    // get mac address
+        //    var macaddress = GetMACAddress();
+        //    //Ip current Ip Address
+        //    var Ipaddress = GetComputer_InternetIP();
+        //    moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
+        //    string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+        //    var tokn = Responsetoken.gettoken();
+        //    var requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + benIFSC + "\",\"agentid\":\"" + CommonTranid + "\"}";
+        //    if (currentsts.Status == "Pending")
+        //    {
+        //        System.Threading.Thread.Sleep(1000);
+        //        VastBazaar cb1 = new VastBazaar();
+        //        Task<IRestResponse> task = Task.Run(() =>
+        //        {
+        //            return cb1.Beneficiary_Account_verify_Status(NUMBER, account, benIFSC, currentsts.trans_id, tokn, bankname);
+        //        });
+        //        bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+        //        if (isCompletedSuccessfully == true)
+        //        {
+        //            var responsechk = task.Result.Content.ToString();
+        //            var responsecode1 = task.Result.StatusCode.ToString();
+        //            if (responsecode1 == "OK")
+        //            {
+        //                dynamic json = JsonConvert.DeserializeObject(responsechk);
+        //                var respcode = json.Content.ResponseCode.ToString();
+        //                var ADDINFO = json.Content.ADDINFO;
+        //                var stscode = ADDINFO.statuscode;
+        //                if (stscode == "TXN")
+        //                {
+        //                    var receiverName = ADDINFO.data.benename.ToString();
+        //                    var bankrefno = ADDINFO.data.bankrefno.ToString();
+        //                    var ser = JsonConvert.SerializeObject(ADDINFO);
+        //                    var jss1 = new JavaScriptSerializer();
+        //                    var dict1 = jss1.Deserialize<dynamic>(ser);
+        //                    return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                }
+        //                else if (stscode == "TUP")
+        //                {
+        //                    var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+        //                    var jss1 = new JavaScriptSerializer();
+        //                    var dict1 = jss1.Deserialize<dynamic>(results1);
+        //                    return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                }
+        //                else
+        //                {
+        //                    var ser = JsonConvert.SerializeObject(ADDINFO);
+        //                    var jss1 = new JavaScriptSerializer();
+        //                    var dict1 = jss1.Deserialize<dynamic>(ser);
+        //                    return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                dynamic json = JsonConvert.DeserializeObject(responsechk);
+        //                if (json == "Invalid response..")
+        //                {
+        //                    var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+        //                    var jss = new JavaScriptSerializer();
+        //                    var dict = jss.Deserialize<dynamic>(results);
+        //                    return Json(dict, JsonRequestBehavior.AllowGet);
+        //                }
+        //                else
+        //                {
+        //                    var error = json.error.ToString();
+        //                    var error_decribe = json["error_description"].ToString();
+        //                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+        //                    var jss = new JavaScriptSerializer();
+        //                    var dict = jss.Deserialize<dynamic>(results);
+        //                    return Json(dict, JsonRequestBehavior.AllowGet);
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+        //            var jss1 = new JavaScriptSerializer();
+        //            var dict1 = jss1.Deserialize<dynamic>(results1);
+        //            return Json(dict1, JsonRequestBehavior.AllowGet);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+        //        var ch = db.Money_transfer_by_paytm(userid, 0, 0, NUMBER, account, bankname, benIFSC, CommonTranid, CommonTranid, "IMPS_VERIFY", "ONLINE", "N", requestsend, apinm.Api_name, Ipaddress, macaddress, "", 0, 0, "DMT2", "", "", uniqueid, outputchk).Single().msg;
+        //        if (ch == "RETAILERLOW")
+        //        {
+        //            var results = "{'status':'Remain Balance Low.','statuscode':'failure' }";
+        //            var jss = new JavaScriptSerializer();
+        //            var dict = jss.Deserialize<dynamic>(results);
+        //            return Json(dict, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else if (ch == "DEALERLOW")
+        //        {
+        //            var results = "{'status':'Dealer Remain Balance Low.','statuscode':'failure' }";
+        //            var jss = new JavaScriptSerializer();
+        //            var dict = jss.Deserialize<dynamic>(results);
+        //            return Json(dict, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else if (ch == "MASTERLOW")
+        //        {
+        //            var results = "{'status':'Master Remain Balance Low.','statuscode':'failure' }";
+        //            var jss = new JavaScriptSerializer();
+        //            var dict = jss.Deserialize<dynamic>(results);
+        //            return Json(dict, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else if (ch == "STATUSDOWN")
+        //        {
+        //            var results = "{'status':'Your Account Transfer status inactive please contact to Admin','statuscode':'failure' }";
+        //            var jss = new JavaScriptSerializer();
+        //            var dict = jss.Deserialize<dynamic>(results);
+        //            return Json(dict, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else if (ch == "CAPPINGLOW")
+        //        {
+        //            var results = "{'status':'Capping Low.','statuscode':'failure' }";
+        //            var jss = new JavaScriptSerializer();
+        //            var dict = jss.Deserialize<dynamic>(results);
+        //            return Json(dict, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else
+        //        {
+        //            System.Threading.Thread.Sleep(1000);
+        //            VastBazaar cb1 = new VastBazaar();
+        //            Task<IRestResponse> task = Task.Run(() =>
+        //            {
+        //                return cb1.Beneficiary_Account_verify_again(NUMBER, account, benIFSC, CommonTranid, tokn, bankname);
+        //            });
+        //            bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+        //            if (isCompletedSuccessfully == true)
+        //            {
+        //                var responsechk = task.Result.Content.ToString();
+        //                var responsecode1 = task.Result.StatusCode.ToString();
+        //                if (responsecode1 == "OK")
+        //                {
+        //                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+        //                    var respcode = json.Content.ResponseCode.ToString();
+        //                    var ADDINFO = json.Content.ADDINFO;
+        //                    var stscode = ADDINFO.statuscode;
+        //                    if (stscode == "TXN")
+        //                    {
+        //                        var receiverName = ADDINFO.data.benename.ToString();
+        //                        var bankrefno = ADDINFO.data.bankrefno.ToString();
+        //                        var ser = JsonConvert.SerializeObject(ADDINFO);
+        //                        var jss1 = new JavaScriptSerializer();
+        //                        var dict1 = jss1.Deserialize<dynamic>(ser);
+        //                        return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                    }
+        //                    else if (stscode == "TUP")
+        //                    {
+        //                        var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+        //                        var jss1 = new JavaScriptSerializer();
+        //                        var dict1 = jss1.Deserialize<dynamic>(results1);
+        //                        return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                    }
+        //                    else
+        //                    {
+        //                        var ser = JsonConvert.SerializeObject(ADDINFO);
+        //                        var jss1 = new JavaScriptSerializer();
+        //                        var dict1 = jss1.Deserialize<dynamic>(ser);
+        //                        return Json(dict1, JsonRequestBehavior.AllowGet);
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+        //                    if (json == "Invalid response..")
+        //                    {
+        //                        var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+        //                        var jss = new JavaScriptSerializer();
+        //                        var dict = jss.Deserialize<dynamic>(results);
+        //                        return Json(dict, JsonRequestBehavior.AllowGet);
+        //                    }
+        //                    else
+        //                    {
+        //                        var error = json.error.ToString();
+        //                        var error_decribe = json["error_description"].ToString();
+        //                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+        //                        var jss = new JavaScriptSerializer();
+        //                        var dict = jss.Deserialize<dynamic>(results);
+        //                        return Json(dict, JsonRequestBehavior.AllowGet);
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                var results1 = "{'status':'फिलहाल लाभार्थी बैंक धीमी प्रतिक्रिया दे रहा है। तो कृपया 2 मिनट प्रतीक्षा करें फिर रिपोर्ट देखें, आप रिपोर्ट के माध्यम से लाभार्थी को जोड़ सकते हैं।=AT PRESENT THE BENEFICIARY BANK IS GIVING SLOW RESPONSE. SO PLEASE WAIT 2 MINUTES THEN SEE THE REPORT, YOU CAN ADD THE BENEFICIARY THROUGH THE REPORT.','statuscode':'Pending'}";
+        //                var jss1 = new JavaScriptSerializer();
+        //                var dict1 = jss1.Deserialize<dynamic>(results1);
+        //                return Json(dict1, JsonRequestBehavior.AllowGet);
+        //            }
+        //        }
+        //    }
+        //}
+        [HttpPost]
+        public ActionResult Verify_Paytm_walletPPI(string NUMBER, string account, string uniqueid)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
+            if (apinm != null)
+            {
+                string userid = User.Identity.GetUserId();
+                // get mac address
+                var macaddress = GetMACAddress();
+                //Ip current Ip Address
+                var Ipaddress = GetComputer_InternetIP();
+                moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
+                string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+                string benIFSC = "PYTM0123456";
+                string bankname = "Paytm Bank";
+                var tokn = Responsetoken.gettoken();
+                var requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + benIFSC + "\",\"agentid\":\"" + CommonTranid + "\"}";
+                System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var ch = db.Money_transfer_by_paytm(userid, 0, 0, NUMBER, account, bankname, benIFSC, CommonTranid, CommonTranid, "WALLET_IMPS_VERIFY", "ONLINE", "N", requestsend, apinm.api_name, Ipaddress, macaddress, "", 0, 0, "DMT2", "", "", uniqueid, outputchk).Single().msg;
+                if (ch == "RETAILERLOW")
+                {
+                    var results = "{'status':'Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "DEALERLOW")
+                {
+                    var results = "{'status':'Dealer Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "MASTERLOW")
+                {
+                    var results = "{'status':'Master Remain Balance Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "STATUSDOWN")
+                {
+                    var results = "{'status':'Your Account Transfer status inactive please contact to Admin','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else if (ch == "CAPPINGLOW")
+                {
+                    var results = "{'status':'Capping Low.','statuscode':'failure' }";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    VastBazaar cb1 = new VastBazaar();
+                    Task<IRestResponse> task = Task.Run(() =>
+                    {
+                        return cb1.Beneficiary_Wallet_verify(NUMBER, account, benIFSC, CommonTranid, tokn, bankname);
+                    });
+                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                    if (isCompletedSuccessfully == true)
+                    {
+                        var responsechk = task.Result.Content.ToString();
+                        var responsecode1 = task.Result.StatusCode.ToString();
+                        if (responsecode1 == "OK")
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            var respcode = json.Content.ResponseCode.ToString();
+                            var ADDINFO = json.Content.ADDINFO;
+                            var stscode = ADDINFO.statuscode;
+                            if (stscode == "TXN")
+                            {
+                                var receiverName = ADDINFO.data.benename.ToString();
+                                var bankrefno = ADDINFO.data.bankrefno.ToString();
+                                //money transfer update procedure
+                                db.Money_transfer_update_new_new(CommonTranid, "SUCCESS", bankrefno, receiverName, ADDINFO.ToString(), "", 0, 0);
+                                var ser = JsonConvert.SerializeObject(ADDINFO);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                            else if (stscode == "TUP")
+                            {
+                                var results1 = "{'status':'Transaction under process','statuscode':'Pending'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results1);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", ADDINFO.ToString(), "", 0, 0);
+                                var ser = JsonConvert.SerializeObject(ADDINFO);
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(ser);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            if (json == "Invalid response..")
+                            {
+                                var results = "{'status':'Invalid Response','statuscode':'Pending'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                db.Money_transfer_update_new_new(CommonTranid, "FAILED", "", "", json, "", 0, 0);
+                                var error = json.error.ToString();
+                                var error_decribe = json["error_description"].ToString();
+                                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var results1 = "{'status':'Transaction under process','statuscode':'Pending'}";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results1);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            else
+            {
+                var error_decribe = "No Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult TransactionotpsendPPI(string otpcount, string otpfor)
+        {
+            string userid = User.Identity.GetUserId();
+            var retailer = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+            var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
+            var msg = "";
+            if (chkstsotp.status == true)
+            {
+                if (otpcount == "SECOND")
+                {
+                    DateTime olddate = DateTime.Now.AddMinutes(-5);
+                    var oldotp = db.MobileOtps.Where(a => a.Userid == userid && a.Type == otpfor && a.Date >= olddate).OrderByDescending(a => a.Date).FirstOrDefault();
+                    if (oldotp != null)
+                    {
+                        smssend.sms_init("Y", "Y", "TRANSACTIONOTP", retailer.Mobile, oldotp.Otp);
+                        oldotp.Date = DateTime.Now;
+                        db.SaveChanges();
+                        msg = "Resend OTP successfully on your registered mobile number";
+                    }
+                    else
+                    {
+                        Random ran = new Random();
+                        var otprem = ran.Next(1111, 9999);
+                        MobileOtp mob = new MobileOtp();
+                        mob.mobileno = retailer.Mobile;
+                        mob.Userid = userid;
+                        mob.Type = otpfor;
+                        mob.Otp = otprem.ToString();
+                        mob.Date = DateTime.Now;
+                        db.MobileOtps.Add(mob);
+                        db.SaveChanges();
+                        smssend.sms_init("Y", "Y", "TRANSACTIONOTP", retailer.Mobile, otprem);
+                        msg = "New OTP send successfully on your registered mobile number";
+                    }
+                }
+                else
+                {
+                    Random ran = new Random();
+                    var otprem = ran.Next(1111, 9999);
+                    MobileOtp mob = new MobileOtp();
+                    mob.mobileno = retailer.Mobile;
+                    mob.Userid = userid;
+                    mob.Type = otpfor;
+                    mob.Otp = otprem.ToString();
+                    mob.Date = DateTime.Now;
+                    db.MobileOtps.Add(mob);
+                    db.SaveChanges();
+                    smssend.sms_init("Y", "Y", "TRANSACTIONOTP", retailer.Mobile, otprem);
+                    msg = "OTP send successfully on your registered mobile number";
+                }
+            }
+            return Json(new { status = "Success", Message = msg }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult Imps_check_transferPPI(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
+        {
+            try
+            {
+                string userid = User.Identity.GetUserId();
+                var stspinotp = "NOTOK";
+                var pin = Encrypt(dmtpin);
+                var pin_check = (from pi in db.Retailer_Details where pi.RetailerId == userid select pi).Single().PIN;
+                var rememailrememail = db.Retailer_Details.Where(x => x.RetailerId == userid).SingleOrDefault().Email;
+                var adminemail = db.Admin_details.SingleOrDefault().email;
+                var pinxhk = Decrypt(pin_check);
+                var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
+                if (chkstsotp != null)
+                {
+                    if (chkstsotp.status == true)
+                    {
+                        var mobileotplist = db.MobileOtps.Where(a => a.Userid == userid && a.Type == "DMTPINOTP").OrderByDescending(a => a.Date).ToList();
+                        var mobileotp = mobileotplist.FirstOrDefault();
+                        if (mobileotp == null)
+                        {
+                            var results = "{'Details':'OTP Error!!! Please Generate New OTP!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        var last5minute = DateTime.Now.AddMinutes(-5);
+                        if (mobileotp.Date >= last5minute)
+                        {
+                            if (mobileotp.Otp == dmtpin)
+                            {
+                                stspinotp = "OK";
+                            }
+                            else
+                            {
+                                var results = "{'Details':'Wrong OTP!!! Please Enter Correct OTP!!!','status':'Failed'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            db.MobileOtps.RemoveRange(mobileotplist);
+                            db.SaveChanges();
+                            var results = "{'Details':'Expire OTP!!! Please Generate New OTP!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (chkstsotp.status == false)
+                    {
+                        var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                        DateTime currenttime = DateTime.Now;
+                        DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                        lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                        if (lastchangedpassdtr <= currenttime)
+                        {
+                            var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        if (pin == pin_check)
+                        {
+                            stspinotp = "OK";
+                        }
+                        else
+                        {
+                            var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else if (pin == pin_check)
+                {
+                    var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                    DateTime currenttime = DateTime.Now;
+                    DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                    lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                    if (lastchangedpassdtr <= currenttime)
+                    {
+                        var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                    stspinotp = "OK";
+                }
+                else
+                {
+                    var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+                if (stspinotp == "OK")
+                {
+                    decimal finalamount = Convert.ToDecimal(amount);
+                    var ch1 = db.IMPS_transtion_detsils.Where(aa => aa.accountno == account && aa.rch_from == userid && aa.totalamount == finalamount && aa.Status.ToUpper() == "SUCCESS").OrderByDescending(aa => aa.idno).ToList();
+                    var date = ch1.Any() ? ch1.FirstOrDefault().trans_time : System.DateTime.Now.AddDays(-1);
+                    int ggg = Convert.ToInt32((System.DateTime.Now - Convert.ToDateTime(date)).TotalSeconds);
+                    if (ggg >= 180)
+                    {
+                        var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
+                        if (remain >= finalamount)
+                        {
+                            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                            if (apinm != null)
+                            {
+                                int amt = Convert.ToInt32(amount);
+                                decimal? amooot = 0;
+                                if (apinm.catagory == "PAYOUT")
+                                {
+                                    var limitchk = db.transtion_limit.SingleOrDefault();
+                                    amooot = limitchk.Perlimit;
+                                    if (string.IsNullOrEmpty(Mode))
+                                    {
+                                        amooot = 100000;
+                                    }
+
+                                    else if (chkkyc == false)
+                                    {
+                                        if (amooot == 49750)
+                                        {
+                                            amooot = 25000;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (string.IsNullOrEmpty(Mode))
+                                    {
+                                        amooot = 100000;
+                                    }
+                                    else
+                                    {
+                                        amooot = 25000;
+                                    }
+                                }
+                                if (amt <= amooot)
+                                {
+                                    if (amt >= 100)
+                                    {
+                                        if (amt > amooot)
+                                        {
+                                            int otpcodess = new Random().Next(1111, 9999);
+                                            MobileOtp motp = new MobileOtp();
+                                            motp.Date = DateTime.Now;
+                                            motp.Userid = userid;
+                                            motp.Type = "PaymentConfirmation";
+                                            motp.mobileno = sendermobileno;
+                                            motp.Otp = otpcodess.ToString();
+                                            db.MobileOtps.Add(motp);
+                                            db.SaveChanges();
+                                            smssend.sms_init("Y", "Y", "PaymentConfirmationIMSPSMOBILEOTP", sendermobileno, account, amt, otpcodess.ToString());
+                                            var results = "{'Details':'','status':'OTP' }";
+                                            var jss1 = new JavaScriptSerializer();
+                                            var dict1 = jss1.Deserialize<dynamic>(results);
+                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                        }
+                                        else
+                                        {
+                                            var results = "{'Details':'','status':'Success' }";
+                                            var jss1 = new JavaScriptSerializer();
+                                            var dict1 = jss1.Deserialize<dynamic>(results);
+                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var results = "{'Details':' Amount Should be Greater Than Rs. 100','status':'Failed' }";
+                                        var jss1 = new JavaScriptSerializer();
+                                        var dict1 = jss1.Deserialize<dynamic>(results);
+                                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var results = "{'Details':' Amount Should be Less Rs " + amooot + "','status':'Failed' }";
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(results);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var results = "{'Details':'No api Open.','status':'Failed'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var results = "{'Details':'Remain Amount Low','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var results = "{'Details':'Please Wait 5 Minutes... Same Amount Not Transfer in same Account','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var results = "{'Details':'Error!!! Please try after sometime!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var results = "{'Details':'Something went wromg.Please try again.','status':'Failed' }";
+                var jss1 = new JavaScriptSerializer();
+                var dict1 = jss1.Deserialize<dynamic>(results);
+                return Json(dict1, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult imps_transferPPI(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc, string customerid)
+        {
+            var results = ""; var requestsend = ""; var kycsts = "";
+            string imagepath = null;
+            var stspinotp = "NOTOK";
+            try
+            {
+                if (!string.IsNullOrEmpty(imageData))
+                {
+                    //   filename = Server.MapPath("~/Retailer_image/") + DateTime.Now.ToString().Replace("/", "-").Replace(" ", "_").Replace(":", "") + ".jpeg";
+                    //  var imagepath=   Server.MapPath("~/Retailer_image/") + DateTime.Now.ToString().Replace("/", "-").Replace(" ", "_").Replace(":", "") + ".jpeg";
+                    var newfilename = Guid.NewGuid().ToString();
+                    var filename = Server.MapPath("~/Retailer_image/") + newfilename + ".jpeg";
+                    using (FileStream fs = new FileStream(filename, FileMode.Create))
+                    {
+                        using (BinaryWriter bw = new BinaryWriter(fs))
+                        {
+                            byte[] data = Convert.FromBase64String(imageData);
+                            bw.Write(data);
+                            bw.Close();
+                        }
+                    }
+                    imagepath = @"\Retailer_image\" + newfilename + ".jpeg";
+                }
+                string externalip = new WebClient().DownloadString("http://ipv4.icanhazip.com/");
+                externalip = externalip.Replace("\n", "");
+                //get only city using ip
+                //var clientforgetip = new RestClient("http://ip-api.com/json/" + externalip + "?fields=city");
+                //var requestforcurrntip = new RestRequest(Method.GET);
+                //var taskingforcurrntip = Task.Run(() =>
+                //{
+                //    return clientforgetip.Execute(requestforcurrntip).Content;
+                //});
+                //var responsessssforcurrentip = taskingforcurrntip.Result;
+                //dynamic presonse111ip = JsonConvert.DeserializeObject(responsessssforcurrentip);
+                //string city = presonse111ip.city;
+                string chkamounts = "OK";
+                var statusAdmin = db.PushNotificationStatus.Where(a => a.UserRole == "Admin").SingleOrDefault().Status;
+                var statusRetailer = db.PushNotificationStatus.Where(a => a.UserRole == "Retailer").SingleOrDefault().Status;
+                var StatusSendSmsMoneyTransferSuccess = db.SMSSendAlls.Where(a => a.ServiceName == "dmtsucconline").SingleOrDefault();
+                var StatusSendSmsMoneyTransferFailed = db.SMSSendAlls.Where(a => a.ServiceName == "dmtfailedonline").SingleOrDefault();
+                var StatusSendMailMoneyTransferSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "dmtsucconline1").SingleOrDefault().Status;
+                var StatusSendMailMoneyTransferFailed = db.EmailSendAlls.Where(a => a.ServiceName == "dmtfailedonline1").SingleOrDefault().Status;
+                string userid = User.Identity.GetUserId();
+                var AdminEmail = db.Admin_details.Single().email;
+                var rem_details = db.Retailer_Details.Where(p => p.RetailerId == userid).SingleOrDefault();
+                var RetailerEmail = rem_details.Email;
+                var RetailerMob = rem_details.Mobile;
+                var aadhar = rem_details.AadharCard;
+                moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                var remwise = db.passbyretailerdmts.Where(s => s.userid == userid).ToList();
+                string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+                var apiname = apinm == null ? "NO" : apinm.api_name;
+                var slabname = apinm.Slabnm;
+                var apists = "";
+                if (remwise.Count > 0)
+                {
+                    apists = remwise[0].status == false ? "NO" : "Yes";
+                }
+                var pin = Encrypt(dmtpin);
+                var infochk = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                var pin_check = infochk.PIN;
+                // get mac address
+                var macaddress = GetMACAddress();
+                //Ip current Ip Address
+                var Ipaddress = GetComputer_InternetIP();
+                dynamic Response = new JObject();
+                kycsts = "N";
+                var typetransfer = "";
+                typetransfer = type;
+                var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
+                if (chkstsotp != null && type != "Credit Card")
+                {
+                    if (chkstsotp.status == true)
+                    {
+                        var mobileotplist = db.MobileOtps.Where(a => a.Userid == userid && a.Type == "DMTPINOTP").OrderByDescending(a => a.Date).ToList();
+                        var mobileotp = mobileotplist.FirstOrDefault();
+                        if (mobileotp == null)
+                        {
+                            results = "{'Details':'OTP Error!!! Please Generate New OTP!!!','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        var last5minute = DateTime.Now.AddMinutes(-5);
+                        if (mobileotp.Date >= last5minute)
+                        {
+                            if (mobileotp.Otp == dmtpin)
+                            {
+                                stspinotp = "OK";
+                                db.MobileOtps.RemoveRange(mobileotplist);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                results = "{'Details':'Wrong OTP!!! Please Enter Correct OTP!!!','status':'Failed' }";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            db.MobileOtps.RemoveRange(mobileotplist);
+                            db.SaveChanges();
+                            results = "{'Details':'Expire OTP!!! Please Generate New OTP!!!','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (chkstsotp.status == false)
+                    {
+                        var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                        DateTime currenttime = DateTime.Now;
+                        DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                        lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                        if (lastchangedpassdtr <= currenttime)
+                        {
+                            results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        if (pin == pin_check)
+                        {
+                            stspinotp = "OK";
+                        }
+                        else
+                        {
+                            results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else if (pin == pin_check)
+                {
+                    var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                    DateTime currenttime = DateTime.Now;
+                    DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                    lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                    if (lastchangedpassdtr <= currenttime)
+                    {
+                        results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                    stspinotp = "OK";
+                }
+                else
+                {
+                    results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+                if (stspinotp == "OK")
+                {
+                    //var userinfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    //if (userinfo.Mobile == NUMBER)
+                    //{
+                    string city = null;
+                    string address = null;
+                    string remlocationstatus = null;
+                    RetailerRemloclogic.checklocationbyRem(userid, "CHECK", out remlocationstatus, latss, longloc, ref city, ref address);
+                    if (remlocationstatus == "NOTALLOW")
+                    {
+                        //  dynamic Responses = new JObject();
+                        Response.status = "Failed";
+                        Response.Details = "Account Transfer not allowed at this location.";
+                        dynamic resp = new JObject();
+                        resp.Amount = amount;
+                        resp.Status = "Failed";
+                        resp.bankrefid = "Account Transfer not allowed at this location.";
+                        Response.data.Add(resp);
+                        var jjj = Response.ToString();
+                        var jss2 = new JavaScriptSerializer();
+                        var dict2 = jss2.Deserialize<dynamic>(jjj);
+                        return Json(dict2, JsonRequestBehavior.AllowGet);
+                    }
+                    //va   var jjj = Response.ToString();r retailermanagelocation = db.Manage_rem_Location_by_Admin.Where(sss => sss.userid == userid).ToList();
+                    //if   var jss2 = new JavaScriptSerializer(); (retailermanagelocation.Count() > 0)
+                    //{    var dict2 = jss2.Deserialize<dynamic>(jjj);
+                    //     return Json(dict2, JsonRequestBehavior.AllowGet);  var findexectlocation = db.Manage_rem_Location_by_Admin.Where(sss => sss.userid == userid && sss.nameofcity.Trim().ToUpper() == city.Trim().ToUpper()).FirstOrDefault();
+                    //    if (findexectlocation == null)
+                    //    {
+                    //      //  dynamic Responses = new JObject();
+                    //        Response.status = "Failed";
+                    //        Response.Details = "DMT not allowed at this location.";
+                    //        dynamic resp = new JObject();
+                    //        resp.Amount = amount;
+                    //        resp.Status = "Failed";
+                    //        resp.bankrefid = "DMT not allowed at this location.";
+                    //        Response.data.Add(resp);
+                    //        var jjj = Response.ToString();
+                    //        var jss2 = new JavaScriptSerializer();
+                    //        var dict2 = jss2.Deserialize<dynamic>(jjj);
+                    //        return Json(dict2, JsonRequestBehavior.AllowGet);
+                    //    }
+                    //}
+                    /***** 3 Minutes wait for same amount transfer*****/
+                    decimal finalamount = Convert.ToDecimal(amount);
+                    var ch1 = db.IMPS_transtion_detsils.Where(aa => aa.accountno == account && aa.rch_from == userid && aa.totalamount == finalamount && aa.Status.ToUpper() == "SUCCESS").OrderByDescending(aa => aa.idno).ToList();
+                    var date = ch1.Any() ? ch1.FirstOrDefault().trans_time : System.DateTime.Now.AddDays(-1);
+                    int ggg = Convert.ToInt32((System.DateTime.Now - Convert.ToDateTime(date)).TotalSeconds);
+                    if (ggg >= 180)
+                    {
+
+                        var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
+                        if (remain >= finalamount)
+                        {
+                            if (apiname != "NO" || apists != "NO")
+                            {
+                                decimal aomt = 25000;
+                                decimal amt_chk = 25000;
+                                int amt = Convert.ToInt32(amount);
+                                if (apinm.catagory == "PAYOUT")
+                                {
+                                    if (type == "Credit Card")
+                                    {
+                                        aomt = 100000;
+                                        amt_chk = 100000;
+                                    }
+                                    else
+                                    {
+                                        aomt = 25000;
+                                        amt_chk = 24999;
+                                        if (check_kyc == true)
+                                        {
+                                            var info = db.Sender_aadhar.Where(aa => aa.sendernumber == NUMBER).SingleOrDefault();
+                                            aomt = 49999;
+                                            amt_chk = 49999;
+                                            idprooftype = "aadhar";
+                                            try
+                                            {
+                                                idproofnumber = info.aadharnumber;
+                                            }
+                                            catch { }
+                                        }
+                                    }
+                                }
+                                if (amt <= aomt)
+                                {
+                                    if (amt >= 100)
+                                    {
+                                        if (amt > amt_chk)
+                                        {
+                                            chkamounts = "NOTOK";
+                                            var otpchkretailer = db.MobileOtps.Where(aa => aa.Userid == userid && aa.Type == "PaymentConfirmation" && aa.mobileno == NUMBER).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault().Otp;
+                                            if (otpchkretailer == senderotps)
+                                            {
+                                                chkamounts = "OK";
+                                            }
+                                        }
+                                        if (chkamounts == "OK")
+                                        {
+                                            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                            var tokn = Responsetoken.gettoken();
+                                            var logos = db.tblHeaderLogoes.Where(aa => aa.Role == "ADMIN").SingleOrDefault();
+                                            var logo = "";
+                                            if (logos != null)
+                                            {
+                                                logo = logos.LogoImage;
+                                            }
+                                            var firmname = rem_details.Frm_Name;
+                                            Response.Accountno = account;
+                                            Response.Ifsccode = ifsc;
+                                            Response.BankName = bankname;
+                                            Response.TotalAmount = finalamount;
+                                            Response.Time = DateTime.Now;
+                                            Response.orderid = CommonTranid;
+                                            Response.logo = logo;
+                                            Response.firmname = firmname;
+                                            Response.servicefee = 0;
+                                            Response.tax = 0;
+                                            Response.total = 0;
+                                            Response.remainretailer = 0;
+                                            Response.data = new JArray() as dynamic;
+                                            string Tranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
+                                            var dmt_apirange = db.rang_of_imps_transaction_retailer.Where(s => s.retailer_id == userid).FirstOrDefault();
+                                            try
+                                            {
+                                                if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
+                                                {
+                                                    apiname = "INSTANTPAY";
+                                                }
+                                                else if (apiname == "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt && typetransfer == "UPI")
+                                                {
+                                                    apiname = "RAZORPAY";
+                                                }
+                                                else
+                                                {
+                                                    if (apinm.api_name == "VASTWEB")
+                                                    {
+                                                        apiname = "VASTWEB";
+                                                    }
+                                                    else if (apinm.api_name == "RADIANT")
+                                                    {
+                                                        apiname = "RADIANT";
+                                                    }
+                                                    else
+                                                    {
+                                                        apiname = "NO";
+                                                    }
+                                                }
+                                            }
+                                            catch { }
+                                            var ch = "";
+
+                                            // var hh = "exec Money_transfer_by_paytm '" + userid + "','" + amt + "' ,'" + finalamount + "' , '" + NUMBER + "' , '" + account + "' ,'" + bankname + "' ,'" + ifsc + "' ,'" + CommonTranid + "' , '" + Tranid + "' ,'" + typetransfer + "' , 'ONLINE' ,'" + kycsts + "' ,'" + requestsend + "', '" + apiname + "' , '" + Ipaddress + "' , '" + macaddress + "' , '','" + servicefee + "' , '0' , 'DMT2' ,'" + idprooftype + "' , '" + idproofnumber + "' , '" + uniqueid + "' , '" + outputchk + "' ";
+                                            if (apiname == "RADIANT")
+                                            {
+                                                if (apinm.catagory == "PAYOUT")
+                                                {
+                                                    //  requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + ifsc + "\",\"agentid\":\"" + CommonTranid + "";
+                                                    // ch = db.Money_transfer_by_paytm(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+                                                    Guid guid = Guid.NewGuid();
+                                                    var respchk = moneypayoutradiant(userid, Convert.ToDecimal(amount), Convert.ToDecimal(amount), NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress, benCode, customerid, servicefee, idprooftype, idproofnumber, kycsts, infochk.Pincode.ToString(), "");
+                                                    dynamic resp_chk = JsonConvert.SerializeObject(respchk);
+                                                    dynamic respchkk = JsonConvert.DeserializeObject(resp_chk);
+                                                    List<Transmsg> transactions = new List<Transmsg>();
+                                                    Transmsg transaction = new Transmsg
+                                                    {
+                                                        Status = respchkk.Status,
+                                                        Message = respchkk.Message,
+                                                        BankRRN = respchkk.Bannrrn,
+                                                        Amount = respchkk.Amount
+                                                    };
+                                                    transactions.Add(transaction);
+                                                    var transinfo = JsonConvert.SerializeObject(transactions);
+                                                    Response.status = "NOTDEFINE";
+                                                    Response.data = transinfo;
+                                                    var jjj = Response.ToString();
+                                                    var jss2 = new JavaScriptSerializer();
+                                                    var dict2 = jss2.Deserialize<dynamic>(jjj);
+                                                    return Json(dict2, JsonRequestBehavior.AllowGet);
+                                                }
+                                                else
+                                                {
+
+                                                    System.Data.Entity.Core.Objects.ObjectParameter outputchk1 = new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+                                                    var msginfo = db.DMT_Check_amount(userid, finalamount, outputchk1).SingleOrDefault().msg;
+
+                                                    if (msginfo == "OK")
+                                                    {
+                                                        int divide = Convert.ToInt32(finalamount) / 5000;
+                                                        var sef = finalamount % 5000;
+                                                        List<Transmsg> transactions = new List<Transmsg>();
+                                                        for (int i = 0; i < divide; i++)
+                                                        {
+                                                            Guid guid = Guid.NewGuid();
+                                                            var respchk = monrytransferunique(userid, 5000, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress, benCode, customerid);
+                                                            dynamic resp_chk = JsonConvert.SerializeObject(respchk);
+                                                            dynamic respchkk = JsonConvert.DeserializeObject(resp_chk);
+                                                            Transmsg transaction = new Transmsg
+                                                            {
+                                                                Status = respchkk.Status,
+                                                                Message = respchkk.Message,
+                                                                BankRRN = respchkk.Bannrrn,
+                                                                Amount = respchkk.Amount
+                                                            };
+                                                            transactions.Add(transaction);
+                                                        }
+                                                        if (sef != 0)
+                                                        {
+
+                                                            Guid guid = Guid.NewGuid();
+                                                            var respchk = monrytransferunique(userid, sef, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, typetransfer, name, Ipaddress, macaddress, benCode, customerid);
+                                                            dynamic resp_chk = JsonConvert.SerializeObject(respchk);
+                                                            dynamic respchkk = JsonConvert.DeserializeObject(resp_chk);
+                                                            Transmsg transaction = new Transmsg
+                                                            {
+                                                                Status = respchkk.Status,
+                                                                Message = respchkk.Message,
+                                                                BankRRN = respchkk.Bannrrn,
+                                                                Amount = respchkk.Amount
+                                                            };
+                                                            transactions.Add(transaction);
+                                                        }
+                                                        var transinfo = JsonConvert.SerializeObject(transactions);
+                                                        Response.status = "NOTDEFINE";
+                                                        Response.data = transinfo;
+                                                        var jjj = Response.ToString();
+                                                        var jss2 = new JavaScriptSerializer();
+                                                        var dict2 = jss2.Deserialize<dynamic>(jjj);
+                                                        return Json(dict2, JsonRequestBehavior.AllowGet);
+                                                    }
+                                                    else
+                                                    {
+                                                        Response.status = "Failed";
+                                                        Response.Details = "Remain Balance Low";
+                                                        dynamic resp = new JObject();
+                                                        resp.Amount = amt;
+                                                        resp.Status = "Failed";
+                                                        resp.bankrefid = "Remain Balance Low";
+                                                        Response.data.Add(resp);
+                                                        var jjj = Response.ToString();
+                                                        var jss2 = new JavaScriptSerializer();
+                                                        var dict2 = jss2.Deserialize<dynamic>(jjj);
+                                                        return Json(dict2, JsonRequestBehavior.AllowGet);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ////////////VastWeb/////////////////
+                                                requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + ifsc + "\",\"agentid\":\"" + CommonTranid + "";
+                                                if (slabname == "Slab1")
+                                                {
+                                                    ch = db.Money_transfer_by_paytm(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+                                                }
+                                                else
+                                                {
+                                                    ch = db.Money_transfer_by_paytm1(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+
+                                                }
+                                                var remainrem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount;
+                                                Response.remainretailer = remainrem;
+                                                if (ch == "RETAILERLOW")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Remain Balance Low.";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Remain Balance Low.";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "DEALERLOW")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Dealer Remain Balance Low.";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Dealer Remain Balance Low.";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "MASTERLOW")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Master Remain Balance Low.";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Master Remain Balance Low.";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "STATUSDOWN")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Your Account Transfer status inactive please contact to Admin";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Your Account Transfer status inactive please contact to Admin";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "CAPPINGLOW")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Capping Low.";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Capping Low.";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "MONTHLYLIMITOVER")
+                                                {
+                                                    Response.status = "Failed";
+                                                    Response.Details = "Sender Monthly Limit Over";
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "Sender Monthly Limit Over";
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "PERTRANSTIONOVER")
+                                                {
+                                                    decimal? pert = 25000;
+                                                    var per = db.transtion_limit.SingleOrDefault();
+                                                    if (per != null)
+                                                    {
+                                                        pert = per.Perlimit;
+                                                    }
+                                                    var chkk = pert.ToString();
+                                                    Response.status = "Failed";
+                                                    Response.Details = "PER TRANSACTION LIMIT IS UP TO " + chkk;
+                                                    dynamic resp = new JObject();
+                                                    resp.Amount = amt;
+                                                    resp.Status = "Failed";
+                                                    resp.bankrefid = "PER TRANSACTION LIMIT IS UP TO " + chkk;
+                                                    Response.data.Add(resp);
+                                                }
+                                                else if (ch == "OK")
+                                                {
+                                                    VastBazaar cb1 = new VastBazaar();
+                                                    int idvalimps = db.IMPS_transtion_detsils.Where(aa => aa.rch_from == userid).OrderByDescending(aa => aa.idno).Select(c => c.idno).FirstOrDefault();
+                                                    var rchinforsss = db.IMPS_transtion_detsils.Where(x => x.idno == idvalimps).FirstOrDefault();
+                                                    if (rchinforsss != null)
+                                                    {
+                                                        rchinforsss.Devicetoken = null;
+                                                        rchinforsss.Latitude = latss;
+                                                        rchinforsss.Longitude = longloc;
+                                                        rchinforsss.ModelNo = null;
+                                                        rchinforsss.City = city;
+                                                        rchinforsss.PostalCode = null;
+                                                        rchinforsss.InternetTYPE = null;
+                                                        rchinforsss.Address = address;
+                                                        rchinforsss.PhotoCaptured = imagepath;
+                                                        db.SaveChanges();
+                                                    }
+                                                    var frmname = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                                                    Task<IRestResponse> task;
+                                                    if (typetransfer == "UPI")
+                                                    {
+                                                        if (apiname == "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt)
+                                                        {
+                                                            var razorpayinfo = db.razorpay_auth.SingleOrDefault();
+                                                            var apikey = razorpayinfo.Apikey;
+                                                            var apisecret = razorpayinfo.ApiSecret;
+                                                            var accountnumber = razorpayinfo.Accountnumber;
+                                                            task = Task.Run(() =>
+                                                            {
+                                                                return cb1.Fund_Transfer_Razor_UPI(account, amt, account, frmname.Frm_Name, "", frmname.Mobile, Tranid, apikey, apisecret, accountnumber);
+                                                            });
+                                                        }
+                                                        else
+                                                        {
+                                                            task = Task.Run(() =>
+                                                            {
+                                                                return cb1.Fund_Transfer_UPI(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                            });
+                                                        }
+                                                        //task = Task.Run(() =>
+                                                        //{
+                                                        //    return cb1.Fund_Transfer_Razor_UPI(account, amt, account, frmname, "", NUMBER, Tranid);
+                                                        //});
+                                                        //Fund_Transfer_Razor_UPI(string Acno, decimal amt, string upi, string names, string Email, string mobile, string refid)
+                                                    }
+                                                    else if (typetransfer == "WALLET")
+                                                    {
+                                                        task = Task.Run(() =>
+                                                        {
+                                                            return cb1.Fund_Transfer_WALLET(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                        });
+                                                    }
+                                                    else if (typetransfer == "Credit Card")
+                                                    {
+                                                        task = Task.Run(() =>
+                                                        {
+                                                            return cb1.creaditFund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                        });
+                                                    }
+                                                    else if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt)
+                                                    {
+                                                        var instantpayauth = db.Instantpay_auth.SingleOrDefault();
+                                                        string authcode = instantpayauth.authcode;
+                                                        string clientid = instantpayauth.clientid;
+                                                        string secret = instantpayauth.clientsecret;
+                                                        string ipaddress = instantpayauth.clientsecret;
+                                                        string actno = instantpayauth.accountnumber;
+                                                        task = Task.Run(() =>
+                                                        {
+                                                            return Instantpay_Payout.payout_pool(name, type, amt.ToString(), account, ifsc, Tranid, RetailerEmail, authcode, clientid, secret, ipaddress, actno);
+                                                        });
+                                                    }
+
+                                                    else
+                                                    {
+                                                        task = Task.Run(() =>
+                                                        {
+                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                        });
+                                                    }
+                                                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
+                                                    var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.trans_id == Tranid).SingleOrDefault();
+                                                    if (isCompletedSuccessfully == true)
+                                                    {
+                                                        //"{\"Version\":\"1.0\",\"StatusCode\":200,\"Content\":{\"ResponseCode\":1,\"ADDINFO\":{\"status\":\"c\",\"statusCode\":\"DE_101\",\"statusMessage\":\"Your request is in process. Kindly check after sometime\",\"result\":{\"mid\":\"VastWe83136376087116\",\"orderId\":\"25191806TX\",\"paytmOrderId\":\"201910251918250985400278\",\"amount\":\"10.00\",\"commissionAmount\":\"0.00\",\"tax\":\"0.00\",\"rrn\":null}}}}"
+                                                        if (apiname == "RAZORPAY" && dmt_apirange.Razorpay_min <= amt && dmt_apirange.razorpay_max >= amt && typetransfer == "UPI")
+                                                        {
+                                                            var response = task.Result;
+                                                            var responsechk = task.Result.Content.ToString();
+                                                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                                            var isfalse = false;
+                                                            try
+                                                            {
+                                                                if (json.status.ToString() == "processing")
+                                                                {
+                                                                    var payidno = json.id?.ToString();
+                                                                    //db.Money_transfer_update_new_new(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apicloseingbal);
+                                                                    db.Money_transfer_update_by_paytm(Tranid, "SUCCESS", payidno, name, json.ToString(), "", 0, 0);
+                                                                    smssend.sms_init(StatusSendSmsMoneyTransferSuccess.Status, StatusSendSmsMoneyTransferSuccess.Whatsapp_Status, "IMPSPAYMENTSUCCESSFULLY", NUMBER, bankname, account, payidno, amount);
+                                                                    if (StatusSendMailMoneyTransferSuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge", AdminEmail);
+                                                                    }
+                                                                    Response.servicefee = resp_imps.rem_comm;
+                                                                    Response.tax = resp_imps.rem_gst;
+                                                                    Response.total = resp_imps.totalamount;
+                                                                    Response.status = "Success";
+                                                                    Response.Details = payidno;
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "Success";
+                                                                    resp.bankrefid = payidno;
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                            }
+                                                            catch
+                                                            {
+                                                                isfalse = true;
+                                                                if (isfalse)
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        var bname = ""; string payidno = "";
+                                                                        try
+                                                                        {
+                                                                            payidno = json.error.description.ToString();
+                                                                        }
+                                                                        catch
+                                                                        {
+                                                                        }
+                                                                        if (json.error.code.ToString() == "BAD_REQUEST_ERROR")
+                                                                        {
+                                                                            db.Money_transfer_update_by_paytm(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                            smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account, amount, payidno);
+                                                                            if (StatusSendMailMoneyTransferFailed == "Y")
+                                                                            {
+                                                                                smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                                                            }
+                                                                            Response.status = "Failed";
+                                                                            Response.Details = payidno;
+                                                                            dynamic resp = new JObject();
+                                                                            resp.Amount = amt;
+                                                                            resp.Status = "Failed";
+                                                                            resp.bankrefid = payidno;
+                                                                            Response.data.Add(resp);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            Response.servicefee = resp_imps.charge;
+                                                                            if (rem_details.gststatus == "N")
+                                                                            {
+                                                                                Response.tax = 0;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                                Response.tax = (charge * 18) / 100;
+                                                                            }
+                                                                            Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                            Response.status = "Pending";
+                                                                            Response.Details = "";
+                                                                            dynamic resp = new JObject();
+                                                                            resp.Amount = amt;
+                                                                            resp.Status = "Pending";
+                                                                            resp.bankrefid = "Pending";
+                                                                            Response.data.Add(resp);
+                                                                        }
+                                                                    }
+                                                                    catch
+                                                                    {
+                                                                        Response.servicefee = resp_imps.charge;
+                                                                        if (rem_details.gststatus == "N")
+                                                                        {
+                                                                            Response.tax = 0;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                            Response.tax = (charge * 18) / 100;
+                                                                        }
+                                                                        Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                        Response.status = "Pending";
+                                                                        Response.Details = "";
+                                                                        dynamic resp = new JObject();
+                                                                        resp.Amount = amt;
+                                                                        resp.Status = "Pending";
+                                                                        resp.bankrefid = "Pending";
+                                                                        Response.data.Add(resp);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (apiname == "INSTANTPAY" && dmt_apirange.instatntpay_max >= amt && dmt_apirange.instatntpay_min <= amt && typetransfer != "UPI" && typetransfer != "WALLET")
+                                                        {
+                                                            var response = task.Result;
+                                                            var responsechk = task.Result.Content.ToString();
+                                                            if (response.StatusCode == HttpStatusCode.OK)
+                                                            {
+                                                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                                                if (json.statuscode.ToString() == "TXN")
+                                                                {
+                                                                    decimal apiopeningbal = Convert.ToDecimal(json.data.pool.openingBal.ToString());
+                                                                    decimal apicloseingbal = Convert.ToDecimal(json.data.pool.closingBal.ToString());
+                                                                    var payidno = json.data.txnReferenceId?.ToString();
+                                                                    //db.Money_transfer_update_new_new(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apicloseingbal);
+                                                                    db.Money_transfer_update_by_paytm(Tranid, "SUCCESS", payidno, name, json.ToString(), "", apiopeningbal, apicloseingbal);
+                                                                    smssend.sms_init(StatusSendSmsMoneyTransferSuccess.Status, StatusSendSmsMoneyTransferSuccess.Whatsapp_Status, "IMPSPAYMENTSUCCESSFULLY", NUMBER, bankname, account, payidno, amount);
+                                                                    if (StatusSendMailMoneyTransferSuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge", AdminEmail);
+                                                                    }
+                                                                    Response.servicefee = resp_imps.rem_comm;
+                                                                    Response.tax = resp_imps.rem_gst;
+                                                                    Response.total = resp_imps.totalamount;
+                                                                    Response.status = "Success";
+                                                                    Response.Details = payidno;
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "Success";
+                                                                    resp.bankrefid = payidno;
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                                else if (json.statuscode.ToString() == "TUP" || json.statuscode.ToString() == "IAB")
+                                                                {
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    Response.status = "Pending";
+                                                                    Response.Details = "";
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "Pending";
+                                                                    resp.bankrefid = "Pending";
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                                else
+                                                                {
+                                                                    var bname = ""; string payidno = "";
+                                                                    try
+                                                                    {
+                                                                        payidno = json.status.ToString();
+                                                                    }
+                                                                    catch { }
+                                                                    if (payidno.Contains("Some Technical Issue") || payidno.Contains("Insufficient balance") || payidno.Contains("Balance Fatching Problem"))
+                                                                    {
+                                                                        Response.servicefee = resp_imps.charge;
+                                                                        if (rem_details.gststatus == "N")
+                                                                        {
+                                                                            Response.tax = 0;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                            Response.tax = (charge * 18) / 100;
+                                                                        }
+                                                                        Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                        Response.status = "Pending";
+                                                                        Response.Details = "";
+                                                                        dynamic resp = new JObject();
+                                                                        resp.Amount = amt;
+                                                                        resp.Status = "Pending";
+                                                                        resp.bankrefid = "Pending";
+                                                                        Response.data.Add(resp);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                        db.Money_transfer_update_by_paytm(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                        smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account, amount, payidno);
+                                                                        if (StatusSendMailMoneyTransferFailed == "Y")
+                                                                        {
+                                                                            smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                                                        }
+                                                                        Response.status = "Failed";
+                                                                        Response.Details = payidno;
+                                                                        dynamic resp = new JObject();
+                                                                        resp.Amount = amt;
+                                                                        resp.Status = "Failed";
+                                                                        resp.bankrefid = payidno;
+                                                                        Response.data.Add(resp);
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                Response.status = "Pending";
+                                                                Response.Details = "Pending";
+                                                                dynamic resp = new JObject();
+                                                                resp.Amount = amt;
+                                                                resp.Status = "Pending";
+                                                                resp.bankrefid = "Pending";
+                                                                Response.data.Add(resp);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            var responsechk = task.Result.Content.ToString();
+                                                            var responsecode1 = task.Result.StatusCode.ToString();
+                                                            if (responsecode1 == "OK")
+                                                            {
+                                                                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                                                var respcode = json.Content.ResponseCode.ToString();
+                                                                var ADDINFO = json.Content.ADDINFO;
+                                                                var txnSts = ADDINFO.status;
+                                                                if (txnSts == "SUCCESS")
+                                                                {
+                                                                    //decimal apiopeningbal = ADDINFO.data.opening_bal;
+                                                                    //decimal chargeAmt = ADDINFO.data.charged_amt;
+                                                                    //decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                                                                    //var oprid = ADDINFO.data.ref_no.ToString();
+                                                                    //var bname = ADDINFO.data.name.ToString();
+                                                                    //string payidno = oprid;
+                                                                    decimal apiopeningbal = ADDINFO.result.opening_bal;
+                                                                    decimal chargeAmt = ADDINFO.result.charged_amt;
+                                                                    decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                                                                    var oprid = ADDINFO.result.rrn?.ToString();
+                                                                    var bname = ADDINFO.result.name?.ToString();
+                                                                    string payidno = oprid;
+                                                                    //db.Money_transfer_update_new_new(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apicloseingbal);
+                                                                    db.Money_transfer_update_by_paytm(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apiopeningbal);
+                                                                    //if (StatusSendSmsMoneyTransferSuccess == "Y")
+                                                                    //{
+                                                                    //    string msgssss = "";
+                                                                    //    string tempid = "";
+                                                                    //    string urlss = "";
+                                                                    //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                    //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "IMPSPAYMENTSUCCESSFULLY" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                    //    if (smsstypes != null)
+                                                                    //    {
+                                                                    //        msgssss = string.Format(smsstypes.Templates, bankname, account, payidno, amount);
+                                                                    //        tempid = smsstypes.Templateid;
+                                                                    //        urlss = smsapionsts.smsapi;
+                                                                    //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                                                    //    }
+                                                                    //    // smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge");
+                                                                    //}
+                                                                    smssend.sms_init(StatusSendSmsMoneyTransferSuccess.Status, StatusSendSmsMoneyTransferSuccess.Whatsapp_Status, "IMPSPAYMENTSUCCESSFULLY", NUMBER, bankname + " ", account + " ", payidno + " ", amount + " ");
+                                                                    if (StatusSendMailMoneyTransferSuccess == "Y")
+                                                                    {
+                                                                        smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge", AdminEmail);
+                                                                    }
+                                                                    Response.servicefee = resp_imps.rem_comm;
+                                                                    Response.tax = resp_imps.rem_gst;
+                                                                    Response.total = resp_imps.totalamount;
+                                                                    Response.status = "Success";
+                                                                    Response.Details = payidno;
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "Success";
+                                                                    resp.bankrefid = payidno;
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                                else if (txnSts == "ACCEPTED" || txnSts == "PENDING")
+                                                                {
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    Response.status = "Pending";
+                                                                    Response.Details = "";
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "Pending";
+                                                                    resp.bankrefid = "Pending";
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                                else
+                                                                {
+                                                                    var bname = ""; string payidno = "";
+                                                                    try
+                                                                    {
+                                                                        payidno = ADDINFO.status.ToString();
+                                                                    }
+                                                                    catch { }
+                                                                    if (payidno.Contains("Some Technical Issue") || payidno.Contains("Insufficient balance") || payidno.Contains("Balance Fatching Problem") || (payidno.Contains("Failed Due To Balance Issue")))
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            Response.servicefee = resp_imps.charge;
+                                                                        }
+                                                                        catch { }
+                                                                        if (rem_details.gststatus == "N")
+                                                                        {
+                                                                            Response.tax = 0;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                            Response.tax = (charge * 18) / 100;
+                                                                        }
+                                                                        Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                        Response.status = "Pending";
+                                                                        Response.Details = "";
+                                                                        dynamic resp = new JObject();
+                                                                        resp.Amount = amt;
+                                                                        resp.Status = "Pending";
+                                                                        resp.bankrefid = "Pending";
+                                                                        Response.data.Add(resp);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                        db.Money_transfer_update_by_paytm(Tranid, "FAILED", "Failed", bname, json.ToString(), "", 0, 0);
+                                                                        //if (StatusSendSmsMoneyTransferFailed == "Y")
+                                                                        //{
+                                                                        //    string msgssss = "";
+                                                                        //    string tempid = "";
+                                                                        //    string urlss = "";
+                                                                        //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                                                        //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "MONEYTRANSFERMANUALMONEYFAILEDDUETO" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                                                        //    if (smsstypes != null)
+                                                                        //    {
+                                                                        //        msgssss = string.Format(smsstypes.Templates, bankname, account, amount, payidno);
+                                                                        //        tempid = smsstypes.Templateid;
+                                                                        //        urlss = smsapionsts.smsapi;
+                                                                        //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                                                        //    }
+                                                                        //    //  smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge");
+                                                                        //}
+                                                                        smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account + " ", " " + amount, payidno);
+                                                                        if (StatusSendMailMoneyTransferFailed == "Y")
+                                                                        {
+                                                                            smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                                                        }
+                                                                        Response.status = "Failed";
+                                                                        Response.Details = "Failed";
+                                                                        dynamic resp = new JObject();
+                                                                        resp.Amount = amt;
+                                                                        resp.Status = "Failed";
+                                                                        resp.bankrefid = "Failed";
+                                                                        Response.data.Add(resp);
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                Response.status = "Pending";
+                                                                Response.Details = "Pending";
+                                                                dynamic resp = new JObject();
+                                                                resp.Amount = amt;
+                                                                resp.Status = "Pending";
+                                                                resp.bankrefid = "Pending";
+                                                                Response.data.Add(resp);
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Response.servicefee = resp_imps.charge;
+                                                        if (rem_details.gststatus == "N")
+                                                        {
+                                                            Response.tax = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            var charge = Convert.ToDecimal(resp_imps.charge);
+                                                            Response.tax = (charge * 18) / 100;
+                                                        }
+                                                        Response.total = resp_imps.totalamount + resp_imps.charge + Response.tax;
+                                                        Response.status = "Pending";
+                                                        Response.Details = "";
+                                                        dynamic resp = new JObject();
+                                                        resp.Amount = amt;
+                                                        resp.Status = "Pending";
+                                                        resp.bankrefid = "";
+                                                        Response.data.Add(resp);
+                                                    }
+                                                }
+                                                var jjj = Response.ToString();
+                                                var jss2 = new JavaScriptSerializer();
+                                                var dict2 = jss2.Deserialize<dynamic>(jjj);
+                                                return Json(dict2, JsonRequestBehavior.AllowGet);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            results = "{'Details':'Wrong OTP.','status':'Failed'}";
+                                            var jss1 = new JavaScriptSerializer();
+                                            var dict1 = jss1.Deserialize<dynamic>(results);
+                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        results = "{'Details':' Amount Should be Greater Than Rs. 100','status':'Failed' }";
+                                        //if (statusAdmin == "Y")
+                                        //{
+                                        //    SendPushNotification(AdminEmail, "Home/Money_transfer_Report", "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount " + transamount + " is Failed Due To Inputed Amount Should be Less Rs 25000 . ", "Money Transfer ..");
+                                        //}
+                                        //if (statusRetailer == "Y")
+                                        //{
+                                        //    SendPushNotification(RetailerEmail, "Home/Money_Transfer_Report", "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount " + transamount + " is Failed Due To Amount Should be Less Rs 25000 . ", "Money Transfer ..");
+                                        //}
+                                        //if (StatusSendSmsMoneyTransferFailed == "Y")
+                                        //{
+                                        //    string msgssss = "";
+                                        //    string tempid = "";
+                                        //    string urlss = "";
+                                        //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                        //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "IMPSPAYMENTFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                        //    if (smsstypes != null)
+                                        //    {
+                                        //        msgssss = string.Format(smsstypes.Templates, bankname, account, amount);
+                                        //        tempid = smsstypes.Templateid;
+                                        //        urlss = smsapionsts.smsapi;
+                                        //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                        //    }
+                                        //    // smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To Amount Should be Less Rs 50000 .", "Recharge");
+                                        //}
+                                        smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "IMPSPAYMENTFAILED", NUMBER, bankname, account + " ", " " + amount);
+                                        if (StatusSendMailMoneyTransferFailed == "Y")
+                                        {
+                                            smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To Amount Should be Less Rs 50000 .", "Recharge", AdminEmail);
+                                        }
+                                        var jss1 = new JavaScriptSerializer();
+                                        var dict1 = jss1.Deserialize<dynamic>(results);
+                                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var nmm = aomt.ToString();
+                                    results = "{'Details':'Amount Should be Less Rs " + nmm + "','status':'Failed' }";
+                                    //if (statusAdmin == "Y")
+                                    //{
+                                    //    SendPushNotification(AdminEmail, "Home/Money_transfer_Report", "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount " + transamount + " is Failed Due To Inputed Amount Should be Less Rs 25000 . ", "Money Transfer ..");
+                                    //}
+                                    //if (statusRetailer == "Y")
+                                    //{
+                                    //    SendPushNotification(RetailerEmail, "Home/Money_Transfer_Report", "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount " + transamount + " is Failed Due To Amount Should be Less Rs 25000 . ", "Money Transfer ..");
+                                    //}
+                                    //if (StatusSendSmsMoneyTransferFailed == "Y")
+                                    //{
+                                    //    string msgssss = "";
+                                    //    string tempid = "";
+                                    //    string urlss = "";
+                                    //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                    //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "IMPSPAYMENTFAILED" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                    //    if (smsstypes != null)
+                                    //    {
+                                    //        msgssss = string.Format(smsstypes.Templates, bankname, account, amount);
+                                    //        tempid = smsstypes.Templateid;
+                                    //        urlss = smsapionsts.smsapi;
+                                    //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                    //    }
+                                    //    //  smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To Amount Should be Less Rs 50000 .", "Recharge");
+                                    //}
+                                    smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "IMPSPAYMENTFAILED", NUMBER, bankname, account + " ", " " + amount);
+                                    if (StatusSendMailMoneyTransferFailed == "Y")
+                                    {
+                                        smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To Amount Should be Less Rs 50000 .", "Recharge", AdminEmail);
+                                    }
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(results);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                results = "{'Details':'No api Open.','status':'Failed'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            results = "{'Details':'Remain Amount Low','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        results = "{'Details':'Please Wait 5 Minutes... Same Amount Not Transfer in same Account','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                    //}
+                    //else
+                    //{
+                    //    results = "{'Details':'Not Allow , Use The Register Mobile','status':'Failed'}";
+                    //    var jss1 = new JavaScriptSerializer();
+                    //    var dict1 = jss1.Deserialize<dynamic>(results);
+                    //    return Json(dict1, JsonRequestBehavior.AllowGet);
+                    //}
+                }
+                else
+                {
+                    results = "{'Details':'Error!!! Please try after sometime!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+                var msg = ex.Message.ToString();
+
+                var results1 = "{'Details':'" + msg + "','status':'Failed' }";
+                var jss1 = new JavaScriptSerializer();
+                var dict1 = jss1.Deserialize<dynamic>(results1);
+                return Json(dict1, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public JObject moneypayoutradiantPPI(string userid, decimal Amount, decimal FinalAmount, string sender_number, string Accountnumber, string bankname, string benIFSC, string CommonTranid, string typetransfer, string Name, string Ipaddress, string macaddress, string benid, string custid, decimal? servicefee, string idprooftype, string idproofnumber, string kycsts, string pincode, string slabname)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                Guid guid = Guid.NewGuid();
+                string uniqueid = guid.ToString();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                Radiantdmt dmt = new Radiantdmt();
+                dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                string Reqid = "R" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                var requestsend = "https://aceneobank.dev.acepe.co.in/apiService/dmt/Fundtransfer?customerid=" + custid + "&senderno=" + sender_number + "&beneficierid=" + benid + "&benefmobile=" + sender_number + "&benefname=" + Name + "&paymode=" + typetransfer + "&amount=" + Amount.ToString() + "&agent_id=" + radianagentid + "";
+                System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                //  var ch = db.Money_transfer_new_new(userid, Amount, FinalAmount, sender_number, Accountnumber, bankname, benIFSC, CommonTranid, Reqid, typetransfer, "Apps", "Y", requestsend, "RADIANT", Ipaddress, macaddress, "", 0, 0, "DMT2", uniqueid, outputchk).Single().msg;
+                var ch = "";
+                if (slabname == "Slab1")
+                {
+                    ch = db.Money_transfer_by_paytm(userid, Amount, FinalAmount, sender_number, Accountnumber, bankname, benIFSC, CommonTranid, Reqid, typetransfer, "ONLINE", kycsts, requestsend, "RADIANT", Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+                }
+                else
+                {
+                    ch = db.Money_transfer_by_paytm(userid, Amount, FinalAmount, sender_number, Accountnumber, bankname, benIFSC, CommonTranid, Reqid, typetransfer, "ONLINE", kycsts, requestsend, "RADIANT", Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+
+                }
+                if (ch == "RETAILERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "DEALERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Dealer Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "MASTERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Master Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "STATUSDOWN")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "IMPS Down.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "CAPPINGLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Capping Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "SAMEIDNOTALLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Same Requesid Id Not Allow.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "OK")
+                {
+                    Task<IRestResponse> task = Task.Run(() =>
+                    {
+                        return dmt.PayoutTransfer(radianagentid, radianttoken, sender_number, Name, Amount.ToString(), radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Accountnumber, bankname, benIFSC, pincode);
+
+                        //  return dmt.Fundtransfer(radianagentid, radianttoken, sender_number, benid, Name, typetransfer, Amount.ToString(), custid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                    });
+                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                    //  var responseall = cb1.Beneficiary_Account_verify(NUMBER, account, benIFSC, CommonTranid, tokn.apitoken, bankname);
+                    if (isCompletedSuccessfully == true)
+                    {
+                        if (task.Result.StatusCode == HttpStatusCode.NotAcceptable)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            task = Task.Run(() =>
+                            {
+                                return dmt.PayoutTransfer(radianagentid, radianttoken, sender_number, Name, Amount.ToString(), radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Accountnumber, bankname, benIFSC, pincode);
+                            });
+                        }
+                        if (task.Result.StatusCode == HttpStatusCode.Created || task.Result.StatusCode == HttpStatusCode.OK)
+                        {
+                            dynamic resp_chk = JsonConvert.DeserializeObject(task.Result.Content);
+                            bool status = resp_chk.success;
+                            string message = resp_chk.message;
+                            if (status)
+                            {
+                                string txnSts = resp_chk.data.status;
+                                if (txnSts.ToUpper().Contains("SUCCESS"))
+                                {
+                                    string oprid = resp_chk.data.rrn?.ToString();
+                                    var bname = resp_chk.data.beneName?.ToString();
+                                    db.Money_transfer_update_by_paytm(Reqid, "SUCCESS", oprid, bname, task.Result.Content.ToString(), "", 0, 0);
+                                    dynamic res = new JObject();
+                                    res.Status = "Success";
+                                    res.Message = "Transition Successful";
+                                    res.Bannrrn = oprid;
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else if (txnSts.ToUpper().Contains("AWAITED") || txnSts.ToUpper() == "INPROGRESS" || txnSts.ToUpper() == "PENDING")
+                                {
+                                    dynamic res = new JObject();
+                                    res.Status = "Pending";
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else
+                                {
+                                    // db.Money_transfer_update_by_paytm(Reqid, "FAILED", message, "", task.Result.ToString(), "", 0, 0);
+                                    //   db.Money_transfer_update_new_new(Reqid, "FAILED", message, "", task.Result.Content, "", 0, 0);
+                                    //dynamic res = new JObject();
+                                    //res.Status = "Failed";
+                                    //res.Message = message;
+                                    //res.Bannrrn = message;
+                                    //res.Amount = Amount;
+                                    //return res;
+                                    dynamic res = new JObject();
+                                    res.Status = "Pending";
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                            }
+                            else
+                            {
+                                db.Money_transfer_update_by_paytm(Reqid, "FAILED", message, "", task.Result.ToString(), "", 0, 0);
+
+                                dynamic res = new JObject();
+                                res.Status = "Failed";
+                                res.Message = message;
+                                res.Bannrrn = message;
+                                res.Amount = Amount;
+                                return res;
+                            }
+                        }
+                        else
+                        {
+                            db.Money_transfer_update_by_paytm(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", task.Result.ToString(), "", 0, 0);
+
+                            //  db.Money_transfer_update_new_new(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", chkkk.Content, "", 0, 0);
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            dynamic res = new JObject();
+                            res.Status = "Failed";
+                            res.Message = "Please Try After Sometime";
+                            res.Bannrrn = "Please Try After Sometime";
+                            res.Amount = Amount;
+                            return res;
+                        }
+                    }
+                    else
+                    {
+                        dynamic res = new JObject();
+                        res.Status = "Pending";
+                        res.Message = "Transition Pending";
+                        res.Bannrrn = "Transition Pending";
+                        res.Amount = Amount;
+                        return res;
+                    }
+                }
+                else
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Pending";
+                    res.Message = "Please Check history";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+            }
+        }
+
+
+        public JObject monrytransferuniquePPI(string userid, decimal Amount, decimal FinalAmount, string sender_number, string Accountnumber, string bankname, string benIFSC, string CommonTranid, string typetransfer, string Name, string Ipaddress, string macaddress, string benid, string custid)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                Guid guid = Guid.NewGuid();
+                string uniqueid = guid.ToString();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                Radiantdmt dmt = new Radiantdmt();
+                dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                string Reqid = "R" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                var requestsend = "https://aceneobank.dev.acepe.co.in/apiService/dmt/Fundtransfer?customerid=" + custid + "&senderno=" + sender_number + "&beneficierid=" + benid + "&benefmobile=" + sender_number + "&benefname=" + Name + "&paymode=" + typetransfer + "&amount=" + Amount.ToString() + "&agent_id=" + radianagentid + "";
+                System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var chkinfo = userid + "," + Amount + "," + FinalAmount + "," + sender_number + "," + Accountnumber + "," + bankname + "," + benIFSC + "," + CommonTranid + "," + Reqid + "," + typetransfer + "," + "Apps" + "," + "Y" + "," + requestsend + "," + "RADIANT" + "," + Ipaddress + "," + macaddress + "," + "" + "," + 0 + "," + 0 + "," + "DMT2" + "," + uniqueid + ",";
+
+                var ch = db.Money_transfer_new_new(userid, Amount, FinalAmount, sender_number, Accountnumber, bankname, benIFSC, CommonTranid, Reqid, typetransfer, "Apps", "Y", requestsend, "RADIANT", Ipaddress, macaddress, "", 0, 0, "DMT2", uniqueid, outputchk).Single().msg;
+                if (ch == "RETAILERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "DEALERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Dealer Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "MASTERLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Master Remain Balance Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "STATUSDOWN")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "IMPS Down.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "CAPPINGLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Capping Low.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "SAMEIDNOTALLOW")
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Failed";
+                    res.Message = "Same Requesid Id Not Allow.";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+                else if (ch == "OK")
+                {
+                    Task<IRestResponse> task = Task.Run(() =>
+                    {
+                        return dmt.Fundtransfer(radianagentid, radianttoken, sender_number, benid, Name, typetransfer, Amount.ToString(), custid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                    });
+                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(30000));
+                    //  var responseall = cb1.Beneficiary_Account_verify(NUMBER, account, benIFSC, CommonTranid, tokn.apitoken, bankname);
+                    if (isCompletedSuccessfully == true)
+                    {
+                        if (task.Result.StatusCode == HttpStatusCode.NotAcceptable)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            task = Task.Run(() =>
+                            {
+                                return dmt.Fundtransfer(radianagentid, radianttoken, sender_number, benid, Name, typetransfer, Amount.ToString(), custid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            });
+                        }
+                        if (task.Result.StatusCode == HttpStatusCode.Created || task.Result.StatusCode == HttpStatusCode.OK)
+                        {
+                            dynamic resp_chk = JsonConvert.DeserializeObject(task.Result.Content);
+                            bool status = resp_chk.success;
+                            string message = resp_chk.message;
+                            if (status)
+                            {
+                                string txnSts = resp_chk.data.status;
+                                if (txnSts.ToUpper().Contains("SUCCESS"))
+                                {
+                                    string oprid = resp_chk.data.sorTxnId?.ToString();
+                                    var bname = resp_chk.data.benefname?.ToString();
+                                    db.Money_transfer_update_by_paytm(Reqid, "SUCCESS", oprid, bname, task.Result.Content.ToString(), "", 0, 0);
+                                    dynamic res = new JObject();
+                                    res.Status = "Success";
+                                    res.Message = "Transition Successful";
+                                    res.Bannrrn = oprid;
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else if (txnSts.ToUpper().Contains("AWAITED") || txnSts.ToUpper() == "PENDING")
+                                {
+                                    dynamic res = new JObject();
+                                    res.Status = "Pending";
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else if (txnSts.ToUpper() == "FAILED")
+                                {
+                                    db.Money_transfer_update_new_new(Reqid, "FAILED", message, "", task.Result.Content, "", 0, 0);
+                                    dynamic res = new JObject();
+                                    res.Status = "Failed";
+                                    res.Message = message;
+                                    res.Bannrrn = message;
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                                else
+                                {
+                                    dynamic res = new JObject();
+                                    res.Status = "Pending";
+                                    res.Message = "Transition Pending";
+                                    res.Bannrrn = "Transition Pending";
+                                    res.Amount = Amount;
+                                    return res;
+                                }
+                            }
+                            else
+                            {
+                                db.Money_transfer_update_new_new(Reqid, "FAILED", message, "", task.Result.Content, "", 0, 0);
+                                dynamic res = new JObject();
+                                res.Status = "Failed";
+                                res.Message = message;
+                                res.Bannrrn = message;
+                                res.Amount = Amount;
+                                return res;
+                            }
+                        }
+                        else
+                        {
+                            db.Money_transfer_update_new_new(Reqid, "FAILED", "Please Try After Sometime", "Please Try After Sometime", task.Result.Content, "", 0, 0);
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            dynamic res = new JObject();
+                            res.Status = "Failed";
+                            res.Message = "Please Try After Sometime";
+                            res.Bannrrn = "Please Try After Sometime";
+                            res.Amount = Amount;
+                            return res;
+                        }
+                    }
+                    else
+                    {
+                        dynamic res = new JObject();
+                        res.Status = "Pending";
+                        res.Message = "Transition Pending";
+                        res.Bannrrn = "Transition Pending";
+                        res.Amount = Amount;
+                        return res;
+                    }
+                }
+                else
+                {
+                    dynamic res = new JObject();
+                    res.Status = "Pending";
+                    res.Message = "Please Check history";
+                    res.Bannrrn = "";
+                    res.Amount = Amount;
+                    return res;
+                }
+            }
+        }
+
+        public ActionResult Print_Imps_PdfPPI(string orderid)
+        {
+            string userid = User.Identity.GetUserId();
+            var rem = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var chk = db.IMPS_transtion_detsils.Where(aa => aa.trans_common_id == orderid && aa.Status.ToUpper() != "RESEND").SingleOrDefault();
+            var admin = db.Admin_details.ToList();
+            ViewData["customercare"] = admin.Single().mobile1;
+            ViewData["Websitename"] = admin.Single().WebsiteUrl;
+            var sts = chk.Status;
+            ViewData["amount"] = chk.amount;
+            ViewData["orderid"] = orderid;
+            ViewData["retailermobile"] = rem.Mobile;
+            ViewData["retaileremail"] = rem.Email;
+            ViewData["retaileraddress"] = rem.Address;
+            ViewData["FirmName"] = rem.Frm_Name;
+            ViewData["mode"] = chk.Trans_Type;
+            ViewData["amount"] = chk.amount;
+            ViewData["BankName"] = chk.bank_nm;
+            ViewData["TransDate"] = chk.trans_time;
+            ViewData["Reciver"] = chk.recivername;
+            ViewData["senderno"] = chk.senderno;
+            var charge = chk.charge;
+            decimal tax = 0; decimal total = 0;
+            if (rem.gststatus == "Y")
+            {
+                tax = (Convert.ToDecimal(charge) * 18) / 100;
+                total = Convert.ToDecimal(chk.amount) + Convert.ToDecimal(tax) + Convert.ToDecimal(charge);
+            }
+            else
+            {
+                total = Convert.ToDecimal(chk.amount) + Convert.ToDecimal(tax) + Convert.ToDecimal(charge);
+            }
+            ViewData["servicefee"] = charge;
+            ViewData["tax"] = tax;
+            ViewData["total"] = total;
+            ViewData["rrn"] = chk.bank_trans_id;
+            ViewData["accountno"] = chk.accountno;
+            ViewData["ifsccode"] = chk.ifsccode;
+            if (sts.ToUpper() == "SUCCESS")
+            {
+                ViewData["msg"] = "Successful";
+            }
+            else if (sts.ToUpper() == "PENDING")
+            {
+                var trans_time = chk.trans_time;
+                double difftime = DateTime.Now.Subtract(trans_time.Value).TotalMinutes;
+                if (difftime < 2)
+                {
+                    ViewData["msg"] = "Transaction In Process";
+                }
+                else
+                {
+                    ViewData["msg"] = "Transaction pending";
+                }
+            }
+            return new ViewAsPdf("Print_Imps_Pdf");
+        }
+        [HttpPost]
+        public ActionResult imps_emailPPI(string orderid)
+        {
+            string userid = User.Identity.GetUserId();
+            var rem = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var logo = db.tblHeaderLogoes.Where(aa => aa.Role == "ADMIN").SingleOrDefault().LogoImage;
+            var chk = db.IMPS_transtion_detsils.Where(aa => aa.trans_common_id == orderid).SingleOrDefault();
+            var sts = chk.Status;
+            ViewData["amount"] = chk.amount;
+            ViewData["orderid"] = orderid;
+            var logochk = logo.Replace("\\Outside_logo\\", "");
+            ViewData["logo"] = logochk;
+            ViewData["FirmName"] = rem.Frm_Name;
+            ViewData["mode"] = chk.Trans_Type;
+            ViewData["amount"] = chk.amount;
+            ViewData["servicefee"] = 0;
+            ViewData["tax"] = "0";
+            ViewData["total"] = chk.amount + 0;
+            ViewData["rrn"] = chk.bank_trans_id;
+            ViewData["accountno"] = chk.accountno;
+            ViewData["name"] = chk.recivername;
+            ViewData["ifsccode"] = chk.ifsccode;
+            var msg = "";
+            if (sts.ToUpper() == "SUCCESS" || sts.ToUpper() == "PENDING")
+            {
+                msg = "Transaction Successful";
+            }
+            else
+            {
+                msg = "Transaction Failed";
+            }
+            decimal tax = 0; decimal total = 0;
+            if (rem.gststatus == "Y")
+            {
+                var charge = Convert.ToDecimal(chk.charge);
+                tax = (charge * 18) / 100;
+            }
+            total = Convert.ToDecimal(chk.charge) + Convert.ToDecimal(chk.amount) + tax;
+            string body = new CommonUtil().PopulateBodyEmail(msg, chk.amount.ToString(), orderid, rem.Frm_Name, chk.Trans_Type, chk.amount.ToString(), tax.ToString(), total.ToString(), chk.bank_trans_id, chk.accountno, chk.recivername, chk.ifsccode);
+            new CommonUtil().InsertsendmailIMPS(rem.Email, "IMPS Transaction", body);
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JObject AadharVerificationOtpSent_MoneyPPI(string aadhar, string senderno)
+        {
+            var obj = new JObject();
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var userid = User.Identity.GetUserId();
+                if (String.IsNullOrEmpty(aadhar) || aadhar.Length != 12)
+                {
+                    obj.Add("Status", false);
+                    obj.Add("Message", "Invalid Retailer Aadhar Card");
+                    return obj;
+                }
+                var token = Responsetoken.gettoken();
+                var txnid = new DateTime().Millisecond.ToString() + RandomString(8);
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+                var outp = db.sender_info_aadhar_proc_insert(userid, senderno, aadhar, txnid, output).SingleOrDefault().msg;
+                if (outp == "OK")
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    var client = new RestClient("http://api.vastbazaar.com/api/DMTPAYTM/validaadhar?aadharno=" + aadhar + "&txnid=" + txnid + "&senderno=" + senderno);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("Authorization", "Bearer " + token);
+                    IRestResponse response = client.Execute(request);
+                    if (response.Content.Contains("Invalid response"))
+                    {
+                        obj.Add("Status", false);
+                        obj.Add("Message", "Bad Request");
+                    }
+                    else
+                    {
+                        dynamic res = JsonConvert.DeserializeObject(response.Content);
+                        db.update_sender_aadhar(txnid, "Success", "Pending", "", "");
+                        var status = (bool)res.Content.ADDINFO.success;
+                        if (status)
+                        {
+                            var clientId = (string)res.Content.ADDINFO.data.client_id;
+                            obj.Add("Status", true);
+                            obj.Add("Message", "Aadhar Verification Otp Sent");
+                            obj.Add("clientId", clientId);
+                            obj.Add("txnid", txnid);
+                            obj.Add("aadhar", aadhar);
+                        }
+                        else
+                        {
+                            var message = (string)res.Content.ADDINFO.message;
+                            obj.Add("Status", false);
+                            obj.Add("Message", message);
+                        }
+                    }
+                }
+                else
+                {
+                    obj.Add("Status", false);
+                    obj.Add("Message", outp);
+                }
+            }
+            return obj;
+        }
+        [HttpPost]
+        public JObject AadharVerificationOtpVerify_moneyPPI(string client_id, string otp, string aadhar, string senderno, string txnid)
+        {
+            var obj = new JObject();
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var userid = User.Identity.GetUserId();
+                var token = Responsetoken.gettoken();
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var client = new RestClient("http://api.vastbazaar.com/api/DMTPAYTM/validaadharotp?client_id=" + client_id + "&otp=" + otp + "&txnid= " + txnid + "&aadhaar_number=" + aadhar + "&senderno=" + senderno);
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", "Bearer " + token);
+                IRestResponse response = client.Execute(request);
+                if (response.Content.ToUpper().Contains("INVALID RESPONSE"))
+                {
+                    obj.Add("Status", false);
+                    obj.Add("Message", "Bad Request");
+                }
+                else
+                {
+                    dynamic res = JsonConvert.DeserializeObject(response.Content);
+                    var status = (bool)res.Content.ADDINFO.success;
+                    var statuscode = (string)res.Content.ADDINFO.status_code;
+                    if (status)
+                    {
+                        var full_name = (string)res.Content.ADDINFO.data.full_name;
+                        var dob = (string)res.Content.ADDINFO.data.dob;
+                        var profile_image = (string)res.Content.ADDINFO.data.profile_image;
+                        var house = (string)res.Content.ADDINFO.data.address.house;
+                        var street = (string)res.Content.ADDINFO.data.address.street;
+                        var landmark = (string)res.Content.ADDINFO.data.address.landmark;
+                        var loc = (string)res.Content.ADDINFO.data.address.loc;
+                        var subdist = (string)res.Content.ADDINFO.data.address.subdist;
+                        var dist = (string)res.Content.ADDINFO.data.address.dist;
+                        var state = (string)res.Content.ADDINFO.data.address.state;
+                        //var profile_image = (string)res.Content.ADDINFO.data.profile_image;
+                        var infochk = db.sender_aadhar_info.Where(aa => aa.txnid == txnid).SingleOrDefault();
+                        infochk.Statuscode = statuscode;
+                        infochk.Name = full_name;
+                        infochk.photo = profile_image;
+                        var chk = db.Sender_aadhar.Where(aa => aa.aadharnumber == aadhar).SingleOrDefault();
+                        if (chk == null)
+                        {
+                            Sender_aadhar send = new Sender_aadhar();
+                            send.aadharnumber = aadhar;
+                            send.sendernumber = senderno;
+                            db.Sender_aadhar.Add(send);
+                        }
+                        db.SaveChanges();
+                        obj.Add("Status", true);
+                        obj.Add("Message", "Aadhar Verification Done");
+                    }
+                    else
+                    {
+                        var message = (string)res.Content.ADDINFO.message;
+                        obj.Add("Status", false);
+                        obj.Add("Message", message);
+                    }
+                }
+            }
+            return obj;
+        }
+        public IRestResponse tokencheckPPI()
+        {
+            var apidetails = db.Money_API_URLS.Where(aa => aa.API_Name == "VASTWEB").SingleOrDefault();
+            var token = apidetails == null ? "" : apidetails.Token;
+            var apiid = apidetails == null ? "" : apidetails.API_ID;
+            var apiidpwd = apidetails == null ? "" : apidetails.Api_pwd;
+            var client = new RestClient(VastbazaarBaseUrl + "token");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("iptoken", token);
+            request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddParameter("application/x-www-form-urlencoded", "UserName=" + apiid + "&Password=" + apiidpwd + "&grant_type=password", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return response;
+        }
+      
+       
+        public ActionResult DMTreportnewPPI()
+        {
+            var userid = User.Identity.GetUserId();
+            Recent_report recent = new Recent_report();
+            recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
+            recent.Recent_report_Aeps = null;
+            recent.Recent_PAN_CARD_IPAY = null;
+            recent.Recent_mPosInfo = null;
+            return PartialView("_RecentReport", recent);
+        }
+        /// <summary>
+        ///////  UPI  
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        public ActionResult Register_ben_UPIPPI(string senderno, string account, string benname)
+        {
+            try
+            {
+                var RetailerID = User.Identity.GetUserId();
+                var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
+                var reciep_mobile = mob;
+                VastBazaar cb = new VastBazaar();
+                var responsechk = "";
+                var responsecode1 = "";
+                var tokn = Responsetoken.gettoken();
+                var responseall = cb.Beneficiary_register_UPI(benname, senderno, account, tokn);
+                responsechk = responseall.Content.ToString();
+                responsecode1 = responseall.StatusCode.ToString();
+                if (responsecode1 == "OK")
+                {
+                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                    var respcode = json.Content.ResponseCode.ToString();
+                    var ADDINFO = json.Content.ADDINFO;
+                    var stscode = ADDINFO.status;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                    var error = json.error.ToString();
+                    var error_decribe = json["error_description"].ToString();
+                    var results = "{'message':'" + error_decribe + "','status':false}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message.ToString();
+                var results = "{'Message':'" + msg + "','Response':false}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Register_ben_WALLETPPI(string senderno, string account, string benname)
+        {
+            try
+            {
+                var RetailerID = User.Identity.GetUserId();
+                var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
+                var reciep_mobile = mob;
+                VastBazaar cb = new VastBazaar();
+                var responsechk = "";
+                var responsecode1 = "";
+                var tokn = Responsetoken.gettoken();
+                var responseall = cb.Beneficiary_register_WALLET(benname, senderno, account, tokn);
+                responsechk = responseall.Content.ToString();
+                responsecode1 = responseall.StatusCode.ToString();
+                if (responsecode1 == "OK")
+                {
+                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                    var respcode = json.Content.ResponseCode.ToString();
+                    var ADDINFO = json.Content.ADDINFO;
+                    var stscode = ADDINFO.status;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                    var error = json.error.ToString();
+                    var error_decribe = json["error_description"].ToString();
+                    var results = "{'message':'" + error_decribe + "','status':false}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message.ToString();
+                var results = "{'Message':'" + msg + "','Response':false}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion End DMT PPI
+
+        /// </summary>
+        /// <returns></returns>
+
+
         #region MONEYTRANSFER DMT 1
         [HttpGet]
         public ActionResult Money_transfer2()
         {
             var money1 = false; var money2 = false;
-            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
-            var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT").SingleOrDefault();
-            if (moneyapists_dmt.status == true || moneyapists_payout.status == true)
+            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status==true).SingleOrDefault();
+            if (moneyapists_dmt!=null)
             {
                 money1 = true;
             }
-            var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT").SingleOrDefault();
-            var moneyapists_payout1 = db.money_api_status1.Where(aa => aa.catagory == "PAYOUT").SingleOrDefault();
-            if (moneyapists_dmt1.status == true || moneyapists_payout1.status == true)
+            var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
+            if (moneyapists_dmt1 != null)
             {
                 money2 = true;
             }
@@ -19245,6 +26031,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(viewresponse1, JsonRequestBehavior.AllowGet);
             }
         }
+     
         [HttpPost]
         public ActionResult VerifyotpEkyc(string otp, string primaryhide, string encodehide)
         {
@@ -20640,11 +27427,86 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
+        public JsonResult BindBankDdllist_Paysprint()
+        {
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                VastBazaar cb = new VastBazaar();
+                var responseall = cb.Paysprint_Bank_details(Responsetoken.gettoken());
+                var responsechk = responseall.Content;
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+                var ser = JsonConvert.SerializeObject(ADDINFO);
+                json = JsonConvert.DeserializeObject(ser);
+                JArray a = (JArray)json["data"];
+                IList<BankNameModel> Details = a.ToObject<IList<BankNameModel>>();
+                List<SelectListItem> customers = new List<SelectListItem>();
+                foreach (var item in Details)
+                {
+                    customers.Add(new SelectListItem
+                    {
+                        Value = item.branch_ifsc +"|"+item.id,
+                        Text = item.bank_name
+                    });
+                }
+                //for (int i = 0; i < 10; i++)
+                //{
+                //    customers.Add(new SelectListItem
+                //    {
+                //        Value = entities.Customers.ToList()[i].CustomerID,
+                //        Text = entities.Customers.ToList()[i].ContactName
+                //    });
+                //}
+                return Json(new { data = customers }, JsonRequestBehavior.AllowGet);
+                // var result=  new SelectList(Details, "branch_ifsc", "bank_name");
+                // return json(result, JsonRequestBehavior.AllowGet);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        
         [HttpPost]
-        public ActionResult Senderdetails(string senderno)
+        public ActionResult RAdiantKYCRegister(string senderno, string pid,string aadharnumber)
+        {
+            string lat = "27.609400";
+            string long1= "75.139908";
+            var ipaddress = GetComputer_InternetIP();
+            var userid = User.Identity.GetUserId();
+
+            var radiantauthchk = db.radiantauths.SingleOrDefault();
+            if (radiantauthchk != null)
+            {
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (radiantresponse != null)
+                {
+                    Radiantdmt dmt = new Radiantdmt();
+                    var tokenchk = db.radianttokens.SingleOrDefault();
+                    if (tokenchk == null)
+                    {
+                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                    }
+                    else
+                    {
+                        radianttoken = tokenchk.accessToken;
+                        radianagentid = tokenchk.agentID;
+                    }
+                    var respchk = dmt.KYCRegister(radianagentid, radianttoken, senderno,aadharnumber,pid, lat, long1, ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                    if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                    {
+                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                        respchk = dmt.KYCRegister(radianagentid, radianttoken, senderno, aadharnumber, pid, lat, long1, ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                    }
+                }
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult Senderdetails(string senderno,string latloc,string longloc)
         {
             var check = "OK"; var errormsg = "";
-            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "PAYOUT" || aa.catagory == "DMT")).SingleOrDefault();
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
             if (apinm != null)
             {
 
@@ -20681,7 +27543,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 VastBazaar cb = new VastBazaar();
                                 var tokenapi = Responsetoken.gettoken();
-                                var responseall = cb.Remitter_details(senderno, tokenapi);
+                                var responseall = cb.Remitter_details_DMT(senderno, tokenapi,latloc,longloc);
                                 var responsechk = responseall.Content.ToString();
                                 var responsecode1 = responseall.StatusCode.ToString();
                                 var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
@@ -20736,6 +27598,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         catch
                                         { }
                                     }
+                                   
+                                   
                                     //   var results = JsonConvert.SerializeObject(json);
                                     // var jss = new JavaScriptSerializer();
                                     //  var dict = jss.Deserialize<dynamic>(json);
@@ -20889,6 +27753,90 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 //  var dict = jss.Deserialize<dynamic>(results);
                 return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
             }
+        }
+        public static byte[] EncryptAES(string plainText, string key, string iv)
+        {
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Encoding.UTF8.GetBytes(key);
+                aesAlg.IV = Encoding.UTF8.GetBytes(iv);
+                aesAlg.Mode = CipherMode.CBC;
+                aesAlg.Padding = PaddingMode.PKCS7;
+
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+                return encryptor.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
+            }
+        }
+        [HttpPost]
+        public ActionResult KYCRegister(string senderno,string pid,string aadharnumber, string latloc,string longloc)
+        {
+            pid= HttpUtility.UrlDecode(pid);
+            string key = "2dc2770e6938f17c";       // Replace with your AES key (must be 16 bytes for AES-128)
+            string iv = "e2cb1fd94a96ff35";         // Replace with your Initialization Vector (must be 16 bytes)
+
+            byte[] encrypted = EncryptAES(pid, key, iv);
+            string enctoken = Convert.ToBase64String(encrypted);
+
+            string userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken);
+            var status = false; string message = "Please Try After Sometime";
+            string kyc_id = "";string stateresp = "";
+            if (responseall.StatusCode==HttpStatusCode.OK)
+            {
+                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                dynamic respchk = respchkinfo.Content.ADDINFO;
+                message = respchk.message;
+                if (respchk.status ==true)
+                {
+                    if(respchk.response_code=="1")
+                    {
+                        status = true;
+                        kyc_id = respchk.data.ekyc_id;
+                        stateresp = respchk.data.stateresp;
+                    }
+                }
+            }
+            var respchk1 = new
+            {
+                status,
+                kyc_id,
+                stateresp,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult KYCEnterOTP(  string stateResp,string kyc_id,string Sendernumber,string otp)
+        {
+            string userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
+            var status = false; string message = "Please Try After Sometime";
+            if (responseall.StatusCode == HttpStatusCode.OK)
+            {
+                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                dynamic respchk = respchkinfo.Content.ADDINFO;
+            
+                message = respchk.message;
+                if (respchk.status == true)
+                {
+                    if (respchk.response_code == "1")
+                    {
+                        status = true;
+                    }
+                }
+            }
+            var respchk1 = new
+            {
+                status,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult UPI_Senderdetails(string senderno)
@@ -21153,7 +28101,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Register_ben(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname)
+        public ActionResult Register_ben(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname,string hidebenid)
         {
             try
             {
@@ -21161,7 +28109,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 ifsccode = ifsccode.ToUpper();
                 var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
                 var reciep_mobile = mob;
-                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "PAYOUT" || aa.catagory == "DMT")).SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
                 if (apinm != null)
                 {
                     if (apinm.api_name == "VASTWEB")
@@ -21170,7 +28118,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var responsechk = "";
                         var responsecode1 = "";
                         var tokn = Responsetoken.gettoken();
-                        var responseall = cb.Beneficiary_register("", benname, senderno, ifsccode, account, tokn, originalifsccode);
+                        var responseall = cb.Beneficiary_register_Paysprint(hidebenid, benname, senderno, ifsccode, account, tokn, originalifsccode);
                         responsechk = responseall.Content.ToString();
                         responsecode1 = responseall.StatusCode.ToString();
                         if (responsecode1 == "OK")
@@ -21322,6 +28270,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
+
+
 
         [HttpPost]
         public ActionResult Register_sender(string senderno, string name)
@@ -21641,14 +28591,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpPost]
         public ActionResult Delete_ben(string benid, string mobile)
         {
-            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
             if (apinm != null)
             {
                 if (apinm.api_name == "VASTWEB")
                 {
                     VastBazaar cb = new VastBazaar();
                     var tokn = Responsetoken.gettoken();
-                    var responseall = cb.Beneficiary_Delete(benid, "", tokn, mobile);
+                    var responseall = cb.Beneficiary_Delete_Paysprint(benid, "", tokn, mobile);
                     var responsechk = responseall.Content.ToString();
                     var responsecode1 = responseall.StatusCode.ToString();
                     if (responsecode1 == "OK")
@@ -23534,14 +30484,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 }
                                 else
                                 {
-                                    if (string.IsNullOrEmpty(Mode))
-                                    {
-                                        amooot = 100000;
-                                    }
-                                    else
-                                    {
-                                        amooot = 25000;
-                                    }
+                                    amooot = 5000;
                                 }
                                 if (amt <= amooot)
                                 {
@@ -23636,6 +30579,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var stspinotp = "NOTOK";
             try
             {
+                
                 if (!string.IsNullOrEmpty(imageData))
                 {
                     //   filename = Server.MapPath("~/Retailer_image/") + DateTime.Now.ToString().Replace("/", "-").Replace(" ", "_").Replace(":", "") + ".jpeg";
@@ -23679,7 +30623,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var RetailerMob = rem_details.Mobile;
                 var aadhar = rem_details.AadharCard;
                 moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
-                var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
                 var remwise = db.passbyretailerdmts.Where(s => s.userid == userid).ToList();
                 string CommonTranid = "W" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb.RandomString(4);
                 var apiname = apinm == null ? "NO" : apinm.api_name;
@@ -24040,15 +30984,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             {
                                                 ////////////VastWeb/////////////////
                                                 requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + ifsc + "\",\"agentid\":\"" + CommonTranid + "";
-                                                if (slabname == "Slab1")
-                                                {
-                                                    ch = db.Money_transfer_by_paytm(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
-                                                }
-                                                else
-                                                {
-                                                    ch = db.Money_transfer_by_paytm1(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+                                                //if (slabname == "Slab1")
+                                                //{
+                                                //    ch = db.Money_transfer_by_paytm(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
+                                                //}
+                                                //else
+                                                //{
+                                                //    ch = db.Money_transfer_by_paytm1(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
 
-                                                }
+                                                //}
+                                                 ch = db.Money_transfer_new_new(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", "Y", requestsend, apiname, Ipaddress, macaddress, "", 0, 0, "DMTN", uniqueid, outputchk).Single().msg;
+
                                                 var remainrem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount;
                                                 Response.remainretailer = remainrem;
                                                 if (ch == "RETAILERLOW")
@@ -24201,12 +31147,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             return Instantpay_Payout.payout_pool(name, type, amt.ToString(), account, ifsc, Tranid, RetailerEmail, authcode, clientid, secret, ipaddress, actno);
                                                         });
                                                     }
-
                                                     else
                                                     {
                                                         task = Task.Run(() =>
                                                         {
-                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                            //return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                            return cb1.Fund_Transfer_Paysprint(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar, latss, longloc);
                                                         });
                                                     }
                                                     bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
@@ -24534,13 +31480,42 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         var charge = Convert.ToDecimal(resp_imps.charge);
                                                                         Response.tax = (charge * 18) / 100;
                                                                     }
+                                                                    string rrn= ADDINFO.result.rrn.ToString();
                                                                     Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
                                                                     Response.status = "Pending";
                                                                     Response.Details = "";
                                                                     dynamic resp = new JObject();
                                                                     resp.Amount = amt;
                                                                     resp.Status = "Pending";
-                                                                    resp.bankrefid = "Pending";
+                                                                   // resp.bankrefid = "Pending";
+                                                                    resp.bankrefid = rrn;
+                                                                    resp.agentid = Tranid;
+                                                                    resp.benid = benCode;
+                                                                    Response.data.Add(resp);
+                                                                }
+                                                                else if(txnSts== "SENDOTP")
+                                                                {
+                                                                    Response.servicefee = resp_imps.charge;
+                                                                    if (rem_details.gststatus == "N")
+                                                                    {
+                                                                        Response.tax = 0;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var charge = Convert.ToDecimal(resp_imps.charge);
+                                                                        Response.tax = (charge * 18) / 100;
+                                                                    }
+                                                                    string rrn = ADDINFO.result.rrn.ToString();
+                                                                    Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
+                                                                    Response.status = "SENDOTP";
+                                                                    Response.Details = "";
+                                                                    dynamic resp = new JObject();
+                                                                    resp.Amount = amt;
+                                                                    resp.Status = "SENDOTP";
+                                                                    // resp.bankrefid = "Pending";
+                                                                    resp.bankrefid = rrn;
+                                                                    resp.agentid = Tranid;
+                                                                    resp.benid = benCode;
                                                                     Response.data.Add(resp);
                                                                 }
                                                                 else
@@ -24579,7 +31554,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     else
                                                                     {
                                                                         //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
-                                                                        db.Money_transfer_update_by_paytm(Tranid, "FAILED", "Failed", bname, json.ToString(), "", 0, 0);
+                                                                        db.Money_transfer_update_by_paytm(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
                                                                         //if (StatusSendSmsMoneyTransferFailed == "Y")
                                                                         //{
                                                                         //    string msgssss = "";
@@ -24602,11 +31577,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
                                                                         }
                                                                         Response.status = "Failed";
-                                                                        Response.Details = "Failed";
+                                                                        Response.Details = payidno;
                                                                         dynamic resp = new JObject();
                                                                         resp.Amount = amt;
                                                                         resp.Status = "Failed";
-                                                                        resp.bankrefid = "Failed";
+                                                                        resp.bankrefid = payidno;
                                                                         Response.data.Add(resp);
                                                                     }
                                                                 }
@@ -24776,15 +31751,326 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             catch (Exception ex)
             {
-
-
                 var msg = ex.Message.ToString();
-
                 var results1 = "{'Details':'" + msg + "','status':'Failed' }";
                 var jss1 = new JavaScriptSerializer();
                 var dict1 = jss1.Deserialize<dynamic>(results1);
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
+        }
+        [HttpPost]
+        public ActionResult imps_transfer_verifyotp(string Agentid,string benid,string otp,string stateresp)
+        {
+            var userid = User.Identity.GetUserId();
+            var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.Status == "Pending" && aa.trans_id == Agentid && aa.rch_from== userid).SingleOrDefault();
+            dynamic Responsen = new JObject();
+            Responsen.data = new JArray() as dynamic;
+            if (resp_imps != null)
+            {
+                string bankname = resp_imps.bank_nm;
+                string amount = resp_imps.amount.ToString();
+                string amt = amount;
+                string NUMBER = resp_imps.senderno;
+                string account = resp_imps.accountno;
+                string paymode = resp_imps.Trans_Type;
+                string AdminEmail = db.Admin_details.SingleOrDefault().email;
+                var rem_details = db.Retailer_Details.Where(aa=>aa.RetailerId==userid).SingleOrDefault();
+                string RetailerEmail = rem_details.Email;
+                string bankifsccode = resp_imps.ifsccode;
+                string orderid = resp_imps.trans_id;
+                string firmname = rem_details.Frm_Name;
+
+                //Responsen.bankifsccode = bankifsccode;
+                //Responsen.accountno = account;
+                //Responsen.paymode = paymode;
+                //Responsen.orderid = orderid;
+                //Responsen.firmname = firmname;
+                //Responsen.Amount = amt;
+                //Responsen.remainretailer = resp_imps.user_remain.ToString();
+
+
+                var logos = db.tblHeaderLogoes.Where(aa => aa.Role == "ADMIN").SingleOrDefault();
+                var logo = "";
+                if (logos != null)
+                {
+                    logo = logos.LogoImage;
+                }
+
+                Responsen.Accountno = account;
+                Responsen.Ifsccode = bankifsccode;
+                Responsen.bankifsccode = bankifsccode;
+                Responsen.BankName = bankname;
+                Responsen.TotalAmount = amt;
+                Responsen.accountno = account;
+                Responsen.Amount = amt;
+                Responsen.Time = DateTime.Now;
+                Responsen.orderid = orderid;
+                Responsen.logo = logo;
+                Responsen.firmname = firmname;
+                Responsen.servicefee = 0;
+                Responsen.tax = 0;
+                Responsen.total = amt;
+                Responsen.paymode = paymode;
+                Responsen.remainretailer = resp_imps.user_remain.ToString();
+
+
+                var tokn = Responsetoken.gettoken();
+                VastBazaar cb1 = new VastBazaar();
+                 var  task = Task.Run(() =>
+                {
+                    //return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                    return cb1.Fund_Transfer_Paysprint_Verifyotp(resp_imps.senderno, benid, Agentid, amount, resp_imps.Trans_Type, tokn, otp, stateresp);
+                });
+                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
+                if(isCompletedSuccessfully==true)
+                {
+                    var responsechk = task.Result.Content.ToString();
+                    var responsecode1 = task.Result.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        var StatusSendSmsMoneyTransferSuccess = db.SMSSendAlls.Where(a => a.ServiceName == "dmtsucconline").SingleOrDefault();
+                        var StatusSendSmsMoneyTransferFailed = db.SMSSendAlls.Where(a => a.ServiceName == "dmtfailedonline").SingleOrDefault();
+                        var StatusSendMailMoneyTransferSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "dmtsucconline1").SingleOrDefault().Status;
+                        var StatusSendMailMoneyTransferFailed = db.EmailSendAlls.Where(a => a.ServiceName == "dmtfailedonline1").SingleOrDefault().Status;
+
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var txnSts = ADDINFO.status;
+                        if (txnSts == "SUCCESS")
+                        {
+                            //decimal apiopeningbal = ADDINFO.data.opening_bal;
+                            //decimal chargeAmt = ADDINFO.data.charged_amt;
+                            //decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                            //var oprid = ADDINFO.data.ref_no.ToString();
+                            //var bname = ADDINFO.data.name.ToString();
+                            //string payidno = oprid;
+                            decimal apiopeningbal = ADDINFO.result.opening_bal;
+                            decimal chargeAmt = ADDINFO.result.charged_amt;
+                            decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                            var oprid = ADDINFO.result.rrn?.ToString();
+                            var bname = ADDINFO.result.name?.ToString();
+                            string payidno = oprid;
+                            //db.Money_transfer_update_new_new(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apicloseingbal);
+                            db.Money_transfer_update_by_paytm(Agentid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apiopeningbal);
+                            //if (StatusSendSmsMoneyTransferSuccess == "Y")
+                            //{
+                            //    string msgssss = "";
+                            //    string tempid = "";
+                            //    string urlss = "";
+                            //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                            //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "IMPSPAYMENTSUCCESSFULLY" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                            //    if (smsstypes != null)
+                            //    {
+                            //        msgssss = string.Format(smsstypes.Templates, bankname, account, payidno, amount);
+                            //        tempid = smsstypes.Templateid;
+                            //        urlss = smsapionsts.smsapi;
+                            //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                            //    }
+                            //    // smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge");
+                            //}
+                            smssend.sms_init(StatusSendSmsMoneyTransferSuccess.Status, StatusSendSmsMoneyTransferSuccess.Whatsapp_Status, "IMPSPAYMENTSUCCESSFULLY", NUMBER, bankname + " ", account + " ", payidno + " ", amount + " ");
+                            if (StatusSendMailMoneyTransferSuccess == "Y")
+                            {
+                                smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge", AdminEmail);
+                            }
+                            Responsen.servicefee = resp_imps.rem_comm;
+                            Responsen.tax = resp_imps.rem_gst;
+                            Responsen.total = resp_imps.totalamount;
+                            Responsen.status = "Success";
+                            Responsen.Details = payidno;
+                            Responsen.servicefee = resp_imps.charge;
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+                    
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "Success";
+                            resp.bankrefid = payidno;
+                            Responsen.data.Add(resp);
+                        }
+                        else if (txnSts == "ACCEPTED" || txnSts == "PENDING")
+                        {
+                            Responsen.servicefee = resp_imps.charge;
+                          
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+                            string rrn = ADDINFO.result.rrn.ToString();
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            Responsen.status = "Pending";
+                            Responsen.Details = "";
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "Pending";
+                            //resp.bankrefid = "Pending";
+                            resp.bankrefid = rrn;
+                            resp.agentid = Agentid;
+                            resp.benid = "";
+                            Responsen.data.Add(resp);
+                        }
+                        else if (txnSts == "SENDOTP")
+                        {
+                            Responsen.servicefee = resp_imps.charge;
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+                            string rrn = ADDINFO.result.rrn.ToString();
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            Responsen.status = "SENDOTP";
+                            Responsen.Details = "";
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "SENDOTP";
+                            // resp.bankrefid = "Pending";
+                            resp.bankrefid = rrn;
+                            resp.agentid = Agentid;
+                            resp.benid = "";
+                            Responsen.data.Add(resp);
+                        }
+                        else
+                        {
+                            var bname = ""; string payidno = "";
+                            try
+                            {
+                                payidno = ADDINFO.status.ToString();
+                            }
+                            catch { }
+                            if (payidno.Contains("Some Technical Issue") || payidno.Contains("Insufficient balance") || payidno.Contains("Balance Fatching Problem") || (payidno.Contains("Failed Due To Balance Issue")))
+                            {
+                                try
+                                {
+                                    Responsen.servicefee = resp_imps.charge;
+                                }
+                                catch { }
+                                if (rem_details.gststatus == "N")
+                                {
+                                    Responsen.tax = 0;
+                                }
+                                else
+                                {
+                                    var charge = Convert.ToDecimal(resp_imps.charge);
+                                    Responsen.tax = (charge * 18) / 100;
+                                }
+                                Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                                Responsen.status = "Pending";
+                                Responsen.Details = "";
+                                dynamic resp = new JObject();
+                                resp.Amount = amt;
+                                resp.Status = "Pending";
+                                resp.bankrefid = "Pending";
+                                Responsen.data.Add(resp);
+                            }
+                            else
+                            {
+                                //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                db.Money_transfer_update_by_paytm(Agentid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                //if (StatusSendSmsMoneyTransferFailed == "Y")
+                                //{
+                                //    string msgssss = "";
+                                //    string tempid = "";
+                                //    string urlss = "";
+                                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "MONEYTRANSFERMANUALMONEYFAILEDDUETO" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                //    if (smsstypes != null)
+                                //    {
+                                //        msgssss = string.Format(smsstypes.Templates, bankname, account, amount, payidno);
+                                //        tempid = smsstypes.Templateid;
+                                //        urlss = smsapionsts.smsapi;
+                                //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                //    }
+                                //    //  smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge");
+                                //}
+                                smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account + " ", " " + amount, payidno);
+                                if (StatusSendMailMoneyTransferFailed == "Y")
+                                {
+                                    smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                }
+                             
+                                Responsen.status = "Failed";
+                                Responsen.Details = payidno;
+                                dynamic resp = new JObject();
+                                resp.Amount = amt;
+                                resp.Status = "Failed";
+                                resp.bankrefid = payidno;
+                                Responsen.data.Add(resp);
+
+
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Responsen.status = "Pending";
+                        Responsen.Details = "Pending";
+                        dynamic resp = new JObject();
+                        resp.Amount = amt;
+                        resp.Status = "Pending";
+                        resp.bankrefid = "Pending";
+                        Responsen.data.Add(resp);
+                    }
+                }
+                else
+                {
+                    Responsen.servicefee = resp_imps.charge;
+                    if (rem_details.gststatus == "N")
+                    {
+                        Responsen.tax = 0;
+                    }
+                    else
+                    {
+                        var charge = Convert.ToDecimal(resp_imps.charge);
+                        Responsen.tax = (charge * 18) / 100;
+                    }
+                    Responsen.total = resp_imps.totalamount + resp_imps.charge + Responsen.tax;
+                    Responsen.status = "Pending";
+                    Responsen.Details = "";
+                    dynamic resp = new JObject();
+                    resp.Amount = amt;
+                    resp.Status = "Pending";
+                    resp.bankrefid = "";
+                    Responsen.data.Add(resp);
+                }
+
+            }
+            else
+            {
+                Responsen.tax = 0;
+                
+                Responsen.total = resp_imps.totalamount + resp_imps.charge + Responsen.tax;
+                Responsen.status = "Pending";
+                Responsen.Details = "";
+                dynamic resp = new JObject();
+                resp.Amount = 0;
+                resp.Status = "Pending";
+                resp.bankrefid = "";
+                Responsen.data.Add(resp);
+            }
+            var jjj = Responsen.ToString();
+            var jss2 = new JavaScriptSerializer();
+            var dict2 = jss2.Deserialize<dynamic>(jjj);
+            return Json(dict2, JsonRequestBehavior.AllowGet);
         }
 
         public JObject moneypayoutradiant(string userid, decimal Amount, decimal FinalAmount, string sender_number, string Accountnumber, string bankname, string benIFSC, string CommonTranid, string typetransfer, string Name, string Ipaddress, string macaddress, string benid, string custid, decimal? servicefee, string idprooftype, string idproofnumber, string kycsts, string pincode, string slabname)

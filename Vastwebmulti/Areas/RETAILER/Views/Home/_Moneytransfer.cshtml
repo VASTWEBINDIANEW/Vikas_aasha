@@ -13,6 +13,39 @@
     }
 }
 <style>
+#overlay{
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height:100%;
+  display: none;
+  background: rgba(0,0,0,0.6);
+}
+.cv-spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px #ddd solid;
+  border-top: 4px #2e93e6 solid;
+  border-radius: 50%;
+  animation: sp-anime 0.8s infinite linear;
+}
+@@keyframes sp-anime {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.is-hide{
+  display:none;
+}
+</style>
+<style>
     .loader {
         position: fixed;
         top: -90px;
@@ -271,6 +304,10 @@
             background-color: #5a6268; /* Darker shade on hover */
         }
 </style>
+<input type="hidden" id="latloc" />
+<input type="hidden" id="longloc" />
+<div class="loader"></div>
+<script src="~/Scripts/PageScript/Retailer/DMT/EKYCValidate.js"></script>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
     <div class="button-container">
@@ -351,10 +388,99 @@
     </div>
 </div>
 <!------------------------------------------------------------->
+<!---------------------- EKYC ------------------------>
+<div id="scancheck" class="gotoscan-changecss" style="display:none;text-align:center;">
+    <button onclick="gotoscan()" class="display-nonescanp" id="scanrecoveer"><strong>GO</strong> To Scan</button>
+</div>
+<div id="Devicerror" style="display:none;">
+    <div class="container-fluid aepsid-login">
+        <div class="col-md-12 aeps-start">
+            <div class="col-md-12 aeps_id">
+                <div class="scannot-found">
+                    <img src="~/ashok-images/scanner.svg" />
+                </div>
+                <div class="scannot-font-size">
+                    <span id="deviceerror1" style="    color: red;
+        border-bottom: 2px solid #ff0048;
+        display: inline-block;
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-weight: 700;
+" class="body-border-bottom"></span>
+                    <span id="deviceerror2" style="color:red;"></span>
+
+                    <span id="deviceerror3" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror4" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror5" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror6" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror7" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror8" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror9" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <a href="#scanrecoveer" id="againscanclick" onclick="gotoscan()">Scan&nbsp;Again</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loadaeps1" style="display: none;text-align:center;">
+    <img class="body-border-bottom-top" src="~/ashok-images/portrait_mode_scanning.gif" style="height:150px;" />
+</div>
+<!---------------------------------------------------->
+<!-------------------AAdhar Verify----------------->
+<div id="Devicefind" class="container-fluid otp_page_second" style="display:none;">
+    <div class="fullwidthaccount fullwidthaccount-top">
+        <div class="col-md-12 amount amount_strong">
+            <strong style="width:auto;">Remitter Number</strong>
+            <span id="aadharekyc_Sendernumber"></span>
+        </div>
+        <div class="col-md-12 amount amount_strong">
+            <strong style="">Aadhar Number</strong>
+            <input id="aadhardetails_ekyc" type="text" placeholder="Enter Aadhar Number" />
+        </div>
+        <div class="col-md-12 amount amount_strong amount-changesse">
+            <span id="Aadhar_Error" style="color:red;"></span>
+            <input type="hidden" id="cap" />
+            <input type="hidden" id="capxmlP" />
+
+        </div>
+    </div>
+    <div class="container-fluid transaction-button">
+        <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
+        <button onclick="gotoscan()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
+        
+    </div>
+</div>
+<!-------------------------------------------------->
+<!----------------------- OTP  --------------------->
+<div id="otpshow_ekyc" class="container-fluid otp_page_second" style="display:none;">
+    <div class="fullwidthaccount fullwidthaccount-top">
+        <div class="col-md-12 amount amount_strong">
+            <strong style="width:auto;">Remitter Number</strong>
+            <span id="otpsenderno_ekyc"></span>
+        </div>
+        <div class="col-md-12 amount amount_strong">
+            <strong style="">Enter OTP</strong>
+            <input id="otpinsert_Ekyc" type="text" placeholder="Enter The OTP" />
+        </div>
+        <div class="col-md-12 amount amount_strong amount-changesse">
+            <span id="otperror_Ekyc" style="color:red;"></span>
+            <input type="hidden" id="otpstateResp_ekyc"/>
+            <input type="hidden" id="otpekyc_id_ekyc"/>
+
+        </div>
+    </div>
+    <div class="container-fluid transaction-button" id="next_page_Ekyc">
+        <button onclick="verifyotp_Ekyc()" id="addaccount-add-ekyc" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
+    </div>
+</div>
+
+<!------------------------------------------------->
+
 <!---------------------Ben List-------------------------------->
 <div id="remlist" class="remlish-responshives" style="display:none">
     <div class="col-md-12 number-login">
-        <div class="col-md-5 userName" style="border: 1px solid red; width:47%;"><div id="imgshow" class="col-md-5 userName" style="float:left;display:none;margin: -4px 0px 0px 5px;padding: 0;width: 25px;height: 25px;"><img id="remimg" src="#" style="height:25px;width:25px;" /> </div><span class="hi">Hi , </span> <span id="username"></span> <input type="hidden" id="hidecustid" /> </div>
+      @*  <div class="col-md-5 userName" style="border: 1px solid red; width:47%;"><div id="imgshow" class="col-md-5 userName" style="float:left;display:none;margin: -4px 0px 0px 5px;padding: 0;width: 25px;height: 25px;"><img id="remimg" src="#" style="height:25px;width:25px;" /> </div><span class="hi">Hi , </span> <span id="username"></span> <input type="hidden" id="hidecustid" /> </div>*@
         <div id="validatekyc" class="col-md-5 userName" style="width: 10%;margin-left: 7px;text-align: center;"><a href="#" onclick="validkyc()">KYC</a> </div>
         <div class="col-md-5 changesenderclass" style="width: 35%;">
             <input id="changesender" type="text" style="width:120px;" readonly placeholder="Sender Number" onkeypress="return isNumber(event)" />
@@ -367,7 +493,7 @@
     <div class="col-md-12 number-login" style="margin-top: 8px;">
         <div class="col-md-5 userName" style="float:left;"><span class="hi">Total Limit : </span> <span id="tlimit"></span></div>
         <div class="col-md-5 userName" style="float: right;"><span class="hi">Remain Limit : </span> <span id="Rlimit"></span></div>
-        <div id="kycstschk" class="col-md-5 userName" style="float:left;"><span class="hi">KYC STATUS : </span> <span id="checkkyc"></span> </div>
+       @* <div id="kycstschk" class="col-md-5 userName" style="float:left;"><span class="hi">KYC STATUS : </span> <span id="checkkyc"></span> </div>*@
     </div>
     <div id="transfer_fund">
         <div class="col-md-12 radiobuttonimps radiobuttonimps-responshive">
@@ -376,18 +502,18 @@
                     <input type="radio" name="bendetails" id="impsbutton" value="IMPS" checked><p>IMPS</p>
                     <span class="checkmark"></span>
                 </label>
-                <label id="creaditcbt" class="container container-last">
+                @*<label id="creaditcbt" class="container container-last">
                     <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
                     <span class="checkmark"></span>
-                </label>
+                </label>*@
                 <label class="container">
                     <input type="radio" name="bendetails" id="neftbutton" value="NEFT"><p>NEFT</p>
                     <span class="checkmark"></span>
                 </label>
-                <label id="upilabel" class="container">
+                @*<label id="upilabel" class="container">
                     <input type="radio" name="bendetails" id="upibutton" value="UPI"><p>UPI</p>
                     <span class="checkmark"></span>
-                </label>
+                </label>*@
                 @*<label id="walletlabel" class="container container-last">
                         <input type="radio" name="bendetails" id="paytmwalletbutton" value="WALLET"><p>PAYTM WALLET</p>
                         <span class="checkmark"></span>
@@ -639,6 +765,13 @@
             <div class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
             <div class="col-md-12 amount"><strong>Id Proof Type</strong><span id="idprooftype"></span></div>
             <div class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>
+            <div class="col-md-12 amount" style="display:none" id="OTPinfo_show">
+                <input type="hidden" id="hidetxtagentid" />
+                <input type="hidden" id="hidebenidtxt" />
+                <input type="hidden" id="hidestateresptxt" />
+            <strong style="width:108px;">Enter OTP</strong>
+            <input type="text" id="txtsenderotps_pay" style=" background: white; float: right;" name="txtsenderotps_pay">
+            </div>
             <div class="col-md-12 amount otpboxnotshow" style="display:none"><strong style="width:108px;">Enter Sender OTP</strong><input type="text" id="txtsenderotps" style=" background: white; float: right;" name="txtsenderotps" value="0"></div>
             @*<div class="col-md-12 amount"><strong>Debit Amount</strong><span id="chargeconfirm">20040</span></div>*@
             <div class="col-md-12 amount transfererroreee"><span id="transfererror" style="color:red;"></span></div>
@@ -647,6 +780,7 @@
             <div class="cancelbuttonright">
                 <a href="#" id="dmt11" class="cancel" onclick="confirmback()">BACK</a>
                 <a href="#" id="dmt1" style="display:none" class="cancel" onclick="confirmback1()">BACK</a>
+                <a href="javascript:void(0);" style="display:none" id="submitotp" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="submitotpinfo()">Submit OTP<i class="fa fa-angle-right"></i></a>
                 <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment<i class="fa fa-angle-right"></i></a>
                 <a href="javascript:void(0);" id="fpay1" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
             </div>
@@ -722,18 +856,18 @@
                         <span class="checkmark"></span>
                     </label>
 
-                    <label id="registerupi" class="container container-last" onclick="document.getElementById('creaditcardnew').style.display = 'none';">
+                    @*<label id="registerupi" class="container container-last" onclick="document.getElementById('creaditcardnew').style.display = 'none';">
                         <input type="radio" name="addnewradio" id="upibutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="UPI"><p>UPI</p>
                         <span class="checkmark"></span>
-                    </label>
+                    </label>*@
                     @*<label id="registerwallet" class="container container-last" onclick="document.getElementById('creaditcardnew').style.display = 'none';">
                             <input type="radio" name="addnewradio" id="paytmwalletbutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="WALLET"><p>PAYTM WALLET</p>
                             <span class="checkmark"></span>
                         </label>*@
-                    <label id="creditcardlink" class="container container-last" onclick="credicardshow();">
+                    @*<label id="creditcardlink" class="container container-last" onclick="credicardshow();">
                         <input type="radio" name="addnewradio" id="creaditbutton" onclick="credicardshow();" value="checked"><p>Credit Card</p>
                         <span class="checkmark"></span>
-                    </label>
+                    </label>*@
 
                 </form>
             </div>
@@ -760,6 +894,7 @@
                     <strong style="">IFSC Code</strong>
                     <button id="click-change-1" class="click-change"><img src="~/ashok-images/refresh.svg" /></button>
                     <input id="ifsccode" type="text" class="click-change-block" placeholder="Enter IFS Code" />
+                    <input type="hidden" id="hidebenid" />
                     <span style="color:red; padding-left:4px;">*</span>
                 </div>
                 <div class="col-md-12 amount amount_strong">
@@ -937,7 +1072,7 @@
                             url: '@Url.Action("savebencreaditcard", "Home")',
                             data: { name: name, Mobile: mobile, Ifsc: ifsc, OriginalIfsc: ifscoriginal, Account:cardno},
                             success: function (result) {
-                                console.log(result);
+                              
                                 if (result.sts == "TXN") {
                                     back();
                                     $('#creaditcardnew').hide();
@@ -1050,8 +1185,10 @@
         <div id="load" style="display: none" class="loader"></div>
     </div>*@
 <div class="loader loaderpancard"></div>
-<div>
-
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
 </div>
 <script>
 
@@ -1220,7 +1357,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-                 console.log(err)
+                 
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1240,7 +1377,7 @@
              body: requ
          }).then(Response => Response.json())
              .then(resp => {
-                 console.log(resp);
+              
                  var statuscode = resp.statuscode;
                  if (statuscode == "TXN") {
                      typeof cb == 'function' && cb(null, resp.Response);
@@ -1259,7 +1396,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-                 console.log(err)
+            
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1267,6 +1404,14 @@
 </script>
 <script>
     function senderdetails(change, cb) {
+        var latloc = $('#latloc').val()
+        var longloc = $('#longloc').val()
+        $('#Devicefind').hide();
+        $('#otpshow_ekyc').hide();
+        $('#otpekyc_id_ekyc').val("");
+        $('#otpstateResp_ekyc').val("");
+        $('#otpinsert_Ekyc').val("");
+
         $('#registerupi').show()
         $('#registerwallet').show()
         $('#upilabel').show()
@@ -1309,21 +1454,24 @@
         $('#DMTPIN').val("");
         $('#banknametransfer').val("");
         $('#bencodetransfer').val("");
-            $('#sendererrorshow').text("");
-            $('#sendotpaadhar').show();
-            $('#validateaadhar').hide();
-            $('#errmsgaadhar').val("");
-            $('#errmsgaadharotp').val("");
-            $('#aadharnumber_sender').val("");
-            $('#aadharnumber_OTP').val("");
-            $('#Clientid').val("");
-            $('#txnid').val("");
-            $('#imgshow').hide();
-            $('#remimg').hide();
+        $('#sendererrorshow').text("");
+        $('#otperror_Ekyc').text("");
+        $('#sendotpaadhar').show();
+        $('#validateaadhar').hide();
+        $('#errmsgaadhar').val("");
+        $('#errmsgaadharotp').val("");
+        $('#aadharnumber_sender').val("");
+        $('#aadharnumber_OTP').val("");
+        $('#Clientid').val("");
+        $('#txnid').val("");
+        $('#imgshow').hide();
+        $('#remimg').hide();
+
         var len = "";
         var senderno = "";
         if (change == "new") {
             senderno = $('#senderno').val();
+            $('#aadharekyc_Sendernumber').text(senderno)
             len = senderno.length;
             if (senderno.length == 10) {
                 //$('#Firstpage').hide();
@@ -1332,26 +1480,29 @@
         }
         else {
             senderno = $('#changesender').val();
+            $('#aadharekyc_Sendernumber').text(senderno)
             len = senderno.length;
             if (len == 10) {
                 $('#senderno').val(senderno);
                 $("#changesender").attr("readonly", true);
             }
         }
+      
         if (len == 10) {
             $('#errorsenderno').text("");
             $("#benlistttable tr").remove();
             $.ajax({
                 url: '@Url.Action("Senderdetails","Home")',
-                data: { senderno: senderno },
+                data: { senderno: senderno, latloc, longloc },
                 cache: false,
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                    console.log()
+                 
                     $('#btnsenddd ,#cancelloder').html("Next");
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
+              
                     var statuscode = output.statuscode;
 
                     if (statuscode == "TXN") {
@@ -1418,7 +1569,35 @@
                             $('#cclistttable').append('<tr id=' + id + '><td><span style="display:none;">' + id + '</span><p style="display:none;">BANK:' + bank + '</p><strong>' + name + '</strong><br /><span>CARD NO.: ' + account + '</span><br /><span>Bank: ' + bank + '' + bandownmsg + '</span><br /><span>IFSC: ' + ifsc + '</span></td><td><div class="Transferdata"><a href="#" class="addtabledata" onclick=fundtransfercreadit(this,"' + account + '",' + id+')></a><button id="btn' + id + '"  class="addtabledatade click-displays" onclick=deleteshow("' + id + '")><i class="fa fa-trash"></i></button><a href="javascript:void(0);" id="aa' + id + '" class="addtabledatade click-delete" onclick=deleteben1("' + id + '")>sure <Strong>?</Strong></a> </div></td></tr>');
                         }
                     }
+                    else if (statuscode == "TXNP")
+                    {
+                        $('#scancheck').show()
+                        $('#scanrecoveer').show()
+                        $('#sendername').val("");
+                        $('#remlist').hide();
+                        $('#newsender').text(senderno);
+                        $('#Firstpage').hide();
+                        $('#register_new_ben').hide();
+                        $('#NewSenderregister').hide();
+                        $('#otpsenderno_ekyc').text(senderno)
+                    }
+                    else if (statuscode == "OTP")
+                    {
+                        var stateResp = output.stateResp;       
+                        var ekyc_id = output.ekyc_id;
+                        $('#otpstateResp_ekyc').val(stateResp)
+                        $('#otpekyc_id_ekyc').val(ekyc_id)
+                        $('#sendername').val("");
+                        $('#remlist').hide();
+                        $('#newsender').text(senderno);
+                        $('#Firstpage').hide();
+                        $('#register_new_ben').hide();
+                        $('#NewSenderregister').hide();
+                        $('#otpsenderno_ekyc').text(senderno)
+                        $('#otpshow_ekyc').show();
+                    }
                     else if (statuscode == "RNF") {
+                        $('#otpshow_ekyc').hide();
                         $('#sendername').val("");
                         $('#remlist').hide();
                         $('#newsender').text(senderno);
@@ -1429,6 +1608,7 @@
                     }
                     else if (statuscode == "RDT")
                     {
+                        $('#otpshow_ekyc').hide();
                         $('#registerupi').hide()
                         $('#registerwallet').hide()
                         $('#upilabel').hide()
@@ -1481,7 +1661,7 @@
                                 var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
-                                console.log(bankname)
+                              
                                 //var isbankdown = output.data.beneficiary[i].isbankdown;
                                 var bandownmsg = "";
                                 //if (isbankdown == true) {
@@ -1492,7 +1672,7 @@
                         }
                         else if (respout.success == false) {
                             var msginfo = respout.message;
-                            console.log(msginfo)
+                 
                             if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
                                 $('#sendername').val("");
                                 $('#remlist').hide();
@@ -1510,6 +1690,7 @@
                         }
                     }
                     else {
+                       
                         var msg = output.status;
                         $('#Firstpage').show()
                         $('#sendererrorshow').text(msg);
@@ -1530,6 +1711,40 @@
     }
 
 
+</script>
+<script>
+    function verifyotp_Ekyc() {
+        $('#otperror_Ekyc').text("")
+        var stateResp = $('#otpstateResp_ekyc').val()
+        var kyc_id = $('#otpekyc_id_ekyc').val()
+        var Sendernumber = $('#otpsenderno_ekyc').text();
+        var otp = $('#otpinsert_Ekyc').val()
+        if (otp != "") {
+            $("#overlay").fadeIn(300);　
+                $.ajax({
+      url: '@Url.Action("KYCEnterOTP", "Home")',
+                    data: { stateResp, kyc_id, Sendernumber, otp },
+      cache: false,
+      type: "POST",
+      dataType: 'json',
+                    success: function (output) {
+                        $("#overlay").fadeOut(300);
+          var statuscode = output.status;
+          var message = output.message;
+          if (statuscode == true) {
+              senderdetails('new');
+          }
+          else {
+              $('#otperror_Ekyc').text(message);
+          }
+
+      }
+  });
+        }
+        else {
+            $('#otperror_Ekyc').text("Please Enter The OTP");
+        }
+    }
 </script>
 <script>
     $("#senderno").keyup(function () {
@@ -1562,7 +1777,11 @@
 <script>
     $("#banknm").change(function () {
         var select = $(this).val();
-        $('#ifsccode').val(select)
+        var result = select.split("|");
+        var hideid = result[1];
+        var ifsccode = result[0];
+        $('#hidebenid').val(hideid)
+        $('#ifsccode').val(ifsccode)
     });
 </script>
 <script>
@@ -1576,13 +1795,15 @@
         var account = $('#accountno').val();
         var ifsccode = $('#ifsccode').val();
         var originalifsccode = $('#banknm').val();
+        var hidebenid = $('#hidebenid').val();
+
         var bankname = $('#banknm').find('option:selected').text();
-        console.log(bankname)
+     
         var benname = $('#benname').val();
            if (senderno != "" && account != "" && ifsccode != "" && originalifsccode != "" && benname!="") {
                $.ajax({
                    url: '@Url.Action("Register_ben","Home")',
-                   data: { senderno, account, ifsccode, originalifsccode, benname, bankname },
+                   data: { senderno, account, ifsccode, originalifsccode, benname, bankname, hidebenid },
                    cache: false,
                    type: "POST",
                    success: function (data) {
@@ -1823,7 +2044,7 @@
         banknm.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
         $.ajax({
             type: "POST",
-            url: "@Url.Action("BindBankDdllist","Home")",
+            url: "@Url.Action("BindBankDdllist_Paysprint","Home")",
             data: '{}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1933,9 +2154,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-                console.log(req)
+               
                 var outtt = JSON.parse(req);
-                console.log(outtt)
+         
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -1958,9 +2179,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-                console.log(req)
+             
                 var outtt = JSON.parse(req);
-                console.log(outtt)
+               
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -1977,7 +2198,7 @@
         var senderno = $('#changesender').val();
         $.ajax({
             url: '@Url.Action("Delete_ben","Home")',
-            data: { benid: idno, senderno: senderno},
+            data: { benid: idno, mobile: senderno},
             cache: false,
             type: "POST",
             success: function (data) {
@@ -2058,7 +2279,7 @@
               $('.loader').show();
              },
             success: function (data) {
-                console.log("data " + data);
+                
             var sts = data.statuscode;
             var msg = data.status;
             if (sts == "TXN") {
@@ -2207,7 +2428,7 @@
               }
               else if (sts == "RADIT")
               {
-                  alert(msg)
+                
                   senderdetails('change');
               }
               else {
@@ -2317,7 +2538,7 @@
                 idstr += String.fromCharCode(ascicode);
             }
         } while (idstr.length < 32);
-        console.log(idstr)
+      
         return (idstr);
     }
 
@@ -2424,7 +2645,7 @@
     fundtransferWALLET = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-        console.log(str);
+     
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("Paytm No: ") + 9, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2459,7 +2680,7 @@
     fundtransferUPI = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-        console.log(str);
+      
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("VPA ID:") + 8, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2567,7 +2788,7 @@
         var remainlimit = $('#Rlimit').text();
 
         if (amount != "" && markup != "" && Dmtpin != "" && idproff != undefined) {
-
+            remainlimit = amount;
             if (parseFloat(remainlimit) >= parseFloat(amount)) {
                 var resp = "OK";
                 if (idproff != "none") {
@@ -2600,6 +2821,8 @@
                 }
                 if (resp == "OK") {
                    var chkkyc= $('#checkkyc').text();
+            
+                    chkkyc = true;
                     $.ajax({
                         url: '@Url.Action("Imps_check_transfer","Home")',
                         data: { Mode: modesss, dmtpin: Dmtpin, account: accountno, amount: amount, sendermobileno: sendermobileno, chkkyc: chkkyc },
@@ -2839,8 +3062,7 @@
         var customerid = $('#hidecustid').val();
         accountno = accountno.trim();
         bankifsccode = bankifsccode.trim();
-        console.log(bnames + ',' + senderno + ',' + paymode + ',' + accountno + ',' + bankifsccode + ',' + Dmtpin + ',' + amount + ',' + bankname + ',' + bencode + ',' + markup + ',' + idprooftype + ',' + idproofnumber + ',' + senderotps + ',' + latss + ',' + longloc + ',' + imagebase64data + ',' + uniqueid + ',' + check_kyc + ',' + customerid);
-
+       
         $('#amounttransfer').val("");
             $('#DMTPIN').val("");
 
@@ -2866,7 +3088,7 @@
             if (srcstatus == "OK") {
             $('#fpay').hide();
                 if (amount != "" && Dmtpin != "") {
-                    var check_kyc = $('#checkkyc').text();
+                    var check_kyc = true;
                 $.ajax({
                     url: '@Url.Action("imps_transfer","Home")',
                     data: { name: bnames, NUMBER: senderno, type: paymode, account: accountno, ifsc: bankifsccode, dmtpin: Dmtpin, amount: amount, bankname: bankname, benCode: bencode, servicefee: markup, idprooftype: idprooftype, idproofnumber: idproofnumber, senderotps: senderotps, latss: latss, longloc: longloc, imageData: imagebase64data, uniqueid, check_kyc: check_kyc, customerid },
@@ -2885,6 +3107,7 @@
                         var tax = data.tax;
                         var total = data.total;
                         var remremain = data.remainretailer;
+
                         $("#remainretailer").text(remremain);
                         if (sts == "Success" || sts == "Pending") {
                             $('#successdata').show();
@@ -2915,6 +3138,18 @@
                             $('#dmttransferfinal').show();
                             $('#dmtconfirm').hide();
                         }
+                        else if (sts == "SENDOTP") {
+                            var bankrrn = data.data[0].bankrefid;
+                            var agentid = data.data[0].agentid;
+                            var benid = data.data[0].benid;
+                            $('#hidetxtagentid').val(agentid)
+                            $('#hidebenidtxt').val(benid)
+                            $('#hidestateresptxt').val(bankrrn)
+                            $('#OTPinfo_show').show();
+                            $('#fpay').hide();
+                            $('#fpay1').hide();
+                            $('#submitotp').show();
+                        }
                         else if (sts == "NOTDEFINE")
                         {
                             $('#successdata').hide();
@@ -2933,11 +3168,9 @@
                             $('#responsebankrrn').text(msg);
                             $('#responseaccount').text(accountno);
                             $('#responseifsccode').text(bankifsccode);
-
                             $('#success').hide();
                             $('#failed').show();
                             $('#dmttransferfinal').show();
-
                             $('#dmtconfirm').hide();
                         }
                         else {
@@ -2959,13 +3192,10 @@
                             $('#responsebankrrn').text(msg);
                             $('#responseaccount').text(accountno);
                             $('#responseifsccode').text(bankifsccode);
-
                             $('#success').hide();
                             $('#failed').show();
                             $('#dmttransferfinal').show();
-
                             $('#dmtconfirm').hide();
-
                             //$('#transfererror').text(msg);
                         }
                     },
@@ -3136,6 +3366,59 @@
                 $('#sendemailmsg').text("Email Send SuccessFully");
             }
         });
+    }
+</script>
+<script>
+    function Register_EKYC() {
+        var senderno = $('#senderno').val();
+        var aadharnumber = $('#aadhardetails_ekyc').val();
+        var latloc = $('#latloc').val();
+        var longloc = $('#longloc').val();
+        var pid = $('#capxmlP').val()
+      
+        $('#capxmlP').val("")
+        if (aadharnumber != "") {
+            if (pid != "") {
+                $("#overlay").fadeIn(300);　
+                  $.ajax({
+                          url: '@Url.Action("KYCRegister", "Home")',
+                      data: { senderno, pid: encodeURIComponent(pid),  aadharnumber, latloc, longloc },
+                      cache: false,
+                      contentType: 'application/x-www-form-urlencoded',
+                          type: "POST",
+                      success: function (data) {       
+                          $("#overlay").fadeOut(300);
+                          var status = data.status;
+                          var message = data.message;
+                          var ekyc_id = data.kyc_id;
+                          var stateresp = data.stateresp;
+                          if (status == true) {
+                                        // senderdetails('change');
+                                        $('#Devicefind').hide();
+                                        $('#otpshow_ekyc').show();
+                                        $('#otpstateResp_ekyc').val(stateresp)
+                                        $('#otpekyc_id_ekyc').val(ekyc_id)
+                                        $('#sendername').val("");
+                                        $('#remlist').hide();
+                                        $('#newsender').text(senderno);
+                                        $('#Firstpage').hide();
+                                        $('#register_new_ben').hide();
+                                        $('#NewSenderregister').hide();
+                                        $('#otpsenderno_ekyc').text(senderno)
+                                    }
+                                    else {
+                                        $('#Aadhar_Error').text(message)
+                                    }
+                                  }
+                          })
+            }
+            else {
+                $('#Aadhar_Error').text("Please Scan Again")
+            }
+        }
+        else {
+            $('#Aadhar_Error').text("Enter The Aadhar Number")
+        }
     }
 </script>
 <script>
@@ -3478,5 +3761,186 @@
             jpeg_quality: 100
         });
         Webcam.attach('#camera');
+    }
+</script>
+<script>
+        function gotoscan() {
+            $('#cap').val("");
+            $('#capxmlP').val("");
+            $('#device_srno').val("");
+            $('#txtdevice').val("");
+            $('#scanrecoveer').hide();
+            $("#Devicerror").hide();
+            $('#Devicefind').hide();
+        $.ajax({
+            url: '@Url.Action("chk1","Home")',
+            cache: false,
+            type: "GET",
+            beforeSend: function() {
+                  $("#loadaeps1").show();
+             },
+            success: function (data) {
+
+            }, error: function (data) {
+                scanfingP();
+            }
+        })
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var allowSubmit = false;
+        /* HTML5 Geolocation */
+        navigator.geolocation.getCurrentPosition(
+            function (position) { // success cb
+                /* Current Coordinate */
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                $('#latloc').val(lat);
+                $('#longloc').val(lng);
+
+            }
+        );
+    });
+</script>
+
+<script>
+    function submitotpinfo() {
+        var Agentid = $('#hidetxtagentid').val()
+        var benid = $('#hidebenidtxt').val()
+        var stateresp = $('#hidestateresptxt').val()
+        var otp = $('#txtsenderotps_pay').val()
+             $.ajax({
+                   url: '@Url.Action("imps_transfer_verifyotp", "Home")',
+                   data: { Agentid, benid, otp, stateresp },
+                   cache: false,
+                   type: "POST",
+                beforeSend: function () {
+                   $('.loader').show();
+               },
+               success: function (data) {
+                   var sts = data.status;
+                   var msg = data.Details;
+                   var orderid = data.orderid;
+                   var logo = data.logo;
+                   var firmname = data.firmname;
+                   var servicefee = data.servicefee;
+                   var tax = data.tax;
+                   var amount = data.Amount;
+                   var total = data.total;
+                   var bankifsccode = data.bankifsccode;
+                   var remremain = data.remainretailer;
+                   var accountno = data.accountno;
+                   var paymode = data.paymode;
+                   $("#remainretailer").text(remremain);
+                   if (sts == "Success" || sts == "Pending") {
+                       $('#successdata').show();
+                       var bankrrn = data.data[0].bankrefid;
+                       //var benname = data.data.benename;
+                       if (sts == "Pending") {
+                           $('#transresp').text("transaction  In Process");
+                       }
+                       else {
+                           $('#transresp').text("transaction " + sts);
+                       }
+                       $('#benname').val("");
+                       $('#verifyimpserror').text(msg);
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(bankrrn);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+                       $('#success').show();
+                       $('#failed').hide();
+                       $('#dmttransferfinal').show();
+                       $('#dmtconfirm').hide();
+                   }
+                   else if (sts == "NOTDEFINE")
+                   {
+                       $('#successdata').hide();
+                       $('#transresp').text("Transaction Processed");
+                       $('#benname').val("");
+                       $('#verifyimpserror').text("Transaction Processed , Please Check History");
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(msg);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+
+                       $('#success').hide();
+                       $('#failed').show();
+                       $('#dmttransferfinal').show();
+
+                       $('#dmtconfirm').hide();
+                   }
+                   else {
+                   
+                       $('#dmtconfirm').hide();
+                       $('#submitotp').hide();
+                       $('#OTPinfo_show').hide();
+                       //var bankrrn = data.data.bankrefid;
+                       // var benname = data.data.benename;
+                       $('#successdata').hide();
+                       $('#transresp').text("transaction Failed");
+                       $('#benname').val("");
+                       $('#verifyimpserror').text(msg);
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(msg);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+
+                       $('#success').hide();
+                       $('#failed').show();
+                       $('#dmttransferfinal').show();
+
+                   
+
+                       //$('#transfererror').text(msg);
+                   }
+               },
+                      complete: function () {
+                          $('#submitotp').hide();
+                          $('#OTPinfo_show').hide();
+                   $("#remainretailer").load(location.href + " #remainretailer");
+                   $('.loader').hide();
+                   $.ajax({
+                       url: '@Url.Action("DMTreportnew","Home")',
+                       cache: false,
+                       type: "GET",
+                       cache: false,
+                       dataType: "html",
+                       success: function (data) {
+                           $('#reportallinone').html(data);
+                       }
+                   })
+               },
+               error: function () {
+                   $("#remainretailer").load(location.href + " #remainretailer");
+                   $('.loader').hide();
+               }
+                 });
     }
 </script>
