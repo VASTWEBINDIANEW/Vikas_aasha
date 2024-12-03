@@ -7,7 +7,109 @@
 <script src="/path/to/cdn/jquery.min.js"></script>
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
-    /*  new cssv   */
+    .show_pop {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        background: #00000033;
+        z-index: 99999;
+    }
+        .show_pop input {
+            padding: 10px;
+        }
+        .show_pop img {
+            text-align: center;
+            margin: auto;
+            position: relative;
+            top: 40%;
+        }
+
+    .box_otp {
+        width: 30%;
+        margin: auto;
+        position: relative;
+        top: 40%;
+        float: initial !important;
+        display: table !important;
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+    }
+
+        .box_otp input {
+            width: 100%;
+            float: left;
+        }
+
+        .box_otp button {
+            padding: 4px 16px;
+            border: 1px solid green;
+            margin-top: 23px !important;
+            width: auto;
+            float: right;
+        }
+    .button-container {
+        display: flex;
+        gap: 10px; /* Space between buttons */
+    }
+    #textArea {
+        padding: 10px;
+        height: 220px;
+    }
+
+    #textForm button {
+        margin: 0;
+    }
+
+    .mesg_text span {
+        width: 30px;
+        height: 30px;
+        float: left;
+        border: 1px solid #000;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        justify-content: center;
+        margin-right: 10px;
+    }
+
+    .mesg_text {
+        width: 100%;
+        padding: 10px 0;
+        float: left;
+    }
+
+        .mesg_text p {
+            font-size: 18px;
+            margin: 0;
+            text-align: justify;
+        }
+        .button-container button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #f0f0f0; /* Default background color */
+            color: #333; /* Default text color */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        }
+
+            .button-container button.active {
+                background-color: var(--main-bg-lcolor); /* Active background color */
+                color: #fff; /* Active text color */
+            }
+
+            .button-container button:hover {
+                background-color: var(--main-bg-lcolor); /* Hover background color */
+                color: #fff; /* Hover text color */
+            }
+
+
     .but_df button {
         margin: 0 !important;
         border-radius: 2px;
@@ -85,18 +187,23 @@
     .ps_set h3 {
         display: flex;
         align-items: center;
+        font-size: 15px;
     }
     .danger {
         background-color: #ffdddd;
         border-left: 6px solid #f44336;
         padding: 4px 12px;
     }
+    .ps_hset h3 {
+        font-size: 15px;
+    }
     .appc_autol .ps_hset h3 {
-        margin-top: 10px;
+        margin-top: 5px;
     }
     .ps_hset {
         display: flex;
         align-items: center;
+        
     }
         .ps_hset span {
             margin-left: 4px;
@@ -190,10 +297,10 @@
         width: 100%;
         text-align: left;
         float: left;
-        height: 166px;
+        height: 126px;
     }
     .ps_setcolor .appc_autol {
-        height: 155px;
+        height: 126px;
     }
 
     .ps_set2 {
@@ -1453,79 +1560,82 @@
             height: auto !important;
             width: 1px;
         }
-/* new css   */
+    /* new css   */
 
     textarea {
         width: 100%;
     }
 
-@@media only screen and (max-width:1024px){
-    #sidebar-open {
-        top: 30px;
-        left: -145px;
-    }
-    .app_set button {
-        margin: auto !important;
-        text-align: center;
-        margin-top: 8px !important;
-    }
-    
-    .app_set {
-        width: 100% !important;
-    }
-    .secdiv {
-        width: 50%;
-    }
-    .app_set .page-header-third {
-        height: auto !important;
-        padding-bottom: 20px !important;
-    }
+    @@media only screen and (max-width:1024px) {
+        #sidebar-open {
+            top: 30px;
+            left: -145px;
+        }
 
-}
+        .app_set button {
+            margin: auto !important;
+            text-align: center;
+            margin-top: 8px !important;
+        }
+
+        .app_set {
+            width: 100% !important;
+        }
+
+        .secdiv {
+            width: 50%;
+        }
+
+        .app_set .page-header-third {
+            height: auto !important;
+            padding-bottom: 20px !important;
+        }
+    }
 
     @@media only screen and (max-width:767px) {
         .appi_set {
             width: 100%;
             padding: 15px;
         }
+
         .br_setb {
             width: 100%;
         }
+
         #sidebar-open {
             top: 1px;
             left: -6px;
-            padding:10px;
-            margin-bottom:10px;
-
+            padding: 10px;
+            margin-bottom: 10px;
         }
-
-        
     }
 
     @@media only screen and (max-width:600px) {
         .ps_setcolor {
             width: 100%;
         }
+
         .ps_setmob {
             width: 100%;
             float: left;
         }
+
         .app_set2 {
             display: block;
         }
+
         .secdiv {
             width: 100%;
         }
+
         .appc_autol1 {
             display: block;
         }
+
             .appc_autol1 button {
                 width: 33.333%;
             }
-
     }
-
-
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -1543,963 +1653,759 @@
             var loginss = db.Login_to_sim.ToList();
         }
 
-
-        <div class="row clearfix" id="loginSliders">
-            @*@Html.Partial("_LoginPagesliderImage")*@
+        <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
                 <div class="card login-back-img page-header-third">
-                    <div class="login-slider-status">
-
-                        <h2>APP Background Color/Button Color/Text Color</h2>
-
-
+                    <div class="button-container">
+                        <button id="Button1" onclick="ButtonActive('Button1')" class="active">App Color</button>
+                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon</button>
+                        <button id="Button3" onclick="ButtonActive('Button3')">App KYC Docs</button>
+                        <button id="Button4" onclick="ButtonActive('Button4')">FQAS</button>
+                        <button id="Button5" onclick="ButtonActive('Button5')">App Sliders</button>
+                        <button id="Button6" onclick="ButtonActive('Button6')">App Message</button>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="app_set" style="width:50%; display:block;">
-                        <div class="page-header-third" style=" width: 100%;">
-
-                            <div class="thame-headding">
-                                <h2 style="background: #878787;color:white">App Background Color Setting</h2>
-                            </div>
-
-                            <div class="app_set2">
-                                @if (backgapp.Count == 0)
-                                {
-                                    @*<input type="color" id="backcolor1" onchange="updbackgr()" />
-                        <input type="color" id="backcolor2" onchange="updbackgr()" />*@
-
-                                    <div class="ps_setcolor">
-                                        <div class="ps_set">
-                                            <h3>
-                                                Primary Color
-                                            </h3>
-
-
-
-                                            <div class="ps_set2">
-                                                <input type="color" id="backcolor1" onchange="updbackgr()" />
-                                            </div>
-
-                                        </div>
-
-                                        <div class="ps_set">
-                                            <h3>
-                                                Secondary Color
-                                            </h3>
-
-
-
-                                            <div class="ps_set2">
-                                                <input type="color" id="backcolor2" onchange="updbackgr()" />
-                                            </div>
-                                        </div>
-
-                                        <div class="ps_set">
-
-
-                                            <div class="danger">
-                                                <p>
-                                                    <strong>Notes !</strong>
-
-                                                    Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.
-
-
-                                                </p>
-                                            </div>
-
-
-                                        </div>
-
-                                    </div>
-                                }
-                                else
-                                {
-
-
-                                    <div class="ps_setcolor">
-                                        <div class="ps_set">
-                                            <div class="ps_hset">
-                                                <h3>
-                                                    Primary Color
-
-                                                </h3>
-                                                <span id="bckg1">
-
-                                                    (@backgapp[0].background_color1)
-
-                                                </span>
-                                            </div>
-
-
-                                            <div class="ps_set2">
-                                                <input type="color" id="backcolor1" value="@backgapp[0].background_color1" onchange="updbackgr()" />
-                                            </div>
-
-
-
-                                        </div>
-
-                                        <div class="ps_set">
-                                            <div class="ps_hset">
-                                                <h3>
-                                                    Secondary Color
-
-                                                </h3>
-                                                <span id="bckg2">
-
-                                                    (@backgapp[0].background_color2)
-
-                                                </span>
-                                            </div>
-
-
-
-
-                                            <div class="ps_set2">
-                                                <input type="color" id="backcolor2" value="@backgapp[0].background_color2" onchange="updbackgr()" />
-                                            </div>
-
-                                        </div>
-
-                                        <div class="ps_set">
-
-
-                                            <div class="danger">
-                                                <p>
-                                                    <strong>Notes !</strong>
-
-                                                    Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.
-
-
-                                                </p>
-                                            </div>
-
-
-                                        </div>
-
-
-                                    </div>
-
-
-                                }
-
-                                <div class="ps_setmob">
+        <div id="AppColor">
+            <div class="row clearfix" id="loginSliders">
+                @*@Html.Partial("_LoginPagesliderImage")*@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="login-slider-status">
+                            <h2>APP Background Color/Button Color/Text Color</h2>
+                         </div>
+                        <div class="app_set" style="width:50%; display:block;">
+                            <div class="page-header-third" style=" width: 100%;">
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787;color:white">App Background Color Setting</h2>
+                                </div>
+                                <div class="app_set2">
                                     @if (backgapp.Count == 0)
                                     {
-                                        <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                        <div class="ps_setcolor">
+                                            <div class="ps_set">
+                                                <h3>
+                                                    Primary Color
+                                                </h3>
+                                                <div class="ps_set2">
+                                                    <input type="color" id="backcolor1" onchange="ShowBackgroundColor()"/>
+                                                </div>
+                                            </div>
+                                            <div class="ps_set">
+                                                <h3>
+                                                    Secondary Color
+                                                </h3>
+                                                <div class="ps_set2">
+                                                    <input type="color" id="backcolor2" onchange="ShowBackgroundColor()"/>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
+                                            </div>
+                                            <div class="ps_set">
+                                                <div class="danger">
+                                                    <p><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     }
                                     else
                                     {
-                                        <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
-
-                                    }
-
-
-
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-
-                    </div>
-
-                    <div class="app_set" style="width:50%">
-                        <div class="page-header-third" style=" width: 100%;">
-                            <div class="thame-headding">
-                                <h2 style="background: #878787;color:white">App Button Color/Text Color</h2>
-                            </div>
-
-                            <div class="appc_autol1" style="padding: 2px 15px;">
                                 <div class="ps_setcolor">
-
-                                    <div class="appc_autol">
-
+                                    <div class="ps_set">
+                                        <div class="danger">
+                                            <p style="text-align: justify; font-size: 15px;"><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
+                                        </div>
+                                    </div>
+                                    <div class="ps_set">
                                         <div class="ps_hset">
                                             <h3>Primary Color</h3>
-                                            <span id="buttfup1">(@chksd[0].background_color)</span>
+                                            <span id="bckg1">(@backgapp[0].background_color1)</span>
                                         </div>
-
-
                                         <div class="ps_set2">
-                                            <input type="color" value="@chksd[0].background_color" id="appcol1" onchange="colorprint('1')" />
-
+                                            <input type="color" id="backcolor1" value="@backgapp[0].background_color1" onchange="ShowBackgroundColor()" />
                                         </div>
-
                                     </div>
-                                    <div class="appc_autol">
+                                    <div class="ps_set">
                                         <div class="ps_hset">
                                             <h3>Secondary Color</h3>
-                                            <span id="buttfup2">(@chksd[0].background_color2)</span>
+                                            <span id="bckg2">(@backgapp[0].background_color2)</span>
                                         </div>
-
-
                                         <div class="ps_set2">
-                                            <input type="color" value="@chksd[0].background_color2" id="appcol2" onchange="colorprint('1')" />
-
+                                            <input type="color" id="backcolor2" value="@backgapp[0].background_color2" onchange="ShowBackgroundColor()" />
                                         </div>
-
                                     </div>
-                                    <div class="appc_autol">
-
-                                        <div class="ps_hset">
-                                            <h3>Text Color</h3>
-                                            <span id="buttfup3">(@chksd[0].font_color)</span>
-                                        </div>
-
-
-                                        <div class="ps_set2">
-                                            <input type="color" value="@chksd[0].font_color" id="appcol3" onchange="colorprint1()" />
-                                        </div>
-
+                                    <div class="ps_set2" style="margin-top: 14px;">
+                                        <button style="width: 100%; float: left; height: 54px; background: green; color: #fff; border: 1px solid; border-radius: 4px;" onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
                                     </div>
 
                                 </div>
+                                    }
+                                    <div class="ps_setmob">
+                                        @if (backgapp.Count == 0)
+                                        {
+                                            <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                        }
+                                        else
+                                        {
+                                            <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                <div class="ps_setmob">
-                                    <div class="Button_mo">
-                                        <div style="padding: 20px; background:linear-gradient(to right,@chksd[0].background_color, @chksd[0].background_color2); color:@chksd[0].font_color;text-align:center" id="valaapcol">FONT COLOR</div>
-                                        <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div>
+                        <div class="app_set" style="width:50%">
+                            <div class="page-header-third" style=" width: 100%;">
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787;color:white">App Button Color/Text Color</h2>
+                                </div>
+                                <div class="appc_autol1" style="padding: 2px 15px;">
+                                    <div class="ps_setcolor">
+                                        <div class="appc_autol">
 
-                                        <div style="position: absolute; top: 26px; padding: 10px; ">
-                                            <div class="danger">
-                                                <p>
-                                                    <strong>Notes !</strong>
+                                            <div class="ps_hset">
+                                                <h3>Primary Color</h3>
+                                                <span id="buttfup1">(@chksd[0].background_color)</span>
+                                            </div>
+                                            <div class="ps_set2">
+                                                <input type="color" value="@chksd[0].background_color" id="appcol1" onchange="ShowIconColor()" />
+                                            </div>
+                                        </div>
+                                        <div class="appc_autol">
+                                            <div class="ps_hset">
+                                                <h3>Secondary Color</h3>
+                                                <span id="buttfup2">(@chksd[0].background_color2)</span>
+                                            </div>
 
-                                                    Please use dark type as button color. Whenever the color changes, open the mobile app and check carefully first. Please don't set the dark color in text color, if possible set only white color.
-                                                </p>
+                                            <div class="ps_set2">
+                                                <input type="color" value="@chksd[0].background_color2" id="appcol2" onchange="ShowIconColor()" />
+                                            </div>
+                                        </div>
+                                        <div class="appc_autol">
+
+                                            <div class="ps_hset">
+                                                <h3>Text Color</h3>
+                                                <span id="buttfup3">(@chksd[0].font_color)</span>
+                                            </div>
+                                            <div class="ps_set2">
+                                                <input type="color" value="@chksd[0].font_color" id="appcol3" onchange="ShowIconColor()" />
+                                            </div>
+                                        </div>
+                                        <div  class="ps_set2">
+                                            <button style="width: 100%; float: left; height: 54px; background: green; color: #fff; border: 1px solid; border-radius: 4px;" onclick="SentIconOtp('Your Button & text color change OTP is ')">Save Button & Text Color</button>
+                                        </div>
+                                    </div>
+                                    <div class="ps_setmob">
+                                        <div class="Button_mo">
+                                            <div style="padding: 20px; background:linear-gradient(to right,@chksd[0].background_color, @chksd[0].background_color2); color:@chksd[0].font_color;text-align:center" id="valaapcol">FONT COLOR</div>
+                                            <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div>
+
+                                            <div style="position: absolute; top: 26px; padding: 10px; ">
+                                                <div class="danger">
+                                                    <p><strong>Notes !</strong>Please use dark type as button color. Whenever the color changes, open the mobile app and check carefully first. Please don't set the dark color in text color, if possible set only white color.</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
-
                             </div>
-                            @*<div>App background Color</div>
-                <div>
-                    <input type="color" value="" id="appcol1" onchange="colorprint('1')" />
-                    <input type="color" value="" id="appcol2" onchange="colorprint('1')" />
-
+                        </div>
+                    </div>
                 </div>
-                <div>App Font Color</div>
-                <div>
-                    <input type="color" value="" id="appcol3" onchange="colorprint1()" />
+            </div>
+        </div>
 
-                </div>*@
+        <div id="AppIcon" style="display: none;">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <h2 class="but_df">
+                            <button style="background: var(--main-bg-lcolor)" onclick="deshbackss()" id="dback">Dashboard icon</button>
+                            <button id="fback" onclick="frontbackss()">Front icon</button>
+                        </h2>
+                    </div>
+                </div>
+            </div>
 
-
-
-
-
+            <div class="row clearfix" id="iconsettingshow">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="thame-headding">
+                            <h2 style="float: left; width: 100%;">App Dashboard icon Design/Color</h2>
                         </div>
 
-                    </div>
+                        <div style="height: 510px;">
+                            <div class="br_setb">
+                                <div class="appc_auto0">
+                                    <div class="appc_auto">
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style=" color: white;">
+                                                <h2 style="background-color: #878787;">App Icon Color/Background Color</h2>
+                                            </div>
 
-                </div>
-            </div>
-        </div>
+                                            <div class="appc_autol1">
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(0)" onmouseout="whitemess1(0)" />  Primary Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].color1" id="appcolor11" onchange="appiconcolor(1 ,0)" />
+                                                        <div class="whitemes" style="display:none">
+                                                            Please do not use white color
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(1)" onmouseout="whitemess1(1)" />  Secondary Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].color2" id="appcolor12" onchange="appiconcolor(2 ,0)" />
 
-        <div class="row clearfix">
+                                                    </div>
+                                                    <div class="whitemes" style="display:none">
+                                                        Please do not use white color
+                                                    </div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(2)" onmouseout="whitemess1(2)" />  Background Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].background_color" id="appBGcolor" onchange="appiconcolor(3 ,0)" />
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                <div class="card login-back-img page-header-third">
-                    <h2 class="but_df">
-                        <button style="background: var(--main-bg-lcolor)" onclick="deshbackss()" id="dback">Dashboard icon</button>
-                        <button id="fback" onclick="frontbackss()">Front icon</button>
-                        <script>
-                            function frontbackss()
-                            {
-                                document.getElementById('dback').style.background = '#F6F5F5';
-                                document.getElementById('fback').style.background = 'var(--main-bg-lcolor)';
-                                document.getElementById('iconsettingshow').style.display = 'none';
-                                document.getElementById('iconsettinghide').style.display = 'contents';
-                            }
-                            function deshbackss() {
-                                document.getElementById('fback').style.background = '#F6F5F5';
-                                document.getElementById('dback').style.background = 'var(--main-bg-lcolor)';
-                                document.getElementById('iconsettinghide').style.display = 'none';
-                                document.getElementById('iconsettingshow').style.display = 'contents';
-                            }
-                        </script>
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix" id="iconsettingshow">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                <div class="card login-back-img page-header-third">
-
-                    <div class="thame-headding">
-
-                        <h2 style="float: left; width: 100%;">App Dashboard icon Design/Color</h2>
-                    </div>
-
-                    <div style="height: 510px;">
-                        <div class="br_setb">
-
-                            <div class="appc_auto0">
-                                <div class="appc_auto">
-
-                                    <div class="page-header-third">
-
-                                        <div class="thame-headding" style=" color: white;">
-                                            <h2 style="background-color: #878787;">App Icon Color/Background Color</h2>
-                                        </div>
-
-                                        <div class="appc_autol1">
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(0)" onmouseout="whitemess1(0)" />  Primary Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123[0].color1" id="appcolor11" onchange="appiconcolor(1 ,0)" />
+                                                    </div>
                                                     <div class="whitemes" style="display:none">
                                                         Please do not use white color
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(1)" onmouseout="whitemess1(1)" />  Secondary Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123[0].color2" id="appcolor12" onchange="appiconcolor(2 ,0)" />
+                                        </div>
+                                    </div>
+                                    <div class="appc_auto">
 
-                                                </div>
-                                                <div class="whitemes" style="display:none">
-                                                    Please do not use white color
-                                                </div>
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style="color: white;">
+                                                <h2 style="background: #878787;">App Icon Themes</h2>
                                             </div>
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(2)" onmouseout="whitemess1(2)" />  Background Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123[0].background_color" id="appBGcolor" onchange="appiconcolor(3 ,0)" />
 
-                                                </div>
-                                                <div class="whitemes" style="display:none">
-                                                    Please do not use white color
-                                                </div>
+                                            <div class="appc_autol1">
+                                                @if (chksd123[0].icon_design == "1")
+                                                {
+                                                    <button id="sef0" onclick="appiconcolor(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef0" onclick="appiconcolor(4 ,0)"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "10")
+                                                {
+                                                    <button id="sef1" onclick="appiconcolor(4 ,1)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef1" onclick="appiconcolor(4 ,1)"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "20")
+                                                {
+                                                    <button id="sef2" onclick="appiconcolor(4 ,2)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef2" onclick="appiconcolor(4 ,2)"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "30")
+                                                {
+                                                    <button id="sef3" onclick="appiconcolor(4 ,3)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef3" onclick="appiconcolor(4 ,3)"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "100")
+                                                {
+                                                    <button id="sef4" onclick="appiconcolor(4 ,4)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef4" onclick="appiconcolor(4 ,4)"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "200")
+                                                {
+                                                    <button id="sef5" onclick="appiconcolor(4 ,5)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef5" onclick="appiconcolor(4 ,5)"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                                }
+                                                @if (chksd123[0].icon_design == "300")
+                                                {
+                                                    <button id="sef6" onclick="appiconcolor(4 ,6)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef6" onclick="appiconcolor(4 ,6)"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>}
+                                                @if (chksd123[0].icon_design == "400")
+                                                {
+                                                    <button id="sef7" onclick="appiconcolor(4 ,7)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef7" onclick="appiconcolor(4 ,7)"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>}
+                                                @if (chksd123[0].icon_design == "500")
+                                                {
+                                                    <button id="sef8" onclick="appiconcolor(4 ,8)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef8" onclick="appiconcolor(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                                }
                                             </div>
                                         </div>
 
                                     </div>
+                                    <div style="display:none" id="col1"></div>
+                                    <div style="display:none" id="col2"></div>
+                                    <div style="display:none" id="col3"></div>
+                                    <div style="display:none" id="col4"></div>
 
-
-                                </div>
-                                <div class="appc_auto">
-
-                                    <div class="page-header-third">
-                                        <div class="thame-headding" style="color: white;">
-                                            <h2 style="background: #878787;">App Icon Themes</h2>
-                                        </div>
-
-                                        <div class="appc_autol1">
-                                            @if (chksd123[0].icon_design == "1")
-                                            {
-                                                <button id="sef0" onclick="appiconcolor(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef0" onclick="appiconcolor(4 ,0)"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "10")
-                                            {
-
-
-                                                <button id="sef1" onclick="appiconcolor(4 ,1)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef1" onclick="appiconcolor(4 ,1)"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "20")
-                                            {
-                                                <button id="sef2" onclick="appiconcolor(4 ,2)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef2" onclick="appiconcolor(4 ,2)"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "30")
-                                            {
-                                                <button id="sef3" onclick="appiconcolor(4 ,3)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef3" onclick="appiconcolor(4 ,3)"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "100")
-                                            {
-                                                <button id="sef4" onclick="appiconcolor(4 ,4)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef4" onclick="appiconcolor(4 ,4)"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "200")
-                                            {
-                                                <button id="sef5" onclick="appiconcolor(4 ,5)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef5" onclick="appiconcolor(4 ,5)"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
-                                            }
-                                            @if (chksd123[0].icon_design == "300")
-                                            {
-
-
-                                                <button id="sef6" onclick="appiconcolor(4 ,6)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef6" onclick="appiconcolor(4 ,6)"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>}
-                                            @if (chksd123[0].icon_design == "400")
-                                            {
-
-
-                                                <button id="sef7" onclick="appiconcolor(4 ,7)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef7" onclick="appiconcolor(4 ,7)"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>}
-                                            @if (chksd123[0].icon_design == "500")
-                                            {
-
-
-                                                <button id="sef8" onclick="appiconcolor(4 ,8)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef8" onclick="appiconcolor(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
-                                            }
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div style="display:none" id="col1"></div>
-                                <div style="display:none" id="col2"></div>
-                                <div style="display:none" id="col3"></div>
-                                <div style="display:none" id="col4"></div>
-
-                                <div class="app_all_s">
-                                    <div id="opthide">
-                                        <button onclick="optsents()" style="padding: 6px 88px;" id="savehidd">SAVE</button>
-                                        <img src="~/icegif-1263.gif" id="saveshow" style="display:none" />
-                                    </div>
-                                    <div id="optshow" style="display:none">
-                                        <div>
-                                            <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
-
-                                            <button style="color: #fff; background: green; " onclick="savedateicon()">Submit</button>
-
+                                    <div class="app_all_s">
+                                        <div id="opthide">
+                                            <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px;" id="savehidd">SAVE</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
-                        </div>
-                        @*<div id="optshow">
-                                                    <div class="optshow_c">
-                                                        <CENTER>
-
-                                                            <div class="page-header-third" style="padding:20px;" id="optshow">
-                                                                <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
-
-                                                                <div class="bs_btton">
-                                                                    <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
-                        document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
-                                                                        back
-                                                                    </button>
-
-                                                                    <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
-                                                                </div>
-
-
-                                                            </div>
-
-                                                        </CENTER>
-                                                    </div>
-                                                </div>*@
-
-                        <div class="appi_set" style="float:right">
-
-                            <div class="page-header-third">
-
-                                <div class="center_iset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                    <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
-                                    <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
-                                    <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
-                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
-                                    <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
-                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
-                                    <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
-                                    <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
-            </linearGradient>
-                                    <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#a); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
-        </g>
-    </svg>
+                            <div class="appi_set" style="float:right">
+                                <div class="page-header-third">
+                                    <div class="center_iset">
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                           <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
+                                           <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
+                                               <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
+                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
+                                               <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
+                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
+                                               <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
+                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
+                                                </linearGradient>
+                                               <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#a); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
+                                           </g>
+                                        </svg>
+                                    </div>
                                 </div>
-
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
-
                 </div>
-
             </div>
+            <div class="row clearfix" id="iconsettinghide" style="display:none">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="thame-headding">
+                            <h2>App Front icon Design/Color</h2>
+                        </div>
+                        <div style="height: 510px;">
+                            <div class="br_setb">
+                                <div class="appc_auto0">
+                                    <div class="appc_auto">
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style=" color: white;">
+                                                <h2 style="background-color: #878787;">App Front Icon Color/Background Color</h2>
+                                            </div>
+                                            <div class="appc_autol1">
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(0)" onmouseout="whitemess1ss(0)" />  Primary Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123ss[0].color1" id="appcolorssss" onchange="appiconcolorss(1 ,0)" />
+                                                        <div class="whitemesss" style="display:none">
+                                                            Please do not use white color
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(1)" onmouseout="whitemess1ss(1)" />  Secondary Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123ss[0].color2" id="appcolor12ss" onchange="appiconcolorss(2 ,0)" />
 
-        </div>
+                                                    </div>
+                                                    <div class="whitemesss" style="display:none">
+                                                        Please do not use white color
+                                                    </div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(2)" onmouseout="whitemess1ss(2)" />  Background Color</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123ss[0].background_color" id="appBGcolorss" onchange="appiconcolorss(3 ,0)" />
 
-        <div class="row clearfix" id="iconsettinghide" style="display:none">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                <div class="card login-back-img page-header-third">
-
-                    <div class="thame-headding">
-                        <h2>App Front icon Design/Color</h2>
-                    </div>
-
-                    <div style="height: 510px;">
-                        <div class="br_setb">
-
-                            <div class="appc_auto0">
-                                <div class="appc_auto">
-
-                                    <div class="page-header-third">
-
-                                        <div class="thame-headding" style=" color: white;">
-                                            <h2 style="background-color: #878787;">App Front Icon Color/Background Color</h2>
-                                        </div>
-
-                                        <div class="appc_autol1">
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(0)" onmouseout="whitemess1ss(0)" />  Primary Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123ss[0].color1" id="appcolorssss" onchange="appiconcolorss(1 ,0)" />
+                                                    </div>
                                                     <div class="whitemesss" style="display:none">
                                                         Please do not use white color
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(1)" onmouseout="whitemess1ss(1)" />  Secondary Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123ss[0].color2" id="appcolor12ss" onchange="appiconcolorss(2 ,0)" />
+                                        </div>
+                                    </div>
+                                    <div class="appc_auto">
 
-                                                </div>
-                                                <div class="whitemesss" style="display:none">
-                                                    Please do not use white color
-                                                </div>
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style="color: white;">
+                                                <h2 style="background: #878787;">App Front Icon Themes</h2>
                                             </div>
-                                            <div class="appc_autol">
-                                                <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(2)" onmouseout="whitemess1ss(2)" />  Background Color</div>
-                                                <div>
-                                                    <input type="color" value="@chksd123ss[0].background_color" id="appBGcolorss" onchange="appiconcolorss(3 ,0)" />
-
-                                                </div>
-                                                <div class="whitemesss" style="display:none">
-                                                    Please do not use white color
-                                                </div>
+                                            <div class="appc_autol1">
+                                                @if (chksd123ss[0].icon_design == "1")
+                                                {
+                                                    <button id="sef0ss" onclick="appiconcolorss(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef0ss" onclick="appiconcolorss(4 ,0)"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "10")
+                                                {
+                                                    <button id="sef1ss" onclick="appiconcolorss(4 ,1)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef1ss" onclick="appiconcolorss(4 ,1)"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "20")
+                                                {
+                                                    <button id="sef2ss" onclick="appiconcolorss(4 ,2)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef2ss" onclick="appiconcolorss(4 ,2)"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "30")
+                                                {
+                                                    <button id="sef3ss" onclick="appiconcolorss(4 ,3)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef3ss" onclick="appiconcolorss(4 ,3)"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "100")
+                                                {
+                                                    <button id="sef4ss" onclick="appiconcolorss(4 ,4)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef4ss" onclick="appiconcolorss(4 ,4)"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "200")
+                                                {
+                                                    <button id="sef5ss" onclick="appiconcolorss(4 ,5)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef5ss" onclick="appiconcolorss(4 ,5)"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
+                                                }
+                                                @if (chksd123ss[0].icon_design == "300")
+                                                {
+                                                    <button id="sef6ss" onclick="appiconcolorss(4 ,6)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef6ss" onclick="appiconcolorss(4 ,6)"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>}
+                                                @if (chksd123ss[0].icon_design == "400")
+                                                {
+                                                    <button id="sef7ss" onclick="appiconcolorss(4 ,7)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef7ss" onclick="appiconcolorss(4 ,7)"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>}
+                                                @if (chksd123ss[0].icon_design == "500")
+                                                {
+                                                    <button id="sef8ss" onclick="appiconcolorss(4 ,8)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button id="sef8ss" onclick="appiconcolorss(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
+                                                }
                                             </div>
+
                                         </div>
 
                                     </div>
+                                    <div style="display:none" id="col1ss"></div>
+                                    <div style="display:none" id="col2ss"></div>
+                                    <div style="display:none" id="col3ss"></div>
+                                    <div style="display:none" id="col4ss"></div>
 
-
-                                </div>
-                                <div class="appc_auto">
-
-                                    <div class="page-header-third">
-                                        <div class="thame-headding" style="color: white;">
-                                            <h2 style="background: #878787;">App Front Icon Themes</h2>
-                                        </div>
-
-                                        <div class="appc_autol1">
-                                            @if (chksd123ss[0].icon_design == "1")
-                                            {
-                                                <button id="sef0ss" onclick="appiconcolorss(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef0ss" onclick="appiconcolorss(4 ,0)"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "10")
-                                            {
-
-
-                                                <button id="sef1ss" onclick="appiconcolorss(4 ,1)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef1ss" onclick="appiconcolorss(4 ,1)"><span class="s_button1">Theme 2</span> <br /><span class="s_button2">10px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "20")
-                                            {
-                                                <button id="sef2ss" onclick="appiconcolorss(4 ,2)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef2ss" onclick="appiconcolorss(4 ,2)"><span class="s_button1">Theme 3</span> <br /><span class="s_button2">20px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "30")
-                                            {
-                                                <button id="sef3ss" onclick="appiconcolorss(4 ,3)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef3ss" onclick="appiconcolorss(4 ,3)"><span class="s_button1">Theme 4</span> <br /><span class="s_button2">30px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "100")
-                                            {
-                                                <button id="sef4ss" onclick="appiconcolorss(4 ,4)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef4ss" onclick="appiconcolorss(4 ,4)"><span class="s_button1">Theme 5</span> <br /><span class="s_button2">100px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "200")
-                                            {
-                                                <button id="sef5ss" onclick="appiconcolorss(4 ,5)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef5ss" onclick="appiconcolorss(4 ,5)"><span class="s_button1">Theme 6</span> <br /><span class="s_button2">200px</span></button>
-                                            }
-                                            @if (chksd123ss[0].icon_design == "300")
-                                            {
-
-
-                                                <button id="sef6ss" onclick="appiconcolorss(4 ,6)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef6ss" onclick="appiconcolorss(4 ,6)"><span class="s_button1">Theme 7</span> <br /><span class="s_button2">300px</span></button>}
-                                            @if (chksd123ss[0].icon_design == "400")
-                                            {
-
-
-                                                <button id="sef7ss" onclick="appiconcolorss(4 ,7)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef7ss" onclick="appiconcolorss(4 ,7)"><span class="s_button1">Theme 8</span> <br /><span class="s_button2">400px</span></button>}
-                                            @if (chksd123ss[0].icon_design == "500")
-                                            {
-
-
-                                                <button id="sef8ss" onclick="appiconcolorss(4 ,8)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
-                                            }
-                                            else
-                                            {
-                                                <button id="sef8ss" onclick="appiconcolorss(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
-                                            }
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div style="display:none" id="col1ss"></div>
-                                <div style="display:none" id="col2ss"></div>
-                                <div style="display:none" id="col3ss"></div>
-                                <div style="display:none" id="col4ss"></div>
-
-                                <div class="app_all_s">
-                                    <div id="opthidess">
-                                        <button onclick="optsentsss()" style="padding: 6px 88px;" id="savehiddss">SAVE</button>
-                                        <img src="~/icegif-1263.gif" id="saveshowss" style="display: none; width: 13%;" />
-                                    </div>
-                                    <div id="optshowss" style="display:none">
-                                        <div>
-                                            <input type="number" id="otpiconss" placeholder="Enter Otp" max="4" />
-
-                                            <button style="color: #fff; background: green; " onclick="savedateiconss()">Submit</button>
-
+                                    <div class="app_all_s">
+                                        <div id="opthidess">
+                                            <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px;" id="savehiddss">SAVE</button>
                                         </div>
                                     </div>
-
-
-
-
                                 </div>
                             </div>
+                            <div class="appi_set" style="float:right">
 
+                                <div class="page-header-third">
 
-                        </div>
-                        <div id="optshowss" style="display:none">
-                            <div class="optshow_c">
-                                <CENTER>
-
-                                    <div class="page-header-third" style="padding:20px;">
-                                        <input type="number" id="otpicon" placeholder="Enter Otp" max="4" />
-
-                                        <div class="bs_btton">
-                                            <button style="float:none;color:#fff;background:#000;" onclick="document.getElementById('optshow').style.display = 'none';
-document.getElementById('opthide').style.display = 'block';document.getElementById('savehidd').style.display = 'block';document.getElementById('saveshow').style.display = 'none';">
-                                                back
-                                            </button>
-
-                                            <button style="float: none; color: #fff; background: green; " onclick="savedateicon()">Submit</button>
-                                        </div>
-
-
+                                    <div class="center_isetss">
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                                        <rect width="512" height="512" rx="@chksd123ss[0].icon_design" ry="@chksd123ss[0].icon_design" fill="@chksd123ss[0].background_color" class="bgcoloresss"></rect>
+                                        <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
+                                        <linearGradient id="b" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
+                                        <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0"></stop>
+                                        <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.021"></stop>
+                                        <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.293"></stop>
+                                        <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.554"></stop>
+                                        <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.796"></stop>
+                                         </linearGradient>
+                                        <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#b); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
+                                         </g>
+                                          </svg>
                                     </div>
-
-                                </CENTER>
-                            </div>
-                        </div>
-
-                        <div class="appi_set" style="float:right">
-
-                            <div class="page-header-third">
-
-                                <div class="center_isetss">
-                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                    <rect width="512" height="512" rx="@chksd123ss[0].icon_design" ry="@chksd123ss[0].icon_design" fill="@chksd123ss[0].background_color" class="bgcoloresss"></rect>
-                                    <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
-                                    <linearGradient id="b" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
-                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0"></stop>
-                                    <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.021"></stop>
-                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.293"></stop>
-                                    <stop class="coloew2ss" stop-color="@chksd123ss[0].color2" offset="0.554"></stop>
-                                    <stop class="coloewsss" stop-color="@chksd123ss[0].color1" offset="0.796"></stop>
-            </linearGradient>
-                                    <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#b); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
-        </g>
-    </svg>
                                 </div>
-
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
-
                 </div>
-
             </div>
-
         </div>
 
+        <div id="AppKYCDocs" style="display: none;">
+            <div class="row clearfix" id="loginSliders">
+                @*@Html.Partial("_LoginPagesliderImage")*@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="login-slider-status">
+                            <h2>APP KYC Document Field Setting</h2>
+                        </div>
 
+                        <div class="app_set">
+                            <div class="page-header-third" style=" width: 100%; height: 170px;">
 
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787; color: white">App KYC Option(SKIP/MANDATORY)</h2>
+                                </div>
 
-
-
-
-
-
-
-
-
-
-        <div class="row clearfix" id="loginSliders">
-            @*@Html.Partial("_LoginPagesliderImage")*@
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                <div class="card login-back-img page-header-third">
-                    <div class="login-slider-status">
-                        <h2>APP KYC Document Field Setting</h2>
-
-
-                    </div>
-
-                    <div class="app_set">
-                        <div class="page-header-third" style=" width: 100%; height: 170px;">
-
-                            <div class="thame-headding">
-                                <h2 style="background: #878787; color: white">App KYC Option(SKIP/MANDATORY)</h2>
-                            </div>
-
-                            <div class="app_set2">
-                                <p>KYC Option</p>
-                                @if (manatoryfilDS.Count > 0)
-                                {
-                                    if (manatoryfilDS[0].skips == null || manatoryfilDS[0].skips == "N")
+                                <div class="app_set2">
+                                    <p>KYC Option</p>
+                                    @if (manatoryfilDS.Count > 0)
+                                    {
+                                        if (manatoryfilDS[0].skips == null || manatoryfilDS[0].skips == "N")
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('S',1)">Skip</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('S',1)">MANDATORY</button>
+                                        }
+                                    }
+                                    else
                                     {
                                         <button class="manatory" onclick="manatorypermision('S',1)">Skip</button>
                                     }
-                                    else
-                                    {
-                                        <button class="manatory" onclick="manatorypermision('S',1)">MANDATORY</button>
-                                    }
-                                }
-                                else
-                                {
-                                    <button class="manatory" onclick="manatorypermision('S',1)">Skip</button>
-                                }
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="app_set">
-                        <div class="page-header-third" style=" width: 100%; height: 170px;">
-                            <div class="thame-headding">
-                                <h2 style="background: #878787; color: white">App KYC Document Field (OPTIONAL/MANDATORY)</h2>
-                            </div>
+                        <div class="app_set">
+                            <div class="page-header-third" style=" width: 100%; height: 170px;">
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787; color: white">App KYC Document Field (OPTIONAL/MANDATORY)</h2>
+                                </div>
 
-                            <div class="app_set2">
-                                <p>GST Certificate</p>
+                                <div class="app_set2">
+                                    <p>GST Certificate</p>
 
-                                @if (manatoryfilDS.Count > 0)
-                                {
-                                    if (manatoryfilDS[0].gst == null || manatoryfilDS[0].gst == "N")
+                                    @if (manatoryfilDS.Count > 0)
+                                    {
+                                        if (manatoryfilDS[0].gst == null || manatoryfilDS[0].gst == "N")
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('g',2)">OPTIONAL</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('g',2)">MANDATORY</button>
+                                        }
+                                    }
+                                    else
                                     {
                                         <button class="manatory" onclick="manatorypermision('g',2)">OPTIONAL</button>
                                     }
-                                    else
+                                </div>
+                                <div class="app_set2">
+                                    <p>Service Agreement</p>
+                                    @if (manatoryfilDS.Count > 0)
                                     {
-                                        <button class="manatory" onclick="manatorypermision('g',2)">MANDATORY</button>
+                                        if (manatoryfilDS[0].agreement == null || manatoryfilDS[0].agreement == "N")
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('a',3)">OPTIONAL</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('a',3)">MANDATORY</button>
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    <button class="manatory" onclick="manatorypermision('g',2)">OPTIONAL</button>
-                                }
-                            </div>
-                            <div class="app_set2">
-                                <p>Service Agreement</p>
-                                @if (manatoryfilDS.Count > 0)
-                                {
-                                    if (manatoryfilDS[0].agreement == null || manatoryfilDS[0].agreement == "N")
+                                    else
                                     {
                                         <button class="manatory" onclick="manatorypermision('a',3)">OPTIONAL</button>
                                     }
-                                    else
+                                </div>
+                                <div class="app_set2">
+                                    <p>Address Proof</p>
+                                    @if (manatoryfilDS.Count > 0)
                                     {
-                                        <button class="manatory" onclick="manatorypermision('a',3)">MANDATORY</button>
+                                        if (manatoryfilDS[0].addressproof == null || manatoryfilDS[0].addressproof == "N")
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('p',4)">OPTIONAL</button>
+                                            @*<span id="statusNULL" class="custom-off1"  onclick="SliderStatus()">Status Off</span>*@
+                                        }
+                                        else
+                                        {
+                                            <button class="manatory" onclick="manatorypermision('p',4)">MANDATORY</button>
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    <button class="manatory" onclick="manatorypermision('a',3)">OPTIONAL</button>
-                                }
-                            </div>
-                            <div class="app_set2">
-                                <p>Address Proof</p>
-                                @if (manatoryfilDS.Count > 0)
-                                {
-                                    if (manatoryfilDS[0].addressproof == null || manatoryfilDS[0].addressproof == "N")
+                                    else
                                     {
                                         <button class="manatory" onclick="manatorypermision('p',4)">OPTIONAL</button>
-                                        @*<span id="statusNULL" class="custom-off1"  onclick="SliderStatus()">Status Off</span>*@
                                     }
-                                    else
-                                    {
-                                        <button class="manatory" onclick="manatorypermision('p',4)">MANDATORY</button>
-                                    }
-                                }
-                                else
-                                {
-                                    <button class="manatory" onclick="manatorypermision('p',4)">OPTIONAL</button>
-                                }
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row clearfix" id="loginSliders">
-            @*@Html.Partial("_LoginPagesliderImage")*@
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                <div class="card login-back-img page-header-third">
-                    <div class="login-slider-status">
-                        <h2>FAQ Questions and Answers</h2>
 
+        <div id="FQAS" style="display: none;">
+            <div class="row clearfix" id="loginSliders">
+                @*@Html.Partial("_LoginPagesliderImage")*@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="login-slider-status">
+                            <h2>FAQ Questions and Answers</h2>
+                        </div>
+                        <div class="app_set">
+                            <div class="page-header-third" style=" width: 100%; height: 320px;">
 
-                    </div>
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787; color: white">Create FAQ Questions & Answers</h2>
+                                </div>
 
-                    <div class="app_set">
-                        <div class="page-header-third" style=" width: 100%; height: 320px;">
-
-                            <div class="thame-headding">
-                                <h2 style="background: #878787; color: white">Create FAQ Questions & Answers</h2>
-                            </div>
-
-                            <div style="padding: 2px 15px;">
-                                <h4>Question</h4>
-                                <textarea style="font-size: medium; padding: 3px;" id="faqq"></textarea>
-                                <h4>Answer</h4>
-                                <textarea style="font-size: medium; padding: 3px;" id="faqa"></textarea>
-                                <button style="width: 20%; height: 33px; background: green; color: white; margin: 10px 247px; " onclick="faqsave()">SAVE</button>
+                                <div style="padding: 2px 15px;">
+                                    <h4>Question</h4>
+                                    <textarea style="font-size: medium; padding: 3px;" id="faqq"></textarea>
+                                    <h4>Answer</h4>
+                                    <textarea style="font-size: medium; padding: 3px;" id="faqa"></textarea>
+                                    <button style="width: 20%; height: 33px; background: green; color: white; margin: 10px 247px; " onclick="faqsave()">SAVE</button>
+                                </div>
                             </div>
                         </div>
+                        <div class="app_set">
+                            <div class="page-header-third" style=" width: 100%; height: 320px;">
+                                <div class="thame-headding">
+                                    <h2 style="background: #878787; color: white">FAQ Questions & Answers List</h2>
+                                </div>
+                                <div class="table-container">
+                                    <table id="faqlist"></table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="app_set">
-                        <div class="page-header-third" style=" width: 100%; height: 320px;">
-                            <div class="thame-headding">
-                                <h2 style="background: #878787; color: white">FAQ Questions & Answers List</h2>
+        <div class="row clearfix" id="AppSlider" style="display: none;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                <div class="card login-back-img page-header-third">
+                    <div class="login-slider-status">
+                        <h2 style="margin-left: 10px;">APP SLIDER IMAGES</h2> <a href="@Url.Action("APPImagesshow","Home")" style=" margin: 18px; float: right; padding: 6px 35px;background:green;color:white">Selected Images</a>
+                    </div>
+                    <div id="sliderImages">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="AppMessage" style="display: none;">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="login-slider-status">
+                            <h2 style="margin-left: 10px;">App Message </h2>
+                        </div>
+                        <div class="row">
+                            <div style="width: 100%; padding: 16px; float: left;padding-top:0;">
+                                <div class="col-md-4">
+                                    <div class="form-container">
+                                        <form id="textForm">
+                                            <textarea id="textArea" placeholder="Enter your text here..." oninput="updateCharCount()"></textarea>
+                                            <div style="display: flex; align-items: center; justify-content: space-between; ">
+                                                <button onclick="clearText(event)">Clear</button>
+                                                <button type="submit" onclick="handleSubmit(event)">Submit</button>
+                                            </div>
+                                        </form>
+                                        <div class="danger" style=" margin-top: 25px; font-size: 17px;">
+                                            <p id="charCount">Characters Remaining: 500</p>
+                                        </div>
+                                        <div class="danger" style=" margin-top: 25px; font-size: 17px;">
+                                            <p><strong>Notes !</strong> "You can insert a maximum of 4 notifications. To add a new notification, please delete an existing one."</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div id="AppNotifications">
+
+                                    </div>
+                                </div>
                             </div>
-                            <div class="table-container">
-                                <table id="faqlist"></table>
-                            </div>
+                        </div>
 
-                            <script>
-                                $.ajax({
-                                    type: "POST",
-                                    url: '@Url.Action("faqsave", "Home")',
-                                    data: { q :null , a : null },
-                                    success: function (result) {
-                                        var faq = document.getElementById('faqlist');
-                                        faq.innerHTML = "";
-                                        for (var i = 0; i < result.length; i++) {
-                                            var br = document.createElement('tr');
-                                            var bU = document.createElement('button');
-                                            bU.textContent = "-";
-                                            bU.setAttribute('onclick', 'deletefaq(' + result[i].idno + ',' + i + ')')
-                                            bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
-                                            bU.setAttribute('class', 'deletefsw');
-                                            br.setAttribute('style', 'font-size: large;');
-                                            var br1 = document.createElement('tr');
-                                            var br2 = document.createElement('tr');
-                                            var hr = document.createElement('hr');
-                                            br1.setAttribute('style', 'font-size: large;');
-                                            br.appendChild(document.createTextNode('Q.' + (i + 1) + ' ' + result[i].question));
-                                            br2.appendChild(bU);
-                                            br1.appendChild(document.createTextNode('Ans.' + result[i].answer));
-                                            faq.appendChild(br);
-                                            faq.appendChild(br1);
-                                            faq.appendChild(br2);
-                                            faq.appendChild(hr);
-                                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    </div>
 
-                                    }
-                                });
-                                function isEmptyOrSpaces(str) {
-                                    return str === null || str.match(/^ *$/) !== null;
-                                }
-                                function faqsave() {
-                                    var ques = document.getElementById('faqq').value;
-                                    var ans = document.getElementById('faqa').value;
+</section>
+<div class="show_pop" id="saveshow" style="display:none">
+    <img src="~/icegif-1263.gif" />
+</div>
 
-if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
-    $.ajax({
+<div class="show_pop" id="optshow" style="display:none">
+    <div class="box_otp">
+        <input type="number" id="otpicon" placeholder="Enter Otp" maxlength="4" />
+        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
+        <button style="color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+    </div>
+</div>
+<div class="show_pop" id="optshowss" style="display:none">
+    <div class="box_otp">
+        <input type="number" id="otpiconss" placeholder="Enter Otp" maxlength="4" />
+        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
+        <button style="color: #fff; background: green; " onclick="savedateiconss()">Submit</button>
+    </div>
+</div>
+
+<div class="show_pop" id="BackGroundOtpBox" style="display:none">
+    <div class="box_otp">
+        <input type="number" id="OTPBackground" placeholder="Enter Otp" maxlength="4" />
+        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
+        <button style="color: #fff; background: green; " onclick="updbackgr()">Submit</button>
+    </div>
+</div>
+
+<div class="show_pop" id="IconOtpBox" style="display:none">
+    <div class="box_otp">
+        <input type="number" id="OTPIcon" placeholder="Enter Otp" maxlength="4" />
+        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
+        <button style="color: #fff; background: green; " onclick="colorprint()">Submit</button>
+    </div>
+</div>
+
+<script>
+     $.ajax({
         type: "POST",
         url: '@Url.Action("faqsave", "Home")',
-        data: { q: ques, a: ans },
+        data: { q :null , a : null },
         success: function (result) {
             var faq = document.getElementById('faqlist');
             faq.innerHTML = "";
@@ -2507,7 +2413,7 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                 var br = document.createElement('tr');
                 var bU = document.createElement('button');
                 bU.textContent = "-";
-                bU.setAttribute('onclick', 'deletefaq(' + result[i].idno +','+i+ ')')
+                bU.setAttribute('onclick', 'deletefaq(' + result[i].idno + ',' + i + ')')
                 bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
                 bU.setAttribute('class', 'deletefsw');
                 br.setAttribute('style', 'font-size: large;');
@@ -2522,344 +2428,421 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
                 faq.appendChild(br1);
                 faq.appendChild(br2);
                 faq.appendChild(hr);
-
-
             }
-            alert('FAQ Saved');
-            document.getElementById('faqq').value = "";
-            document.getElementById('faqa').value = "";
+    
+    
+        }
+     });
+
+    function isEmptyOrSpaces(str) {
+        return str === null || str.match(/^ *$/) !== null;
+    }
+    function HidePoPup() {
+        document.getElementById('IconOtpBox').style.display = 'none';
+        document.getElementById('BackGroundOtpBox').style.display = 'none';
+        document.getElementById('optshowss').style.display = 'none';
+        document.getElementById('optshow').style.display = 'none';
+    }
+    function faqsave() {
+        var ques = document.getElementById('faqq').value;
+        var ans = document.getElementById('faqa').value;
+        if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("faqsave", "Home")',
+                data: { q: ques, a: ans },
+                success: function (result) {
+                    var faq = document.getElementById('faqlist');
+                    faq.innerHTML = "";
+                    for (var i = 0; i < result.length; i++) {
+                        var br = document.createElement('tr');
+                        var bU = document.createElement('button');
+                        bU.textContent = "-";
+                        bU.setAttribute('onclick', 'deletefaq(' + result[i].idno +','+i+ ')')
+                        bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
+                        bU.setAttribute('class', 'deletefsw');
+                        br.setAttribute('style', 'font-size: large;');
+                        var br1 = document.createElement('tr');
+                        var br2 = document.createElement('tr');
+                        var hr = document.createElement('hr');
+                        br1.setAttribute('style', 'font-size: large;');
+                        br.appendChild(document.createTextNode('Q.' + (i + 1) + ' ' + result[i].question));
+                        br2.appendChild(bU);
+                        br1.appendChild(document.createTextNode('Ans.' + result[i].answer));
+                        faq.appendChild(br);
+                        faq.appendChild(br1);
+                        faq.appendChild(br2);
+                        faq.appendChild(hr);
+                    }
+                    alert('FAQ Saved');
+                    document.getElementById('faqq').value = "";
+                    document.getElementById('faqa').value = "";
+                }
+            });
+        }
+        else {
+            alert('Empty text not allowed');
+        }
+    }
+    
+    function deletefaq(d) {
+        if (d != null) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("faqdelete", "Home")',
+                data: { id: d },
+                success: function (result) {
+                    var faq = document.getElementById('faqlist');
+                    faq.innerHTML = "";
+                    for (var i = 0; i < result.length; i++) {
+                        var br = document.createElement('tr');
+                        var bU = document.createElement('button');
+                        bU.textContent = "-";
+                        bU.setAttribute('onclick', 'deletefaq(' + result[i].idno + ',' + i + ')')
+                        bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
+                        bU.setAttribute('class', 'deletefsw');
+                        br.setAttribute('style', 'font-size: large;');
+                        var br1 = document.createElement('tr');
+                        var br2 = document.createElement('tr');
+                        var hr = document.createElement('hr');
+                        br1.setAttribute('style', 'font-size: large;');
+                        br.appendChild(document.createTextNode('Q.' + (i + 1) + ' ' + result[i].question));
+                        br2.appendChild(bU);
+                        br1.appendChild(document.createTextNode('Ans.' + result[i].answer));
+                        faq.appendChild(br);
+                        faq.appendChild(br1);
+                        faq.appendChild(br2);
+                        faq.appendChild(hr);
+    
+    
+                    }
+                    alert('FAQ Deleted');
+    
+                }
+            });
+    
+        }
+        else {
+            alert('Faq not Deleted');
+        }
+    }
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("sliderimages", "Home")',
+        success: function (result) {
+            var s = 0;
+            for (var i = 0; i < result.image.length; i++) {
+                var imgg = result.image[i];
+                var set = document.getElementById("sliderImages");
+                var ses = document.createElement('div');
+                var ses11 = document.createElement('div');
+                ses11.setAttribute("Class", "catagselect");
+                var ses13 = document.createElement('div');
+                ses13.setAttribute("Class", "page-header-third");
+                var ses12 = document.createElement('input');
+                ses12.setAttribute("type", "checkbox");
+                ses12.setAttribute("Class", "checkboxdata");
+                ses12.setAttribute("onchange", "checksave('" + imgg + "','" + result.catagory[i] + "','" + result.Type[i] + "','" + result.Lang[i] + "'," + s + ")" )
+                ses12.setAttribute("style", "opacity: 100%; position: static;");
+
+                var ses14 = document.createElement('span');
+                var text = document.createTextNode(result.catagory[i]);
+                ses.style.float = "Left";
+                var img = document.createElement('img');
+                img.src = imgg;
+                ses14.appendChild(text);
+                ses11.appendChild(ses14);
+                ses11.appendChild(ses12);
+                ses13.appendChild(img);
+                ses13.appendChild(ses11);
+                ses.appendChild(ses13);
+                set.appendChild(ses);
+                ses.classList.add("secdiv");
+                set.classList.add("firstdiv");
+                s++;
+            }
         }
     });
-}
-
-                                    else {
-                                        alert('Empty text not allowed');
-                                    }
-                                }
-
-                                function deletefaq(d) {
-                                    if (d != null) {
-                                        $.ajax({
-                                            type: "POST",
-                                            url: '@Url.Action("faqdelete", "Home")',
-                                            data: { id: d },
-                                            success: function (result) {
-                                                var faq = document.getElementById('faqlist');
-                                                faq.innerHTML = "";
-                                                for (var i = 0; i < result.length; i++) {
-                                                    var br = document.createElement('tr');
-                                                    var bU = document.createElement('button');
-                                                    bU.textContent = "-";
-                                                    bU.setAttribute('onclick', 'deletefaq(' + result[i].idno + ',' + i + ')')
-                                                    bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
-                                                    bU.setAttribute('class', 'deletefsw');
-                                                    br.setAttribute('style', 'font-size: large;');
-                                                    var br1 = document.createElement('tr');
-                                                    var br2 = document.createElement('tr');
-                                                    var hr = document.createElement('hr');
-                                                    br1.setAttribute('style', 'font-size: large;');
-                                                    br.appendChild(document.createTextNode('Q.' + (i + 1) + ' ' + result[i].question));
-                                                    br2.appendChild(bU);
-                                                    br1.appendChild(document.createTextNode('Ans.' + result[i].answer));
-                                                    faq.appendChild(br);
-                                                    faq.appendChild(br1);
-                                                    faq.appendChild(br2);
-                                                    faq.appendChild(hr);
-
-
-                                                }
-                                                alert('FAQ Deleted');
-
-                                            }
-                                        });
-
-                                    }
-                                    else {
-                                        alert('Faq not Deleted');
-                                    }
-                                }
-                            </script>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row clearfix">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-
-
-                <div class="card login-back-img page-header-third">
-                    <div class="login-slider-status">
-                        <h2 style="margin-left: 10px;">APP SLIDER IMAGES</h2> <a href="@Url.Action("APPImagesshow","Home")" style=" margin: 18px; float: right; padding: 6px 35px;background:green;color:white">Selected Images</a>
-
-
-                    </div>
-                    <div id="sliderImages">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-
-    </div>
-
-</section>
-
-<script>
-  function colorprint(s) {
-
-          var col = document.getElementById('appcol1').value;
-      var col1 = document.getElementById('appcol2').value;
-      document.getElementById('buttfup1').innerHTML = "(" + col + ")" ;
-      document.getElementById('buttfup2').innerHTML = "(" + col1 + ")";
-
-          if (s == '1') {
-
-              document.getElementById('valaapcol').style.background = "linear-gradient(to right, " + col +","+col1+")";
-              var col3 = document.getElementById('appcol3').value;
-              var bfd =  col;
-              var bfd1 =  col1;
-
-               $.ajax({
-      url: '@Url.Action("app_colors_save", "Home")',
-       type: 'GET',
-                   data: { bg1: bfd, bg2: bfd1, fc :col3},
-      success: function (response) {
-   if (response === 'Success') {
-       ToastrMessage();
-       toastr.success('APP Background Color Selected.');
-   }
-   else {
-       ToastrMessage();
-       toastr.success('try again');
-   }
-
-      }
-  });
-
-
-
-
-          }
-          else {
-              document.getElementById('valaapcol').style.background = "linear-gradient(to right, " + col + "," + col1 + ")";
-              var col3 = document.getElementById('appcol3').value;
-              var bfd = col;
-              var bfd1 = col1;
-                $.ajax({
-      url: '@Url.Action("app_colors_save", "Home")',
-       type: 'GET',
-                    data: { bg1: bfd, bg2: bfd1, fc: col3},
-      success: function (response) {
-   if (response === 'Success') {
-       ToastrMessage();
-       toastr.success('APP Background Color Selected.');
-   }
-   else {
-       ToastrMessage();
-       toastr.success('try again');
-   }
-
-      }
-  });
-          }
-      }
-  function colorprint1() {
-
-          var col3 = document.getElementById('appcol3').value;
-      document.getElementById('valaapcol').style.color = col3;
-      document.getElementById('buttfup3').innerHTML = "(" + col3 + ")";
-
+    function SentBackgroudOtp(TextMessage) {
+       document.getElementById('saveshow').style.display = 'block';
        $.ajax({
-      url: '@Url.Action("app_colors_save", "Home")',
-       type: 'GET',
-           data: { bg1: '1', bg2: '1', fc: col3},
-      success: function (response) {
-   if (response === 'Success') {
-       ToastrMessage();
-       toastr.success('APP Text Color Selected.');
-   }
-   else {
-       ToastrMessage();
-       toastr.success('try again');
-   }
+           type: "POST",
+           url: '@Url.Action("otpforchangeicon","Home")',
+           data: { TextMessage: TextMessage },
+           success: function (result) {
+              if (result == "Success") {
+                  ToastrMessage();
+                  toastr.success("PASSCODE SENT SUCCESSFULLY");
+                  document.getElementById('BackGroundOtpBox').style.display = 'block';
+              }
+              else {
+                  ToastrMessage();
+                  toastr.error(result);
+               }
+           
+               document.getElementById('saveshow').style.display = 'none';
+           }
+       });
+    }
+    function SentIconOtp(TextMessage) {
+        document.getElementById('saveshow').style.display = 'block';
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("otpforchangeicon","Home")',
+            data: { TextMessage: TextMessage },
+            success: function (result) {
+               if (result == "Success") {
+                   ToastrMessage();
+                   toastr.success("PASSCODE SENT SUCCESSFULLY");
+                   document.getElementById('IconOtpBox').style.display = 'block';
+               }
+               else {
+                   ToastrMessage();
+                   toastr.error(result);
+               }
+               document.getElementById('saveshow').style.display = 'none';
+            }
+        });
+    }
 
-      }
-  });
-      }
-</script>
-<script>
+    const maxLength = 500;
+    function updateCharCount() {
+        const textArea = document.getElementById("textArea");
+        const charCountDiv = document.getElementById("charCount");
+        const currentLength = textArea.value.length;
+
+        if (currentLength > maxLength) {
+            textArea.value = textArea.value.substring(0, maxLength);
+        }
+
+        charCountDiv.textContent = `Characters Remaining: ${maxLength - currentLength}`;
+    }
+
+    function clearText(event) {
+        event.preventDefault();
+        const textArea = document.getElementById("textArea");
+        textArea.value = "";
+        updateCharCount();
+    }
+
+    function DeleteAppNotification(id) {
+        $.ajax({
+            url: '@Url.Action("DeleteAppMessage", "Home")',
+            type: "POST",
+            data: { id : id },
+            success: function (response) {
+                var IHtml = '';
+                var Count = 1;
+                response.data.forEach(item => {
+                    IHtml += `<div class="mesg_text">
+                                   <span>${Count}</span> <p>${item.App_Message} <a onclick="DeleteAppNotification(${item.id})" style="text-decoration: underline;  cursor:pointer;">Delete</a></p>
+                              </div>`
+                    Count++;
+                });
+                document.getElementById('AppNotifications').innerHTML = IHtml;
+                if (response.status) {
+                    toastr.success(response.message);
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (error) {
+                toastr.error(error.message);
+            }
+
+        })
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        const text = document.getElementById('textArea').value;
+         $.ajax({
+             url: '@Url.Action("InsertAppMessage", "Home")',
+             type: 'POST',
+             data: { Message: text },
+             success: function (response) {
+                 var IHtml = '';
+                 var Count = 1;
+                 response.data.forEach(item => {
+                     IHtml += `<div class="mesg_text">
+                                  <span>${Count}</span> <p>${item.App_Message} <a onclick="DeleteAppNotification(${item.id})" style="text-decoration: underline;  cursor:pointer;">Delete</a></p>
+                               </div>`
+                     Count++;
+                 });
+                 document.getElementById('AppNotifications').innerHTML = IHtml;
+                 if (!response.status) {
+                     toastr.error(response.message);
+                 }
+             }
+         });
+    }
+
+    function ButtonActive(btn) {
+        console.log(btn)
+        const buttons = document.querySelectorAll('.button-container button');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        const activeButton = document.getElementById(btn);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        } else {
+            console.error(`Button with id ${btn} not found`);
+            return;
+        }
+        const sections = {
+            Button1: 'AppColor',
+            Button2: 'AppIcon',
+            Button3: 'AppKYCDocs',
+            Button4: 'FQAS',
+            Button5: 'AppSlider',
+            Button6: 'AppMessage',
+        };
+        Object.values(sections).forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'none';
+            } else {
+                console.warn(`Section with id ${sectionId} not found`);
+            }
+        });
+
+        const activeSection = document.getElementById(sections[btn]);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+            if (sections[btn] === 'AppMessage') {
+                const event = new Event('submit');
+                handleSubmit(event);
+            }
+        } else {
+            console.error(`Active section for ${btn} not found`);
+        }
+    }
+
+    function ShowIconColor() {
+        var col = document.getElementById('appcol1').value;
+        var col1 = document.getElementById('appcol2').value;
+        var col3 = document.getElementById('appcol3').value;
+        document.getElementById('valaapcol').style.color = col3;
+        document.getElementById('buttfup3').innerHTML = "(" + col3 + ")";
+        document.getElementById('buttfup1').innerHTML = "(" + col + ")";
+        document.getElementById('buttfup2').innerHTML = "(" + col1 + ")";
+        document.getElementById('valaapcol').style.background = "linear-gradient(to right, " + col + "," + col1 + ")";
+    }
+
+    function colorprint() {
+        var col = document.getElementById('appcol1').value;
+        var col1 = document.getElementById('appcol2').value;
+        var col3 = document.getElementById('appcol3').value;
+        var otp = document.getElementById('OTPIcon').value;
+        $.ajax({
+            url: '@Url.Action("app_colors_save", "Home")',
+            type: 'GET',
+            data: { otp: otp, bg1: col, bg2: col1, fc :col3},
+            success: function (response) {
+                document.getElementById('IconOtpBox').style.display = 'none'
+                if (response === 'Success') {
+                   ToastrMessage();
+                   toastr.success('APP Background Color Selected.');
+                }
+                else {
+                    ToastrMessage();
+                    toastr.success(response);
+                }
+            }
+        });
+
+    }
+
+    function frontbackss() {
+        document.getElementById('dback').style.background = '#F6F5F5';
+        document.getElementById('fback').style.background = 'var(--main-bg-lcolor)';
+        document.getElementById('iconsettingshow').style.display = 'none';
+        document.getElementById('iconsettinghide').style.display = 'contents';
+    }
+    function deshbackss() {
+        document.getElementById('fback').style.background = '#F6F5F5';
+        document.getElementById('dback').style.background = 'var(--main-bg-lcolor)';
+        document.getElementById('iconsettinghide').style.display = 'none';
+        document.getElementById('iconsettingshow').style.display = 'contents';
+    }
+
     function whitemess(W) {
         var der = document.getElementsByClassName('whitemes');
         der[W].style.display = "block";
-
     }
+
     function whitemess1(W) {
         var der = document.getElementsByClassName('whitemes');
         der[W].style.display = "none";
-
     }
 
-
-</script>
-<script>
-                    function savedateicon() {
-                        var otp = document.getElementById('otpicon').value;
-                        if (otp > 999 && otp <= 9999) {
-                            var col11 = document.getElementById('col1').innerHTML;
-                            var col12 = document.getElementById('col2').innerHTML;
-                            var col13 = document.getElementById('col3').innerHTML;
-                            var col14 = document.getElementById('col4').innerHTML;
-                            $.ajax({
-                                type: "POST",
-                                url: '@Url.Action("icondesignsave", "Home")',
-                                data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
-                                success: function (result) {
-                                    if (result == "Success") {
-                                        ToastrMessage();
-                                        toastr.success("Successfully Updated");
-                                        document.getElementById('optshow').style.display = 'none';
-                                        document.getElementById('opthide').style.display = 'block';
-                                        document.getElementById('savehidd').style.display = 'block';
-                                        document.getElementById('saveshow').style.display = 'none';
-                                    }
-                                    else {
-                                        ToastrMessage();
-                                        toastr.error(result);
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            ToastrMessage();
-                            toastr.error('Enter otp in 4 digit');
-                        }
-    }
-    function savedateiconss() {
-                        var otp = document.getElementById('otpiconss').value;
-                        if (otp > 999 && otp <= 9999) {
-                            var col11 = document.getElementById('col1ss').innerHTML;
-                            var col12 = document.getElementById('col2ss').innerHTML;
-                            var col13 = document.getElementById('col3ss').innerHTML;
-                            var col14 = document.getElementById('col4ss').innerHTML;
-                            $.ajax({
-                                type: "POST",
-                                url: '@Url.Action("iconfrontdesignsave", "Home")',
-                                data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
-                                success: function (result) {
-                                    if (result == "Success") {
-                                        ToastrMessage();
-                                        toastr.success("Successfully Updated");
-                                        document.getElementById('optshowss').style.display = 'none';
-                                        document.getElementById('opthidess').style.display = 'contents';
-                                        document.getElementById('savehiddss').style.display = 'block';
-                                        document.getElementById('saveshowss').style.display = 'none';
-                                    }
-                                    else {
-                                        ToastrMessage();
-                                        toastr.error(result);
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            ToastrMessage();
-                            toastr.error('Enter otp in 4 digit');
-                        }
+    function savedateicon() {
+        var otp = document.getElementById('otpicon').value;
+        if (otp > 999 && otp <= 9999) {
+            var col11 = document.getElementById('col1').innerHTML;
+            var col12 = document.getElementById('col2').innerHTML;
+            var col13 = document.getElementById('col3').innerHTML;
+            var col14 = document.getElementById('col4').innerHTML;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("icondesignsave", "Home")',
+                data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
+                success: function (result) {
+                    if (result == "Success") {
+                        ToastrMessage();
+                        toastr.success("Successfully Updated");
+                        document.getElementById('optshow').style.display = 'none';
+                        document.getElementById('opthide').style.display = 'block';
+                        document.getElementById('savehidd').style.display = 'block';
+                        document.getElementById('saveshow').style.display = 'none';
                     }
-</script>
-@*<script>
-        function appiconcolor(s, d) {
-            if (s === 1) {
-                var gradientStops = document.querySelectorAll('.coloew1');
-                var color = document.getElementById('appcolor11').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('stop-color', color);
-                });
-                document.getElementById('col1').innerHTML = color;
-            } else if (s === 2) {
-                var gradientStops = document.querySelectorAll('.coloew2');
-                var color = document.getElementById('appcolor12').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('stop-color', color);
-                });
-                document.getElementById('col2').innerHTML = color;
-            } else if (s === 3) {
-                var gradientStops = document.querySelectorAll('.bgcolores');
-                var color = document.getElementById('appBGcolor').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('fill', color);
-                });
-                document.getElementById('col3').innerHTML = color;
-            } else if (s === 4) {
-                var arr = [1, 10, 20, 30, 100, 200, 300, 400, 500];
-                var gradientStops = document.querySelectorAll('.bgcolores');
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('rx', arr[d]);
-                    stop.setAttribute('ry', arr[d]);
-                });
-                document.getElementById('col4').innerHTML = arr[d];
-
-                for (var i = 0; i <= 8; i++) {
-                    document.getElementById('sef' + i).classList.remove('selected');
+                    else {
+                        ToastrMessage();
+                        toastr.error(result);
+                    }
                 }
-                document.getElementById('sef' + d).classList.add('selected');
-            }
+            });
         }
-
-        function appiconcolorss(s, d) {
-            if (s === 1) {
-                var gradientStops = document.querySelectorAll('.coloewsss');
-                var color = document.getElementById('appcolorssss').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('stop-color', color);
-                });
-                document.getElementById('col1ss').innerHTML = color;
-            } else if (s === 2) {
-                var gradientStops = document.querySelectorAll('.coloew2ss');
-                var color = document.getElementById('appcolor12ss').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('stop-color', color);
-                });
-                document.getElementById('col2ss').innerHTML = color;
-            } else if (s === 3) {
-                var gradientStops = document.querySelectorAll('.bgcoloresss');
-                var color = document.getElementById('appBGcolorss').value;
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('fill', color);
-                });
-                document.getElementById('col3ss').innerHTML = color;
-            } else if (s === 4) {
-                var arr = [1, 10, 20, 30, 100, 200, 300, 400, 500];
-                var gradientStops = document.querySelectorAll('.bgcoloresss');
-
-                gradientStops.forEach(function (stop) {
-                    stop.setAttribute('rx', arr[d]);
-                    stop.setAttribute('ry', arr[d]);
-                });
-                document.getElementById('col4ss').innerHTML = arr[d];
-
-                for (var i = 0; i <= 8; i++) {
-                    document.getElementById('sef' + i + 'ss').classList.remove('selected');
-                }
-                document.getElementById('sef' + d + 'ss').classList.add('selected');
-            }
+        else {
+            ToastrMessage();
+            toastr.error('Enter otp in 4 digit');
         }
-    </script>*@
+    }
 
-<script>
+    function savedateiconss() {
+         var otp = document.getElementById('otpiconss').value;
+         if (otp > 999 && otp <= 9999) {
+             var col11 = document.getElementById('col1ss').innerHTML;
+             var col12 = document.getElementById('col2ss').innerHTML;
+             var col13 = document.getElementById('col3ss').innerHTML;
+             var col14 = document.getElementById('col4ss').innerHTML;
+             $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("iconfrontdesignsave", "Home")',
+                 data: { otp: otp, color1: col11, color2: col12, bdcolor: col13, design: col14 },
+                 success: function (result) {
+                     if (result == "Success") {
+                         ToastrMessage();
+                         toastr.success("Successfully Updated");
+                         document.getElementById('optshowss').style.display = 'none';
+                         document.getElementById('opthidess').style.display = 'contents';
+                         document.getElementById('savehiddss').style.display = 'block';
+                         document.getElementById('saveshowss').style.display = 'none';
+                     }
+                     else {
+                         ToastrMessage();
+                         toastr.error(result);
+                     }
+                 }
+             });
+         }
+         else {
+             ToastrMessage();
+             toastr.error('Enter otp in 4 digit');
+         }
+    }
+
     function setGradientColor(s, color, prefix, className) {
         var gradientStops = document.querySelectorAll(className);
 
@@ -2890,9 +2873,9 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
         document.getElementById('col4' + prefix).innerHTML = arr[d];
 
         for (var i = 0; i <= 8; i++) {
-            document.getElementById('sef' + i + prefix).style.background ='lightgray';
+            document.getElementById('sef' + i + prefix).style.background = 'lightgray';
         }
-        document.getElementById('sef' + d + prefix).style.background ='var(--main-bg-lcolor)';
+        document.getElementById('sef' + d + prefix).style.background = 'var(--main-bg-lcolor)';
     }
 
     function appiconcolor(s, d) {
@@ -2924,103 +2907,100 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
             setRadius(d, 'ss');
         }
     }
-</script>
 
-<script>
-    function optsents() {
+    function optsents(TextMessage) {
         document.getElementById('savehidd').style.display = 'none';
         document.getElementById('saveshow').style.display = 'block';
-                          $.ajax({
-                              type: "POST",
-                              url: '@Url.Action("otpforchangeicon","Home")',
-                              success: function (result) {
-                                  if (result == "Success") {
-                                  ToastrMessage();
-                                  toastr.success("PASSCODE SENT SUCCESSFULLY");
-                                      document.getElementById('optshow').style.display = 'block';
-                                      document.getElementById('opthide').style.display = 'none';
-                              }
-                              else {
-                                  ToastrMessage();
-                                      toastr.error(result);
-                              }
-      }
-  });
-
-        //document.getElementById('savehidd').style.display = 'block';
-        //document.getElementById('saveshow').style.display = 'none';
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("otpforchangeicon","Home")',
+            data: { TextMessage: TextMessage },
+            success: function (result) {
+                if (result == "Success") {
+                    ToastrMessage();
+                    toastr.success("PASSCODE SENT SUCCESSFULLY");
+                    document.getElementById('optshow').style.display = 'block';
+                    document.getElementById('opthide').style.display = 'none';
+                    document.getElementById('saveshow').style.display = 'none';
+                }
+                else {
+                    document.getElementById('saveshow').style.display = 'block';
+                    ToastrMessage();
+                    toastr.error(result);
+                }
+            }
+        });
     }
-    function optsentsss() {
+
+    function optsentsss(TextMessage) {
         document.getElementById('savehiddss').style.display = 'none';
-        document.getElementById('saveshowss').style.display = 'block';
-                          $.ajax({
-                              type: "POST",
-                              url: '@Url.Action("otpforchangeicon", "Home")',
-                              success: function (result) {
-                                  if (result == "Success") {
-                                  ToastrMessage();
-                                  toastr.success("PASSCODE SENT SUCCESSFULLY");
-                                      document.getElementById('optshowss').style.display = 'block';
-                                      document.getElementById('opthidess').style.display = 'none';
-                              }
-                              else {
-                                  ToastrMessage();
-                                      toastr.error(result);
-                              }
-      }
-  });
+        document.getElementById('saveshow').style.display = 'block';
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("otpforchangeicon", "Home")',
+            data: { TextMessage: TextMessage },
+            success: function (result) {
+                if (result == "Success") {
+                    ToastrMessage();
+                    toastr.success("PASSCODE SENT SUCCESSFULLY");
+                    document.getElementById('optshowss').style.display = 'block';
+                    document.getElementById('opthidess').style.display = 'none';
+                    document.getElementById('saveshow').style.display = 'none';
+                }
+                else {
+                    ToastrMessage();
+                    document.getElementById('saveshow').style.display = 'none';
+                    toastr.error(result);
+                }
+            }
+        });
+    }
 
-        //document.getElementById('savehidd').style.display = 'block';
-        //document.getElementById('saveshow').style.display = 'none';
-                    }
-</script>
-<script>
-                    function manatorypermision(s ,d) {
-                       $.ajax({
-                            type: "POST",
-                           url: '@Url.Action("updatemanatroryfild", "Home")',
-                           data: { fild: s },
-                            success: function (result) {
-                                if (result.Mess == "Success") {
-                                ToastrMessage();
-                                toastr.success("Successfully Updated");
+    function manatorypermision(s ,d) {
+        $.ajax({
+             type: "POST",
+            url: '@Url.Action("updatemanatroryfild", "Home")',
+            data: { fild: s },
+             success: function (result) {
+                 if (result.Mess == "Success") {
+                 ToastrMessage();
+                 toastr.success("Successfully Updated");
 
-                            }
-                            else {
-                                ToastrMessage();
-                                    toastr.error(result.Mess);
-                                }
+             }
+             else {
+                 ToastrMessage();
+                     toastr.error(result.Mess);
+                 }
 
-                                var cls = document.getElementsByClassName("manatory");
-                                if (result.skip == "Y") {
-                                    cls[0].innerHTML = "MANDATORY";
-                                }
-                                else {
-                                    cls[0].innerHTML = "Skip";
-                                }
-                                if (result.gsts == "Y") {
-                                    cls[1].innerHTML = "MANDATORY";
-                                }
-                                else {
-                                    cls[1].innerHTML = "OPTIONAL";
-                                }
-                                if (result.agreement == "Y") {
-                                    cls[2].innerHTML = "MANDATORY";
-                                }
-                                else {
-                                    cls[2].innerHTML = "OPTIONAL";
-                                }
-                                if (result.address == "Y") {
-                                    cls[3].innerHTML = "MANDATORY";
-                                }
-                                else {
-                                    cls[3].innerHTML = "OPTIONAL";
-                                }
-                              }
-                             });
-                    }
-</script>
-<script>
+                 var cls = document.getElementsByClassName("manatory");
+                 if (result.skip == "Y") {
+                     cls[0].innerHTML = "MANDATORY";
+                 }
+                 else {
+                     cls[0].innerHTML = "Skip";
+                 }
+                 if (result.gsts == "Y") {
+                     cls[1].innerHTML = "MANDATORY";
+                 }
+                 else {
+                     cls[1].innerHTML = "OPTIONAL";
+                 }
+                 if (result.agreement == "Y") {
+                     cls[2].innerHTML = "MANDATORY";
+                 }
+                 else {
+                     cls[2].innerHTML = "OPTIONAL";
+                 }
+                 if (result.address == "Y") {
+                     cls[3].innerHTML = "MANDATORY";
+                 }
+                 else {
+                     cls[3].innerHTML = "OPTIONAL";
+                 }
+               }
+              });
+    }
+
     function ToastrMessage() {
         toastr.options = {
             "closeButton": false,
@@ -3041,124 +3021,63 @@ if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
         };
         //toastr.info('MY MESSAGE!');
     }
-</script>
-<script>
 
-        function updbackgr() {
+    function ShowBackgroundColor() {
+        var col1 = document.getElementById('backcolor1').value;
+        var col12 = document.getElementById('backcolor2').value;
+        document.getElementById('bckg1').innerHTML = "(" + col1 + ")";
+        document.getElementById('bckg2').innerHTML = "(" + col12 + ")";
+        document.getElementById('prebackground').style.background = "linear-gradient(to bottom," + col1 + "," + col12 + ")";
+    }
 
-            var col1 = document.getElementById('backcolor1').value;
-            var col12 = document.getElementById('backcolor2').value;
+    function updbackgr() {
+        var col1 = document.getElementById('backcolor1').value;
+        var col12 = document.getElementById('backcolor2').value;
+        var otp = document.getElementById('OTPBackground').value;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("backgroundcolorappsave", "Home")',
+            data: { otp: otp, appc1: col1, appc2: col12 },
+            success: function (result) {
+               if (result == "Success") {
+                   ToastrMessage();
+                   toastr.success("Successfully Updated");
+               }
+               else {
+                   toastr.error(result);
+                }
+                document.getElementById('BackGroundOtpBox').style.display = 'none';
+            }
+        });
+    }
 
-            document.getElementById('bckg1').innerHTML = "(" + col1 + ")";
-            document.getElementById('bckg2').innerHTML = "(" + col12 + ")";
-
-            document.getElementById('prebackground').style.background = "linear-gradient(to bottom," + col1 + "," + col12 + ")";
-
-                            $.ajax({
-                            type: "POST",
-                           url: '@Url.Action("backgroundcolorappsave", "Home")',
-                                data: { appc1: col1, appc2: col12 },
-                            success: function (result) {
-                                if (result == "Success") {
-                                    ToastrMessage();
-                                    toastr.success("Successfully Updated");
-
-                                }
-                                else {
-                                    toastr.error(result);
-                                }
-
-                              }
-                             });
-        }
-</script>
-<script>
-     $.ajax({
-                            type: "POST",
-                           url: '@Url.Action("sliderimages", "Home")',
-
-         success: function (result) {
-
-             var s = 0;
-             for (var i = 0; i < result.image.length; i++) {
-                 var imgg = result.image[i];
-                 var set = document.getElementById("sliderImages");
-                 var ses = document.createElement('div');
-                 var ses11 = document.createElement('div');
-                 ses11.setAttribute("Class", "catagselect");
-                 var ses13 = document.createElement('div');
-                 ses13.setAttribute("Class", "page-header-third");
-                 var ses12 = document.createElement('input');
-                 ses12.setAttribute("type", "checkbox");
-                 ses12.setAttribute("Class", "checkboxdata");
-                 ses12.setAttribute("onchange", "checksave('" + imgg + "','" + result.catagory[i] + "','" + result.Type[i] + "','" + result.Lang[i] + "'," + s + ")" )
-                 //console.log(imgg);
-                 //console.log(result.catagory[i]);
-                 //console.log(result.Type[i]);
-                 //console.log(result.Lang[i]);
-                 //console.log(s);
-
-                 //console.log("checksave('" + imgg + "','" + result[i].catagory + "','" + result[i].Type + "','" + result[i].Lang + "'," + s + ")");
-
-                 ses12.setAttribute("style", "opacity: 100%; position: static;");
-
-                 var ses14 = document.createElement('span');
-
-                 //var ses1 = document.getElementById('div');
-                 var text = document.createTextNode(result.catagory[i]);
-                /* ses.textContent = result[i].catagory + result[i].Type + result[i].Lang;*/
-                 ses.style.float = "Left";
-                 var img = document.createElement('img');
-                 img.src = imgg;
-
-                 ses14.appendChild(text);
-                 ses11.appendChild(ses14);
-                 ses11.appendChild(ses12);
-                 ses13.appendChild(img);
-                 ses13.appendChild(ses11);
-                 ses.appendChild(ses13);
-                 /*ses.appendChild(ses11);*/
-                 set.appendChild(ses);
-                 ses.classList.add("secdiv");
-                 set.classList.add("firstdiv");
-                 s++;
-
-             }
-
-
-                              }
-                             });
-</script>
-<script>
     function checksave(img, c, t, l, d) {
         console.log(d);
         var s=0;
         var check = document.getElementsByClassName('checkboxdata');
-
-            if (check[d].checked == true) {
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("sliderimagessave", "Home")',
-                    data: { img: img, cat: c, type: t, Lang: l },
-                    success: function (result) {
-                        if (result != "saved") {
-                            check[d].checked = false;
-                        }
-                        alert(result);
+        if (check[d].checked == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("sliderimagessave", "Home")',
+                data: { img: img, cat: c, type: t, Lang: l },
+                success: function (result) {
+                    if (result != "saved") {
+                        check[d].checked = false;
                     }
-                });
-            }
-            else {
-                 $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("sliderimagesdelete", "Home")',
-                    data: { img: img, cat: c, type: t, Lang: l },
-                    success: function (result) {
-                        alert(result);
-                    }
-                });
-            }
-
+                    alert(result);
+                }
+            });
+        }
+        else {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("sliderimagesdelete", "Home")',
+                data: { img: img, cat: c, type: t, Lang: l },
+                success: function (result) {
+                    alert(result);
+                }
+            });
+        }
     }
 </script>
 <script src="https://kit.fontawesome.com/a4c00a89bc.js" crossorigin="anonymous"></script>
