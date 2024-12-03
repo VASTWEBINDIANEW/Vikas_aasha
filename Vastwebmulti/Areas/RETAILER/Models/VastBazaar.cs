@@ -32,66 +32,12 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             return responseall;
         }
 
-        public IRestResponse Remitter_details_DMT(string mobile, string token, string lat, string longni)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Remitter_details");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                mobile = mobile,
-                lat,
-                longni
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
+      
 
-        public IRestResponse EKYC_Register(string mobile, string token,string lat,string longni,string aadharcard,string Pidata)
-        {
-            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/EkycRegister");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                mobile = mobile,
-                lat,
-                longni,
-                aadharcard,
-                data= Pidata
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
-        public IRestResponse EKYC_Register_OTP(string mobile, string token, string otp, string stateresp, string ekyc_id)
-        {
-            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Ekyc_otp");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                mobile,
-                otp,
-                stateresp,
-                ekyc_id
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
+   
+     
+
+
 
         public IRestResponse Remitter_details_UPI(string mobile, string token)
         {
@@ -177,26 +123,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse Beneficiary_Delete_Paysprint(string beneficiaryid, string remitterid, string token, string SenderNumber)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Beneficiary_Delete");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                Sendernumber = SenderNumber,
-                beneficiaryid = beneficiaryid,
-                remitterid = remitterid
-            };
-
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
-
+     
         public IRestResponse Beneficiary_Delete_UPI(string idno, string token)
         {
             var url = "http://api.vastbazaar.com/api/COMPOSITE/delbenlist";
@@ -291,29 +218,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse Beneficiary_register_Paysprint(string remitterid, string name, string mobile, string ifsc, string account, string token, string ifscoriginal)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Beneficiary_register");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                remitterid = remitterid,
-                name = name,
-                mobile = mobile,
-                ifsc = ifsc,
-                account = account,
-                originalifsc = ifscoriginal
-            };
-
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
-
+   
         public IRestResponse Beneficiary_register_UPI(string name, string mobile,  string account, string token)
         {
             var url = BaseURL + "/api/COMPOSITE/Benregister";
@@ -466,56 +371,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse Fund_Transfer_Paysprint(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno,string lat,string longi)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/TransactionSendOTP");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                remittermobile,
-                beneficiaryid = benid,
-                agentid,
-                amount,
-                mode,
-                accountno,
-                bankname,
-                kyccheck = kyc,
-                aadharno,
-                ifsccode,
-                lat,
-                longi
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
-        public IRestResponse Fund_Transfer_Paysprint_Verifyotp(string remittermobile, string benid, string agentid, string amount, string mode, string token,string otp,string statedesp)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/TransactionVerifyOTP");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                remittermobile,
-                beneficiaryid = benid,
-                mode,
-                amount,
-                otp,
-                agentid,
-                statedesp
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
-
+    
 
         public IRestResponse Fund_Transfer_UPI(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
         {
@@ -652,15 +508,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse Paysprint_Bank_details(string token)
-        {
-            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Bank_details");
-            var request = new RestRequest(Method.POST);
-            request.AddHeader("authorization", "bearer " + token);
-            request.AddHeader("content-type", "application/json");
-            IRestResponse responseall = client.Execute(request);
-            return responseall;
-        }
+
         public IRestResponse EKOStatus(string t_id, string token)
         {
             var client = new RestClient(BaseURL + "/api/DMTPAYTM/Transition_status");
@@ -804,6 +652,25 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
+        public IRestResponse GenrateURL_PPI(string Refid, string token, string Merchant_Code, string Kyc_redirect)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPPI/GenrateURL");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                Merchant_Code,
+                Refid,
+                Kyc_redirect
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
         public IRestResponse Remitter_details_PPI(string mobile, string token,string Merchant_Code,string Kyc_redirect)
         {
             var client = new RestClient(BaseURL + "/api/DMTPPI/Remitter_details");
@@ -1108,6 +975,188 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         //    IRestResponse responseall = client.Execute(request);
         //    return responseall;
         //}
+
+        #endregion
+
+
+        #region PAYSPRINT
+        public IRestResponse Remitter_details_DMT(string mobile, string token, string lat, string longni)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Remitter_details");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile = mobile,
+                lat,
+                longni
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse EKYC_Register(string mobile, string token, string lat, string longni, string aadharcard, string Pidata)
+        {
+            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/EkycRegister");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile = mobile,
+                lat,
+                longni,
+                aadharcard,
+                data = Pidata
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse EKYC_Register_OTP(string mobile, string token, string otp, string stateresp, string ekyc_id)
+        {
+            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Ekyc_otp");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile,
+                otp,
+                stateresp,
+                ekyc_id
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Beneficiary_Delete_Paysprint(string beneficiaryid, string remitterid, string token, string SenderNumber)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Beneficiary_Delete");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                Sendernumber = SenderNumber,
+                beneficiaryid = beneficiaryid,
+                remitterid = remitterid
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Beneficiary_register_Paysprint(string remitterid, string name, string mobile, string ifsc, string account, string token, string ifscoriginal)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Beneficiary_register");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                remitterid = remitterid,
+                name = name,
+                mobile = mobile,
+                ifsc = ifsc,
+                account = account,
+                originalifsc = ifscoriginal
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Fund_Transfer_Paysprint(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno, string lat, string longi)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/TransactionSendOTP");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                remittermobile,
+                beneficiaryid = benid,
+                agentid,
+                amount,
+                mode,
+                accountno,
+                bankname,
+                kyccheck = kyc,
+                aadharno,
+                ifsccode,
+                lat,
+                longi
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Fund_Transfer_Paysprint_Verifyotp(string remittermobile, string benid, string agentid, string amount, string mode, string token, string otp, string statedesp)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/TransactionVerifyOTP");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                remittermobile,
+                beneficiaryid = benid,
+                mode,
+                amount,
+                otp,
+                agentid,
+                statedesp
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Paysprint_Bank_details(string token)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Bank_details");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Paysprint_RefundOTP(string token,string txnid)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/RefundOTP?txnid="+ txnid + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Paysprint_ClaimRefund(string token, string txnid,string otp)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/ClaimRefund?txnid=" + txnid + "&otp="+otp+"");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
 
         #endregion
     }
