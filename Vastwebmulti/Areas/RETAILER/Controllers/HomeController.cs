@@ -30485,7 +30485,108 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(viewresponse1, JsonRequestBehavior.AllowGet);
             }
         }
+        public string UpdateAeps(string lattitude, string longitude)
+        {
+            var userid = User.Identity.GetUserId();
+            var token = string.Empty;
+            token = getAuthToken();
+            var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
 
+            string companyBankAccountNumber = retailer.Bankaccountno;
+            string bankIfscCode = retailer.Ifsccode;
+            string companyBankName = retailer.bankname;
+            string bankBranchName = retailer.bankAddress;
+            string bankAccountName = retailer.accountholder;
+            string aadhaarNumber = retailer.AadharCard;
+            var ipAddress = GetComputer_InternetIP();
+            var reque = new
+            {
+                merchantLoginId = retailer.AepsMerchandId,
+                merchantName = retailer.RetailerName,
+                stateid = retailer.State,
+                latitude = lattitude,
+                longitude = longitude,
+                merchantPhoneNumber = retailer.Mobile,
+                merchantPinCode = retailer.Pincode,
+                merchantCityName = city,
+                merchantAddress = retailer.Address,
+                userPan = retailer.PanCard,
+                retilerid = retailer.Email,
+                OTP = "",
+                companyBankAccountNumber,
+                bankIfscCode,
+                companyBankName,
+                bankBranchName,
+                bankAccountName,
+                ipAddress,
+                aadhaarNumber,
+                emailid = retailer.Email,
+                firmname = retailer.Frm_Name,
+                merchantPanImage = "",
+                maskedAadharImage = "",
+                backgroundImageOfShop = ""
+            };
+            var Data = JsonConvert.SerializeObject(reque);
+            var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE_UPDATE");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Bearer " + token);
+            request.AddHeader("Content-Type", "application/json");
+            request.AddParameter("application/json", Data, ParameterType.RequestBody);
+            IRestResponse response2 = client.Execute(request);
+            dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+            var stscode = resp.Content.ADDINFO.statuscode.ToString();
+            var message = resp.Content.ADDINFO.status.ToString();
+            string fullUrl = Request.Url?.ToString();
+            UpdateAepsLog("****************************************************************");
+            UpdateAepsLog("Time : " + DateTime.Now.ToString());
+            UpdateAepsLog("fullUrl: " + fullUrl);
+            UpdateAepsLog("Request: " + Data.ToString());
+            UpdateAepsLog("Response : " + resp.Content);
+            if (stscode == "TXN")
+            {
+                return "TXN";
+            }
+            else
+            {
+                return "ERROR";
+            }
+        }
+        public static void UpdateAepsLog(string strMessage)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "UpdateAepsInfo-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+
+                }
+                catch (Exception ex)
+                { }
+            }
+
+        }
         [HttpPost]
         public ActionResult Validate2FA(string cap, string capxml, string devicesrno, string devicenm, string iin, string bankname)
         {
@@ -30628,6 +30729,29 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
                 }
+                try
+                {
+                    bool Update_Aeps_info = db.Update_Aeps_Info.Any(x => x.UserId == userid);
+                    if (!Update_Aeps_info)
+                    {
+                        string Aeps_Update = UpdateAeps(lattitude, longitude);
+                        if (Aeps_Update == "TXN")
+                        {
+                            var data = new Update_Aeps_Info()
+                            {
+                                UserId = userid,
+                                latitude = lattitude,
+                                longitude = longitude,
+                                UpdateTime = DateTime.Now,
+                                status = true,
+                                RequestFrom = "Web"
+                            };
+                            db.Update_Aeps_Info.Add(data);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+                catch { }
                 if (retailer.AepsMerchandId == "")
                 {
                     string companyBankAccountNumber = retailer.Bankaccountno;
