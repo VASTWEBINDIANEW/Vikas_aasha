@@ -7,6 +7,8 @@ using Vastwebmulti.Models;
 using System.IO;
 using sun.net.idn;
 using sun.security.krb5.@internal;
+using com.sun.security.ntlm;
+using Google.Apis.Auth.OAuth2;
 
 namespace Vastwebmulti.Areas.RETAILER.Models
 {
@@ -120,7 +122,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 Latitude,
                 longitude,
                 PublicIP
-
             };
             var jsonbody = JsonConvert.SerializeObject(body);
             WriteLog("Request " + jsonbody);
@@ -133,6 +134,39 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             }
             catch { }
             return response;
+        }
+        public IRestResponse Getcustomer(string agentid,string sendernumber,string token, string clientId,string ClientSecret,string apiKey)
+        {
+            WriteLog("************************ Getcustomer ************************************");
+            WriteLog("sendernumber " + sendernumber);
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+           string Baseurl = "https://aceneobank.com/apiService/";
+         
+            WriteLog("Request " + Baseurl + "V4/dmt/get-customer");
+            var client = new RestClient(Baseurl + "V4/dmt/get-customer");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("X-Root-id", agentid);
+            request.AddHeader("clientId", clientId);
+            request.AddHeader("ClientSecret", ClientSecret);
+            request.AddHeader("apiKey", apiKey);
+            request.AddHeader("Authorization", "Bearer " + token + "");
+            var body = new
+            {
+                agentid,
+                CustomerMobileNo= sendernumber
+            };
+            var reqbody = JsonConvert.SerializeObject(body);
+            WriteLog("Request " + reqbody);
+            request.AddParameter("application/json", reqbody, ParameterType.RequestBody);
+            IRestResponse responsecheck = client.Execute(request);
+            try
+            {
+                WriteLog("Response Code " + responsecheck.StatusCode);
+                WriteLog("Response " + responsecheck.Content);
+            }
+            catch { }
+            return responsecheck;
         }
         public IRestResponse Getbenificry(string agentid, string sendernumber, string token, string clientId, string ClientSecret, string apiKey)
         {

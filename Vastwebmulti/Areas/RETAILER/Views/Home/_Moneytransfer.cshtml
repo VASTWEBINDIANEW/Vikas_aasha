@@ -313,11 +313,19 @@
     <div class="button-container">
         @if (ViewBag.moneysts1 == true)
         {
-            <a href="@Url.Action("Money_transfer2", "Home")" class="btn">BANK1</a>
+            <a href="@Url.Action("Money_transfer2", "Home")" class="btn">DMT1</a>
         }
         @if (ViewBag.moneysts2 == true)
         {
-            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">BANK2</a>
+            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">DMT2</a>
+        }
+        @if (ViewBag.moneysts3 == true)
+        {
+            <a href="@Url.Action("Money_transfer_new", "Home")" class="btn btn-secondary">Wallet To Bank</a>
+        }
+        @if (ViewBag.moneysts4 == true)
+        {
+            <a href="@Url.Action("Money_transferPPI", "Home")" class="btn btn-secondary">PPI Wallet</a>
         }
     </div>
     <fieldset>
@@ -3327,11 +3335,7 @@
                         $('.loader').hide();
                     }
                 })
-
-    }
-
-
-
+        }
     function uniqueid(){
     // always start with a letter (for DOM friendlyness)
     var idstr=String.fromCharCode(Math.floor((Math.random()*25)+65));
@@ -3375,7 +3379,7 @@
         var latloc = $('#latloc').val();
         var longloc = $('#longloc').val();
         var pid = $('#capxmlP').val()
-      
+
         $('#capxmlP').val("")
         if (aadharnumber != "") {
             if (pid != "") {
@@ -3425,9 +3429,7 @@
     $(document).ready(function () {
         $(document).ajaxSend(function () {
             $('#btnsenddd ,#cancelloder ,#confirm-button ,.confirmbuttontext').html("<i class='fa fa-circle-o-notch fa-spin'></i>");
-
             //$('.verify-account').html("<i class='fa fa-circle-o-notch fa-spin'></i>");
-
             $("#load").css("display", "block");
         });
         $(document).ajaxComplete(function () {
@@ -3577,8 +3579,6 @@
                 $('#cancelloder').prop("disabled", false)
             }
         }
-
-
         if (parseInt(e.target.value) <= 24999) {
             $('#self').prop("disabled", false)
         }
@@ -3590,20 +3590,14 @@
             }
         }
     })
-
     $('#selfbtn').click(e => {
         if ($('#self').prop("disabled")) {
             $('#dmterrorcode').text('Maximum amount must be ₹24999 for SELF')
         }
     })
-
 </script>
-
 <script>
-
     var stscamchk = false;
-
-
     navigator.getMedia = (navigator.getUserMedia || // use the proper vendor prefix
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
