@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-   
+
     //document.getElementById("loadermoney").style.display = "block";
 });
 //////////////////////////////////////////
@@ -365,7 +365,7 @@ function discoverAvdmFirstNode(PortNo) {
         async: false,
         crossDomain: true,
         beforeSend: function () {
-            $("#loadaeps1").show();
+            $("#loadDMT1").show();
         },
         success: function (data) {
             httpStaus = true;
@@ -481,7 +481,7 @@ function discoverAvdmP() {
                 //console.log("3");
                 var CmbData1 = $($doc).find('RDService').attr('status');
                 var CmbData2 = $($doc).find('RDService').attr('info');
-                
+
                 //   console.log("CmbData1 " + CmbData1);
                 //   console.log("CmbData2 " + CmbData2);
 
@@ -590,9 +590,9 @@ function discoverAvdmP() {
         }
     }
     if (SuccessFlag == 0) {
-        $("#deviceerror2").text("➀ Connection failed Please try again.");
+        $("#deviceerror2DMT").text("➀ Connection failed Please try again.");
 
-        $("#Devicerror").show();
+        $("#DevicerrorDMT").show();
     }
     // closeNav();
     return res;
@@ -720,7 +720,7 @@ function CaptureAvdmP() {
 
 
             //$('#txtPidOptions').val(data); AJ
-            $("#cap").val(JSON.stringify(captureJson));
+            $("#capDMT").val(JSON.stringify(captureJson));
             txtPidOptions = XML;
             var $doc;
             if (DeviceKonsi == "Mantra") {
@@ -733,20 +733,20 @@ function CaptureAvdmP() {
             }
             var serializer = new XMLSerializer();
             var xmlString = serializer.serializeToString($doc);
-       
-            $("#capxmlP").val(xmlString);
+
+            $("#capxmlPDMT").val(xmlString);
             console.log(xmlString)
             var errInfo = $($doc).find('Resp').attr('errInfo');
-         
+
             try {
-               
+
                 //console.log("================ PidOptions=======================");
                 //console.log(txtPidOptions);
                 //console.log("================= Capture data ======================");
                 //console.log(txtPidData);
                 //console.log("==================XML to JS =====================");
                 if ($($doc).find('Resp').attr("errCode") == 0) {
-              
+
                     captureJson.PidDatatype = $($doc).find('Data').attr('type');
                     captureJson.Piddata = $($doc).find('Data').text();
                     captureJson.ci = $($doc).find('Skey').attr('ci');
@@ -774,30 +774,30 @@ function CaptureAvdmP() {
                     try {
                         //  console.log("sr no : " + $($doc).find('DeviceInfo additional_info Param').attr("value"));
 
-                        $("#device_srno").val($($doc).find('DeviceInfo additional_info Param').attr("value"));
+                        $("#device_srnoDMT").val($($doc).find('DeviceInfo additional_info Param').attr("value"));
                     } catch (err) { }
-                    $('#Devicefind').show();
-              
-  
-                    $('#txtdevice').val(DeviceKonsi);
-                    $("#cap").val(JSON.stringify(captureJson));
+                    $('#DevicefindDMT').show();
+
+
+                    $('#txtdeviceDMT').val(DeviceKonsi);
+                    $("#capDMT").val(JSON.stringify(captureJson));
                     //  $("#scanimage").hide();
                     // $('#AEPSFOUND').show();
-                    $("#Devicerror").hide();
+                    $("#DevicerrorDMT").hide();
                     //  $("#fingImgBlack").hide();
                     //  $("#fingImgGreen").show();
                     //   $("#AEPS").submit();
 
                 } else {
-                    $('#Devicefind').hide();
+                    $('#DevicefindDMT').hide();
 
-                    $("#Devicerror").show();
-                    $('#deviceerror8').text($($doc).find('Resp').attr("errInfo"));
-                    $('#deviceerror9').text("Please Try again");
-                    $('#againscanclick').text("scan again");
+                    $("#DevicerrorDMT").show();
+                    $('#deviceerror8DMT').text($($doc).find('Resp').attr("errInfo"));
+                    $('#deviceerror9DMT').text("Please Try again");
+                    $('#againscanclickDMT').text("scan again");
                 }
             } catch (err) {
-                
+
             }
         },
         error: function (jqXHR, ajaxOptions, thrownError) {
@@ -840,18 +840,18 @@ function scanfingP() {
         //alert("Tap on " + DeviceKonsi + " scanner !");
         //document.getElementById("loadermoney").style.display = "block";
         CaptureAvdmP();
-        $("#loadaeps1").hide();
-  
+        $("#loadDMT1").hide();
+
         //  $('#AEPSFOUND').show();
     }
     else {
-        $("#loadaeps1").hide();
-        $("#Devicerror").show();
+        $("#loadDMT1").hide();
+        $("#DevicerrorDMT").show();
         $("#deviceerror1").text(" Device not found (check the following list)");
-        $("#deviceerror3").text("➁ Check your device connection");
-        $("#deviceerror4").text("➂ Check device power supply status");
-        $("#deviceerror5").text("➃ Check if drivers are installed correctly");
-        $("#deviceerror6").text("➄ You may not have scanned the finger in scan timing");
+        $("#deviceerror3DMT").text("➁ Check your device connection");
+        $("#deviceerror4DMT").text("➂ Check device power supply status");
+        $("#deviceerror5DMT").text("➃ Check if drivers are installed correctly");
+        $("#deviceerror6DMT").text("➄ You may not have scanned the finger in scan timing");
         $("#deviceerror7").text("➅ There may be a connectivity problem with the bank");
         //alert("Device not found!!");
     }

@@ -76,6 +76,7 @@ using sun.misc;
 using System.Reflection;
 using com.sun.imageio.plugins.common;
 using com.sun.java.swing.plaf.motif.resources;
+using sun.security.krb5.@internal;
 //using paytmresponselibrary;
 
 
@@ -16340,7 +16341,38 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                                 }
 
-                                if ((respchk.StatusCode == HttpStatusCode.OK) || (respchk.StatusCode == HttpStatusCode.Created))
+                                if (respchk.StatusCode == HttpStatusCode.OK)
+                                {
+
+                                     respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                    if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                                    {
+                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                        respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                    }
+
+                                    if ((respchk.StatusCode == HttpStatusCode.OK) || (respchk.StatusCode == HttpStatusCode.Created))
+                                    {
+                                        var apiresp = respchk.Content;
+                                        dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                                        var results = "{'status':'" + respout + "','statuscode':'RDT'}";
+                                        var json1 = JsonConvert.DeserializeObject(results);
+                                        var json = JsonConvert.SerializeObject(json1);
+                                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        var error_decribe = "Something Went Wrong";
+                                        var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                        var json1 = JsonConvert.DeserializeObject(results);
+                                        var json = JsonConvert.SerializeObject(json1);
+                                        //       var jss = new JavaScriptSerializer();
+                                        //         var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else if(respchk.StatusCode == HttpStatusCode.Created)
                                 {
                                     var apiresp = respchk.Content;
                                     dynamic respout = JsonConvert.DeserializeObject(apiresp);
@@ -16414,6 +16446,164 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 //  var dict = jss.Deserialize<dynamic>(results);
                 return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
             }
+        }
+        [HttpPost]
+        public ActionResult KYCRegister1(string senderno, string pid, string aadharnumber, string latloc, string longloc,string Name)
+        {
+            var status = false;string message = "";string OTPRequestID = "";string KYCRequestID = "";
+            pid = HttpUtility.UrlDecode(pid);
+            string userid = User.Identity.GetUserId();
+
+            var radiantauthchk = db.radiantauths.SingleOrDefault();
+            if (radiantauthchk != null)
+            {
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (radiantresponse != null)
+                {
+                    if (radiantresponse.Sts == "Approved")
+                    {
+                        Radiantdmt dmt = new Radiantdmt();
+                        var tokenchk = db.radianttokens.SingleOrDefault();
+                        if (tokenchk == null)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                        }
+                        else
+                        {
+                            radianttoken = tokenchk.accessToken;
+                            radianagentid = tokenchk.agentID;
+                        }
+                        var Ipaddress = GetComputer_InternetIP();
+                        var respchk = dmt.CustomerKYC(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name,aadharnumber,pid,latloc,longloc, Ipaddress);
+                        if (respchk.StatusCode == HttpStatusCode.NotAcceptable || respchk.StatusCode == HttpStatusCode.Gone)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            respchk = dmt.CustomerKYC(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name, aadharnumber, pid, latloc, longloc, Ipaddress);
+                        }
+
+                        if (respchk.StatusCode == HttpStatusCode.OK)
+                        {
+                            status = true;
+                            var apiresp = respchk.Content;
+                            dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                            OTPRequestID = respout.OTPRequestID;
+                            KYCRequestID= respout.KYCRequestID;
+                        }
+                        else
+                        {
+                            var apiresp = respchk.Content;
+                            dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                            message = respout.message;
+                        }
+                    }
+                    else
+                    {
+                        message = "EKYC is pending. Please wait for approval.";
+                    }
+                }
+                else
+                {
+                    message = "KYC not Done! Please go to your profile and Complete Ekyc Process..";
+                }
+            }
+            else
+            {
+                message = "Authentication is required! Please contact the administrator.";
+            }
+
+            var respchk1 = new
+            {
+                status,
+                OTPRequestID,
+                KYCRequestID,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpPost]
+        public ActionResult KYCEnterOTP1(string stateResp, string kyc_id, string Sendernumber, string otp,string Name,string latloc, string longloc)
+        {
+            var status = false; string message = "";
+            string userid = User.Identity.GetUserId();
+            var radiantauthchk = db.radiantauths.SingleOrDefault();
+            if (radiantauthchk != null)
+            {
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (radiantresponse != null)
+                {
+                    if (radiantresponse.Sts == "Approved")
+                    {
+                        Radiantdmt dmt = new Radiantdmt();
+                        var tokenchk = db.radianttokens.SingleOrDefault();
+                        if (tokenchk == null)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                        }
+                        else
+                        {
+                            radianttoken = tokenchk.accessToken;
+                            radianagentid = tokenchk.agentID;
+                        }
+                        var Ipaddress = GetComputer_InternetIP();
+                        var respchk = dmt.CreateCustomer(radianagentid, Sendernumber, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name, latloc, longloc, Ipaddress, kyc_id, stateResp, otp);
+                        if (respchk.StatusCode == HttpStatusCode.NotAcceptable || respchk.StatusCode == HttpStatusCode.Gone)
+                        {
+                            dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                            respchk = dmt.CreateCustomer(radianagentid, Sendernumber, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name, latloc, longloc, Ipaddress, kyc_id, stateResp, otp);
+
+                        }
+
+                        if (respchk.StatusCode == HttpStatusCode.OK)
+                        {
+                            status = true;
+                        }
+                        else
+                        {
+                            var apiresp = respchk.Content;
+                            dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                            message = respout.message;
+                        }
+                    }
+                    else
+                    {
+                        message = "EKYC is pending. Please wait for approval.";
+                    }
+                }
+                else
+                {
+                    message = "KYC not Done! Please go to your profile and Complete Ekyc Process..";
+                }
+            }
+            else
+            {
+                message = "Authentication is required! Please contact the administrator.";
+            }
+
+            //VastBazaar cb = new VastBazaar();
+            //var tokenapi = Responsetoken.gettoken();
+            //var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
+            //var status = false; string message = "Please Try After Sometime";
+            //if (responseall.StatusCode == HttpStatusCode.OK)
+            //{
+            //    dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+            //    dynamic respchk = respchkinfo.Content.ADDINFO;
+
+            //    message = respchk.message;
+            //    if (respchk.status == true)
+            //    {
+            //        if (respchk.response_code == "1")
+            //        {
+            //            status = true;
+            //        }
+            //    }
+            //}
+            var respchk1 = new
+            {
+                status,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult Register_ben1(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname)
@@ -17056,7 +17246,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
-      
         [HttpPost]
         public ActionResult Verify_account1(string NUMBER, string account, string benIFSC, string bankname, string uniqueid, string idno, string name)
         {
@@ -18067,7 +18256,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
         }
-
         [HttpPost]
         public ActionResult imps_transfer1(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc, string customerid)
         {
@@ -18991,6 +19179,322 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public ActionResult imps_transfer_verifyotp1(string Agentid, string benid, string otp, string stateresp)
+        {
+            var userid = User.Identity.GetUserId();
+            var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.Status == "Pending" && aa.trans_id == Agentid && aa.rch_from == userid).SingleOrDefault();
+            dynamic Responsen = new JObject();
+            Responsen.data = new JArray() as dynamic;
+            if (resp_imps != null)
+            {
+                string bankname = resp_imps.bank_nm;
+                string amount = resp_imps.amount.ToString();
+                string amt = amount;
+                string NUMBER = resp_imps.senderno;
+                string account = resp_imps.accountno;
+                string paymode = resp_imps.Trans_Type;
+                string AdminEmail = db.Admin_details.SingleOrDefault().email;
+                var rem_details = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                string RetailerEmail = rem_details.Email;
+                string bankifsccode = resp_imps.ifsccode;
+                string orderid = resp_imps.trans_id;
+                string firmname = rem_details.Frm_Name;
+
+                //Responsen.bankifsccode = bankifsccode;
+                //Responsen.accountno = account;
+                //Responsen.paymode = paymode;
+                //Responsen.orderid = orderid;
+                //Responsen.firmname = firmname;
+                //Responsen.Amount = amt;
+                //Responsen.remainretailer = resp_imps.user_remain.ToString();
+
+
+                var logos = db.tblHeaderLogoes.Where(aa => aa.Role == "ADMIN").SingleOrDefault();
+                var logo = "";
+                if (logos != null)
+                {
+                    logo = logos.LogoImage;
+                }
+
+                Responsen.Accountno = account;
+                Responsen.Ifsccode = bankifsccode;
+                Responsen.bankifsccode = bankifsccode;
+                Responsen.BankName = bankname;
+                Responsen.TotalAmount = amt;
+                Responsen.accountno = account;
+                Responsen.Amount = amt;
+                Responsen.Time = DateTime.Now;
+                Responsen.orderid = orderid;
+                Responsen.logo = logo;
+                Responsen.firmname = firmname;
+                Responsen.servicefee = 0;
+                Responsen.tax = 0;
+                Responsen.total = amt;
+                Responsen.paymode = paymode;
+                Responsen.remainretailer = resp_imps.user_remain.ToString();
+
+
+                var tokn = Responsetoken.gettoken();
+                VastBazaar cb1 = new VastBazaar();
+                var task = Task.Run(() =>
+                {
+                    //return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                    return cb1.Fund_Transfer_Paysprint_Verifyotp(resp_imps.senderno, benid, Agentid, amount, resp_imps.Trans_Type, tokn, otp, stateresp);
+                });
+                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
+                if (isCompletedSuccessfully == true)
+                {
+                    var responsechk = task.Result.Content.ToString();
+                    var responsecode1 = task.Result.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        var StatusSendSmsMoneyTransferSuccess = db.SMSSendAlls.Where(a => a.ServiceName == "dmtsucconline").SingleOrDefault();
+                        var StatusSendSmsMoneyTransferFailed = db.SMSSendAlls.Where(a => a.ServiceName == "dmtfailedonline").SingleOrDefault();
+                        var StatusSendMailMoneyTransferSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "dmtsucconline1").SingleOrDefault().Status;
+                        var StatusSendMailMoneyTransferFailed = db.EmailSendAlls.Where(a => a.ServiceName == "dmtfailedonline1").SingleOrDefault().Status;
+
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var txnSts = ADDINFO.status;
+                        if (txnSts == "SUCCESS")
+                        {
+                            //decimal apiopeningbal = ADDINFO.data.opening_bal;
+                            //decimal chargeAmt = ADDINFO.data.charged_amt;
+                            //decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                            //var oprid = ADDINFO.data.ref_no.ToString();
+                            //var bname = ADDINFO.data.name.ToString();
+                            //string payidno = oprid;
+                            decimal apiopeningbal = ADDINFO.result.opening_bal;
+                            decimal chargeAmt = ADDINFO.result.charged_amt;
+                            decimal apicloseingbal = (apiopeningbal - chargeAmt);
+                            var oprid = ADDINFO.result.rrn?.ToString();
+                            var bname = ADDINFO.result.name?.ToString();
+                            string payidno = oprid;
+                            //db.Money_transfer_update_new_new(Tranid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apicloseingbal);
+                            db.Money_transfer_update_by_paytm(Agentid, "SUCCESS", payidno, bname, json.ToString(), "", apiopeningbal, apiopeningbal);
+                            //if (StatusSendSmsMoneyTransferSuccess == "Y")
+                            //{
+                            //    string msgssss = "";
+                            //    string tempid = "";
+                            //    string urlss = "";
+                            //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                            //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "IMPSPAYMENTSUCCESSFULLY" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                            //    if (smsstypes != null)
+                            //    {
+                            //        msgssss = string.Format(smsstypes.Templates, bankname, account, payidno, amount);
+                            //        tempid = smsstypes.Templateid;
+                            //        urlss = smsapionsts.smsapi;
+                            //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                            //    }
+                            //    // smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge");
+                            //}
+                            smssend.sms_init(StatusSendSmsMoneyTransferSuccess.Status, StatusSendSmsMoneyTransferSuccess.Whatsapp_Status, "IMPSPAYMENTSUCCESSFULLY", NUMBER, bankname + " ", account + " ", payidno + " ", amount + " ");
+                            if (StatusSendMailMoneyTransferSuccess == "Y")
+                            {
+                                smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Bank Refernce Id " + payidno + " and Amount " + amount + " is transfer Successfully.", "Recharge", AdminEmail);
+                            }
+                            Responsen.servicefee = resp_imps.rem_comm;
+                            Responsen.tax = resp_imps.rem_gst;
+                            Responsen.total = resp_imps.totalamount;
+                            Responsen.status = "Success";
+                            Responsen.Details = payidno;
+                            Responsen.servicefee = resp_imps.charge;
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "Success";
+                            resp.bankrefid = payidno;
+                            Responsen.data.Add(resp);
+                        }
+                        else if (txnSts == "ACCEPTED" || txnSts == "PENDING")
+                        {
+                            Responsen.servicefee = resp_imps.charge;
+
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+                            string rrn = ADDINFO.result.rrn.ToString();
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            Responsen.status = "Pending";
+                            Responsen.Details = "";
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "Pending";
+                            //resp.bankrefid = "Pending";
+                            resp.bankrefid = rrn;
+                            resp.agentid = Agentid;
+                            resp.benid = "";
+                            Responsen.data.Add(resp);
+                        }
+                        else if (txnSts == "SENDOTP")
+                        {
+                            Responsen.servicefee = resp_imps.charge;
+                            if (rem_details.gststatus == "N")
+                            {
+                                Responsen.tax = 0;
+                            }
+                            else
+                            {
+                                var charge = Convert.ToDecimal(resp_imps.charge);
+                                Responsen.tax = (charge * 18) / 100;
+                            }
+                            string rrn = ADDINFO.result.rrn.ToString();
+                            Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                            Responsen.status = "SENDOTP";
+                            Responsen.Details = "";
+                            dynamic resp = new JObject();
+                            resp.Amount = amt;
+                            resp.Status = "SENDOTP";
+                            // resp.bankrefid = "Pending";
+                            resp.bankrefid = rrn;
+                            resp.agentid = Agentid;
+                            resp.benid = "";
+                            Responsen.data.Add(resp);
+                        }
+                        else
+                        {
+                            var bname = ""; string payidno = "";
+                            try
+                            {
+                                payidno = ADDINFO.status.ToString();
+                            }
+                            catch { }
+                            if (payidno.Contains("Some Technical Issue") || payidno.Contains("Insufficient balance") || payidno.Contains("Balance Fatching Problem") || (payidno.Contains("Failed Due To Balance Issue")))
+                            {
+                                try
+                                {
+                                    Responsen.servicefee = resp_imps.charge;
+                                }
+                                catch { }
+                                if (rem_details.gststatus == "N")
+                                {
+                                    Responsen.tax = 0;
+                                }
+                                else
+                                {
+                                    var charge = Convert.ToDecimal(resp_imps.charge);
+                                    Responsen.tax = (charge * 18) / 100;
+                                }
+                                Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
+                                Responsen.status = "Pending";
+                                Responsen.Details = "";
+                                dynamic resp = new JObject();
+                                resp.Amount = amt;
+                                resp.Status = "Pending";
+                                resp.bankrefid = "Pending";
+                                Responsen.data.Add(resp);
+                            }
+                            else
+                            {
+                                //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                db.Money_transfer_update_by_paytm(Agentid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                //if (StatusSendSmsMoneyTransferFailed == "Y")
+                                //{
+                                //    string msgssss = "";
+                                //    string tempid = "";
+                                //    string urlss = "";
+                                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "MONEYTRANSFERMANUALMONEYFAILEDDUETO" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                //    if (smsstypes != null)
+                                //    {
+                                //        msgssss = string.Format(smsstypes.Templates, bankname, account, amount, payidno);
+                                //        tempid = smsstypes.Templateid;
+                                //        urlss = smsapionsts.smsapi;
+                                //        smssend.sendsmsallnew(NUMBER, msgssss, urlss, tempid);
+                                //    }
+                                //    //  smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge");
+                                //}
+                                smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account + " ", " " + amount, payidno);
+                                if (StatusSendMailMoneyTransferFailed == "Y")
+                                {
+                                    smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                }
+
+                                Responsen.status = "Failed";
+                                Responsen.Details = payidno;
+                                dynamic resp = new JObject();
+                                resp.Amount = amt;
+                                resp.Status = "Failed";
+                                resp.bankrefid = payidno;
+                                Responsen.data.Add(resp);
+
+
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Responsen.status = "Pending";
+                        Responsen.Details = "Pending";
+                        dynamic resp = new JObject();
+                        resp.Amount = amt;
+                        resp.Status = "Pending";
+                        resp.bankrefid = "Pending";
+                        Responsen.data.Add(resp);
+                    }
+                }
+                else
+                {
+                    Responsen.servicefee = resp_imps.charge;
+                    if (rem_details.gststatus == "N")
+                    {
+                        Responsen.tax = 0;
+                    }
+                    else
+                    {
+                        var charge = Convert.ToDecimal(resp_imps.charge);
+                        Responsen.tax = (charge * 18) / 100;
+                    }
+                    Responsen.total = resp_imps.totalamount + resp_imps.charge + Responsen.tax;
+                    Responsen.status = "Pending";
+                    Responsen.Details = "";
+                    dynamic resp = new JObject();
+                    resp.Amount = amt;
+                    resp.Status = "Pending";
+                    resp.bankrefid = "";
+                    Responsen.data.Add(resp);
+                }
+
+            }
+            else
+            {
+                Responsen.tax = 0;
+
+                Responsen.total = resp_imps.totalamount + resp_imps.charge + Responsen.tax;
+                Responsen.status = "Pending";
+                Responsen.Details = "";
+                dynamic resp = new JObject();
+                resp.Amount = 0;
+                resp.Status = "Pending";
+                resp.bankrefid = "";
+                Responsen.data.Add(resp);
+            }
+            var jjj = Responsen.ToString();
+            var jss2 = new JavaScriptSerializer();
+            var dict2 = jss2.Deserialize<dynamic>(jjj);
+            return Json(dict2, JsonRequestBehavior.AllowGet);
+        }
+
+
         public ActionResult Delete_ben11(string benid, string mobile)
         {
             var apinm = db.money_api_status1.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
@@ -31700,7 +32204,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpPost]
         public ActionResult KYCRegister(string senderno,string pid,string aadharnumber, string latloc,string longloc)
         {
-            pid= "%3C%3Fxml%20version%3D%221.0%22%3F%3E%3CPidData%3E%0A%20%20%3CResp%20errCode%3D%220%22%20errInfo%3D%22Success.%22%20fCount%3D%221%22%20fType%3D%222%22%20nmPoints%3D%2250%22%20qScore%3D%2294%22%2F%3E%0A%20%20%3CDeviceInfo%20dpId%3D%22MANTRA.MSIPL%22%20rdsId%3D%22RENESAS.MANTRA.001%22%20rdsVer%3D%221.1.0%22%20mi%3D%22MFS110%22%20mc%3D%22MIIEADCCAuigAwIBAgIIREM1M0VENDgwDQYJKoZIhvcNAQELBQAwgfwxKjAoBgNVBAMTIURTIE1hbnRyYSBTb2Z0ZWNoIEluZGlhIFB2dCBMdGQgMjFVMFMGA1UEMxNMQi0yMDMgU2hhcGF0aCBIZXhhIE9wcG9zaXRlIEd1amFyYXQgSGlnaCBDb3VydCBTLkcgSGlnaHdheSBBaG1lZGFiYWQgLTM4MDA2MDESMBAGA1UECRMJQUhNRURBQkFEMRAwDgYDVQQIEwdHVUpBUkFUMR0wGwYDVQQLExRURUNITklDQUwgREVQQVJUTUVOVDElMCMGA1UEChMcTWFudHJhIFNvZnRlY2ggSW5kaWEgUHZ0IEx0ZDELMAkGA1UEBhMCSU4wHhcNMjQxMTI1MDcyODI2WhcNMjQxMjEzMDY0MzIyWjCBgjEkMCIGCSqGSIb3DQEJARYVc3VwcG9ydEBtYW50cmF0ZWMuY29tMQswCQYDVQQGEwJJTjELMAkGA1UECBMCR0oxEjAQBgNVBAcTCUFobWVkYWJhZDEOMAwGA1UEChMFTVNJUEwxCzAJBgNVBAsTAklUMQ8wDQYDVQQDEwZNRlMxMTAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCaQYmYFcx0HL7Zcyf%2FD9tspUBoXCm%2F22Zq9F7dkkcBm3NIT1QZ8c6%2B8PebCSgeiQIFtyKNJzHi4rMQMSjoDkiq9vvWXOkQOiHef3pYtVrKT5ecUMOWv2JefMqAd%2FG2EOGR6ZICFfJ3xAS6QDU8jLldQKIj%2FR7r0TmVlDud606WjsNoKsX9XIx1CChstqu3YojHygrlUitdfXkz9Hgwft4w9fD6zMEXIKOref8Nq0NTKdyOY3zhJ584pcJ7PH4gvtfTrMI3gaL%2F4aQqrCqCjCSDLlpY4qXgli9ssMqIDuU6poTMZIBL%2Fy4ShB3TxVGzpmVTsX0qLFwvu%2B7l0wd5nfydAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAFCMA5NMJi0BZzZiCKMcwxBkLMMCkMQsKwgGIQk9mO0KmFFjWeQpnqCaXyKMmwhKEKAWPSudRKyRIte%2FvmijMvBKvg%2FgIrEjltwLPNmNIHiWhIT%2FDiuL9tgB1tL4%2FfVzs2HPYZFSeABFYtmUfm647UOcWzt9wIe%2FnhilKhiIgk5hvsEckytGsDJPSCe2RaSreFyS77sp681tTKUwmfl0SVjOW%2FgZuiau5QWx8XiAUfjv6DMKDFKh05ci2HiIbSWrwNLGFl8%2FnP2%2F3I0V7lZ3e82Sgv34WVf1Tj%2F8kwTvBxHM27IBZKt0SdjSJTc9Lx5wsgEjNDAD9qrcbUihOtPZVhk%3D%22%20dc%3D%22c5db1ebe-74c1-4cf1-a317-f76865519966%22%3E%0A%20%20%20%20%3Cadditional_info%3E%0A%20%20%20%20%20%20%3CParam%20name%3D%22srno%22%20value%3D%227396113%22%2F%3E%0A%20%20%20%20%20%20%3CParam%20name%3D%22sysid%22%20value%3D%226EDFEBF327847A1FBFF0%22%2F%3E%0A%20%20%20%20%20%20%3CParam%20name%3D%22ts%22%20value%3D%222024-12-02T10%3A09%3A10%2B05%3A30%22%2F%3E%0A%20%20%20%20%20%20%3CParam%20name%3D%22modality_type%22%20value%3D%22Finger%22%2F%3E%0A%20%20%20%20%20%20%3CParam%20name%3D%22device_type%22%20value%3D%22L1%22%2F%3E%0A%20%20%20%20%3C%2Fadditional_info%3E%0A%20%20%3C%2FDeviceInfo%3E%0A%20%20%3CSkey%20ci%3D%2220250923%22%3ENqI%2FM8O31cVPN%2FO1QeuV0KelItbn2HBzCWia6mrazbH8PBRCGylYB%2Fj4d%2BfJVptgZoJ%2BgivQjsaDow%2BiKzxPSmHwP6bJcOzCx%2BBHUNH%2F%2FsK0ISr50uX%2B85zB3knrL8cbYG2y1Y6AAkbTM2MwsEv9Nb6euFuzJDNY8N8vTJNelGIXCGDv7%2BECDA9BGkCBwiHCwZeQcV0SaWp1pne9W0hTE3x8AFt9hWleKTkAwl4YprkZwu886bdkJ2Gq%2FoQEHNEaXcHEKVPz1UepWUrpY%2BFdM2o%2FTLMJBo151DKQEsx4sp5qGf3Sijm6aLS%2FKd1qIBXNwhkgTFMolYaVKk3tWgesPA%3D%3D%3C%2FSkey%3E%0A%20%20%3CHmac%3E02BRWTc5hGDYuiv2LQjzcUjTr1y5OGYjMPIoXm%2BXaczRhYYFmebH7NmlWBhUEJCT%3C%2FHmac%3E%0A%20%20%3CData%20type%3D%22X%22%3EMjAyNC0xMi0wMlQxMDowOTowMbpg1dRfFaUn7dOUjYyL7Bz5cQcVIAutZ7BMCM33iNouMlx5L9YTM%2FgqXams8ckiuPRGfS1anzF1O%2B4DbGSOfXlSCXMKeb9Md%2F%2BeiHZYLRMn39b2GWpW5BoPsaHkfesl%2F8fNKeZG3pE1RNbnYo1mqDE4VKdJevo7%2F0W44lm4rKpgpyA4Vt66V0PZU5t%2FinjmqVudtjqNOsjhZJIaCgREG7V3OpEU86MAIKBkZFvDyJK452tdc8fQCQA%2BsQLbKSvknimKByjNyp%2BTQsko7SiABiAh4Y6%2BmwL5Rv5Th5c7JLF5kJ%2FU18RlINw4WfL5eGILehrEM36ilGTAjqxyl8C%2Bo2BdBBebr%2BQLIuhg0Vq1lXEh%2F6nN1TJX7XgWPw3kyyoG9z0zUMeXxp%2FcKiVXM003lrBBUQtNlKnui6734X7zmsNZrH2U%2Fp%2BtZsGN0lu1xqb5HsRl%2Fr8%2F04azeJ56oTUgfcz5KnSJtaTEQTy%2B5iIyZUMrvcRNEesxcqm3rNwllhr8xVEJ4pFPHqp6H95BeBFOwwa%2Fv5EVefYk%2BxlP%2FnKgs%2FQ39uIBfDu6aSGdwpBKbCYVbvujE6orjWS4XCY10cNOwsICYcRKsKyujNbnMJOy%2FK5hNc7F14yqKtyKbXoy7w7zUKruTAxaPRL1P922cM4Bi99QJjwW9V08Gr%2BY%2FPOK5MLnHZr4KZG46J%2FXzDB6I4HVhhqcjRLzaWkhiVY9E6d9t7G0DJymuh%2FDpa%2BMGUniTJB%2Fxg7fc%2BuXJ6NcIsEK0dsTrY72F6Sai9ppxEBlXQeDsjUVUd%2Ft%2BMdqHz5X3K47N0%2FBQYKAxG7b9ZIpiO86VdsfSYeCT%2FuNxc3GCjql4RxmlcGlHJ6kQEzmx7EvBZiQexpw9VYSDYsZ0rIiAZO3rA31IIzI5glq5dZoGSo%2ByZkyaPt8O4OewH5VUSBbIA5KTGxgbjYbJpIGVJH6wHsIn7M4UJ8kgQVvKIhcw1L1x3eOBjP48X1m66wb1qRVzE%2FRMYyWnB5iEbifLNzIqfcDoqrJEyVaw%2BXufvGsXogT1PPrUD4AqU4ThCvc%2FS9dW38SimZpaIG4Ql%2BQaIpoPsNXFdrlwrkHxSLyf9i6j3bH4LGKiIruQmgEOawtm0hFIf5jo%2FAgQOi9MwithJRw0X9z1owuV9aFpfigoxsjGMPvVLXgMn%2F3hvSDGpUhzF0ciCVUaWhrgbBgya9NtDUlhgDRytLvxObqIOtSXo8tGXBXevKmufhXF8LjEGbSrcI4fTvQyO41fIEeHW79ip8ivkXsSiLrEGUwRvm6URPIx67GggCYtNi7BP9fq0Dfe46fLFD%2BHbrv5q5cnaEUvj1su9bcfbDNd8sIGwET%2BFQCmt7EWKsRSQCE3%2BNcZvGEOhnhp%2F5Sd%2Brl%2BNJ7JW5Sl94o2FaFT2VCLiJD4Y2cJ%2F8h0UBRzWtLdlz2UpJCrusfoJn38GDJrhmf6cBVPRf1APu%2FsaPihML9LI466kw5IJg%2FGf7oftwkVSXqDPkB47A0vXhlNVqW5%2B%2F%2FpF78YWvh1OvvRCdLVMVeyPeoSwEKJV9erKbg4Wsud%2BDSzaLziVsgeVlIeAosKlNkymU4NmGKKASBB0xsHdkV5%2BGV5E9Y6F8KnCzR7oVpJbS0wFcaIujKWN0cdAG6IogjKTf%2FO0w3q6eLbNmYpVPweSVc0eNWb%2FNNTpM%2Bt5U7U3hQ4sI5cliWjt7XM5IRFI7nqoqyBkfhJiCC0RXpFJbCaXmzuc44P5LXu%2F%2FyzlvBDtjjpj8t7WyrYDJ2Xcu2KQHPMPP%2BtlI58oVBzcDAC2bKT6cFUQ5fPWfj%2BjC%2FAOnHZr0xBnTXB1s6WtiJM97M1PdpBrQHwpDKuiYm6aWg39BJH9Qt8XmP%2BqjMSbk3Y00h%2FYNlHCGntDlC6zSbCpZeU%2BIZqK3Zcpl%2FcZ16LlI9FZlyowmBdSaqMjfepeYX2lHV9suSLthXTXriyCtvAqy0C6oGVijT3%2Fz73MnFwmFiDJNw%2Fnfzcf7IDKEGQsiRF50cUxrdqOLSj%2BGm39VTpKyj69yI7aF6GthIEmJ3PfrfKHYXlfJkBT0UFEsjumWtSWYh%2FpbYNG0L4SRdjVBXTdjm61g2tp3%2Fb8tsCb8xbFxOf0j%2BPUolsRtZtNxtoS4vAukte3i5H4sFEavgXMVSyrxe9kQWCKHO68%2B3AllmsrvlbHwfHFHR8MTVMqKuuqvndAvWyDhRFatCj%2BApQQbYXNP6XXTgiG4gk8qImW90rtnlYQ%2Fl24SeL7jFgUJdkSLB%2BdiZjZjYFEWX6hbUJ7OP%2BNR3Lht9MZJ9z9%2Bq2cgxkAJEvtsma9RFz8BYhmSg9zBK7wctGJGOIgHgCanRlot98k%2FyHgKowFooUNV9%2B2TL3llGIl9PNimPGFYovHKTl56viFoGQ8JlGZNh2MW7W72CjhhD2wnDAJTU5c3yMKXZH%2By36Y16%2FkgGv29QXnyYR3d1uRzGbw1rTj4t9%2BqjXKXPr3ggS9kmMu4%2BgdFmqhGThBxTha2sLufIy1WRJvg1P4Jbol6oTVWw4iv5xPyDdp3DpeCWTzjAzHZfwAW6Y9I2WLryMDtkrRNyd7hkkzJHMRDq9XFT382vpnMBsBZ00W0fvtmHttuj6feKU%2BOEb0Oyc9tb6LoiwSRX4XpJZezmj8WZAA9Y0SozTXxIHShZ1LiskQfBlDMqkFaBL0wruW0JfMXiELogQqiwzzTKjI8HqbaczpWszeCdy5mpx4W%2BH%2FI%2BrJAgF0RxNP76Nk6BV%2B7d0iG%2FbL64ksdG%2FvRzKMJ8hcbwH1o7EIweBB47MRaBlNonsYvenb5goOpSp9gDRQTFA9AHoJuM6SSs4NZ13npTeYwNNrRKS3WofBVQB6LZgC5qmf2DC6fDMu8HPMOcWvSerTCEi0jtCTViEAjR79byI%2BzSEmc3u93q%2BLKcDKjv13Gb%2FEhCmLrsIEsFgDBsg7V2Lhub%2FDz02DzOheL2bTVq1c00lTUZErRWnWZhKbkUBu4E9zyJYNjTzIu1Lgp5SX8AyC2b1SNgpgR1Dpf%2By4AQ6ljtfYKW0yqjQrWujfGbODusGZDL3PRxDgk4TBLZHEB6tIvxJMSPWYUqiobCP8Ljxpaf6mhX67E30f7qOsZuWm5DX5yL5d9e24HTZXCPs52mJ%2BWHMkmPNhNFxUfjJi7LJlVDTj6vGyaVmgHSLsW1vIr3gkDcnA8ZBUN97JDYjGW2CyqekT1LA2PSApC9%2FeEW3BXNSoDXqXkQhLMzxCQP3DOR9TVGBCgyrNoOBRe8%2FoDnipLRk3b5IGREckT5GPyZ0KEm0a3IQOkKCvfn0KLDk8530FF1AX4XirFUD0xl5gnBG87EntEm99W930R2DVmRUd3G6T4RHpyab%2Bdnvym2EVcKx7AcSXkBlqRf0UsMARtwuaduUqO17Ch%2FurtmNxZmKySWboK8zsDQfPCQMpDYnmNlJkxKy7dtXTXOG6c8r4Qcr4FRopDACtPBdmb%2Fqv2zATy7jCoNVYuNC7NKC3Df34LYSI6A8mFbeTypyhGFitJEiEy5FEO%2BT93E70U9cj1SSNXEzvD4R6vJeEYRIWEXK5Ga2Hz0RWb%2BRhvOzUn0zfgdv6tES%2BQJ3WU%2FfGWDlMfK1nnxU8M%2BYrf%2FcrPBfjdVtLQd9t14q8MDmRUPVCPwakjzCJe%2FHDu3htZKv%2FTDp5zBgFFIHt8tc5TabKkiRufvMRmYIzWnD8X0IYYbosiXSd8XpzmMTsirTQjbFwDemQ7zt5H2HB5FAHysIjD5SQdKq4GxpgrZyAqXxWzdZ1BeAFjwQlMyIomM9vl2BbgVa94ddWZ4MnprLLQMMLzZHG3rLsO12BHXroXYziF7ZenH2cAFtOXEos208%2FWhxKyj651aSa5lwRtwWfIJOFdJoegzP1zwZL%2BRTumVMaqL46ZKbkRmoKqB8C%2BV7CcVt1csqDUVOXdPnb0a7hNZqmqErmr6KyKUk0UQTEuMrNTPLuP%2F1WOauMEh5R6yALS5ejEO6mjjgf7vOHr1em9dplYgvJu%2BmAmPo9tRmkCA2UZLUUO9lCeFvsLz3XP4awi9wkDT2J5zVKMB4LvtcQrU8RrWOpNA13nFaB%2BHv2lwmzvAjqxy1hiVFMjscQX%2FDqPgrvAPd3th7Wd7EQJZtTOsqELwJkAWTtsZAK0YcCh2CXjeBzgdoSwS2usAHS8KDnzwT5KC1YQoQZG7hnUIRy0BPDGRX1buffTzqgJlRSPlcMYSek6U%2FbZqVgcCT1e%2BXGKzbwiviCTLFdt5qXT2mrN%2BSx3ukdbInJUR9A5R44oxRNru6JxiS%2F1qVqEQf%2BGyswbh4%2FaB78gGiD43cz%2BJaojSoR%2F4UaaHpejIbnFyDsEZoC%2FU%2FLJ0ak7kp4FyBY0zgWKviIJUx8OvPCOxiJRO2DDYNo24GiX8aPmseY6l%2BgXr56Dlyq1SCNaGfzM3Z%2B4WBGPeC7TYMACXuSWH%2FTT8Fa1LIpwUfAflavahnlOYkeSOsQnzbZxfkwk8Yk6KUGdOhIwcqJTrGuT6x8CXb1FnebSCF95Ip0wB5zmtbSi6%2BKWiQhwdmdDQM1YdjD1%2B9X166rwgYmo%2B1kIJpq0%2FzvYKZI%2Fvoo%2BucPqUSsTsblabreA57olwjv%2BbsFy%2FuR1uVxYMo3LOoanz0O7bJf%2F7rpDS92ewxPeRMNTeIBgROJS37PCf7T5KpuA%2B%2FxFJI7LNacgYDhC6D1lOeMQeqMq1EGt6vAykgCVho2mXnD8ArvPoQgcMhSIJGjvMn76vGg7qs5yXfuRwSLqwoi4SdT8DQLOXGT4X3Fv1Tusj0BLI6P03r%2Fjw4aOYHp83jwbq04F%2FXkdz1d8GezC5Of%2FE%2B3RPtzQQ5U3cMmFd4MFdYsysnJAmM05KL4wUsy77S5D%2FwdZ85Pcj6kGz9dAxtN6Ieaqm6RmvQnakVkZWvOtvhOJq7%2BbM2YLLBrC4DsQF3YFOtQ4CJ5FZAmkG7pSgLqMvpp5PlnGlZh3JlSGzVVeBDhCypyeIMFngdUw2ly8Shhi5wNBPxF1UDNBBBGzhxIxELLgT0rD3yUPEqzm8DYc2GU83KWxIIozwIgkr0X%2BpiV18iUuQW7LBbiIBpnxNlnqPBCKd2PMTCGL93ImPSQQT5rviApACSmHy05cc7sPn8YvP4G6UgOq3zpXj7159DDC8UqkvdFDeqXubp5w8tvbXFrN5f3tAFbleU4UZ%2F4NdkMuTB%2FWehy3wrkabZcRirm0qvB7MCY4mng%2FQdlrU4%2FBVuZOyYf1umhFXqB3k3hKsnBeP%2FAOmbQv6JasTwmCGpi9M88iQqLsiuQB0sRAuySws2E5znuWlCU2aVs%2BjiWH9A9oURgPcIie1KPxrak7%2FHN4pIA7fRmSnqcLC26O%2BadQKLeACOSVfXbM72CPvf7k%2BBXrpLN4pA8pM3XRNYN6MJtGbiLFnrOvkuoxeiTMqPBq17PlkM68xjHjyzC%2BjOz5joAhpFW02SQeGZSAxwjQDeGN1TFxRlwYHoaG4Xb84imj0PMA7lhhRXtiLNsYIf3jtEzfraqODZXbFjb0B75fNg8EpT0mJvZWfMVCKwUAg8rPI9hUuOyoj7W5AFnaKdXDMDxjfc0LSzav%2BWkm%2BOZI11GDnWmBiYkESdsl39JhjHjGYcrmg7GstikXWwWuSLEmPdvQzggNFPqzWojualpaiL9%2FaIO79A%2BqAB2j4SF2KeCw%2BUIzKKPmI25x69jsBVlRViVp1%2F%2BmprhwIo0RU%2FQ247662MYLcmAutxt%2BXXMk1qE4bMZvmev1fgILJEdlD4vIiWj1VkV%2B4xwSYD66baHSidII1162%2F9pYxI6IE%2BVJYWGCAPxUhDVw5ycWOfaiShJZqIQisy9FscmKuW3YQg9TB%2FoU%2B3ST45y1UfiwwRNPZuYtCBVtW%2FJ96dpsag8WNoFT9METYQob9w7n87afQlh0SZn9N7inrUlky5MU7yu3iaJgz4ysRtNdJEQfbqjIDa1GQXJwru0oSVSbKf22gPLQfxy6Fg5WawoceGrZM9fpETDTYqspnRjGQmgBZzLThLxSAdC29do4624eTaRSeC8Mz8yfvq2X3LhtXj2VyGFwt1h%2Bahr342Li4QtWPXqGcdIwXkIA7QgUp%2BPJC1q1w1Glmh5fTfXGaSOW0tz96ptX8iagQofenYZUo7wPejnWemNKiljF5PBmdmlqnf6pLjueIvhxpkwdQmXEpYbAbA8SQFSIdaDhHzaIir2tyvEJ1jP4hnPKEjeYhwUr%2FgMvahVbQ8DGQVqgTsyTfjShllOvOgV1pXpSvCEWGKxhD6yvWbNuuvC6Tdf6KKFwmsJahTvOOftK3jzTBp6ewyEeGRLJmLeb47A%2BYbIThbEB7xdMfDDCAH9LUlcFp0mEasDQd9kO46xxH9TcGW6mNbCob3fU%2FOOVcAQE0No8V1GnMlzALMcqSX47jr9TbtZeoR6zxfte%2B76El%2BdDzx3Qnq%2Bn9aHn4z3UFJK3gcMguKZfKVgCH1BUw4LHAlnPgzjKHF7qFNLRO5v5LjYeHeeWhyjwN2GJsbRU24MKYJCfXgWGsQqtxelAmM1crx1u%2BOvmotC1E4Ez8QkxzWOM6RJltkFBjwyD%2FcFhRqTZzYqGeVARpmp2Y8jb52MF5TyZv3sfzcLS0oZwXa%2FE7bfdopb7uB7JMXx1A2IOVjcuD9Ri27AG5Lw%2B89HZ9hRlbYnQQexlqIIgoFm%2BdSjZHB%2BlXIe%2B8tsZyStJhHJDEQq55qWtnEcuLE1ceK5ZOO0bSaO51arnIa0LAIxsmz4WOAsD8Gz4GkFb16k4wNuHm0XE5v162M%2Bl%2Bg2OV3%2F%2BJwh9RK3FG0bPKj8hedS8S1KcY5BP9goIbHC7Y%2FdmcKUd0EH1USLj%2FojcIe8nXoonUv7%2BWUUZVTJwmYLBjpA2m39RMu29HzZP1HlHdQ1hmVgrPJjrhVjC5%2BQ0B9TvcKlux%2Biwpr5avCQjBHVsodGqZ%2BSY8xXkhr%2BrfsWafZkpPyQDvahHFFFwHSzWqQvr7AcbOKzLHnNMn42pT%2BSO%2B1Ky4ElS%2Fy4%2B6CmdkxouOJGMoO3nFBuuWb2bZr%2FCcWyREmlGp6BZ0F1WaluxVlyhcI1Lq9a3Dmu6B1vISOTowarYP%2BQPxUAyiAeWpV4F74V4vOFbl1u9ljRUiatK5P8u2n4x963WS8JybCmnziPko%2F0TQIf28HeDQHd9ykcSxs8jYKpGP2MLWkAX94QJqJeE8CZSaQN4BWVtb%2Bga4ZGav0v%2BkesFwvNMRtJAoVpYDauCm6S4IJd%2FNHS786KQjVmaDYBZoRrgblwuJo8G3ffxMzqSIf10Ud4a8VQKMh6JTpJlpXgIg36qABn9Zof4ZdzzH4DLrYaS%2BrJE%2B6KBEDEtB4miT7Kl1w6VfbAFDq4Uqc6Vw7njNSt31GPVx4mzj3ZO%2Fn8ftGYveSMFJ%2FnkGdJi0RBgxrD9QjhNKe47l%2FsLMzQYZfENMD54GOoVVJZjq%2BNaHirxXJl8uu%2B4H7qZ384U%2FYf75kzImFj34rLio1B80U2925weeWdHA1WXMkcmRUOuWG8Kp7Jb%2FgeFoiFMS9IWFTsicw5IrMD04S49PIQyIchksBwe0%2BX5Ak9n3jjM6XedNIk6W%2BUM0iTCXcA225d5iB8BXTRPEijMjOFsH2JGz98OQ9c%2B3GFNaWFwVtFxPlaHJwk6TKmcv2obuzjVbNKR%2B7C7FqWcsOaQttINbcuPAp%2FCYkpnbGblWnWdm%2FbmdNuWPmFTIMuL7d3z3eMDPCDQjhMY8JzFPz4AY3fDNR%2Fndsqb3fRKQbkSrXbX82C2BT3DhBEqrIjYrJ6jrPzzPhbUXkO3KwCS5ZZSgPcQqmoBhVNK1Ez40%2Fh19Hi1fQEzk%2BX8pA46Okr0uqeqFFZN9dexMOjW3GRJcTjQBQJ5igPMzW2TMDK3qhEV4nq%2FoWDBHrl0nmb0blO4J84YlmXor9FL0vUAZf4pQZQyHyiwwDuIYwUeJm0yE4p1noEfFuoBDAbVHIP63Y3fmAQuJXAvy6MvI9swFNtdNRDbUVyPB9lWzMMKo9lbA%2FvVfaViQ1%2BlHtcE4%2FaqQCe4aiyv7xE4E5Oa%2Bq4f2WQTE7OqybL%2F%2B3wl8cd21VtYcUYXDtlwnePkE744R2isxxTQIPgP0LeWVkS1UNksHO5WbrIdlD8MVQ56%2BVvj%2BNQngkr6Qv%2FgXKGkQ98xDdXE9D2cdBXUwrIsBvuYBYq3qRWKFFEna%2B6Kv6ERhMRwNBV7RBV8XB5vWJafrdZ53cWcHyV1N7sV2r%2BtfXKZxuJqR6wm%2BHVwY7KWwjJMyzBTA7z8TVv%2BZs1kjaqV6WlWDBVGJo5HS%2FzVxYhcm%2BeOPl4t%2B6ZgHaLmdyHqoJXDtXRgdZinwQnB0T%2BumZ4%2Bpy3LhMTyoAsLOjOtRKiE2ev%2BShcANysEYwQC%2BOAuP0ih57Z1sk%2F8rPitaTZkcOJ4rflRZcSWmc9XS73rJ65cb%2FmkvNCwukLk58%2F0qMAtwsbhZGm%2BvjSe2O31OMvioKnxTSyoxl0YS6y4Y20O1RJOIipgzMR%2BgV1zv8tRcmnNRTXaqWO%2Bqh77LBltYBlYgIg4%2BV4zUCE7DPAs1j4p1e64qyBLFQgiafXCIXWGQmXatSTnFAfVMi44lArOXkAk%2BRsXDGkj%2BtZHKWMXbbylJiuskn4IDQh4sFABPnN9%2FesD70CJX%2B1iTGjbjmbQeJHfBIlxbbsrJ6dNJ94OJ756t7auQTGFc%2BRaESDpV%2BqsD3q%2FKZX5iLXJVzVvKuxdxDeg%2FF7b82VXbqyNrCaoAdaYJgU11dt%2B8zwXIYLLdsfjrQJm5Gds1m11HW0HwkgIH%2Bch2lMCwnRpas0ksRsI2UMsl2Krb9lofYjPGsgrIAGJAv7snRIs1U79gbG%2Bg65FogtPRyZY%2F21XKE2EYIFViTx6QurXRetb2ABOUunhYjbsAzvle%2B626GGDwROx%2F0eyR7kEL9plhn7p0KEitN%2BnrFT%2F3C%2FkUwnBaljQMU4z15gGOo9aywXf98LyI8LVveMndIzGQnnrRB0woqKfG%2Bi67hpLCLGlhSAXDYeQKdyyUmBvGXxuO6PpFTfMl%2Bg3ICCC5tw0vEOqKKC2vZ1MUwTGZrggDQ48pm0KM%2B56W2TJyv7ZNn8gsVuS4fpoLAJHlCrLM8ap7EJ%2BIiNoUIukZbt%2F22M108Sa4LUQZG1t6sa4zlQMitJ0Zuqk82oTntcy29dwK6pIebgxZexRnfYTIv0vqtEce0%2BHzUmdRqzHgjzsxUIro65l4pdFZmQu8NhH9vuOO7elbkwM%2FrShe60pW46c2PL53Gg%2FjWehRWRnswqVhPz0NPVFdFP9dWF0ndEP0%2B6x7u0kDbKa3%2BVC7wZ8i%2Fbp5aJpAo9KLYd9lQQCb3qPpkTZGFht0aE5k7F7U1EpdkM8PQAWhR6%2F4pUqhiuVhWZseEo7gib6dYVjM9s9ZRZv%2FLtwLBDCmpK2XuTeWePVy0mm0QeJ9LeXwoy4yBHjssC7aHPp4UuPKtx03Ftj5%2FglLWYocpDIxtu3%2F24pUNHXV1fI4PQQ0KJz1jp9ea3F1loISNI1YHOQIJT2kY1yQoZomGlwsiZJbk1coNyOu5UD6TH9Qe4BdVV3Bk2PjU248D9ovljOKE6YmduQrvDetNCiQ3MeQTn1m5bpUtCJ0jkUPeiIt48N01hOr4%2FmoChl1CDlSqwoyFcXRRwbF7LijpLgYGpHxr5pMW1oXg%2F1D3CAEXIkNxvbIjjbRL03H5CKOSODMlQ%2FkCsf77A%2BFPOlODf2TEtDxB7fzzQ65ex4kWKDPt0utskJ4X7KDz4SXpGCltRyR%2Fhca9KZj08gYzog42D0hBtRU2pMKrH52FfJqaFQlo7JwnuU0P5mGrMy9o7FC3AsfHVylp4EmyAu8tzdXjctf5vdJTtcDDCoIDGF09q%2Fziliwh6i2sKKCjuabMnUpLo6t2dAGruwKTrwWkIxBFsyhuXvPbkiMPZF7uh5raIIUoBidVcJOMP29jlqLXd92pKCFT1bDOgovDc%2BJB7F1qPHhnaMT0KHDQA30Qy2h7I37jPsmJoOVuYyg5Wd4I6p1sza5X6LQuVDUe5hm593bgCv2H20Ld%2Be%2F8BgveIVbyQ7YRI4hgalPSeoWfXWAE1Kz%2BqGGqgOzPkBYYP%2BYdqY%2BEkJi65%2B7%2F04s5qj1cSaZLf1R8umMjldxhabLfaXRqzPV3hWtRIPBtNfm%2B7ycqi6VKuEPof1ZWqrjAtUWT0mxK5bKxcPHP9jB9Fl6654w0VkDOHUQ2t4Dhue5OriKOOiRedvIPbG8TkozfYkxiJIkwHWYd%2BkRbDdbhSQHwbbYUdzvmkQ8zAGcsUrkcInKzbFtuEOVhVS5jqF7QNSJ4LqdDQOzyoJ6CEwhYrBMNONTpTh0gUG3JZVn9NWtsYp0pVg2cY54qcqCMBREByP2i1Xo3SmtLGCo%2FV6KV5Sj7MlWlK12fLhQ9V5kl9OaijQgQ%2BHSJPPIy8I67Q%2BPQ%2FqMWJ3b2vB4TBnfWM0SFNypR2CYw0lI5efIEUKNI2VMng09yG6Mxi0B6oYFqohHdT%2FK41%2FgFzBJAKbf7JEpklgwvwt5XsEXw24ukMwJGvTvmVUUWXT04YzHoxka3xcN40YfdY2EOhrVWXUW3G7bIbSQOicYIV7aek5FyC%2FVFcDdjxwBaLA5DMS3wZgn0fw3GfdqzGbkNWdNCxOBoVCOSWSLYfzebTK1Jvkx0xp9PSRTwK8lbZihAsXH79gQ72RybjpRDNjrOUL8GNS%2FGahN60NoikpU3Dnn99ZrNKt%2BK8Hy%2Fan9WfpmpiCJPPqvCLkBBkVra5i7BEommvjIPqDvPA4aMA3nn%2BVhyIVVKNtoAnCM%2F9vMqg2yGsX0kIH1VbPQBFkbWc0BNQhr2uP8sJHrjEEebJVs%2Fg0RfGalnPT1aAdw3bQflIWqMlSlY7xHY7qZsolhGa%2Fe8bWqMduLXzwFXo8mGEZG4N42zx4vxSUynOjy2ZDnKc0Ps8Nwe8iBNZFKXOR16KhCJw502dkZZsLPHLmlxGv3%2Bmp8i8rwtw5aS9C0DUpojBCPeOqProldVZ84XXRa3alD68vM%2BDai7DSqm2GDbyx4bNX9arrqK7hulIaDFk1q36WVCz3HRcc9WEgLp9Qsa4%2FVu1sucxuLAny5mvShM89fDE9V1N0%2BvGjd4K6BrPQV8aWAB%2BfoJg%2FHFxpaVfOe02M0EnMc1TKm1Vr%2BGPC3LkkW7E7VCCoiuUakmXgI5NW489H2ZXYjlpi3scn7jQnbZsmHuJaLH6x6RZhQiS2vvn0bZKXgBf8SL4Uw%2FzTH3tZQnS86Av40aPA24d2RsKyeIKqaawm1Pf0ZZ32NDEfROxI4VMrb2RPl95CIdLyP5m3udIUFajMgSrx0cX1oopSfi0tkJYadyAfGj0nFAKuipyoq7P2WNxIqk8gyI1qTIfzZmh1GGvlAHjHhyWv4aYLONxMlkiYT1zgyKDjIX5sUM9%2F35o1pqj2%2F%2FvM6NtKhB31dyvqV45ymVPJqOvA3uThv8ZzqWJofdqdmrv9NOPmlWcM35yWpY1Ixo7A9cKFfBDqh4umEOX3Sbbd2FT7kD%2FxNlgzNWkV7FeFzzrrh58TM6SpbUgMn2FDT7lbnKjjNUOYtH%2B2QCEt9JtyPYdKakh6swnMFXEAmdL7VUmuUrWUtAD1xkVUzgq306%2BvbyQvJySnF3sWE6Slr7scSgbGWBBwx2SpPwmGE2BLsjtYz5UfMT4dfPvh1Jv1flEqT02%2F2hgRdQ03ZRMa7tkEwpHhoebmd9E37Wg730p9mM0G0b8bswDZKWGmuVhUdmdDI9US1tlhUXVkdJy9c%2Btsw5fZ9o%2BG2%2F9JG2LRZwU1UR1MYl1HDNTwCS4q0sojwruRRtoS4%2BTSBp%2F04fHKcLpv%2F%2BQwceC08Fxm%2BuFAS%2F7g9Mz86A998pQIgqV6%2FjMbn4ZSZ3PizeSjlAf6nWAE7nU4kiFp5q%2FgvQ5NsmlTCFKAtHgdu6HC4wMnVf0CByBYKWz2S87hijt9QZvvuOPJUFA%3D%3D%3C%2FData%3E%0A%3C%2FPidData%3E";
             pid= HttpUtility.UrlDecode(pid);
             string key = "2dc2770e6938f17c";       // Replace with your AES key (must be 16 bytes for AES-128)
             string iv = "e2cb1fd94a96ff35";         // Replace with your Initialization Vector (must be 16 bytes)
@@ -34280,7 +34783,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return Json(new { status = "Success", Message = msg }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult Imps_check_transfer(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
+        public ActionResult Imps_check_transfer_New(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
         {
             try
             {
@@ -34389,7 +34892,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
                         if (remain >= finalamount)
                         {
-                            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                             if (apinm != null)
                             {
                                 int amt = Convert.ToInt32(amount);
@@ -34500,6 +35003,229 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public ActionResult Imps_check_transfer_DMT(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
+        {
+            try
+            {
+                string userid = User.Identity.GetUserId();
+                var stspinotp = "NOTOK";
+                var pin = Encrypt(dmtpin);
+                var pin_check = (from pi in db.Retailer_Details where pi.RetailerId == userid select pi).Single().PIN;
+                var rememailrememail = db.Retailer_Details.Where(x => x.RetailerId == userid).SingleOrDefault().Email;
+                var adminemail = db.Admin_details.SingleOrDefault().email;
+                var pinxhk = Decrypt(pin_check);
+                var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
+                if (chkstsotp != null)
+                {
+                    if (chkstsotp.status == true)
+                    {
+                        var mobileotplist = db.MobileOtps.Where(a => a.Userid == userid && a.Type == "DMTPINOTP").OrderByDescending(a => a.Date).ToList();
+                        var mobileotp = mobileotplist.FirstOrDefault();
+                        if (mobileotp == null)
+                        {
+                            var results = "{'Details':'OTP Error!!! Please Generate New OTP!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        var last5minute = DateTime.Now.AddMinutes(-5);
+                        if (mobileotp.Date >= last5minute)
+                        {
+                            if (mobileotp.Otp == dmtpin)
+                            {
+                                stspinotp = "OK";
+                            }
+                            else
+                            {
+                                var results = "{'Details':'Wrong OTP!!! Please Enter Correct OTP!!!','status':'Failed'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            db.MobileOtps.RemoveRange(mobileotplist);
+                            db.SaveChanges();
+                            var results = "{'Details':'Expire OTP!!! Please Generate New OTP!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (chkstsotp.status == false)
+                    {
+                        var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                        DateTime currenttime = DateTime.Now;
+                        DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                        lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                        if (lastchangedpassdtr <= currenttime)
+                        {
+                            var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        if (pin == pin_check)
+                        {
+                            stspinotp = "OK";
+                        }
+                        else
+                        {
+                            var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else if (pin == pin_check)
+                {
+                    var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
+                    DateTime currenttime = DateTime.Now;
+                    DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
+                    lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
+                    if (lastchangedpassdtr <= currenttime)
+                    {
+                        var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                    stspinotp = "OK";
+                }
+                else
+                {
+                    var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+                if (stspinotp == "OK")
+                {
+                    decimal finalamount = Convert.ToDecimal(amount);
+                    var ch1 = db.IMPS_transtion_detsils.Where(aa => aa.accountno == account && aa.rch_from == userid && aa.totalamount == finalamount && aa.Status.ToUpper() == "SUCCESS").OrderByDescending(aa => aa.idno).ToList();
+                    var date = ch1.Any() ? ch1.FirstOrDefault().trans_time : System.DateTime.Now.AddDays(-1);
+                    int ggg = Convert.ToInt32((System.DateTime.Now - Convert.ToDateTime(date)).TotalSeconds);
+                    if (ggg >= 180)
+                    {
+                        var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
+                        if (remain >= finalamount)
+                        {
+                            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
+                            if (apinm != null)
+                            {
+                                int amt = Convert.ToInt32(amount);
+                                decimal? amooot = 0;
+                                if (apinm.catagory == "PAYOUT")
+                                {
+                                    var limitchk = db.transtion_limit.SingleOrDefault();
+                                    amooot = limitchk.Perlimit;
+                                    if (string.IsNullOrEmpty(Mode))
+                                    {
+                                        amooot = 100000;
+                                    }
+
+                                    else if (chkkyc == false)
+                                    {
+                                        if (amooot == 49750)
+                                        {
+                                            amooot = 25000;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    amooot = 5000;
+                                }
+                                if (amt <= amooot)
+                                {
+                                    if (amt >= 100)
+                                    {
+                                        if (amt > amooot)
+                                        {
+                                            int otpcodess = new Random().Next(1111, 9999);
+                                            MobileOtp motp = new MobileOtp();
+                                            motp.Date = DateTime.Now;
+                                            motp.Userid = userid;
+                                            motp.Type = "PaymentConfirmation";
+                                            motp.mobileno = sendermobileno;
+                                            motp.Otp = otpcodess.ToString();
+                                            db.MobileOtps.Add(motp);
+                                            db.SaveChanges();
+                                            smssend.sms_init("Y", "Y", "PaymentConfirmationIMSPSMOBILEOTP", sendermobileno, account, amt, otpcodess.ToString());
+                                            var results = "{'Details':'','status':'OTP' }";
+                                            var jss1 = new JavaScriptSerializer();
+                                            var dict1 = jss1.Deserialize<dynamic>(results);
+                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                        }
+                                        else
+                                        {
+                                            var results = "{'Details':'','status':'Success' }";
+                                            var jss1 = new JavaScriptSerializer();
+                                            var dict1 = jss1.Deserialize<dynamic>(results);
+                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var results = "{'Details':' Amount Should be Greater Than Rs. 100','status':'Failed' }";
+                                        var jss1 = new JavaScriptSerializer();
+                                        var dict1 = jss1.Deserialize<dynamic>(results);
+                                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var results = "{'Details':' Amount Should be Less Rs " + amooot + "','status':'Failed' }";
+                                    var jss1 = new JavaScriptSerializer();
+                                    var dict1 = jss1.Deserialize<dynamic>(results);
+                                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var results = "{'Details':'No api Open.','status':'Failed'}";
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var results = "{'Details':'Remain Amount Low','status':'Failed' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var results = "{'Details':'Please Wait 5 Minutes... Same Amount Not Transfer in same Account','status':'Failed' }";
+                        var jss1 = new JavaScriptSerializer();
+                        var dict1 = jss1.Deserialize<dynamic>(results);
+                        return Json(dict1, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var results = "{'Details':'Error!!! Please try after sometime!!!','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var results = "{'Details':'Something went wromg.Please try again.','status':'Failed' }";
+                var jss1 = new JavaScriptSerializer();
+                var dict1 = jss1.Deserialize<dynamic>(results);
+                return Json(dict1, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         [HttpPost]
         public ActionResult imps_transfer(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc, string customerid)
         {
