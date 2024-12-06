@@ -13,37 +13,41 @@
     }
 }
 <style>
-#overlay{
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  height:100%;
-  display: none;
-  background: rgba(0,0,0,0.6);
-}
-.cv-spinner {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px #ddd solid;
-  border-top: 4px #2e93e6 solid;
-  border-radius: 50%;
-  animation: sp-anime 0.8s infinite linear;
-}
-@@keyframes sp-anime {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.is-hide{
-  display:none;
-}
+    #overlay {
+        position: fixed;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: rgba(0,0,0,0.6);
+    }
+
+    .cv-spinner {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px #ddd solid;
+        border-top: 4px #2e93e6 solid;
+        border-radius: 50%;
+        animation: sp-anime 0.8s infinite linear;
+    }
+
+    @@keyframes sp-anime {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .is-hide {
+        display: none;
+    }
 </style>
 <style>
     .loader {
@@ -397,10 +401,47 @@
 </div>
 <!------------------------------------------------------------->
 <!---------------------- EKYC ------------------------>
-<div id="scancheck" class="gotoscan-changecss" style="display:none;text-align:center;">
-    <button onclick="gotoscan()" class="display-nonescanp" id="scanrecoveer"><strong>GO</strong> To Scan</button>
+<div id="scancheckdmt" class="gotoscanDMT-changecss" style="display:none;text-align:center;">
+    <button onclick="gotoscanDMT()" class="display-nonescanp" id="scanrecoveerDMT" style="">
+        <strong>GO</strong> To Scan
+    </button>
 </div>
-<div id="Devicerror" style="display:none;">
+<style>
+    .gotoscanDMT-changecss button, .body-border-bottom-top {
+        border: 6px solid var(--main-bg-lcolor) !important;
+    }
+
+    .gotoscanDMT-changecss button {
+        color: #545454;
+        background: transparent;
+        height: 150px !important;
+        width: 150px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .gotoscanDMT-changecss button {
+        color: #545454;
+        background: transparent;
+        height: 150px !important;
+        width: 150px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .gotoscanDMT-changecss button {
+        background: #a4a0a0;
+        border: 0;
+        color: #fff;
+        padding: 5px 10px;
+    }
+
+    .gotoscanDMT-changecss button, .body-border-bottom-top {
+        border: 6px solid var(--main-bg-lcolor) !important;
+    }
+</style>
+
+<div id="DevicerrorDMT" style="display:none;">
     <div class="container-fluid aepsid-login">
         <div class="col-md-12 aeps-start">
             <div class="col-md-12 aeps_id">
@@ -415,28 +456,28 @@
         font-size: 16px;
         font-weight: 700;
 " class="body-border-bottom"></span>
-                    <span id="deviceerror2" style="color:red;"></span>
+                    <span id="deviceerror2DMT" style="color:red;"></span>
 
-                    <span id="deviceerror3" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror4" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror5" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror6" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror7" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror8" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror9" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <a href="#scanrecoveer" id="againscanclick" onclick="gotoscan()">Scan&nbsp;Again</a>
+                    <span id="deviceerror3DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror4DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror5DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror6DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror7DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror8DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror9DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <a href="#scanrecoveerDMT" id="againscanclickDMT" onclick="gotoscanDMT()">Scan&nbsp;Again</a>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-<div id="loadaeps1" style="display: none;text-align:center;">
+<div id="loadDMT1" style="display: none;text-align:center;">
     <img class="body-border-bottom-top" src="~/ashok-images/portrait_mode_scanning.gif" style="height:150px;" />
 </div>
 <!---------------------------------------------------->
 <!-------------------AAdhar Verify----------------->
-<div id="Devicefind" class="container-fluid otp_page_second" style="display:none;">
+<div id="DevicefindDMT" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
             <strong style="width:auto;">Remitter Number</strong>
@@ -448,15 +489,15 @@
         </div>
         <div class="col-md-12 amount amount_strong amount-changesse">
             <span id="Aadhar_Error" style="color:red;"></span>
-            <input type="hidden" id="cap" />
-            <input type="hidden" id="capxmlP" />
+            <input type="hidden" id="capDMT" />
+            <input type="hidden" id="capxmlPDMT" />
 
         </div>
     </div>
     <div class="container-fluid transaction-button">
         <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
-        <button onclick="gotoscan()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
-        
+        <button onclick="gotoscanDMT()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
+
     </div>
 </div>
 <!-------------------------------------------------->
@@ -473,8 +514,8 @@
         </div>
         <div class="col-md-12 amount amount_strong amount-changesse">
             <span id="otperror_Ekyc" style="color:red;"></span>
-            <input type="hidden" id="otpstateResp_ekyc"/>
-            <input type="hidden" id="otpekyc_id_ekyc"/>
+            <input type="hidden" id="otpstateResp_ekyc" />
+            <input type="hidden" id="otpekyc_id_ekyc" />
 
         </div>
     </div>
@@ -484,11 +525,10 @@
 </div>
 
 <!------------------------------------------------->
-
 <!---------------------Ben List-------------------------------->
 <div id="remlist" class="remlish-responshives" style="display:none">
     <div class="col-md-12 number-login">
-      @*  <div class="col-md-5 userName" style="border: 1px solid red; width:47%;"><div id="imgshow" class="col-md-5 userName" style="float:left;display:none;margin: -4px 0px 0px 5px;padding: 0;width: 25px;height: 25px;"><img id="remimg" src="#" style="height:25px;width:25px;" /> </div><span class="hi">Hi , </span> <span id="username"></span> <input type="hidden" id="hidecustid" /> </div>*@
+        @*  <div class="col-md-5 userName" style="border: 1px solid red; width:47%;"><div id="imgshow" class="col-md-5 userName" style="float:left;display:none;margin: -4px 0px 0px 5px;padding: 0;width: 25px;height: 25px;"><img id="remimg" src="#" style="height:25px;width:25px;" /> </div><span class="hi">Hi , </span> <span id="username"></span> <input type="hidden" id="hidecustid" /> </div>*@
         <div id="validatekyc" class="col-md-5 userName" style="width: 10%;margin-left: 7px;text-align: center;"><a href="#" onclick="validkyc()">KYC</a> </div>
         <div class="col-md-5 changesenderclass" style="width: 35%;">
             <input id="changesender" type="text" style="width:120px;" readonly placeholder="Sender Number" onkeypress="return isNumber(event)" />
@@ -501,7 +541,7 @@
     <div class="col-md-12 number-login" style="margin-top: 8px;">
         <div class="col-md-5 userName" style="float:left;"><span class="hi">Total Limit : </span> <span id="tlimit"></span></div>
         <div class="col-md-5 userName" style="float: right;"><span class="hi">Remain Limit : </span> <span id="Rlimit"></span></div>
-       @* <div id="kycstschk" class="col-md-5 userName" style="float:left;"><span class="hi">KYC STATUS : </span> <span id="checkkyc"></span> </div>*@
+        @* <div id="kycstschk" class="col-md-5 userName" style="float:left;"><span class="hi">KYC STATUS : </span> <span id="checkkyc"></span> </div>*@
     </div>
     <div id="transfer_fund">
         <div class="col-md-12 radiobuttonimps radiobuttonimps-responshive">
@@ -511,17 +551,17 @@
                     <span class="checkmark"></span>
                 </label>
                 @*<label id="creaditcbt" class="container container-last">
-                    <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
-                    <span class="checkmark"></span>
-                </label>*@
+                        <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
+                        <span class="checkmark"></span>
+                    </label>*@
                 <label class="container">
                     <input type="radio" name="bendetails" id="neftbutton" value="NEFT"><p>NEFT</p>
                     <span class="checkmark"></span>
                 </label>
                 @*<label id="upilabel" class="container">
-                    <input type="radio" name="bendetails" id="upibutton" value="UPI"><p>UPI</p>
-                    <span class="checkmark"></span>
-                </label>*@
+                        <input type="radio" name="bendetails" id="upibutton" value="UPI"><p>UPI</p>
+                        <span class="checkmark"></span>
+                    </label>*@
                 @*<label id="walletlabel" class="container container-last">
                         <input type="radio" name="bendetails" id="paytmwalletbutton" value="WALLET"><p>PAYTM WALLET</p>
                         <span class="checkmark"></span>
@@ -777,8 +817,8 @@
                 <input type="hidden" id="hidetxtagentid" />
                 <input type="hidden" id="hidebenidtxt" />
                 <input type="hidden" id="hidestateresptxt" />
-            <strong style="width:108px;">Enter OTP</strong>
-            <input type="text" id="txtsenderotps_pay" style=" background: white; float: right;" name="txtsenderotps_pay">
+                <strong style="width:108px;">Enter OTP</strong>
+                <input type="text" id="txtsenderotps_pay" style=" background: white; float: right;" name="txtsenderotps_pay">
             </div>
             <div class="col-md-12 amount otpboxnotshow" style="display:none"><strong style="width:108px;">Enter Sender OTP</strong><input type="text" id="txtsenderotps" style=" background: white; float: right;" name="txtsenderotps" value="0"></div>
             @*<div class="col-md-12 amount"><strong>Debit Amount</strong><span id="chargeconfirm">20040</span></div>*@
@@ -865,17 +905,17 @@
                     </label>
 
                     @*<label id="registerupi" class="container container-last" onclick="document.getElementById('creaditcardnew').style.display = 'none';">
-                        <input type="radio" name="addnewradio" id="upibutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="UPI"><p>UPI</p>
-                        <span class="checkmark"></span>
-                    </label>*@
+                            <input type="radio" name="addnewradio" id="upibutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="UPI"><p>UPI</p>
+                            <span class="checkmark"></span>
+                        </label>*@
                     @*<label id="registerwallet" class="container container-last" onclick="document.getElementById('creaditcardnew').style.display = 'none';">
                             <input type="radio" name="addnewradio" id="paytmwalletbutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="WALLET"><p>PAYTM WALLET</p>
                             <span class="checkmark"></span>
                         </label>*@
                     @*<label id="creditcardlink" class="container container-last" onclick="credicardshow();">
-                        <input type="radio" name="addnewradio" id="creaditbutton" onclick="credicardshow();" value="checked"><p>Credit Card</p>
-                        <span class="checkmark"></span>
-                    </label>*@
+                            <input type="radio" name="addnewradio" id="creaditbutton" onclick="credicardshow();" value="checked"><p>Credit Card</p>
+                            <span class="checkmark"></span>
+                        </label>*@
 
                 </form>
             </div>
@@ -1080,7 +1120,7 @@
                             url: '@Url.Action("savebencreaditcard", "Home")',
                             data: { name: name, Mobile: mobile, Ifsc: ifsc, OriginalIfsc: ifscoriginal, Account:cardno},
                             success: function (result) {
-                              
+
                                 if (result.sts == "TXN") {
                                     back();
                                     $('#creaditcardnew').hide();
@@ -1365,7 +1405,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-                 
+
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1385,7 +1425,7 @@
              body: requ
          }).then(Response => Response.json())
              .then(resp => {
-              
+
                  var statuscode = resp.statuscode;
                  if (statuscode == "TXN") {
                      typeof cb == 'function' && cb(null, resp.Response);
@@ -1404,7 +1444,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-            
+
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1414,7 +1454,7 @@
     function senderdetails(change, cb) {
         var latloc = $('#latloc').val()
         var longloc = $('#longloc').val()
-        $('#Devicefind').hide();
+        $('#DevicefindDMT').hide();
         $('#otpshow_ekyc').hide();
         $('#otpekyc_id_ekyc').val("");
         $('#otpstateResp_ekyc').val("");
@@ -1495,7 +1535,7 @@
                 $("#changesender").attr("readonly", true);
             }
         }
-      
+
         if (len == 10) {
             $('#errorsenderno').text("");
             $("#benlistttable tr").remove();
@@ -1506,11 +1546,11 @@
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                 
+
                     $('#btnsenddd ,#cancelloder').html("Next");
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
-              
+
                     var statuscode = output.statuscode;
 
                     if (statuscode == "TXN") {
@@ -1579,8 +1619,8 @@
                     }
                     else if (statuscode == "TXNP")
                     {
-                        $('#scancheck').show()
-                        $('#scanrecoveer').show()
+                        $('#scancheckdmt').show()
+                        $('#scanrecoveerDMT').show()
                         $('#sendername').val("");
                         $('#remlist').hide();
                         $('#newsender').text(senderno);
@@ -1591,7 +1631,7 @@
                     }
                     else if (statuscode == "OTP")
                     {
-                        var stateResp = output.stateResp;       
+                        var stateResp = output.stateResp;
                         var ekyc_id = output.ekyc_id;
                         $('#otpstateResp_ekyc').val(stateResp)
                         $('#otpekyc_id_ekyc').val(ekyc_id)
@@ -1669,7 +1709,7 @@
                                 var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
-                              
+
                                 //var isbankdown = output.data.beneficiary[i].isbankdown;
                                 var bandownmsg = "";
                                 //if (isbankdown == true) {
@@ -1680,7 +1720,7 @@
                         }
                         else if (respout.success == false) {
                             var msginfo = respout.message;
-                 
+
                             if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
                                 $('#sendername').val("");
                                 $('#remlist').hide();
@@ -1698,7 +1738,7 @@
                         }
                     }
                     else {
-                       
+
                         var msg = output.status;
                         $('#Firstpage').show()
                         $('#sendererrorshow').text(msg);
@@ -1806,7 +1846,7 @@
         var hidebenid = $('#hidebenid').val();
 
         var bankname = $('#banknm').find('option:selected').text();
-     
+
         var benname = $('#benname').val();
            if (senderno != "" && account != "" && ifsccode != "" && originalifsccode != "" && benname!="") {
                $.ajax({
@@ -2162,9 +2202,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-               
+
                 var outtt = JSON.parse(req);
-         
+
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -2187,9 +2227,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-             
+
                 var outtt = JSON.parse(req);
-               
+
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -2287,7 +2327,7 @@
               $('.loader').show();
              },
             success: function (data) {
-                
+
             var sts = data.statuscode;
             var msg = data.status;
             if (sts == "TXN") {
@@ -2436,7 +2476,7 @@
               }
               else if (sts == "RADIT")
               {
-                
+
                   senderdetails('change');
               }
               else {
@@ -2546,7 +2586,7 @@
                 idstr += String.fromCharCode(ascicode);
             }
         } while (idstr.length < 32);
-      
+
         return (idstr);
     }
 
@@ -2653,7 +2693,7 @@
     fundtransferWALLET = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-     
+
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("Paytm No: ") + 9, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2688,7 +2728,7 @@
     fundtransferUPI = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-      
+
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("VPA ID:") + 8, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2829,10 +2869,10 @@
                 }
                 if (resp == "OK") {
                    var chkkyc= $('#checkkyc').text();
-            
+
                     chkkyc = true;
                     $.ajax({
-                        url: '@Url.Action("Imps_check_transfer","Home")',
+                        url: '@Url.Action("Imps_check_transfer_DMT", "Home")',
                         data: { Mode: modesss, dmtpin: Dmtpin, account: accountno, amount: amount, sendermobileno: sendermobileno, chkkyc: chkkyc },
                         cache: false,
                         type: "POST",
@@ -2951,7 +2991,7 @@
                 if (resp == "OK") {
                    var chkkyc= false;
                     $.ajax({
-                        url: '@Url.Action("Imps_check_transfer","Home")',
+                        url: '@Url.Action("Imps_check_transfer_DMT", "Home")',
                         data: { dmtpin: Dmtpin, account: accountno, amount: amount, sendermobileno: sendermobileno, chkkyc: chkkyc },
                         cache: false,
                         type: "POST",
@@ -3070,7 +3110,7 @@
         var customerid = $('#hidecustid').val();
         accountno = accountno.trim();
         bankifsccode = bankifsccode.trim();
-       
+
         $('#amounttransfer').val("");
             $('#DMTPIN').val("");
 
@@ -3378,9 +3418,9 @@
         var aadharnumber = $('#aadhardetails_ekyc').val();
         var latloc = $('#latloc').val();
         var longloc = $('#longloc').val();
-        var pid = $('#capxmlP').val()
+        var pid = $('#capxmlPDMT').val()
 
-        $('#capxmlP').val("")
+        $('#capxmlPDMT').val("")
         if (aadharnumber != "") {
             if (pid != "") {
                 $("#overlay").fadeIn(300);　
@@ -3390,7 +3430,7 @@
                       cache: false,
                       contentType: 'application/x-www-form-urlencoded',
                           type: "POST",
-                      success: function (data) {       
+                      success: function (data) {
                           $("#overlay").fadeOut(300);
                           var status = data.status;
                           var message = data.message;
@@ -3398,7 +3438,7 @@
                           var stateresp = data.stateresp;
                           if (status == true) {
                                         // senderdetails('change');
-                                        $('#Devicefind').hide();
+                                        $('#DevicefindDMT').hide();
                                         $('#otpshow_ekyc').show();
                                         $('#otpstateResp_ekyc').val(stateresp)
                                         $('#otpekyc_id_ekyc').val(ekyc_id)
@@ -3758,20 +3798,20 @@
     }
 </script>
 <script>
-        function gotoscan() {
-            $('#cap').val("");
-            $('#capxmlP').val("");
-            $('#device_srno').val("");
-            $('#txtdevice').val("");
-            $('#scanrecoveer').hide();
-            $("#Devicerror").hide();
-            $('#Devicefind').hide();
+        function gotoscanDMT() {
+            $('#capDMT').val("");
+            $('#capxmlPDMT').val("");
+            $('#device_srnoDMT').val("");
+            $('#txtdeviceDMT').val("");
+            $('#scanrecoveerDMT').hide();
+            $("#DevicerrorDMT").hide();
+            $('#DevicefindDMT').hide();
         $.ajax({
             url: '@Url.Action("chk1","Home")',
             cache: false,
             type: "GET",
             beforeSend: function() {
-                  $("#loadaeps1").show();
+                  $("#loadDMT1").show();
              },
             success: function (data) {
 
@@ -3883,7 +3923,7 @@
                        $('#dmtconfirm').hide();
                    }
                    else {
-                   
+
                        $('#dmtconfirm').hide();
                        $('#submitotp').hide();
                        $('#OTPinfo_show').hide();
@@ -3910,7 +3950,7 @@
                        $('#failed').show();
                        $('#dmttransferfinal').show();
 
-                   
+
 
                        //$('#transfererror').text(msg);
                    }
