@@ -887,6 +887,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Update_Aeps_Info> Update_Aeps_Info { get; set; }
         public virtual DbSet<PPIAgent> PPIAgents { get; set; }
         public virtual DbSet<AppMessage> AppMessages { get; set; }
+        public virtual DbSet<BankAccountForAep> BankAccountForAeps { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

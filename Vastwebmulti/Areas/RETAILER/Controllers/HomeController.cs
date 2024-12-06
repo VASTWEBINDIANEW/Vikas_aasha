@@ -76,6 +76,7 @@ using sun.misc;
 using System.Reflection;
 using com.sun.imageio.plugins.common;
 using com.sun.java.swing.plaf.motif.resources;
+using Microsoft.Ajax.Utilities;
 //using paytmresponselibrary;
 
 
@@ -12098,6 +12099,118 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
         //End
         //Profile
+        [HttpGet]
+        public ActionResult AddAepsAccount()
+        {
+            var Userid = User.Identity.GetUserId();
+            var data = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult SentBankOtp()
+        {
+            var Userid = User.Identity.GetUserId();
+            var CheckEntry = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).FirstOrDefault();
+
+            Random d1 = new Random();
+            var pin = d1.Next(999, 9999);
+
+            var details = db.Users.Where(s => s.UserId == Userid).SingleOrDefault();
+            var whatsts = db.Email_show_passcode.SingleOrDefault();
+            var apiurls = "";
+            var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
+            var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
+            string TextMessage = "Your Account add for aeps otp is ";
+            if (smsapionsts2 != null)
+            {
+                apiurls = smsapionsts2.smsapi;
+                string text = TextMessage + pin;
+                text = string.Format(text, "1230");
+                var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
+
+                var client = new RestClient(apinamechange);
+                var request = new RestRequest(Method.GET);
+                VastBazaartoken Responsetoken = new VastBazaartoken();
+                if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG") && whatsts.whatsappapists == true)
+                {
+                    var token = Responsetoken.gettoken();
+                    request.AddHeader("authorization", "bearer " + token);
+                    request.AddHeader("content-type", "application/json");
+                }
+                var task = Task.Run(() =>
+                {
+                    return client.Execute(request).Content;
+                });
+                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                var resp = "";
+                if (isCompletedSuccessfully == true)
+                {
+                    resp = task.Result;
+                }
+
+                sms_api_entry sms = new sms_api_entry();
+                sms.apiname = apinamechange;
+                sms.msg = text;
+                sms.m_date = System.DateTime.Now;
+                sms.response = resp;
+                sms.messagefor = details.UserId;
+                db.sms_api_entry.Add(sms);
+                db.SaveChanges();
+
+            }
+            var emailid = db.Admin_details.Single().email;
+            var ToCC = db.Admin_details.FirstOrDefault().email;
+            CommUtilEmail emailsend = new CommUtilEmail();
+
+
+            emailsend.EmailLimitChk(emailid, emailid, "icon setting Passcode", TextMessage + pin, "No CallBackUrl");
+
+            if (CheckEntry == null)
+            {
+                var data = new BankAccountForAep()
+                {
+                    RetailerId = Userid,
+                    BankName = "",
+                    AccountNO = "",
+                    IFSC_CODE = "",
+                    AccountHolder = "",
+                    BankAddress = "",
+                    InserDate = DateTime.Now,
+                    Otp = pin.ToString()
+                };
+                db.BankAccountForAeps.Add(data);
+                db.SaveChanges();
+            }
+            else
+            {
+                CheckEntry.Otp = pin.ToString();
+                db.SaveChanges();
+            }
+            return RedirectToAction("AddAepsAccount", "Home");
+        }
+        [HttpPost]
+        public ActionResult AddAepsAccount(string BankName, string accountno, string ifscCode, string AccountHolderName, string BankAddress, string otp)
+        {
+            
+            var Userid = User.Identity.GetUserId();
+            var data = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).FirstOrDefault();
+            if(data.Otp == otp)
+            {
+                if(BankName.Length > 1 && accountno.Length > 8 && ifscCode.Length == 11 && AccountHolderName.Length > 1)
+                {
+                    data.BankName = BankName;
+                    data.AccountNO = accountno;
+                    data.IFSC_CODE = ifscCode;
+                    data.AccountHolder = AccountHolderName;
+                    data.BankAddress = BankAddress;
+                    data.InserDate = DateTime.Now;
+                    db.SaveChanges();
+                }
+            }
+            var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+            ViewBag.Message = "Account Update Successfully.";
+            return View(info);
+        }
         [HttpGet]
         public new ActionResult Profile()
         {
@@ -30059,11 +30172,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -30492,12 +30606,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             token = getAuthToken();
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
-
+            var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
             string companyBankAccountNumber = retailer.Bankaccountno;
-            string bankIfscCode = retailer.Ifsccode;
-            string companyBankName = retailer.bankname;
-            string bankBranchName = retailer.bankAddress;
-            string bankAccountName = retailer.accountholder;
+            string bankIfscCode = Account.IFSC_CODE;
+            string companyBankName = Account.BankName;
+            string bankBranchName = Account.BankAddress;
+            string bankAccountName = Account.AccountHolder;
             string aadhaarNumber = retailer.AadharCard;
             var ipAddress = GetComputer_InternetIP();
             var reque = new
@@ -37759,6 +37873,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             {
                                                 lattitude = retailer.UserLocation.Lattitude;
                                                 longitude = retailer.UserLocation.Longitute;
+                                            }
+                                            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                                            if(latLong != null)
+                                            {
+                                                lattitude = latLong.latitude;
+                                                longitude = latLong.longitude;
                                             }
                                             if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
                                             {
