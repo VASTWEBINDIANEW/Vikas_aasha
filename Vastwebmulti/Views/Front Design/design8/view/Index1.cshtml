@@ -681,8 +681,43 @@
         </div>
     </section>
 
+    @{
 
-</main><!-- End #main -->
+        var desktopimgurl = (from img in db.message_popup select img.imageurl).FirstOrDefault() ?? "";
+        var headercontent = (from content in db.message_popup select content.Heardercontent).FirstOrDefault() ?? "";
+        var imgsts = (from img in db.message_popup select img.sts).FirstOrDefault() ?? "N";
+
+        if (imgsts == "Y")
+        {
+            <input type="button" value="sleep" id="btnsleep" data-toggle="modal" data-target="#sleep-modal" style="display:none;">
+            <div class="modal fade" id="desktoppopup-modal" role="dialog" style="opacity: 1; background: #0000007d;display:block;">
+                <div class="modal-dialog modal-lg" style="margin-top: 85px; max-width: 60%; top: 40px;">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="modal-title" style="font-size:20px;color:#000;text-align:center;">@headercontent</p>
+                            <button type="button" onclick="closebtn()" class="close" data-dismiss="modal" style="border: 2px solid #000; padding: 0 7px;">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <img style="float: left; width: 100%;" src="@Url.Content("~/" + @desktopimgurl)" class="img-responsive" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+
+        }
+
+        }
+
+
+    </main><!-- End #main -->
 <!-- Vendor JS Files -->
 <script src="~/MainFrontDesign/Bootstrap5/vendor/purecounter/purecounter_vanilla.js"></script>
 <script src="~/MainFrontDesign/Bootstrap5/vendor/aos/aos.js"></script>
@@ -695,6 +730,10 @@
 <!-- Template Main JS File -->
 
 <script>
+    function closebtn() {
+        document.getElementById('desktoppopup-modal').style.display = 'none';
+    }
+    
     var a = document.querySelectorAll(".menu a");
     for (var i = 0, length = a.length; i < length; i++) {
         a[i].onclick = function () {
@@ -808,7 +847,9 @@
 
 @*<script src="~/CSS/multislider.js"></script>*@
 
+
 <script>
+
     function myFunction() {
         var copyText = document.getElementById("txthdlink");
         copyText.select();
