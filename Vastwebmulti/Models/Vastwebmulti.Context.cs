@@ -23555,5 +23555,26 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_InsertWalletToBankAmountTransfer_Result>("proc_InsertWalletToBankAmountTransfer", useridParameter, amountParameter, typeParameter, requestIdParameter, transectionIDParameter, accountNumberParameter, status, message);
         }
+    
+        public virtual ObjectResult<calculatorDMT_Result> calculatorDMT(Nullable<decimal> commshareRetailer, Nullable<decimal> commsharedealer, Nullable<decimal> commsharemaster, Nullable<decimal> amount)
+        {
+            var commshareRetailerParameter = commshareRetailer.HasValue ?
+                new ObjectParameter("commshareRetailer", commshareRetailer) :
+                new ObjectParameter("commshareRetailer", typeof(decimal));
+    
+            var commsharedealerParameter = commsharedealer.HasValue ?
+                new ObjectParameter("commsharedealer", commsharedealer) :
+                new ObjectParameter("commsharedealer", typeof(decimal));
+    
+            var commsharemasterParameter = commsharemaster.HasValue ?
+                new ObjectParameter("commsharemaster", commsharemaster) :
+                new ObjectParameter("commsharemaster", typeof(decimal));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<calculatorDMT_Result>("calculatorDMT", commshareRetailerParameter, commsharedealerParameter, commsharemasterParameter, amountParameter);
+        }
     }
 }

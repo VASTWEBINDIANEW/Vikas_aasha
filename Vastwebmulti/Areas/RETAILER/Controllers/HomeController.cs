@@ -28561,7 +28561,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
                         if (remain >= finalamount)
                         {
-                            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "DMT" || aa.catagory == "PAYOUT")).SingleOrDefault();
+                            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                             if (apinm != null)
                             {
                                 int amt = Convert.ToInt32(amount);
