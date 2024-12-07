@@ -100,6 +100,15 @@
         //var menucolor = allcolor.SingleOrDefault().MenuColor;
     }
 <style>
+    .term-pop-in {
+        background: #ffffff !important;
+        top: 63px !important;
+    }
+    .term-pop-close {
+        cursor: pointer;
+        z-index: 9;
+    }
+
     #menu-item-5999:hover .color-scheme-dark {
         visibility: visible;
     }
@@ -485,14 +494,12 @@
             $('#Privacybutton').click(function () {
                 $('.for-privacy-pop').fadeIn();
             });
-
-
-
             $('.term-pop-close').click(function () {
                 $('.term-pop').fadeOut();
             });
         });
     </script>
+
     <script>
         var a = document.querySelectorAll(".menu a");
         for (var i = 0, length = a.length; i < length; i++) {
@@ -545,7 +552,16 @@
             </div>
         </div>
     }
-
+    <script>
+        window.onload=function()
+        {
+            var block = '@ViewData["msg"]';
+            if (block == "websiteblock") {
+                $('#btnsleep').click();
+                $("#sleep-modal").modal('show');
+            }
+        }
+    </script>
     <script>
         // scrolltop
         $('.scrollup').click(function () {
@@ -573,9 +589,6 @@
             $('#Privacybutton').click(function () {
                 $('.for-privacy-pop').fadeIn();
             });
-
-
-
             $('.term-pop-close').click(function () {
                 $('.term-pop').fadeOut();
             });
