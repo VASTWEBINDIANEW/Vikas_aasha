@@ -21,6 +21,7 @@
         box-sizing: border-box;
         animation: rotation 1s linear infinite;
     }
+
     #AEPSFOUND .transaction-button button, .education-img button {
         border: 1px solid #7b7272;
     }
@@ -110,15 +111,19 @@
     .select2-container--open .select2-dropdown--below {
         width: 314px !important;
     }
+
     #addaccount-back:hover {
         background-image: linear-gradient(to right, var(--main-bg-rcolor), var(--main-bg-lcolor)) !important;
     }
+
     #nextfund:hover {
         background-image: linear-gradient(to right, var(--main-bg-rcolor), var(--main-bg-lcolor)) !important;
     }
+
     #nextclick:hover {
         background-image: linear-gradient(to right, var(--main-bg-rcolor), var(--main-bg-lcolor)) !important;
     }
+
     #addaccount-balance:hover {
         background-image: linear-gradient(to right, var(--main-bg-rcolor), var(--main-bg-lcolor)) !important;
     }
@@ -347,7 +352,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
     <div class="with-click-block" id="AAdharpay2FaRequired">
 
         <div class="cash-add">
-            <div  class="container-fluid otp_page">
+            <div class="container-fluid otp_page">
                 <div class="fullwidthaccount fullwidthaccount-top addnewnamecss">
                     <div class="col-md-12 amount amount_strong">
                         <strong class="changere11" style="">Bank Name</strong>
@@ -387,7 +392,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                         <strong class="changere4" style=""> OTP  </strong>
                         <input type="text" id="txtotptransfer" name="txtotptransfer" value="0" placeholder="Enter Your Service Fee" onkeypress="return isNumber(event)" />
                     </div>
-                    <input type="hidden" id="cap" />
+                    <input type="hidden" id="capAEPS" />
                     <input type="hidden" id="capxml" />
                     <div class="col-md-12 amount amount_strong" id="aepserrow-show" style=" margin-bottom: 10px;">
                         <p id="txterrortransfer" style="color: red; float: left; position: absolute; left: 0px;"></p>
@@ -660,7 +665,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         $('#devicesrno').val("");
         $('#txtaadhar').val("");
         $('#txtphone').val("");
-        $('#cap').val("");
+        $('#capAEPS').val("");
         $('#capxml').val("");
         $('#devicesrno').val("");
         $('#txtamt').val("");
@@ -767,7 +772,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         $('#devicesrno').val("");
         $('#txtaadhar').val("");
         $('#txtphone').val("");
-        $('#cap').val("");
+        $('#capAEPS').val("");
         $('#capxml').val("");
         $('#devicesrno').val("");
         $('#txtamt').val("");
@@ -959,7 +964,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
         }
     //  location.reload();
-  
+
 </script>
 <script>
     $('input[type=radio][name=radio]').change(function () {
@@ -1138,9 +1143,10 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         var txtphone=$('#txtphone').val();
         var bankname = $("#banklistshow").find("option:selected").text();
         var iin = $('#banklistshow').val();
-        var cap = $('#cap').val();
-        var capxml = $('#capxml').val();
+        var cap = $('#capAEPS').val();
 
+            var capxml = $('#capxml').val();
+            console.log(capxml)
         var remark = "";
 
         var servicefee =  $('#txtfee').val();
@@ -1189,11 +1195,11 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                         if (sts == "Failed") {
                             var msg = data.Message;
 
-                            $('#cap').val("");
+                            $('#capAEPS').val("");
                             $('#capxml').val("");
                             $('#devicesrno').val("");
                             $("#txterrortransfer").text(msg);
-                            $('#cap').val("");
+                            $('#capAEPS').val("");
                             $('#devicesrno').val("");
                             $('#nextfund').html('Confirm & Withdraw')
                         }
@@ -1212,7 +1218,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
                             $('#aeps-Confirm-Payment').show();
                             $('#AEPSFOUND').hide();
-                            $('#cap').val("");
+                            $('#capAEPS').val("");
                             $('#capxml').val("");
                             $('#devicesrno').val("");
                             $('#amountaepssuccess').text(txtamt);
@@ -1231,12 +1237,12 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                         }
                     },
                     complete: function () {
-                       
+
                         $('.loader').hide();
                            onloaddata();
                     },
                     error: function () {
-                     
+
                         $('.loader').hide();
                     }
                 })
@@ -1269,7 +1275,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         var txtphone=$('#txtphone').val();
         var bankname = $("#banklistshow").find("option:selected").text();
         var iin = $('#banklistshow').val();
-        var cap = $('#cap').val();
+        var cap = $('#capAEPS').val();
         var capxml = $('#capxml').val();
         var txtfee = $('#txtfee').val();
         var usernm = $('#txtusernm').val();
@@ -1325,7 +1331,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                             var sts = data.Status;
                             if (sts == "Failed") {
                                 var msg = data.Message;
-                                $('#cap').val("");
+                                $('#capAEPS').val("");
                                 $('#capxml').val("");
                                 $('#devicesrno').val("");
                                 $("#txterrortransfer").text(msg);
@@ -1333,7 +1339,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                             else {
                                 if (type == "SAP") {
                                     var msg1111 = data.Message;
-                             
+
                                     $("#statementtbody").html('');
                                     var ouut = JSON.parse(msg1111);
                                    // var mini_statement = ouut.miniStatementStructureModel;
@@ -1342,9 +1348,9 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                                     var len = mini_statement.length;
 
                                     //var openbal = parseFloat(ouut.balanceAmount);
-                              
+
                                     var openbal = parseFloat(mini_statement[0].amount);
-                           
+
                                     var closebal = openbal;
                                     for (i = 0; i < len; i++) {
                                         var date = mini_statement[i].date;
@@ -1363,7 +1369,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
                                         closebal = openbal;
                                     }
-                                    $('#cap').val("");
+                                    $('#capAEPS').val("");
                                     $('#capxml').val("");
                                     $('#devicesrno').val("");
                                     var userinfo = data.userinfo;
@@ -1379,7 +1385,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                                 }
                                 else {
                                     var userinfo = data.userinfo;
-                                    $('#cap').val("");
+                                    $('#capAEPS').val("");
                                     $('#capxml').val("");
                                     $('#devicesrno').val("");
                                     var rrnno = "RRN - " + data.Message.BankRrn;
@@ -1396,11 +1402,11 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                             }
                         },
                         complete: function () {
-                          
+
                             $('.loader').hide();
                         },
                         error: function () {
-                          
+
                            $('.loader').hide();
                         }
                     })

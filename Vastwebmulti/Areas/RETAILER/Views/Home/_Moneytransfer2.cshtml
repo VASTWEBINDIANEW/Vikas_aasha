@@ -13,6 +13,43 @@
     }
 }
 <style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: rgba(0,0,0,0.6);
+    }
+
+    .cv-spinner {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px #ddd solid;
+        border-top: 4px #2e93e6 solid;
+        border-radius: 50%;
+        animation: sp-anime 0.8s infinite linear;
+    }
+
+    @@keyframes sp-anime {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .is-hide {
+        display: none;
+    }
+</style>
+<style>
     .loader {
         position: fixed;
         top: -90px;
@@ -271,16 +308,28 @@
             background-color: #5a6268; /* Darker shade on hover */
         }
 </style>
+<input type="hidden" id="latloc" />
+<input type="hidden" id="longloc" />
+<div class="loader"></div>
+<script src="~/Scripts/PageScript/Retailer/DMT/EKYCValidate.js"></script>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
     <div class="button-container">
         @if (ViewBag.moneysts1 == true)
         {
-            <a href="@Url.Action("Money_transfer2", "Home")" class="btn btn-secondary">BANK1</a>
+            <a href="@Url.Action("Money_transfer2", "Home")" class="btn btn-secondary">DMT1</a>
         }
         @if (ViewBag.moneysts2 == true)
         {
-            <a href="@Url.Action("Money_transfer", "Home")" class="btn">BANK2</a>
+            <a href="@Url.Action("Money_transfer", "Home")" class="btn">DMT2</a>
+        }
+        @if (ViewBag.moneysts3 == true)
+        {
+            <a href="@Url.Action("Money_transfer_new", "Home")" class="btn btn-secondary">Wallet To Bank</a>
+        }
+        @if (ViewBag.moneysts4 == true)
+        {
+            <a href="@Url.Action("Money_transferPPI", "Home")" class="btn btn-secondary">PPI Wallet</a>
         }
     </div>
     <fieldset>
@@ -350,7 +399,99 @@
         <button onclick="verifyotp()" id="addaccount-add" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
     </div>
 </div>
+
+<!---------------------- EKYC ------------------------>
+<div id="scancheckdmt1" class="gotoscan-changecss" style="display:none;text-align:center;">
+    <button onclick="gotoscan()" class="display-nonescanp" id="scanrecoveer"><strong>GO</strong> To Scan</button>
+</div>
+<div id="Devicerror" style="display:none;">
+    <div class="container-fluid aepsid-login">
+        <div class="col-md-12 aeps-start">
+            <div class="col-md-12 aeps_id">
+                <div class="scannot-found">
+                    <img src="~/ashok-images/scanner.svg" />
+                </div>
+                <div class="scannot-font-size">
+                    <span id="deviceerror1" style="    color: red;
+        border-bottom: 2px solid #ff0048;
+        display: inline-block;
+        padding-bottom: 2px;
+        font-size: 16px;
+        font-weight: 700;
+" class="body-border-bottom"></span>
+                    <span id="deviceerror2" style="color:red;"></span>
+
+                    <span id="deviceerror3" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror4" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror5" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror6" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror7" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror8" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror9" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <a href="#scanrecoveer" id="againscanclick" onclick="gotoscan()">Scan&nbsp;Again</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loadaeps1" style="display: none;text-align:center;">
+    <img class="body-border-bottom-top" src="~/ashok-images/portrait_mode_scanning.gif" style="height:150px;" />
+</div>
+
 <!------------------------------------------------------------->
+<!-------------------AAdhar Verify----------------->
+<div id="Devicefind" class="container-fluid otp_page_second" style="display:none;">
+    <div class="fullwidthaccount fullwidthaccount-top">
+        <div class="col-md-12 amount amount_strong">
+            <strong style="width:auto;">Remitter Number</strong>
+            <span id="aadharekyc_Sendernumber"></span>
+        </div>
+        <div class="col-md-12 amount amount_strong">
+            <strong style="">Aadhar Number</strong>
+            <input id="aadhardetails_ekyc" type="text" placeholder="Enter Aadhar Number" />
+        </div>
+        <div class="col-md-12 amount amount_strong">
+            <strong style="">Name</strong>
+            <input id="aadhardetails_Name" type="text" placeholder="Enter Name" />
+        </div>
+        <div class="col-md-12 amount amount_strong amount-changesse">
+            <span id="Aadhar_Error" style="color:red;"></span>
+            <input type="hidden" id="cap" />
+            <input type="hidden" id="capxmlP" />
+
+        </div>
+    </div>
+    <div class="container-fluid transaction-button">
+        <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
+        <button onclick="gotoscan()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
+
+    </div>
+</div>
+<!----------------------- OTP  --------------------->
+<div id="otpshow_ekyc" class="container-fluid otp_page_second" style="display:none;">
+    <div class="fullwidthaccount fullwidthaccount-top">
+        <div class="col-md-12 amount amount_strong">
+            <strong style="width:auto;">Remitter Number</strong>
+            <span id="otpsenderno_ekyc"></span>
+        </div>
+        <div class="col-md-12 amount amount_strong">
+            <strong style="">Enter OTP</strong>
+            <input id="otpinsert_Ekyc" type="text" placeholder="Enter The OTP" />
+        </div>
+        <div class="col-md-12 amount amount_strong amount-changesse">
+            <span id="otperror_Ekyc" style="color:red;"></span>
+            <input type="hidden" id="otpstateResp_ekyc" />
+            <input type="hidden" id="otpekyc_id_ekyc" />
+
+        </div>
+    </div>
+    <div class="container-fluid transaction-button" id="next_page_Ekyc">
+        <button onclick="verifyotp_Ekyc()" id="addaccount-add-ekyc" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
+    </div>
+</div>
+
+<!------------------------------------------------->
 <!---------------------Ben List-------------------------------->
 <div id="remlist" class="remlish-responshives" style="display:none">
     <div class="col-md-12 number-login">
@@ -1050,8 +1191,11 @@
         <div id="load" style="display: none" class="loader"></div>
     </div>*@
 <div class="loader loaderpancard"></div>
-<div>
 
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
 </div>
 <script>
 
@@ -1267,6 +1411,14 @@
 </script>
 <script>
     function senderdetails(change, cb) {
+        var latloc = $('#latloc').val()
+        var longloc = $('#longloc').val()
+        $('#Devicefind').hide();
+        $('#otpshow_ekyc').hide();
+        $('#otpekyc_id_ekyc').val("");
+        $('#otpstateResp_ekyc').val("");
+        $('#otpinsert_Ekyc').val("");
+
         $('#registerupi').show()
         $('#registerwallet').show()
         $('#upilabel').show()
@@ -1324,6 +1476,7 @@
         var senderno = "";
         if (change == "new") {
             senderno = $('#senderno').val();
+            $('#aadharekyc_Sendernumber').text(senderno)
             len = senderno.length;
             if (senderno.length == 10) {
                 //$('#Firstpage').hide();
@@ -1332,6 +1485,7 @@
         }
         else {
             senderno = $('#changesender').val();
+            $('#aadharekyc_Sendernumber').text(senderno)
             len = senderno.length;
             if (len == 10) {
                 $('#senderno').val(senderno);
@@ -1348,18 +1502,21 @@
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                    console.log()
+                    console.log(data)
                     $('#btnsenddd ,#cancelloder').html("Next");
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
+            
                     var statuscode = output.statuscode;
+                    var ekyc_status = output.ekyc_status;
+
 
                     if (statuscode == "TXN") {
                         $('#remlist').show();
-                        var name = output.data.remitter.name;
+                        var name = output.customer_name;
                         var totallimit = output.data.remitter.consumedlimit;
                         var remaininglimit = output.data.remitter.remaininglimit;
-                        var iskycdone = output.data.remitter.kycdone;
+                        var iskycdone = true;
                         var photo = output.data.remitter.Photo;
 
                         $('#username').text(name);
@@ -1481,27 +1638,38 @@
                                 var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
-                                console.log(bankname)
+                             
                                 //var isbankdown = output.data.beneficiary[i].isbankdown;
                                 var bandownmsg = "";
                                 //if (isbankdown == true) {
-                                //    bandownmsg = "Note :- Currently the beneficiary bank's server is down or busy, please try after sometime.";
+                                //bandownmsg = "Note :- Currently the beneficiary bank's server is down or busy, please try after sometime.";
                                 //}
                                 $('#benlistttable').append('<tr id=' + id + '><td><span style="display:none;">' + id + '</span><p style="display:none;">BANK:' + bank + '</p><strong>' + name + '</strong><br /><span>A/C: ' + account + '</span><br /><span>IFSC: ' + ifsc + ' ' + bandownmsg + '</span></td><td><div class="Transferdata"><a href="#" title="Money Transfer" class="addtabledata" onclick=fundtransfer(this)></a><button title="Account Verify" id="btnverify' + id + '"  class="addtabledatade click-displays" onclick=verifyshow("' + id + '","' + account + '","' + ifsc + '","' + escapedBankname + '","' + escapedname +'")><i class="fa fa-check fa-2x"></i></button><button title="Delete Beneficiary" id="btn' + id + '"  class="addtabledatade click-displays" onclick=deleteshow("' + id + '")><i class="fa fa-trash"></i></button><a href="javascript:void(0);" id="aa' + id + '" class="addtabledatade click-delete" onclick=deleteben("' + id + '")>sure <Strong>?</Strong></a> </div></td></tr>');
                             }
                         }
                         else if (respout.success == false) {
                             var msginfo = respout.message;
-                            console.log(msginfo)
-                            if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
+                            var ekyc_status = respout.ekyc_status;
+                            if (ekyc_status == "0") {
+                                $('#scancheckdmt1').show()
+                                $('#scanrecoveer').show()
                                 $('#sendername').val("");
                                 $('#remlist').hide();
                                 $('#newsender').text(senderno);
                                 $('#Firstpage').hide();
                                 $('#register_new_ben').hide();
-                                $('#NewSenderregister').show();
-                                typeof cb == 'function' && cb('Sender Not Registered');
+                                $('#NewSenderregister').hide();
+                                $('#otpsenderno_ekyc').text(senderno)
                             }
+                            //if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
+                            //    $('#sendername').val("");
+                            //    $('#remlist').hide();
+                            //    $('#newsender').text(senderno);
+                            //    $('#Firstpage').hide();
+                            //    $('#register_new_ben').hide();
+                            //    $('#NewSenderregister').show();
+                            //    typeof cb == 'function' && cb('Sender Not Registered');
+                            //}
                             else {
                                 $('#Firstpage').show()
                                 $('#sendererrorshow').text(msginfo);
@@ -3480,5 +3648,275 @@
         Webcam.attach('#camera');
     }
 </script>
+<script>
+        function gotoscan() {
+            $('#cap').val("");
+            $('#capxmlP').val("");
+            $('#device_srno').val("");
+            $('#txtdevice').val("");
+            $('#scanrecoveer').hide();
+            $("#Devicerror").hide();
+            $('#Devicefind').hide();
+        $.ajax({
+            url: '@Url.Action("chk1","Home")',
+            cache: false,
+            type: "GET",
+            beforeSend: function() {
+                  $("#loadaeps1").show();
+             },
+            success: function (data) {
+
+            }, error: function (data) {
+                scanfingP();
+            }
+        })
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var allowSubmit = false;
+        /* HTML5 Geolocation */
+        navigator.geolocation.getCurrentPosition(
+            function (position) { // success cb
+                /* Current Coordinate */
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                $('#latloc').val(lat);
+                $('#longloc').val(lng);
+
+            }
+        );
+    });
+</script>
+
+<script>
+    function submitotpinfo() {
+        var Agentid = $('#hidetxtagentid').val()
+        var benid = $('#hidebenidtxt').val()
+        var stateresp = $('#hidestateresptxt').val()
+        var otp = $('#txtsenderotps_pay').val()
+             $.ajax({
+                   url: '@Url.Action("imps_transfer_verifyotp", "Home")',
+                   data: { Agentid, benid, otp, stateresp },
+                   cache: false,
+                   type: "POST",
+                beforeSend: function () {
+                   $('.loader').show();
+               },
+               success: function (data) {
+                   var sts = data.status;
+                   var msg = data.Details;
+                   var orderid = data.orderid;
+                   var logo = data.logo;
+                   var firmname = data.firmname;
+                   var servicefee = data.servicefee;
+                   var tax = data.tax;
+                   var amount = data.Amount;
+                   var total = data.total;
+                   var bankifsccode = data.bankifsccode;
+                   var remremain = data.remainretailer;
+                   var accountno = data.accountno;
+                   var paymode = data.paymode;
+                   $("#remainretailer").text(remremain);
+                   if (sts == "Success" || sts == "Pending") {
+                       $('#successdata').show();
+                       var bankrrn = data.data[0].bankrefid;
+                       //var benname = data.data.benename;
+                       if (sts == "Pending") {
+                           $('#transresp').text("transaction  In Process");
+                       }
+                       else {
+                           $('#transresp').text("transaction " + sts);
+                       }
+                       $('#benname').val("");
+                       $('#verifyimpserror').text(msg);
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(bankrrn);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+                       $('#success').show();
+                       $('#failed').hide();
+                       $('#dmttransferfinal').show();
+                       $('#dmtconfirm').hide();
+                   }
+                   else if (sts == "NOTDEFINE")
+                   {
+                       $('#successdata').hide();
+                       $('#transresp').text("Transaction Processed");
+                       $('#benname').val("");
+                       $('#verifyimpserror').text("Transaction Processed , Please Check History");
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(msg);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+
+                       $('#success').hide();
+                       $('#failed').show();
+                       $('#dmttransferfinal').show();
+
+                       $('#dmtconfirm').hide();
+                   }
+                   else {
+
+                       $('#dmtconfirm').hide();
+                       $('#submitotp').hide();
+                       $('#OTPinfo_show').hide();
+                       //var bankrrn = data.data.bankrefid;
+                       // var benname = data.data.benename;
+                       $('#successdata').hide();
+                       $('#transresp').text("transaction Failed");
+                       $('#benname').val("");
+                       $('#verifyimpserror').text(msg);
+                       $('#responseamount').text(amount);
+                       $('#responseorderid').text(orderid);
+                       $("#logo").attr("src", "../.." + logo);
+                       $('#responsefirmname').text(firmname);
+                       $('#responsemode').text(paymode);
+                       $('#responseamountnew').text(amount);
+                       $('#servicefee').text(servicefee);
+                       $('#responsetax').text(tax);
+                       $('#responsetotal').text(total);
+                       $('#responsebankrrn').text(msg);
+                       $('#responseaccount').text(accountno);
+                       $('#responseifsccode').text(bankifsccode);
+
+                       $('#success').hide();
+                       $('#failed').show();
+                       $('#dmttransferfinal').show();
 
 
+
+                       //$('#transfererror').text(msg);
+                   }
+               },
+                      complete: function () {
+                          $('#submitotp').hide();
+                          $('#OTPinfo_show').hide();
+                   $("#remainretailer").load(location.href + " #remainretailer");
+                   $('.loader').hide();
+                   $.ajax({
+                       url: '@Url.Action("DMTreportnew","Home")',
+                       cache: false,
+                       type: "GET",
+                       cache: false,
+                       dataType: "html",
+                       success: function (data) {
+                           $('#reportallinone').html(data);
+                       }
+                   })
+               },
+               error: function () {
+                   $("#remainretailer").load(location.href + " #remainretailer");
+                   $('.loader').hide();
+               }
+                 });
+    }
+</script>
+<script>
+    function Register_EKYC() {
+        var senderno = $('#senderno').val();
+        var Name = $('#aadhardetails_Name').val();
+        var aadharnumber = $('#aadhardetails_ekyc').val();
+        var latloc = $('#latloc').val();
+        var longloc = $('#longloc').val();
+        var pid = $('#capxmlP').val()
+
+        $('#capxmlP').val("")
+        if (aadharnumber != "") {
+            if (pid != "") {
+                $("#overlay").fadeIn(300);　
+                  $.ajax({
+                          url: '@Url.Action("KYCRegister1", "Home")',
+                      data: { senderno, pid: encodeURIComponent(pid), aadharnumber, latloc, longloc, Name },
+                      cache: false,
+                      contentType: 'application/x-www-form-urlencoded',
+                          type: "POST",
+                      success: function (data) {
+                          $("#overlay").fadeOut(300);
+                          var status = data.status;
+                          var message = data.message;
+                          var ekyc_id = data.KYCRequestID;
+                          var stateresp = data.OTPRequestID;
+                          if (status == true) {
+                                        // senderdetails('change');
+                                        $('#Devicefind').hide();
+                                        $('#otpshow_ekyc').show();
+                                        $('#otpstateResp_ekyc').val(stateresp)
+                                        $('#otpekyc_id_ekyc').val(ekyc_id)
+                                        $('#sendername').val("");
+                                        $('#remlist').hide();
+                                        $('#newsender').text(senderno);
+                                        $('#Firstpage').hide();
+                                        $('#register_new_ben').hide();
+                                        $('#NewSenderregister').hide();
+                                        $('#otpsenderno_ekyc').text(senderno)
+                                    }
+                                    else {
+                                        $('#Aadhar_Error').text(message)
+                                    }
+                                  }
+                          })
+            }
+            else {
+                $('#Aadhar_Error').text("Please Scan Again")
+            }
+        }
+        else {
+            $('#Aadhar_Error').text("Enter The Aadhar Number")
+        }
+    }
+</script>
+<script>
+    function verifyotp_Ekyc() {
+        $('#otperror_Ekyc').text("")
+        var stateResp = $('#otpstateResp_ekyc').val()
+        var kyc_id = $('#otpekyc_id_ekyc').val()
+        var Sendernumber = $('#otpsenderno_ekyc').text();
+        var otp = $('#otpinsert_Ekyc').val()
+        var Name = $('#aadhardetails_Name').val();
+        var latloc = $('#latloc').val();
+        var longloc = $('#longloc').val();
+        if (otp != "") {
+            $("#overlay").fadeIn(300);　
+                $.ajax({
+      url: '@Url.Action("KYCEnterOTP1", "Home")',
+                    data: { stateResp, kyc_id, Sendernumber, otp, Name, latloc, longloc },
+      cache: false,
+      type: "POST",
+      dataType: 'json',
+                    success: function (output) {
+                        $("#overlay").fadeOut(300);
+          var statuscode = output.status;
+          var message = output.message;
+          if (statuscode == true) {
+              senderdetails('new');
+          }
+          else {
+              $('#otperror_Ekyc').text(message);
+          }
+
+      }
+  });
+        }
+        else {
+            $('#otperror_Ekyc').text("Please Enter The OTP");
+        }
+    }
+</script>

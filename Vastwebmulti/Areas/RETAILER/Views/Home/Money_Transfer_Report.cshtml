@@ -1084,6 +1084,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="myModalRefund" role="dialog" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="position:initial;background-color:whitesmoke;">
+                <h4 class="modal-title" style="color:#00000080; text-align:center;color:black;">Refund OTP</h4>
+            </div>
+            <div class="modal-body" style="margin-top:0px;">
+                <div class="body">
+                    <form>
+
+                        <div class="row clearfix">
+                            <div class="form-group" style="margin-top:27px;">
+                                <div class="" style="border:1px solid #dddddd;">
+                                    @Html.TextBox("txtotpinfo", "", new {@class="form-control", @placeholder = "Enter Otp" })
+                                    @Html.Hidden("hidetxnid")
+                                </div>
+                                <span style="color:red" id="errorhideotp"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="Submitinfo()">Submit</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- Jquery Core Js -->
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
@@ -1466,10 +1500,51 @@
     }
 
 
+
+</script>
+<script>
+    Submitinfo = () => {
+        var txnid = $('#hidetxnid').val()
+        var otp = $('#txtotpinfo').val()
+             $.ajax({
+                   url: '@Url.Action("PaysprintVerifyOTP", "Home")',
+                   type: "Post",
+                   dataType: 'json',
+                   cache: false,
+                   data: { txnid, otp },
+                   success: function (result) {
+                         var sts = result.status;
+                         var msg = result.message;
+                       alert(msg)
+                       location.reload();
+                 }
+             });
+    }
 </script>
 <script>
     Refund = (transid) => {
-        alert(transid)
+          $.ajax({
+                  url: '@Url.Action("PaysprintRefundOTP", "Home")',
+                  type: "Post",
+                  dataType: 'json',
+                  cache: false,
+      //   async: false,
+              data: { txnid: transid, },
+      //cache: false,
+      success: function (result) {
+        //  let obj = JSON.parse(jsonData);
+          var sts = result.status;
+          var msg = result.message;
+          if (sts == false) {
+              $('#myModalRefund').modal('show')
+              $('#hidetxnid').val(transid)
+          }
+          else {
+              alert(msg)
+          }
+      }
+  });
+        
     }
 </script>
 

@@ -276,20 +276,32 @@
     <div class="button-container">
         @if (ViewBag.moneysts1 == true)
         {
-            <a href="@Url.Action("Money_transfer2", "Home")" class="btn">BANK1</a>
+            <a href="@Url.Action("Money_transfer2", "Home")" class="btn btn-secondary">DMT1</a>
         }
         @if (ViewBag.moneysts2 == true)
         {
-            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">BANK2</a>
+            <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">DMT2</a>
+        }
+        @if (ViewBag.moneysts3 == true)
+        {
+            <a href="@Url.Action("Money_transfer_new", "Home")" class="btn btn-secondary">Wallet To Bank</a>
+        }
+        @if (ViewBag.moneysts4 == true)
+        {
+            <a href="@Url.Action("Money_transferPPI", "Home")" class="btn">PPI Wallet</a>
         }
     </div>
     <fieldset>
-        <legend class="bodycolormy">Enter Your Remitter Number</legend>
+        <form method="post" action="@ViewBag.url">
+            <textarea name="encdata" style="display:none">@ViewBag.encdata</textarea>
+            <input type="submit" value="Submit">
+        </form>
+        @*<legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">
             @Html.TextBox("senderno", "", new { placeholder = "Enter 10 Digit Number", maxlength = "10", required = "required", onkeypress = "return isNumber(event)" })
             <button type="button" id="btnsenddd" name="btnsenddd" onclick="senderdetails('new')" class="button-money">Next<i class="fa fa-angle-right" style="top:1px; font-size:19px;float:right;right:15px;"></i></button>
             <span id="errorsenderno" style="color:red;"></span>
-        </div>
+        </div>*@
     </fieldset>
     <div class="money_tab-height">
         <p class="body-border-bottom">Important Notes</p>
@@ -1353,7 +1365,7 @@
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
                     var statuscode = output.statuscode;
-
+                  
                     if (statuscode == "TXN") {
                         $('#remlist').show();
                         var name = output.data.remitter.name;
@@ -1508,6 +1520,12 @@
                                 typeof cb == 'function' && cb(msginfo);
                             }
                         }
+                    }
+                    else if (statuscode == "LINK")
+                    {
+                        var msg = output.status;
+                  
+                        window.location.href = msg;
                     }
                     else {
                         var msg = output.status;

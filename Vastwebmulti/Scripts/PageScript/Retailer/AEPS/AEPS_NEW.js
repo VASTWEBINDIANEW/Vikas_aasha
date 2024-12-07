@@ -765,7 +765,7 @@ function CaptureAvdm() {
                     } catch (err) { }
 
                     $('#txtdevice').val(DeviceKonsi);
-                    $("#cap").val(JSON.stringify(captureJson));
+                    $("#capAEPS").val(JSON.stringify(captureJson));
                     $("#payaeps").show();
                     $("#scanimage").hide();
                     $('#AEPSFOUND').show();
