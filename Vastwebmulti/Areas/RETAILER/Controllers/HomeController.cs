@@ -30587,6 +30587,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
             string lattitude = string.Empty;
             string longitude = string.Empty;
+            var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+            if ((Account.AccountNO == "" && Account.IFSC_CODE == "" && Account.BankName == "" && Account.BankAddress == "") || (Account == null))
+            {
+                var message = "Plese Add Account First.";
+                var viewresponse = new { Status = "Failed", Message = message };
+                return Json(viewresponse, JsonRequestBehavior.AllowGet);
+            }
             if (retailer.UserLocation == null)
             {
                 insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -30676,7 +30683,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
                     string companyBankAccountNumber = Account.AccountNO;
                     string bankIfscCode = Account.IFSC_CODE;
                     string companyBankName = Account.BankName;
@@ -31111,7 +31117,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
             var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
-            string companyBankAccountNumber = retailer.Bankaccountno;
+            string companyBankAccountNumber = Account.AccountNO;
             string bankIfscCode = Account.IFSC_CODE;
             string companyBankName = Account.BankName;
             string bankBranchName = Account.BankAddress;
@@ -31338,6 +31344,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
                 string lattitude = string.Empty;
                 string longitude = string.Empty;
+                var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                if ((Account.AccountNO == "" && Account.IFSC_CODE == "" && Account.BankName == "" && Account.BankAddress == "") || (Account == null))
+                {
+                    var message = "Plese Add Account First.";
+                    var viewresponse = new { Status = "Failed", Message = message };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
                 if (retailer.UserLocation == null)
                 {
                     insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -31372,11 +31385,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 catch { }
                 if (retailer.AepsMerchandId == "")
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -31387,8 +31400,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                     else
                     {
-
-
                         var reque = new
                         {
                             merchantName = retailer.RetailerName,
