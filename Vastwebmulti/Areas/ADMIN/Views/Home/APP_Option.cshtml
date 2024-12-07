@@ -7,6 +7,80 @@
 <script src="/path/to/cdn/jquery.min.js"></script>
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
+    .loadingio-spinner-ripple-92ar2pfqk5j {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: transparent;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    .ldio-zdyd6mf6t5 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+    }
+        .ldio-zdyd6mf6t5 div {
+            position: absolute;
+            border-width: 4px;
+            border-style: solid;
+            opacity: 1;
+            border-radius: 50%;
+            animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
+            box-sizing: content-box;
+        }
+            .ldio-zdyd6mf6t5 div:nth-child(1) {
+                border-color: var(--main-bg-lcolor);
+            }
+            .ldio-zdyd6mf6t5 div:nth-child(2) {
+                border-color: #c7c7c7;
+                animation-delay: -0.5s;
+            }
+    @@keyframes ldio-zdyd6mf6t5 {
+        0% {
+            top: 96px;
+            left: 96px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+
+        100% {
+            top: 18px;
+            left: 18px;
+            width: 156px;
+            height: 156px;
+            opacity: 0;
+        }
+    }
+
+
+    .but_df {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+        .but_df button {
+            border-radius: 6px !important;
+            background: #ffffffbd;
+        }
+    .box_otp h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .box_otp span {
+        margin-bottom: 18px;
+        float: left;
+        text-align: center;
+        width: 100%;
+    }
+
     .show_pop {
         position: fixed;
         width: 100%;
@@ -14,7 +88,7 @@
         left: 0;
         top: 0;
         text-align: center;
-        background: #00000033;
+        background: #00000070;
         z-index: 99999;
     }
         .show_pop input {
@@ -31,7 +105,7 @@
         width: 30%;
         margin: auto;
         position: relative;
-        top: 40%;
+        top: 35%;
         float: initial !important;
         display: table !important;
         background: #fff;
@@ -46,10 +120,11 @@
 
         .box_otp button {
             padding: 4px 16px;
-            border: 1px solid green;
-            margin-top: 23px !important;
+            border: 1px solid #000;
+            margin-top: 20px !important;
             width: auto;
             float: right;
+            border-radius: 3px;
         }
     .button-container {
         display: flex;
@@ -62,6 +137,7 @@
 
     #textForm button {
         margin: 0;
+        margin-top: 10px;
     }
 
     .mesg_text span {
@@ -467,7 +543,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 36px;
+        padding-bottom: 12px;
     }
 
     .appc_autol div {
@@ -1593,6 +1669,12 @@
     }
 
     @@media only screen and (max-width:767px) {
+        .button-container {
+            display: block;
+        }
+            .button-container button {
+                float: left;
+            }
         .appi_set {
             width: 100%;
             padding: 15px;
@@ -1658,7 +1740,7 @@
                 <div class="card login-back-img page-header-third">
                     <div class="button-container">
                         <button id="Button1" onclick="ButtonActive('Button1')" class="active">App Color</button>
-                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon</button>
+                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon Theme</button>
                         <button id="Button3" onclick="ButtonActive('Button3')">App KYC Docs</button>
                         <button id="Button4" onclick="ButtonActive('Button4')">FQAS</button>
                         <button id="Button5" onclick="ButtonActive('Button5')">App Sliders</button>
@@ -1674,7 +1756,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
                     <div class="card login-back-img page-header-third">
                         <div class="login-slider-status">
-                            <h2>APP Background Color/Button Color/Text Color</h2>
+                            <h2>APP Background Color & Button Color & Text Color</h2>
                          </div>
                         <div class="app_set" style="width:50%; display:block;">
                             <div class="page-header-third" style=" width: 100%;">
@@ -1760,7 +1842,7 @@
                         <div class="app_set" style="width:50%">
                             <div class="page-header-third" style=" width: 100%;">
                                 <div class="thame-headding">
-                                    <h2 style="background: #878787;color:white">App Button Color/Text Color</h2>
+                                    <h2 style="background: #878787;color:white">App Button Color & Text Color</h2>
                                 </div>
                                 <div class="appc_autol1" style="padding: 2px 15px;">
                                     <div class="ps_setcolor">
@@ -1819,22 +1901,21 @@
         </div>
 
         <div id="AppIcon" style="display: none;">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <h2 class="but_df">
-                            <button style="background: var(--main-bg-lcolor)" onclick="deshbackss()" id="dback">Dashboard icon</button>
-                            <button id="fback" onclick="frontbackss()">Front icon</button>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix" id="iconsettingshow">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+            
+            <div class="row clearfix" id="iconsettingshow" style=" margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
-                            <h2 style="float: left; width: 100%;">App Dashboard icon Design/Color</h2>
+                            <h2 class="but_df">
+                                <span>
+                                    <button style="background: var(--main-bg-lcolor);color:#fff;" onclick="deshbackss()" id="dback">Dashboard Icon</button>
+                                    <button style="margin-left: 5px !important;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
+                                </span>
+                                <span>
+                                    App Dashboard icon Design & Color
+                                </span>
+                            </h2>
+
                         </div>
 
                         <div style="height: 510px;">
@@ -1843,7 +1924,7 @@
                                     <div class="appc_auto">
                                         <div class="page-header-third">
                                             <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Icon Color/Background Color</h2>
+                                                <h2 style="background-color: #878787;">App Icon Color & Background Color</h2>
                                             </div>
 
                                             <div class="appc_autol1">
@@ -1879,7 +1960,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="appc_auto">
+                                    <div class="appc_auto" style="padding-top:0;">
 
                                         <div class="page-header-third">
                                             <div class="thame-headding" style="color: white;">
@@ -1958,19 +2039,22 @@
                                                     <button id="sef8" onclick="appiconcolor(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
                                                 }
                                             </div>
+
+                                            <div style="display:none" id="col1"></div>
+                                            <div style="display:none" id="col2"></div>
+                                            <div style="display:none" id="col3"></div>
+                                            <div style="display:none" id="col4"></div>
+
+                                            <div class="app_all_s" style=" padding-top: 7px;">
+                                                <div id="opthide">
+                                                    <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehidd"><b style="color:#fff;">Update Icon Theme</b></button>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="col1"></div>
-                                    <div style="display:none" id="col2"></div>
-                                    <div style="display:none" id="col3"></div>
-                                    <div style="display:none" id="col4"></div>
-
-                                    <div class="app_all_s">
-                                        <div id="opthide">
-                                            <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px;" id="savehidd">SAVE</button>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -1997,11 +2081,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row clearfix" id="iconsettinghide" style="display:none">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+            <div class="row clearfix" id="iconsettinghide" style="display: none; margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
-                            <h2>App Front icon Design/Color</h2>
+                            <h2 class="but_df">
+                                <span>
+                                    <button onclick="deshbackss()" id="dback">Dashboard Icon</button>
+                                    <button  style="background: var(--main-bg-lcolor); margin-left: 5px !important;color:#fff;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
+                                </span>
+                                <span>
+                                    App Front icon Design & Color
+                                </span>
+                            </h2>
                         </div>
                         <div style="height: 510px;">
                             <div class="br_setb">
@@ -2009,7 +2101,7 @@
                                     <div class="appc_auto">
                                         <div class="page-header-third">
                                             <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Front Icon Color/Background Color</h2>
+                                                <h2 style="background-color: #878787;">App Front Icon Color & Background Color</h2>
                                             </div>
                                             <div class="appc_autol1">
                                                 <div class="appc_autol">
@@ -2044,7 +2136,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="appc_auto">
+                                    <div class="appc_auto"  style="padding-top:0;">
 
                                         <div class="page-header-third">
                                             <div class="thame-headding" style="color: white;">
@@ -2122,20 +2214,20 @@
                                                     <button id="sef8ss" onclick="appiconcolorss(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
                                                 }
                                             </div>
+                                            <div style="display:none" id="col1ss"></div>
+                                            <div style="display:none" id="col2ss"></div>
+                                            <div style="display:none" id="col3ss"></div>
+                                            <div style="display:none" id="col4ss"></div>
 
+                                            <div class="app_all_s" style="padding-top: 7px;">
+                                                <div id="opthidess">
+                                                    <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehiddss"><b style="color:#fff;">Update Icon Theme</b></button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="col1ss"></div>
-                                    <div style="display:none" id="col2ss"></div>
-                                    <div style="display:none" id="col3ss"></div>
-                                    <div style="display:none" id="col4ss"></div>
-
-                                    <div class="app_all_s">
-                                        <div id="opthidess">
-                                            <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px;" id="savehiddss">SAVE</button>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="appi_set" style="float:right">
@@ -2367,37 +2459,52 @@
 
 </section>
 <div class="show_pop" id="saveshow" style="display:none">
-    <img src="~/icegif-1263.gif" />
+    @*<img src="~/icegif-1263.gif" />*@
+    <div id="loadredmodel" style="display:block;">
+        <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
+            <div class="ldio-zdyd6mf6t5">
+                <div></div><div></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="show_pop" id="optshow" style="display:none">
     <div class="box_otp">
+        <h3>Submit your Dashboard Icon OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="otpicon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateicon()">Submit</button>
     </div>
 </div>
 <div class="show_pop" id="optshowss" style="display:none">
     <div class="box_otp">
+        <h3>Submit your Front Icon OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="otpiconss" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="savedateiconss()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateiconss()">Submit</button>
     </div>
 </div>
 
 <div class="show_pop" id="BackGroundOtpBox" style="display:none">
     <div class="box_otp">
+        <h3>Submit your App Background Color OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="OTPBackground" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="updbackgr()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="updbackgr()">Submit</button>
     </div>
 </div>
 
 <div class="show_pop" id="IconOtpBox" style="display:none">
     <div class="box_otp">
+        <h3>Submit your App Button Color/Text OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="OTPIcon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="colorprint()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="colorprint()">Submit</button>
     </div>
 </div>
 
