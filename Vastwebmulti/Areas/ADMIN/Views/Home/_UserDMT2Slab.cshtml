@@ -80,43 +80,66 @@
                 </div>
             </div>
         </div>
-    </div>
-    <table class="table table-bordered slab-table third-design-table">
-        <thead class="navbar" style="position:initial;">
-            <tr>
-                <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(₹)</th>
-                <th colspan="2" style="text-align:center">Charge&nbsp;100&nbsp;>&nbsp;1K</th>
-                <th colspan="2" style="text-align:center">Charge&nbsp;1001&nbsp;>&nbsp;2K</th>
-                <th colspan="2" style="text-align:center">Charge&nbsp;2001&nbsp;>&nbsp;3K</th>
-                <th colspan="2" style="text-align:center">Charge&nbsp;3001&nbsp;>&nbsp;4K</th>
-                <th colspan="2" style="text-align:center">Charge&nbsp;4001&nbsp;>&nbsp;5K</th>
+    </div><table class="table table-bordered slab-table third-design-table">
+              <thead class="navbar" style="position:initial;">
+                  <tr>
+                      <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                      <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(₹)</th>
+                      <th colspan="2" style="text-align:center">Range&nbsp;100&nbsp;>&nbsp;1K</th>
+                      <th colspan="2" style="text-align:center">Range&nbsp;1001&nbsp;>&nbsp;2K</th>
+                      <th colspan="2" style="text-align:center">Range&nbsp;2001&nbsp;>&nbsp;3K</th>
+                      <th colspan="2" style="text-align:center">Range&nbsp;3001&nbsp;>&nbsp;4K</th>
+                      <th colspan="2" style="text-align:center">Range&nbsp;4001&nbsp;>&nbsp;5K</th>
 
-            </tr>
-            <tr style="color: #333333; font-weight: 600; font-size: 11px;">
-                <td>Charge</td>
-                <td>Active</td>
-                <td>
-                    Charge
-                </td>
-                <td>Active</td>
-                <td>
-                    Charge
-                </td>
-                <td>Active</td>
-                <td>
-                    Charge
-                </td>
-                <td>Active</td>
-                <td>
-                    Charge
-                </td>
-                <td>Active</td>
+                  </tr>
+                  @if (Model.Retaileruser != null)
+                  {
+                      <tr style="color: #333333; font-weight: 600; font-size: 11px;">
+                          <td>Sharing</td>
+                          <td>Active</td>
+                          <td>
+                              Sharing
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Sharing
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Sharing
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Sharing
+                          </td>
+                          <td>Active</td>
+                      </tr>
+                  }
+                  else
+                  {
+                      <tr style="color: #333333; font-weight: 600; font-size: 11px;">
+                          <td>Commission</td>
+                          <td>Active</td>
+                          <td>
+                              Commission
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Commission
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Commission
+                          </td>
+                          <td>Active</td>
+                          <td>
+                              Commission
+                          </td>
+                          <td>Active</td>
+                      </tr>
+                  }
 
-
-
-            </tr>
-        </thead>
+              </thead>
         <tbody id="tbodyshow">
             <!--Master User-->
             @if (Model.Materuser != null)
@@ -129,15 +152,15 @@
                         </td>
                         <td>@item.verify_comm</td>
                         <td>@item.comm_1000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_2000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_3000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_4000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_5000</td>
-                        <td>%</td>
+                        <td>₹</td>
                     </tr>
                 }
             }
@@ -153,15 +176,15 @@
                         </td>
                         <td>@item.verify_comm</td>
                         <td>@item.comm_1000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_2000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_3000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_4000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_5000</td>
-                        <td>%</td>
+                        <td>₹</td>
                     </tr>
 
                 }
@@ -203,15 +226,15 @@
                         </td>
                         <td>@item.verify_comm</td>
                         <td>@item.comm_1000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_2000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_3000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_4000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_5000</td>
-                        <td>%</td>
+                        <td>₹</td>
                     </tr>
                 }
             }
@@ -227,15 +250,15 @@
                         </td>
                         <td>@item.verify_comm</td>
                         <td>@item.comm_1000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_2000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_3000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_4000</td>
-                        <td>%</td>
+                        <td>₹</td>
                         <td>@item.comm_5000</td>
-                        <td>%</td>
+                        <td>₹</td>
                     </tr>
                 }
             }
@@ -262,35 +285,35 @@
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm_1000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Materuser[i].comm_2000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Materuser[i].comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Materuser[i].comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Materuser[i].comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
 
                     </tr>
@@ -318,35 +341,35 @@
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm_1000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Dealeruser[i].comm_2000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Dealeruser[i].comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Dealeruser[i].comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.Dealeruser[i].comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                     </tr>
                 }
@@ -434,7 +457,7 @@
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm_1000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -442,28 +465,28 @@
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.APIuser[i].comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.APIuser[i].comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.APIuser[i].comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
 
                     </tr>
@@ -491,7 +514,7 @@
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm_1000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -499,7 +522,7 @@
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -507,7 +530,7 @@
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -515,7 +538,7 @@
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -523,7 +546,7 @@
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                     </tr>
                 }
@@ -551,7 +574,7 @@
 
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -559,28 +582,28 @@
                             @Html.ValidationMessageFor(a => a.UpdateMaster[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.UpdateMaster[i].comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.UpdateMaster[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.UpdateMaster[i].comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.UpdateMaster[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                         <td>
                             @Html.EditorFor(a => a.UpdateMaster[i].comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
                             @Html.ValidationMessageFor(a => a.UpdateMaster[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
                         </td>
                     </tr>
                 }
@@ -606,7 +629,7 @@
 
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -614,7 +637,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateDealer[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -622,7 +645,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateDealer[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -630,7 +653,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateDealer[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -638,7 +661,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateDealer[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
 
@@ -726,7 +749,7 @@
 
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -734,7 +757,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateAPI[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -742,7 +765,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateAPI[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -750,7 +773,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateAPI[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -758,7 +781,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateAPI[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
 
@@ -787,7 +810,7 @@
 
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -795,7 +818,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateWhitelabel[i].comm_2000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -803,7 +826,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateWhitelabel[i].comm_3000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -811,7 +834,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateWhitelabel[i].comm_4000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
                         <td>
@@ -819,7 +842,7 @@
                             @Html.ValidationMessageFor(a => a.UpdateWhitelabel[i].comm_5000)
                         </td>
                         <td>
-                            %
+                            ₹
 
                         </td>
 
