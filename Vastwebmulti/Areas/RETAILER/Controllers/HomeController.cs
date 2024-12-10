@@ -12130,14 +12130,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             var details = db.Users.Where(s => s.UserId == Userid).SingleOrDefault();
             var whatsts = db.Email_show_passcode.SingleOrDefault();
-            var apiurls = "";
             var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
             var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
-            string TextMessage = "Your Account add for aeps otp is ";
             if (smsapionsts2 != null)
             {
-                apiurls = smsapionsts2.smsapi;
-                string text = TextMessage + pin;
+                var apiurls = smsapionsts2.smsapi;
+                string text = "Your Account add for aeps otp is " + pin;
                 text = string.Format(text, "1230");
                 var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
 
@@ -12176,7 +12174,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             CommUtilEmail emailsend = new CommUtilEmail();
 
 
-            emailsend.EmailLimitChk(emailid, emailid, "icon setting Passcode", TextMessage + pin, "No CallBackUrl");
+            emailsend.EmailLimitChk(emailid, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
 
             if (CheckEntry == null)
             {
@@ -12202,27 +12200,39 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return RedirectToAction("AddAepsAccount", "Home");
         }
         [HttpPost]
-        public ActionResult AddAepsAccount(string BankName, string accountno, string ifscCode, string AccountHolderName, string BankAddress, string otp)
+        public ActionResult AddAepsAccount(AepsAccount model)
         {
-            
             var Userid = User.Identity.GetUserId();
             var data = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).FirstOrDefault();
-            if(data.Otp == otp)
+            if (ModelState.IsValid)
             {
-                if(BankName.Length > 1 && accountno.Length > 8 && ifscCode.Length == 11 && AccountHolderName.Length > 1)
+                if (data.Otp == model.otp)
                 {
-                    data.BankName = BankName;
-                    data.AccountNO = accountno;
-                    data.IFSC_CODE = ifscCode;
-                    data.AccountHolder = AccountHolderName;
-                    data.BankAddress = BankAddress;
+                    data.BankName = model.BankName;
+                    data.AccountNO = model.accountno;
+                    data.IFSC_CODE = model.ifscCode;
+                    data.AccountHolder = model.AccountHolderName;
+                    data.BankAddress = model.BankAddress;
                     data.InserDate = DateTime.Now;
                     db.SaveChanges();
+                    ViewBag.message = "Add Successfully.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
+                }
+                else
+                {
+                    ViewBag.message = "Otp Mismatch.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
                 }
             }
-            var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
-            ViewBag.Message = "Account Update Successfully.";
-            return View(info);
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                string message = string.Join(", ", errors);
+                ViewBag.message = message;
+                return View(data);
+            }
         }
         [HttpGet]
         public new ActionResult Profile()
