@@ -8,8 +8,9 @@
     {
         if (dmtotpsts.status == true)
         {
-            stsotp = "Y";
+            stsotp = "N";
         }
+        dmtotpsts.status = false;
     }
 }
 <style>
@@ -1537,6 +1538,7 @@
         }
 
         if (len == 10) {
+            console.log("1111")
             $('#errorsenderno').text("");
             $("#benlistttable tr").remove();
             $.ajax({
