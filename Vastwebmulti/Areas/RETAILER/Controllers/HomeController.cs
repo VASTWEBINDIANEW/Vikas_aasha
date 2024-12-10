@@ -10352,18 +10352,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (responsecode1 == "OK")
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
-                var respcode = json.Content.ResponseCode.ToString();
-                var ADDINFO = json.Content.ADDINFO;
-                var results = JsonConvert.SerializeObject(ADDINFO);
-                var jss = new JavaScriptSerializer();
-                var dict = jss.Deserialize<dynamic>(results);
-                return Json(dict, JsonRequestBehavior.AllowGet);
+                var respcode = json.Content.ADDINFO.response_code.ToString();
+                if (respcode == "1")
+                {
+                    var ADDINFO = json.Content.ADDINFO;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var error = json.Content.ADDINFO.message.ToString();
+                    var error_decribe = false;
+                    var results = "{'status':'" + error_decribe + "','message':'" + error + "','response_code':'" + respcode + "'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
                 var error = json.error.ToString();
-                var error_decribe =false;
+                var error_decribe = false;
                 var results = "{'status':'" + error_decribe + "','message':'Please Try After Sometime','response_code':'40'}";
                 var jss = new JavaScriptSerializer();
                 var dict = jss.Deserialize<dynamic>(results);
