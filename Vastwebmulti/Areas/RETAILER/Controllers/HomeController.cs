@@ -30437,11 +30437,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 if (string.IsNullOrEmpty(retailer.AepsMerchandId))
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                    if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
+                    {
+                        var message = "Please add a complete account first.";
+                        var viewResponse = new { Status = "Failed", Message = message };
+                        return Json(viewResponse, JsonRequestBehavior.AllowGet);
+                    }
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -31345,11 +31352,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 string lattitude = string.Empty;
                 string longitude = string.Empty;
                 var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
-                if ((Account.AccountNO == "" && Account.IFSC_CODE == "" && Account.BankName == "" && Account.BankAddress == "") || (Account == null))
+                if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
                 {
-                    var message = "Plese Add Account First.";
-                    var viewresponse = new { Status = "Failed", Message = message };
-                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                    var message = "Please add a complete account first.";
+                    var viewResponse = new { Status = "Failed", Message = message };
+                    return Json(viewResponse, JsonRequestBehavior.AllowGet);
                 }
                 if (retailer.UserLocation == null)
                 {
