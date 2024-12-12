@@ -488,6 +488,9 @@
                                                     }
                                                 }
 
+
+                                                <button type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important; background-color:@color"><span style="color:white;" onclick="updatechargeekyc()">DMT EKYC CHARGE : @ViewBag.Charge </span></button>
+
                                                 <button id="fixchargests" type="button" class="btn  waves-effect btn-first" style=" width: auto; padding: 7px 15px !important; float: right !important; background-color:@color" onclick="updatefixcharge()"><span style="color:white;">Fix Charge @text</span></button>
 
                                                 <script>
@@ -975,6 +978,42 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        @using (Html.BeginForm("Update_Dlm_slab", "Home", FormMethod.Post))
+        {
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ekyc Charge </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                      
+                        <div class="form-group">
+                            <label for="Name" class="col-sm-3 text-right control-label col-form-label">Charge</label>
+                            <div class="col-sm-9">
+                                @Html.TextBox("txtcharge", "", new { @class = "form-control", placeholder = "Enter Charge", required = "required" , @type="number"})
+                               
+                               
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        }
+        </div>
+</div>
 <script>
     function update(e) {
         var url = '@Url.Action("UpdateLimit", "Home")';
@@ -1233,7 +1272,6 @@
           .always(function () {
           });
     }
-
 </script>
 
 <script>
@@ -1249,3 +1287,18 @@
     });
     </script>*@
 
+<script>
+    updatechargeekyc = () => {
+           $.ajax({
+              url: '@Url.Action("ChargeDMTEKYCinfo", "Home")',
+              type: 'POST',
+               success: function (data) {
+                   $('#txtcharge').val(data)
+                  $('#exampleModal').modal('show');
+              },
+              error: function (data) {
+              }
+          });
+        
+    }
+</script>

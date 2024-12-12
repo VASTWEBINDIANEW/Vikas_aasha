@@ -10352,18 +10352,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (responsecode1 == "OK")
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
-                var respcode = json.Content.ResponseCode.ToString();
-                var ADDINFO = json.Content.ADDINFO;
-                var results = JsonConvert.SerializeObject(ADDINFO);
-                var jss = new JavaScriptSerializer();
-                var dict = jss.Deserialize<dynamic>(results);
-                return Json(dict, JsonRequestBehavior.AllowGet);
+                var respcode = json.Content.ADDINFO.response_code.ToString();
+                if (respcode == "1")
+                {
+                    var ADDINFO = json.Content.ADDINFO;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var error = json.Content.ADDINFO.message.ToString();
+                    var error_decribe = false;
+                    var results = "{'status':'" + error_decribe + "','message':'" + error + "','response_code':'" + respcode + "'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
                 var error = json.error.ToString();
-                var error_decribe =false;
+                var error_decribe = false;
                 var results = "{'status':'" + error_decribe + "','message':'Please Try After Sometime','response_code':'40'}";
                 var jss = new JavaScriptSerializer();
                 var dict = jss.Deserialize<dynamic>(results);
@@ -12118,14 +12130,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             var details = db.Users.Where(s => s.UserId == Userid).SingleOrDefault();
             var whatsts = db.Email_show_passcode.SingleOrDefault();
-            var apiurls = "";
             var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
             var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
-            string TextMessage = "Your Account add for aeps otp is ";
             if (smsapionsts2 != null)
             {
-                apiurls = smsapionsts2.smsapi;
-                string text = TextMessage + pin;
+                var apiurls = smsapionsts2.smsapi;
+                string text = "Your Account add for aeps otp is " + pin;
                 text = string.Format(text, "1230");
                 var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
 
@@ -12164,7 +12174,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             CommUtilEmail emailsend = new CommUtilEmail();
 
 
-            emailsend.EmailLimitChk(emailid, emailid, "icon setting Passcode", TextMessage + pin, "No CallBackUrl");
+            emailsend.EmailLimitChk(emailid, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
 
             if (CheckEntry == null)
             {
@@ -12190,27 +12200,39 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return RedirectToAction("AddAepsAccount", "Home");
         }
         [HttpPost]
-        public ActionResult AddAepsAccount(string BankName, string accountno, string ifscCode, string AccountHolderName, string BankAddress, string otp)
+        public ActionResult AddAepsAccount(AepsAccount model)
         {
-            
             var Userid = User.Identity.GetUserId();
             var data = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).FirstOrDefault();
-            if(data.Otp == otp)
+            if (ModelState.IsValid)
             {
-                if(BankName.Length > 1 && accountno.Length > 8 && ifscCode.Length == 11 && AccountHolderName.Length > 1)
+                if (data.Otp == model.otp)
                 {
-                    data.BankName = BankName;
-                    data.AccountNO = accountno;
-                    data.IFSC_CODE = ifscCode;
-                    data.AccountHolder = AccountHolderName;
-                    data.BankAddress = BankAddress;
+                    data.BankName = model.BankName;
+                    data.AccountNO = model.accountno;
+                    data.IFSC_CODE = model.ifscCode;
+                    data.AccountHolder = model.AccountHolderName;
+                    data.BankAddress = model.BankAddress;
                     data.InserDate = DateTime.Now;
                     db.SaveChanges();
+                    ViewBag.message = "Add Successfully.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
+                }
+                else
+                {
+                    ViewBag.message = "Otp Mismatch.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
                 }
             }
-            var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
-            ViewBag.Message = "Account Update Successfully.";
-            return View(info);
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                string message = string.Join(", ", errors);
+                ViewBag.message = message;
+                return View(data);
+            }
         }
         [HttpGet]
         public new ActionResult Profile()
@@ -29954,14 +29976,852 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
         #endregion
 
+        #region MoneyTransfer DMT AIRTEL
 
+        public ActionResult Money_transfer_Airtel()
+        {
+            var money1 = false; var money2 = false; var money3 = false; var money4 = false;
+            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
+            if (moneyapists_dmt != null)
+            {
+                money1 = true;
+            }
+            var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
+            if (moneyapists_dmt1 != null)
+            {
+                money2 = true;
+            }
+            var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT" && aa.status == true).SingleOrDefault();
+            if (moneyapists_payout != null)
+            {
+                money3 = true;
+            }
+            var moneyapists_PPI = db.money_api_status.Where(aa => aa.catagory == "DMTPPI" && aa.status == true).SingleOrDefault();
+            if (moneyapists_PPI != null)
+            {
+                money4 = true;
+            }
+            ViewBag.moneysts1 = money1;
+            ViewBag.moneysts2 = money2;
+            ViewBag.moneysts3 = money3;
+            ViewBag.moneysts4 = money4;
+
+            string userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
+            {
+                //////////////////////Check E KYC///////////////////////////
+                var isvalid = true;
+                var checkekyc = db.ekycChecks.Where(aa => aa.userid == userid).SingleOrDefault();
+                if (checkekyc == null)
+                {
+                    isvalid = false;
+                    ViewBag.req = "REQUIREDOTP";
+                }
+                else
+                {
+                    var sts = checkekyc.isvalid;
+                    if (sts == false)
+                    {
+                        isvalid = false;
+                        ViewBag.req = "REQUIREDSCAN";
+                    }
+                }
+                /////////////////// 2 FaVerification////////////////
+                if (isvalid == true)
+                {
+                    var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == userid).SingleOrDefault();
+                    if (twofacheck == null)
+                    {
+                        Aeps_2Fa_Status item = new Aeps_2Fa_Status();
+                        item.userid = userid;
+                        item.Status = false;
+                        item.AepsMerchantId = ChkKYC.AepsMerchandId;
+                        item.InsertDate = DateTime.Now;
+                        db.Aeps_2Fa_Status.Add(item);
+                        db.SaveChanges();
+                        isvalid = false;
+                        ViewBag.req = "2FAREQUIRED";
+                    }
+                    else
+                    {
+                        var insertdate = Convert.ToDateTime(twofacheck.InsertDate).Date;
+                        var currentdate = DateTime.Now.Date;
+                        if (insertdate == currentdate)
+                        {
+                            if (twofacheck.Status == false)
+                            {
+                                isvalid = false;
+                                ViewBag.req = "2FAREQUIRED";
+                            }
+                        }
+                        else
+                        {
+                            twofacheck.Status = false;
+                            db.SaveChanges();
+                            isvalid = false;
+                            ViewBag.req = "2FAREQUIRED";
+                        }
+                    }
+                }
+
+                /////////////////// 2 FaVerification////////////////
+
+
+
+                ///////////////Check DMT Service Fee///////////////////////
+                var isfree = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().IsFree;
+                var allservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL").SingleOrDefault().IsFree;
+                if (isfree == true && allservice == true)
+                {
+                    ViewBag.chkcharge = "DONE";
+                }
+                else
+                {
+                    if (isfree == true)
+                    {
+                        if (allservice == false)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "NOTDONE";
+                                        ViewData["chksertype"] = "NOTDONE";
+                                    }
+
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "ALLNOTDONE";
+                                    ViewData["chksertype"] = "ALLNOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "ALLNOTDONE";
+                                ViewData["chksertype"] = "ALLNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == false)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "BOTHNOTDONE";
+                                        ViewData["chksertype"] = "BOTHNOTDONE";
+                                    }
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "BOTHNOTDONE";
+                                    ViewData["chksertype"] = "BOTHNOTDONE";
+                                }
+                            }
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "BOTHNOTDONE";
+                                    ViewData["chksertype"] = "BOTHNOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "BOTHNOTDONE";
+                                ViewData["chksertype"] = "BOTHNOTDONE";
+                            }
+                        }
+                    }
+                    if (isfree == false)
+                    {
+                        if (allservice == true)
+                        {
+                            var retailerautorenseting = db.autopaidserviceRenewalsettings.Where(x => x.retailerid == userid).SingleOrDefault().auto_set;
+                            if (retailerautorenseting == "ALL" || retailerautorenseting == "PER")
+                            {
+                                var chkklatestdate = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (chkklatestdate != null)
+                                {
+                                    var expiredate = chkklatestdate.ExpiryDate.Date.AddDays(-1);
+                                    if (expiredate == DateTime.Now.Date)
+                                    {
+                                        var chkadminperservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT" && aa.IsFree == false).SingleOrDefault();
+                                        var chkadminallservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "ALL" && aa.IsFree == false).SingleOrDefault();
+                                        System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                                        System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+
+
+                                        if (chkadminallservice != null && retailerautorenseting == "ALL")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminallservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+                                        else if (chkadminperservice != null && retailerautorenseting == "PER")
+                                        {
+                                            var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
+                                        }
+
+                                        ViewBag.chkcharge = "DONE";
+                                    }
+                                    else
+                                    {
+                                        ViewBag.chkcharge = "NOTDONE";
+                                        ViewData["chksertype"] = "NOTDONE";
+                                    }
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+
+                            //var chk = db.PaidService_auto.Where(aa => aa.Userid == userid && aa.ServiceName == "DMT").SingleOrDefault().AutoSts;
+                            //if (chk == "Y")
+                            //{
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
+                            //    System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
+                            //    int serviceid = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault().Idno;
+                            //    var msg = db.proc_PurchasePaidServices(userid, serviceid, Status, Message).SingleOrDefault();
+                            //}
+
+
+
+                            var chkk = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                            if (chkk != null)
+                            {
+                                var expiredate = chkk.ExpiryDate;
+                                if (expiredate >= DateTime.Now)
+                                {
+                                    ViewBag.chkcharge = "DONE";
+                                }
+                                else
+                                {
+                                    ViewBag.chkcharge = "NOTDONE";
+                                    ViewData["chksertype"] = "NOTDONE";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.chkcharge = "NOTDONE";
+                                ViewData["chksertype"] = "NOTDONE";
+                            }
+                        }
+                    }
+                }
+
+                Recent_report recent = new Recent_report();
+                recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
+                recent.Recent_report_Aeps = null;
+                recent.Recent_PAN_CARD_IPAY = null;
+                recent.Recent_mPosInfo = null;
+                return View(recent);
+            }
+            else
+            {
+                ViewBag.ChkKYC = "Firstly Complete Your Full KYC !";
+                return RedirectToAction("Profile");
+            }
+        }
+        [HttpPost]
+        public ActionResult SenderdetailsAirtel(string senderno, string latloc, string longloc)
+        {
+            var check = "OK"; var errormsg = "";
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
+            if (apinm != null)
+            {
+
+                var userid = User.Identity.GetUserId();
+                if (apinm.api_name == "VASTWEB")
+                {
+                    var remdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Dealer_Details.Where(aa => aa.DealerId == remdetails.DealerId).SingleOrDefault();
+                    if (dlmdetails.moneysts == true)
+                    {
+                        if (remdetails.moneysts == true)
+                        {
+                            var checkfreeservice = db.PaidServicesChargeLists.Where(aa => aa.ServiceName == "DMT").SingleOrDefault();
+                            if (checkfreeservice.IsFree == false)
+                            {
+                                var servicecheck = db.PaidServicesPaymentHistories.Where(aa => aa.UserId == userid && aa.ServiceName == "DMT").OrderByDescending(aa => aa.PurchaseDate).Take(1).SingleOrDefault();
+                                if (servicecheck != null)
+                                {
+                                    var expdate = servicecheck.ExpiryDate;
+                                    var currentdate = DateTime.Now;
+                                    if (expdate <= currentdate)
+                                    {
+                                        check = "NOTOK";
+                                        errormsg = "Account Transfer Service is Expired.";
+                                    }
+                                }
+                                else
+                                {
+                                    check = "NOTOK";
+                                    errormsg = "Firstlly Purchase this Service.";
+                                }
+                            }
+                            if (check == "OK")
+                            {
+                                VastBazaar cb = new VastBazaar();
+                                var tokenapi = Responsetoken.gettoken();
+                                var responseall = cb.Remitter_details_DMT_Airtel(senderno, tokenapi, latloc, longloc);
+                                var responsechk = responseall.Content.ToString();
+                                var responsecode1 = responseall.StatusCode.ToString();
+                                var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
+                                var responsechk1 = responseall1.Content.ToString();
+                                var responsecode11 = responseall1.StatusCode.ToString();
+                                if (responsecode1 == "OK" && responsecode11 == "OK")
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    var respcode = json.Content.ResponseCode.ToString();
+                                    var ADDINFO = json.Content.ADDINFO;
+                                    var stscode = ADDINFO.statuscode;
+                                    json = JsonConvert.SerializeObject(ADDINFO);
+
+                                    dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
+                                    var respcode1 = json1.Content.ResponseCode.ToString();
+                                    var ADDINFO1 = json1.Content.ADDINFO;
+                                    var stscode1 = ADDINFO1.statuscode;
+                                    json1 = JsonConvert.SerializeObject(ADDINFO1);
+                                    if (stscode == "TXN" && stscode1 == "TXN")
+                                    {
+                                        //dynamic jobject = JsonConvert.DeserializeObject(json.ToString());
+                                        dynamic jobject = JsonConvert.DeserializeObject(json);
+                                        try
+                                        {
+                                            bool isArray = jobject.data.beneficiary.item.Type == JTokenType.Array;
+                                            if (isArray == false)
+                                            {
+                                                json = json.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
+                                                int modificationIndex = json.IndexOf("}},", json.IndexOf("beneficiary"));
+                                                if (modificationIndex > 0)
+                                                {
+                                                    json = json.Remove(modificationIndex, 2).Insert(modificationIndex, "}]}");
+                                                }
+                                            }
+                                        }
+                                        catch
+                                        { }
+                                        dynamic jobject1 = JsonConvert.DeserializeObject(json1);
+                                        try
+                                        {
+                                            bool isArray1 = jobject1.data.beneficiary.item.Type == JTokenType.Array;
+                                            if (isArray1 == false)
+                                            {
+                                                json1 = json1.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
+                                                int modificationIndex1 = json1.IndexOf("}},", json1.IndexOf("beneficiary"));
+                                                if (modificationIndex1 > 0)
+                                                {
+                                                    json1 = json1.Remove(modificationIndex1, 2).Insert(modificationIndex1, "}]}");
+                                                }
+                                            }
+                                        }
+                                        catch
+                                        { }
+                                    }
+
+
+                                    //   var results = JsonConvert.SerializeObject(json);
+                                    // var jss = new JavaScriptSerializer();
+                                    //  var dict = jss.Deserialize<dynamic>(json);
+                                    return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    //dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                    // var error = json.error.ToString();
+                                    var error_decribe = "Some Error Occer";
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                    var json = JsonConvert.SerializeObject(results);
+                                    //  var jss = new JavaScriptSerializer();
+                                    //  var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error_decribe = errormsg;
+                                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                var json1 = JsonConvert.DeserializeObject(results);
+                                var json = JsonConvert.SerializeObject(json1);
+                                //   var jss = new JavaScriptSerializer();
+                                //   var dict = jss.Deserialize<dynamic>(results);
+                                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error_decribe = "Money Status Off";
+                            var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                            var json1 = JsonConvert.DeserializeObject(results);
+                            var json = JsonConvert.SerializeObject(json1);
+                            // var jss = new JavaScriptSerializer();
+                            // var dict = jss.Deserialize<dynamic>(results);
+                            return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "Money Status Off, Contact Distributor OR Customer Care.";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                        var json1 = JsonConvert.DeserializeObject(results);
+                        var json = JsonConvert.SerializeObject(json1);
+                        //  var jss = new JavaScriptSerializer();
+                        // var dict = jss.Deserialize<dynamic>(results);
+                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    respchk = dmt.Getbenificry(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+
+                                if ((respchk.StatusCode == HttpStatusCode.OK) || (respchk.StatusCode == HttpStatusCode.Created))
+                                {
+                                    var apiresp = respchk.Content;
+                                    dynamic respout = JsonConvert.DeserializeObject(apiresp);
+                                    var results = "{'status':'" + respout + "','statuscode':'RDT'}";
+                                    var json1 = JsonConvert.DeserializeObject(results);
+                                    var json = JsonConvert.SerializeObject(json1);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    var error_decribe = "Something Went Wrong";
+                                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                    var json1 = JsonConvert.DeserializeObject(results);
+                                    var json = JsonConvert.SerializeObject(json1);
+                                    //       var jss = new JavaScriptSerializer();
+                                    //         var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error_decribe = "EKYC is pending. Please wait for approval.";
+                                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                                var json1 = JsonConvert.DeserializeObject(results);
+                                var json = JsonConvert.SerializeObject(json1);
+                                //       var jss = new JavaScriptSerializer();
+                                //         var dict = jss.Deserialize<dynamic>(results);
+                                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error_decribe = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                            var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                            var json1 = JsonConvert.DeserializeObject(results);
+                            var json = JsonConvert.SerializeObject(json1);
+                            //       var jss = new JavaScriptSerializer();
+                            //         var dict = jss.Deserialize<dynamic>(results);
+                            return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                        var json1 = JsonConvert.DeserializeObject(results);
+                        var json = JsonConvert.SerializeObject(json1);
+                        //       var jss = new JavaScriptSerializer();
+                        //         var dict = jss.Deserialize<dynamic>(results);
+                        return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO API OPEN";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                    var json1 = JsonConvert.DeserializeObject(results);
+                    var json = JsonConvert.SerializeObject(json1);
+                    //       var jss = new JavaScriptSerializer();
+                    //         var dict = jss.Deserialize<dynamic>(results);
+                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO API OPEN";
+                var results = "{'status':'" + error_decribe + "','statuscode':'ERR'}";
+                var json1 = JsonConvert.DeserializeObject(results);
+                var json = JsonConvert.SerializeObject(json1);
+                //   var jss = new JavaScriptSerializer();
+                //  var dict = jss.Deserialize<dynamic>(results);
+                return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult KYCRegisterAirtel(string senderno, string pid, string aadharnumber, string latloc, string longloc)
+        {
+
+
+            string userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb.EKYC_Register_Airtel(senderno, tokenapi, latloc, longloc, aadharnumber);
+            var status = false; string message = "Please Try After Sometime";
+            string kyc_id = ""; string stateresp = "";
+            if (responseall.StatusCode == HttpStatusCode.OK)
+            {
+                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                dynamic respchk = respchkinfo.Content.ADDINFO;
+                message = respchk.message;
+                if (respchk.status == true)
+                {
+                    if (respchk.response_code == "1")
+                    {
+                        status = true;
+                       // kyc_id = respchk.data.ekyc_id;
+                        stateresp = respchk.stateresp;
+                    }
+                }
+            }
+            var respchk1 = new
+            {
+                status,
+                kyc_id,
+                stateresp,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult KYCEnterOTPAirtel(string stateResp, string kyc_id, string Sendernumber, string otp,string pid)
+        {
+            pid = HttpUtility.UrlDecode(pid);
+            string key = "2dc2770e6938f17c";       // Replace with your AES key (must be 16 bytes for AES-128)
+            string iv = "e2cb1fd94a96ff35";         // Replace with your Initialization Vector (must be 16 bytes)
+
+            byte[] encrypted = EncryptAES(pid, key, iv);
+            string enctoken = Convert.ToBase64String(encrypted);
+
+            string userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb.EKYC_Register_OTP_Airtel(Sendernumber, tokenapi, otp, stateResp, kyc_id, enctoken);
+            var status = false; string message = "Please Try After Sometime";
+            if (responseall.StatusCode == HttpStatusCode.OK)
+            {
+                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                dynamic respchk = respchkinfo.Content.ADDINFO;
+
+                message = respchk.message;
+                if (respchk.status == true)
+                {
+                    if (respchk.response_code == "1")
+                    {
+                        status = true;
+                    }
+                }
+            }
+            var respchk1 = new
+            {
+                status,
+                message
+            };
+            return Json(respchk1, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult Register_benAirtel(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname, string hidebenid)
+        {
+        
+            try
+            {
+                var RetailerID = User.Identity.GetUserId();
+                ifsccode = ifsccode.ToUpper();
+                var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
+                var reciep_mobile = mob;
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
+                if (apinm != null)
+                {
+                    if (apinm.api_name == "VASTWEB")
+                    {
+                        VastBazaar cb = new VastBazaar();
+                        var responsechk = "";
+                        var responsecode1 = "";
+                        var tokn = Responsetoken.gettoken();
+                        var responseall = cb.Beneficiary_register_Paysprint(hidebenid, benname, senderno, ifsccode, account, tokn, originalifsccode);
+                        responsechk = responseall.Content.ToString();
+                        responsecode1 = responseall.StatusCode.ToString();
+                        if (responsecode1 == "OK")
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            var respcode = json.Content.ResponseCode.ToString();
+                            var ADDINFO = json.Content.ADDINFO;
+                            var stscode = ADDINFO.statuscode;
+                            var results = JsonConvert.SerializeObject(ADDINFO);
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            dynamic json = JsonConvert.DeserializeObject(responsechk);
+                            var error = json.error.ToString();
+                            var error_decribe = json["error_description"].ToString();
+                            var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if (apinm.api_name == "RADIANT")
+                    {
+                        var userid = User.Identity.GetUserId();
+                        var radiantauthchk = db.radiantauths.SingleOrDefault();
+                        if (radiantauthchk != null)
+                        {
+                            var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                            if (radiantresponse != null)
+                            {
+                                if (radiantresponse.Sts == "Approved")
+                                {
+                                    Radiantdmt dmt = new Radiantdmt();
+                                    var tokenchk = db.radianttokens.SingleOrDefault();
+                                    if (tokenchk == null)
+                                    {
+                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    }
+                                    else
+                                    {
+                                        radianttoken = tokenchk.accessToken;
+                                        radianagentid = tokenchk.agentID;
+                                    }
+                                    var responseinfo = dmt.AddBeneficiary(radianagentid, radianttoken, senderno, benname, account, bankname, ifsccode, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                    if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                    {
+                                        dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                        responseinfo = dmt.AddBeneficiary(radianagentid, radianttoken, senderno, benname, account, bankname, ifsccode, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                    }
+
+                                    if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                    {
+                                        dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                        if (json.success == true)
+                                        {
+                                            string message = json.message;
+                                            var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                            var jss = new JavaScriptSerializer();
+                                            var dict = jss.Deserialize<dynamic>(results);
+                                            return Json(dict, JsonRequestBehavior.AllowGet);
+                                        }
+                                        else
+                                        {
+                                            var error = "";
+                                            try
+                                            {
+                                                error = json.errors.senderno[0].ToString();
+                                            }
+                                            catch { }
+                                            if (string.IsNullOrEmpty(error))
+                                            {
+                                                try
+                                                {
+                                                    error = json.message;
+                                                }
+                                                catch { }
+                                            }
+                                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                            var jss = new JavaScriptSerializer();
+                                            var dict = jss.Deserialize<dynamic>(results);
+                                            return Json(dict, JsonRequestBehavior.AllowGet);
+                                        }
+                                    }
+
+                                    else
+                                    {
+                                        var error = "Something Went Wrong, Try After Some Time";
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+                                else
+                                {
+                                    var error = "EKYC is pending. Please wait for approval.";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error = "EKYC not Done! Please go to your profile and Complete Ekyc Process.";
+                                var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error = "Authentication is required! Please contact the administrator.";
+                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error_decribe = "NO Api Open";
+                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message.ToString();
+                var results = "{'Message':'" + msg + "','Response':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+
+        #endregion
 
 
         #region MONEYTRANSFER DMT 1
         [HttpGet]
         public ActionResult Money_transfer2()
         {
-            var money1 = false; var money2 = false;var money3 = false; var money4 = false;
+            var chk1ekyc = db.DMT_Ekyc_Charge.SingleOrDefault();
+            ViewBag.EkycCharge = chk1ekyc.Charge;
+          var money1 = false; var money2 = false;var money3 = false; var money4 = false;
             var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status==true).SingleOrDefault();
             if (moneyapists_dmt!=null)
             {
@@ -30948,11 +31808,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                    if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
+                    {
+                        var message = "Please add a complete account first.";
+                        var viewResponse = new { Status = "Failed", Message = message };
+                        return Json(viewResponse, JsonRequestBehavior.AllowGet);
+                    }
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -32162,6 +33029,21 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         catch
                                         { }
                                     }
+                                    else if(stscode=="OTP")
+                                    {
+                                        try
+                                        {
+                                            dynamic dyrespchk = JsonConvert.DeserializeObject(json);
+                                            string stateresp = dyrespchk.stateResp;
+                                            var infochk = db.IMPS_transtion_detsils.Where(aa => aa.senderno == senderno && aa.Status.ToUpper() == "PENDING" && aa.Trans_Type == "EKYC CHARGE").OrderByDescending(aa => aa.trans_time).Take(1).SingleOrDefault();
+                                            if (infochk != null)
+                                            {
+                                                infochk.Devicetoken = stateresp;
+                                                db.SaveChanges();
+                                            }
+                                        }
+                                        catch { }
+                                    }
                                    
                                    
                                     //   var results = JsonConvert.SerializeObject(json);
@@ -32346,23 +33228,64 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             string userid = User.Identity.GetUserId();
             VastBazaar cb = new VastBazaar();
             var tokenapi = Responsetoken.gettoken();
-            var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken);
+            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+            Guid uniqueIdinfo = Guid.NewGuid();
+            string uniqueid = uniqueIdinfo.ToString();
+            var Ipaddress = GetComputer_InternetIP();
+            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var status = false; string message = "Please Try After Sometime";
-            string kyc_id = "";string stateresp = "";
-            if (responseall.StatusCode==HttpStatusCode.OK)
+            string kyc_id = ""; string stateresp = "";
+            string statusinfo = "Pending";
+            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, senderno, "PAYSPRINT", Ipaddress, "", outputchk).SingleOrDefault();
+            var msginfo = Reqinfochk.msg;
+            if (msginfo == "OK")
             {
-                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
-                dynamic respchk = respchkinfo.Content.ADDINFO;
-                message = respchk.message;
-                if (respchk.status ==true)
+                var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken, agentid);
+                if (responseall.StatusCode == HttpStatusCode.OK)
                 {
-                    if(respchk.response_code=="1")
+                    dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                    dynamic respchk = respchkinfo.Content.ADDINFO;
+                    message = respchk.message;
+                    if (respchk.status == true)
                     {
-                        status = true;
-                        kyc_id = respchk.data.ekyc_id;
-                        stateresp = respchk.data.stateresp;
+                        if (respchk.response_code == "1")
+                        {
+                            statusinfo = "Success";
+                            status = true;
+                            kyc_id = respchk.data.ekyc_id;
+                            stateresp = respchk.data.stateresp;
+                        }
+                        else
+                        {
+                            statusinfo = "Failed";
+                        }
+                    }
+                    else
+                    {
+                        statusinfo = "Failed";
                     }
                 }
+                else
+                {
+                    statusinfo = "Failed";
+                }
+                if(statusinfo=="Failed")
+                {
+                    db.RefundDMTEkycCharge(agentid, statusinfo, message);
+                }
+                else if(statusinfo=="Success")
+                {
+                    var infochk = db.IMPS_transtion_detsils.Where(aa => aa.trans_common_id == agentid && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
+                    if(infochk!=null)
+                    {
+                        infochk.Devicetoken = stateresp;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                message = msginfo;
             }
             var respchk1 = new
             {
@@ -32374,13 +33297,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult KYCEnterOTP(  string stateResp,string kyc_id,string Sendernumber,string otp)
+        public ActionResult KYCEnterOTP(string stateResp,string kyc_id,string Sendernumber,string otp)
         {
             string userid = User.Identity.GetUserId();
             VastBazaar cb = new VastBazaar();
             var tokenapi = Responsetoken.gettoken();
             var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
             var status = false; string message = "Please Try After Sometime";
+            var stateinfo = "Pending";
             if (responseall.StatusCode == HttpStatusCode.OK)
             {
                 dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
@@ -32391,8 +33315,23 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     if (respchk.response_code == "1")
                     {
+                        stateinfo = "Success";
                         status = true;
                     }
+                    else
+                    {
+                        stateinfo = "Failed";
+                    }
+                }
+                else
+                {
+                    stateinfo = "Failed";
+                }
+                if (stateinfo == "Failed" || stateinfo=="Success")
+                {
+                    var chkinfo1 = db.IMPS_transtion_detsils.Where(aa => aa.Devicetoken == stateResp && aa.Status=="Pending").SingleOrDefault();
+                    string agentid = chkinfo1.trans_common_id;
+                    db.RefundDMTEkycCharge(agentid, stateinfo, message);
                 }
             }
             var respchk1 = new

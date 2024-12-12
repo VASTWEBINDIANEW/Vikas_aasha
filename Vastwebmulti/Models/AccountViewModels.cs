@@ -164,6 +164,33 @@ namespace Vastwebmulti.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+    public class AepsAccount
+    {
+        [Required(ErrorMessage = "Bank name is required.")]
+        [StringLength(200, ErrorMessage = "Bank name cannot exceed 200 characters.")]
+        public string BankName { get; set; }
+
+        [Required(ErrorMessage = "Account number is required.")]
+        [StringLength(20, MinimumLength = 10, ErrorMessage = "Account number must be between 10 and 20 characters.")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Account number must contain only digits.")]
+        public string accountno { get; set; }
+
+        [Required(ErrorMessage = "IFSC code is required.")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "IFSC code must be exactly 11 characters.")]
+        [RegularExpression(@"^[A-Z]{4}0[A-Z0-9]{6}$", ErrorMessage = "Invalid IFSC code format.")]
+        public string ifscCode { get; set; }
+
+        [Required(ErrorMessage = "Account holder name is required.")]
+        [StringLength(100, ErrorMessage = "Account holder name cannot exceed 100 characters.")]
+        public string AccountHolderName { get; set; }
+
+        [StringLength(5, ErrorMessage = "OTP cannot exceed 10 characters.")]
+        public string otp { get; set; }
+
+        [Required(ErrorMessage = "Bank address is required.")]
+        [StringLength(300, ErrorMessage = "Bank address cannot exceed 300 characters.")]
+        public string BankAddress { get; set; }
+    }
 
 
 }
