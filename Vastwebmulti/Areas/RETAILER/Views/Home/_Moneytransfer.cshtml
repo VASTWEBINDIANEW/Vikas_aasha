@@ -11,6 +11,7 @@
             stsotp = "Y";
         }
     }
+    dmtotpsts.status = false;
 }
 <style>
     #overlay {
@@ -308,6 +309,63 @@
             background-color: #5a6268; /* Darker shade on hover */
         }
 </style>
+<style>
+    /* Overlay background */
+    .overlay {
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* Dialog box */
+    .dialog {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scale(0.7);
+        transition: transform 0.3s ease;
+    }
+
+        /* Buttons */
+        .dialog button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .dialog .confirm-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .dialog .cancel-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+    /* Show dialog animation */
+    .overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+        .overlay.show .dialog {
+            transform: scale(1);
+        }
+</style>
 <input type="hidden" id="latloc" />
 <input type="hidden" id="longloc" />
 <div class="loader"></div>
@@ -449,15 +507,12 @@
                     <img src="~/ashok-images/scanner.svg" />
                 </div>
                 <div class="scannot-font-size">
-                    <span id="deviceerror1" style="    color: red;
-        border-bottom: 2px solid #ff0048;
+                    <span id="deviceerror1" style="color: red;border-bottom: 2px solid #ff0048;
         display: inline-block;
         padding-bottom: 2px;
         font-size: 16px;
-        font-weight: 700;
-" class="body-border-bottom"></span>
+        font-weight: 700;" class="body-border-bottom"></span>
                     <span id="deviceerror2DMT" style="color:red;"></span>
-
                     <span id="deviceerror3DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
                     <span id="deviceerror4DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
                     <span id="deviceerror5DMT" style="color:red;font-weight:400;text-transform:capitalize;"></span>
@@ -495,8 +550,9 @@
         </div>
     </div>
     <div class="container-fluid transaction-button">
+        <button onclick="gotoscanDMT()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan  <i class="fa fa-angle-right otp_icon"></i></button>
         <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
-        <button onclick="gotoscanDMT()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
+
 
     </div>
 </div>
@@ -1619,7 +1675,7 @@
                     }
                     else if (statuscode == "TXNP")
                     {
-                        $('#scancheckdmt').show()
+                        $('#DevicefindDMT').show()
                         $('#scanrecoveerDMT').show()
                         $('#sendername').val("");
                         $('#remlist').hide();
@@ -3412,49 +3468,58 @@
         });
     }
 </script>
+<div class="overlay" id="confirmDialog">
+    <div class="dialog">
+        <p>EKYC Charge is @ViewBag.EkycCharge Rs.</p>
+        <button class="confirm-btn" onclick="handleConfirm(true)">OK</button>
+        <button class="cancel-btn" onclick="handleConfirm(false)">Cancel</button>
+    </div>
+</div>
 <script>
-    function Register_EKYC() {
-        var senderno = $('#senderno').val();
-        var aadharnumber = $('#aadhardetails_ekyc').val();
-        var latloc = $('#latloc').val();
-        var longloc = $('#longloc').val();
-        var pid = $('#capxmlPDMT').val()
-
+    function handleConfirm(isConfirmed) {
+        const dialog = document.getElementById('confirmDialog');
+        dialog.classList.remove('show');
+        if (isConfirmed) {
+                var senderno = $('#senderno').val();
+    var aadharnumber = $('#aadhardetails_ekyc').val();
+    var latloc = $('#latloc').val();
+    var longloc = $('#longloc').val();
+    var pid = $('#capxmlPDMT').val()
         $('#capxmlPDMT').val("")
         if (aadharnumber != "") {
             if (pid != "") {
-                $("#overlay").fadeIn(300);　
-                  $.ajax({
-                          url: '@Url.Action("KYCRegister", "Home")',
-                      data: { senderno, pid: encodeURIComponent(pid),  aadharnumber, latloc, longloc },
-                      cache: false,
-                      contentType: 'application/x-www-form-urlencoded',
-                          type: "POST",
-                      success: function (data) {
-                          $("#overlay").fadeOut(300);
-                          var status = data.status;
-                          var message = data.message;
-                          var ekyc_id = data.kyc_id;
-                          var stateresp = data.stateresp;
-                          if (status == true) {
-                                        // senderdetails('change');
-                                        $('#DevicefindDMT').hide();
-                                        $('#otpshow_ekyc').show();
-                                        $('#otpstateResp_ekyc').val(stateresp)
-                                        $('#otpekyc_id_ekyc').val(ekyc_id)
-                                        $('#sendername').val("");
-                                        $('#remlist').hide();
-                                        $('#newsender').text(senderno);
-                                        $('#Firstpage').hide();
-                                        $('#register_new_ben').hide();
-                                        $('#NewSenderregister').hide();
-                                        $('#otpsenderno_ekyc').text(senderno)
-                                    }
-                                    else {
-                                        $('#Aadhar_Error').text(message)
-                                    }
-                                  }
-                          })
+                $("#overlay").fadeIn(300);
+                $.ajax({
+                    url: '@Url.Action("KYCRegister", "Home")',
+                    data: { senderno, pid: encodeURIComponent(pid), aadharnumber, latloc, longloc },
+                    cache: false,
+                    contentType: 'application/x-www-form-urlencoded',
+                    type: "POST",
+                    success: function (data) {
+                        $("#overlay").fadeOut(300);
+                        var status = data.status;
+                        var message = data.message;
+                        var ekyc_id = data.kyc_id;
+                        var stateresp = data.stateresp;
+                        if (status == true) {
+                            // senderdetails('change');
+                            $('#DevicefindDMT').hide();
+                            $('#otpshow_ekyc').show();
+                            $('#otpstateResp_ekyc').val(stateresp)
+                            $('#otpekyc_id_ekyc').val(ekyc_id)
+                            $('#sendername').val("");
+                            $('#remlist').hide();
+                            $('#newsender').text(senderno);
+                            $('#Firstpage').hide();
+                            $('#register_new_ben').hide();
+                            $('#NewSenderregister').hide();
+                            $('#otpsenderno_ekyc').text(senderno)
+                        }
+                        else {
+                            $('#Aadhar_Error').text(message)
+                        }
+                    }
+                })
             }
             else {
                 $('#Aadhar_Error').text("Please Scan Again")
@@ -3463,6 +3528,12 @@
         else {
             $('#Aadhar_Error').text("Enter The Aadhar Number")
         }
+
+        } 
+    }
+    function Register_EKYC() {
+        const dialog = document.getElementById('confirmDialog');
+        dialog.classList.add('show');
     }
 </script>
 <script>

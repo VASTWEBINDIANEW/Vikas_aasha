@@ -978,6 +978,91 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
         #endregion
 
+        #region DMT AIRTEL
+        public IRestResponse Remitter_details_DMT_Airtel(string mobile, string token, string lat, string longni)
+        {
+            var client = new RestClient(BaseURL + "/api/AIRTEL/DMTPAYSPRINT/Remitter_details");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile = mobile,
+                lat,
+                longni
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse EKYC_Register_Airtel(string mobile, string token, string lat, string longni, string aadharcard)
+        {
+            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
+            var client = new RestClient(BaseURL + "/api/AIRTEL/DMTPAYSPRINT/EkycRegister");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile = mobile,
+                lat,
+                longni,
+                aadharcard
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse EKYC_Register_OTP_Airtel(string mobile, string token, string otp, string stateresp, string ekyc_id,string data1)
+        {
+            // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
+            var client = new RestClient(BaseURL + "/api/AIRTEL/DMTPAYSPRINT/Ekyc_otp");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                mobile,
+                otp,
+                stateresp,
+                ekyc_id,
+                data= data1
+            };
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Beneficiary_register_Paysprint_Airtel(string remitterid, string name, string mobile, string ifsc, string account, string token, string ifscoriginal)
+        {
+            var client = new RestClient(BaseURL + "/api/AIRTEL/DMTPAYSPRINT/Beneficiary_register");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            var data = new
+            {
+                remitterid = remitterid,
+                name = name,
+                mobile = mobile,
+                ifsc = ifsc,
+                account = account,
+                originalifsc = ifscoriginal
+            };
+
+            var serializer = new JavaScriptSerializer();
+            var json = serializer.Serialize(data);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
+
+        #endregion
 
         #region PAYSPRINT
         public IRestResponse Remitter_details_DMT(string mobile, string token, string lat, string longni)
@@ -998,7 +1083,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse EKYC_Register(string mobile, string token, string lat, string longni, string aadharcard, string Pidata)
+        public IRestResponse EKYC_Register(string mobile, string token, string lat, string longni, string aadharcard, string Pidata,string Agentid)
         {
             // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
             var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/EkycRegister");
@@ -1011,7 +1096,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 lat,
                 longni,
                 aadharcard,
-                data = Pidata
+                data = Pidata,
+                Agentid,
+                Charge = "OK"
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
@@ -1031,7 +1118,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 mobile,
                 otp,
                 stateresp,
-                ekyc_id
+                ekyc_id,
+                Charge="OK"
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);

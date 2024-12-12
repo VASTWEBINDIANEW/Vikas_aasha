@@ -888,6 +888,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<PPIAgent> PPIAgents { get; set; }
         public virtual DbSet<AppMessage> AppMessages { get; set; }
         public virtual DbSet<BankAccountForAep> BankAccountForAeps { get; set; }
+        public virtual DbSet<DMT_Ekyc_Charge> DMT_Ekyc_Charge { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23576,6 +23577,56 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("amount", typeof(decimal));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<calculatorDMT_Result>("calculatorDMT", commshareRetailerParameter, commsharedealerParameter, commsharemasterParameter, amountParameter);
+        }
+    
+        public virtual ObjectResult<DMTEkycCharge_Result> DMTEkycCharge(string userid, string agentid, string uniqueid, string senderno, string apiname, string ipaddress, string imeino, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var agentidParameter = agentid != null ?
+                new ObjectParameter("agentid", agentid) :
+                new ObjectParameter("agentid", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var sendernoParameter = senderno != null ?
+                new ObjectParameter("senderno", senderno) :
+                new ObjectParameter("senderno", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DMTEkycCharge_Result>("DMTEkycCharge", useridParameter, agentidParameter, uniqueidParameter, sendernoParameter, apinameParameter, ipaddressParameter, imeinoParameter, output);
+        }
+    
+        public virtual int RefundDMTEkycCharge(string agentid, string status, string message)
+        {
+            var agentidParameter = agentid != null ?
+                new ObjectParameter("agentid", agentid) :
+                new ObjectParameter("agentid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var messageParameter = message != null ?
+                new ObjectParameter("message", message) :
+                new ObjectParameter("message", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RefundDMTEkycCharge", agentidParameter, statusParameter, messageParameter);
         }
     }
 }
