@@ -10352,18 +10352,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (responsecode1 == "OK")
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
-                var respcode = json.Content.ResponseCode.ToString();
-                var ADDINFO = json.Content.ADDINFO;
-                var results = JsonConvert.SerializeObject(ADDINFO);
-                var jss = new JavaScriptSerializer();
-                var dict = jss.Deserialize<dynamic>(results);
-                return Json(dict, JsonRequestBehavior.AllowGet);
+                var respcode = json.Content.ADDINFO.response_code.ToString();
+                if (respcode == "1")
+                {
+                    var ADDINFO = json.Content.ADDINFO;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var error = json.Content.ADDINFO.message.ToString();
+                    var error_decribe = false;
+                    var results = "{'status':'" + error_decribe + "','message':'" + error + "','response_code':'" + respcode + "'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
                 var error = json.error.ToString();
-                var error_decribe =false;
+                var error_decribe = false;
                 var results = "{'status':'" + error_decribe + "','message':'Please Try After Sometime','response_code':'40'}";
                 var jss = new JavaScriptSerializer();
                 var dict = jss.Deserialize<dynamic>(results);
@@ -12118,14 +12130,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             var details = db.Users.Where(s => s.UserId == Userid).SingleOrDefault();
             var whatsts = db.Email_show_passcode.SingleOrDefault();
-            var apiurls = "";
             var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
             var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
-            string TextMessage = "Your Account add for aeps otp is ";
             if (smsapionsts2 != null)
             {
-                apiurls = smsapionsts2.smsapi;
-                string text = TextMessage + pin;
+                var apiurls = smsapionsts2.smsapi;
+                string text = "Your Account add for aeps otp is " + pin;
                 text = string.Format(text, "1230");
                 var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
 
@@ -12164,7 +12174,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             CommUtilEmail emailsend = new CommUtilEmail();
 
 
-            emailsend.EmailLimitChk(emailid, emailid, "icon setting Passcode", TextMessage + pin, "No CallBackUrl");
+            emailsend.EmailLimitChk(emailid, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
 
             if (CheckEntry == null)
             {
@@ -12190,27 +12200,39 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return RedirectToAction("AddAepsAccount", "Home");
         }
         [HttpPost]
-        public ActionResult AddAepsAccount(string BankName, string accountno, string ifscCode, string AccountHolderName, string BankAddress, string otp)
+        public ActionResult AddAepsAccount(AepsAccount model)
         {
-            
             var Userid = User.Identity.GetUserId();
             var data = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).FirstOrDefault();
-            if(data.Otp == otp)
+            if (ModelState.IsValid)
             {
-                if(BankName.Length > 1 && accountno.Length > 8 && ifscCode.Length == 11 && AccountHolderName.Length > 1)
+                if (data.Otp == model.otp)
                 {
-                    data.BankName = BankName;
-                    data.AccountNO = accountno;
-                    data.IFSC_CODE = ifscCode;
-                    data.AccountHolder = AccountHolderName;
-                    data.BankAddress = BankAddress;
+                    data.BankName = model.BankName;
+                    data.AccountNO = model.accountno;
+                    data.IFSC_CODE = model.ifscCode;
+                    data.AccountHolder = model.AccountHolderName;
+                    data.BankAddress = model.BankAddress;
                     data.InserDate = DateTime.Now;
                     db.SaveChanges();
+                    ViewBag.message = "Add Successfully.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
+                }
+                else
+                {
+                    ViewBag.message = "Otp Mismatch.";
+                    var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
+                    return View(info);
                 }
             }
-            var info = db.BankAccountForAeps.Where(x => x.RetailerId == Userid).ToList();
-            ViewBag.Message = "Account Update Successfully.";
-            return View(info);
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                string message = string.Join(", ", errors);
+                ViewBag.message = message;
+                return View(data);
+            }
         }
         [HttpGet]
         public new ActionResult Profile()
@@ -31275,11 +31297,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 if (string.IsNullOrEmpty(retailer.AepsMerchandId))
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                    if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
+                    {
+                        var message = "Please add a complete account first.";
+                        var viewResponse = new { Status = "Failed", Message = message };
+                        return Json(viewResponse, JsonRequestBehavior.AllowGet);
+                    }
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -31425,6 +31454,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
             string lattitude = string.Empty;
             string longitude = string.Empty;
+            var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+            if ((Account.AccountNO == "" && Account.IFSC_CODE == "" && Account.BankName == "" && Account.BankAddress == "") || (Account == null))
+            {
+                var message = "Plese Add Account First.";
+                var viewresponse = new { Status = "Failed", Message = message };
+                return Json(viewresponse, JsonRequestBehavior.AllowGet);
+            }
             if (retailer.UserLocation == null)
             {
                 insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -31514,7 +31550,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
                     string companyBankAccountNumber = Account.AccountNO;
                     string bankIfscCode = Account.IFSC_CODE;
                     string companyBankName = Account.BankName;
@@ -31773,11 +31808,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 if (retailer.AepsMerchandId == "")
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                    if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
+                    {
+                        var message = "Please add a complete account first.";
+                        var viewResponse = new { Status = "Failed", Message = message };
+                        return Json(viewResponse, JsonRequestBehavior.AllowGet);
+                    }
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -31949,7 +31991,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
             var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
-            string companyBankAccountNumber = retailer.Bankaccountno;
+            string companyBankAccountNumber = Account.AccountNO;
             string bankIfscCode = Account.IFSC_CODE;
             string companyBankName = Account.BankName;
             string bankBranchName = Account.BankAddress;
@@ -32176,6 +32218,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
                 string lattitude = string.Empty;
                 string longitude = string.Empty;
+                var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                if (Account == null || string.IsNullOrWhiteSpace(Account.AccountNO) || string.IsNullOrWhiteSpace(Account.IFSC_CODE) || string.IsNullOrWhiteSpace(Account.AccountHolder) || string.IsNullOrWhiteSpace(Account.BankAddress) || string.IsNullOrWhiteSpace(Account.BankName))
+                {
+                    var message = "Please add a complete account first.";
+                    var viewResponse = new { Status = "Failed", Message = message };
+                    return Json(viewResponse, JsonRequestBehavior.AllowGet);
+                }
                 if (retailer.UserLocation == null)
                 {
                     insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -32210,11 +32259,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 catch { }
                 if (retailer.AepsMerchandId == "")
                 {
-                    string companyBankAccountNumber = retailer.Bankaccountno;
-                    string bankIfscCode = retailer.Ifsccode;
-                    string companyBankName = retailer.bankname;
-                    string bankBranchName = retailer.bankAddress;
-                    string bankAccountName = retailer.accountholder;
+                    string companyBankAccountNumber = Account.AccountNO;
+                    string bankIfscCode = Account.IFSC_CODE;
+                    string companyBankName = Account.BankName;
+                    string bankBranchName = Account.BankAddress;
+                    string bankAccountName = Account.AccountHolder;
                     string aadhaarNumber = retailer.AadharCard;
                     var ipAddress = GetComputer_InternetIP();
                     if (string.IsNullOrEmpty(companyBankAccountNumber))
@@ -32225,8 +32274,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                     else
                     {
-
-
                         var reque = new
                         {
                             merchantName = retailer.RetailerName,
@@ -35806,227 +35853,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json(new { status = "Success", Message = msg }, JsonRequestBehavior.AllowGet);
         }
-        [HttpPost]
-        public ActionResult Imps_check_transfer_New(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
-        {
-            try
-            {
-                string userid = User.Identity.GetUserId();
-                var stspinotp = "NOTOK";
-                var pin = Encrypt(dmtpin);
-                var pin_check = (from pi in db.Retailer_Details where pi.RetailerId == userid select pi).Single().PIN;
-                var rememailrememail = db.Retailer_Details.Where(x => x.RetailerId == userid).SingleOrDefault().Email;
-                var adminemail = db.Admin_details.SingleOrDefault().email;
-                var pinxhk = Decrypt(pin_check);
-                var chkstsotp = db.dmtpin_otp_status.SingleOrDefault();
-                if (chkstsotp != null)
-                {
-                    if (chkstsotp.status == true)
-                    {
-                        var mobileotplist = db.MobileOtps.Where(a => a.Userid == userid && a.Type == "DMTPINOTP").OrderByDescending(a => a.Date).ToList();
-                        var mobileotp = mobileotplist.FirstOrDefault();
-                        if (mobileotp == null)
-                        {
-                            var results = "{'Details':'OTP Error!!! Please Generate New OTP!!!','status':'Failed'}";
-                            var jss1 = new JavaScriptSerializer();
-                            var dict1 = jss1.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                        var last5minute = DateTime.Now.AddMinutes(-5);
-                        if (mobileotp.Date >= last5minute)
-                        {
-                            if (mobileotp.Otp == dmtpin)
-                            {
-                                stspinotp = "OK";
-                            }
-                            else
-                            {
-                                var results = "{'Details':'Wrong OTP!!! Please Enter Correct OTP!!!','status':'Failed'}";
-                                var jss1 = new JavaScriptSerializer();
-                                var dict1 = jss1.Deserialize<dynamic>(results);
-                                return Json(dict1, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else
-                        {
-                            db.MobileOtps.RemoveRange(mobileotplist);
-                            db.SaveChanges();
-                            var results = "{'Details':'Expire OTP!!! Please Generate New OTP!!!','status':'Failed'}";
-                            var jss1 = new JavaScriptSerializer();
-                            var dict1 = jss1.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                    else if (chkstsotp.status == false)
-                    {
-                        var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
-                        DateTime currenttime = DateTime.Now;
-                        DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
-                        lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
-                        if (lastchangedpassdtr <= currenttime)
-                        {
-                            var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
-                            var jss1 = new JavaScriptSerializer();
-                            var dict1 = jss1.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                        if (pin == pin_check)
-                        {
-                            stspinotp = "OK";
-                        }
-                        else
-                        {
-                            var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
-                            var jss1 = new JavaScriptSerializer();
-                            var dict1 = jss1.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                }
-                else if (pin == pin_check)
-                {
-                    var chktranss = db.Retailer_Details.Where(a => a.RetailerId == userid).SingleOrDefault();
-                    DateTime currenttime = DateTime.Now;
-                    DateTime lastchangedpassdtr = Convert.ToDateTime(chktranss.lastupdatetrans);
-                    lastchangedpassdtr = lastchangedpassdtr.AddDays(Convert.ToInt32(chktranss.transexpdays));
-                    if (lastchangedpassdtr <= currenttime)
-                    {
-                        var results = "{'Details':'Your transaction pin is expired or have to be changed!! Please set new transaction pin','status':'Failed' }";
-                        var jss1 = new JavaScriptSerializer();
-                        var dict1 = jss1.Deserialize<dynamic>(results);
-                        return Json(dict1, JsonRequestBehavior.AllowGet);
-                    }
-                    stspinotp = "OK";
-                }
-                else
-                {
-                    var results = "{'Details':'Wrong Pin!!! Please Enter Correct Pin!!!','status':'Failed'}";
-                    var jss1 = new JavaScriptSerializer();
-                    var dict1 = jss1.Deserialize<dynamic>(results);
-                    return Json(dict1, JsonRequestBehavior.AllowGet);
-                }
-                if (stspinotp == "OK")
-                {
-                    decimal finalamount = Convert.ToDecimal(amount);
-                    var ch1 = db.IMPS_transtion_detsils.Where(aa => aa.accountno == account && aa.rch_from == userid && aa.totalamount == finalamount && aa.Status.ToUpper() == "SUCCESS").OrderByDescending(aa => aa.idno).ToList();
-                    var date = ch1.Any() ? ch1.FirstOrDefault().trans_time : System.DateTime.Now.AddDays(-1);
-                    int ggg = Convert.ToInt32((System.DateTime.Now - Convert.ToDateTime(date)).TotalSeconds);
-                    if (ggg >= 180)
-                    {
-                        var remain = (from mon in db.Remain_reteller_balance where mon.RetellerId == userid select mon).Single().Remainamount;
-                        if (remain >= finalamount)
-                        {
-                            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
-                            if (apinm != null)
-                            {
-                                int amt = Convert.ToInt32(amount);
-                                decimal? amooot = 0;
-                                if (apinm.catagory == "PAYOUT")
-                                {
-                                    var limitchk = db.transtion_limit.SingleOrDefault();
-                                    amooot = limitchk.Perlimit;
-                                    if (string.IsNullOrEmpty(Mode))
-                                    {
-                                        amooot = 100000;
-                                    }
-
-                                    else if (chkkyc == false)
-                                    {
-                                        if (amooot == 49750)
-                                        {
-                                            amooot = 25000;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    amooot = 5000;
-                                }
-                                if (amt <= amooot)
-                                {
-                                    if (amt >= 100)
-                                    {
-                                        if (amt > amooot)
-                                        {
-                                            int otpcodess = new Random().Next(1111, 9999);
-                                            MobileOtp motp = new MobileOtp();
-                                            motp.Date = DateTime.Now;
-                                            motp.Userid = userid;
-                                            motp.Type = "PaymentConfirmation";
-                                            motp.mobileno = sendermobileno;
-                                            motp.Otp = otpcodess.ToString();
-                                            db.MobileOtps.Add(motp);
-                                            db.SaveChanges();
-                                            smssend.sms_init("Y", "Y", "PaymentConfirmationIMSPSMOBILEOTP", sendermobileno, account, amt, otpcodess.ToString());
-                                            var results = "{'Details':'','status':'OTP' }";
-                                            var jss1 = new JavaScriptSerializer();
-                                            var dict1 = jss1.Deserialize<dynamic>(results);
-                                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                                        }
-                                        else
-                                        {
-                                            var results = "{'Details':'','status':'Success' }";
-                                            var jss1 = new JavaScriptSerializer();
-                                            var dict1 = jss1.Deserialize<dynamic>(results);
-                                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var results = "{'Details':' Amount Should be Greater Than Rs. 100','status':'Failed' }";
-                                        var jss1 = new JavaScriptSerializer();
-                                        var dict1 = jss1.Deserialize<dynamic>(results);
-                                        return Json(dict1, JsonRequestBehavior.AllowGet);
-                                    }
-                                }
-                                else
-                                {
-                                    var results = "{'Details':' Amount Should be Less Rs " + amooot + "','status':'Failed' }";
-                                    var jss1 = new JavaScriptSerializer();
-                                    var dict1 = jss1.Deserialize<dynamic>(results);
-                                    return Json(dict1, JsonRequestBehavior.AllowGet);
-                                }
-                            }
-                            else
-                            {
-                                var results = "{'Details':'No api Open.','status':'Failed'}";
-                                var jss1 = new JavaScriptSerializer();
-                                var dict1 = jss1.Deserialize<dynamic>(results);
-                                return Json(dict1, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else
-                        {
-                            var results = "{'Details':'Remain Amount Low','status':'Failed' }";
-                            var jss1 = new JavaScriptSerializer();
-                            var dict1 = jss1.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                    else
-                    {
-                        var results = "{'Details':'Please Wait 5 Minutes... Same Amount Not Transfer in same Account','status':'Failed' }";
-                        var jss1 = new JavaScriptSerializer();
-                        var dict1 = jss1.Deserialize<dynamic>(results);
-                        return Json(dict1, JsonRequestBehavior.AllowGet);
-                    }
-                }
-                else
-                {
-                    var results = "{'Details':'Error!!! Please try after sometime!!!','status':'Failed'}";
-                    var jss1 = new JavaScriptSerializer();
-                    var dict1 = jss1.Deserialize<dynamic>(results);
-                    return Json(dict1, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception ex)
-            {
-                var results = "{'Details':'Something went wromg.Please try again.','status':'Failed' }";
-                var jss1 = new JavaScriptSerializer();
-                var dict1 = jss1.Deserialize<dynamic>(results);
-                return Json(dict1, JsonRequestBehavior.AllowGet);
-            }
-        }
+       
         [HttpPost]
         public ActionResult Imps_check_transfer_DMT(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
         {

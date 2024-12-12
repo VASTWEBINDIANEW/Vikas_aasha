@@ -13,30 +13,30 @@
                 <tr>
                     <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(₹)</th>
-                    <th colspan="2" style="text-align:center">Charge&nbsp;100&nbsp;>&nbsp;1K</th>
-                    <th colspan="2" style="text-align:center">Charge&nbsp;1001&nbsp;>&nbsp;2K</th>
-                    <th colspan="2" style="text-align:center">Charge&nbsp;2001&nbsp;>&nbsp;3K</th>
-                    <th colspan="2" style="text-align:center">Charge&nbsp;3001&nbsp;>&nbsp;4K</th>
-                    <th colspan="2" style="text-align:center">Charge&nbsp;4001&nbsp;>&nbsp;5K</th>
+                    <th colspan="2" style="text-align:center">Range&nbsp;100&nbsp;>&nbsp;1K</th>
+                    <th colspan="2" style="text-align:center">Range&nbsp;1001&nbsp;>&nbsp;2K</th>
+                    <th colspan="2" style="text-align:center">Range&nbsp;2001&nbsp;>&nbsp;3K</th>
+                    <th colspan="2" style="text-align:center">Range&nbsp;3001&nbsp;>&nbsp;4K</th>
+                    <th colspan="2" style="text-align:center">Range&nbsp;4001&nbsp;>&nbsp;5K</th>
 
                 </tr>
                 <tr style="color: #333333; font-weight: 600; font-size: 11px;">
-                    <td>Charge</td>
+                    <td>Comm/Sharing</td>
                     <td>Active</td>
                     <td>
-                        Charge
+                        Comm/Sharing
                     </td>
                     <td>Active</td>
                     <td>
-                        Charge
+                        Comm/Sharing
                     </td>
                     <td>Active</td>
                     <td>
-                        Charge
+                        Comm/Sharing
                     </td>
                     <td>Active</td>
                     <td>
-                        Charge
+                        Comm/Sharing
                     </td>
                     <td>Active</td>
 
@@ -50,12 +50,12 @@
                     var usertype = item.usertype;
                     if (item.usertype == "Distributor-REM")
                     {
-                        usertype = "Retailer Charge";
+                        usertype = "Retailer Sharing";
                     }
                     var data = "";
                     if (item.usertype == "Retailer")
                     {
-                        usertype = "Retailer Charge";
+                        usertype = "Retailer Sharing";
                         data = "";
                     }
                     var color = "";
@@ -83,18 +83,37 @@
 
 
                     <tr style="background-color:@color; display:@data">
-                        <td>@usertype</td>
-                        <td>@item.Verify_comm</td>
-                        <td>@item.Comm_1000</td>
-                        <td>%</td>
-                        <td>@item.Comm_2000</td>
-                        <td>%</td>
-                        <td>@item.Comm_3000</td>
-                        <td>%</td>
-                        <td>@item.Comm_4000</td>
-                        <td>%</td>
-                        <td>@item.Comm_5000</td>
-                        <td>%</td>
+                        @if (item.usertype == "Retailer")
+                        {
+                            <td>@usertype</td>
+                            <td>@item.Verify_comm</td>
+                            <td>@item.Comm_1000</td>
+                            <td>%</td>
+                            <td>@item.Comm_2000</td>
+                            <td>%</td>
+                            <td>@item.Comm_3000</td>
+                            <td>%</td>
+                            <td>@item.Comm_4000</td>
+                            <td>%</td>
+                            <td>@item.Comm_5000</td>
+                            <td>%</td>
+                        }
+                        else
+                        {
+                            <td>@usertype</td>
+                            <td>@item.Verify_comm</td>
+                            <td>@item.Comm_1000</td>
+                            <td>₹</td>
+                            <td>@item.Comm_2000</td>
+                            <td>₹</td>
+                            <td>@item.Comm_3000</td>
+                            <td>₹</td>
+                            <td>@item.Comm_4000</td>
+                            <td>₹</td>
+                            <td>@item.Comm_5000</td>
+                            <td>₹</td>
+                        }
+
 
                     </tr>
                 }
@@ -108,7 +127,7 @@
                     var data = "";
                     if (Model.commonnew[i].usertype == "Retailer")
                     {
-                        usertype = "Retailer > Common";
+                        usertype = "Retailer Sharing";
 
                     }
                     var color = "";
@@ -133,53 +152,107 @@
                     {
                         usertype = "Distributor commission";
                     }
-                    <tr style="background-color:@color; display:@data">
-                        @Html.HiddenFor(a => a.commonnew[i].idno)
-                        <td>
-                            @usertype
-                        </td>
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Verify_comm, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].verify_comm)
-                        </td>
+                    if (Model.commonnew[i].usertype == "Retailer")
+                    {
+                        <tr style="background-color:@color; display:@data">
+                            @Html.HiddenFor(a => a.commonnew[i].idno)
+                            <td>
+                                @usertype
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Verify_comm, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].verify_comm)
+                            </td>
 
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Comm_1000, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].comm_1000)
-                        </td>
-                        <td>
-                            %
-                        </td>
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Comm_2000, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].comm_2000)
-                        </td>
-                        <td>
-                            %
-                        </td>
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].comm_3000)
-                        </td>
-                        <td>
-                            %
-                        </td>
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].comm_4000)
-                        </td>
-                        <td>
-                            %
-                        </td>
-                        <td>
-                            @Html.EditorFor(a => a.commonnew[i].Comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
-                            @Html.ValidationMessageFor(a => a.common[i].comm_5000)
-                        </td>
-                        <td>
-                            %
-                        </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_1000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_1000)
+                            </td>
+                            <td>
+                                %
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_2000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_2000)
+                            </td>
+                            <td>
+                                %
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_3000)
+                            </td>
+                            <td>
+                                %
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_4000)
+                            </td>
+                            <td>
+                                %
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_5000)
+                            </td>
+                            <td>
+                                %
+                            </td>
 
-                    </tr>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr style="background-color:@color; display:@data">
+                            @Html.HiddenFor(a => a.commonnew[i].idno)
+                            <td>
+                                @usertype
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Verify_comm, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].verify_comm)
+                            </td>
+
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_1000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_1000)
+                            </td>
+                            <td>
+                                ₹
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_2000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_2000)
+                            </td>
+                            <td>
+                                ₹
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_3000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_3000)
+                            </td>
+                            <td>
+                                ₹
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_4000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_4000)
+                            </td>
+                            <td>
+                                ₹
+                            </td>
+                            <td>
+                                @Html.EditorFor(a => a.commonnew[i].Comm_5000, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.ValidationMessageFor(a => a.common[i].comm_5000)
+                            </td>
+                            <td>
+                                ₹
+                            </td>
+
+                        </tr>
+                    }
+
                 }
 
             </tbody>

@@ -7,6 +7,89 @@
 <script src="/path/to/cdn/jquery.min.js"></script>
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
+    .group_img {
+        position: absolute;
+
+    }
+        .group_img svg {
+            width: 100%;
+            float: left;
+        }
+
+    .loadingio-spinner-ripple-92ar2pfqk5j {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: transparent;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    .ldio-zdyd6mf6t5 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+    }
+        .ldio-zdyd6mf6t5 div {
+            position: absolute;
+            border-width: 4px;
+            border-style: solid;
+            opacity: 1;
+            border-radius: 50%;
+            animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
+            box-sizing: content-box;
+        }
+            .ldio-zdyd6mf6t5 div:nth-child(1) {
+                border-color: var(--main-bg-lcolor);
+            }
+            .ldio-zdyd6mf6t5 div:nth-child(2) {
+                border-color: #c7c7c7;
+                animation-delay: -0.5s;
+            }
+    @@keyframes ldio-zdyd6mf6t5 {
+        0% {
+            top: 96px;
+            left: 96px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+
+        100% {
+            top: 18px;
+            left: 18px;
+            width: 156px;
+            height: 156px;
+            opacity: 0;
+        }
+    }
+
+
+    .but_df {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+        .but_df button {
+            border-radius: 6px !important;
+            background: #ffffffbd;
+        }
+    .box_otp h3 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .box_otp span {
+        margin-bottom: 18px;
+        float: left;
+        text-align: center;
+        width: 100%;
+    }
+
     .show_pop {
         position: fixed;
         width: 100%;
@@ -14,7 +97,7 @@
         left: 0;
         top: 0;
         text-align: center;
-        background: #00000033;
+        background: #00000070;
         z-index: 99999;
     }
         .show_pop input {
@@ -31,7 +114,7 @@
         width: 30%;
         margin: auto;
         position: relative;
-        top: 40%;
+        top: 35%;
         float: initial !important;
         display: table !important;
         background: #fff;
@@ -46,10 +129,11 @@
 
         .box_otp button {
             padding: 4px 16px;
-            border: 1px solid green;
-            margin-top: 23px !important;
+            border: 1px solid #000;
+            margin-top: 20px !important;
             width: auto;
             float: right;
+            border-radius: 3px;
         }
     .button-container {
         display: flex;
@@ -62,6 +146,7 @@
 
     #textForm button {
         margin: 0;
+        margin-top: 10px;
     }
 
     .mesg_text span {
@@ -467,7 +552,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 36px;
+        padding-bottom: 12px;
     }
 
     .appc_autol div {
@@ -1593,6 +1678,14 @@
     }
 
     @@media only screen and (max-width:767px) {
+        .button-container {
+            display: block;
+        }
+            .button-container button {
+                float: left;
+                margin: 5px;
+                width: 48%;
+            }
         .appi_set {
             width: 100%;
             padding: 15px;
@@ -1613,6 +1706,9 @@
     @@media only screen and (max-width:600px) {
         .ps_setcolor {
             width: 100%;
+        }
+        .button-container button {
+            width: 47%;
         }
 
         .ps_setmob {
@@ -1636,6 +1732,17 @@
                 width: 33.333%;
             }
     }
+
+    @@media only screen and (max-width:480px){
+        .button-container button {
+            margin: 5px 0;
+            width: 100%;
+        }
+        .app_all_s button {
+            padding: 6px 60px !important;
+        }
+    }
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
@@ -1658,11 +1765,12 @@
                 <div class="card login-back-img page-header-third">
                     <div class="button-container">
                         <button id="Button1" onclick="ButtonActive('Button1')" class="active">App Color</button>
-                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon</button>
-                        <button id="Button3" onclick="ButtonActive('Button3')">App KYC Docs</button>
-                        <button id="Button4" onclick="ButtonActive('Button4')">FQAS</button>
-                        <button id="Button5" onclick="ButtonActive('Button5')">App Sliders</button>
-                        <button id="Button6" onclick="ButtonActive('Button6')">App Message</button>
+                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon Theme</button>
+                        <button id="Button3" onclick="ButtonActive('Button3')">App Icon Images</button>
+                        <button id="Button4" onclick="ButtonActive('Button4')">App KYC Docs</button>
+                        <button id="Button5" onclick="ButtonActive('Button5')">FQAS</button>
+                        <button id="Button6" onclick="ButtonActive('Button6')">App Sliders</button>
+                        <button id="Button7" onclick="ButtonActive('Button7')">App Message</button>
                     </div>
                 </div>
             </div>
@@ -1674,8 +1782,8 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
                     <div class="card login-back-img page-header-third">
                         <div class="login-slider-status">
-                            <h2>APP Background Color/Button Color/Text Color</h2>
-                         </div>
+                            <h2>APP Background Color & Button Color & Text Color</h2>
+                        </div>
                         <div class="app_set" style="width:50%; display:block;">
                             <div class="page-header-third" style=" width: 100%;">
                                 <div class="thame-headding">
@@ -1690,7 +1798,7 @@
                                                     Primary Color
                                                 </h3>
                                                 <div class="ps_set2">
-                                                    <input type="color" id="backcolor1" onchange="ShowBackgroundColor()"/>
+                                                    <input type="color" id="backcolor1" onchange="ShowBackgroundColor()" />
                                                 </div>
                                             </div>
                                             <div class="ps_set">
@@ -1698,7 +1806,7 @@
                                                     Secondary Color
                                                 </h3>
                                                 <div class="ps_set2">
-                                                    <input type="color" id="backcolor2" onchange="ShowBackgroundColor()"/>
+                                                    <input type="color" id="backcolor2" onchange="ShowBackgroundColor()" />
                                                 </div>
                                             </div>
                                             <div>
@@ -1713,35 +1821,35 @@
                                     }
                                     else
                                     {
-                                <div class="ps_setcolor">
-                                    <div class="ps_set">
-                                        <div class="danger">
-                                            <p style="text-align: justify; font-size: 15px;"><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
-                                        </div>
-                                    </div>
-                                    <div class="ps_set">
-                                        <div class="ps_hset">
-                                            <h3>Primary Color</h3>
-                                            <span id="bckg1">(@backgapp[0].background_color1)</span>
-                                        </div>
-                                        <div class="ps_set2">
-                                            <input type="color" id="backcolor1" value="@backgapp[0].background_color1" onchange="ShowBackgroundColor()" />
-                                        </div>
-                                    </div>
-                                    <div class="ps_set">
-                                        <div class="ps_hset">
-                                            <h3>Secondary Color</h3>
-                                            <span id="bckg2">(@backgapp[0].background_color2)</span>
-                                        </div>
-                                        <div class="ps_set2">
-                                            <input type="color" id="backcolor2" value="@backgapp[0].background_color2" onchange="ShowBackgroundColor()" />
-                                        </div>
-                                    </div>
-                                    <div class="ps_set2" style="margin-top: 14px;">
-                                        <button style="width: 100%; float: left; height: 54px; background: green; color: #fff; border: 1px solid; border-radius: 4px;" onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
-                                    </div>
+                                        <div class="ps_setcolor">
+                                            <div class="ps_set">
+                                                <div class="danger">
+                                                    <p style="text-align: justify; font-size: 15px;"><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
+                                                </div>
+                                            </div>
+                                            <div class="ps_set">
+                                                <div class="ps_hset">
+                                                    <h3>Primary Color</h3>
+                                                    <span id="bckg1">(@backgapp[0].background_color1)</span>
+                                                </div>
+                                                <div class="ps_set2">
+                                                    <input type="color" id="backcolor1" value="@backgapp[0].background_color1" onchange="ShowBackgroundColor()" />
+                                                </div>
+                                            </div>
+                                            <div class="ps_set">
+                                                <div class="ps_hset">
+                                                    <h3>Secondary Color</h3>
+                                                    <span id="bckg2">(@backgapp[0].background_color2)</span>
+                                                </div>
+                                                <div class="ps_set2">
+                                                    <input type="color" id="backcolor2" value="@backgapp[0].background_color2" onchange="ShowBackgroundColor()" />
+                                                </div>
+                                            </div>
+                                            <div class="ps_set2" style="margin-top: 14px;">
+                                                <button style="width: 100%; float: left; height: 54px; background: green; color: #fff; border: 1px solid; border-radius: 4px;" onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
+                                            </div>
 
-                                </div>
+                                        </div>
                                     }
                                     <div class="ps_setmob">
                                         @if (backgapp.Count == 0)
@@ -1760,7 +1868,7 @@
                         <div class="app_set" style="width:50%">
                             <div class="page-header-third" style=" width: 100%;">
                                 <div class="thame-headding">
-                                    <h2 style="background: #878787;color:white">App Button Color/Text Color</h2>
+                                    <h2 style="background: #878787;color:white">App Button Color & Text Color</h2>
                                 </div>
                                 <div class="appc_autol1" style="padding: 2px 15px;">
                                     <div class="ps_setcolor">
@@ -1794,7 +1902,7 @@
                                                 <input type="color" value="@chksd[0].font_color" id="appcol3" onchange="ShowIconColor()" />
                                             </div>
                                         </div>
-                                        <div  class="ps_set2">
+                                        <div class="ps_set2">
                                             <button style="width: 100%; float: left; height: 54px; background: green; color: #fff; border: 1px solid; border-radius: 4px;" onclick="SentIconOtp('Your Button & text color change OTP is ')">Save Button & Text Color</button>
                                         </div>
                                     </div>
@@ -1819,22 +1927,21 @@
         </div>
 
         <div id="AppIcon" style="display: none;">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <h2 class="but_df">
-                            <button style="background: var(--main-bg-lcolor)" onclick="deshbackss()" id="dback">Dashboard icon</button>
-                            <button id="fback" onclick="frontbackss()">Front icon</button>
-                        </h2>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row clearfix" id="iconsettingshow">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+            <div class="row clearfix" id="iconsettingshow" style=" margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
-                            <h2 style="float: left; width: 100%;">App Dashboard icon Design/Color</h2>
+                            <h2 class="but_df">
+                                <span>
+                                    <button style="background: var(--main-bg-lcolor);color:#fff;" onclick="deshbackss()" id="dback">Dashboard Icon</button>
+                                    <button style="margin-left: 5px !important;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
+                                </span>
+                                <span>
+                                    App Dashboard icon Design & Color
+                                </span>
+                            </h2>
+
                         </div>
 
                         <div style="height: 510px;">
@@ -1843,7 +1950,7 @@
                                     <div class="appc_auto">
                                         <div class="page-header-third">
                                             <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Icon Color/Background Color</h2>
+                                                <h2 style="background-color: #878787;">App Icon Color & Background Color</h2>
                                             </div>
 
                                             <div class="appc_autol1">
@@ -1879,7 +1986,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="appc_auto">
+                                    <div class="appc_auto" style="padding-top:0;">
 
                                         <div class="page-header-third">
                                             <div class="thame-headding" style="color: white;">
@@ -1958,19 +2065,22 @@
                                                     <button id="sef8" onclick="appiconcolor(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
                                                 }
                                             </div>
+
+                                            <div style="display:none" id="col1"></div>
+                                            <div style="display:none" id="col2"></div>
+                                            <div style="display:none" id="col3"></div>
+                                            <div style="display:none" id="col4"></div>
+
+                                            <div class="app_all_s" style=" padding-top: 7px;">
+                                                <div id="opthide">
+                                                    <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehidd"><b style="color:#fff;">Update Icon Theme</b></button>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="col1"></div>
-                                    <div style="display:none" id="col2"></div>
-                                    <div style="display:none" id="col3"></div>
-                                    <div style="display:none" id="col4"></div>
 
-                                    <div class="app_all_s">
-                                        <div id="opthide">
-                                            <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px;" id="savehidd">SAVE</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -1978,16 +2088,16 @@
                                 <div class="page-header-third">
                                     <div class="center_iset">
                                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
-                                           <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
-                                           <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
-                                               <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
-                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
-                                               <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
-                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
-                                               <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
-                                               <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
+                                        <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
+                                        <g transform="matrix(0.88,0,0,0.88,30.72,30.72)">
+                                        <linearGradient id="a" x1="11.781" x2="500.219" y1="256" y2="256" gradientUnits="userSpaceOnUse">
+                                        <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0"></stop>
+                                        <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.021"></stop>
+                                        <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.293"></stop>
+                                        <stop class="coloew2" stop-color="@chksd123[0].color2" offset="0.554"></stop>
+                                        <stop class="coloew1" stop-color="@chksd123[0].color1" offset="0.796"></stop>
                                                 </linearGradient>
-                                               <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#a); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
+                                        <path d="M206.461 225.73v-35.556c0-27.208 22.183-49.264 49.546-49.264s49.546 22.056 49.546 49.264v35.556M251.13 39.37a223.243 223.243 0 0 0-42.899 4.628C88.523 68.729 11.609 185.433 36.439 304.664c15.419 74.04 66.446 131.643 131.576 158.751M217.97 70.651l36.763-31.695L209.124 20m51.746 452.63a223.243 223.243 0 0 0 42.899-4.628c119.708-24.731 196.622-141.436 171.792-260.667-15.419-74.04-66.446-131.643-131.576-158.751M294.03 441.349l-36.763 31.695L302.876 492m30.704-221.909-.005-8.581c-1.082-19.942-17.625-35.781-37.874-35.781h-79.387c-20.949 0-37.931 16.951-37.931 37.86v69.641c0 20.909 16.982 37.86 37.931 37.86h79.387c2.992 0 5.902-.346 8.695-1" style="fill: none; stroke: url(#a); stroke-width: 45; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10;"></path>
                                            </g>
                                         </svg>
                                     </div>
@@ -1997,11 +2107,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row clearfix" id="iconsettinghide" style="display:none">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
+            <div class="row clearfix" id="iconsettinghide" style="display: none; margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
-                            <h2>App Front icon Design/Color</h2>
+                            <h2 class="but_df">
+                                <span>
+                                    <button onclick="deshbackss()" id="dback">Dashboard Icon</button>
+                                    <button style="background: var(--main-bg-lcolor); margin-left: 5px !important;color:#fff;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
+                                </span>
+                                <span>
+                                    App Front icon Design & Color
+                                </span>
+                            </h2>
                         </div>
                         <div style="height: 510px;">
                             <div class="br_setb">
@@ -2009,7 +2127,7 @@
                                     <div class="appc_auto">
                                         <div class="page-header-third">
                                             <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Front Icon Color/Background Color</h2>
+                                                <h2 style="background-color: #878787;">App Front Icon Color & Background Color</h2>
                                             </div>
                                             <div class="appc_autol1">
                                                 <div class="appc_autol">
@@ -2044,7 +2162,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="appc_auto">
+                                    <div class="appc_auto" style="padding-top:0;">
 
                                         <div class="page-header-third">
                                             <div class="thame-headding" style="color: white;">
@@ -2122,20 +2240,20 @@
                                                     <button id="sef8ss" onclick="appiconcolorss(4 ,8)"><span class="s_button1">Theme 9</span> <br /><span class="s_button2">500px</span></button>
                                                 }
                                             </div>
+                                            <div style="display:none" id="col1ss"></div>
+                                            <div style="display:none" id="col2ss"></div>
+                                            <div style="display:none" id="col3ss"></div>
+                                            <div style="display:none" id="col4ss"></div>
 
+                                            <div class="app_all_s" style="padding-top: 7px;">
+                                                <div id="opthidess">
+                                                    <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehiddss"><b style="color:#fff;">Update Icon Theme</b></button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="col1ss"></div>
-                                    <div style="display:none" id="col2ss"></div>
-                                    <div style="display:none" id="col3ss"></div>
-                                    <div style="display:none" id="col4ss"></div>
 
-                                    <div class="app_all_s">
-                                        <div id="opthidess">
-                                            <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px;" id="savehiddss">SAVE</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="appi_set" style="float:right">
@@ -2158,6 +2276,179 @@
                                           </svg>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="AppIconImages" style="display: none;">
+
+            <div class="row clearfix" id="imagessettingshow" style=" margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="thame-headding">
+                            <h2 class="but_df">
+                                <span>
+                                    <button id="fillback" onclick="fillbackss()" style="background: var(--main-bg-lcolor);color:#fff;">Fill Icon Images</button>
+                                    <button onclick="outbackss()" id="outback" style="margin-left: 5px !important;">Out Line Icon Images</button>
+                                </span>
+                                <span>
+                                    We have 12 type fill icon groups
+                                </span>
+                            </h2>
+
+                        </div>
+
+                        <div style="height: 510px;">
+                            <div class="br_setb">
+                                <div class="appc_auto0">
+                                    <div class="appc_auto">
+
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style="color: white;">
+                                                <h2 style="background: #878787;">App Fill Icon Images Groups</h2>
+                                            </div>
+
+                                            <div class="appc_autol1">
+                                                <button><span class="s_button1">Group 1</span></button>
+                                                <button><span class="s_button1">Group 2</span></button>
+                                                <button><span class="s_button1">Group 3</span></button>
+                                                <button><span class="s_button1">Group 4</span></button>
+                                                <button><span class="s_button1">Group 5</span></button>
+                                                <button><span class="s_button1">Group 6</span></button>
+                                                <button><span class="s_button1">Group 7</span></button>
+                                                <button><span class="s_button1">Group 8</span></button>
+                                                <button><span class="s_button1">Group 9</span></button>
+                                                <button><span class="s_button1">Group 10</span></button>
+                                                <button><span class="s_button1">Group 11</span></button>
+                                                <button><span class="s_button1">Group 12</span></button>
+                                            </div>
+
+                                            <div style="display:none" ></div>
+                                            <div style="display:none" ></div>
+                                            <div style="display:none" ></div>
+                                            <div style="display:none" ></div>
+
+                                            <div class="app_all_s" style=" padding-top: 7px;">
+                                                <div>
+                                                    <button style="padding: 6px 88px; border-radius: 20px;"><b style="color:#fff;">Update Icon Images</b></button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="appi_set" style="float:right">
+                                <div class="page-header-third">
+                                    <div class="center_iset" style="height:auto;">
+                                        <div class="ps_setmob" style=" margin: 0;">
+                                            @if (backgapp.Count == 0)
+                                            {
+                                                <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                            }
+
+                                        <div class="group_img" >
+                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512" xml:space="preserve">
+                                            <rect width="512" height="512" rx="102.4" ry="102.4" fill="#bac8d3" shape="rounded"></rect>
+                                            <g transform="matrix(0.78,0,0,0.78,56.31999664306639,56.33099731445316)">
+                                            <linearGradient id="a" x1="57.945" x2="454.065" y1="454.06" y2="57.94" gradientTransform="matrix(1 0 0 -1 0 512)" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0" stop-color="#459dff"></stop>
+                                            <stop offset="1" stop-color="#0056b3"></stop>
+                                            </linearGradient>
+                                            <path fill="url(#a)" d="M204.8 135.3c0 12.1-9.8 21.9-21.9 21.9s-21.9-9.8-21.9-21.9 9.8-21.9 21.9-21.9 21.9 9.8 21.9 21.9zM51.2..."></path>
+                                            </g>
+                                            </svg>
+                                        </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix" id="imagessettinghide" style="display: none; margin: 0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
+                    <div class="card login-back-img page-header-third">
+                        <div class="thame-headding">
+                            <h2 class="but_df">
+                                <span>
+                                    <button id="fillback" onclick="fillbackss()">Fill Icon Images</button>
+                                    <button onclick="outbackss()" id="outback"  style="background: var(--main-bg-lcolor); margin-left: 5px !important;color:#fff;">Out Line Icon Images</button>
+                                </span>
+                                <span>
+                                    We have 12 type out line icon groups
+                                </span>
+                            </h2>
+                        </div>
+                        <div style="height: 510px;">
+                            <div class="br_setb">
+                                <div class="appc_auto0">
+                                    <div class="appc_auto">
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style="color: white;">
+                                                <h2 style="background: #878787;">App Out Line Icon Images Groups</h2>
+                                            </div>
+
+                                            <div class="appc_autol1">
+                                                <button><span class="s_button1">Group 1</span></button>
+                                                <button><span class="s_button1">Group 2</span></button>
+                                                <button><span class="s_button1">Group 3</span></button>
+                                                <button><span class="s_button1">Group 4</span></button>
+                                                <button><span class="s_button1">Group 5</span></button>
+                                                <button><span class="s_button1">Group 6</span></button>
+                                                <button><span class="s_button1">Group 7</span></button>
+                                                <button><span class="s_button1">Group 8</span></button>
+                                                <button><span class="s_button1">Group 9</span></button>
+                                                <button><span class="s_button1">Group 10</span></button>
+                                                <button><span class="s_button1">Group 11</span></button>
+                                                <button><span class="s_button1">Group 12</span></button>
+                                            </div>
+
+                                            <div style="display:none"></div>
+                                            <div style="display:none"></div>
+                                            <div style="display:none"></div>
+                                            <div style="display:none"></div>
+
+                                            <div class="app_all_s" style=" padding-top: 7px;">
+                                                <div>
+                                                    <button style="padding: 6px 88px; border-radius: 20px;"><b style="color:#fff;">Update Icon Images</b></button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="appi_set" style="float:right">
+
+                                    <div class="page-header-third">
+                                        <div class="center_iset" style="height:auto;">
+                                            <div class="ps_setmob" style=" margin: 0;">
+                                                @if (backgapp.Count == 0)
+                                                {
+                                                    <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                                }
+                                                else
+                                                {
+                                                    <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -2367,37 +2658,52 @@
 
 </section>
 <div class="show_pop" id="saveshow" style="display:none">
-    <img src="~/icegif-1263.gif" />
+    @*<img src="~/icegif-1263.gif" />*@
+    <div id="loadredmodel" style="display:block;">
+        <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
+            <div class="ldio-zdyd6mf6t5">
+                <div></div><div></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="show_pop" id="optshow" style="display:none">
     <div class="box_otp">
+        <h3>Submit your Dashboard Icon OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="otpicon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="savedateicon()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateicon()">Submit</button>
     </div>
 </div>
 <div class="show_pop" id="optshowss" style="display:none">
     <div class="box_otp">
+        <h3>Submit your Front Icon OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="otpiconss" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="savedateiconss()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateiconss()">Submit</button>
     </div>
 </div>
 
 <div class="show_pop" id="BackGroundOtpBox" style="display:none">
     <div class="box_otp">
+        <h3>Submit your App Background Color OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="OTPBackground" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="updbackgr()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="updbackgr()">Submit</button>
     </div>
 </div>
 
 <div class="show_pop" id="IconOtpBox" style="display:none">
     <div class="box_otp">
+        <h3>Submit your App Button Color/Text OTP </h3>
+        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
         <input type="number" id="OTPIcon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: green; float: left;">Back</button>
-        <button style="color: #fff; background: green; " onclick="colorprint()">Submit</button>
+        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
+        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="colorprint()">Submit</button>
     </div>
 </div>
 
@@ -2693,10 +2999,11 @@
         const sections = {
             Button1: 'AppColor',
             Button2: 'AppIcon',
-            Button3: 'AppKYCDocs',
-            Button4: 'FQAS',
-            Button5: 'AppSlider',
-            Button6: 'AppMessage',
+            Button3: 'AppIconImages',
+            Button4: 'AppKYCDocs',
+            Button5: 'FQAS',
+            Button6: 'AppSlider',
+            Button7: 'AppMessage',
         };
         Object.values(sections).forEach(sectionId => {
             const section = document.getElementById(sectionId);
@@ -2753,7 +3060,7 @@
         });
 
     }
-
+    //  App Icon Theme
     function frontbackss() {
         document.getElementById('dback').style.background = '#F6F5F5';
         document.getElementById('fback').style.background = 'var(--main-bg-lcolor)';
@@ -2766,6 +3073,20 @@
         document.getElementById('iconsettinghide').style.display = 'none';
         document.getElementById('iconsettingshow').style.display = 'contents';
     }
+    //  App Icon Images
+    function fillbackss() {
+        document.getElementById('outback').style.background = '#F6F5F5';
+        document.getElementById('fillback').style.background = 'var(--main-bg-lcolor)';
+        document.getElementById('imagessettingshow').style.display = 'contents';
+        document.getElementById('imagessettinghide').style.display = 'none';
+    }
+    function outbackss() {
+        document.getElementById('fillback').style.background = '#F6F5F5';
+        document.getElementById('outback').style.background = 'var(--main-bg-lcolor)';
+        document.getElementById('imagessettinghide').style.display = 'contents';
+        document.getElementById('imagessettingshow').style.display = 'none';
+    }
+
 
     function whitemess(W) {
         var der = document.getElementsByClassName('whitemes');

@@ -3,6 +3,98 @@
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
 <style>
+   /* New css */
+    .loadingio-spinner-ripple-92ar2pfqk5j {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        overflow: hidden;
+        background: transparent;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .ldio-zdyd6mf6t5 {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
+    }
+
+        .ldio-zdyd6mf6t5 div {
+            position: absolute;
+            border-width: 4px;
+            border-style: solid;
+            opacity: 1;
+            border-radius: 50%;
+            animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
+            box-sizing: content-box;
+        }
+
+            .ldio-zdyd6mf6t5 div:nth-child(1) {
+                border-color: var(--main-bg-lcolor);
+            }
+
+            .ldio-zdyd6mf6t5 div:nth-child(2) {
+                border-color: #c7c7c7;
+                animation-delay: -0.5s;
+            }
+
+    @@keyframes ldio-zdyd6mf6t5 {
+        0% {
+            top: 96px;
+            left: 96px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+
+        100% {
+            top: 18px;
+            left: 18px;
+            width: 156px;
+            height: 156px;
+            opacity: 0;
+        }
+    }
+
+
+    .login-slider-status {
+        width: 100%;
+        float: left;
+        border-bottom: 3px solid var(--main-bg-lcolor);
+        background: var(--nav-tab-bg);
+        margin-bottom: 20px;
+        text-align: left;
+    }
+        .login-slider-status h2 {
+            border-bottom: 3px solid var(--main-bg-lcolor);
+            font-size: 18px;
+            margin: 0px;
+            padding: 15px;
+            background: var(--nav-tab-bg);
+            width: 50%;
+            float: left;
+            margin-bottom: 0px !important;
+            border-bottom: 0px !important;
+            width: 100%;
+        }
+    form {
+        text-align: left;
+    }
+    .set_but {
+        padding: 6px 100px;
+        border-radius: 20px !important;
+        background: var(--main-bg-lcolor) !important;
+        margin-top: 12px;
+    }
+
+   /* New css */
+
     .layoutt-retailer section.content {
         margin-top: 95px;
         padding-top: 5px;
@@ -31,10 +123,12 @@
 <section class="content content-margin-second content-fourdesign-page allpage-four-design-section" style=" overflow-x:hidden;">
     <div class="container-fluid alldiv-back-change-four">
         <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="page-header-third">
-                    <div class="col-md-6">
-                        <h4>Add Bank Account For Aeps</h4>
+            <div class="col-md-12" style=" padding: 0;">
+                <div class="col-md-6">
+                    <div class="page-header-third" style=" height: 80vh; text-align: center;">
+                        <div class="login-slider-status">
+                            <h2>Add Bank Account For Aeps Integration</h2>
+                        </div>
                         @using (Html.BeginForm("AddAepsAccount", "Home", FormMethod.Post))
                         {
                             <div class="form-group">
@@ -66,13 +160,18 @@
                                 <label class="form-label" for="remiterName">OTP</label>
                                 @Html.TextBox("OTP", null, new { @class = "form-control", @placeholder = "Enter OTP", @id = "OTP" })
                             </div>
-                            <button id="SubmitBankDetails" type="submit" class="btn btn-primary" style="display: none;">Submit</button>
+                            <p style="color: red;">@ViewBag.message</p>
+                            <button id="SubmitBankDetails" type="submit" class="btn btn-primary set_but" style="display: none; margin: auto;">Submit</button>
                         }
-                        <button class="btn btn-primary" id="ShowOtpBox" onclick="validateForm()">Send Otp</button>
+                        <button class="btn btn-primary set_but" id="ShowOtpBox" onclick="validateForm()">Send Otp</button>
 
                     </div>
-                    <div class="col-md-6">
-                        <h4>Bank Account For Aeps</h4>
+                </div>
+                <div class="col-md-6">
+                    <div class="page-header-third" style=" height: 80vh;">
+                        <div class="login-slider-status">
+                            <h2>Added Bank Account For Aeps</h2>
+                        </div>
                         <table class="table">
                             <tbody>
                                 @if (Model.Count() > 0)
@@ -120,7 +219,14 @@
     </div>
 </section>
 <div id="Account_Loder" class="Account_Loder" style="display: none;">
-    <img src="~/icegif-1263.gif" style="position: relative; top: 40%;" />
+    @*<img src="~/icegif-1263.gif" style="position: relative; top: 40%;" />*@
+    <div id="loadredmodel" style="display:block;">
+        <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
+            <div class="ldio-zdyd6mf6t5">
+                <div></div><div></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     function validateForm() {
