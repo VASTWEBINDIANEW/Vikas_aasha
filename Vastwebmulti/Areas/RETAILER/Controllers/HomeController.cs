@@ -33258,7 +33258,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 VastBazaar cb = new VastBazaar();
                 var tokenapi = Responsetoken.gettoken();
-                var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
+                var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id, agentid);
               
                 var stateinfo = "Pending";
                 if (responseall.StatusCode == HttpStatusCode.OK)
