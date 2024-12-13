@@ -78,6 +78,7 @@ using com.sun.imageio.plugins.common;
 using com.sun.java.swing.plaf.motif.resources;
 using sun.security.krb5.@internal;
 using Microsoft.Ajax.Utilities;
+using static sun.swing.plaf.synth.DefaultSynthStyle;
 //using paytmresponselibrary;
 
 
@@ -33029,23 +33030,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         catch
                                         { }
                                     }
-                                    else if(stscode=="OTP")
-                                    {
-                                        try
-                                        {
-                                            dynamic dyrespchk = JsonConvert.DeserializeObject(json);
-                                            string stateresp = dyrespchk.stateResp;
-                                            var infochk = db.IMPS_transtion_detsils.Where(aa => aa.senderno == senderno && aa.Status.ToUpper() == "PENDING" && aa.Trans_Type == "EKYC CHARGE").OrderByDescending(aa => aa.trans_time).Take(1).SingleOrDefault();
-                                            if (infochk != null)
-                                            {
-                                                infochk.Devicetoken = stateresp;
-                                                db.SaveChanges();
-                                            }
-                                        }
-                                        catch { }
-                                    }
-                                   
-                                   
                                     //   var results = JsonConvert.SerializeObject(json);
                                     // var jss = new JavaScriptSerializer();
                                     //  var dict = jss.Deserialize<dynamic>(json);
@@ -33228,19 +33212,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             string userid = User.Identity.GetUserId();
             VastBazaar cb = new VastBazaar();
             var tokenapi = Responsetoken.gettoken();
-            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-            Guid uniqueIdinfo = Guid.NewGuid();
-            string uniqueid = uniqueIdinfo.ToString();
-            var Ipaddress = GetComputer_InternetIP();
-            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-            var status = false; string message = "Please Try After Sometime";
+
+             var status = false; string message = "Please Try After Sometime";
             string kyc_id = ""; string stateresp = "";
-            string statusinfo = "Pending";
-            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, senderno, "PAYSPRINT", Ipaddress, "", outputchk).SingleOrDefault();
-            var msginfo = Reqinfochk.msg;
-            if (msginfo == "OK")
-            {
-                var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken, agentid);
+
+            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+            var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken, agentid);
                 if (responseall.StatusCode == HttpStatusCode.OK)
                 {
                     dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
@@ -33250,43 +33227,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         if (respchk.response_code == "1")
                         {
-                            statusinfo = "Success";
                             status = true;
                             kyc_id = respchk.data.ekyc_id;
                             stateresp = respchk.data.stateresp;
                         }
-                        else
-                        {
-                            statusinfo = "Failed";
-                        }
-                    }
-                    else
-                    {
-                        statusinfo = "Failed";
                     }
                 }
-                else
-                {
-                    statusinfo = "Failed";
-                }
-                if(statusinfo=="Failed")
-                {
-                    db.RefundDMTEkycCharge(agentid, statusinfo, message);
-                }
-                else if(statusinfo=="Success")
-                {
-                    var infochk = db.IMPS_transtion_detsils.Where(aa => aa.trans_common_id == agentid && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
-                    if(infochk!=null)
-                    {
-                        infochk.Devicetoken = stateresp;
-                        db.SaveChanges();
-                    }
-                }
-            }
-            else
-            {
-                message = msginfo;
-            }
             var respchk1 = new
             {
                 status,
@@ -33300,38 +33246,47 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult KYCEnterOTP(string stateResp,string kyc_id,string Sendernumber,string otp)
         {
             string userid = User.Identity.GetUserId();
-            VastBazaar cb = new VastBazaar();
-            var tokenapi = Responsetoken.gettoken();
-            var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
+            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+            Guid uniqueIdinfo = Guid.NewGuid();
+            string uniqueid = uniqueIdinfo.ToString();
+            var Ipaddress = GetComputer_InternetIP();
+            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var status = false; string message = "Please Try After Sometime";
-            var stateinfo = "Pending";
-            if (responseall.StatusCode == HttpStatusCode.OK)
+            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, Sendernumber, "PAYSPRINT", Ipaddress, "", outputchk).SingleOrDefault();
+            var msginfo = Reqinfochk.msg;
+            if (msginfo == "OK")
             {
-                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
-                dynamic respchk = respchkinfo.Content.ADDINFO;
-            
-                message = respchk.message;
-                if (respchk.status == true)
+                VastBazaar cb = new VastBazaar();
+                var tokenapi = Responsetoken.gettoken();
+                var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id);
+              
+                var stateinfo = "Pending";
+                if (responseall.StatusCode == HttpStatusCode.OK)
                 {
-                    if (respchk.response_code == "1")
+                    dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                    dynamic respchk = respchkinfo.Content.ADDINFO;
+
+                    message = respchk.message;
+                    if (respchk.status == true)
                     {
-                        stateinfo = "Success";
-                        status = true;
+                        if (respchk.response_code == "1")
+                        {
+                            stateinfo = "Success";
+                            status = true;
+                        }
+                        else
+                        {
+                            stateinfo = "Failed";
+                        }
                     }
                     else
                     {
                         stateinfo = "Failed";
                     }
-                }
-                else
-                {
-                    stateinfo = "Failed";
-                }
-                if (stateinfo == "Failed" || stateinfo=="Success")
-                {
-                    var chkinfo1 = db.IMPS_transtion_detsils.Where(aa => aa.Devicetoken == stateResp && aa.Status=="Pending").SingleOrDefault();
-                    string agentid = chkinfo1.trans_common_id;
-                    db.RefundDMTEkycCharge(agentid, stateinfo, message);
+                    if (stateinfo == "Failed" || stateinfo == "Success")
+                    {
+                        db.RefundDMTEkycCharge(agentid, stateinfo, message);
+                    }
                 }
             }
             var respchk1 = new

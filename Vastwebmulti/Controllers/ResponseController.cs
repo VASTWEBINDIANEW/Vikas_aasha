@@ -2799,7 +2799,10 @@ namespace Vastwebmulti.Controllers
                         }
                     }
                     //PPI 
-                   
+                    else if(Type== "DMT-WALLET-MONEY-REMITTER-EKYC")
+                    {
+
+                    }
                 }
                 catch
                 {
