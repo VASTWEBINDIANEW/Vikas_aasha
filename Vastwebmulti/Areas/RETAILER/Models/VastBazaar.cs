@@ -1106,7 +1106,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse EKYC_Register_OTP(string mobile, string token, string otp, string stateresp, string ekyc_id)
+        public IRestResponse EKYC_Register_OTP(string mobile, string token, string otp, string stateresp, string ekyc_id,string Agentid)
         {
             // var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
             var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/Ekyc_otp");
@@ -1119,7 +1119,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 otp,
                 stateresp,
                 ekyc_id,
-                Charge="OK"
+                Charge="OK",
+                Agentid
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
