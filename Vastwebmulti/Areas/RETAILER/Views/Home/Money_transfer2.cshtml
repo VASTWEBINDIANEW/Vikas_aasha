@@ -11,20 +11,49 @@
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
 <style>
+    .money_tab-height p {
+        padding-bottom: 0px;
+        margin-bottom: 1px;
+    }
+    .tabsmy {
+        background: #eae9e9;
+    }
+    .tab-link-new.current {
+        height: 80px !important;
+    }
+    #tabsmyss li {
+        padding: 3px 0;
+        position: relative;
+        height: 72px;
+        background: #eae9e9;
+    }
+    .tab-link-new {
+        height: 70px !important;
+    }
+    .tabspage ul li img {
+        height: 32px !important;
+    }
+    .tabsmy span {
+        font-size: 10px !important;
+    }
+    .diveotpclass button{
+        border-radius:4px !important;
+    }
+
+    /* New css*/
     .newpagecustomertyui .tab-link-new.current::after {
         content: "";
         clip-path: polygon(50% 100%, 100% 0, 0 0);
-        background: #000;
-        top: 18px !important;
+        bottom: -13px !important;
         width: 86% !important;
-        height: 11px !important;
+        height: 13px !important;
         display: block;
-        position: relative;
-        left: 4px;
+        position: absolute;
+        left: 5px;
     }
     .newpagecustomertyui .tab-link-new.current {
-        border-style: dashed dotted solid;
-        border-radius: 0px 0px 13px 13px;
+        border-style: dotted;
+        border-radius: 0px 0 50% 50%;
     }
     .transaction ul li.transaction-left, .transaction ul li.transaction-right {
         height: 28px;
@@ -91,7 +120,7 @@
 
             <ul class="tabsmy" id="tabsmyss" style="display:flex;">
 
-                <li class="tab-link-new fullbodydycolorbg current" data-tab="tab-1" onclick="DMT()" style="padding:5px 0px;">
+                <li class="tab-link-new fullbodydycolorbg current" data-tab="tab-1" onclick="DMT()" style="">
                     <strong class="img-none" style="display:none;"><img style="height: 65px;" src="~/images/transfer.svg" /></strong><img class="hover-display-none" src="~/images/transfer-money.png" />
                     @if (ViewBag.openapi == "VASTWEB")
                     {
@@ -99,13 +128,54 @@
                     }
                     else
                     {
-                        <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:11px;">Domestic<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">Money&nbsp;Transfer</sup></span>
+                <span class="aeps-aadharclassdiv" style="padding-left: 0; position: relative; font-size:9px !important;">Domestic Money<sup class="aadharpaysup" style="display: block; margin: 4px 0;animation: none;font-size: 9px;position:static;">Transfer </sup></span>
                     }
                 </li>
-                <li id="tabaeps" class="tab-link-new fullbodydycolorbg" data-tab="tab-2" onclick="AEPS()" style="padding:5px 0px;"><strong class="img-none" style="display:none;"><img src="~/images/aeps1.png" /></strong><img class="hover-display-none" src="~/images/aespicon.png" /><span class="aeps-aadharclassdiv" style="padding-left: 0;">AEPS<sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">Aadhar Pay</sup> </span></li>
-                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-5" onclick="GotoATMActive()" style="padding:5px 0px;"><strong class="img-none" style="display: none; "><img src="~/ashok-images/microatm.svg" /></strong><img class="hover-display-none" src="~/ashok-images/microatm(1).svg" /><span style="padding-left:0;">VM30<sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">Micro ATM</sup></span></li>
-                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-4" onclick="MPOS()" style="padding:5px 0px;"><strong class="img-none" style="display: none; "><img src="~/images/mpos1.png" /></strong><img class="hover-display-none" src="~/images/mposicon.png" /><span style="padding-left:0;">ME30S</span></li>
-                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="PANCARD()" style="padding:5px 0px;"><strong class="img-none" style="display:none;"><img src="~/images/pancarde1.png" /></strong><img class="hover-display-none" src="~/images/pancardicon.png" /><span style="padding-left:0;">Pancard</span></li>
+                <li id="tabaeps" class="tab-link-new fullbodydycolorbg" data-tab="tab-2" onclick="AEPS()" style="">
+                <strong class="img-none" style="display:none;">
+                    <img src="~/images/aeps1.png" /></strong>
+                <img class="hover-display-none" src="~/images/aespicon.png" />
+                <span class="aeps-aadharclassdiv" style="padding-left: 0;">
+                    Aadhar Pay
+                    <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
+                        AEPS
+                    </sup>
+                </span>
+                </li>
+                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-5" onclick="GotoATMActive()" style="">
+                <strong class="img-none" style="display: none; ">
+                    <img src="~/ashok-images/microatm.svg" />
+                    </strong>
+                <img class="hover-display-none" src="~/ashok-images/microatm(1).svg" />
+                <span style="padding-left:0;">
+                     Micro ATM
+                    <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
+                        VM30
+                    </sup>
+                </span>
+                </li>
+                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-4" onclick="MPOS()" style="">
+                <strong class="img-none" style="display: none; ">
+                    <img src="~/images/mpos1.png" /></strong>
+                <img class="hover-display-none" src="~/images/mposicon.png" />
+                <span style="padding-left:0;">
+                     M - Pos
+                    <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
+                        ME30S
+                    </sup>
+                </span>
+                </li>
+                <li class="tab-link-new fullbodydycolorbg" data-tab="tab-3" onclick="PANCARD()" style="">
+                <strong class="img-none" style="display:none;">
+                    <img src="~/images/pancarde1.png" /></strong>
+                <img class="hover-display-none" src="~/images/pancardicon.png" />
+                <span style="padding-left:0;">
+                    Pancard
+                    <sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;animation: none;">
+                        Create
+                    </sup>
+                </span>
+                </li>
                 @*<li class="tab-link-new fullbodydycolorbg" data-tab="tab-6" onclick="CashDeposit()" style="padding:5px 0px;"><strong class="img-none" style="display: none; "><img src="~/ashok-images/moneyretailerdesec.svg" /></strong><img class="hover-display-none" src="~/ashok-images/moneyretailerde.svg" /><span style="padding-left:0;">Cash<sup class="aadharpaysup" style="display: block; margin: 4px 0;font-size: 10px;position:static;">Deposit</sup></span></li>*@
 
             </ul>
