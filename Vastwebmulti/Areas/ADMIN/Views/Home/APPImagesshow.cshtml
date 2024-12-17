@@ -39,15 +39,40 @@
         cursor: pointer;
         
     }
+
+/* New css  */
+
+    @@media only screen and (max-width:1024px){
+        #sidebar-open {
+            top: 30px;
+            left: -148px;
+        }
+    }
+
+    @@media only screen and (max-width:767px){
+        #sidebar-open {
+            top: -2px;
+            left: -5px;
+        }
+        .secdiv {
+            width: 50%;
+        }
+    }
+
+    @@media only screen and (max-width:480px){
+       .secdiv{
+           width:100%;
+       }
+    }
+
+/* New css end */
 </style>
 <section class="content outside-logo-page" style="position: relative;">
     <div class="container-fluid">
-
         @foreach (var i in chk)
         {
         <div class="secdiv" style="float: left;">
             <div class="page-header-third">
-
             <img src="@i.images"  />
             <div class="catagselect">
                 <span>@i.Category</span>
@@ -57,7 +82,7 @@
         </div>
             s++;
         }
-</div>
+    </div>
     </section>
 
 
