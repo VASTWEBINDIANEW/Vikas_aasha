@@ -889,6 +889,11 @@ namespace Vastwebmulti.Models
         public virtual DbSet<AppMessage> AppMessages { get; set; }
         public virtual DbSet<BankAccountForAep> BankAccountForAeps { get; set; }
         public virtual DbSet<DMT_Ekyc_Charge> DMT_Ekyc_Charge { get; set; }
+        public virtual DbSet<PPI_common_comm_new> PPI_common_comm_new { get; set; }
+        public virtual DbSet<PPI_Distributor_comm_new> PPI_Distributor_comm_new { get; set; }
+        public virtual DbSet<PPI_Master_comm_new> PPI_Master_comm_new { get; set; }
+        public virtual DbSet<PPI_Retailer_comm_new> PPI_Retailer_comm_new { get; set; }
+        public virtual DbSet<PPI_Distributor_Retailer_comm_new> PPI_Distributor_Retailer_comm_new { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23627,6 +23632,145 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("message", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RefundDMTEkycCharge", agentidParameter, statusParameter, messageParameter);
+        }
+    
+        public virtual ObjectResult<DMTEkycCharge_PPI_Result> DMTEkycCharge_PPI(string userid, string agentid, string uniqueid, string senderno, string apiname, string ipaddress, string imeino, Nullable<decimal> charge, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var agentidParameter = agentid != null ?
+                new ObjectParameter("agentid", agentid) :
+                new ObjectParameter("agentid", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var sendernoParameter = senderno != null ?
+                new ObjectParameter("senderno", senderno) :
+                new ObjectParameter("senderno", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            var chargeParameter = charge.HasValue ?
+                new ObjectParameter("charge", charge) :
+                new ObjectParameter("charge", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DMTEkycCharge_PPI_Result>("DMTEkycCharge_PPI", useridParameter, agentidParameter, uniqueidParameter, sendernoParameter, apinameParameter, ipaddressParameter, imeinoParameter, chargeParameter, output);
+        }
+    
+        public virtual ObjectResult<CheckPPI_Deduct_Result> CheckPPI_Deduct(string userid, Nullable<decimal> amount, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CheckPPI_Deduct_Result>("CheckPPI_Deduct", useridParameter, amountParameter, output);
+        }
+    
+        public virtual ObjectResult<Money_transfer_PPI_Result> Money_transfer_PPI(string userid, Nullable<decimal> amount, Nullable<decimal> finalamount, string sendernumber, string accountno, string banknm, string ifsccode, string common_req_id, string req_id, string reqtype, string req_from, string kycstatus, string impsrequest, string apiname, string ipaddress, string macaddress, string imeino, Nullable<decimal> apiprebal, Nullable<decimal> apipostbal, string dmtType, string uniqueid, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var finalamountParameter = finalamount.HasValue ?
+                new ObjectParameter("finalamount", finalamount) :
+                new ObjectParameter("finalamount", typeof(decimal));
+    
+            var sendernumberParameter = sendernumber != null ?
+                new ObjectParameter("sendernumber", sendernumber) :
+                new ObjectParameter("sendernumber", typeof(string));
+    
+            var accountnoParameter = accountno != null ?
+                new ObjectParameter("accountno", accountno) :
+                new ObjectParameter("accountno", typeof(string));
+    
+            var banknmParameter = banknm != null ?
+                new ObjectParameter("banknm", banknm) :
+                new ObjectParameter("banknm", typeof(string));
+    
+            var ifsccodeParameter = ifsccode != null ?
+                new ObjectParameter("ifsccode", ifsccode) :
+                new ObjectParameter("ifsccode", typeof(string));
+    
+            var common_req_idParameter = common_req_id != null ?
+                new ObjectParameter("common_req_id", common_req_id) :
+                new ObjectParameter("common_req_id", typeof(string));
+    
+            var req_idParameter = req_id != null ?
+                new ObjectParameter("req_id", req_id) :
+                new ObjectParameter("req_id", typeof(string));
+    
+            var reqtypeParameter = reqtype != null ?
+                new ObjectParameter("reqtype", reqtype) :
+                new ObjectParameter("reqtype", typeof(string));
+    
+            var req_fromParameter = req_from != null ?
+                new ObjectParameter("req_from", req_from) :
+                new ObjectParameter("req_from", typeof(string));
+    
+            var kycstatusParameter = kycstatus != null ?
+                new ObjectParameter("kycstatus", kycstatus) :
+                new ObjectParameter("kycstatus", typeof(string));
+    
+            var impsrequestParameter = impsrequest != null ?
+                new ObjectParameter("impsrequest", impsrequest) :
+                new ObjectParameter("impsrequest", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var macaddressParameter = macaddress != null ?
+                new ObjectParameter("macaddress", macaddress) :
+                new ObjectParameter("macaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            var apiprebalParameter = apiprebal.HasValue ?
+                new ObjectParameter("apiprebal", apiprebal) :
+                new ObjectParameter("apiprebal", typeof(decimal));
+    
+            var apipostbalParameter = apipostbal.HasValue ?
+                new ObjectParameter("apipostbal", apipostbal) :
+                new ObjectParameter("apipostbal", typeof(decimal));
+    
+            var dmtTypeParameter = dmtType != null ?
+                new ObjectParameter("DmtType", dmtType) :
+                new ObjectParameter("DmtType", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_PPI_Result>("Money_transfer_PPI", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, uniqueidParameter, output);
         }
     }
 }

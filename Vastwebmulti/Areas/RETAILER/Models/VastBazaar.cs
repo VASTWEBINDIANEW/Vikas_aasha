@@ -1236,6 +1236,15 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
+        public IRestResponse Paysprint_RefundOTPPPI(string token, string txnid,string userid)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPPI/RefundOTP?Merchantcode="+ userid + "&txnid=" + txnid + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
         public IRestResponse Paysprint_ClaimRefund(string token, string txnid,string otp)
         {
             var client = new RestClient(BaseURL + "/api/DMTPAYSPRINT/ClaimRefund?txnid=" + txnid + "&otp="+otp+"");
@@ -1245,7 +1254,15 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-
+        public IRestResponse Paysprint_ClaimRefundPPI(string token, string txnid, string otp, string merchantcode,string stateresp)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPPI/ClaimRefund?txnid=" + txnid + "&otp=" + otp + "&stateresp="+ stateresp + "&merchantcode="+ merchantcode + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
 
         #endregion
     }
