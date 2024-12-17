@@ -12175,7 +12175,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             CommUtilEmail emailsend = new CommUtilEmail();
 
 
-            emailsend.EmailLimitChk(emailid, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
+            emailsend.EmailLimitChk(details.Email, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
 
             if (CheckEntry == null)
             {
@@ -32237,8 +32237,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
                 try
                 {
-                    bool Update_Aeps_info = db.Update_Aeps_Info.Any(x => x.UserId == userid);
-                    if (!Update_Aeps_info)
+                    var Update_Aeps_info = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                    if (Update_Aeps_info == null)
                     {
                         string Aeps_Update = UpdateAeps(lattitude, longitude);
                         if (Aeps_Update == "TXN")
@@ -32255,6 +32255,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             db.Update_Aeps_Info.Add(data);
                             db.SaveChanges();
                         }
+                    }
+                    else
+                    {
+                        lattitude = Update_Aeps_info.latitude;
+                        longitude = Update_Aeps_info.longitude;
                     }
                 }
                 catch { }
