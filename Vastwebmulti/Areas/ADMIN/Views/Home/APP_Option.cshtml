@@ -8,6 +8,11 @@
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
    /* new css */
+    .app_silder {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
     .icon_btn {
         float: left;
         width: 33.33%;
@@ -1009,6 +1014,7 @@
         padding: 15px;
         margin-bottom: 15px;
         background: var(--nav-tab-bg);
+        width:100%;
     }
 </style>
 <style>
@@ -1763,6 +1769,19 @@
     }
 
     @@media only screen and (max-width:600px) {
+     /* new css */
+        .but_df {
+            display: block;
+        }
+            .but_df span {
+                width: 100%;
+                float: left;
+            }
+            .but_df button {
+                margin-bottom: 10px !important;
+            }
+     /* new css */
+
         .ps_setcolor {
             width: 100%;
         }
@@ -1793,6 +1812,22 @@
     }
 
     @@media only screen and (max-width:480px){
+        /* new css */
+        .app_silder {
+            display: block;
+        }
+        .but_df span button {
+            width: 100%;
+            margin: 0 0 10px 0px !important;
+        }
+        .app_silder a {
+            width: 100%;
+            float: left;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        /* new css */
         .button-container button {
             margin: 5px 0;
             width: 100%;
@@ -2785,7 +2820,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
                 <div class="card login-back-img page-header-third">
                     <div class="login-slider-status">
-                        <h2 style="margin-left: 10px;">APP SLIDER IMAGES</h2> <a href="@Url.Action("APPImagesshow","Home")" style=" margin: 18px; float: right; padding: 6px 35px;background:green;color:white">Selected Images</a>
+                        <h2 class="app_silder">APP SLIDER IMAGES <a href="@Url.Action("APPImagesshow","Home")" style="float: right; padding: 6px 35px;background:green;color:white">Selected Images</a></h2> 
                     </div>
                     <div id="sliderImages">
                     </div>
@@ -2807,8 +2842,8 @@
                                         <form id="textForm">
                                             <textarea id="textArea" placeholder="Enter your text here..." oninput="updateCharCount()"></textarea>
                                             <div style="display: flex; align-items: center; justify-content: space-between; ">
-                                                <button onclick="clearText(event)">Clear</button>
-                                                <button type="submit" onclick="handleSubmit(event)">Submit</button>
+                                                <button style="padding: 6px 18px;background:#000;color: #fff;border:0;" onclick="clearText(event)">Clear</button>
+                                                <button style="padding: 6px 18px;background:var(--main-bg-lcolor);color: #fff;border:0; " type="submit" onclick="handleSubmit(event)">Submit</button>
                                             </div>
                                         </form>
                                         <div class="danger" style=" margin-top: 25px; font-size: 17px;">
