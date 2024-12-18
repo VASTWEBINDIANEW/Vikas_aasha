@@ -13,6 +13,28 @@
     }
 }
 <style>
+    /* New css */
+    /*.tabspage .tab-content {
+     height: auto;
+ }*/
+    @@keyframes blink {
+        0% {
+            color: #fff;
+        }
+
+        50% {
+            color: Yellow;
+        }
+
+        100% {
+            color: black;
+        }
+    }
+
+    .col-md-12.remitter_button {
+        padding: 9px;
+    }
+    /* New css */
     .loader {
         position: fixed;
         top: -90px;
@@ -245,31 +267,58 @@
 <style>
     .button-container {
         display: flex; /* Use flexbox to align the buttons side by side */
-        justify-content: center; /* Center the buttons horizontally */
+        justify-content: space-between; /* Center the buttons horizontally */
         gap: 10px; /* Add space between the buttons */
+        padding-bottom: 12px;
     }
 
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        background-color: #007bff; /* Primary color */
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        border-radius: 5px;
-    }
-
-        .btn:hover {
-            background-color: #0056b3; /* Darker shade on hover */
+        .button-container .btn {
+            padding: 8px 18px;
+            border: none;
+            background-color: var(--main-bg-lcolor); /* Primary color */
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
         }
 
-    .btn-secondary {
-        background-color: #6c757d; /* Secondary color */
+            .button-container .btn i {
+                top: 0 !important;
+                margin-right: 6px;
+                font-size: 16px !important;
+            }
+
+            .button-container .btn:hover {
+                background-color: var(--main-bg-lcolor); /* Darker shade on hover */
+            }
+
+        .button-container .btn-secondary {
+            background-color: #c4c4c4; /* Secondary color */
+            color: #000;
+        }
+
+            .button-container .btn-secondary:hover {
+                background-color: var(--main-bg-lcolor); /* Darker shade on hover */
+                color: #fff;
+            }
+    @@media only screen and (max-width:480px) {
+        .button-container {
+            display: block;
+            text-align: center;
+        }
+
+            .button-container .btn {
+                margin-bottom: 8px;
+                text-align: center;
+                display: block;
+            }
     }
 
-        .btn-secondary:hover {
-            background-color: #5a6268; /* Darker shade on hover */
-        }
+
 </style>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
@@ -282,19 +331,27 @@
         {
             <a href="@Url.Action("Money_transfer", "Home")" class="btn btn-secondary">DMT2</a>
         }
-        @if (ViewBag.moneysts3 == true)
-        {
-            <a href="@Url.Action("Money_transfer_new", "Home")" class="btn btn-secondary">Wallet To Bank</a>
-        }
         @if (ViewBag.moneysts4 == true)
         {
-            <a href="@Url.Action("Money_transferPPI", "Home")" class="btn">PPI Wallet</a>
+            <a href="@Url.Action("Money_transferPPI", "Home")" class="btn">
+                <i class="fa fa-check"></i>
+                <label class="for-blink1" style="font-size: 8px; position: absolute; top: 1px; right: 12px; font-weight: normal; text-transform: uppercase;">Fast</label>
+                PPI Wallet
+            </a>
         }
+        @if (ViewBag.moneysts3 == true)
+        {
+            <a href="@Url.Action("Money_transfer_new", "Home")" class="btn btn-secondary">
+                <label class="for-blink1" style="font-size: 8px; position: absolute; top: 1px; right: 12px; font-weight: normal; text-transform: uppercase;">Slow</label>
+                Self Payout
+            </a>
+        }
+
     </div>
     <fieldset>
-        <form method="post" action="@ViewBag.url">
+        <form method="post" action="@ViewBag.url" target="_blank" style="margin-bottom: 50px; margin-top: 50px; margin-left: 103px;">
             <textarea name="encdata" style="display:none">@ViewBag.encdata</textarea>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Continue For PPI Wallet" class="btn btn-link">
         </form>
         @*<legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">
