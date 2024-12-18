@@ -30915,7 +30915,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         #endregion
 
 
-        #region MONEYTRANSFER DMT 1
+        #region MONEYTRANSFER DMT       
+        
         [HttpGet]
         public ActionResult Money_transfer2()
         {
@@ -31256,6 +31257,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
 
+      
+        
         [HttpPost]
         public ActionResult CheckAAdharPay()
         {
@@ -33038,6 +33041,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
+       
+        
+        
         [HttpPost]
         public ActionResult Senderdetails(string senderno,string latloc,string longloc)
         {
@@ -33288,6 +33294,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
             }
         }
+       
+        
+        
+       
         public static byte[] EncryptAES(string plainText, string key, string iv)
         {
             using (Aes aesAlg = Aes.Create())
@@ -33303,6 +33313,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return encryptor.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
             }
         }
+       
+        
+        
+        
         [HttpPost]
         public ActionResult KYCRegister(string senderno,string pid,string aadharnumber, string latloc,string longloc)
         {
@@ -33400,6 +33414,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             };
             return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
+       
+        
+        
+        
         [HttpPost]
         public ActionResult UPI_Senderdetails(string senderno)
         {
