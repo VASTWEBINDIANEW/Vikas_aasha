@@ -10343,6 +10343,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
         public ActionResult PaysprintRefundOTP(string txnid)
         {
+
             VastBazaar cb = new VastBazaar();
             var responsechk = "";
             var responsecode1 = "";
@@ -10421,6 +10422,91 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        public ActionResult PaysprintRefundOTPPPI(string txnid)
+        {
+            var userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var responsechk = "";
+            var responsecode1 = "";
+            var tokn = Responsetoken.gettoken();
+            var responseall = cb.Paysprint_RefundOTPPPI(tokn, txnid, userid);
+            responsechk = responseall.Content.ToString();
+            responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ADDINFO.response_code.ToString();
+                if (respcode == "1")
+                {
+                    var ADDINFO = json.Content.ADDINFO;
+                    var results = JsonConvert.SerializeObject(ADDINFO);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var error = json.Content.ADDINFO.message.ToString();
+                    var error_decribe = false;
+                    var results = "{'status':'" + error_decribe + "','message':'" + error + "','response_code':'" + respcode + "'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var error = json.error.ToString();
+                var error_decribe = false;
+                var results = "{'status':'" + error_decribe + "','message':'Please Try After Sometime','response_code':'40'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult PaysprintVerifyOTPPPI(string txnid, string otp,string stateresp)
+        {
+            var userid = User.Identity.GetUserId();
+            VastBazaar cb = new VastBazaar();
+            var responsechk = "";
+            var responsecode1 = "";
+            var tokn = Responsetoken.gettoken();
+            var responseall = cb.Paysprint_ClaimRefundPPI(tokn, txnid, otp, userid, stateresp);
+            responsechk = responseall.Content.ToString();
+            responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                dynamic ADDINFO = json.Content.ADDINFO;
+                var sts = ADDINFO.status;
+                var message = ADDINFO.message;
+                var response_code = ADDINFO.response_code;
+                if (sts == true && response_code == "1")
+                {
+                    MoneyFailedNew(txnid, "Transaction Refunded", "", "", "Pending");
+                }
+
+                var results = JsonConvert.SerializeObject(ADDINFO);
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var error = json.error.ToString();
+                var error_decribe = false;
+                var results = "{'status':'" + error_decribe + "','message':'Please Try After Sometime','response_code':'40'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult MoneyFailedNew(string txtrefidno, string bankid, string recivername, string ddl_refund, string currentstatus)
         {
             try
@@ -12175,7 +12261,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             CommUtilEmail emailsend = new CommUtilEmail();
 
 
-            emailsend.EmailLimitChk(emailid, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
+            emailsend.EmailLimitChk(details.Email, emailid, "Bank Add For Aeps", "Your Account add for aeps otp is " + pin, "No CallBackUrl");
 
             if (CheckEntry == null)
             {
@@ -20021,11 +20107,24 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 string uniqueid = guid.ToString();
                 var Agentinfo = db.PPIAgents.Where(aa => aa.Retailer_id == userid).SingleOrDefault();
                 VastBazaar vast = new VastBazaar();
-                var info=  vast.GenrateURL_PPI(uniqueid, token, Agentinfo.Retailer_id, "http://api.vastbazaar.com");
+                var request = HttpContext.Request;
+                string currentUrl = $"{request.Url.Scheme}://{request.Url.Authority}{request.Url.AbsolutePath}{request.Url.Query}";
+
+                var info =  vast.GenrateURL_PPI(uniqueid, token, Agentinfo.Retailer_id, currentUrl);
                 var datainfo = info.Content;
-                dynamic respchkk = JsonConvert.DeserializeObject(datainfo);
-                ViewBag.url = respchkk.Content.ADDINFO.data.url;
-                ViewBag.encdata = respchkk.Content.ADDINFO.data.encdata;
+              
+                if(info.StatusCode==HttpStatusCode.OK)
+                {
+                    dynamic respchkk = JsonConvert.DeserializeObject(datainfo);
+                    ViewBag.url = respchkk.Content.ADDINFO.data.url;
+                    ViewBag.encdata = respchkk.Content.ADDINFO.data.encdata;
+                }
+                else
+                {
+                    ViewBag.url = "";
+                    ViewBag.encdata = "";
+                }
+              
                 Recent_report recent = new Recent_report();
                 recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
                 recent.Recent_report_Aeps = null;
@@ -32240,8 +32339,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
                 try
                 {
-                    bool Update_Aeps_info = db.Update_Aeps_Info.Any(x => x.UserId == userid);
-                    if (!Update_Aeps_info)
+                    var Update_Aeps_info = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                    if (Update_Aeps_info == null)
                     {
                         string Aeps_Update = UpdateAeps(lattitude, longitude);
                         if (Aeps_Update == "TXN")
@@ -32258,6 +32357,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             db.Update_Aeps_Info.Add(data);
                             db.SaveChanges();
                         }
+                    }
+                    else
+                    {
+                        lattitude = Update_Aeps_info.latitude;
+                        longitude = Update_Aeps_info.longitude;
                     }
                 }
                 catch { }

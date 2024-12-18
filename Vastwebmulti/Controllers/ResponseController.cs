@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Utilities.Net;
 using RestSharp;
 using System;
 using System.Drawing;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -20,6 +22,7 @@ using Vastwebmulti.Hubs;
 using Vastwebmulti.Models;
 using ZXing;
 using ZXing.Rendering;
+using static sun.net.ftp.FtpClient;
 using static Vastwebmulti.Areas.RETAILER.Controllers.HomeController;
 
 namespace Vastwebmulti.Controllers
@@ -2801,7 +2804,237 @@ namespace Vastwebmulti.Controllers
                     //PPI 
                     else if(Type== "DMT-WALLET-MONEY-REMITTER-EKYC")
                     {
+                        var mobile = Status;
+                        var kyccharge = Reqid;
+                        decimal charge = Convert.ToDecimal(kyccharge);
+                        var merchantcode = MSG;
+                        string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                        Guid uniqueIdinfo = Guid.NewGuid();
+                        string uniqueid = uniqueIdinfo.ToString();
+                        var Ipaddress = GetComputer_InternetIP();
+                        System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
+                        var msginfo = dbsrs.DMTEkycCharge_PPI(merchantcode, agentid, uniqueid, mobile, "PAYSPRINT", Ipaddress, "", charge, outputchk).SingleOrDefault().msg;
+                        if(msginfo=="OK")
+                        {
+                            var resp = new
+                            {
+                                status = true,
+                                agentid= agentid,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = msginfo
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if(Type== "DMT-WALLET-MONEY-WALLET-LOAD")
+                    {
+                        var mobile = Status;
+                        var Amount = Reqid;
+                        decimal amt = Convert.ToDecimal(Amount);
+                        var merchantcode = MSG;
+                      
+                        string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                        Guid uniqueIdinfo = Guid.NewGuid();
+                        string uniqueid = uniqueIdinfo.ToString();
+                        var Ipaddress = GetComputer_InternetIP();
+                        System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                        var msginfo = dbsrs.CheckPPI_Deduct(merchantcode, amt, outputchk).SingleOrDefault().msg;
+                        if (msginfo == "OK")
+                        {
+                            var resp = new
+                            {
+                                status = true,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = msginfo
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if(Type== "DMT-WALLET-MONEY-V2")
+                    {
+                        var mobile = Status;
+                        var Amount = Reqid;
+                        var merchantcode = MSG;
+                        var data1 = Transid;
+                        dynamic dyrespchk = JsonConvert.DeserializeObject(data1);
+                        string benname = dyrespchk.benname;
+                        string bankname = dyrespchk.bankname;
+                        string account = dyrespchk.account;
+                        string transfertype = dyrespchk.transfertype;
+                      //  string wallet_refid = dyrespchk.wallet_refid;
+                        string ifsccode = dyrespchk.ifsccode;
+                        string txn_status = dyrespchk.txn_status;
+                        string response_code = dyrespchk.response_code;
+                        string utr = dyrespchk.utr;
+                        string agentinfo = dyrespchk.agentinfo;
+            
+                        if (response_code == "0")
+                        {
+                            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                            Guid uniqueIdinfo = Guid.NewGuid();
+                            string uniqueid = uniqueIdinfo.ToString();
+                            var Ipaddress = GetComputer_InternetIP();
+                            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            decimal amt = Convert.ToDecimal(Amount);
+                            var msginfo = dbsrs.Money_transfer_PPI(merchantcode, amt, amt, mobile, account, bankname, ifsccode,
+                                agentid, agentid, transfertype, "ONLINE", "Y", "", "VASTWEB", Ipaddress, "", "", 0, 0, "DMTPPI", uniqueid, outputchk).SingleOrDefault().msg;
+                            if (msginfo == "OK")
+                            {
+                                var resp = new
+                                {
+                                    status = true,
+                                    agentid = agentid,
+                                    message = "Transaction Successfull"
+                                };
+                                return Json(resp, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                var resp = new
+                                {
+                                    status = false,
+                                    agentid = agentid,
+                                    message = msginfo
+                                };
+                                return Json(resp, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else if(response_code=="1")
+                        {
+                            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+
+                            var statusinfo = "Pending";
+                            if(txn_status=="0")
+                            {
+                                statusinfo = "Failed";
+                            }
+                            else if(txn_status=="1")
+                            {
+                                statusinfo = "Success";
+                            }
+                            if(statusinfo== "Success" || statusinfo=="Failed")
+                            {
+                                dbsrs.Money_transfer_update_new_new(agentinfo, statusinfo, utr, benname, "", "", 0, 0);
+                            }
+                            var resp = new
+                            {
+                                status = true,
+                                agentid = agentid,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = "Someting Went Wrong, Please Try After Some time"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if(Type == "DMT-WALLET-MONEY-BENE-VERIFY")
+                    {
+                        var mobile = Status;
+                        var Amount = Reqid;
+                        var merchantcode = MSG;
+                        var data1 = Transid;
+                     
+                        dynamic dyresp = JsonConvert.DeserializeObject(data1);
+                        string benename = dyresp.benename;
+                        string bankname = dyresp.bankname;
+                        string account = dyresp.account;
+                        string ifsccode = dyresp.ifsccode;
+                        string txn_status = dyresp.txn_status;
+                        string response_code = dyresp.response_code;
+                        string agentinfo = dyresp.agentinfo;
+                        string utr = dyresp.utr;
+                        string messageinfo = dyresp.messageinfo;
+
+                        if (response_code == "0")
+                        {
+                            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                            var Ipaddress = GetComputer_InternetIP();
+                            Guid uniqueIdinfo = Guid.NewGuid();
+                            string uniqueid = uniqueIdinfo.ToString();
+                            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                            var msginfo = dbsrs.Money_transfer_PPI(merchantcode, 0, 0, mobile, account, bankname, ifsccode,
+                                agentid, agentid, "IMPS_VERIFY", "ONLINE", "Y", "", "VASTWEB", Ipaddress, "", "", 0, 0, "DMTPPI", uniqueid, outputchk).SingleOrDefault().msg;
+                            if (msginfo == "OK")
+                            {
+                                var resp = new
+                                {
+                                    status = true,
+                                    agentid = agentid,
+                                    message = "Transaction Successfull"
+                                };
+                                return Json(resp, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                var resp = new
+                                {
+                                    status = false,
+                                    agentid = agentid,
+                                    message = msginfo
+                                };
+                                return Json(resp, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else if(response_code=="1")
+                        {
+                            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+
+                            var statusinfo = "Pending";
+                            if (txn_status == "0")
+                            {
+                                utr = messageinfo;
+                                statusinfo = "Failed";
+                            }
+                            else if (txn_status == "1")
+                            {
+                                statusinfo = "Success";
+                            }
+                            if (statusinfo == "Success" || statusinfo == "Failed")
+                            {
+                                dbsrs.Money_transfer_update_new_new(agentinfo, statusinfo, utr, benename, "", "", 0, 0);
+                            }
+                            var resp = new
+                            {
+                                status = true,
+                                agentid = agentid,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = "Someting Went Wrong, Please Try After Some time"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
                     }
                 }
                 catch
