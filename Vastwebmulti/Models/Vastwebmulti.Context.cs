@@ -886,7 +886,6 @@ namespace Vastwebmulti.Models
         public virtual DbSet<paytm_imps_whitelabel_Retailer_comm1> paytm_imps_whitelabel_Retailer_comm1 { get; set; }
         public virtual DbSet<Update_Aeps_Info> Update_Aeps_Info { get; set; }
         public virtual DbSet<PPIAgent> PPIAgents { get; set; }
-        public virtual DbSet<AppMessage> AppMessages { get; set; }
         public virtual DbSet<BankAccountForAep> BankAccountForAeps { get; set; }
         public virtual DbSet<DMT_Ekyc_Charge> DMT_Ekyc_Charge { get; set; }
         public virtual DbSet<PPI_common_comm_new> PPI_common_comm_new { get; set; }
@@ -894,6 +893,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<PPI_Master_comm_new> PPI_Master_comm_new { get; set; }
         public virtual DbSet<PPI_Retailer_comm_new> PPI_Retailer_comm_new { get; set; }
         public virtual DbSet<PPI_Distributor_Retailer_comm_new> PPI_Distributor_Retailer_comm_new { get; set; }
+        public virtual DbSet<AppMessage> AppMessages { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
