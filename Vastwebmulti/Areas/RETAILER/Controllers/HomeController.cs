@@ -79,6 +79,7 @@ using com.sun.java.swing.plaf.motif.resources;
 using sun.security.krb5.@internal;
 using Microsoft.Ajax.Utilities;
 using static sun.swing.plaf.synth.DefaultSynthStyle;
+using com.sun.security.ntlm;
 //using paytmresponselibrary;
 
 
@@ -20107,22 +20108,58 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 string uniqueid = guid.ToString();
                 var Agentinfo = db.PPIAgents.Where(aa => aa.Retailer_id == userid).SingleOrDefault();
                 VastBazaar vast = new VastBazaar();
-                var request = HttpContext.Request;
-                string currentUrl = $"{request.Url.Scheme}://{request.Url.Authority}{request.Url.AbsolutePath}{request.Url.Query}";
+                ViewBag.errormsg = "OK";
+                if (Agentinfo == null)
+                {
+                    var tokn = Responsetoken.gettoken();
+                    var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var statename = db.State_Desc.Where(aa => aa.State_id == reminfo.State).SingleOrDefault();
+          
+                    var respchk = vast.Agent_register_PPI(reminfo.Mobile, tokn, userid, statename.State_name, reminfo.RetailerName, reminfo.Pincode.ToString(), reminfo.Email, reminfo.PanCard, reminfo.Frm_Name, reminfo.Address);
 
-                var info =  vast.GenrateURL_PPI(uniqueid, token, Agentinfo.Retailer_id, currentUrl);
-                var datainfo = info.Content;
-              
-                if(info.StatusCode==HttpStatusCode.OK)
-                {
-                    dynamic respchkk = JsonConvert.DeserializeObject(datainfo);
-                    ViewBag.url = respchkk.Content.ADDINFO.data.url;
-                    ViewBag.encdata = respchkk.Content.ADDINFO.data.encdata;
+                    if (respchk.StatusCode == HttpStatusCode.OK)
+                    {
+                        dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
+                        if (dyrespchk.Content.ADDINFO.status == true)
+                        {
+                            PPIAgent pp = new PPIAgent();
+                            pp.Retailer_id = userid;
+                            pp.Status = true;
+                            pp.Insertdate = DateTime.Now;
+                            db.PPIAgents.Add(pp);
+                            db.SaveChanges();
+                            //  PPIAge
+
+                            //PPIAgents ppinfo = new PPIAgent();
+                            //ppinfo.
+                        }
+                        else
+                        {
+
+                            string errorchk = dyrespchk.Content.ADDINFO.message;
+                            ViewBag.errormsg = errorchk;
+                        }
+                    }
                 }
-                else
+                Agentinfo = db.PPIAgents.Where(aa => aa.Retailer_id == userid).SingleOrDefault();
+                if (Agentinfo != null)
                 {
-                    ViewBag.url = "";
-                    ViewBag.encdata = "";
+                    var request = HttpContext.Request;
+                    string currentUrl = $"{request.Url.Scheme}://{request.Url.Authority}{request.Url.AbsolutePath}{request.Url.Query}";
+
+                    var info = vast.GenrateURL_PPI(uniqueid, token, Agentinfo.Retailer_id, currentUrl);
+                    var datainfo = info.Content;
+
+                    if (info.StatusCode == HttpStatusCode.OK)
+                    {
+                        dynamic respchkk = JsonConvert.DeserializeObject(datainfo);
+                        ViewBag.url = respchkk.Content.ADDINFO.data.url;
+                        ViewBag.encdata = respchkk.Content.ADDINFO.data.encdata;
+                    }
+                    else
+                    {
+                        ViewBag.errormsg = "Something Went Wrong";
+                    }
                 }
               
                 Recent_report recent = new Recent_report();
@@ -27008,10 +27045,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 var responseall = cb.Remitter_details(senderno, tokenapi);
                                 var responsechk = responseall.Content.ToString();
                                 var responsecode1 = responseall.StatusCode.ToString();
-                                var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
-                                var responsechk1 = responseall1.Content.ToString();
-                                var responsecode11 = responseall1.StatusCode.ToString();
-                                if (responsecode1 == "OK" && responsecode11 == "OK")
+                              //  var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
+                          //      var responsechk1 = responseall1.Content.ToString();
+                             //   var responsecode11 = responseall1.StatusCode.ToString();
+                                if (responsecode1 == "OK")
                                 {
                                     dynamic json = JsonConvert.DeserializeObject(responsechk);
                                     var respcode = json.Content.ResponseCode.ToString();
@@ -27019,12 +27056,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var stscode = ADDINFO.statuscode;
                                     json = JsonConvert.SerializeObject(ADDINFO);
 
-                                    dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
-                                    var respcode1 = json1.Content.ResponseCode.ToString();
-                                    var ADDINFO1 = json1.Content.ADDINFO;
-                                    var stscode1 = ADDINFO1.statuscode;
-                                    json1 = JsonConvert.SerializeObject(ADDINFO1);
-                                    if (stscode == "TXN" && stscode1 == "TXN")
+                                 //   dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
+                                  //  var respcode1 = json1.Content.ResponseCode.ToString();
+                                  //  var ADDINFO1 = json1.Content.ADDINFO;
+                                  //  var stscode1 = ADDINFO1.statuscode;
+                                   // json1 = JsonConvert.SerializeObject(ADDINFO1);
+                                    if (stscode == "TXN")
                                     {
                                         //dynamic jobject = JsonConvert.DeserializeObject(json.ToString());
                                         dynamic jobject = JsonConvert.DeserializeObject(json);
@@ -27043,27 +27080,25 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         catch
                                         { }
-                                        dynamic jobject1 = JsonConvert.DeserializeObject(json1);
-                                        try
-                                        {
-                                            bool isArray1 = jobject1.data.beneficiary.item.Type == JTokenType.Array;
-                                            if (isArray1 == false)
-                                            {
-                                                json1 = json1.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
-                                                int modificationIndex1 = json1.IndexOf("}},", json1.IndexOf("beneficiary"));
-                                                if (modificationIndex1 > 0)
-                                                {
-                                                    json1 = json1.Remove(modificationIndex1, 2).Insert(modificationIndex1, "}]}");
-                                                }
-                                            }
-                                        }
-                                        catch
-                                        { }
+                                        //dynamic jobject1 = JsonConvert.DeserializeObject(json1);
+                                        //try
+                                        //{
+                                        //    bool isArray1 = jobject1.data.beneficiary.item.Type == JTokenType.Array;
+                                        //    if (isArray1 == false)
+                                        //    {
+                                        //        json1 = json1.Replace("\"beneficiary\":{\"item\":{", "\"beneficiary\":{\"item\":[{");
+                                        //        int modificationIndex1 = json1.IndexOf("}},", json1.IndexOf("beneficiary"));
+                                        //        if (modificationIndex1 > 0)
+                                        //        {
+                                        //            json1 = json1.Remove(modificationIndex1, 2).Insert(modificationIndex1, "}]}");
+                                        //        }
+                                        //    }
+                                        //}
+                                        //catch
+                                        //{ }
                                     }
-                                    //   var results = JsonConvert.SerializeObject(json);
-                                    // var jss = new JavaScriptSerializer();
-                                    //  var dict = jss.Deserialize<dynamic>(json);
-                                    return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
+                                   // return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
+                                    return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
                                 }
                                 else
                                 {
@@ -27212,6 +27247,301 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 //   var jss = new JavaScriptSerializer();
                 //  var dict = jss.Deserialize<dynamic>(results);
                 return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Register_aadhar_new(string senderno,string aadharno,string pancardnumber)
+        {
+            string userid = User.Identity.GetUserId();
+            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+            Guid uniqueIdinfo = Guid.NewGuid();
+            string uniqueid = uniqueIdinfo.ToString();
+            var Ipaddress = GetComputer_InternetIP();
+            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            var status = false; string message = "Please Try After Sometime";
+            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, senderno, "VASTWEB", Ipaddress, "", outputchk).SingleOrDefault();
+            var msginfo = Reqinfochk.msg;
+            if (msginfo == "OK")
+            {
+
+                VastBazaar cb = new VastBazaar();
+                var token = Responsetoken.gettoken();
+                var responseall = cb.Aadhar_Register(senderno, aadharno, agentid, token);
+                var responsechk = responseall.Content.ToString();
+                var responsecode1 = responseall.StatusCode.ToString();
+                if (responsecode1 == "OK")
+                {
+                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                    var ADDINFO = json.Content.ADDINFO;
+                   // dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
+                    var stsmsg = ADDINFO.success;
+                    var msg = ADDINFO.message;
+                    var clientid = ADDINFO.data.client_id;
+                   
+                    if(stsmsg==false)
+                    {
+                        db.RefundDMTEkycCharge(agentid, "Failed", message);
+                    }
+                    var respchk = new
+                    {
+                        stsmsg,
+                        msg,
+                        clientid,
+                        agentid
+                    };
+                    var results = JsonConvert.SerializeObject(respchk);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var error_decribe = "Please Try After Sometime";
+                    var respchk = new
+                    {
+                        stsmsg=false,
+                        msg= error_decribe,
+                        clientid="",
+                        agentid=""
+                    };
+                    var results = JsonConvert.SerializeObject(respchk);
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = msginfo;
+                var respchk = new
+                {
+                    stsmsg = false,
+                    msg = error_decribe,
+                    clientid = "",
+                    agentid = ""
+                };
+                var results = JsonConvert.SerializeObject(respchk);
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult Otp_verify_aadhar_new(string senderno, string otp, string aadhar, string clientid, string agentid)
+        {
+            VastBazaar cb = new VastBazaar();
+            var responsechk = "";
+            var responsecode1 = "";
+            var tokn = Responsetoken.gettoken();
+            var responseall = cb.Aadhar_Register_OTP(senderno, otp, aadhar, clientid, agentid, tokn);
+            responsechk = responseall.Content.ToString();
+            responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+             //   var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+            //    dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
+                var stsmsg = ADDINFO.success;
+                string msg = ADDINFO.message;
+ 
+
+                if (stsmsg == false)
+                {
+                    db.RefundDMTEkycCharge(agentid, "Failed", msg);
+                }
+                else if(stsmsg==true)
+                {
+                    db.RefundDMTEkycCharge(agentid, "Success", msg);
+                }
+                var respchk = new
+                {
+                    stsmsg,
+                    msg,
+                    clientid,
+                    agentid
+                };
+                var results = JsonConvert.SerializeObject(respchk);
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var Status = "Some Techincal Issue";
+                var respchk = new
+                {
+                    stsmsg = false,
+                    msg = Status,
+                    clientid = "",
+                    agentid = ""
+                };
+                var results = JsonConvert.SerializeObject(respchk);
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult Register_sender_new(string senderno, string name)
+        {
+            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "PAYOUT")).SingleOrDefault();
+            if (apinm != null)
+            {
+                if (apinm.api_name == "VASTWEB")
+                {
+                    VastBazaar cb = new VastBazaar();
+                    var token = Responsetoken.gettoken();
+                    var responseall = cb.Remitter_Register(senderno, name, "332311", token);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var results = JsonConvert.SerializeObject(ADDINFO);
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else if (apinm.api_name == "RADIANT")
+                {
+                    var userid = User.Identity.GetUserId();
+                    var radiantauthchk = db.radiantauths.SingleOrDefault();
+                    if (radiantauthchk != null)
+                    {
+                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                        if (radiantresponse != null)
+                        {
+                            if (radiantresponse.Sts == "Approved")
+                            {
+                                Radiantdmt dmt = new Radiantdmt();
+                                var tokenchk = db.radianttokens.SingleOrDefault();
+                                if (tokenchk == null)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                }
+                                else
+                                {
+                                    radianttoken = tokenchk.accessToken;
+                                    radianagentid = tokenchk.agentID;
+                                }
+                                var responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                                {
+                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                    responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+
+                                }
+                                if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
+                                {
+                                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                                    if (json.success == true)
+                                    {
+                                        string message = json.message;
+                                        var results = "{'status':'" + message + "','statuscode':'REDIT'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
+                                    {
+                                        var error = "";
+                                        try
+                                        {
+                                            error = json.errors.senderno[0].ToString();
+                                        }
+                                        catch { }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.errors.sendername[0].ToString();
+                                            }
+                                            catch { }
+                                        }
+                                        if (string.IsNullOrEmpty(error))
+                                        {
+                                            try
+                                            {
+                                                error = json.message;
+                                            }
+                                            catch { }
+                                        }
+                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                        var jss = new JavaScriptSerializer();
+                                        var dict = jss.Deserialize<dynamic>(results);
+                                        return Json(dict, JsonRequestBehavior.AllowGet);
+                                    }
+                                }
+
+                                else
+                                {
+                                    var error = "Something Went Wrong, Try After Some Time";
+                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(results);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                var error = "Agent ID is pending. Please wait for approval.";
+                                var results = "{'status':'" + error + "','statuscode':'failure'}";
+                                var jss = new JavaScriptSerializer();
+                                var dict = jss.Deserialize<dynamic>(results);
+                                return Json(dict, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
+                            var results = "{'status':'" + error + "','statuscode':'failure'}";
+                            var jss = new JavaScriptSerializer();
+                            var dict = jss.Deserialize<dynamic>(results);
+                            return Json(dict, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        var error = "Authentication is required! Please contact the administrator.";
+                        var results = "{'status':'" + error + "','statuscode':'failure'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    var error_decribe = "NO Api Open";
+                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var error_decribe = "NO Api Open";
+                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
@@ -27384,166 +27714,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
-        [HttpPost]
-        public ActionResult Register_sender_new(string senderno, string name)
-        {
-            var apinm = db.money_api_status.Where(aa => aa.status == true && (aa.catagory == "PAYOUT")).SingleOrDefault();
-            if (apinm != null)
-            {
-                if (apinm.api_name == "VASTWEB")
-                {
-                    VastBazaar cb = new VastBazaar();
-                    var token = Responsetoken.gettoken();
-                    var responseall = cb.Remitter_Register(senderno, name, "332311", token);
-                    var responsechk = responseall.Content.ToString();
-                    var responsecode1 = responseall.StatusCode.ToString();
-                    if (responsecode1 == "OK")
-                    {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var respcode = json.Content.ResponseCode.ToString();
-                        var ADDINFO = json.Content.ADDINFO;
-                        var stscode = ADDINFO.statuscode;
-                        var results = JsonConvert.SerializeObject(ADDINFO);
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var error = json.error.ToString();
-                        var error_decribe = json["error_description"].ToString();
-                        var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
-                    }
-                }
-                else if (apinm.api_name == "RADIANT")
-                {
-                    var userid = User.Identity.GetUserId();
-                    var radiantauthchk = db.radiantauths.SingleOrDefault();
-                    if (radiantauthchk != null)
-                    {
-                        var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
-                        if (radiantresponse != null)
-                        {
-                            if (radiantresponse.Sts == "Approved")
-                            {
-                                Radiantdmt dmt = new Radiantdmt();
-                                var tokenchk = db.radianttokens.SingleOrDefault();
-                                if (tokenchk == null)
-                                {
-                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                }
-                                else
-                                {
-                                    radianttoken = tokenchk.accessToken;
-                                    radianagentid = tokenchk.agentID;
-                                }
-                                var responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
-                                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
-                                {
-                                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                    responseinfo = dmt.CreateSendernumber(radianagentid, radianttoken, senderno, name, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
 
-                                }
-                                if (responseinfo.StatusCode == HttpStatusCode.Created || responseinfo.StatusCode == HttpStatusCode.OK)
-                                {
-                                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
-                                    if (json.success == true)
-                                    {
-                                        string message = json.message;
-                                        var results = "{'status':'" + message + "','statuscode':'REDIT'}";
-                                        var jss = new JavaScriptSerializer();
-                                        var dict = jss.Deserialize<dynamic>(results);
-                                        return Json(dict, JsonRequestBehavior.AllowGet);
-                                    }
-                                    else
-                                    {
-                                        var error = "";
-                                        try
-                                        {
-                                            error = json.errors.senderno[0].ToString();
-                                        }
-                                        catch { }
-                                        if (string.IsNullOrEmpty(error))
-                                        {
-                                            try
-                                            {
-                                                error = json.errors.sendername[0].ToString();
-                                            }
-                                            catch { }
-                                        }
-                                        if (string.IsNullOrEmpty(error))
-                                        {
-                                            try
-                                            {
-                                                error = json.message;
-                                            }
-                                            catch { }
-                                        }
-                                        var results = "{'status':'" + error + "','statuscode':'failure'}";
-                                        var jss = new JavaScriptSerializer();
-                                        var dict = jss.Deserialize<dynamic>(results);
-                                        return Json(dict, JsonRequestBehavior.AllowGet);
-                                    }
-                                }
 
-                                else
-                                {
-                                    var error = "Something Went Wrong, Try After Some Time";
-                                    var results = "{'status':'" + error + "','statuscode':'failure'}";
-                                    var jss = new JavaScriptSerializer();
-                                    var dict = jss.Deserialize<dynamic>(results);
-                                    return Json(dict, JsonRequestBehavior.AllowGet);
-                                }
-                            }
-                            else
-                            {
-                                var error = "Agent ID is pending. Please wait for approval.";
-                                var results = "{'status':'" + error + "','statuscode':'failure'}";
-                                var jss = new JavaScriptSerializer();
-                                var dict = jss.Deserialize<dynamic>(results);
-                                return Json(dict, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else
-                        {
-                            var error = "Agent ID not created! Please go to your profile and create a new Agent ID.";
-                            var results = "{'status':'" + error + "','statuscode':'failure'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(results);
-                            return Json(dict, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                    else
-                    {
-                        var error = "Authentication is required! Please contact the administrator.";
-                        var results = "{'status':'" + error + "','statuscode':'failure'}";
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
-                    }
-                }
-                else
-                {
-                    var error_decribe = "NO Api Open";
-                    var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
-                    var jss = new JavaScriptSerializer();
-                    var dict = jss.Deserialize<dynamic>(results);
-                    return Json(dict, JsonRequestBehavior.AllowGet);
-                }
-            }
-            else
-            {
-                var error_decribe = "NO Api Open";
-                var results = "{'status':'" + error_decribe + "','statuscode':'failure'}";
-                var jss = new JavaScriptSerializer();
-                var dict = jss.Deserialize<dynamic>(results);
-                return Json(dict, JsonRequestBehavior.AllowGet);
-            }
-        }
+
         [HttpPost]
         public ActionResult Otp_verify_sender_new(string senderno, string otp, string benid)
         {

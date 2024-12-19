@@ -349,10 +349,17 @@
 
     </div>
     <fieldset>
+        @if (ViewBag.errormsg == "OK")
+        {
         <form method="post" action="@ViewBag.url" target="_blank" style="margin-bottom: 50px; margin-top: 50px; margin-left: 103px;">
             <textarea name="encdata" style="display:none">@ViewBag.encdata</textarea>
             <input type="submit" value="Continue For PPI Wallet" class="btn btn-link">
         </form>
+        }
+else
+            {
+                <span style="color:red;">@ViewBag.errormsg </span>
+            }
         @*<legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">
             @Html.TextBox("senderno", "", new { placeholder = "Enter 10 Digit Number", maxlength = "10", required = "required", onkeypress = "return isNumber(event)" })
