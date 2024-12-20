@@ -4,13 +4,8 @@
     VastwebmultiEntities DB = new VastwebmultiEntities();
     var stsotp = "N";
     var dmtotpsts = DB.dmtpin_otp_status.SingleOrDefault();
-    if (dmtotpsts != null)
-    {
-        if (dmtotpsts.status == true)
-        {
-            stsotp = "Y";
-        }
-    }
+    dmtotpsts.status = false;
+ 
 }
 <style>
     @@keyframes blink {
@@ -757,12 +752,14 @@
             <div class="col-md-12 amount otpboxnotshow" style="display:none"><strong style="width:108px;">Enter Sender OTP</strong><input type="text" id="txtsenderotps" style=" background: white; float: right;" name="txtsenderotps" value="0"></div>
             @*<div class="col-md-12 amount"><strong>Debit Amount</strong><span id="chargeconfirm">20040</span></div>*@
             <div class="col-md-12 amount transfererroreee"><span id="transfererror" style="color:red;"></span></div>
+
         </div>
         <div class="col-md-12 cancelbutton">
             <div class="cancelbuttonright">
                 <a href="#" id="dmt11" class="cancel" onclick="confirmback()">BACK</a>
                 <a href="#" id="dmt1" style="display:none" class="cancel" onclick="confirmback1()">BACK</a>
                 <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment<i class="fa fa-angle-right"></i></a>
+                <a href="javascript:void(0);" id="fotp" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="fsendotp()">Send OTP<i class="fa fa-angle-right"></i></a>
                 <a href="javascript:void(0);" id="fpay1" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
@@ -2942,6 +2939,8 @@
                                     $('#confirmdivbankname').show();
                                 }
                                 $('#dmtconfirm').show();
+                                $('#fpay').hide();
+                                $('#fotp').show();
                                 $('#dmttransfer').hide();
                             }
                             else if (sts == "OTP") {
@@ -3074,6 +3073,7 @@
                             $('#fpay1').show();
                             $('#dmt11').hide();
                             $('#fpay').hide();
+                   
                         }
                     });
                 }
@@ -3123,6 +3123,41 @@
         $('#fpay').hide();
         $('#fpay1').show();
         $('#dmtconfirm').hide();
+    }
+</script>
+<script>
+    function fsendotp() {
+        var senderno = $('#changesender').val(); 
+        var amount = $('#amounttransfer').val();
+        var accountno = $('#accountnotransfer').text();
+      $.ajax({
+      url: '@Url.Action("Imps_Send_otp", "Home")',
+          data: { senderno, uniqueid, amount, accountno },
+      cache: false,
+      type: "POST",
+      beforeSend: function () {
+          $('.loader').show();
+      },
+      success: function (data) {
+          var sts = data.status;
+          var msg = data.Details;
+          if (sts == "Success") {
+              $('#fotp').hide()
+              $('#fpay').show()
+              $('.otpboxnotshow').show();
+              
+          }
+
+          
+      },
+      complete: function () {
+          $('.loader').hide();
+
+      },
+      error: function () {
+          $('.loader').hide();
+      }
+  })
     }
 </script>
 <script>
