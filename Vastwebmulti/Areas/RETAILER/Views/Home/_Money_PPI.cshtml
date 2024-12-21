@@ -310,7 +310,6 @@
             display: block;
             text-align: center;
         }
-
             .button-container .btn {
                 margin-bottom: 8px;
                 text-align: center;
@@ -348,17 +347,18 @@
         }
 
     </div>
-    <fieldset>
+    
         @if (ViewBag.errormsg == "OK")
-        {
-        <form method="post" action="@ViewBag.url" target="_blank" style="margin-bottom: 50px; margin-top: 50px; margin-left: 103px;">
-            <textarea name="encdata" style="display:none">@ViewBag.encdata</textarea>
-            <input type="submit" value="Continue For PPI Wallet" class="btn btn-link">
-        </form>
+        { <fieldset>
+            <form method="post" action="@ViewBag.url" target="_blank" style="margin-bottom: 50px; margin-top: 50px; margin-left: 103px;">
+                <textarea name="encdata" style="display:none">@ViewBag.encdata</textarea>
+                <input type="submit" value="Continue For PPI Wallet" class="btn btn-link">
+            </form>
+           </fieldset>
         }
-else
+        else
             {
-                <span style="color:red;">@ViewBag.errormsg </span>
+            <span style="color: red; font-size: 24px; text-align: center; padding: 12px;">⚠ @ViewBag.errormsg </span>
             }
         @*<legend class="bodycolormy">Enter Your Remitter Number</legend>
         <div class="col-md-12 remitter_button button-responshivecce">
@@ -366,9 +366,9 @@ else
             <button type="button" id="btnsenddd" name="btnsenddd" onclick="senderdetails('new')" class="button-money">Next<i class="fa fa-angle-right" style="top:1px; font-size:19px;float:right;right:15px;"></i></button>
             <span id="errorsenderno" style="color:red;"></span>
         </div>*@
-    </fieldset>
+    
     <div class="money_tab-height">
-        <p class="body-border-bottom">Important Notes</p>
+        <p class="body-border-bottom" style="font-weight:bold;">Important Notes</p>
         <p class="note-content"><strong>.</strong>Money can be sent to the customer's bank account through IMPS, NEFT and UPI.</p>
         <p class="note-content">
             <strong>.</strong>For any reason, money entered in the wrong account will neither be returned nor transferred to another account. Please check the account number before transferring money.

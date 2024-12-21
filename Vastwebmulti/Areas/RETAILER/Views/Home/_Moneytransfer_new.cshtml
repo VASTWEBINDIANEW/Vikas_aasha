@@ -13,13 +13,93 @@
     }
 }
 <style>
+   /* New css */
+    #remlist .radiobuttonimps label.container {
+        padding-left: 35px;
+    }
+    .fa.fa-angle-right.otp_icon {
+        right: 14px;
+    }
+
+    #next_page button:last-child {
+        padding: 4px 26px;
+    }
+    #next_page button {
+        padding: 4px 18px;
+    }
+    #dmttransfer #account-holdername p, #dmttransfer #account-holdernamefirst p, .button-imps .col-md-12.amount.amount_strong strong {
+        top: 0px;
+    }
+
+    #full .select2-selection__arrow b {
+        top: 10px;
+    }
+    #full #impsaddnew .amount_strong span.select2-selection__arrow {
+        margin-top: 0;
+    }
+    #addaccount-add123 {
+        margin-top: 0px;
+    }
+
+    #tab-1 #dmttransfer .accountholderde input {
+        width: 72%;
+    }
+    .radiobuttonimps .checkmark {
+        margin-left: 7px;
+    }
+    #full .col-md-12.amount input {
+        width: 72%;
+        margin-right: 0;
+        border-radius: 0;
+        border: 0;
+    }
+    .amount {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+    .fullwidthaccount-top-respons .col-md-12.amount.amount_strong input#sendername {
+        width: 73% !important;
+        border-radius: 0;
+        border: 0;
+    }
+    #NewSenderregister .col-md-12.amount.amount_strong, #otpshow .col-md-12.amount.amount_strong {
+        padding-left: 0px;
+    }
+    .fullwidthaccount-top .col-md-12.amount strong {
+        padding-left: 5px;
+    }
+    #NewSenderregister .col-md-12.amount.amount_strong input, #otpshow .col-md-12.amount.amount_strong input#otpinsert {
+        width: 72% !important;
+        border-radius: 0;
+        border: 0;
+    }
+
+    .amount i {
+        float: right;
+        display: block;
+        position: absolute;
+        right: 6px;
+        /*background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));*/
+        border-radius: 50%;
+        padding: 7px;
+        color: #fff;
+        background: var(--main-bg-lcolor);
+    }
+        .amount span {
+            padding-top: 0;
+        }
+
+   /* New css */
+
+
     @@keyframes blink {
         0% {
             color: #fff;
         }
 
         50% {
-            color: Yellow;
+            color: red;
         }
 
         100% {
@@ -299,11 +379,21 @@
             }
 
     @@media only screen and (max-width:480px) {
+
+        .fullwidthaccount-top-respons .col-md-12.amount.amount_strong input#sendername {
+            width: 50% !important;
+        }
+        #full .col-md-12.amount strong {
+            width: 38%;
+        }
+        #full .col-md-12.amount input {
+            width: 65%;
+        }
+
         .button-container {
             display: block;
             text-align: center;
         }
-
             .button-container .btn {
                 margin-bottom: 8px;
                 text-align: center;
@@ -366,6 +456,7 @@
         <div class="col-md-12 amount amount_strong allredyshow">
             <strong style="width:110px;">Remitter Number</strong>
             <span id="newsender"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong" style="background:#fff;">
             <strong style="">Remitter Name</strong>
@@ -385,12 +476,14 @@
 <div id="otpshow" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="otpsenderno"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Remitter Name</strong>
             <span id="otpsendername"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Enter OTP</strong>
@@ -419,7 +512,7 @@
             <input id="aadharnumber_new" type="number" placeholder="Aadhar Number" />
         </div>
         <div class="col-md-12 amount amount_strong" style="background:#fff;">
-            <strong style="">Pan Card</strong>
+            <strong style="width: 118px !important;">Pan Card</strong>
             <input id="pancard_new" type="text" placeholder="Pan Card" />
         </div>
         <div class="col-md-12 amount amount_strong" id="amount_strong-change">
@@ -438,7 +531,7 @@
         <input id="clientidaadhar" type="hidden" />
         <input id="agentidaadhar" type="hidden" />
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="otpsendernoaadhar"></span>
         </div>
         <div class="col-md-12 amount amount_strong">
@@ -476,7 +569,7 @@
             <i class="fa fa-exchange" onclick="change()" title="Change Sender Number"></i>
         </div>
         <div class="col-md-2 add_account add_account-responshive" style="width: 15%;">
-            <a onclick="addnewaccount()" style="cursor:pointer;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
+            <a onclick="addnewaccount()" style="cursor: pointer;margin: 0;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
         </div>
     </div>
     <div class="col-md-12 number-login" style="margin-top: 8px;">
@@ -491,22 +584,24 @@
                     <input type="radio" name="bendetails" id="impsbutton" value="IMPS" checked><p>IMPS</p>
                     <span class="checkmark"></span>
                 </label>
-                <label id="creaditcbt" class="container container-last">
-                    <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
-                    <span class="checkmark"></span>
-                </label>
+
                 <label class="container">
                     <input type="radio" name="bendetails" id="neftbutton" value="NEFT"><p>NEFT</p>
                     <span class="checkmark"></span>
                 </label>
-                <label id="upilabel" class="container">
-                    <input type="radio" name="bendetails" id="upibutton" value="UPI"><p>UPI</p>
+                <label id="creaditcbt" class="container container-last">
+                    <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
                     <span class="checkmark"></span>
+                    <label class="for-blink1" style="font-size: 7px; position: absolute; top: 0px; right: 4px; font-weight: normal; text-transform: uppercase;">Coming Soom</label>
                 </label>
+                @*<label id="upilabel" class="container">
+            <input type="radio" name="bendetails" id="upibutton" value="UPI"><p>UPI</p>
+            <span class="checkmark"></span>
+        </label>*@
                 @*<label id="walletlabel" class="container container-last">
-                        <input type="radio" name="bendetails" id="paytmwalletbutton" value="WALLET"><p>PAYTM WALLET</p>
-                        <span class="checkmark"></span>
-                    </label>*@
+            <input type="radio" name="bendetails" id="paytmwalletbutton" value="WALLET"><p>PAYTM WALLET</p>
+            <span class="checkmark"></span>
+        </label>*@
 
             </form>
         </div>
@@ -601,8 +696,8 @@
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">A/C Number</strong> <span id="accountnotransfer"></span></div>
-            <div id="divbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong">
-                <p class="bodycolormy">Bank IFSC</p>
+            <div id="divbankifsc" style=" padding-bottom: 10px;" class="col-md-4 account-holder account-holder2 amount amount_strong">
+                <p class="bodycolormy" style=" margin: 0;">Bank IFSC</p>
                 <strong id="bankifsccodetransfer" style="padding-left:8px !important;"></strong>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">A/C Name</strong><span id="Nametransfer"></span></div>
@@ -708,8 +803,8 @@
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">Card Number</strong> <span id="ccnotransfer"></span></div>
-            <div id="ccdivbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong">
-                <p class="bodycolormy">Bank IFSC</p>
+            <div id="ccdivbankifsc" style="padding-bottom:10px;" class="col-md-4 account-holder account-holder2 amount amount_strong">
+                <p class="bodycolormy" style=" margin: 0;">Bank IFSC</p>
                 <strong id="ccifsccodetransfer" style="padding-left:8px !important;"></strong>
 
             </div>
@@ -879,7 +974,7 @@
                 </div>
                 <div class="col-md-12 amount amount_strong">
                     <strong style="">A/C Holder</strong>
-                    <input id="benname" class="bennameCHange bennameCHangeqwety" type="text" placeholder="Beneficiary Name" />
+                    <input id="benname" style="margin-right: 2.5px !important;" class="bennameCHange bennameCHangeqwety" type="text" placeholder="Beneficiary Name" />
                     <span style="color:red;padding-left:8px;">*</span>
                     <button id="addaccount-add123" class="fullbodydycolorbg verify-account" onclick="Accountverify()">A/c verify</button>
                     <button id="addaccount-add123_again" class="verify-account" style="display:none;" onclick="Accountverifyagain()"><br /><label>Try Again</label></button>
@@ -1144,7 +1239,7 @@
             <div class="add-select-bank">
                 <div class="col-md-12 amount amount_strong">
                     <strong style="">Bank Name</strong>
-                    <i class="fa fa-angle-down"></i>    <select class="select-bank-name">
+                    <i style="background: transparent; padding: 0; right: 13px;" class="fa fa-angle-down"></i>    <select class="select-bank-name">
                         <option>SELECT BANK NAME</option>
                         <option>HDFC BANK</option>
                         <option>STATE BANK of india</option>
