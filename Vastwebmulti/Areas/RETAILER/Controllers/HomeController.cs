@@ -16049,27 +16049,78 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpGet]
         public ActionResult Money_transfer()
         {
+            var userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var dealerid = ChkKYC.DealerId;
+            var dealerinfo = db.Dealer_Details.Where(aa => aa.DealerId == dealerid).SingleOrDefault();
+
             var money1 = false; var money2 = false; var money3 = false; var money4 = false;
             var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt != null)
             {
                 money1 = true;
+                if (dealerinfo.moneysts == true)
+                {
+                    if (ChkKYC.moneysts == false)
+                    {
+                        money1 = false;
+                    }
+                }
+                else
+                {
+                    money1 = false;
+                }
             }
             var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt1 != null)
             {
                 money2 = true;
+                if (dealerinfo.moneysts1 == true)
+                {
+                    if (ChkKYC.moneysts1 == false)
+                    {
+                        money2 = false;
+                    }
+                }
+                else
+                {
+                    money2 = false;
+                }
             }
             var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT" && aa.status == true).SingleOrDefault();
             if (moneyapists_payout != null)
             {
                 money3 = true;
+                if (dealerinfo.payout == true)
+                {
+                    if (ChkKYC.payout == false)
+                    {
+                        money3 = false;
+                    }
+                }
+                else
+                {
+                    money3 = false;
+                }
             }
             var moneyapists_PPI = db.money_api_status.Where(aa => aa.catagory == "DMTPPI" && aa.status == true).SingleOrDefault();
             if (moneyapists_PPI != null)
             {
                 money4 = true;
+                if (dealerinfo.moneyppi == true)
+                {
+                    if (ChkKYC.moneyppi == false)
+                    {
+                        money4 = false;
+                    }
+                }
+                else
+                {
+                    money4 = false;
+                }
             }
+
+
             ViewBag.moneysts1 = money1;
             ViewBag.moneysts2 = money2;
             ViewBag.moneysts3 = money3;
@@ -16077,8 +16128,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             if (money2)
             {
-                string userid = User.Identity.GetUserId();
-                var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
                 if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
                 {
                     //////////////////////Check E KYC///////////////////////////
@@ -19062,7 +19112,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         {
                                                             task = Task.Run(() =>
                                                             {
-                                                                return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                                return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar, senderotps,uniqueid);
                                                             });
                                                             var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.trans_id == Tranid).SingleOrDefault();
 
@@ -19782,35 +19832,85 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpGet]
         public ActionResult Money_transferPPI()
         {
+            var userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var dealerid = ChkKYC.DealerId;
+            var dealerinfo = db.Dealer_Details.Where(aa => aa.DealerId == dealerid).SingleOrDefault();
+
             var money1 = false; var money2 = false; var money3 = false; var money4 = false;
             var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt != null)
             {
                 money1 = true;
+                if (dealerinfo.moneysts == true)
+                {
+                    if (ChkKYC.moneysts == false)
+                    {
+                        money1 = false;
+                    }
+                }
+                else
+                {
+                    money1 = false;
+                }
             }
             var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt1 != null)
             {
                 money2 = true;
+                if (dealerinfo.moneysts1 == true)
+                {
+                    if (ChkKYC.moneysts1 == false)
+                    {
+                        money2 = false;
+                    }
+                }
+                else
+                {
+                    money2 = false;
+                }
             }
             var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT" && aa.status == true).SingleOrDefault();
             if (moneyapists_payout != null)
             {
                 money3 = true;
+                if (dealerinfo.payout == true)
+                {
+                    if (ChkKYC.payout == false)
+                    {
+                        money3 = false;
+                    }
+                }
+                else
+                {
+                    money3 = false;
+                }
             }
             var moneyapists_PPI = db.money_api_status.Where(aa => aa.catagory == "DMTPPI" && aa.status == true).SingleOrDefault();
             if (moneyapists_PPI != null)
             {
                 money4 = true;
+                if (dealerinfo.moneyppi == true)
+                {
+                    if (ChkKYC.moneyppi == false)
+                    {
+                        money4 = false;
+                    }
+                }
+                else
+                {
+                    money4 = false;
+                }
             }
+
+
             ViewBag.moneysts1 = money1;
             ViewBag.moneysts2 = money2;
             ViewBag.moneysts3 = money3;
             ViewBag.moneysts4 = money4;
 
 
-            string userid = User.Identity.GetUserId();
-            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
             if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
                 //////////////////////Check E KYC///////////////////////////
@@ -25355,7 +25455,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     {
                                                         task = Task.Run(() =>
                                                         {
-                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar, senderotps,uniqueid);
                                                         });
                                                     }
                                                     bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
@@ -26667,34 +26767,84 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpGet]
         public ActionResult Money_transfer_new()
         {
+            var userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var dealerid = ChkKYC.DealerId;
+            var dealerinfo = db.Dealer_Details.Where(aa => aa.DealerId == dealerid).SingleOrDefault();
+
             var money1 = false; var money2 = false; var money3 = false; var money4 = false;
             var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt != null)
             {
                 money1 = true;
+                if (dealerinfo.moneysts == true)
+                {
+                    if (ChkKYC.moneysts == false)
+                    {
+                        money1 = false;
+                    }
+                }
+                else
+                {
+                    money1 = false;
+                }
             }
             var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt1 != null)
             {
                 money2 = true;
+                if (dealerinfo.moneysts1 == true)
+                {
+                    if (ChkKYC.moneysts1 == false)
+                    {
+                        money2 = false;
+                    }
+                }
+                else
+                {
+                    money2 = false;
+                }
             }
             var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT" && aa.status == true).SingleOrDefault();
             if (moneyapists_payout != null)
             {
                 money3 = true;
+                if (dealerinfo.payout == true)
+                {
+                    if (ChkKYC.payout == false)
+                    {
+                        money3 = false;
+                    }
+                }
+                else
+                {
+                    money3 = false;
+                }
             }
             var moneyapists_PPI = db.money_api_status.Where(aa => aa.catagory == "DMTPPI" && aa.status == true).SingleOrDefault();
             if (moneyapists_PPI != null)
             {
                 money4 = true;
+                if (dealerinfo.moneyppi == true)
+                {
+                    if (ChkKYC.moneyppi == false)
+                    {
+                        money4 = false;
+                    }
+                }
+                else
+                {
+                    money4 = false;
+                }
             }
+
+
             ViewBag.moneysts1 = money1;
             ViewBag.moneysts2 = money2;
             ViewBag.moneysts3 = money3;
             ViewBag.moneysts4 = money4;
 
-            string userid = User.Identity.GetUserId();
-            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+           
             if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
                 //////////////////////Check E KYC///////////////////////////
@@ -27266,7 +27416,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 VastBazaar cb = new VastBazaar();
                 var token = Responsetoken.gettoken();
-                var responseall = cb.Aadhar_Register(senderno, aadharno, agentid, token);
+                var responseall = cb.Aadhar_Register(senderno, aadharno, pancardnumber, agentid, token);
                 var responsechk = responseall.Content.ToString();
                 var responsecode1 = responseall.StatusCode.ToString();
                 if (responsecode1 == "OK")
@@ -29088,6 +29238,43 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
+        public ActionResult Imps_Send_otp(string senderno, string uniqueid, decimal amount, string accountno)
+        {
+            VastBazaar cb = new VastBazaar();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb.Fund_Transfer_Sendotp(senderno, uniqueid, amount, accountno, tokenapi);
+            if (responseall.StatusCode == HttpStatusCode.OK)
+            {
+                var responsechk = responseall.Content.ToString();
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var ADDINFO = json.Content.ADDINFO;
+                var stscode = ADDINFO.statuscode;
+                if(stscode=="TXN")
+                {
+                    var results = "{'Details':'Otp Send Sender Number','status':'Success'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var results = "{'Details':'Please Try After Sometime','status':'Failed'}";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                var results = "{'Details':'Please Try After Sometime','status':'Failed'}";
+                var jss1 = new JavaScriptSerializer();
+                var dict1 = jss1.Deserialize<dynamic>(results);
+                return Json(dict1, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+        [HttpPost]
         public ActionResult imps_transfer_new(string name, string NUMBER, string type, string account, string ifsc, string dmtpin, string amount, string bankname, string benCode, decimal servicefee, string idprooftype, string idproofnumber, string senderotps, string latss, string longloc, string imageData, string uniqueid, bool check_kyc, string customerid)
         {
             var results = ""; var requestsend = ""; var kycsts = "";
@@ -29660,12 +29847,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             return Instantpay_Payout.payout_pool(name, type, amt.ToString(), account, ifsc, Tranid, RetailerEmail, authcode, clientid, secret, ipaddress, actno);
                                                         });
                                                     }
-
                                                     else
                                                     {
                                                         task = Task.Run(() =>
                                                         {
-                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar,senderotps,uniqueid);
                                                         });
                                                     }
                                                     bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
@@ -31093,6 +31279,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpGet]
         public ActionResult Money_transfer2()
         {
+            var userid = User.Identity.GetUserId();
+            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+            var dealerid = ChkKYC.DealerId;
+            var dealerinfo = db.Dealer_Details.Where(aa => aa.DealerId == dealerid).SingleOrDefault();
+
             var chk1ekyc = db.DMT_Ekyc_Charge.SingleOrDefault();
             ViewBag.EkycCharge = chk1ekyc.Charge;
           var money1 = false; var money2 = false;var money3 = false; var money4 = false;
@@ -31100,29 +31291,77 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (moneyapists_dmt!=null)
             {
                 money1 = true;
+                if(dealerinfo.moneysts==true)
+                {
+                    if(ChkKYC.moneysts==false)
+                    {
+                        money1 = false;
+                    }
+                }
+                else
+                {
+                    money1 = false;
+                }
             }
             var moneyapists_dmt1 = db.money_api_status1.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
             if (moneyapists_dmt1 != null)
             {
                 money2 = true;
+                if (dealerinfo.moneysts1 == true)
+                {
+                    if (ChkKYC.moneysts1 == false)
+                    {
+                        money2 = false;
+                    }
+                }
+                else
+                {
+                    money2 = false;
+                }
             }
             var moneyapists_payout = db.money_api_status.Where(aa => aa.catagory == "PAYOUT" && aa.status == true).SingleOrDefault();
             if (moneyapists_payout != null)
             {
                 money3 = true;
+                if (dealerinfo.payout == true)
+                {
+                    if (ChkKYC.payout == false)
+                    {
+                        money3 = false;
+                    }
+                }
+                else
+                {
+                    money3 = false;
+                }
             }
             var moneyapists_PPI = db.money_api_status.Where(aa => aa.catagory == "DMTPPI" && aa.status == true).SingleOrDefault();
             if (moneyapists_PPI != null)
             {
                 money4 = true;
+                if (dealerinfo.moneyppi == true)
+                {
+                    if (ChkKYC.moneyppi == false)
+                    {
+                        money4 = false;
+                    }
+                }
+                else
+                {
+                    money4 = false;
+                }
             }
+         
+
+
+
             ViewBag.moneysts1 = money1;
             ViewBag.moneysts2 = money2;
             ViewBag.moneysts3 = money3;
             ViewBag.moneysts4 = money4;
 
-            string userid = User.Identity.GetUserId();
-            var ChkKYC = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
+        
             if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
                 //////////////////////Check E KYC///////////////////////////

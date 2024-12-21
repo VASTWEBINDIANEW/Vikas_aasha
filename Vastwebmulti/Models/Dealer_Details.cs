@@ -72,5 +72,8 @@ namespace Vastwebmulti.Models
         public Nullable<bool> DealerSelf_sts { get; set; }
         public int caption { get; set; }
         public string NetOFFR { get; set; }
+        public Nullable<bool> moneysts1 { get; set; }
+        public Nullable<bool> moneyppi { get; set; }
+        public Nullable<bool> payout { get; set; }
     }
 }

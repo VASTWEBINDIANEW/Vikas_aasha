@@ -32,13 +32,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             return responseall;
         }
 
-      
-
-   
-     
-
-
-
         public IRestResponse Remitter_details_UPI(string mobile, string token)
         {
             var url = BaseURL + "/api/COMPOSITE/Benlist";
@@ -85,9 +78,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-        public IRestResponse Aadhar_Register(string mobile, string aadharno, string txnid, string token)
+        public IRestResponse Aadhar_Register(string mobile, string aadharno,string pancardnumber, string txnid, string token)
         {
-            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_validaadhar?senderno="+ mobile + "&aadharno="+ aadharno + "&txnid="+ txnid + "");
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_validaadhar?senderno="+ mobile + "&aadharno="+ aadharno + "&txnid="+ txnid + "&pancardnumber="+ pancardnumber + "");
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", "bearer " + token);
             request.AddHeader("content-type", "application/json");
@@ -380,7 +373,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             return responseall;
         }
 
-        public IRestResponse Fund_Transfer(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
+        public IRestResponse Fund_Transfer(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno,string senderotps,string uniqueid)
         {
             var client = new RestClient(BaseURL + "/api/DMTPAYTM/Fund_Transfer");
             var request = new RestRequest(Method.POST);
@@ -397,7 +390,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 bankname,
                 kyccheck = kyc,
                 aadharno,
-                ifsccode
+                ifsccode,
+                otp= senderotps,
+                uniqueid
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
@@ -405,7 +400,18 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-    
+        public IRestResponse Fund_Transfer_Sendotp(string senderno,string uniqueid,decimal amount,string accountnumber,string token)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Fund_Transfer_OTP?Sendernumber="+ senderno + "&uniqueid="+ uniqueid + "&amount="+ amount + "&accountnumber="+ accountnumber + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
+
 
         public IRestResponse Fund_Transfer_UPI(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
         {
