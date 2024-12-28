@@ -1760,7 +1760,9 @@ namespace Vastwebmulti.Controllers
             TempData["provider"] = provider;
             ViewBag.returnUrl = returnUrl;
 
-            ViewBag.rememberMe = rememberMe;
+            ViewBag.rememberMe = true;
+
+            var chk = await SignInManager.HasBeenVerifiedAsync();
             // Generate the token and send it
             if (!await SignInManager.SendTwoFactorCodeAsync("Email Code"))
             {
@@ -1794,10 +1796,10 @@ namespace Vastwebmulti.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync("Email Code", Code, isPersistent: true, rememberBrowser: false);
+            var result = await SignInManager.TwoFactorSignInAsync("Email Code", Code, isPersistent: true, rememberBrowser: true);
             if (result == SignInStatus.Failure)
             {
-                result = await SignInManager.TwoFactorSignInAsync("Phone Code", Code, isPersistent: true, rememberBrowser: false);
+                result = await SignInManager.TwoFactorSignInAsync("Phone Code", Code, isPersistent: true, rememberBrowser: true);
             }
             switch (result)
             {
@@ -1821,8 +1823,9 @@ namespace Vastwebmulti.Controllers
         {
             TempData["provider"] = provider;
             ViewBag.returnUrl = returnUrl;
-
+            rememberMe = true;
             ViewBag.rememberMe = rememberMe;
+            var chk = await SignInManager.HasBeenVerifiedAsync();
             // Generate the token and send it on mail
             if (!await SignInManager.SendTwoFactorCodeAsync("Email Code"))
             {
@@ -1868,10 +1871,10 @@ namespace Vastwebmulti.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync("Email Code", Code, isPersistent: true, rememberBrowser: false);
+            var result = await SignInManager.TwoFactorSignInAsync("Email Code", Code, isPersistent: true, rememberBrowser: true);
             if (result == SignInStatus.Failure)
             {
-                result = await SignInManager.TwoFactorSignInAsync("Phone Code", Code, isPersistent: true, rememberBrowser: false);
+                result = await SignInManager.TwoFactorSignInAsync("Phone Code", Code, isPersistent: true, rememberBrowser: true);
             }
             switch (result)
             {
