@@ -1138,7 +1138,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 aadharcard,
                 data = Pidata,
                 Agentid,
-                Charge = "OK"
+                Charge = "OK",
+                accessmode = "WEB"
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
