@@ -6,44 +6,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>@ViewBag.compnay</title>
     @{
-    var favimage = "";
-    VastwebmultiEntities db2 = new VastwebmultiEntities();
-    var faviconlogo = db2.tblfavicons.Where(p => p.Role == "ADMIN").ToList();
-    if (faviconlogo.Count() > 0)
-    {
-    if (faviconlogo.SingleOrDefault().Role == "ADMIN")
-    {
-    favimage = faviconlogo.SingleOrDefault().faviconimage;
+        var favimage = "";
+        VastwebmultiEntities db2 = new VastwebmultiEntities();
+        var faviconlogo = db2.tblfavicons.Where(p => p.Role == "ADMIN").ToList();
+        if (faviconlogo.Count() > 0)
+        {
+            if (faviconlogo.SingleOrDefault().Role == "ADMIN")
+            {
+                favimage = faviconlogo.SingleOrDefault().faviconimage;
+            }
+        }
+        else
+        {
+            <link rel="icon" href="" type="image/x-icon" />
+        }
+        var admindetail = db2.Admin_details.ToList();
+        var mailid = admindetail.SingleOrDefault().email;
+        var mobile = admindetail.SingleOrDefault().mobile;
+        var Address = admindetail.SingleOrDefault().Address;
+        var Firm_Name = admindetail.SingleOrDefault().Companyname;
+        var SupportMail = admindetail.SingleOrDefault().email1;
+        var CustCareNo = "+91" + admindetail.SingleOrDefault().mobile1;
+        var PinCode = admindetail.SingleOrDefault().pincode;
+
+        int state = Convert.ToInt32(admindetail.SingleOrDefault().State);
+        int district = Convert.ToInt32(admindetail.SingleOrDefault().District);
+        var City = db2.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
+        var State = db2.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
+
+        var notshow = db2.tblMenus.Where(a => (a.MenuName == "CARDS" || a.MenuName == "TRAVEL") && a.Status == "Y" && a.Role == "ADMIN").ToList();
+
+        var Card = db2.tblMenus.Where(a => a.MenuName == "CARDS" && a.Role == "ADMIN").SingleOrDefault().Status;
+        var Travel = db2.tblMenus.Where(a => a.MenuName == "TRAVEL" && a.Role == "ADMIN").SingleOrDefault().Status;
+        var outerlink = db2.OuterUpload_Link.ToList();
+        var Outerlinkname_change = db2.Outer_Namechange.SingleOrDefault().Name;
+
     }
-    }
-    else
-    {
-    <link rel="icon" href="" type="image/x-icon" />
-    }
-    var admindetail = db2.Admin_details.ToList();
-    var mailid = admindetail.SingleOrDefault().email;
-    var mobile = admindetail.SingleOrDefault().mobile;
-    var Address = admindetail.SingleOrDefault().Address;
-    var Firm_Name = admindetail.SingleOrDefault().Companyname;
-    var SupportMail = admindetail.SingleOrDefault().email1;
-    var CustCareNo = "+91" + admindetail.SingleOrDefault().mobile1;
-    var PinCode = admindetail.SingleOrDefault().pincode;
 
-    int state = Convert.ToInt32(admindetail.SingleOrDefault().State);
-    int district = Convert.ToInt32(admindetail.SingleOrDefault().District);
-    var City = db2.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
-    var State = db2.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
 
-    var notshow = db2.tblMenus.Where(a => (a.MenuName == "CARDS" || a.MenuName == "TRAVEL") && a.Status == "Y" && a.Role== "ADMIN").ToList();
-
-    var Card = db2.tblMenus.Where(a => a.MenuName == "CARDS" && a.Role== "ADMIN").SingleOrDefault().Status;
-    var Travel = db2.tblMenus.Where(a => a.MenuName == "TRAVEL" && a.Role == "ADMIN").SingleOrDefault().Status;
-    var outerlink = db2.OuterUpload_Link.ToList();
-    var Outerlinkname_change = db2.Outer_Namechange.SingleOrDefault().Name;
-
-    }
-
-    <link rel="icon" href="@Url.Content(" ~ /" + @favimage)" type="image/x-icon" />
+    <link rel="icon" href="@Url.Content("~/" + @favimage)" type="image/x-icon" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -66,28 +67,28 @@
     <script src="~/MainFrontDesign/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     @if (!HttpContext.Current.Request.IsLocal)
     {
-    <!-- To Disable Inspect Element -->
-    @*
-    <script src="~/Scripts/Disable_Inspect_Element/Disable_Inspect.js"></script>*@
+        <!-- To Disable Inspect Element -->
+        @*
+            <script src="~/Scripts/Disable_Inspect_Element/Disable_Inspect.js"></script>*@
     }
     @{
-    var selectedcolor = "";
-    var menucolor = "";
-    VastwebmultiEntities db1 = new VastwebmultiEntities();
-    var allcolor = db1.tblMenuColors.ToList();
-    if (allcolor.Count > 0)
-    {
-    selectedcolor = allcolor.SingleOrDefault().SelectedColor;
-    menucolor = allcolor.SingleOrDefault().MenuColor;
-    }
-    else
-    {
-    selectedcolor = "Green";
-    menucolor = "White";
-    }
+        var selectedcolor = "";
+        var menucolor = "";
+        VastwebmultiEntities db1 = new VastwebmultiEntities();
+        var allcolor = db1.tblMenuColors.ToList();
+        if (allcolor.Count > 0)
+        {
+            selectedcolor = allcolor.SingleOrDefault().SelectedColor;
+            menucolor = allcolor.SingleOrDefault().MenuColor;
+        }
+        else
+        {
+            selectedcolor = "Green";
+            menucolor = "White";
+        }
 
-    //var selectedcolor = allcolor.SingleOrDefault().SelectedColor;
-    //var menucolor = allcolor.SingleOrDefault().MenuColor;
+        //var selectedcolor = allcolor.SingleOrDefault().SelectedColor;
+        //var menucolor = allcolor.SingleOrDefault().MenuColor;
     }
     <style type="text/css">
         .for-blink {
