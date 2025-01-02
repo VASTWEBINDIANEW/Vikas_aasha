@@ -106,6 +106,9 @@ namespace Vastwebmulti.Models
         public Nullable<int> transexpdays { get; set; }
         public Nullable<bool> Demouser { get; set; }
         public Nullable<decimal> POS_CAPPING { get; set; }
+        public Nullable<bool> moneysts1 { get; set; }
+        public Nullable<bool> moneyppi { get; set; }
+        public Nullable<bool> payout { get; set; }
     
         public virtual AEPS_Merchants AEPS_Merchants { get; set; }
         public virtual RetailerOutlet RetailerOutlet { get; set; }

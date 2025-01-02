@@ -8,6 +8,24 @@
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
    /* new css */
+    .icon_btn span i {
+        display: block;
+        margin-right: 10px;
+    }
+    .icon_btn .s_button1 {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .catagselect button {
+        margin: 0 !important;
+        cursor: pointer;
+        padding: 3px 15px !important;
+        border-radius: 2px !important;
+    }
+
     .app_silder {
         display: flex;
         align-items: center;
@@ -338,6 +356,7 @@
             border:none;
         }
 
+
     /*  new css   */
     .ps_set h3 {
         display: flex;
@@ -526,8 +545,7 @@
     }
 
         .app_set2 button {
-            width: 100px;
-            padding: 1px;
+            padding: 4px 12px;
         }
 
         .app_set2 p {
@@ -598,6 +616,7 @@
     .whitemes {
         position: absolute;
         width: 100%;
+        bottom: -17px;
     }
 
     #opthide {
@@ -787,6 +806,7 @@
     }
 
     @@media only screen and (max-width:480px) {
+        
         .image-upload button {
             float: left;
         }
@@ -1739,7 +1759,7 @@
             width: 100% !important;
         }
 
-        .secdiv {
+        .secdiv, .secdiv1 {
             width: 50%;
         }
 
@@ -1779,11 +1799,20 @@
 
     @@media only screen and (max-width:600px) {
         /* new css */
+        .login-back-img h2 strong {
+            float: left !important;
+            width: 100%;
+            padding: 5px 0;
+        }
+
+        .login-back-img h2 {
+            display: table;
+        }
         .but_df {
             display: block;
         }
 
-            .but_df span {
+            .but_df span { 
                 width: 100%;
                 float: left;
             }
@@ -1810,7 +1839,7 @@
             display: block;
         }
 
-        .secdiv {
+        .secdiv, .secdiv1 {
             width: 100%;
         }
 
@@ -2420,7 +2449,7 @@
 
                                             <div class="appc_autol1">
                                                 <div class="icon_btn">
-                                                    <button style=" background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;">Group 1</span></button>
+                                                    <button style=" background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;"><i class="fa fa-check"></i> Group 1</span></button>
                                                 </div>
                                                 <div class="icon_btn">
                                                     <button><span class="s_button1">Group 2</span></button>
@@ -2566,7 +2595,7 @@
 
                                             <div class="appc_autol1">
                                                 <div class="icon_btn">
-                                                    <button style="background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;">Group 1</span></button>
+                                                    <button style="background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;"><i class="fa fa-check"></i> Group 1</span></button>
                                                 </div>
                                                 <div class="icon_btn">
                                                     <button><span class="s_button1">Group 2</span></button>
@@ -2692,7 +2721,7 @@
                         </div>
 
                         <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 170px;">
+                            <div class="page-header-third" style=" width: 100%; height: 195px;">
 
                                 <div class="thame-headding">
                                     <h2 style="background: #878787; color: white">App KYC Option(SKIP/MANDATORY)</h2>
@@ -2720,7 +2749,7 @@
                         </div>
 
                         <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 170px;">
+                            <div class="page-header-third" style=" width: 100%; height: 195px;">
                                 <div class="thame-headding">
                                     <h2 style="background: #878787; color: white">App KYC Document Field (OPTIONAL/MANDATORY)</h2>
                                 </div>
@@ -2809,7 +2838,7 @@
                                     <textarea style="font-size: medium; padding: 3px;" id="faqq"></textarea>
                                     <h4>Answer</h4>
                                     <textarea style="font-size: medium; padding: 3px;" id="faqa"></textarea>
-                                    <button style="width: 20%; height: 33px; background: green; color: white; margin: 10px 247px; " onclick="faqsave()">SAVE</button>
+                                    <button style="width: 200px; margin: 10px 213px; float: left; height: 36px; background: var(--main-bg-lcolor); color: #fff; border: 1px solid; border-radius: 21px; padding: 4px 12px;" onclick="faqsave()">SAVE</button>
                                 </div>
                             </div>
                         </div>
@@ -2832,7 +2861,7 @@
         <div class="row clearfix" id="AppSlider" style="display: none;">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
                 <div class="card login-back-img page-header-third">
-                    <h2>Your Selected Image <strong style="float: right;">You can select only 5 image</strong></h2>
+                    <h2><strong>Your Selected Image</strong> <strong style="float: right;">Note :- You can select maximum 5 images at a time</strong></h2>
                     <div id="sliderSelectedImage">
                         @if (Model.Count > 0)
                         {
@@ -2843,7 +2872,9 @@
                                         <img src="@item.images" />
                                         <div class="catagselect">
                                             <span>@item.Category</span>
-                                            <input value="Delete" type="button" class="checkboxdata fas fa-trash delete-icon" onclick="DeleteSliderImage('@item.idno','@item.images')" style="opacity: 100%; position: static;">
+                                            <button  type="button" class="checkboxdata delete-icon" onclick="DeleteSliderImage('@item.idno','@item.images')" style="opacity: 100%; position: static;">
+                                            <i class="fa fa-trash-o" style="font-size:20px;color:red;display:block;"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -2855,7 +2886,7 @@
                         }
                     </div>
                     <div class="card login-back-img page-header-third">
-                        <h2>Select Image</h2>
+                        <h2>Select Aap Slider Images <strong style="float:right;">You can select below images for the App slider</strong></h2>
                         <div id="sliderImages"></div>
                     </div>
                     </div>
@@ -3114,7 +3145,9 @@
                             <img src="${data.data[i].images}" />
                             <div class="catagselect">
                                 <span>${data.data[i].Category}</span>
-                                <input value="delete" type="button" onclick="DeleteSliderImage('${data.data[i].idno}','${data.data[i].images}')">
+                                <button  type="button" class="checkboxdata delete-icon" onclick="DeleteSliderImage('${data.data[i].idno}','${data.data[i].images}')" style="opacity: 100%; position: static;">
+                                   <i class="fa fa-trash-o" style="font-size:20px;color:red;display:block;"></i>
+                                </button>
                             </div>
                         </div>
                     </div>`;
@@ -3148,7 +3181,9 @@
                             <img src="${data.data[i].images}" />
                             <div class="catagselect">
                                 <span>${data.data[i].Category}</span>
-                                <input value="delete" type="button" onclick="DeleteSliderImage('${data.data[i].idno}','${data.data[i].images}')">
+                                <button  type="button" class="checkboxdata delete-icon" onclick="DeleteSliderImage('${data.data[i].idno}','${data.data[i].images}')" style="opacity: 100%; position: static;">
+                                   <i class="fa fa-trash-o" style="font-size:20px;color:red;display:block;"></i>
+                                </button>
                             </div>
                         </div>
                     </div>`;

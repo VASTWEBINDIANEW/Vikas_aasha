@@ -17,7 +17,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         //  private string BaseURL = "http://localhost:62147";
         public IRestResponse Remitter_details(string mobile, string token)
         {
-            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details");
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_details_latest");
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", "bearer " + token);
             request.AddHeader("content-type", "application/json");
@@ -31,13 +31,6 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-
-      
-
-   
-     
-
-
 
         public IRestResponse Remitter_details_UPI(string mobile, string token)
         {
@@ -85,18 +78,52 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
+        public IRestResponse Aadhar_Register(string mobile, string aadharno,string pancardnumber, string txnid, string token)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_validaadhar?senderno="+ mobile + "&aadharno="+ aadharno + "&txnid="+ txnid + "&pancardnumber="+ pancardnumber + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            //var data = new
+            //{
+            //    mobile = mobile,
+            //    Name = name
+            //};
+            //var serializer = new JavaScriptSerializer();
+            //var json = serializer.Serialize(data);
+            //request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+        public IRestResponse Aadhar_Register_OTP(string senderno, string otp, string aadhar, string clientid,string agentid,string token)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_validaadharotp?client_id=" + clientid + "&otp=" + otp + "&txnid=" + agentid + "&Senderno=" + senderno + "&aadharcradnumber="+ aadhar + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+            //var data = new
+            //{
+            //    mobile = mobile,
+            //    Name = name
+            //};
+            //var serializer = new JavaScriptSerializer();
+            //var json = serializer.Serialize(data);
+            //request.AddParameter("application/json", json, ParameterType.RequestBody);
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
+
         public IRestResponse Remitter_Register(string mobile, string name, string pincode, string token)
         {
-            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_Register");
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_Send_otp");
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", "bearer " + token);
             request.AddHeader("content-type", "application/json");
             var data = new
             {
                 mobile = mobile,
-                name = name,
-                surname = "Singh",
-                pincode = pincode
+                Name = name
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
@@ -158,20 +185,20 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         }
         public IRestResponse Beneficiary_register_Validate(string beneficiaryid, string remitterid, string otp, string token, string sendernumber)
         {
-            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_Register_Validate");
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Remitter_Verify_otp?Senderno="+ sendernumber + "&OTP="+ otp + "");
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", "bearer " + token);
             request.AddHeader("content-type", "application/json");
-            var data = new
-            {
-                mobile = sendernumber,
-                remitterid = remitterid,
-                otp= otp,
-                outletid=1
-            };
-            var serializer = new JavaScriptSerializer();
-            var json = serializer.Serialize(data);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            //var data = new
+            //{
+            //    mobile = sendernumber,
+            //    remitterid = remitterid,
+            //    otp= otp,
+            //    outletid=1
+            //};
+            //var serializer = new JavaScriptSerializer();
+            //var json = serializer.Serialize(data);
+          //  request.AddParameter("application/json", json, ParameterType.RequestBody);
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
@@ -346,7 +373,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             return responseall;
         }
 
-        public IRestResponse Fund_Transfer(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
+        public IRestResponse Fund_Transfer(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno,string senderotps,string uniqueid)
         {
             var client = new RestClient(BaseURL + "/api/DMTPAYTM/Fund_Transfer");
             var request = new RestRequest(Method.POST);
@@ -363,7 +390,9 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 bankname,
                 kyccheck = kyc,
                 aadharno,
-                ifsccode
+                ifsccode,
+                otp= senderotps,
+                uniqueid
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);
@@ -371,7 +400,18 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responseall = client.Execute(request);
             return responseall;
         }
-    
+        public IRestResponse Fund_Transfer_Sendotp(string senderno,string uniqueid,decimal amount,string accountnumber,string token)
+        {
+            var client = new RestClient(BaseURL + "/api/DMTPAYTM/Fund_Transfer_OTP?Sendernumber="+ senderno + "&uniqueid="+ uniqueid + "&amount="+ amount + "&accountnumber="+ accountnumber + "");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("authorization", "bearer " + token);
+            request.AddHeader("content-type", "application/json");
+
+            IRestResponse responseall = client.Execute(request);
+            return responseall;
+        }
+
+
 
         public IRestResponse Fund_Transfer_UPI(string remittermobile, string benid, string agentid, string amount, string mode, string accountno, string ifsccode, string token, string bankname, string kyc, string aadharno)
         {
@@ -1098,7 +1138,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
                 aadharcard,
                 data = Pidata,
                 Agentid,
-                Charge = "OK"
+                Charge = "OK",
+                accessmode = "WEB"
             };
             var serializer = new JavaScriptSerializer();
             var json = serializer.Serialize(data);

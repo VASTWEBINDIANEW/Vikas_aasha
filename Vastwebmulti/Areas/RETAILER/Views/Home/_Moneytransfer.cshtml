@@ -16,9 +16,44 @@
 }
 <style>
    /* New css */
-   /*.tabspage .tab-content {
-        height: auto;
-    }*/
+    .amount i {
+        float: right;
+        display: block;
+        position: absolute;
+        right: 6px;
+        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));
+        border-radius: 50%;
+        padding: 7px;
+        color: #fff;
+        background: var(--main-bg-lcolor);
+    }
+    .amount {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .tabspage .tab-content .amount input {
+        border: none;
+    }
+    #NewSenderregister .col-md-12.amount.amount_strong, #otpshow .col-md-12.amount.amount_strong {
+        padding-left: 0;
+    }
+        #NewSenderregister .col-md-12.amount.amount_strong input, #otpshow .col-md-12.amount.amount_strong input#otpinsert {
+            width: 71% !important;
+        }
+    #full .col-md-12.amount strong {
+        padding-left: 5px;
+    }
+    #next_page button:first-child {
+        position: relative;
+        padding: 4px 15px;
+    }
+    #next_page button:last-child {
+        position: relative;
+        padding: 4px 22px;
+    }
+
     @@keyframes blink {
         0% {
             color: #fff;
@@ -481,6 +516,7 @@
         <div class="col-md-12 amount amount_strong allredyshow">
             <strong style="width:110px;">Remitter Number</strong>
             <span id="newsender"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong" style="background:#fff;">
             <strong style="">Remitter Name</strong>
@@ -501,12 +537,14 @@
 <div id="otpshow" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="otpsenderno"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Remitter Name</strong>
             <span id="otpsendername"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Enter OTP</strong>
@@ -600,7 +638,7 @@
 <div id="DevicefindDMT" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="aadharekyc_Sendernumber"></span>
         </div>
         <div class="col-md-12 amount amount_strong">
@@ -626,7 +664,7 @@
 <div id="otpshow_ekyc" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="otpsenderno_ekyc"></span>
         </div>
         <div class="col-md-12 amount amount_strong">
@@ -656,7 +694,7 @@
             <i class="fa fa-exchange" onclick="change()" title="Change Sender Number"></i>
         </div>
         <div class="col-md-2 add_account add_account-responshive" style="width: 15%;">
-            <a onclick="addnewaccount()" style="cursor:pointer;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
+            <a onclick="addnewaccount()" style="cursor: pointer; margin-top: 0px;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
         </div>
     </div>
     <div class="col-md-12 number-login" style="margin-top: 8px;">

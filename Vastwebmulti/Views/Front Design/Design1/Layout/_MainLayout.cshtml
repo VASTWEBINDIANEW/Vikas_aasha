@@ -33,12 +33,16 @@
         int district = Convert.ToInt32(admindetail.SingleOrDefault().District);
         var City = db2.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
         var State = db2.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
+
         var notshow = db2.tblMenus.Where(a => (a.MenuName == "CARDS" || a.MenuName == "TRAVEL") && a.Status == "Y" && a.Role == "ADMIN").ToList();
 
         var Card = db2.tblMenus.Where(a => a.MenuName == "CARDS" && a.Role == "ADMIN").SingleOrDefault().Status;
         var Travel = db2.tblMenus.Where(a => a.MenuName == "TRAVEL" && a.Role == "ADMIN").SingleOrDefault().Status;
+        var outerlink = db2.OuterUpload_Link.ToList();
+        var Outerlinkname_change = db2.Outer_Namechange.SingleOrDefault().Name;
 
     }
+
 
     <link rel="icon" href="@Url.Content("~/" + @favimage)" type="image/x-icon" />
     <meta name="description" content="">
@@ -64,7 +68,8 @@
     @if (!HttpContext.Current.Request.IsLocal)
     {
         <!-- To Disable Inspect Element -->
-        <script src="~/Scripts/Disable_Inspect_Element/Disable_Inspect.js"></script>
+        @*
+            <script src="~/Scripts/Disable_Inspect_Element/Disable_Inspect.js"></script>*@
     }
     @{
         var selectedcolor = "";
@@ -86,41 +91,82 @@
         //var menucolor = allcolor.SingleOrDefault().MenuColor;
     }
     <style type="text/css">
-             .for-blink{color:#fff;
-		animation: blink 2s linear infinite;
+        .for-blink {
+            color: #fff;
+            animation: blink 2s linear infinite;
         }
-        @@keyframes blink{
-        0%{color: #fff;}
-        50%{color: Yellow;}
-        100%{color: red;}
-        }
-        .main_menu_bg .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus
-        {
-          color:@selectedcolor;
-          padding-bottom:8px;
 
-          border-bottom:2px solid var(--main-bg-lcolor);
-          background:transparent;
-        }
-        .main_menu_bg .navbar-nav>li>a
-        {
+        @@keyframes blink {
+            0% {
+                color: #fff;
+            }
 
-        text-transform:uppercase;
-        font-size:0.875rem;
-        color:@menucolor;
-        font-family:'robotoblack';
+            50% {
+                color: Yellow;
+            }
+
+            100% {
+                color: red;
+            }
         }
-        .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus
-        {
-        color:@selectedcolor;
+
+        .main_menu_bg .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+            color: @selectedcolor;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--main-bg-lcolor);
+            background: transparent;
         }
-        .popover-content p{
-            color:#000;
+
+        .main_menu_bg .navbar-nav > li > a {
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            color: @menucolor;
+            font-family: 'robotoblack';
         }
+
+        .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+            color: @selectedcolor;
+        }
+
+        .popover-content p {
+            color: #000;
+        }
+
         .term-pop-in {
             height: 90%;
         }
 
+        #menu-item-5999:hover .color-scheme-dark {
+            visibility: visible;
+        }
+
+        li#menu-item-5999 {
+            position: relative;
+        }
+
+        .color-scheme-dark {
+            visibility: hidden;
+            position: absolute;
+            z-index: 999;
+            background: var(--main-bg-lcolor);
+            color: #fff;
+            font-size: 15px;
+            top: 44px;
+            left: 0px;
+            text-align: center;
+            width: 155px;
+            transition: 0.30s;
+        }
+
+            .color-scheme-dark a:hover {
+                background: #666060;
+            }
+
+            .color-scheme-dark a {
+                width: 100%;
+                float: left;
+                padding: 10px;
+            }
     </style>
 </head>
 @{
@@ -221,28 +267,63 @@
                                     <li><a href='#our-app'><span style="background: var(--main-bg-lcolor);padding: 3px 6px;border-radius: 40px;border-left-width: 2px;border-right-width: 2px;padding-top:2px;"><img src="~/AdminDesign/images/android-menu.svg" style="width:14px;margin-top:-1px;" />&nbsp;Android</span></a></li>
                                     <li><a href="#ABOUT">about</a></li>
                                     <li><a href="#SERVICES">service</a></li>
-                                    @*<li><a href="#PRODUCTS">product</a></li>*@
+                                    @*
+                                        <li><a href="#PRODUCTS">product</a></li>*@
                                     <li><a href="#WORKS">works</a></li>
                                     @if (Card != "Y")
                                     {
                                         <li><a href="#CARDS">cards</a></li>
+
                                     }
                                     @if (Travel != "Y")
                                     {
                                         <li><a href="#TRAVEL">travel</a></li>
                                     }
-                                        @*<li><a href="#CONTACTUS">contact us</a></li>*@
-                                        <li><a href="#WHYCHOOSEUS">why choose us</a></li>
+
+                                    @*
+                                        <li><a href="#CONTACTUS">contact us</a></li>*@
+                                    <li><a href="#WHYCHOOSEUS">why choose us</a></li>
 
 
-                                        @*@foreach (var item in ViewBag.menuname)
-            {
-                <li><a href="#@item.MenuName">@item.MenuName</a></li>
-            }*@
-                                        <li><a href='@Url.Action("Login","Home",new { id="singin" })'><span style="background:#fff;padding: 3px 10px;border-radius: 40px;color:var(--main-bg-lcolor);">LOGIN</span></a></li>
-                                        <li><a href='@Url.Action("Login","Home",new { id="singup" })'><span style="background:#fff;padding: 3px 8px;border-radius: 40px;color:var(--main-bg-rcolor);">SIGN&nbsp;UP</span></a></li>
-                                        @*<li><a href='@Url.Action("Login","Home")'>LOGIN / SIGNUP</a></li>*@
-                                    </ul>
+                                    @*@foreach (var item in ViewBag.menuname)
+                                        {
+                                        <li><a href="#@item.MenuName">@item.MenuName</a></li>
+
+                                        }*@
+
+
+
+
+                                    @if (outerlink.Count() > 0)
+                                    {
+                                        <li id="menu-item-5999" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-5999">
+                                            <a href="javascript:void(0);" class="mobiledev">@Outerlinkname_change</a>
+
+                                            <div class="color-scheme-dark" style="">
+
+
+                                                <div>
+                                                    @foreach (var item in outerlink)
+                                                    {
+                                                        <a href="@item.Link" target="_blank" style="border-bottom:1px solid #cec6c6;">
+                                                            <span style="text-decoration: none;">@item.Name </span>
+                                                        </a>
+
+                                                    }
+
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </li>
+                                    }
+                                    <li><a href='@Url.Action("Login","Home",new { id="singin" })'><span style="background:#fff;padding: 3px 10px;border-radius: 40px;color:var(--main-bg-lcolor);">LOGIN</span></a></li>
+                                    <li><a href='@Url.Action("Login","Home",new { id="singup" })'><span style="background:#fff;padding: 3px 8px;border-radius: 40px;color:var(--main-bg-rcolor);">SIGN&nbsp;UP</span></a></li>
+                                    @*
+                                        <li><a href='@Url.Action("Login","Home")'>LOGIN / SIGNUP</a></li>*@
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -431,9 +512,9 @@
                             <h5 style="margin-top:5px;">Prepaid</h5>
                             <ul>
                                 <li>Airtel</li>
-                                <li>Idea</li>
                                 <li>Jio</li>
                                 <li>Vodafone</li>
+                                <li>Idea</li>
                                 <li>BSNL</li>
                                 <li>MTNL</li>
                             </ul>
@@ -442,7 +523,6 @@
                             <h5>DTH</h5>
                             <ul>
                                 <li>Airtel Dth</li>
-
                                 <li>Dish Tv</li>
                                 <li>Tata Sky</li>
                                 <li>Videocon D2h</li>
@@ -487,6 +567,7 @@
                                     <li>Hotel Booking</li>
 
                                 </ul>
+
                             </li>
                         }
                         <li>
@@ -807,8 +888,6 @@
     <script type="text/javascript">
         navigator.geolocation.getCurrentPosition(
             function (position) { // success cb
-                console.log(position);
-
             },
             function () { // fail cb
             }
@@ -862,4 +941,3 @@
     </script>
 </body>
 </html>
-
