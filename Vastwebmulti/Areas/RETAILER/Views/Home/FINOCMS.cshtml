@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "FINOCMS";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
 }
@@ -123,12 +122,14 @@
         .navbar-header .bars {
             top: 6px !important;
         }
+        .responcive {
+            padding:0;
+        }
 
     }
 
 
     @@media only screen and (max-width:600px){
-
         #status {
             width: 50%;
             margin-right: 0px;
@@ -142,17 +143,20 @@
 
 </style>
 <section class="newpagecustom newpagecustomertyui newpagecustomertyui-second content-fourdesign-page allpage-four-design-section widthinherit-four">
-    <div style="width:100%">
-        <a href="@Url.Action("FINOCMS","Home")">
-            <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; color: black; background: #00baf2;">
-                Fino CMS
-            </div>
-        </a>
-        <a href="@Url.Action("AirtelCMS","Home")">
-            <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; color: black; ">
-                Airtel CMS
-            </div>
-        </a>
+    <div class="col-md-12 responcive" style="padding-left: 0; font-size: 18px; ">
+        <div class="page-header-third">
+            <a href="@Url.Action("FINOCMS","Home")">
+                <div style="width: 50%; border: 1px black solid; float: left; padding: 8px; text-align: center; color: #fff; background: #00baf2;">
+                    Fino CMS
+                </div>
+            </a>
+            <a href="@Url.Action("AirtelCMS","Home")">
+                <div style="width: 50%; border: 1px black solid; float: left; padding: 8px; text-align: center; color: black; ">
+                    Airtel CMS
+                </div>
+            </a>
+        </div>
+        
     </div>
 
 
