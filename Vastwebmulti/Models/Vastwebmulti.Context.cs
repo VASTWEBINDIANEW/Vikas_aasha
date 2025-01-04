@@ -23772,5 +23772,63 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_PPI_Result>("Money_transfer_PPI", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, uniqueidParameter, output);
         }
+    
+        public virtual ObjectResult<GetWayCreditCardFund_Bill_pay_Result> GetWayCreditCardFund_Bill_pay(string txnid, string mode, string cardname, string status, string errormsg, string paumoneyid, ObjectParameter output)
+        {
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var modeParameter = mode != null ?
+                new ObjectParameter("mode", mode) :
+                new ObjectParameter("mode", typeof(string));
+    
+            var cardnameParameter = cardname != null ?
+                new ObjectParameter("cardname", cardname) :
+                new ObjectParameter("cardname", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var errormsgParameter = errormsg != null ?
+                new ObjectParameter("errormsg", errormsg) :
+                new ObjectParameter("errormsg", typeof(string));
+    
+            var paumoneyidParameter = paumoneyid != null ?
+                new ObjectParameter("paumoneyid", paumoneyid) :
+                new ObjectParameter("paumoneyid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWayCreditCardFund_Bill_pay_Result>("GetWayCreditCardFund_Bill_pay", txnidParameter, modeParameter, cardnameParameter, statusParameter, errormsgParameter, paumoneyidParameter, output);
+        }
+    
+        public virtual ObjectResult<PaymentGateway_Fund_insert_Recharge_Result> PaymentGateway_Fund_insert_Recharge(string role, string userid, Nullable<decimal> amount, string txnid, string type, string cardNumber, ObjectParameter output)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Recharge_Result>("PaymentGateway_Fund_insert_Recharge", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, cardNumberParameter, output);
+        }
     }
 }

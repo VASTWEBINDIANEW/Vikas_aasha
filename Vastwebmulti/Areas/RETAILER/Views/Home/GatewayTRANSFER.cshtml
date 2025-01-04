@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "GatewayTRANSFER";
     Layout = "~/Areas/RETAILER/Views/Shared/_Layout.cshtml";
-
     var totalsuccess = ViewBag.totalsuccess ?? 0;
     var totalfailamnt = ViewBag.totalfailedamount ?? 0;
     var penamount = ViewBag.totalpendingamount ?? 0;
@@ -12,7 +11,6 @@
         public string MaskLastSixDigits(string input)
         {
             input = new string(input.Where(char.IsDigit).ToArray());
-
             if (input.Length > 6)
             {
                 string visiblePart = input.Substring(0, input.Length - 6);
@@ -428,10 +426,11 @@
                         </ul>
                         <div class="width100 float-left ">
                             <div id="home" class="width100 float-left tab-pane fade active in min-heightresponsive-inhe changeback-four-design" style="background: var(--second-bg-color);min-height:590px;">
-                                @if (CheckActiveGetway == "CREDITCARD")
+                                @*@if (CheckActiveGetway == "CREDITCARD")
                                 {
                                     using (Ajax.BeginForm("CreditCardFundTransfer", "Home", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result", OnSuccess = "onSuccess", OnFailure = "onFailure" }, new { @id = "creditCardFundTransferForm" }))
                                     {
+                                        @Html.Hidden("hideidno")
                                         <div class="pay-mode" style="margin-top: 10px;">
                                             <form class="credit-card">
                                                 <div class="col-md-12">
@@ -443,6 +442,9 @@
                                                 </div>
                                                 <div class="col-md-12" style="margin-top: 10px;">
                                                     @Html.TextBox("CardNumber", "", new { @id = "CardNumberInput", @class = "form-control", @placeholder = "Enter Card Number", @required = true, @oninput = "validateInput(this, 'cardNumber')" })
+                                                </div>
+                                                <div class="col-md-12" style="margin-top: 10px;">
+                                                    @Html.TextBox("Name", "", new { @id = "NameInput", @class = "form-control", @placeholder = "Name On The Credit Card", @required = true })
                                                 </div>
                                                 <div class="col-md-12" style="padding: 0px; margin-top: 10px;">
                                                     <div class="col-md-6">
@@ -469,9 +471,9 @@
                                             </form>
                                         </div>
                                     }
-                                }
-                                else
-                                {
+                                }*@
+                                @*else
+                                {*@
                                     <div class="d-flex justify-content-between">
                                         <div class="row pay-mode-first">
                                             <div class="col-md-6" onclick="HideShowGetWay('CreditCard')" style="padding-top:5px;">
@@ -590,12 +592,16 @@
                                             <div class="col-md-12">
                                                 <p id="VlidateionsMessage" style="color: red;"></p>
                                             </div>
+                                            @Html.Hidden("hideidno")
                                             <div class="col-md-12">
                                                 <input id="RequestId" type="hidden" name="RequestId" value="" required />
-                                                @Html.TextBox("Amount", "", new { @id = "Amount", @class = "form-control", @readonly = "readonly", @style= "background-color: #fff;" })
+                                                @Html.TextBox("Amount", "", new { @id = "Amount", @class = "form-control", @readonly = "readonly", @style = "background-color: #fff;" })
                                             </div>
                                             <div class="col-md-12" style="margin-top: 10px;">
                                                 @Html.TextBox("CardNumber", "", new { @id = "CardNumberInput", @class = "form-control", @placeholder = "Enter Card Number", @required = true, @oninput = "validateInput(this, 'cardNumber')" })
+                                            </div>
+                                            <div class="col-md-12" style="margin-top: 10px;">
+                                                @Html.TextBox("Name", "", new { @id = "NameInput", @class = "form-control", @placeholder = "Name On The Credit Card", @required = true })
                                             </div>
                                             <div class="col-md-12" style="padding: 0px; margin-top: 10px;">
                                                 <div class="col-md-6">
@@ -616,12 +622,12 @@
                                             <div id="ButtonProceed" class="col-md-12" style="margin-top: 10px;">
                                                 <button type="button" class="btn fullbodydycolorbg w-100" onclick="CreditCardProceed();" style="color: white;">Proceed</button>
                                             </div>
-                                            <div id="ButtonSubmit" class="col-md-12" style="margin-top: 10px; display: none;">
+                                            @*<div id="ButtonSubmit" class="col-md-12" style="margin-top: 10px; display: none;">
                                                 <button type="submit" class="btn fullbodydycolorbg w-100" style="color: white;">Submit</button>
-                                            </div>
+                                            </div>*@
                                         </form>
                                     </div>
-                                }
+                            @*    }*@
                                 <div class="col-md-12">
                                     <div class="pay-mode-third">
                                         <ol>
@@ -760,7 +766,6 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-
 <script>
     function HideShowGetWay(CheckActive) {
         if (CheckActive === 'Gateway') {
@@ -793,10 +798,8 @@
         } else {
             document.getElementById('GetWayMode').style.display = 'block';
             document.getElementById('CreditCardMode').style.display = 'none';
-
             document.getElementById('creditCardPayment').checked = false;
             document.getElementById('gatewayTransfer').checked = true;
-
         }
     }
     function SelectAmount(dropdown) {
@@ -811,6 +814,8 @@
                     document.getElementById("BillDropdown").style.display = 'none';
                     document.getElementById("BillInputBox").style.display = 'block';
                     document.getElementById("Amount").value = addinfoArray.Amount;
+                    document.getElementById("hideidno").value = selectedValue;
+
                     console.log(response.Addinfo)
                 } else {
                     console.log(response.Message);
@@ -877,65 +882,76 @@
             default:
                 break;
         }
-
         document.getElementById("VlidateionsMessage").innerHTML = message;
     }
-
     function CreditCardProceed() {
+        let Amount = $('#Amount').val(); 
+        let Name = $('#NameInput').val();
+        let Cardnumber = $('#CardNumberInput').val(); 
+        let Month = $('#MonthInput').val(); 
+        let Year = $('#YearInput').val(); 
+        let CVV = $('#CVVInput').val(); 
+        let Otp = $('#OtpInput').val();
+        let Idno = $('#hideidno').val();
+        let reqid = $('#RequestId').val();
+        if (Idno != "") {
+            if (Amount >= 100) {
+                if (Cardnumber.length > 12 && Cardnumber.length < 20) {
+                    if (Month.length > 0 && Month.length < 3) {
+                        Month = Month.length === 1 ? 0 + Month : Month;
+                        if (Year.length > 0 && Year.length < 3) {
+                            if (CVV.length > 2 && CVV.length < 5) {
+                                let Exp = Month + "/" + Year;
 
-        let Amount = document.getElementById("AmountInput").value;
-        let CardNumber = document.getElementById('CardNumberInput').value;
-        let Month = document.getElementById('MonthInput').value;
-        let Year = document.getElementById('YearInput').value;
-        let CVV = document.getElementById('CVVInput').value;
-        let Otp = document.getElementById('OtpInput').value;
-        if (Amount >= 100) {
-            if (CardNumber.length > 12 && CardNumber.length < 20) {
-                if (Month.length > 0 && Month.length < 3) {
-                    Month = Month.length === 1 ? 0 + Month : Month;
-                    if (Year.length > 0 && Year.length < 3) {
-                        if (CVV.length > 2 && CVV.length < 5) {
-                            let CardExpiry = Month + "/" + Year;
-                            document.getElementsByClassName('Loader-set')[0].style.display = 'block';
-                            $.ajax({
-                               url: '@Url.Action("CreditCardTransfer", "Home")',
-                                type: 'POST',
-                                data: { Amount: Amount, Cardnumber: CardNumber, CVV: CVV, Exp: CardExpiry, Otp: Otp },
-                                success: function (response) {
-                                    document.getElementsByClassName('Loader-set')[0].style.display = 'none';
-                                    if (response.Issendotp) {
-                                        document.getElementById('RequestId').value = response.RequestId
-                                        document.getElementById('OtpBox').style.display = 'block';
-                                        document.getElementById('ButtonProceed').style.display = 'none';
-                                        document.getElementById('ButtonSubmit').style.display = 'block';
+                                $.ajax({
+                                    url: '@Url.Action("CreditCardTransfer", "Home")',
+                                    type: 'POST',
+                                    data: { Amount, Cardnumber, Name, CVV, Exp, Otp, Idno, reqid },
+                                    beforeSend: function () {
+                                        document.getElementsByClassName('Loader-set')[0].style.display = 'block';
+                                    },
+                                    success: function (response) {
+                                        document.getElementsByClassName('Loader-set')[0].style.display = 'none';
+                                        if (response.Issendotp) {
+                                            document.getElementById('RequestId').value = response.RequestId
+                                            document.getElementById('OtpBox').style.display = 'block';
+                                           // document.getElementById('ButtonProceed').style.display = 'none';
+                                           // document.getElementById('ButtonSubmit').style.display = 'block';
+                                        }
+                                        else {
+                                            document.getElementById('VlidateionsMessage').innerHTML = response.Message;
+                                        }
+                                    },
+                                    error: function (error) {
+                                        document.getElementsByClassName('Loader-set')[0].style.display = 'none';
+                                    },
+                                    complete: function (xhr, status) {
+                                        document.getElementsByClassName('Loader-set')[0].style.display = 'none';
                                     }
-                                    else {
-                                        document.getElementById('VlidateionsMessage').innerHTML = response.Message;
-                                    }
-                                },
-                               error: function (error) {
-                                   document.getElementsByClassName('Loader-set')[0].style.display = 'none';
-                               }
-                            });
+                                });
+                            }
+                            else {
+                                document.getElementById('VlidateionsMessage').innerHTML = 'Please enter a valid 3 or 4-digit CVV.';
+                            }
                         }
                         else {
-                            document.getElementById('VlidateionsMessage').innerHTML = 'Please enter a valid 3 or 4-digit CVV.';
+                            document.getElementById('VlidateionsMessage').innerHTML = 'Please enter last 2-digit year (e.g., 24).'
                         }
                     }
                     else {
-                        document.getElementById('VlidateionsMessage').innerHTML = 'Please enter last 2-digit year (e.g., 24).'
+                        document.getElementById('VlidateionsMessage').innerHTML = 'Select month between 1 to 12 only.'
                     }
                 }
                 else {
-                    document.getElementById('VlidateionsMessage').innerHTML = 'Select month between 1 to 12 only.'
+                    document.getElementById("VlidateionsMessage").innerHTML = 'Please enter a valid credit card number with 13 to 19 digits.';
                 }
             }
             else {
-                document.getElementById("VlidateionsMessage").innerHTML = 'Please enter a valid credit card number with 13 to 19 digits.';
+                document.getElementById("VlidateionsMessage").innerHTML = 'The Amount must be 100 or more';
             }
         }
         else {
-            document.getElementById("VlidateionsMessage").innerHTML = 'The Amount must be 100 or more';
+            document.getElementById("VlidateionsMessage").innerHTML = 'ID is miss';
         }
     }
 
@@ -1149,17 +1165,14 @@
                 img.style.backgroundColor = merged_array[i] ? 'green' : 'red'
                 td.style.border = '1px solid black';
                 td.style.textAlign = 'center';
-
                 var span = document.createElement('small')
                 span.textContent = amount;
                 span.style.fontSize = '11px';
                 span.style.marginLeft = '3px';
-
                 td.appendChild(img);
                 td.appendChild(span);
             }
         }
-
         tbl.style.margin = "30px 0";
         return tbl;
     }
