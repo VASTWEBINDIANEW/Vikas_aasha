@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using java.net;
+using Newtonsoft.Json;
+using RestSharp;
 using sun.misc;
 using Vastwebmulti.Models;
 
@@ -40,13 +42,26 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responsecheck = client.Execute(request);
             return responsecheck;
         }
-        public IRestResponse CreditCard(string token, string RetailerId, string Frm_Name, string Mobile, decimal Amount, string EnCardNumber, string EnCVV, string EnExp, string Otp, string RequestId)
+        public IRestResponse CreditCard(string token,string idno, string RetailerId, string Name,  string Cardnumber, string exp, string cvv,decimal Amount,string RequestId,string otp)
         {
-            var client = new RestClient(VastbazaarBaseUrl + "api/CREDITCARD/CSC_Credit_card_addmoney");
+            var client = new RestClient(VastbazaarBaseUrl + "api/CREDITCARD/PayBill");
             var request = new RestRequest(Method.POST);
             request.AddHeader("authorization", "bearer " + token + "");
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\r\n  \"Retailerid\": \"" + RetailerId + "\",\r\n  \"Retailername\":\"" + Frm_Name + "\",\r\n  \"Mobile\":\"" + Mobile + "\",\r\n  \"Amount\":\"" + Amount + "\",\r\n  \"Cardnumber\":\"" + EnCardNumber + "\",\r\n  \"CVV\":\"" + EnCVV + "\",\r\n  \"Exp\":\"" + EnExp + "\",\r\n  \"OTP\":\"" + Otp + "\",\r\n  \"Reqid\":\"" + RequestId + "\",\r\n}", ParameterType.RequestBody);
+            var bodyinfo = new
+            {
+                Idno = idno,
+                RetailerId,
+                Name,
+                Cardnumber,
+                exp,
+                cvv,
+                Amount,
+                RequestId,
+                otp
+            };
+            var jsoninfo=JsonConvert.SerializeObject(bodyinfo);
+           request.AddParameter("application/json", jsoninfo, ParameterType.RequestBody);
             IRestResponse responsecheck = client.Execute(request);
             return responsecheck;
         }

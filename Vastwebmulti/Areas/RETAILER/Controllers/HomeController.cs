@@ -50497,7 +50497,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
            
         }
         [HttpPost]
-        public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber, string CVV, string Exp, string Otp)
+        public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber,string Name, string CVV, string Exp, string Otp,string Idno,string reqid)
         {
             string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
             var DcCardNumber = Cardnumber;
@@ -50508,38 +50508,90 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var EnCardNumber = EncryptCard(Cardnumber, key);
             var EnCVV = EncryptCard(CVV, key);
             var EnExp = EncryptCard(Exp, key);
-            var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
-            System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-            var msg = db.PaymentGateway_Fund_insert("Retailer", RetailerId, Amount, RequestId, "", DcCardNumber, output).SingleOrDefault().msg;
-            if(msg == "OK")
+            if (Otp == "")
             {
-                var tokn = Responsetoken.gettoken();
-                Models.Vastbillpay vb = new Models.Vastbillpay();
-                var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
-                var Content = Response.Content.ToString();
-                dynamic json = JsonConvert.DeserializeObject(Content);
-                var ADDINFO = json.Content.ADDINFO.ToString();
-                dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
-                string Status = json1.Status;
-                string Message = json1.Message;
-                bool IsSendOtp = json1.Issendotp;
-                if (Status == "Pending" && IsSendOtp)
+                var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var msg = db.PaymentGateway_Fund_insert_Recharge("Retailer", RetailerId, Amount, RequestId, "", DcCardNumber, output).SingleOrDefault().msg;
+                if (msg == "OK")
                 {
-                    return Json(new { Status = Status, Issendotp = IsSendOtp , Message = Message, RequestId = RequestId });
+                    var tokn = Responsetoken.gettoken();
+                    Models.Vastbillpay vb = new Models.Vastbillpay();
+                    var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, Cardnumber, Exp, CVV, Amount, RequestId,"");
+                    var Content = Response.Content.ToString();
+                    dynamic json = JsonConvert.DeserializeObject(Content);
+                    var ADDINFO = json.Content.ADDINFO.ToString();
+                    dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                    string Status = json1.info.status;
+                    string Message = "";
+                    try
+                    {
+                        Message = json1.info.Message;
+                    }
+                    catch { }
+                    bool IsSendOtp = false;
+                    try
+                    {
+                        IsSendOtp = json1.info.isotp;
+                    }
+                    catch { }
+                    if (Status == "Pending" && IsSendOtp)
+                    {
+                        return Json(new { Status = Status, Issendotp = IsSendOtp, Message = Message, RequestId = RequestId });
+                    }
+                    else
+                    {
+                        var response = db.GetWayCreditCardFund_Bill_pay(RequestId, "NetBanking", "", Status, Message, "", output).SingleOrDefault().msg;
+                        return Json(new { Status = Status, Message = Message, RequestId = RequestId });
+                    }
                 }
                 else
                 {
-                    var response = db.GetWayCreditCardFund(RequestId, "NetBanking", "", Status, Message, "", output).SingleOrDefault().msg;
-                    return Json(new { Status = Status, Message = Message, RequestId = RequestId });
+                    return Json(new { Status = "Reject", Message = msg, RequestId = RequestId });
                 }
             }
             else
             {
-                return Json(new { Status = "Reject", Message = msg, RequestId = RequestId });
+                var tokn = Responsetoken.gettoken();
+                Models.Vastbillpay vb = new Models.Vastbillpay();
+                var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, Cardnumber, Exp, CVV, Amount, reqid, Otp);
+                var Content = Response.Content.ToString();
+                dynamic json = JsonConvert.DeserializeObject(Content);
+                var ADDINFO = json.Content.ADDINFO.ToString();
+                dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                string Status = json1.info.status;
+                string Message = "";string txnid = "";
+                try
+                {
+                    Message = json1.info.Message;
+                }
+                catch { }
+                try
+                {
+                    txnid = json1.info.OPtid;
+                }
+                catch { }
+                bool IsSendOtp = false;
+                try
+                {
+                    IsSendOtp = json1.info.isotp;
+                }
+                catch { }
+                if (Status == "Pending")
+                {
+                    return Json(new { Status = Status, Issendotp = IsSendOtp, Message = Message, RequestId = reqid });
+                }
+                else
+                {
+                    System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                    var response = db.GetWayCreditCardFund_Bill_pay(reqid, "NetBanking", "", Status, Message, txnid, output).SingleOrDefault().msg;
+                    return Json(new { Status = Status, Message = Message, RequestId = reqid });
+                }
             }
         }
         [HttpPost]
-        public ActionResult CreditCardFundTransfer(decimal Amount, string CardNumber, string Month, string Year, string CVV, string Otp, string RequestId)
+        public ActionResult CreditCardFundTransfer(string Idno,string Name,  decimal Amount, string CardNumber, string Month, string Year, string CVV, string Otp, string RequestId)
         {
             string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
             var RetailerId = User.Identity.GetUserId();
@@ -50551,7 +50603,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
             var tokn = Responsetoken.gettoken();
             Models.Vastbillpay vb = new Models.Vastbillpay();
-            var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
+            var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, CardNumber, Exp, CVV, Amount, RequestId,"");
+           // var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
             var Content = Response.Content.ToString();
             dynamic json = JsonConvert.DeserializeObject(Content);
             var ADDINFO = json.Content.ADDINFO.ToString();
