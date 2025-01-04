@@ -16,9 +16,66 @@
 }
 <style>
    /* New css */
-   /*.tabspage .tab-content {
-        height: auto;
-    }*/
+    #dmtconfirm .amount span {
+        color: #000;
+    }
+    .amount span {
+        padding-top: 0;
+    }
+    #dmtconfirm .fullwidthaccount .amount {
+        justify-content: space-between;
+        font-weight: bold;
+    }
+
+    #full .select2-selection__arrow b {
+        top: 21px;
+    }
+    #select2-u4bm-container {
+        padding: 0;
+    }
+
+    .next_button button:last-child {
+        padding: 4px 26px;
+    }
+
+    .amount i {
+        float: right;
+        display: block;
+        position: absolute;
+        right: 6px;
+        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));
+        border-radius: 50%;
+        padding: 7px;
+        color: #fff;
+        background: var(--main-bg-lcolor);
+    }
+    .amount {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .tabspage .tab-content .amount input {
+        border: none;
+    }
+    #NewSenderregister .col-md-12.amount.amount_strong, #otpshow .col-md-12.amount.amount_strong {
+        padding-left: 0;
+    }
+        #NewSenderregister .col-md-12.amount.amount_strong input, #otpshow .col-md-12.amount.amount_strong input#otpinsert {
+            width: 71% !important;
+        }
+    #full .col-md-12.amount strong {
+        padding-left: 5px;
+    }
+    #next_page button:first-child {
+        position: relative;
+        padding: 4px 15px;
+    }
+    #next_page button:last-child {
+        position: relative;
+        padding: 4px 22px;
+    }
+
     @@keyframes blink {
         0% {
             color: #fff;
@@ -41,11 +98,13 @@
     #overlay {
         position: fixed;
         top: 0;
+        left: 0;
         z-index: 100;
         width: 100%;
         height: 100%;
         display: none;
         background: rgba(0,0,0,0.6);
+        z-index: 9999999;
     }
 
     .cv-spinner {
@@ -417,7 +476,7 @@
 </style>
 <input type="hidden" id="latloc" />
 <input type="hidden" id="longloc" />
-<div class="loader"></div>
+@*<div class="loader"></div>*@
 <script src="~/Scripts/PageScript/Retailer/DMT/EKYCValidate.js"></script>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
@@ -481,6 +540,7 @@
         <div class="col-md-12 amount amount_strong allredyshow">
             <strong style="width:110px;">Remitter Number</strong>
             <span id="newsender"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong" style="background:#fff;">
             <strong style="">Remitter Name</strong>
@@ -501,12 +561,14 @@
 <div id="otpshow" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="otpsenderno"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Remitter Name</strong>
             <span id="otpsendername"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Enter OTP</strong>
@@ -600,8 +662,9 @@
 <div id="DevicefindDMT" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
+            <strong style="">Remitter Number</strong>
             <span id="aadharekyc_Sendernumber"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Aadhar Number</strong>
@@ -614,7 +677,7 @@
 
         </div>
     </div>
-    <div class="container-fluid transaction-button">
+    <div class="container-fluid transaction-button next_button">
         <button onclick="gotoscanDMT()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan  <i class="fa fa-angle-right otp_icon"></i></button>
         <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
 
@@ -626,8 +689,9 @@
 <div id="otpshow_ekyc" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
-            <strong style="width:auto;">Remitter Number</strong>
-            <span id="otpsenderno_ekyc"></span>
+            <strong style="">Remitter Number</strong>
+            <span id="otpsenderno_ekyc" style="padding-top:0;"></span>
+            <i class="fa fa-check"></i>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Enter OTP</strong>
@@ -640,9 +704,11 @@
 
         </div>
     </div>
-    <div class="container-fluid transaction-button" id="next_page_Ekyc">
+    <div class="container-fluid transaction-button next_button" id="next_page_Ekyc">
+        <button id="addaccount-back" style="background:#a39f9e;" onclick="DMT()">Back</button>
         <button onclick="verifyotp_Ekyc()" id="addaccount-add-ekyc" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
     </div>
+    
 </div>
 
 <!------------------------------------------------->
@@ -656,7 +722,7 @@
             <i class="fa fa-exchange" onclick="change()" title="Change Sender Number"></i>
         </div>
         <div class="col-md-2 add_account add_account-responshive" style="width: 15%;">
-            <a onclick="addnewaccount()" style="cursor:pointer;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
+            <a onclick="addnewaccount()" style="cursor: pointer; margin-top: 0px;"><strong>+</strong><span>ADD</span>NEW ACCOUNT</a>
         </div>
     </div>
     <div class="col-md-12 number-login" style="margin-top: 8px;">
@@ -690,7 +756,7 @@
 
             </form>
         </div>
-        <div id="neftimps" class="col-md-12 tabledateall tabledateall-responshive">
+        <div id="neftimps" class="col-md-12 tabledateall tabledateall-responshive" style=" height: 360px;">
             <span id="dellist" style="color:red"></span>
             <table id="benlistttable" class="table-content">
             </table>
@@ -781,12 +847,12 @@
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">A/C Number</strong> <span id="accountnotransfer"></span></div>
-            <div id="divbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong">
-                <p class="bodycolormy">Bank IFSC</p>
+            <div id="divbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong" style="margin-bottom:10px;">
+                <p class="bodycolormy" style="margin:0;">Bank IFSC</p>
                 <strong id="bankifsccodetransfer" style="padding-left:8px !important;"></strong>
             </div>
-            <div class="col-md-12 amount amount_strong transperentss"><strong style="">A/C Name</strong><span id="Nametransfer"></span></div>
-            <div class="col-md-12 amount" style="position:relative;">
+            <div class="col-md-12 amount amount_strong transperentss"><strong style="">A/C Name</strong><span id="Nametransfer" style=" padding-top: 0;"></span></div>
+            <div class="col-md-12 amount" style="position: relative;">
                 <strong>amount<span class="spanstar" style="color:red">*</span></strong><input id="amounttransfer" type="text" placeholder="Enter Amount" onkeypress="return isNumber(event)" />
                 <div id="btncamerashow" class="amount-image" style="display:none;">
                     <button type="button" class="btn btn-primary newclasspaddnone" onclick="Cameraopen()" data-toggle="modal" data-target="#exampleModal" style="background: #ddd !important;overflow:hidden;">
@@ -795,7 +861,7 @@
                     @*<input type="button" id="btnphototakenby" name="btnphototakenby" value="PhotoUpload" />*@
                 </div>
             </div>
-            <div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="markuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
+            <div style="display:none;" class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="markuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
             <div id="idproffkyc" class="col-md-12 amount radiobuttonimps">
                 <strong>Id Proof<span class="spanstar" style="color:red;left:55px;">*</span></strong>
                 <div id="dividproof">
@@ -846,8 +912,8 @@
         </div>
         <div class="col-md-12 cancelbutton">
             <div class="cancelbuttonright">
-                <a href="#" class="cancel" onclick="back()">BACK</a>
-                <a href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT<i class="fa fa-angle-right"></i></a>
+                <a style=" padding: 8px 18px;" href="#" class="cancel" onclick="back()">BACK</a>
+                <a style=" padding: 6px 26px;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -888,8 +954,8 @@
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">Card Number</strong> <span id="ccnotransfer"></span></div>
-            <div id="ccdivbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong">
-                <p class="bodycolormy">Bank IFSC</p>
+            <div id="ccdivbankifsc" class="col-md-4 account-holder account-holder2 amount amount_strong" style="margin-bottom:10px;">
+                <p style="margin:0;" class="bodycolormy">Bank IFSC</p>
                 <strong id="ccifsccodetransfer" style="padding-left:8px !important;"></strong>
 
             </div>
@@ -897,7 +963,7 @@
             <div class="col-md-12 amount" style="position:relative;">
                 <strong>amount<span class="spanstar" style="color:red">*</span></strong><input id="ccamounttransfer" type="text" placeholder="Enter Amount" onkeypress="return isNumber(event)" />
             </div>
-            <div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="ccmarkuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
+            <div style="display:none;" class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="ccmarkuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
 
 
             <div class="col-md-12 amount"><strong>Transfer PIN<span class="spanstar" style="color: red; left: 84px;">*</span></strong><input id="ccDMTPIN" type="password" placeholder="Enter Transfer Pin" autocomplete="new-password" /></div>
@@ -906,8 +972,8 @@
         </div>
         <div class="col-md-12 cancelbutton">
             <div class="cancelbuttonright">
-                <a href="#" class="cancel" onclick="back()">BACK</a>
-                <a href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cccancelloder" name="cancel-loder" onclick="TransferDMT1()">NEXT<i class="fa fa-angle-right"></i></a>
+                <a style=" padding: 8px 18px;" href="#" class="cancel" onclick="back()">BACK</a>
+                <a style=" padding: 6px 26px;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cccancelloder" name="cancel-loder" onclick="TransferDMT1()">NEXT<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -922,8 +988,8 @@
                 <button><span class="bodycolormy">Confirm <br />detail</span></button>
             </div>
             <div class="button-imps">
-                <div id="divbankifsccode" class="col-md-12 amount amount_strong"><strong style="">Bank&nbsp;IFS&nbsp;Code</strong><span id="ifscconfirm"></span></div>
-                <div class="col-md-12 amount amount_strong"><strong style="width: 51%;">Payment mode</strong><span id="modeconfirm"></span></div>
+                <div id="divbankifsccode" class="col-md-12 amount amount_strong" style=" justify-content: space-between;"><strong style="margin: 0; top: 0;">Bank&nbsp;IFS&nbsp;Code</strong><span id="ifscconfirm" style=" padding-right: 5px;"></span></div>
+                <div class="col-md-12 amount amount_strong" style=" justify-content: space-between;"><strong style="width: 51%; margin: 0; top: 0;">Payment mode</strong><span id="modeconfirm" style=" padding-right: 5px;"></span></div>
             </div>
         </div>
         <div class="fullwidthaccount fullwidthaccount-top">
@@ -931,9 +997,9 @@
             <div class="col-md-12 amount amount_strong"><strong style="">A/C Name</strong><span id="nameconfirm"></span></div>
             <div id="confirmdivbankname" class="col-md-12 amount amount_strong"><strong style="">Bank Name</strong><span id="banknameconfirm"></span></div>
             <div class="col-md-12 amount"><strong>Net amount</strong><span id="amountconfirm"></span></div>
-            <div class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
-            <div class="col-md-12 amount"><strong>Id Proof Type</strong><span id="idprooftype"></span></div>
-            <div class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>
+            <div style="display:none;" class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
+            <div style="display:none;" class="col-md-12 amount"><strong>Id Proof Type</strong><span id="idprooftype"></span></div>
+            <div style="display:none;" class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>
             <div class="col-md-12 amount" style="display:none" id="OTPinfo_show">
                 <input type="hidden" id="hidetxtagentid" />
                 <input type="hidden" id="hidebenidtxt" />
@@ -950,7 +1016,7 @@
                 <a href="#" id="dmt11" class="cancel" onclick="confirmback()">BACK</a>
                 <a href="#" id="dmt1" style="display:none" class="cancel" onclick="confirmback1()">BACK</a>
                 <a href="javascript:void(0);" style="display:none" id="submitotp" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="submitotpinfo()">Submit OTP<i class="fa fa-angle-right"></i></a>
-                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment<i class="fa fa-angle-right"></i></a>
+                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment <i class="fa fa-angle-right"></i> </a>
                 <a href="javascript:void(0);" id="fpay1" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
@@ -1080,7 +1146,7 @@
 
             <div class="container-fluid transaction-button">
                 <button id="addaccount-back" style="background:#a39f9e;" onclick="back()">Back</button>
-                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span></button>
+                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span></button>
 
             </div>
             <div class="col-md-12 col-sm-12 col-lg-12" style="margin-top: 20px;">
@@ -1333,7 +1399,8 @@
             <div class="add-select-bank">
                 <div class="col-md-12 amount amount_strong">
                     <strong style="">Bank Name</strong>
-                    <i class="fa fa-angle-down"></i>    <select class="select-bank-name">
+                    @*<i style="" class="fa fa-angle-down"></i>  *@ 
+                    <select class="select-bank-name">
                         <option>SELECT BANK NAME</option>
                         <option>HDFC BANK</option>
                         <option>STATE BANK of india</option>

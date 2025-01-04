@@ -14,8 +14,6 @@ namespace Vastwebmulti.Models
 
         public void sendsmsallnew(string frmmobile, string text, string apiurls, string Templateid)
         {
-            System.Data.Entity.Core.Objects.ObjectParameter output = new
-            System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             string userid = null;
             try
             {
@@ -35,41 +33,56 @@ namespace Vastwebmulti.Models
                 }
                 text = string.Format(text, "1230");
                 var apinamechange = apiurls.Replace("tttt", frmmobile).Replace("mmmm", text).Replace("iiii", Templateid);
-
-                var client = new RestClient(apinamechange);
-                var request = new RestRequest(Method.GET);
                 var whatsts = db.Email_show_passcode.SingleOrDefault();
-                
-                VastBazaartoken Responsetoken = new VastBazaartoken();
-                
-                var userwise = db.retailerwise_whatsappsts.Where(a => a.userid == userid).ToList();
-                if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG") && whatsts.whatsappapists == true && userwise[0].sts != false)
+                if (whatsts.whatsappapists == false)
                 {
+                    sms_api_entry sms = new sms_api_entry();
+                    sms.apiname = apinamechange;
+                    sms.msg = "The WhatsApp status is off, so please contact the administrator.";
+                    sms.m_date = System.DateTime.Now;
+                    sms.response = "";
+                    sms.messagefor = userid;
+                    db.sms_api_entry.Add(sms);
+                    db.SaveChanges();
+                }
+                else if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG"))
+                {
+                    VastBazaartoken Responsetoken = new VastBazaartoken();
+                    var client = new RestClient(apinamechange);
+                    var request = new RestRequest(Method.GET);
                     var token = Responsetoken.gettoken();
                     request.AddHeader("authorization", "bearer " + token);
                     request.AddHeader("content-type", "application/json");
+                    var task = Task.Run(() =>
+                    {
+                        return client.Execute(request).Content;
+                    });
+                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                    var resp = "";
+                    if (isCompletedSuccessfully == true)
+                    {
+                        resp = task.Result;
+                    }
+                    sms_api_entry sms = new sms_api_entry();
+                    sms.apiname = apinamechange;
+                    sms.msg = text;
+                    sms.m_date = System.DateTime.Now;
+                    sms.response = resp;
+                    sms.messagefor = userid;
+                    db.sms_api_entry.Add(sms);
+                    db.SaveChanges();
                 }
-                var task = Task.Run(() =>
+                else
                 {
-                    return client.Execute(request).Content;
-                });
-                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                var resp = "";
-                if (isCompletedSuccessfully == true)
-                {
-                    resp = task.Result;
+                    sms_api_entry sms = new sms_api_entry();
+                    sms.apiname = apinamechange;
+                    sms.msg = "Your WhatsApp url is not correct.";
+                    sms.m_date = System.DateTime.Now;
+                    sms.response = "";
+                    sms.messagefor = userid;
+                    db.sms_api_entry.Add(sms);
+                    db.SaveChanges();
                 }
-
-                sms_api_entry sms = new sms_api_entry();
-                sms.apiname = apinamechange;
-                sms.msg = text;
-                sms.m_date = System.DateTime.Now;
-                sms.response = resp;
-                sms.messagefor = userid;
-                db.sms_api_entry.Add(sms);
-                db.SaveChanges();
-
-
             }
             catch (Exception ex)
             {

@@ -100,6 +100,32 @@
         //var menucolor = allcolor.SingleOrDefault().MenuColor;
     }
 <style>
+    /* New css */
+    .news {
+        background: var(--main-bg-lcolor);
+        color: #fff;
+        font-size: 21px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: news_laite 5s linear infinite;
+    }
+    @@keyframes news_laite {
+        0% {
+            background: var(--main-bg-lcolor);
+        }
+
+        50% {
+            background: blue;
+        }
+
+        100% {
+            background: red;
+        }
+    }
+
+    /* New css */
     .term-pop-in {
         background: #ffffff !important;
         top: 63px !important;
@@ -325,7 +351,18 @@
                             News & Updates
                         </h3>
                         <div class="footer_tow">
+                            <div class="" style="color: #000; text-align: justify;">
+                                @if (statuschkGreat != null)
+                                {
+                                    <h2 class="news">
+                                        <img src="~/AdminDesign/images/great-news.svg" style="width:18px;margin-top:2px;margin-right:12px;" /> @statuschkGreat.name
 
+                                    </h2>
+                                    <span style="font-size: 16px; text-align: justify; padding: 10px; width: 100%; float: left;">
+                                        @statuschkGreat.message
+                                    </span>
+                                }
+                            </div>
                         </div>
 
 
