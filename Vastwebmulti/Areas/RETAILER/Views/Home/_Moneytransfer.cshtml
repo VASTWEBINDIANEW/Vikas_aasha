@@ -94,7 +94,10 @@
     }
 
     #full .select2-selection__arrow b {
-        top: 21px;
+        top: 29px;
+    }
+    #full #benadd .select2-selection__arrow b {
+        top: 13px;
     }
     #select2-u4bm-container {
         padding: 0;
@@ -531,6 +534,15 @@
         }
 
 @@media only screen and (max-width:480px){
+    .button-imps {
+        width: 67%;
+    }
+    #addaccount-addasssss {
+        padding: 0 18px;
+    }
+    .col-md-12.cancelbutton a {
+        padding: 8px 14px;
+    }
     .show_pop{
         padding:15px;
     }
@@ -911,7 +923,7 @@
 <div id="dmttransfer" class="dmttransfer-responshivee" style="display:none;">
     <div class="col-md-12 accountholderde">
         <div class="fullwidthaccount">
-            <div class="codepenss body-border-bottom">
+            <div class="codepenss body-border-bottom" style="display:none;">
                 <div class="col-md-4 account-holder account-holder1" id="account-holdername">
                     <p class="bodycolormy">Mode</p>
                     <strong id="paymentmodetransfer"></strong>
@@ -988,8 +1000,8 @@
         </div>
         <div class="col-md-12 cancelbutton">
             <div class="cancelbuttonright">
-                <a style=" padding: 8px 18px;" href="#" class="cancel" onclick="back()">BACK</a>
-                <a style=" padding: 6px 26px;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT<i class="fa fa-angle-right"></i></a>
+                <a style="padding: 8px 14px;" href="#" class="cancel" onclick="back()">BACK</a>
+                <a style="padding: 6px 26px;text-transform: uppercase;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT <i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -1017,7 +1029,7 @@
 
     <div class="col-md-12 accountholderde">
         <div class="fullwidthaccount">
-            <div class="codepenss body-border-bottom">
+            <div class="codepenss body-border-bottom" style="display: flex;">
                 <div class="col-md-4 account-holder account-holder1" id="account-holdername">
                     <p class="bodycolormy">Mode</p>
                     <strong id="ccmodetransfer">Credit Card</strong>
@@ -1026,7 +1038,6 @@
                     <p class="bodycolormy">Bank Name</p>
                     <strong id="ccbanknametransfer"></strong>
                     <span style="display:none;" id="ccbencodetransfer"></span>
-
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">Card Number</strong> <span id="ccnotransfer"></span></div>
@@ -1086,8 +1097,8 @@
                 <a href="#" id="dmt11" class="cancel" onclick="confirmback()">BACK</a>
                 <a href="#" id="dmt1" style="display:none" class="cancel" onclick="confirmback1()">BACK</a>
                 
-                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment <i class="fa fa-angle-right"></i> </a>
-                <a href="javascript:void(0);" id="fpay1" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
+                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()" style="text-transform: uppercase;">Confirm Payment <i class="fa fa-angle-right"></i> </a>
+                <a href="javascript:void(0);" id="fpay1" style="display:none;text-transform:uppercase;" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -1216,7 +1227,7 @@
 
             <div class="container-fluid transaction-button">
                 <button id="addaccount-back" style="background:#a39f9e;" onclick="back()">Back</button>
-                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span></button>
+                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; width: auto; display: flex; align-items: center;"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span> <i class="fa fa-angle-right"></i></button>
 
             </div>
             <div class="col-md-12 col-sm-12 col-lg-12" style="margin-top: 20px;">
@@ -3772,7 +3783,7 @@
         });
         $(document).ajaxComplete(function () {
             $('#btnsenddd ,#cancelloder').html("Next");
-            $('.confirmbuttontext').html("Confirm Payment >");
+            $('.confirmbuttontext').html("Confirm Payment");
 
 
             //$('.verify-account').html("verify Account");
