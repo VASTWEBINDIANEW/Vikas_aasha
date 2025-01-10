@@ -12,6 +12,13 @@
 <style>
 
     /* new css */
+    #reportallinone {
+        overflow-y: auto;
+    }
+
+    .newpagecustomertyui .money-transform-content {
+        overflow: inherit;
+    }
     #fino_cms_table {
         padding: 0;
     }
@@ -131,34 +138,48 @@
             text-align: center;
             font-size: 25px;
         }
-
         .navbar-header .bars {
             top: 6px !important;
+        }
+        .responcive {
+            padding: 0;
         }
     }
 
 
     @@media only screen and (max-width:600px) {
-
         #status {
             width: 50%;
             margin-right: 0px;
         }
     }
+
+    @@media only screen and (max-width:480px){
+        #status{
+            width:100%;
+        }
+        .newpagecustom.newpagecustomertyui {
+            padding-right: 13px;
+        }
+        
+    }
+
 </style>
 <section class="newpagecustom newpagecustomertyui newpagecustomertyui-second content-fourdesign-page allpage-four-design-section widthinherit-four">
   
-    <div style="width:100%">
-        <a href="@Url.Action("FINOCMS","Home")">
-            <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; color: black;">
-                Fino CMS
-            </div>
-        </a>
+    <div class="col-md-12 responcive" style="padding-left: 0; font-size: 18px;">
+        <div class="page-header-third">
+            <a href="@Url.Action("FINOCMS","Home")">
+                <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; color: black;">
+                    Fino CMS
+                </div>
+            </a>
             <a href="@Url.Action("AirtelCMS","Home")">
-                <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; background: #00baf2; color: black; ">
+                <div style="width: 50%; border: 1px black solid; float: left; padding: 10px; text-align: center; background: var(--main-bg-lcolor); color: #fff; ">
                     Airtel CMS
                 </div>
             </a>
+        </div>
     </div>
     <div id="full" class="col-md-4 tabspage">
         <div class="page-header-third">
