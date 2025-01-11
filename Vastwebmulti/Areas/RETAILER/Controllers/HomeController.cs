@@ -32563,7 +32563,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             else
             {
-                return "ERROR";
+                return message;
             }
         }
         public static void UpdateAepsLog(string strMessage)
@@ -32769,6 +32769,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             db.Update_Aeps_Info.Add(data);
                             db.SaveChanges();
                         }
+                        else
+                        {
+                            var viewresponse = new { Status = "Failed", Message = Aeps_Update };
+                            return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else
                     {
@@ -32776,7 +32781,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         longitude = Update_Aeps_info.longitude;
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    var viewresponse = new { Status = "Failed", Message = ex.Message };
+                    return Json(viewresponse, JsonRequestBehavior.AllowGet);
+                }
                 if (retailer.AepsMerchandId == "")
                 {
                     string companyBankAccountNumber = Account.AccountNO;
