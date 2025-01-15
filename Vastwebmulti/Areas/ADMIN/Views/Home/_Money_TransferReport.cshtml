@@ -349,11 +349,13 @@
                                     var jj = "rrr";
                                     var kk = item.idno;
                                     var mkmk = jj + kk;
-
+                                    if ((item.Trans_type == "IMPS" && item.DmtType == "DMT2") || (item.Trans_type == "NEFT" && item.DmtType == "DMT2"))
+                                    {
+                                        <button id="@mkmk" type="button" class="ff" style="background-color:transparent; color:@color;border:none;margin-top:0px;" data-toggle="modal" title="Resend" onclick="resendchk11(@item.idno)">
+                                            <i class="fa fa-registered" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;"></i>
+                                        </button>
+                                    }
                                 }
-                                <button id="@mkmk" type="button" class="ff" style="background-color:transparent; color:@color;border:none;margin-top:0px;" data-toggle="modal" title="Resend" onclick="resendchk11(@item.idno)">
-                                    <i class="fa fa-registered" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;"></i>
-                                </button>
 
                             </div>
                             <span class="fftt" data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.idno')"> <img src="~/ashok-images/rightaeps.svg" style="border: 1px solid #c7c2c2;padding: 3px 5px;font-size: 10px;"> </span>
