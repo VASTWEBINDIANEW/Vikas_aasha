@@ -16,8 +16,74 @@
 }
 <style>
    /* New css */
+    .show_pop {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        background: #000000e5;
+        z-index: 9999999;
+    }
+    .box_otp {
+        width: 30%;
+        margin: auto;
+        position: relative;
+        top: 35%;
+        float: initial !important;
+        display: table !important;
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+    }
+
+        .box_otp h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .box_otp span {
+            margin-bottom: 18px;
+            float: left;
+            text-align: center;
+            width: 100%;
+            font-weight: 400;
+            text-transform: capitalize;
+        }
+        .box_otp input {
+            width: 100%;
+            float: left;
+        }
+    .show_pop input {
+        padding: 10px;
+    }
+    .box_otp button, .box_otp a {
+        padding: 4px 16px;
+        border: 1px solid #000;
+        margin-top: 20px !important;
+        width: auto;
+        float: right;
+        border-radius: 3px;
+    }
+
     #dmtconfirm .amount span {
         color: #000;
+    }
+    .high_light {
+        animation: high_light 2s linear infinite;
+    }
+    @@keyframes high_light {
+        0% {
+            color: var(--main-bg-lcolor);
+        }
+
+        50% {
+            color: var(--main-bg-rcolor);
+        }
+
+        100% {
+            color: var(--main-bg-lcolor);
+        }
     }
     .amount span {
         padding-top: 0;
@@ -28,7 +94,10 @@
     }
 
     #full .select2-selection__arrow b {
-        top: 21px;
+        top: 29px;
+    }
+    #full #benadd .select2-selection__arrow b {
+        top: 13px;
     }
     #select2-u4bm-container {
         padding: 0;
@@ -331,6 +400,9 @@
     }
 
     @@media screen and (max-width:766px) {
+        .box_otp{
+            width:50%;
+        }
         .selfiphoto .modal-dialog {
             width: 95%;
             padding: 0 !important;
@@ -462,6 +534,22 @@
         }
 
 @@media only screen and (max-width:480px){
+    .button-imps {
+        width: 67%;
+    }
+    #addaccount-addasssss {
+        padding: 0 18px;
+    }
+    .col-md-12.cancelbutton a {
+        padding: 8px 14px;
+    }
+    .show_pop{
+        padding:15px;
+    }
+    .box_otp {
+        width: 100%;
+    }
+
     .button-container {
         display: block;
         text-align: center;
@@ -835,7 +923,7 @@
 <div id="dmttransfer" class="dmttransfer-responshivee" style="display:none;">
     <div class="col-md-12 accountholderde">
         <div class="fullwidthaccount">
-            <div class="codepenss body-border-bottom">
+            <div class="codepenss body-border-bottom" style="display:none;">
                 <div class="col-md-4 account-holder account-holder1" id="account-holdername">
                     <p class="bodycolormy">Mode</p>
                     <strong id="paymentmodetransfer"></strong>
@@ -912,8 +1000,8 @@
         </div>
         <div class="col-md-12 cancelbutton">
             <div class="cancelbuttonright">
-                <a style=" padding: 8px 18px;" href="#" class="cancel" onclick="back()">BACK</a>
-                <a style=" padding: 6px 26px;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT<i class="fa fa-angle-right"></i></a>
+                <a style="padding: 8px 14px;" href="#" class="cancel" onclick="back()">BACK</a>
+                <a style="padding: 6px 26px;text-transform: uppercase;" href="javascript:void(0);" class="cancel cancel-button impsbutton1 fullbodydycolorbg" id="cancelloder" name="cancel-loder" onclick="TransferDMT()">NEXT <i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -941,7 +1029,7 @@
 
     <div class="col-md-12 accountholderde">
         <div class="fullwidthaccount">
-            <div class="codepenss body-border-bottom">
+            <div class="codepenss body-border-bottom" style="display: flex;">
                 <div class="col-md-4 account-holder account-holder1" id="account-holdername">
                     <p class="bodycolormy">Mode</p>
                     <strong id="ccmodetransfer">Credit Card</strong>
@@ -950,7 +1038,6 @@
                     <p class="bodycolormy">Bank Name</p>
                     <strong id="ccbanknametransfer"></strong>
                     <span style="display:none;" id="ccbencodetransfer"></span>
-
                 </div>
             </div>
             <div class="col-md-12 amount amount_strong transperentss"><strong style="">Card Number</strong> <span id="ccnotransfer"></span></div>
@@ -985,7 +1072,7 @@
     <div class="col-md-12 next-page">
         <div class="button-classadd body-border-bottom">
             <div class="button-one">
-                <button><span class="bodycolormy">Confirm <br />detail</span></button>
+                <button><span class="bodycolormy high_light">Confirm <br />detail</span></button>
             </div>
             <div class="button-imps">
                 <div id="divbankifsccode" class="col-md-12 amount amount_strong" style=" justify-content: space-between;"><strong style="margin: 0; top: 0;">Bank&nbsp;IFS&nbsp;Code</strong><span id="ifscconfirm" style=" padding-right: 5px;"></span></div>
@@ -1000,13 +1087,7 @@
             <div style="display:none;" class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
             <div style="display:none;" class="col-md-12 amount"><strong>Id Proof Type</strong><span id="idprooftype"></span></div>
             <div style="display:none;" class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>
-            <div class="col-md-12 amount" style="display:none" id="OTPinfo_show">
-                <input type="hidden" id="hidetxtagentid" />
-                <input type="hidden" id="hidebenidtxt" />
-                <input type="hidden" id="hidestateresptxt" />
-                <strong style="width:108px;">Enter OTP</strong>
-                <input type="text" id="txtsenderotps_pay" style=" background: white; float: right;" name="txtsenderotps_pay">
-            </div>
+            
             <div class="col-md-12 amount otpboxnotshow" style="display:none"><strong style="width:108px;">Enter Sender OTP</strong><input type="text" id="txtsenderotps" style=" background: white; float: right;" name="txtsenderotps" value="0"></div>
             @*<div class="col-md-12 amount"><strong>Debit Amount</strong><span id="chargeconfirm">20040</span></div>*@
             <div class="col-md-12 amount transfererroreee"><span id="transfererror" style="color:red;"></span></div>
@@ -1015,9 +1096,9 @@
             <div class="cancelbuttonright">
                 <a href="#" id="dmt11" class="cancel" onclick="confirmback()">BACK</a>
                 <a href="#" id="dmt1" style="display:none" class="cancel" onclick="confirmback1()">BACK</a>
-                <a href="javascript:void(0);" style="display:none" id="submitotp" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="submitotpinfo()">Submit OTP<i class="fa fa-angle-right"></i></a>
-                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()">Confirm Payment <i class="fa fa-angle-right"></i> </a>
-                <a href="javascript:void(0);" id="fpay1" style="display:none" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
+                
+                <a href="javascript:void(0);" id="fpay" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay()" style="text-transform: uppercase;">Confirm Payment <i class="fa fa-angle-right"></i> </a>
+                <a href="javascript:void(0);" id="fpay1" style="display:none;text-transform:uppercase;" class="cancel cancel-button impsbutton1 fullbodydycolorbg confirmbuttontext" onclick="finalpay1()">Confirm Payment<i class="fa fa-angle-right"></i></a>
             </div>
         </div>
     </div>
@@ -1146,7 +1227,7 @@
 
             <div class="container-fluid transaction-button">
                 <button id="addaccount-back" style="background:#a39f9e;" onclick="back()">Back</button>
-                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span></button>
+                <button id="addaccount-addasssss" class="fullbodydycolorbg addaccount-addMy" onclick="Registerben()" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; width: auto; display: flex; align-items: center;"><i style="float: left;margin-top: 4px;display: block;position: relative;left: -4px;"></i><span>Add Account</span> <i class="fa fa-angle-right"></i></button>
 
             </div>
             <div class="col-md-12 col-sm-12 col-lg-12" style="margin-top: 20px;">
@@ -1426,6 +1507,30 @@
         <span class="spinner"></span>
     </div>
 </div>
+
+@*  DMT Success  *@
+<div class="show_pop" style="display:none" id="OTPinfo_show">
+    <div class="box_otp">
+        <h3>Enter OTP</h3>
+        <span style="font-size: 13px;padding-left: 0;">One Time Password (OTP) successfully sent to the Sender Mobile Number</span>
+        <input type="hidden" id="hidetxtagentid" />
+        <input type="hidden" id="hidebenidtxt" />
+        <input type="hidden" id="hidestateresptxt" />
+        <input type="text" id="txtsenderotps_pay" style=" background: white; width: 100%; margin: 0;" name="txtsenderotps_pay">
+
+        <span style="text-align: justify; padding: 0; font-size: 12px; margin-top: 10px; color: #b91010; margin-bottom: 0;"><b>Note :-</b> one time password is mandatory field, otherwise transaction getting pending or suspension entry. We will check pending transactions within three working hours.</span>
+        <a href="#" id="otp_back_b" class="cancel" onclick="otp_back_b()" style="color: #fff; background: #000; float: left; margin-left: 0;">BACK</a>
+        <a href="javascript:void(0);" style="display: none; color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " id="submitotp" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="submitotpinfo()">SUBMIT OTP<i style="margin-left: 6px;" class="fa fa-angle-right"></i></a>
+    </div>
+</div>
+<script>
+    function otp_back_b() {
+        document.getElementById("OTPinfo_show").style.display = 'none';
+    }
+
+</script>
+@*  DMT Success  *@
+
 <script>
 
     sendotp = () => {

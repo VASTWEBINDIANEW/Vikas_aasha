@@ -8,6 +8,25 @@
 <script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
    /* new css */
+    .filllinecolor {
+        background: var(--main-bg-lcolor) !important;
+        color: white !important;
+    }
+    .ClassBtnActive {
+        background: var(--main-bg-lcolor);
+    }
+
+    .ClassBtnActive span {
+        color: #fff;
+    }
+
+    .appc_autol1 .ClassBtnActive span i {
+        display: block;
+    }
+
+    .appc_autol1 .s_button1 i {
+        display: none;
+    }
     .icon_btn span i {
         display: block;
         margin-right: 10px;
@@ -806,7 +825,7 @@
     }
 
     @@media only screen and (max-width:480px) {
-        
+
         .image-upload button {
             float: left;
         }
@@ -1808,11 +1827,12 @@
         .login-back-img h2 {
             display: table;
         }
+
         .but_df {
             display: block;
         }
 
-            .but_df span { 
+            .but_df span {
                 width: 100%;
                 float: left;
             }
@@ -2421,90 +2441,121 @@
 
         <div id="AppIconImages" style="display: none;">
 
-            <div class="row clearfix" id="imagessettingshow" style=" margin: 0px;">
+            <div class="row clearfix" style=" margin: 0px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
                             <h2 class="but_df">
                                 <span>
-                                    <button id="fillback" onclick="fillbackss()" style="background: var(--main-bg-lcolor);color:#fff;">Fill Icon Images</button>
-                                    <button onclick="outbackss()" id="outback" style="margin-left: 5px !important;">Out Line Icon Images</button>
+                                    <button id="fill" onclick="ChangeColorIcon('fill')" style="margin-right: 8px !important;">Fill Icon Images</button>
+                                    <button id="line" onclick="ChangeColorIcon('line')">Out Line Icon Images</button>
                                 </span>
-                                <span>
+                                <span id="textforicon">
                                     We have 12 type fill icon groups
                                 </span>
                             </h2>
 
                         </div>
-
                         <div style="height: 510px;">
                             <div class="br_setb">
                                 <div class="appc_auto0">
-                                    <div class="appc_auto">
+                                    <div class="appc_auto" id="iconfillshow">
 
                                         <div class="page-header-third">
                                             <div class="thame-headding" style="color: white;">
                                                 <h2 style="background: #878787;">App Fill Icon Images Groups</h2>
                                             </div>
-
                                             <div class="appc_autol1">
-                                                <div class="icon_btn">
-                                                    <button style=" background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;"><i class="fa fa-check"></i> Group 1</span></button>
+                                                <div class="icon_btn" id="group1">
+                                                    <button onclick="addContent('group1')"><span class="s_button1"><i class="fa fa-check"></i> Group 1</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 2</span></button>
+                                                <div class="icon_btn" id="group2">
+                                                    <button onclick="addContent('group2')"><span class="s_button1"><i class="fa fa-check"></i> Group 2</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 3</span></button>
+                                                <div class="icon_btn" id="group3">
+                                                    <button onclick="addContent('group3')"><span class="s_button1"> <i class="fa fa-check"></i>Group 3</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 4</span></button>
+                                                <div class="icon_btn" id="group4">
+                                                    <button onclick="addContent('group4')"><span class="s_button1"> <i class="fa fa-check"></i>Group 4</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 5</span></button>
+                                                <div class="icon_btn" id="group5">
+                                                    <button onclick="addContent('group5')"><span class="s_button1"> <i class="fa fa-check"></i>Group 5</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 6</span></button>
+                                                <div class="icon_btn" id="group6">
+                                                    <button onclick="addContent('group6')"><span class="s_button1"> <i class="fa fa-check"></i>Group 6</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 7</span></button>
+                                                <div class="icon_btn" id="group7">
+                                                    <button onclick="addContent('group7')"><span class="s_button1"> <i class="fa fa-check"></i>Group 7</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 8</span></button>
+                                                <div class="icon_btn" id="group8">
+                                                    <button onclick="addContent('group8')"><span class="s_button1"> <i class="fa fa-check"></i>Group 8</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 9</span></button>
+                                                <div class="icon_btn" id="group9">
+                                                    <button onclick="addContent('group9')"><span class="s_button1"> <i class="fa fa-check"></i>Group 9</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 10</span></button>
+                                                <div class="icon_btn" id="group10">
+                                                    <button onclick="addContent('group10')"><span class="s_button1"> <i class="fa fa-check"></i>Group 10</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 11</span></button>
+                                                <div class="icon_btn" id="group11">
+                                                    <button onclick="addContent('group11')"><span class="s_button1"> <i class="fa fa-check"></i>Group 11</span></button>
                                                 </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 12</span></button>
-                                                </div>
-
-                                            </div>
-
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-
-                                            <div class="app_all_s" style=" padding-top: 7px;">
-                                                <div>
-                                                    <button style="padding: 6px 88px; border-radius: 20px;"><b style="color:#fff;">Update Icon Images</b></button>
+                                                <div class="icon_btn" id="group12">
+                                                    <button onclick="addContent('group12')"><span class="s_button1"> <i class="fa fa-check"></i>Group 12</span></button>
                                                 </div>
                                             </div>
-
                                         </div>
 
+                                    </div>
+                                    <div class="appc_auto" id="iconlineshow" style="display: none;">
+                                        <div class="page-header-third">
+                                            <div class="thame-headding" style="color: white;">
+                                                <h2 style="background: #878787;">App Out Line Icon Images Groups</h2>
+                                            </div>
+
+                                            <div class="appc_autol1">
+                                                <div class="icon_btn" id="group13">
+                                                    <button onclick="addContent('group13')"><span class="s_button1"><i class="fa fa-check"></i> Group 1</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group14">
+                                                    <button onclick="addContent('group14')"><span class="s_button1"><i class="fa fa-check"></i>Group 2</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group15">
+                                                    <button onclick="addContent('group15')"><span class="s_button1"><i class="fa fa-check"></i>Group 3</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group16">
+                                                    <button onclick="addContent('group16')"><span class="s_button1"><i class="fa fa-check"></i>Group 4</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group17">
+                                                    <button onclick="addContent('group17')"><span class="s_button1"><i class="fa fa-check"></i>Group 5</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group18">
+                                                    <button onclick="addContent('group18')"><span class="s_button1"><i class="fa fa-check"></i>Group 6</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group19">
+                                                    <button onclick="addContent('group19')"><span class="s_button1"><i class="fa fa-check"></i>Group 7</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group20">
+                                                    <button onclick="addContent('group20')"><span class="s_button1"><i class="fa fa-check"></i>Group 8</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group21">
+                                                    <button onclick="addContent('group21')"><span class="s_button1"><i class="fa fa-check"></i>Group 9</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group22">
+                                                    <button onclick="addContent('group22')"><span class="s_button1"><i class="fa fa-check"></i>Group 10</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group23">
+                                                    <button onclick="addContent('group23')"><span class="s_button1"><i class="fa fa-check"></i>Group 11</span></button>
+                                                </div>
+                                                <div class="icon_btn" id="group24">
+                                                    <button onclick="addContent('group24')"><span class="s_button1"><i class="fa fa-check"></i>Group 12</span></button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
                             </div>
-
+                           
                             <div class="appi_set" style="float:right">
                                 <div class="page-header-third">
                                     <div class="center_iset" style="height:auto;">
@@ -2517,51 +2568,7 @@
                                             {
                                                 <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
                                             }
-
-                                            <div class="group_img">
-                                                <div class="img_box_s">
-                                                    <div class="img_box">
-                                                        <h6>Recharge & Pay Bill</h6>
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/Fill_2.svg" />
-                                                        <img src="~/img/Landline-55.svg" />
-                                                        <img src="~/img/Landline-65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Financial Services</h6>
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/Fill_2.svg" />
-                                                        <img src="~/img/Fill_2.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Travel Hotel</h6>
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/Landline-55.svg" />
-                                                        <img src="~/img/Landline-65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Other Section</h6>
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            <div class="group_img" id="MobileView"> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2570,7 +2577,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row clearfix" id="imagessettinghide" style="display: none; margin: 0px;">
+            @*<div class="row clearfix" style="display: none; margin: 0px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
                     <div class="card login-back-img page-header-third">
                         <div class="thame-headding">
@@ -2585,70 +2592,7 @@
                             </h2>
                         </div>
                         <div style="height: 510px;">
-                            <div class="br_setb">
-                                <div class="appc_auto0">
-                                    <div class="appc_auto">
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style="color: white;">
-                                                <h2 style="background: #878787;">App Out Line Icon Images Groups</h2>
-                                            </div>
-
-                                            <div class="appc_autol1">
-                                                <div class="icon_btn">
-                                                    <button style="background: var(--main-bg-lcolor);"><span class="s_button1" style="color: #fff;"><i class="fa fa-check"></i> Group 1</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 2</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 3</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 4</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 5</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 6</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 7</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 8</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 9</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 10</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 11</span></button>
-                                                </div>
-                                                <div class="icon_btn">
-                                                    <button><span class="s_button1">Group 12</span></button>
-                                                </div>
-
-                                            </div>
-
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-                                            <div style="display:none"></div>
-
-                                            <div class="app_all_s" style=" padding-top: 7px;">
-                                                <div>
-                                                    <button style="padding: 6px 88px; border-radius: 20px;"><b style="color:#fff;">Update Icon Images</b></button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                            
                             <div class="appi_set" style="float:right">
 
                                 <div class="page-header-third">
@@ -2663,43 +2607,7 @@
                                                 <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
                                             }
 
-                                            <div class="group_img">
-                                                <div class="img_box_s">
-                                                    <div class="img_box">
-                                                        <h6>Recharge & Pay Bill</h6>
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Financial Services</h6>
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_2.svg" />
-                                                        <img src="~/img/Outline_2.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Travel Hotel</h6>
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                        <img src="~/img/Outline_1.svg" />
-                                                    </div>
-                                                    <div class="img_box">
-                                                        <h6>Other Section</h6>
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                        <img src="~/img/mobile -65.svg" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            <div class="group_img" id="MobileView"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -2708,7 +2616,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
 
         <div id="AppKYCDocs" style="display: none;">
@@ -2872,8 +2780,8 @@
                                         <img src="@item.images" />
                                         <div class="catagselect">
                                             <span>@item.Category</span>
-                                            <button  type="button" class="checkboxdata delete-icon" onclick="DeleteSliderImage('@item.idno','@item.images')" style="opacity: 100%; position: static;">
-                                            <i class="fa fa-trash-o" style="font-size:20px;color:red;display:block;"></i>
+                                            <button type="button" class="checkboxdata delete-icon" onclick="DeleteSliderImage('@item.idno','@item.images')" style="opacity: 100%; position: static;">
+                                                <i class="fa fa-trash-o" style="font-size:20px;color:red;display:block;"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -2889,8 +2797,8 @@
                         <h2>Select Aap Slider Images <strong style="float:right;">You can select below images for the App slider</strong></h2>
                         <div id="sliderImages"></div>
                     </div>
-                    </div>
                 </div>
+            </div>
         </div>
 
         <div id="AppMessage" style="display: none;">
@@ -2984,7 +2892,6 @@
         <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="colorprint()">Submit</button>
     </div>
 </div>
-
 <script>
      $.ajax({
         type: "POST",
@@ -3013,11 +2920,129 @@
                 faq.appendChild(br2);
                 faq.appendChild(hr);
             }
-
-
         }
      });
-
+     $.ajax({
+         type: "POST",
+         url: '@Url.Action("CheckTheamactive", "Home")',
+         success: function (result) {
+             if (result.success) {
+                 inserthtml(result.theam)
+                 var groupId = 'group' + result.theam;
+                 const group = document.getElementById(groupId);
+                 const button = group.querySelector('button');
+                 button.classList.add('ClassBtnActive');
+                 ChangeColorIcon(result.theam);
+             }
+             else {
+                 ToastrMessage();
+                 toastr.error(result.message);
+             }
+         }
+     });
+     
+    function ChangeColorIcon(type) {
+        if (type == 'fill' || type <= 12) {
+            document.getElementById('iconlineshow').style.display = 'none';
+            document.getElementById('iconfillshow').style.display = 'block';
+            document.getElementById('textforicon').innerHTML = 'We have 12 type fill icon groups';
+            document.getElementById('fill').classList.add('filllinecolor');
+            document.getElementById('line').classList.remove('filllinecolor');
+        }
+        else {
+            document.getElementById('iconlineshow').style.display = 'block';
+            document.getElementById('iconfillshow').style.display = 'none';
+            document.getElementById('textforicon').innerHTML = 'We have 12 type out line icon groups';
+            document.getElementById('line').classList.add('filllinecolor');
+            document.getElementById('fill').classList.remove('filllinecolor');
+        }
+    }
+    function inserthtml(theam) {
+        var ihtml = `
+            <div class="img_box_s">
+                <div class="img_box">
+                    <h6>Recharge & Pay Bill </h6>                                                                                                                                                                                                                                                                              </h6>
+                    <img src="../../SVGIMAGE/${theam}/Mobile.svg" />
+                    <img src="../../SVGIMAGE/${theam}/dth.svg" />
+                    <img src="../../SVGIMAGE/${theam}/electricity.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Gas Cylinder.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Fastag.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Loan.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Insurance.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Credit Card.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Water Bill.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Prepaid Gas.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Landline.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Education Fee.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Broadband.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Hospital.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Cable tv.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Municipal  Tax.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Housing Tax.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Subscription.svg" />
+                    <img src="../../SVGIMAGE/${theam}/View More.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Hide More.svg" />
+                </div>
+                <div class="img_box">
+                    <h6>Financial Services</h6>
+                    <img src="../../SVGIMAGE/${theam}/Money Transfer.svg" />
+                    <img src="../../SVGIMAGE/${theam}/AEPS.svg" />
+                    <img src="../../SVGIMAGE/${theam}/M-ATM & Pos.svg" />
+                    <img src="../../SVGIMAGE/${theam}/CMS.svg" />
+                </div>
+                <div class="img_box">
+                    <h6>Travel Hotel</h6>
+                    <img src="../../SVGIMAGE/${theam}/Flight.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Train.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Bus.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Hotel.svg" />
+                </div>
+                <div class="img_box">
+                    <h6>Other Section</h6>
+                    <img src="../../SVGIMAGE/${theam}/Pan Card.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Gift Card.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Prepaid Card.svg" />
+                    <img src="../../SVGIMAGE/${theam}/Business Card.svg" />
+                </div>
+            </div>
+        `
+        document.getElementById("MobileView").innerHTML = ihtml;
+    }
+    function addContent(groupId) {
+        const group = document.getElementById(groupId);
+        const button = group.querySelector('button');
+        button.classList.add('ClassBtnActive');
+        for (var i = 1; i <= 24; i++) {
+            var id = "group" + i;
+            if (groupId !== id) {
+                const otherGroup = document.getElementById(id);
+                if (otherGroup) {
+                    const otherButton = otherGroup.querySelector('button');
+                    if (otherButton) {
+                        otherButton.classList.remove('ClassBtnActive');
+                    }
+                }
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ChangeIconTheam","Home")',
+                    data: { theam: i },
+                    success: function (result) {
+                        if (result.status) {
+                            inserthtml(result.theam)
+                            ToastrMessage();
+                            toastr.success(result.message);
+                        }
+                        else {
+                            ToastrMessage();
+                            toastr.error(result.message);
+                        }
+                    }
+                });
+            }
+        }
+    }
     function isEmptyOrSpaces(str) {
         return str === null || str.match(/^ *$/) !== null;
     }
@@ -3407,19 +3432,6 @@
         document.getElementById('dback').style.background = 'var(--main-bg-lcolor)';
         document.getElementById('iconsettinghide').style.display = 'none';
         document.getElementById('iconsettingshow').style.display = 'contents';
-    }
-    //  App Icon Images
-    function fillbackss() {
-        document.getElementById('outback').style.background = '#F6F5F5';
-        document.getElementById('fillback').style.background = 'var(--main-bg-lcolor)';
-        document.getElementById('imagessettingshow').style.display = 'contents';
-        document.getElementById('imagessettinghide').style.display = 'none';
-    }
-    function outbackss() {
-        document.getElementById('fillback').style.background = '#F6F5F5';
-        document.getElementById('outback').style.background = 'var(--main-bg-lcolor)';
-        document.getElementById('imagessettinghide').style.display = 'contents';
-        document.getElementById('imagessettingshow').style.display = 'none';
     }
 
 

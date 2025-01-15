@@ -2814,7 +2814,7 @@ namespace Vastwebmulti.Controllers
                         var Ipaddress = GetComputer_InternetIP();
                         System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
-                        var msginfo = dbsrs.DMTEkycCharge_PPI(merchantcode, agentid, uniqueid, mobile, "PAYSPRINT", Ipaddress, "", charge, outputchk).SingleOrDefault().msg;
+                        var msginfo = dbsrs.DMTEkycCharge_PPI(merchantcode, agentid, uniqueid, mobile, "VASTWEB", Ipaddress, "", charge, outputchk).SingleOrDefault().msg;
                         if(msginfo=="OK")
                         {
                             var resp = new
