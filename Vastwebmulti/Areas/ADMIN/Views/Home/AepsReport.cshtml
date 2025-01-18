@@ -274,13 +274,20 @@
 
                                 <div class="col-md-1 cltu responcive-fify" style="padding: 0px; margin-right: 3px;">
                                     <div class="form-line">
-                                        <select class="selectpicker form-control" data-live-search="true" id="ddlusers" name="ddlusers" style="margin-top:4px;padding-left:0px; padding-right:0px;text-align:center;" onchange="answers()">
-                                            <option value="Admin">All User</option>
-                                            <option value="Master">Master D</option>
-                                            <option value="Dealer">Distributor</option>
-                                            <option value="Retailer">Retailer</option>
-                                            <option value="Whitelabel">Whitelabel</option>
-                                        </select>
+                                        @Html.DropDownList("ddlusers", new List<SelectListItem>
+                                         {
+                                             new SelectListItem { Text = "All User", Value = "Admin" },
+                                             new SelectListItem { Text = "Master D", Value = "Master" },
+                                             new SelectListItem { Text = "Distributor", Value = "Dealer" },
+                                             new SelectListItem { Text = "Retailer", Value = "Retailer" },
+                                             new SelectListItem { Text = "Whitelabel", Value = "Whitelabel" }
+                                         }, new
+                                         {
+                                             @class = "selectpicker form-control",
+                                             data_live_search = "true",
+                                             @style = "margin-top:4px; padding:0px; text-align:center;",
+                                             @onchange = "answers()"
+                                         })
                                     </div>
                                 </div>
                                 <div class="col-md-2 responcive-fify" style="display:none;padding: 0px; margin-right: 3px; margin-bottom: 10px;" id="allwhitelabel">

@@ -1148,32 +1148,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 var userid = User.Identity.GetUserId();
                 var retailer = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
-                var frm = retailer.Frm_Name;
-                char frm1 = frm[0];
-                char frm2 = frm[1];
-                char frm3 = frm[2];
-                char frm4 = frm[3];
-
-                string fullfrm = frm1.ToString() + frm2.ToString() + frm3.ToString() + frm4.ToString();
-
                 var psaid = db.VastBazaarRetailerOutlets.Where(s => s.RetailerId == userid).SingleOrDefault().outlet_id;
-                Random d1 = new Random();
-                var id = d1.Next(999, 9999);
-                var dob = DateTime.Now;
-                var setdob = dob.ToString("yyyy/MM/dd ss").Replace("/", "");
-                string reqw = fullfrm+setdob + id;
-
-                var requestid = reqw.Replace("-","").Replace(" " , "");
-                  var token = string.Empty;
-            token = getAuthToken();
-                System.Data.Entity.Core.Objects.ObjectParameter output = new
-                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-
+                string requestid = Guid.NewGuid().ToString();
+                var token = getAuthToken();
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var measge = db.proc_insert_PAN_CARD12(userid, amount, requestid, output).SingleOrDefault().msg;
-
                 if (measge == "Success")
                 {
-
                     var reque = new
                     {
                         Amount = amount,
@@ -1181,8 +1162,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         TrasId = requestid,
                         Name = retailer.Frm_Name,
                         Email = retailer.Email
-
-
                     };
                     var resquestchk = JsonConvert.SerializeObject(reque);
                     var client2 = new RestClient("http://api.vastbazaar.com/api/UTI/PurchasePanCard");
@@ -1190,44 +1169,32 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var request2 = new RestRequest(Method.POST);
                     request2.AddHeader("Authorization", "Bearer " + token);
                     request2.AddHeader("Content-Type", "application/json");
-
                     request2.AddParameter("application/json", resquestchk, ParameterType.RequestBody);
                     IRestResponse response2 = client2.Execute(request2);
                     dynamic resp = JsonConvert.DeserializeObject(response2.Content);
-
-                 
                     if (resp.Content.ADDINFO.Status == "Failed")
                     {
                         var entry = db.pancard_transation.Where(s => s.requestid == requestid).SingleOrDefault();
-
                         db.proc_PAN_CARD_Refund_new(Convert.ToString(entry.idno), "Failed", "Rejected", requestid);
                         var tp = "Contact to Admin";
-
-
-
-
                         var obj = new { RESULT = "1", ADDINFO = tp };
                         return Json(JsonConvert.SerializeObject(obj), JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        var tp = "Success";
-                        var obj = new { RESULT = "1", ADDINFO = tp };
+                        var obj = new { RESULT = "1", ADDINFO = resp.Content.ADDINFO.Message };
                         return Json(JsonConvert.SerializeObject(obj), JsonRequestBehavior.AllowGet);
                     }
-                    
-
                 }
                 else
                 {
-                    var obj = new { RESULT = "1", ADDINFO = "Failed" };
+                    var obj = new { RESULT = "1", ADDINFO = measge };
                     return Json(JsonConvert.SerializeObject(obj), JsonRequestBehavior.AllowGet);
-
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                var obj = new { RESULT = "1", ADDINFO = "Failed." };
+                var obj = new { RESULT = "1", ADDINFO = ex.Message };
                 return Json(JsonConvert.SerializeObject(obj), JsonRequestBehavior.AllowGet);
             }
         }
