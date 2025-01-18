@@ -27409,7 +27409,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var Ipaddress = GetComputer_InternetIP();
             System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var status = false; string message = "Please Try After Sometime";
-            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, senderno, "VASTWEB", Ipaddress, "", outputchk).SingleOrDefault();
+            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, senderno, "VASTWEB", Ipaddress, "DMT2", outputchk).SingleOrDefault();
             var msginfo = Reqinfochk.msg;
             if (msginfo == "OK")
             {
@@ -33791,7 +33791,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var Ipaddress = GetComputer_InternetIP();
             System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var status = false; string message = "Please Try After Sometime";
-            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, Sendernumber, "VASTWEB", Ipaddress, "", outputchk).SingleOrDefault();
+            var Reqinfochk = db.DMTEkycCharge(userid, agentid, uniqueid, Sendernumber, "VASTWEB", Ipaddress, "DMTN", outputchk).SingleOrDefault();
             var msginfo = Reqinfochk.msg;
             if (msginfo == "OK")
             {

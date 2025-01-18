@@ -11,6 +11,13 @@
     <link href="~/MainFrontDesign/css/globalallcss.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/financialreportcss-admin.css" rel="stylesheet" />
     <style>
+        .t_menu form {
+            text-align: right;
+            width: 100%;
+            display: flex;
+            justify-content: right;
+            align-items: center;
+        }
         table #trow {
             counter-reset: rowNumber;
         }
@@ -27,7 +34,6 @@
         .kklo.money-transfer-admin #custnav ul {
             margin-bottom: 0px;
         }
-
     </style>
 
     <style>
@@ -301,27 +307,27 @@
                 margin-left: 0px !important;
             }
 
-            
 
-                .responcive-fify button.btn.llpo {
-                    width: 100%;
-                    text-align: left;
-                }
 
-            
-                .responcive-full input {
-                    width: 49% !important;
-                }
+            .responcive-fify button.btn.llpo {
+                width: 100%;
+                text-align: left;
+            }
 
-                .responcive-full .nrr3 input {
-                    width: 100% !important;
-                }
+
+            .responcive-full input {
+                width: 49% !important;
+            }
+
+            .responcive-full .nrr3 input {
+                width: 100% !important;
+            }
 
             .responcive-fify .web-white-filter {
                 width: 100%;
             }
 
-            
+
 
             .fin1.gjut-ruty ul li {
                 width: 24.5%;
@@ -378,11 +384,13 @@
             .inputiconsateall {
                 width: 50% !important;
             }
+
             .t_menu {
                 margin: 4px 0;
                 float: left;
                 width: 100%;
             }
+
             .fin1, .fin2 {
                 width: 100% !important;
                 display: block !important;
@@ -396,41 +404,41 @@
                 font-size: 12px;
             }
 
-                .fin1 .kklo #custnav ul li a {
-                    padding: 5px 15px;
+            .fin1 .kklo #custnav ul li a {
+                padding: 5px 15px;
+            }
+
+            .fin2 .col-md-2, .fin2 .cltu.col-md-1 {
+                width: 49.5% !important;
+                float: left;
+                margin-left: 0px !important;
+            }
+
+                .fin2 .col-md-2.cltu.for-width {
+                    width: 48% !important;
                 }
 
-                .fin2 .col-md-2, .fin2 .cltu.col-md-1 {
-                    width: 49.5% !important;
-                    float: left;
-                    margin-left: 0px !important;
-                }
-
-                    .fin2 .col-md-2.cltu.for-width {
-                        width: 48% !important;
-                    }
-
-                    .fin2 .col-md-2.gglk {
-                        width: 99% !important;
-                        margin-bottom: 5px;
-                    }
-
-                .fin2 .col-md-3 {
-                    width: 100% !important;
+                .fin2 .col-md-2.gglk {
+                    width: 99% !important;
                     margin-bottom: 5px;
                 }
 
-                    .fin2 .col-md-3 input {
-                        width: 50% !important;
-                    }
+            .fin2 .col-md-3 {
+                width: 100% !important;
+                margin-bottom: 5px;
+            }
 
-                    .fin2 .col-md-3 .nrr3 {
-                        width: 48%;
-                    }
+                .fin2 .col-md-3 input {
+                    width: 50% !important;
+                }
 
-                        .fin2 .col-md-3 .nrr3 input {
-                            width: 100% !important;
-                        }
+                .fin2 .col-md-3 .nrr3 {
+                    width: 48%;
+                }
+
+                    .fin2 .col-md-3 .nrr3 input {
+                        width: 100% !important;
+                    }
 
             .llpo span {
                 display: inline-block;
@@ -485,23 +493,28 @@
         .D_menu .row {
             margin: 0px;
         }
+
         .allpagefinincal-report .reportdate-money-allpage {
             width: auto;
         }
+
         .allpagefinincal-report .respon-third-button {
             width: auto !important;
         }
+
         .allpagefinincal-report .responcive-fify {
             width: auto !important;
         }
+
         .filter-option.pull-left {
             margin: 0px 10px;
         }
-        .inputiconsateall{
+
+        .inputiconsateall {
             width: 113px;
         }
 
-        @@media only screen and (max-width:1280px){
+        @@media only screen and (max-width:1280px) {
 
             section.content {
                 margin: 75px 0px 0 160px;
@@ -528,16 +541,16 @@
             .allpagefinincal-report .responcive-fify {
                 width: 100px !important;
             }
+
             #sidebar-open {
                 top: -1px;
                 left: -4px;
             }
+
             .D_menu {
                 margin-top: 10px;
             }
-            
         }
-
     </style>
 </head>
 <body>
@@ -575,7 +588,7 @@
                                         @*<button type="button" id="gst" value="GST" class="btn bg-grey waves-effect" style="margin-top:2px;" title="Total GST" onclick="Getvaladmin(this)">GST</button>*@
                                         @*<button type="button" id="tds" value="TDS" class="btn bg-grey waves-effect" style="margin-top:2px;" title="Total TDS" onclick="Getvaladmin(this)">TDS</button>*@
                                         @*<button type="button" id="countverify" value="Verify" class="btn bg-grey waves-effect" style="margin-top:2px;" title="Total Imps Verify" onclick="totaocount(this)">Verify</button>
-        <button type="button" id="countimps" value="IMPS" class="btn bg-grey waves-effect" style="margin-top:2px;" title="Total Imps " onclick="totaocount(this)">IMPS</button>*@
+                                            <button type="button" id="countimps" value="IMPS" class="btn bg-grey waves-effect" style="margin-top:2px;" title="Total Imps " onclick="totaocount(this)">IMPS</button>*@
                                         <div style="float:right;" class="web-white-filter lop pdfexpoer-second totalbutton-secondclas">
                                             <button class="btn waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600; color: gray;" title="Status Check" onclick="Dmt_status_check()">Status Check</button>
                                             <button class="white-success-button" style="height:32px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: right;margin-left: 4px;background: #b1a6a638;" onclick="findtotal()">Total</button>
@@ -593,19 +606,9 @@
 
                                     </div>
                                 </div>
-
-
-
-
-
-
                             </div>
                         </div>
                     </div>
-
-
-
-
                 </div>
             </div>
 
@@ -631,7 +634,7 @@
 
                                 </div>
                             </div>
-                            
+
                             <div class="t_menu">
                                 @using (Html.BeginForm("Money_Transfer_Report", "Home", FormMethod.Post))
                                 {
@@ -639,25 +642,25 @@
                                     <div class="col-md-2 cltu left-space-no responcive-fify marginleft-third-respon" style="padding: 0px;">
                                         <div class="">
                                             @Html.DropDownList("ddlusers", new List<SelectListItem>
-                                      {
-                                   new SelectListItem{ Text="All User",Value="Admin"},
-                                   new SelectListItem{Text="Master D",Value="Master"},
-                                   new SelectListItem{Text="Distributor",Value="Dealer"},
-                                   new SelectListItem{Text="Retailer",Value="Retailer"},
-                                   new SelectListItem{Text="Api User",Value="APIID"},
-                                    new SelectListItem{Text="Whitelabel",Value="WAdmin"}
-                                  }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;", @onchange = "answers()" })
+                                            {
+                                              new SelectListItem{ Text="All User",Value="Admin"},
+                                              new SelectListItem{Text="Master D",Value="Master"},
+                                              new SelectListItem{Text="Distributor",Value="Dealer"},
+                                              new SelectListItem{Text="Retailer",Value="Retailer"},
+                                              new SelectListItem{Text="Api User",Value="APIID"},
+                                              new SelectListItem{Text="Whitelabel",Value="WAdmin"}
+                                            }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;", @onchange = "answers()" })
 
                                         </div>
                                     </div>
                                     <div class="col-md-2 cltu left-space-no responcive-fify marginleft-third-respon" style="padding: 0px;">
                                         <div class="">
                                             @Html.DropDownList("APINM", new List<SelectListItem>
-                                      {
-                                   new SelectListItem{ Text="All API",Value="ALL"},
-                                   new SelectListItem{Text="VASTWEB",Value="VASTWEB"},
-                                   new SelectListItem{Text="RADIANT",Value="RADIANT"},
-                                  }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+                                            {
+                                               new SelectListItem{ Text="All API",Value="ALL"},
+                                               new SelectListItem{Text="VASTWEB",Value="VASTWEB"},
+                                               new SelectListItem{Text="RADIANT",Value="RADIANT"},
+                                             }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
 
                                         </div>
                                     </div>
@@ -691,25 +694,42 @@
                                     <div class="cltu responcive-fify" id="sts" style="padding: 0px;">
                                         <div class="">
                                             @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                        {
-                                new SelectListItem{ Text="All Status",Value="ALL",},
-                                new SelectListItem{Text="Success",Value="SUCCESS"},
-                                new SelectListItem{Text="Pending",Value="PENDING"},
-                                new SelectListItem{Text="Failed",Value="FAILED"}
-                                 }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+                                            {
+                                                new SelectListItem{ Text="All Status",Value="ALL",},
+                                                new SelectListItem{Text="Success",Value="SUCCESS"},
+                                                new SelectListItem{Text="Pending",Value="PENDING"},
+                                                new SelectListItem{Text="Failed",Value="FAILED"}
+                                             }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
                                         </div>
                                     </div>
                                     <div class="col-md-2 cltu for-width responcive-fify" style="padding: 0px;">
                                         <div class="">
                                             @Html.DropDownList("ddl_Type", new List<SelectListItem>
-                                        {
-                                new SelectListItem{ Text="Type",Value="ALL",},
-                                new SelectListItem{Text="Account Transfer",Value="IMPS"},
-                                new SelectListItem{Text="UPI Transfer",Value="UPI"},
-                                new SelectListItem{Text="Paytm Wallet",Value="WALLET"},
-                                new SelectListItem{Text="Verify",Value="IMPS_VERIFY"},
-                                new SelectListItem{Text="Credit Card",Value="Credit Card"}
-                                 }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+                                            {
+                                                 new SelectListItem{ Text="Type",Value="ALL",},
+                                                 new SelectListItem{Text="Account Transfer",Value="IMPS"},
+                                                 new SelectListItem{Text="UPI Transfer",Value="UPI"},
+                                                 new SelectListItem{Text="Paytm Wallet",Value="WALLET"},
+                                                 new SelectListItem{Text="Verify",Value="IMPS_VERIFY"},
+                                                 new SelectListItem{Text="Credit Card",Value="Credit Card"}
+                                             }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-md-2 cltu for-width responcive-fify" style="padding: 0px;">
+                                            <div class="">
+                                                @Html.DropDownList("Category", new List<SelectListItem>
+                                                {
+                                                     new SelectListItem{ Text="Category",Value="ALL",},
+                                                     new SelectListItem{Text="PAYOUT E-KYC",Value="PAYOUT E-KYC"},
+                                                     new SelectListItem{Text="DMT E-KYC",Value="DMT E-KYC"},
+                                                     new SelectListItem{Text="PPI E-KYC",Value="PPI E-KYC"},
+                                                     new SelectListItem{Text="DMT",Value="DMT"},
+                                                     new SelectListItem{Text="PAYOUT",Value="PAYOUT"},
+                                                     new SelectListItem{Text="PPI",Value="PPI"}
+                                                 }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
+
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2 gglk responcive-full responcive-fify" style="padding: 0px;margin-right: 3px;">

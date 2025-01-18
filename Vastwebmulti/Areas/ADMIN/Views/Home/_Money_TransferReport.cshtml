@@ -207,49 +207,71 @@
                     {
                         if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                         {
-                        <p>IMPS</p>
+                        <p>IMPS/</p>
                     }
-                }
-                else if (item.Trans_type == "NEFT")
-                {
-                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    }
+                    else if (item.Trans_type == "NEFT")
                     {
-                        <p>NEFT</p>
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                        {
+                            <p>NEFT/</p>
+                        }
                     }
-                }
-                else if (item.Trans_type == "WALLET")
-                {
-                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    else if (item.Trans_type == "WALLET")
                     {
-                        <p>WALLET</p>
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                        {
+                            <p>WALLET/</p>
+                        }
                     }
-                }
-                else if (item.Trans_type == "UPI")
-                {
-                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    else if (item.Trans_type == "UPI")
                     {
-                        <p>UPI</p>
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                        {
+                            <p>UPI</p>
+                        }
                     }
-                }
-                else if (item.Trans_type == "Credit Card")
-                {
-                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    else if (item.Trans_type == "Credit Card")
                     {
-                        <p>Credit Card</p>
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                        {
+                            <p>Credit Card</p>
+                        }
+                    
                     }
-
-                }
-                else
-                {
-                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                    else
                     {
-                        <p>Verify</p>
+                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
+                        {
+                            <p>Verify/</p>
+                        }
                     }
-                }
+                    @if (item.DmtType == "DMT2" && item.Trans_type == "EKYC CHARGE")
+                    {
+                        <p>PAYOUT E-KYC</p>
+                    }
+                    else if (item.DmtType == "DMTN" && item.Trans_type == "EKYC CHARGE")
+                    {
+                        <p>DMT E-KYC</p>
+                    }
+                    else if (item.DmtType == "DMT2" && item.Trans_type == "EKYC PPI CHARGE")
+                    {
+                        <p>PPI E-KYC</p>
+                    }
+                    else if (item.DmtType == "DMTN")
+                    {
+                        <p>DMT</p>
+                    }
+                    else if ((item.DmtType == "DMT2" && (item.Trans_type.ToUpper() == "IMPS" || item.Trans_type.ToUpper() == "NEFT")) || (item.Trans_type == "VASTWEB"))
+                    {
+                        <p>PAYOUT</p>
+                    }
+                    else if (item.DmtType == "DMTPPI")
+                    {
+                        <p>PPI</p>
+                    }
                     <input type="text" value="@item.trans_id" readonly style="border-color:transparent;background-color:transparent;" />
 
-                    </p>
-                    </p>
                 </td>
                 <td>
                     <p>&nbsp;@item.senderno&nbsp;</p>
