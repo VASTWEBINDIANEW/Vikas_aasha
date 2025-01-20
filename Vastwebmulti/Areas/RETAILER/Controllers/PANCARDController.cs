@@ -8,6 +8,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI;
@@ -1321,5 +1323,73 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             }
         }
+
+
+        [HttpPost]
+        public ActionResult CorrectionSubmit(string Title, string NameAsPerAadhar, DateTime? DateOfBirth, string FatherName, string Gender, string AadharNo, string AAdharRegisterNo, string CustomerMobileNo, string UserState, string EmailId, string PanCardNo, HttpPostedFileBase AAdharFrontImg, HttpPostedFileBase AAdharBackImg, HttpPostedFileBase SupportingDocument, string SupportingDocumentName, string CorrectionsType)
+        {
+            if (string.IsNullOrEmpty(Title))
+            {
+                return Json(new { success = false, message = "Title is required." });
+            }
+            else if (string.IsNullOrEmpty(NameAsPerAadhar))
+            {
+                return Json(new { success = false, message = "Name as per Aadhar is required." });
+            }
+            else if (DateOfBirth == DateTime.MinValue)
+            {
+                return Json(new { success = false, message = "Date of Birth is required." });
+            }
+            else if (string.IsNullOrEmpty(FatherName))
+            {
+                return Json(new { success = false, message = "Father's Name is required." });
+            }
+            else if (string.IsNullOrEmpty(Gender))
+            {
+                return Json(new { success = false, message = "Gender is required." });
+            }
+            else if (!Regex.IsMatch(AadharNo, @"^\d{12}$"))
+            {
+                return Json(new { success = false, message = "Aadhar Number must be a 12-digit number." });
+            }
+            else if (!Regex.IsMatch(AAdharRegisterNo, @"^[6-9][0-9]{9}$"))
+            {
+                return Json(new { success = false, message = "Aadhar Register Number must be a valid 10-digit number starting with 7, 8, or 9." });
+            }
+            else if (!Regex.IsMatch(CustomerMobileNo, @"^[6-9][0-9]{9}$"))
+            {
+                return Json(new { success = false, message = "Customer Mobile Number must be a valid 10-digit number starting with 7, 8, or 9." });
+            }
+            else if (string.IsNullOrEmpty(UserState))
+            {
+                return Json(new { success = false, message = "State is required." });
+            }
+            else if (!Regex.IsMatch(EmailId, @"^[a-zA-Z0-9._a-zA-Z0-9%+-]+@[.-]+\.[a-zA-Z]{2,}$"))
+            {
+                return Json(new { success = false, message = "Please enter a valid Email ID." });
+            }
+            else if (!Regex.IsMatch(PanCardNo, @"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"))
+            {
+                return Json(new { success = false, message = "Please enter a valid PAN Card Number. It should be in the format: ABCDE1234X." });
+            }
+            else if (AAdharFrontImg == null || AAdharFrontImg.ContentLength == 0)
+            {
+                return Json(new { success = false, message = "Aadhar Front Image is required." });
+            }
+            else if (AAdharBackImg == null || AAdharBackImg.ContentLength == 0)
+            {
+                return Json(new { success = false, message = "Aadhar Back Image is required." });
+            }
+            else if (string.IsNullOrEmpty(CorrectionsType))
+            {
+                return Json(new { success = false, message = "Correction Type is required." });
+            }
+            else
+            {
+                return Json(new { success = true, message = "" });
+            }
+
+        }
+
     }
 }
