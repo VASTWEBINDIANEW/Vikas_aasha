@@ -31669,8 +31669,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
 
-      
-        
+
         [HttpPost]
         public ActionResult CheckAAdharPay()
         {

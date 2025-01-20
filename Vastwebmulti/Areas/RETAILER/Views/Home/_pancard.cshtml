@@ -1,24 +1,32 @@
 ﻿@using Vastwebmulti.Models;
-@{ 
+@{
     VastwebmultiEntities db = new VastwebmultiEntities();
     var State = db.State_Desc.Select(x => x.State_name).ToList();
 }
 <style>
-   /* New Css */
+    /* New Css */
     .aeps_id .amount {
         display: flex;
         align-items: center;
     }
-        .aeps_id .amount span {
-            padding-top: 0;
-        }
+
+    #Corrections input {
+        width: 100%;
+    }
+
+    .aeps_id .amount span {
+        padding-top: 0;
+    }
+
     .aeps_id .col-md-12.amount strong {
         padding: 6px 5px;
     }
+
     .tabspage .tab-content input {
         border: 1px solid #919191;
         border-radius: 4px;
     }
+
     .select2-container--default .select2-selection--single {
         border: 1px solid #919191 !important;
     }
@@ -126,7 +134,7 @@
     }
 
     .manual_form1 {
-        padding: 6px;
+        padding: 4px;
         width: 50%;
         float: left;
     }
@@ -211,6 +219,7 @@
         height: auto;
         position: sticky;
     }
+
     .backgroundss {
         background: var(--main-bg-lcolor);
         border: 1px solid #aaa;
@@ -227,28 +236,30 @@
             float: left;
         }
     }
-  /* New css */
+    /* New css */
 
-  @@media only screen and (max-width:480px){
-    .manual_form1 {
-        width: 100%;
-    }
-    .aeps-start .fdgfgfgfga {
-        width: 100% !important;
-    }
-        .aeps-start .fdgfgfgfga .amount_strong span {
-            font-size: 14px;
-            padding-top: 0px;
+    @@media only screen and (max-width:480px) {
+        .manual_form1 {
+            width: 100%;
         }
-    .col-md-2.aeps_button {
-        width: 30%;
-    }
-    .manual_w {
-        width: 100%;
-    }
 
-  }
+        .aeps-start .fdgfgfgfga {
+            width: 100% !important;
+        }
 
+            .aeps-start .fdgfgfgfga .amount_strong span {
+                font-size: 14px;
+                padding-top: 0px;
+            }
+
+        .col-md-2.aeps_button {
+            width: 30%;
+        }
+
+        .manual_w {
+            width: 100%;
+        }
+    }
 </style>
 
 <script>
@@ -272,10 +283,15 @@
         </button>
     </div>
     <div class="manual_form1">
-        <button class="btmd"  onclick="PANCARD_manual()">
-            Manual New Pancard Form
+        <button class="btmd" onclick="PANCARD_manual()">
+            Manual Pancard
         </button>
     </div>
+    @*<div class="manual_form1">
+        <button class="btmd" onclick="CorrectionForm()">
+            Correction Pancard
+        </button>
+    </div>*@
 </div>
 
 <div class="manual_form_m " id="manual" style="display:none">
@@ -663,21 +679,184 @@
     </div>
     <!---------------Final Payment-------------------------->
 </div>
+<div id="Corrections" style="display: none;">
+    <!-- Basic Identification Details -->
+    <div class="manual_w">
+        <label for="Title">Title</label>
+        @Html.DropDownList("Title", new List<SelectListItem>
+        {
+           new SelectListItem{ Text="Select Title",Value="",},
+           new SelectListItem{Text="Shri",Value="Shri"},
+           new SelectListItem{Text="Smt",Value="Smt"},
+           new SelectListItem{Text="Kumari",Value="Kumari"}
+        }, new { @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="NameAsPerAadhar">Name as per Aadhaar</label>
+        @Html.TextBox("NameAsPerAadhar", null, new { @placeholder = "Enter Name As Per Aadhar", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="DateOfBirth">Date of Birth</label>
+        @Html.TextBox("DateOfBirth", null, new { @type = "date", @class = "form-control", @placeholder = "Select your DOB" })
+    </div>
+    <div class="manual_w">
+        <label for="FatherName">Father's Name</label>
+        @Html.TextBox("FatherName", null, new { @placeholder = "Enter Father Name", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="Gender">Gender</label>
+        @Html.DropDownList("Gender", new List<SelectListItem>
+        {
+           new SelectListItem{ Text="Select Gender",Value="",},
+           new SelectListItem{Text="Male",Value="Male"},
+           new SelectListItem{Text="Female",Value="Female"},
+           new SelectListItem{Text="Other",Value="Other"}
+        }, new { @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="AadharNo">Aadhaar Number</label>
+        @Html.TextBox("AadharNo", null, new { @placeholder = "Enter Aadhaar Number", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="AAdharRegisterNo">Aadhaar Register Number</label>
+        @Html.TextBox("AAdharRegisterNo", null, new { @placeholder = "Enter Aadhaar Register Number", @class = "form-control" })
+    </div>
+
+    <!-- Contact Information -->
+    <div class="manual_w">
+        <label for="CustomerMobileNo">Customer Mobile Number</label>
+        @Html.TextBox("CustomerMobileNo", null, new { @placeholder = "Enter Customer Mobile Number", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="UserState">State</label>
+        @Html.DropDownList("UserState", new SelectList(State, ""), "-Select State-", new { @id = "UserState", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="EmailId">Customer Email ID</label>
+        @Html.TextBox("EmailId", null, new { @placeholder = "Enter Customer Email Id", @class = "form-control" })
+    </div>
+
+    <!-- Documents -->
+    <div class="manual_w">
+        <label for="PanCardNo">PAN Card Number</label>
+        @Html.TextBox("PanCardNo", null, new { @placeholder = "Enter PanCard Number", @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <label for="AAdharFrontImg">Aadhaar Front Image</label>
+        @Html.TextBox("AAdharFrontImg", null, new { type = "file", @class = "form-control", @placeholder = "Enter Aadhar Front Image" })
+    </div>
+    <div class="manual_w">
+        <label for="AAdharBackImg">Aadhaar Back Image</label>
+        @Html.TextBox("AAdharBackImg", null, new { type = "file", @class = "form-control", @placeholder = "Enter Aadhar Back Image" })
+    </div>
+    <div class="manual_w">
+        <label for="SupportingDocument">Upload Supporting Document</label>
+        @Html.TextBox("SupportingDocument", null, new { type = "file", @class = "form-control", @placeholder = "Supporting Document" })
+    </div>
+    <div class="manual_w">
+        <label for="SupportingDocumentName">Supporting Document</label>
+        @Html.DropDownList("SupportingDocumentName", new List<SelectListItem>
+        {
+           new SelectListItem{ Text="Select Document Type",Value="",},
+           new SelectListItem{Text="Voter Id",Value="Voter Id"},
+           new SelectListItem{Text="Pass Port",Value="Pass Port"},
+           new SelectListItem{Text="10th MarkSheet",Value="10th MarkSheet"},
+           new SelectListItem{Text="Driving Licence",Value="Driving Licence"},
+           new SelectListItem{Text="Ration Card",Value="Ration Card"},
+           new SelectListItem{Text="Other",Value="Other"}
+        }, new { @class = "form-control" })
+    </div>
+
+    <!-- Corrections -->
+    <div class="manual_w">
+        <label for="CorrectionsType">Correction Type</label>
+        @Html.DropDownList("CorrectionsType", new List<SelectListItem>
+        {
+           new SelectListItem{ Text="Select Correction",Value="",},
+           new SelectListItem{Text="Name",Value="Name"},
+           new SelectListItem{Text="Father Name",Value="Father Name"},
+           new SelectListItem{Text="DOB",Value="DOB"},
+           new SelectListItem{Text="Other",Value="Other"}
+        }, new { @class = "form-control" })
+    </div>
+    <div class="manual_w">
+        <button type="submit" class="btn btn-primary" onclick="SubmitCorrectionFrom()">Submit</button>
+    </div>
+</div>
+
 <script>
+    function showLoader() {
+        $('.loader').show();
+    }
+
+    function onFormSuccess(data) {
+        $('.loader').hide();
+        $('#responseMessage').html(data);
+    }
+
+    function onFormFailure(xhr, status, error) {
+        $('.loader').hide();
+        $('#responseMessage').html('An error occurred: ' + error);
+    }
+    function SubmitCorrectionFrom(){
+        var Title = $('#Title').val();
+        var NameAsPerAadhar = $('#NameAsPerAadhar').val();
+        var DateOfBirth = $('#DateOfBirth').val();
+        var FatherName = $('#FatherName').val();
+        var Gender = $('#Gender').val();
+        var AadharNo = $('#AadharNo').val();
+        var AAdharRegisterNo = $('#AAdharRegisterNo').val();
+        var CustomerMobileNo = $('#CustomerMobileNo').val();
+        var UserState = $('#UserState').val();
+        var EmailId = $('#EmailId').val();
+        var PanCardNo = $('#PanCardNo').val();
+        var AAdharFrontImg = $('#AAdharFrontImg')[0].files[0];
+        var AAdharBackImg = $('#AAdharBackImg')[0].files[0];
+        var SupportingDocument = $('#SupportingDocument')[0].files[0];
+        var SupportingDocumentName = $('#SupportingDocumentName').val();
+        var CorrectionsType = $('#CorrectionsType').val();
+        $.ajax({
+            url: '@Url.Action("CorrectionSubmit", "PANCARD")',
+            type: "POST",
+            beforeSend: function () {
+                $('.loader').show();
+            },
+            data: { Title: Title, NameAsPerAadhar: NameAsPerAadhar, DateOfBirth: DateOfBirth, FatherName: FatherName, Gender: Gender, AadharNo: AadharNo, AAdharRegisterNo: AAdharRegisterNo, CustomerMobileNo: CustomerMobileNo, UserState: UserState, EmailId: EmailId, PanCardNo: PanCardNo, AAdharFrontImg: AAdharFrontImg, AAdharBackImg: AAdharBackImg, SupportingDocument: SupportingDocument, SupportingDocumentName: SupportingDocumentName, CorrectionsType: CorrectionsType },
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                /*if (!data.success) {*/
+                console.log(data.message)
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                /*}*/
+                $('.loader').hide();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error: " + error);
+                $('.loader').hide();
+            }
+        });
+    }
+
+
+    function CorrectionForm() {
+        document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
+        document.getElementsByClassName('btmd')[1].classList.remove('backgroundss');
+        document.getElementsByClassName('btmd')[2].classList.add('backgroundss');
+        document.getElementById('manual').style.display = 'none';
+        document.getElementById('manualw1').style.display = 'none';
+        document.getElementById('Corrections').style.display = 'block';
+    }
     const div = document.getElementsByClassName('myDiv123')[0];
     var i = 0;
-
-
-    // Add an input event listener to the input element
     function myfunc() {
-
-        // Get the current value from the input field
         const currentValue = parseInt(div.value);
-
-        // Check if the current value is greater than the previous value
-
-        // Double the value in the div
-
         const doubledValue = parseInt(div.textContent) + 107;
         if (i == 0) {
             div.textContent = 107;
@@ -839,6 +1018,7 @@
         $('#BOTHpur1').hide();
         $('#ALLpur1').hide();
             $('#secpur1').hide();
+            $('#Corrections').hide();
             $('#buttokenerror').text("");
             $('#transaction-more').show();
             $('#Update-more').hide();
@@ -850,6 +1030,7 @@
             $('#purchase').hide();
             $('#pan-Confirm-Payment').hide();
             document.getElementsByClassName('btmd')[1].classList.remove('backgroundss');
+            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[0].classList.add('backgroundss');
             document.getElementById('manual').style.display = 'none';
             document.getElementById('manualw1').style.display = 'block';
@@ -924,6 +1105,7 @@
         $('#BOTHpur1').hide();
         $('#ALLpur1').hide();
             $('#secpur1').hide();
+            $('#Corrections').hide();
             $('#buttokenerror').text("");
             $('#transaction-more').show();
             $('#Update-more').hide();
@@ -986,6 +1168,7 @@
             })
             document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[1].classList.add('backgroundss');
+            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementById('manual').style.display = 'block';
             document.getElementById('manualw1').style.display = 'none';
              $.ajax({
