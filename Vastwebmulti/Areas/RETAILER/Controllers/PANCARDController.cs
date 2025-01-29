@@ -1336,7 +1336,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 return Json(new { success = false, message = "Name as per Aadhar is required." });
             }
-            else if (DateOfBirth == DateTime.MinValue)
+            else if (DateOfBirth == null)
             {
                 return Json(new { success = false, message = "Date of Birth is required." });
             }
@@ -1364,7 +1364,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 return Json(new { success = false, message = "State is required." });
             }
-            else if (!Regex.IsMatch(EmailId, @"^[a-zA-Z0-9._a-zA-Z0-9%+-]+@[.-]+\.[a-zA-Z]{2,}$"))
+            else if (!Regex.IsMatch(EmailId, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
             {
                 return Json(new { success = false, message = "Please enter a valid Email ID." });
             }
