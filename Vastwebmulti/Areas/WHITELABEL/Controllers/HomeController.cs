@@ -3821,7 +3821,7 @@ namespace Vastwebmulti.Areas.WHITELABEL.Controllers
                     }
                     else if (checkforlive.Rstaus.ToUpper() == "FAILED" || checkforlive.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                     {
-                        db.recharge_update_failed_to_success(idno);
+                        db.recharge_update_failed_to_success(idno, "Manual Success");
                     }
                 }
                 else
@@ -3835,7 +3835,7 @@ namespace Vastwebmulti.Areas.WHITELABEL.Controllers
                         }
                         else if (checkforold.Rstaus.ToUpper() == "FAILED" || checkforold.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                         {
-                            db.recharge_update_failed_to_success_old(idno);
+                            db.recharge_update_failed_to_success_old(idno, "Manual Success");
                         }
                     }
                 }

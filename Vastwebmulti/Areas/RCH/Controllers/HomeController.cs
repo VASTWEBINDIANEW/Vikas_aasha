@@ -208,13 +208,13 @@ namespace Vastwebmulti.Areas.RCH.Controllers
                 var today_recharge = db.Recharge_info.Where(s => s.idno == sdk).ToList();
                 if (today_recharge.Count == 1)
                 {
-                    db.recharge_update_failed_to_success(sdk);
+                    db.recharge_update_failed_to_success(sdk, "Manual Success");
 
                 }
                 else
                 {
 
-                    db.recharge_update_failed_to_success_old(sdk);
+                    db.recharge_update_failed_to_success_old(sdk, "Manual Success");
                 }
 
                 return RedirectToAction("Index");

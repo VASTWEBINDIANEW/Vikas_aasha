@@ -1201,7 +1201,7 @@ namespace Vastwebmulti.Controllers
                         {
                             if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
                             {
-                                dbsrs.recharge_update_failed_to_success(entry.Idno);
+                                dbsrs.recharge_update_failed_to_success(entry.Idno, "Manual Success");
                                 if (role == "Retailer")
                                 {
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
@@ -2037,7 +2037,7 @@ namespace Vastwebmulti.Controllers
                                 {
                                     if (Status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
                                     {
-                                        dbsrs.recharge_update_failed_to_success(entry.Idno);
+                                        dbsrs.recharge_update_failed_to_success(entry.Idno, "Manual Success");
                                         if (role == "Retailer")
                                         {
                                             var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
@@ -5464,7 +5464,7 @@ namespace Vastwebmulti.Controllers
                         {
                             if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
                             {
-                                dbsrs.recharge_update_failed_to_success(entry.Idno);
+                                dbsrs.recharge_update_failed_to_success(entry.Idno, "Manual Success");
                                 if (role == "Retailer")
                                 {
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
@@ -6438,7 +6438,7 @@ namespace Vastwebmulti.Controllers
                             if (finalstatus.ToUpper() == "SUCCESS" && failed_to_success)
                             {
                                 resp = "recharge failed to success";
-                                dbsrs.recharge_update_failed_to_success(entry.Idno);
+                                dbsrs.recharge_update_failed_to_success(entry.Idno, "Manual Success");
 
                                 rch1.response_output = outpt + ", Failed To Success";
                                 dbsrs.SaveChanges();
