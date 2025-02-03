@@ -879,6 +879,57 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         //var slabname = db.Retailer_Details.Where(p => p.RetailerId == RetailerId).Single().slab_name;
                         //var retailertokanvalue = db.Slab_PanCard.SingleOrDefault(p => p.createdby == dealerid && p.clienttype == "Retailer" && p.slabname == slabname).tokenval;
                         var dbresponse = db.proc_insert_PAN_CARD_IPAY_Request(RetailerId, "none", Convert.ToInt32(digitalCount ?? "0"), Convert.ToInt32(physicalCount), merchantTxnId, Idno, output).SingleOrDefault();
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == RetailerId).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = RetailerId,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "Pan Card Booking ",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.Pancard(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "Pan Card Booking ",
+
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.Pancard(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "Pan Card Booking ",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.Pancard(model2);
+                        }
+                        catch { }
+
                         var isSuccess = dbresponse.msg;
                         int idnoo = (int)dbresponse.Idno;
 
@@ -926,6 +977,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 var xx = UpdateToken();
                                 db.proc_PAN_CARD_Refund(idnoo.ToString(), "Failed", "Rejected", "");
+                                try
+                                {
+                                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
+                                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == RetailerId).SingleOrDefault();
+                                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                                    var modeln = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = RetailerId,
+                                        Email = retailerdetails.Email,
+                                        Mobile = retailerdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+                                        RemainBalance = remdetails.Remainamount,
+                                        Usertype = "Retailer"
+                                    };
+                                    back.Pancard(modeln);
+
+                                    var model1 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = dealerdetails.DealerId,
+                                        Email = dealerdetails.Email,
+                                        Mobile = dealerdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+
+                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                        Usertype = "Dealer"
+                                    };
+                                    back.Pancard(model1);
+
+                                    var model2 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = masterdetails.SSId,
+                                        Email = masterdetails.Email,
+                                        Mobile = masterdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                        Usertype = "Master"
+                                    };
+                                    back.Pancard(model2);
+                                }
+                                catch { }
                                 jj.Add("RESULT", "1");
                                 jj.Add("ADDINFO", "Unknown Error");
                                 return jj;
@@ -955,6 +1056,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 string msg = respo.Content.ADDINFO[0].Msg;
                                 db.proc_PAN_CARD_Refund(idnoo.ToString(), "Failed", "Rejected", "");
+                                try
+                                {
+                                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
+                                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == RetailerId).SingleOrDefault();
+                                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                                    var modeln = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = RetailerId,
+                                        Email = retailerdetails.Email,
+                                        Mobile = retailerdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+                                        RemainBalance = remdetails.Remainamount,
+                                        Usertype = "Retailer"
+                                    };
+                                    back.Pancard(modeln);
+
+                                    var model1 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = dealerdetails.DealerId,
+                                        Email = dealerdetails.Email,
+                                        Mobile = dealerdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+
+                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                        Usertype = "Dealer"
+                                    };
+                                    back.Pancard(model1);
+
+                                    var model2 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = masterdetails.SSId,
+                                        Email = masterdetails.Email,
+                                        Mobile = masterdetails.Mobile,
+                                        Details = "Pan Card booking Refund",
+                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                        Usertype = "Master"
+                                    };
+                                    back.Pancard(model2);
+                                }
+                                catch { }
                                 jj.Add("RESULT", "1");
                                 jj.Add("ADDINFO", msg);
                             }
@@ -1055,6 +1206,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             msg = "Not Found";
                         }
                         db.proc_PAN_CARD_Refund(id.ToString(), "Failed", "Rejected", Convert.ToString(respo.Content.ADDINFO[0].Msg));
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == retailerid).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == retailerid).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = retailerid,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "Pan Card booking Refund",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.Pancard(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "Pan Card booking Refund",
+
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.Pancard(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "Pan Card booking Refund",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.Pancard(model2);
+                        }
+                        catch { }
                         jj.Add("RESULT", "1");
                         jj.Add("ADDINFO", msg);
                     }
@@ -1080,7 +1281,59 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 using (VastwebmultiEntities db = new VastwebmultiEntities())
                 {
+                    int IDNO= Convert.ToInt32(id);
+                    var retailerid = db.PAN_CARD_IPAY.Where(aa => aa.Idno == IDNO).SingleOrDefault().RetailerId;
                     db.proc_PAN_CARD_Refund_Manual(id.ToString(), "Manual Failed", remark);
+                    try
+                    {
+                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == retailerid).SingleOrDefault();
+                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == retailerid).SingleOrDefault();
+                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                        var admininfo = db.Admin_details.SingleOrDefault();
+                        Backupinfo back = new Backupinfo();
+                        var modeln = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = retailerid,
+                            Email = retailerdetails.Email,
+                            Mobile = retailerdetails.Mobile,
+                            Details = "Pan Card booking Refund",
+                            RemainBalance = remdetails.Remainamount,
+                            Usertype = "Retailer"
+                        };
+                        back.Pancard(modeln);
+
+                        var model1 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = dealerdetails.DealerId,
+                            Email = dealerdetails.Email,
+                            Mobile = dealerdetails.Mobile,
+                            Details = "Pan Card booking Refund",
+
+                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                            Usertype = "Dealer"
+                        };
+                        back.Pancard(model1);
+
+                        var model2 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = masterdetails.SSId,
+                            Email = masterdetails.Email,
+                            Mobile = masterdetails.Mobile,
+                            Details = "Pan Card booking Refund",
+                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                            Usertype = "Master"
+                        };
+                        back.Pancard(model2);
+                    }
+                    catch { }
                 }
 
             }
@@ -1416,6 +1669,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                  System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var respo = db.IPAY_DTH_Booking_Retailer(userid, txtName, txtMobile, customerAddress, DateTime.Now, myoptName, myoptCode, Convert.ToDecimal(1), ddlPackage, STB, output).SingleOrDefault().msg;
+                try
+                {
+                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                    var admininfo = db.Admin_details.SingleOrDefault();
+                    Backupinfo back = new Backupinfo();
+                    var modeln = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = userid,
+                        Email = retailerdetails.Email,
+                        Mobile = retailerdetails.Mobile,
+                        Details = "DTH Booking ",
+                        RemainBalance = remdetails.Remainamount,
+                        Usertype = "Retailer"
+                    };
+                    back.info(modeln);
+
+                    var model1 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = dealerdetails.DealerId,
+                        Email = dealerdetails.Email,
+                        Mobile = dealerdetails.Mobile,
+                        Details = "DTH Booking ",
+
+                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        Usertype = "Dealer"
+                    };
+                    back.info(model1);
+
+                    var model2 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = masterdetails.SSId,
+                        Email = masterdetails.Email,
+                        Mobile = masterdetails.Mobile,
+                        Details = "DTH Booking ",
+                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                        Usertype = "Master"
+                    };
+                    back.info(model2);
+                }
+                catch { }
                 if (respo.Contains("OK"))
                 {
                     HttpClient client = new HttpClient();
@@ -1455,6 +1758,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         {
                             var idno = respo.Replace("OK|", "");
                             var refundresponse = db.IPAY_Refund_DTH_Booking_Retailer(idno, userid, myoptName, "DTH", myoptCode, output).SingleOrDefault().msg;
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "DTH Boking Refund",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "DTH Boking Refund",
+
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "DTH Boking Refund",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             return "ERROR";
                         }
                     }

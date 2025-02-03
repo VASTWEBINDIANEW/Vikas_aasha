@@ -1155,6 +1155,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var token = getAuthToken();
                 System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var measge = db.proc_insert_PAN_CARD12(userid, amount, requestid, output).SingleOrDefault().msg;
+                try
+                {
+                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                    var admininfo = db.Admin_details.SingleOrDefault();
+                    Backupinfo back = new Backupinfo();
+                    var modeln = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = userid,
+                        Email = retailerdetails.Email,
+                        Mobile = retailerdetails.Mobile,
+                        Details = "Pan Card Buy ",
+                        RemainBalance = remdetails.Remainamount,
+                        Usertype = "Retailer"
+                    };
+                    back.Pancard(modeln);
+
+                    var model1 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = dealerdetails.DealerId,
+                        Email = dealerdetails.Email,
+                        Mobile = dealerdetails.Mobile,
+                        Details = "Pan Card Buy ",
+
+                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        Usertype = "Dealer"
+                    };
+                    back.Pancard(model1);
+
+                    var model2 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = masterdetails.SSId,
+                        Email = masterdetails.Email,
+                        Mobile = masterdetails.Mobile,
+                        Details = "Pan Card Buy ",
+                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                        Usertype = "Master"
+                    };
+                    back.Pancard(model2);
+                }
+                catch { }
                 if (measge == "Success")
                 {
                     var reque = new
@@ -1178,6 +1228,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         var entry = db.pancard_transation.Where(s => s.requestid == requestid).SingleOrDefault();
                         db.proc_PAN_CARD_Refund_new(Convert.ToString(entry.idno), "Failed", "Rejected", requestid);
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = userid,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "PAn Card Refund ",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.Pancard(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "PAn Card Refund ",
+
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.Pancard(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "PAn Card Refund ",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.Pancard(model2);
+                        }
+                        catch { }
                         var tp = "Contact to Admin";
                         var obj = new { RESULT = "1", ADDINFO = tp };
                         return Json(JsonConvert.SerializeObject(obj), JsonRequestBehavior.AllowGet);

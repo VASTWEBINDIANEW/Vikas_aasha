@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Utilities.Net;
@@ -23,6 +24,7 @@ using Vastwebmulti.Models;
 using ZXing;
 using ZXing.Rendering;
 using static sun.net.ftp.FtpClient;
+using static Vastwebmulti.Areas.ADMIN.Controllers.HomeController;
 using static Vastwebmulti.Areas.RETAILER.Controllers.HomeController;
 
 namespace Vastwebmulti.Controllers
@@ -235,8 +237,62 @@ namespace Vastwebmulti.Controllers
                                     if (show == null)
                                     {
                                         dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
+                                     
                                         if (role == "Retailer")
                                         {
+                                            try
+                                            {
+                                                var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                                var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                                var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                string mobileno = entry.Mobile;
+                                                string amount = entry.Amount.ToString();
+                                                var model = new Backupinfo.Addinfo
+                                                {
+                                                   
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = entry.userid,
+                                                    Email = retailerdetails.Email,
+                                                    Mobile = retailerdetails.Mobile,
+                                                    Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                    RemainBalance = remdetails.Remainamount,
+                                                    Usertype = "Retailer"
+                                                };
+                                                back.Rechargeandutility(model);
+
+                                                var model1 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = dealerdetails.DealerId,
+                                                    Email = dealerdetails.Email,
+                                                    Mobile = dealerdetails.Mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                    Usertype = "Dealer"
+                                                };
+                                                back.Rechargeandutility(model1);
+
+                                                var model2 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = masterdetails.SSId,
+                                                    Email = masterdetails.Email,
+                                                    Mobile = masterdetails.Mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                    Usertype = "Master"
+                                                };
+                                                back.Rechargeandutility(model2);
+                                            }
+                                            catch { }
+
                                             var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                             var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                             //if (statusretailerrechargefailed == "Y")
@@ -274,6 +330,30 @@ namespace Vastwebmulti.Controllers
                                         }
                                         if (Apientry.rch_type == "API")
                                         {
+                                            try
+                                            {
+                                                var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                                var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                                var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                string mobileno = entry.Mobile;
+                                                string amount = entry.Amount.ToString();
+                                                var model = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = entry.userid,
+                                                    Email = retailerdetails.emailid,
+                                                    Mobile = retailerdetails.mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = remdetails.balance,
+                                                    Usertype = "API"
+                                                };
+                                                back.Rechargeandutility(model);
+
+
+                                            }
+                                            catch { }
                                             var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                             if (urlchk != null)
                                             {
@@ -311,6 +391,59 @@ namespace Vastwebmulti.Controllers
                                             dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                             if (role == "Retailer")
                                             {
+                                                try
+                                                {
+                                                    var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                                    var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                    var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                    var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                                    var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                    var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                    var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                    Backupinfo back = new Backupinfo();
+                                                    string mobileno = entry.Mobile;
+                                                    string amount = entry.Amount.ToString();
+                                                    var model = new Backupinfo.Addinfo
+                                                    {
+
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = entry.userid,
+                                                        Email = retailerdetails.Email,
+                                                        Mobile = retailerdetails.Mobile,
+                                                        Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                        RemainBalance = remdetails.Remainamount,
+                                                        Usertype = "Retailer"
+                                                    };
+                                                    back.Rechargeandutility(model);
+
+                                                    var model1 = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = dealerdetails.DealerId,
+                                                        Email = dealerdetails.Email,
+                                                        Mobile = dealerdetails.Mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                        Usertype = "Dealer"
+                                                    };
+                                                    back.Rechargeandutility(model1);
+
+                                                    var model2 = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = masterdetails.SSId,
+                                                        Email = masterdetails.Email,
+                                                        Mobile = masterdetails.Mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                        Usertype = "Master"
+                                                    };
+                                                    back.Rechargeandutility(model2);
+                                                }
+                                                catch { }
+
                                                 var RetailerMobile = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault().Mobile;
                                                 var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                                 //if (statusretailerrechargefailed == "Y")
@@ -342,9 +475,34 @@ namespace Vastwebmulti.Controllers
                                             }
                                             if (Apientry.rch_type == "API")
                                             {
+                                                try
+                                                {
+                                                    var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                                    var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                                    var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                    Backupinfo back = new Backupinfo();
+                                                    string mobileno = entry.Mobile;
+                                                    string amount = entry.Amount.ToString();
+                                                    var model = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = entry.userid,
+                                                        Email = retailerdetails.emailid,
+                                                        Mobile = retailerdetails.mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = remdetails.balance,
+                                                        Usertype = "API"
+                                                    };
+                                                    back.Rechargeandutility(model);
+
+
+                                                }
+                                                catch { }
                                                 var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                                 if (urlchk != null)
                                                 {
+
                                                     var remainbal = dbsrs.api_remain_amount.Where(aa => aa.apiid == Apientry.Rch_from).Single().balance.ToString();
                                                     var url = urlchk.responseurl.ToString();
                                                     url = url.Replace("rrr", Apientry.refid);
@@ -451,6 +609,59 @@ namespace Vastwebmulti.Controllers
                                                 // dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                                 if (role == "Retailer")
                                                 {
+                                                    try
+                                                    {
+                                                        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                                        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                                        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                        Backupinfo back = new Backupinfo();
+                                                        string mobileno = entry.Mobile;
+                                                        string amount = entry.Amount.ToString();
+                                                        var model = new Backupinfo.Addinfo
+                                                        {
+
+                                                            Websitename = admininfo.WebsiteUrl,
+                                                            RetailerID = entry.userid,
+                                                            Email = retailerdetails.Email,
+                                                            Mobile = retailerdetails.Mobile,
+                                                            Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                            RemainBalance = remdetails.Remainamount,
+                                                            Usertype = "Retailer"
+                                                        };
+                                                        back.Rechargeandutility(model);
+
+                                                        var model1 = new Backupinfo.Addinfo
+                                                        {
+                                                            Websitename = admininfo.WebsiteUrl,
+                                                            RetailerID = dealerdetails.DealerId,
+                                                            Email = dealerdetails.Email,
+                                                            Mobile = dealerdetails.Mobile,
+                                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                            Usertype = "Dealer"
+                                                        };
+                                                        back.Rechargeandutility(model1);
+
+                                                        var model2 = new Backupinfo.Addinfo
+                                                        {
+                                                            Websitename = admininfo.WebsiteUrl,
+                                                            RetailerID = masterdetails.SSId,
+                                                            Email = masterdetails.Email,
+                                                            Mobile = masterdetails.Mobile,
+                                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                            Usertype = "Master"
+                                                        };
+                                                        back.Rechargeandutility(model2);
+                                                    }
+                                                    catch { }
+
                                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                                     //if (statusretailerrechargefailed == "Y")
@@ -486,6 +697,30 @@ namespace Vastwebmulti.Controllers
                                                 }
                                                 if (Apientry.rch_type == "API")
                                                 {
+                                                    try
+                                                    {
+                                                        var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                                        var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                        Backupinfo back = new Backupinfo();
+                                                        string mobileno = entry.Mobile;
+                                                        string amount = entry.Amount.ToString();
+                                                        var model = new Backupinfo.Addinfo
+                                                        {
+                                                            Websitename = admininfo.WebsiteUrl,
+                                                            RetailerID = entry.userid,
+                                                            Email = retailerdetails.emailid,
+                                                            Mobile = retailerdetails.mobile,
+                                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                            RemainBalance = remdetails.balance,
+                                                            Usertype = "API"
+                                                        };
+                                                        back.Rechargeandutility(model);
+
+
+                                                    }
+                                                    catch { }
                                                     var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                                     if (urlchk != null)
                                                     {
@@ -841,6 +1076,59 @@ namespace Vastwebmulti.Controllers
                                     dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                     if (role == "Retailer")
                                     {
+                                        try
+                                        {
+                                            var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                            var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                            var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                            var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                            var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                            var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                            var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                            Backupinfo back = new Backupinfo();
+                                            string mobileno = entry.Mobile;
+                                            string amount = entry.Amount.ToString();
+                                            var model = new Backupinfo.Addinfo
+                                            {
+
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = entry.userid,
+                                                Email = retailerdetails.Email,
+                                                Mobile = retailerdetails.Mobile,
+                                                Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                RemainBalance = remdetails.Remainamount,
+                                                Usertype = "Retailer"
+                                            };
+                                            back.Rechargeandutility(model);
+
+                                            var model1 = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = dealerdetails.DealerId,
+                                                Email = dealerdetails.Email,
+                                                Mobile = dealerdetails.Mobile,
+                                                Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                Usertype = "Dealer"
+                                            };
+                                            back.Rechargeandutility(model1);
+
+                                            var model2 = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = masterdetails.SSId,
+                                                Email = masterdetails.Email,
+                                                Mobile = masterdetails.Mobile,
+                                                Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                Usertype = "Master"
+                                            };
+                                            back.Rechargeandutility(model2);
+                                        }
+                                        catch { }
+
                                         var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                         var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                         //if (statusretailerrechargefailed == "Y")
@@ -877,6 +1165,30 @@ namespace Vastwebmulti.Controllers
                                     }
                                     if (Apientry.rch_type == "API")
                                     {
+                                        try
+                                        {
+                                            var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                            var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                            var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                            Backupinfo back = new Backupinfo();
+                                            string mobileno = entry.Mobile;
+                                            string amount = entry.Amount.ToString();
+                                            var model = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = entry.userid,
+                                                Email = retailerdetails.emailid,
+                                                Mobile = retailerdetails.mobile,
+                                                Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                RemainBalance = remdetails.balance,
+                                                Usertype = "API"
+                                            };
+                                            back.Rechargeandutility(model);
+
+
+                                        }
+                                        catch { }
                                         var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                         if (urlchk != null)
                                         {
@@ -914,6 +1226,59 @@ namespace Vastwebmulti.Controllers
                                         dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                         if (role == "Retailer")
                                         {
+                                            try
+                                            {
+                                                var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                                var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                                var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                string mobileno = entry.Mobile;
+                                                string amount = entry.Amount.ToString();
+                                                var model = new Backupinfo.Addinfo
+                                                {
+
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = entry.userid,
+                                                    Email = retailerdetails.Email,
+                                                    Mobile = retailerdetails.Mobile,
+                                                    Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                    RemainBalance = remdetails.Remainamount,
+                                                    Usertype = "Retailer"
+                                                };
+                                                back.Rechargeandutility(model);
+
+                                                var model1 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = dealerdetails.DealerId,
+                                                    Email = dealerdetails.Email,
+                                                    Mobile = dealerdetails.Mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                    Usertype = "Dealer"
+                                                };
+                                                back.Rechargeandutility(model1);
+
+                                                var model2 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = masterdetails.SSId,
+                                                    Email = masterdetails.Email,
+                                                    Mobile = masterdetails.Mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                    Usertype = "Master"
+                                                };
+                                                back.Rechargeandutility(model2);
+                                            }
+                                            catch { }
+
                                             var RetailerMobile = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault().Mobile;
                                             var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                             //if (statusretailerrechargefailed == "Y")
@@ -944,6 +1309,30 @@ namespace Vastwebmulti.Controllers
                                         }
                                         if (Apientry.rch_type == "API")
                                         {
+                                            try
+                                            {
+                                                var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                                var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                                var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                string mobileno = entry.Mobile;
+                                                string amount = entry.Amount.ToString();
+                                                var model = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = entry.userid,
+                                                    Email = retailerdetails.emailid,
+                                                    Mobile = retailerdetails.mobile,
+                                                    Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                    RemainBalance = remdetails.balance,
+                                                    Usertype = "API"
+                                                };
+                                                back.Rechargeandutility(model);
+
+
+                                            }
+                                            catch { }
                                             var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                             if (urlchk != null)
                                             {
@@ -1047,6 +1436,59 @@ namespace Vastwebmulti.Controllers
                                             // dbsrs.recharge_update(entry.Idno.ToString(), "FAILED", operatorid, Convert.ToDecimal(lapubal), outpt, "ResponseOutput");
                                             if (role == "Retailer")
                                             {
+                                                try
+                                                {
+                                                    var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                                    var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                    var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                    var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                                    var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                    var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                    var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                    Backupinfo back = new Backupinfo();
+                                                    string mobileno = entry.Mobile;
+                                                    string amount = entry.Amount.ToString();
+                                                    var model = new Backupinfo.Addinfo
+                                                    {
+
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = entry.userid,
+                                                        Email = retailerdetails.Email,
+                                                        Mobile = retailerdetails.Mobile,
+                                                        Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                                        RemainBalance = remdetails.Remainamount,
+                                                        Usertype = "Retailer"
+                                                    };
+                                                    back.Rechargeandutility(model);
+
+                                                    var model1 = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = dealerdetails.DealerId,
+                                                        Email = dealerdetails.Email,
+                                                        Mobile = dealerdetails.Mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                        Usertype = "Dealer"
+                                                    };
+                                                    back.Rechargeandutility(model1);
+
+                                                    var model2 = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = masterdetails.SSId,
+                                                        Email = masterdetails.Email,
+                                                        Mobile = masterdetails.Mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                        Usertype = "Master"
+                                                    };
+                                                    back.Rechargeandutility(model2);
+                                                }
+                                                catch { }
+
                                                 var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                                 var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                                 //if (statusretailerrechargefailed == "Y")
@@ -1084,6 +1526,30 @@ namespace Vastwebmulti.Controllers
                                             }
                                             if (Apientry.rch_type == "API")
                                             {
+                                                try
+                                                {
+                                                    var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                                    var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                                    var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                                    Backupinfo back = new Backupinfo();
+                                                    string mobileno = entry.Mobile;
+                                                    string amount = entry.Amount.ToString();
+                                                    var model = new Backupinfo.Addinfo
+                                                    {
+                                                        Websitename = admininfo.WebsiteUrl,
+                                                        RetailerID = entry.userid,
+                                                        Email = retailerdetails.emailid,
+                                                        Mobile = retailerdetails.mobile,
+                                                        Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                                        RemainBalance = remdetails.balance,
+                                                        Usertype = "API"
+                                                    };
+                                                    back.Rechargeandutility(model);
+
+
+                                                }
+                                                catch { }
                                                 var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                                 if (urlchk != null)
                                                 {
@@ -1134,6 +1600,59 @@ namespace Vastwebmulti.Controllers
 
                                 if (role == "Retailer")
                                 {
+                                    try
+                                    {
+                                        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        string mobileno = entry.Mobile;
+                                        string amount = entry.Amount.ToString();
+                                        var model = new Backupinfo.Addinfo
+                                        {
+
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = entry.userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Recharge Refund" + mobileno + " Amount " + amount,
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.Rechargeandutility(model);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.Rechargeandutility(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.Rechargeandutility(model2);
+                                    }
+                                    catch { }
+
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                     //if (statusretailerrechargefailed == "Y")
@@ -1169,6 +1688,30 @@ namespace Vastwebmulti.Controllers
                                 }
                                 if (Apientry.rch_type == "API")
                                 {
+                                    try
+                                    {
+                                        var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                        var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        string mobileno = entry.Mobile;
+                                        string amount = entry.Amount.ToString();
+                                        var model = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = entry.userid,
+                                            Email = retailerdetails.emailid,
+                                            Mobile = retailerdetails.mobile,
+                                            Details = "Recharge Refund " + mobileno + " Amount " + amount,
+                                            RemainBalance = remdetails.balance,
+                                            Usertype = "API"
+                                        };
+                                        back.Rechargeandutility(model);
+
+
+                                    }
+                                    catch { }
                                     var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                     if (urlchk != null)
                                     {
@@ -1202,8 +1745,62 @@ namespace Vastwebmulti.Controllers
                             if (status.ToUpper() == "SUCCESS")      // Callback Status Success, So change status according to callback response
                             {
                                 dbsrs.recharge_update_failed_to_success(entry.Idno);
+
                                 if (role == "Retailer")
                                 {
+                                    try
+                                    {
+                                        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
+                                        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
+                                        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        string mobileno = entry.Mobile;
+                                        string amount = entry.Amount.ToString();
+                                        var model = new Backupinfo.Addinfo
+                                        {
+
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = entry.userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Recharge Failed to Success" + mobileno + " Amount " + amount,
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.Rechargeandutility(model);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.Rechargeandutility(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.Rechargeandutility(model2);
+                                    }
+                                    catch { }
+
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                     //if (statusretailerrechargesuccess == "Y")
@@ -1239,6 +1836,30 @@ namespace Vastwebmulti.Controllers
                                 }
                                 if (Apientry.rch_type == "API")
                                 {
+                                    try
+                                    {
+                                        var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+                                        var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
+
+                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        string mobileno = entry.Mobile;
+                                        string amount = entry.Amount.ToString();
+                                        var model = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = entry.userid,
+                                            Email = retailerdetails.emailid,
+                                            Mobile = retailerdetails.mobile,
+                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
+                                            RemainBalance = remdetails.balance,
+                                            Usertype = "API"
+                                        };
+                                        back.Rechargeandutility(model);
+
+
+                                    }
+                                    catch { }
                                     var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                     if (urlchk != null)
                                     {
@@ -10806,9 +11427,41 @@ namespace Vastwebmulti.Controllers
 
         }
 
-        public ActionResult testrecharge()
+        public ActionResult testrecharge(string Orderid)
         {
-            return View();
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                Radiantdmt dmt = new Radiantdmt();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var userid = "1ddc6aea-9b3a-474c-8886-d168af864672";
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                var tokenchk = db.radianttokens.SingleOrDefault();
+                string radianttoken = "";
+                if (tokenchk == null)
+                {
+                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                }
+                else
+                {
+                    radianttoken = tokenchk.accessToken;
+                    radianagentid = tokenchk.agentID;
+                }
+                var respchk = dmt.UPICollectionStatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, Orderid);
+                if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                {
+                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                    respchk = dmt.UPICollectionStatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, Orderid);
+                }
+                if (respchk.StatusCode == HttpStatusCode.OK)
+                {
+
+                }
+                else
+                {
+
+                }
+                return View();
+            }
           //  
         }
 
@@ -10840,37 +11493,50 @@ namespace Vastwebmulti.Controllers
             string url = Url.Action("hojabhai", "Response", new { userid}, Request.Url.Scheme);
             return Json(url, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult hojabhai(string userid)
+        public ActionResult hojabhai(string userid,string txtupi_amount)
         {
+            string orderId = "";
             using (VastwebmultiEntities db = new VastwebmultiEntities())
             {
-                var Amount = "10";
-                var OrderId = "646464646465";
-  
+                Radiantdmt dmt = new Radiantdmt();
+                var radiantauthchk = db.radiantauths.SingleOrDefault();
+                var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
+                var tokenchk = db.radianttokens.SingleOrDefault();
+                string radianttoken = "";
+                if (tokenchk == null)
+                {
+                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                }
+                else
+                {
+                    radianttoken = tokenchk.accessToken;
+                    radianagentid = tokenchk.agentID;
+                }
+                var respchk = dmt.WalletCreateOrder(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, txtupi_amount, "collect");
+                if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                {
+                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                    respchk = dmt.WalletCreateOrder(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, txtupi_amount, "collect");
+                }
+                if (respchk.StatusCode == HttpStatusCode.OK)
+                {
+                    dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
+                    if (dyrespchk.success == true)
+                    {
+                         var expiryTime = dyrespchk.data.expiryTime;
+                         orderId = dyrespchk.data.orderId;
+                    }
+                }
 
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                String strPathAndQuery = System.Web.HttpContext.Current.Request.Url.PathAndQuery;
-                var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                var auth = db.Gateway_Auth.SingleOrDefault();
-                String strUrl = System.Web.HttpContext.Current.Request.Url.AbsoluteUri.Replace(strPathAndQuery, "/");
-                var url = strUrl + "Response/GatewayResponse";
-                // var key = "CbR19P";
-                var key = auth.merchantkey;
-                var RetailerName = reminfo.RetailerName;
-                var Email = reminfo.Email;
-                //  var salt = "i0dSyipJyJAzKovgBSPhWfUQAsj1GGIZ";
-                var salt = auth.merchantsalt;
-                Amount = Amount + ".00";
-                //decimal amtt = Convert.ToDecimal(Amount);
-                string hashString = key + "|" + OrderId + "|" + Amount + "|" + "Fund Transfer" + "|" + RetailerName + "|" + Email + "|||||||||||" + salt;
-                //string hashString = "3Q5c3q|2590640|3053.00|OnlineBooking|vimallad|ladvimal@gmail.com|||||||||||mE2RxRwx";
-                string hash = Generatehash512(hashString);
-
-                payuhoja(key, OrderId, Amount, RetailerName, reminfo.Mobile, reminfo.Email, url, hash);
-
-
+                    var responseinfo = dmt.UPIIntent(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, orderId);
+                //      var responseinfo = dmt.FundtransferSendotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
+                {
+                    dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                    responseinfo = dmt.UPIIntent(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, orderId);
+                }
             }
-            return RedirectToAction("testrecharge");
+            return View();
         }
 
     }

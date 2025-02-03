@@ -28,7 +28,7 @@ namespace Vastwebmulti.Models.Scheduling
                 using (VastwebmultiEntities db = new VastwebmultiEntities())
                 {
 
-                    var infochk = db.Rem_UPI_REQUEST.Where(aa => aa.status == "PENDING" && aa.Bankrrn == "RADIANTQR").ToList();
+                    var infochk = db.Rem_UPI_REQUEST.Where(aa => aa.status == "PENDING" && (aa.Bankrrn == "RADIANTQR" || aa.Bankrrn== "RADIANTCOLLECTION")).ToList();
                     foreach (var item in infochk)
                     {
                         Radiantdmt radi = new Radiantdmt();
@@ -44,11 +44,97 @@ namespace Vastwebmulti.Models.Scheduling
                             radianttoken = tokenchk.accessToken;
                             radianagentid = tokenchk.agentID;
                         }
-                        var respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken,item.UPITXNID);
-                        if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                        if (item.Bankrrn == "RADIANTCOLLECTION")
                         {
-                            radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                            respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
+                            var respchk = radi.UPICollectionStatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
+                            if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                respchk = radi.UPICollectionStatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
+                            }
+                            if(respchk.StatusCode==HttpStatusCode.OK)
+                            {
+                                dynamic dyrespchk = JsonConvert.DeserializeObject<dynamic>(respchk.ToString());
+                                var sts = dyrespchk.success;
+                                if(sts==true)
+                                {
+                                    var sts1 = dyrespchk.result.status;
+                                    if(sts1==true )
+                                    {
+                                        string txnStatus = dyrespchk.result.status;
+                                        string rrn = dyrespchk.result.rrn;
+                                        if(txnStatus=="APPROVED")
+                                        {
+                                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                          System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                            db.Update_UPI_REQ(item.id, "APPROVED", output);
+                                            try
+                                            {
+                                                var reminfochk=db.Rem_UPI_REQUEST.Where(aa=>aa.id==item.id).FirstOrDefault();
+                                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == reminfochk.retailerid).SingleOrDefault();
+                                                
+                                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == reminfochk.retailerid).SingleOrDefault();
+                                               
+                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                var model = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = reminfochk.retailerid,
+                                                    Email = retailerdetails.Email,
+                                                    Mobile = retailerdetails.Mobile,
+                                                    Details = "Fund Recived From Radiant Collection ",
+                                                    RemainBalance = remdetails.Remainamount,
+                                                    Usertype = "Retailer"
+                                                };
+                                                back.Fundtransfer(model);
+
+                                               
+                                            }
+                                            catch { }
+                                        }
+                                        else
+                                        {
+                                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                         System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                            db.Update_UPI_REQ(item.id, "REJECTED", output);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string message = dyrespchk.message;
+                                        System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                        db.Update_UPI_REQ(item.id, "REJECTED", output);
+                                    }
+                                }
+                                else
+                                {
+                                    string message = dyrespchk.message;
+                                    System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                       System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                    db.Update_UPI_REQ(item.id, "REJECTED", output);
+                                }
+                            }
+                            else
+                            {
+                                dynamic dyrespchk=JsonConvert.DeserializeObject<dynamic>(respchk.ToString());
+                                var sts = dyrespchk.success;
+                                string message = dyrespchk.message;
+                                System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                   System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                db.Update_UPI_REQ(item.id, "REJECTED", output);
+                            }
+
+                        }
+                        else
+                        {
+                            var respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
+                            if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
+                            {
+                                radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
+                                respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
+                            }
                         }
 
                     }

@@ -1253,6 +1253,57 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
             //  db.proc_FlightBookingPayment(userid, model.TraceId, model.OfferedFare + opnlCharge, model.PublishedFare + opnlCharge, LeadPaxFName, LeadPaxLName, PaxNames, AirlineName, isDomestic, JsonConvert.SerializeObject(model), Idno,1,0,0, IsSuccess, Message);
             var hhhh = db.proc_FlightBookingPayment(userid, model.TraceId, model.OfferedFare - amtt_total, model.PublishedFare, LeadPaxFName, LeadPaxLName, PaxNames, AirlineName, isDomestic, JsonConvert.SerializeObject(model), Idno, 1, 0, 0, IsSuccess, Message).SingleOrDefault();
+            try
+            {
+                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                var admininfo = db.Admin_details.SingleOrDefault();
+                Backupinfo back = new Backupinfo();
+                var modeln = new Backupinfo.Addinfo
+                {
+                    Websitename = admininfo.WebsiteUrl,
+                    RetailerID = userid,
+                    Email = retailerdetails.Email,
+                    Mobile = retailerdetails.Mobile,
+                    Details = "Flight Boking ",
+                    RemainBalance = remdetails.Remainamount,
+                    Usertype = "Retailer"
+                };
+                back.info(modeln);
+
+                var model1 = new Backupinfo.Addinfo
+                {
+                    Websitename = admininfo.WebsiteUrl,
+                    RetailerID = dealerdetails.DealerId,
+                    Email = dealerdetails.Email,
+                    Mobile = dealerdetails.Mobile,
+                    Details = "Flight Boking ",
+
+                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                    Usertype = "Dealer"
+                };
+                back.info(model1);
+
+                var model2 = new Backupinfo.Addinfo
+                {
+                    Websitename = admininfo.WebsiteUrl,
+                    RetailerID = masterdetails.SSId,
+                    Email = masterdetails.Email,
+                    Mobile = masterdetails.Mobile,
+                    Details = "Flight Boking ",
+                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                    Usertype = "Master"
+                };
+                back.info(model2);
+            }
+            catch { }
+
             if (hhhh.msg == "Success")
             {
                 if (Convert.ToBoolean(IsSuccess.Value) == true)
@@ -1274,6 +1325,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         //db.proc_UpdateFlightBooking(Idno.Value.ToString(), model.OfferedFare, responseJs, 1, IsSuccess, Message);
                         db.proc_UpdateFlightBooking(Idno.Value.ToString(), userid, model.OfferedFare + opnlCharge,
                             model.PublishedFare + opnlCharge, response.Content, 1, TicketStatus, EnduserIp, TokenId, model.PNR, model.BookingId, IsSuccess, Message);
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = userid,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "Flight Booking Refund ",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.info(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "Flight Booking Refund ",
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.info(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "Flight Booking Refund ",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.info(model2);
+                        }
+                        catch { }
                         return "Failed";
                     }
                 }
@@ -1703,6 +1803,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
                             var respchk_new = db.proc_FlightBookingPayment(userid, model.TraceId, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.OfferedFare + OptionalServicesCharge - amtt_total, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.PublishedFare + OptionalServicesCharge,
                             LeadPaxFirstName, LeadPaxLastName, PassengerName, AirlineName, model.isDomastic, JsonConvert.SerializeObject(reqObj), Idno, totalcount, 0, 0, IsSuccess, Message).SingleOrDefault();
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             if (respchk_new.msg == "Success")
                             {
                                 if (Convert.ToBoolean(IsSuccess.Value) == true)
@@ -1929,6 +2078,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
                             var chk = db.proc_FlightBookingPayment(userid, model.TraceId, model.Inward.FareQuoteVM.Content.Addinfo.Results.Fare.OfferedFare + OptionalServicesCharge - amtt_total, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.PublishedFare + OptionalServicesCharge,
                               LeadPaxFirstName, LeadPaxLastName, PassengerName, AirlineName, model.isDomastic, JsonConvert.SerializeObject(reqObj), Idno, totalcount, 0, 0, IsSuccess, Message).SingleOrDefault();
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             if (chk.msg == "Success")
                             {
                                 if (Convert.ToBoolean(IsSuccess.Value) == true)
@@ -2140,6 +2338,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
                             var chkkk = db.proc_FlightBookingPayment(userid, model.TraceId, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.OfferedFare + OptionalServicesCharge - amtt_total, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.PublishedFare + OptionalServicesCharge,
                              LeadPaxFirstName, LeadPaxLastName, PassengerName, AirlineName, model.isDomastic, JsonConvert.SerializeObject(reqObj), Idno, totalcount, 0, 0, IsSuccess, Message).SingleOrDefault();
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             if (chkkk.msg == "Success")
                             {
                                 if (Convert.ToBoolean(IsSuccess.Value) == true)
@@ -2386,6 +2633,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
                             var chkkkk = db.proc_FlightBookingPayment(userid, model.TraceId, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.OfferedFare + OptionalServicesCharge - amtt_total, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.PublishedFare + OptionalServicesCharge,
                               LeadPaxFirstName, LeadPaxLastName, PassengerName, AirlineName, model.isDomastic, JsonConvert.SerializeObject(reqObj), Idno, totalcount, 0, 0, IsSuccess, Message).SingleOrDefault();
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Flight Booking ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             if (chkkkk.msg == "Success")
                             {
                                 if (Convert.ToBoolean(IsSuccess.Value) == true)
@@ -2456,6 +2752,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             //db.proc_UpdateFlightBooking(Idno.Value.ToString(), reqObj.OfferedFare, responseJs, 1, IsSuccess, Message);
                                             db.proc_UpdateFlightBooking(Idno.Value.ToString(), userid, reqObj.OfferedFare + OptionalServicesCharge, model.Onward.FareQuoteVM.Content.Addinfo.Results.Fare.PublishedFare + OptionalServicesCharge, response.Content, 1, TicketStatus, "", "", "", "", IsSuccess, Message);
+                                            try
+                                            {
+                                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                var modeln = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = userid,
+                                                    Email = retailerdetails.Email,
+                                                    Mobile = retailerdetails.Mobile,
+                                                    Details = "Flight Booking Refund",
+                                                    RemainBalance = remdetails.Remainamount,
+                                                    Usertype = "Retailer"
+                                                };
+                                                back.info(modeln);
+
+                                                var model1 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = dealerdetails.DealerId,
+                                                    Email = dealerdetails.Email,
+                                                    Mobile = dealerdetails.Mobile,
+                                                    Details = "Flight Booking Refund",
+                                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                    Usertype = "Dealer"
+                                                };
+                                                back.info(model1);
+
+                                                var model2 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = masterdetails.SSId,
+                                                    Email = masterdetails.Email,
+                                                    Mobile = masterdetails.Mobile,
+                                                    Details = "Flight Booking Refund",
+                                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                    Usertype = "Master"
+                                                };
+                                                back.info(model2);
+                                            }
+                                            catch { }
                                             var ResponseToView = new { IsSuccess = false, Message = respo.Content.ADDINFO.Error.ErrorMessage ?? "Server Error!!" };
                                             TicketResponses.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(ResponseToView)));
                                             //return Json(JsonConvert.SerializeObject(ResponseToView), JsonRequestBehavior.AllowGet);
