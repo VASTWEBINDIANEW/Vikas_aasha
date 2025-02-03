@@ -16340,6 +16340,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             merCrt.Email = remdetails.Email;
                             merCrt.Bankaccountno = remdetails.Bankaccountno;
                             merCrt.Ifsccode = remdetails.Ifsccode;
+                            merCrt.aadhar_number = remdetails.AadharCard;
                             merCrt.DOB = DOBS.ToString("yyyy-MM-dd"); //Convert.ToDateTime(remdetails.dateofbirth).ToString("dd-MM-yyyy");//("yyyy-MM-dd");
                             var panpath = microATM.GetCurrentUrl() + remdetails.pancardPath.Replace(@"//", @"/");
                             merCrt.PanPath = panpath.ToLower(); //----path
@@ -16654,6 +16655,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         merCrt.PanCard = remdetails.PanCard;
                         merCrt.Mobile = remdetails.Mobile;
                         merCrt.Email = remdetails.Email;
+                        merCrt.aadhar_number = remdetails.AadharCard;
                         merCrt.DOB = DOBS.ToString("yyyy-MM-dd"); //Convert.ToDateTime(remdetails.dateofbirth).ToString("dd-MM-yyyy");//("yyyy-MM-dd");
                         var panpath = microATM.GetCurrentUrl() + remdetails.pancardPath.Replace(@"//", @"/");
                         merCrt.PanPath = panpath.ToLower(); //----path

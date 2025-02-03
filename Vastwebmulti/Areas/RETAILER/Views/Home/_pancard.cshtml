@@ -3,13 +3,13 @@
     VastwebmultiEntities db = new VastwebmultiEntities();
     var State = db.State_Desc.Select(x => x.State_name).ToList();
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <style>
     /* New Css */
     .aeps_id .amount {
         display: flex;
         align-items: center;
     }
-
     #Corrections input {
         width: 100%;
     }
@@ -135,7 +135,7 @@
 
     .manual_form1 {
         padding: 4px;
-        width: 50%;
+        width: 33.33%;
         float: left;
     }
 
@@ -287,11 +287,11 @@
             Manual Pancard
         </button>
     </div>
-    @*<div class="manual_form1">
+    <div class="manual_form1">
         <button class="btmd" onclick="CorrectionForm()">
             Correction Pancard
         </button>
-    </div>*@
+    </div>
 </div>
 
 <div class="manual_form_m " id="manual" style="display:none">
@@ -729,7 +729,7 @@
     </div>
     <div class="manual_w">
         <label for="UserState">State</label>
-        @Html.DropDownList("UserState", new SelectList(State, ""), "-Select State-", new { @id = "UserState", @class = "form-control" })
+        @Html.DropDownList("StateDropDown", new SelectList(State, ""), "-Select State-", new { @id = "StateDropDown", @class = "form-control" })
     </div>
     <div class="manual_w">
         <label for="EmailId">Customer Email ID</label>
@@ -776,15 +776,33 @@
            new SelectListItem{Text="Name",Value="Name"},
            new SelectListItem{Text="Father Name",Value="Father Name"},
            new SelectListItem{Text="DOB",Value="DOB"},
-           new SelectListItem{Text="Other",Value="Other"}
+           new SelectListItem{Text="Address",Value="Address"}
         }, new { @class = "form-control" })
     </div>
     <div class="manual_w">
         <button type="submit" class="btn btn-primary" onclick="SubmitCorrectionFrom()">Submit</button>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
 <script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
     function showLoader() {
         $('.loader').show();
     }
@@ -798,52 +816,42 @@
         $('.loader').hide();
         $('#responseMessage').html('An error occurred: ' + error);
     }
-    function SubmitCorrectionFrom(){
-        var Title = $('#Title').val();
-        var NameAsPerAadhar = $('#NameAsPerAadhar').val();
-        var DateOfBirth = $('#DateOfBirth').val();
-        var FatherName = $('#FatherName').val();
-        var Gender = $('#Gender').val();
-        var AadharNo = $('#AadharNo').val();
-        var AAdharRegisterNo = $('#AAdharRegisterNo').val();
-        var CustomerMobileNo = $('#CustomerMobileNo').val();
-        var UserState = $('#UserState').val();
-        var EmailId = $('#EmailId').val();
-        var PanCardNo = $('#PanCardNo').val();
-        var AAdharFrontImg = $('#AAdharFrontImg')[0].files[0];
-        var AAdharBackImg = $('#AAdharBackImg')[0].files[0];
-        var SupportingDocument = $('#SupportingDocument')[0].files[0];
-        var SupportingDocumentName = $('#SupportingDocumentName').val();
-        var CorrectionsType = $('#CorrectionsType').val();
-        $.ajax({
-            url: '@Url.Action("CorrectionSubmit", "PANCARD")',
-            type: "POST",
-            beforeSend: function () {
-                $('.loader').show();
-            },
-            data: { Title: Title, NameAsPerAadhar: NameAsPerAadhar, DateOfBirth: DateOfBirth, FatherName: FatherName, Gender: Gender, AadharNo: AadharNo, AAdharRegisterNo: AAdharRegisterNo, CustomerMobileNo: CustomerMobileNo, UserState: UserState, EmailId: EmailId, PanCardNo: PanCardNo, AAdharFrontImg: AAdharFrontImg, AAdharBackImg: AAdharBackImg, SupportingDocument: SupportingDocument, SupportingDocumentName: SupportingDocumentName, CorrectionsType: CorrectionsType },
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                /*if (!data.success) {*/
-                console.log(data.message)
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: data.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                /*}*/
-                $('.loader').hide();
-            },
-            error: function (xhr, status, error) {
-                console.error("Error: " + error);
-                $('.loader').hide();
+    function SubmitCorrectionFrom() {
+    var formData = new FormData();
+    formData.append('Title', $('#Title').val());
+    formData.append('NameAsPerAadhar', $('#NameAsPerAadhar').val());
+    formData.append('DateOfBirth', $('#DateOfBirth').val());
+    formData.append('FatherName', $('#FatherName').val());
+    formData.append('Gender', $('#Gender').val());
+    formData.append('AadharNo', $('#AadharNo').val());
+    formData.append('AAdharRegisterNo', $('#AAdharRegisterNo').val());
+    formData.append('CustomerMobileNo', $('#CustomerMobileNo').val());
+    formData.append('UserState', $('#StateDropDown').val());
+    formData.append('EmailId', $('#EmailId').val());
+    formData.append('PanCardNo', $('#PanCardNo').val());
+    formData.append('SupportingDocumentName', $('#SupportingDocumentName').val());
+    formData.append('CorrectionsType', $('#CorrectionsType').val());
+    formData.append('AAdharFrontImg', $('#AAdharFrontImg')[0].files[0]);
+    formData.append('AAdharBackImg', $('#AAdharBackImg')[0].files[0]);
+    formData.append('SupportingDocument', $('#SupportingDocument')[0].files[0]);
+    $.ajax({
+        url: '@Url.Action("CorrectionSubmit", "PANCARD")',
+        type: "POST",
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        success: function (data) {
+            if (data.success) {
+                toastr.success(data.message);
+            } else {
+                toastr.warning(data.message);
             }
-        });
-    }
-
+        },
+        error: function (xhr, status, error) {
+            toastr.error("Error: " + error);
+        }
+    });
+}
 
     function CorrectionForm() {
         document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
@@ -1030,7 +1038,7 @@
             $('#purchase').hide();
             $('#pan-Confirm-Payment').hide();
             document.getElementsByClassName('btmd')[1].classList.remove('backgroundss');
-            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
+            document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[0].classList.add('backgroundss');
             document.getElementById('manual').style.display = 'none';
             document.getElementById('manualw1').style.display = 'block';
@@ -1168,7 +1176,7 @@
             })
             document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[1].classList.add('backgroundss');
-            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
+            document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementById('manual').style.display = 'block';
             document.getElementById('manualw1').style.display = 'none';
              $.ajax({

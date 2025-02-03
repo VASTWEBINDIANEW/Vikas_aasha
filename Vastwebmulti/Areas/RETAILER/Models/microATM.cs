@@ -41,7 +41,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "Bearer " + mercr.vbtoken);
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\r\n  \"Name\": \"" + mercr.Name.Trim() + "\",\r\n  \"BrandName\": \"" + mercr.BrandName.Trim() + "\",\r\n  \"Address\": \"" + HttpUtility.UrlEncode(mercr.Address.Trim()) + "\",\r\n  \"Pincode\": \"" + mercr.Pincode + "\",\r\n  \"PanCard\": \"" + mercr.PanCard + "\",\r\n  \"Mobile\": \"" + mercr.Mobile + "\",\r\n  \"Email\": \"" + mercr.Email + "\",\r\n  \"DOB\": \"" + mercr.DOB + "\",\r\n  \"Accountno\": \"" + mercr.Bankaccountno + "\",\r\n  \"Ifsccode\": \"" + mercr.Ifsccode + "\",\r\n  \"PanPath\": \"" + HttpUtility.UrlEncode(mercr.PanPath) + "\",\r\n  \"PanFileName\": \"" + HttpUtility.UrlEncode(mercr.PanFileName) + "\",\r\n  \"AadharPath\": \"" + HttpUtility.UrlEncode(mercr.AadharPath) + "\",\r\n  \"AadharFileName\": \"" + HttpUtility.UrlEncode(mercr.AadharFileName) + "\",\r\n  \"MerchantCode\": \"" + mercr.MerchantCode + "\",\r\n  \"CancelCheckpath\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckpath) + "\",\r\n  \"CancelCheckFileName\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckFileName) + "\"\r\n}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\r\n  \"Name\": \"" + mercr.Name.Trim() + "\",\r\n  \"BrandName\": \"" + mercr.BrandName.Trim() + "\",\r\n  \"Address\": \"" + HttpUtility.UrlEncode(mercr.Address.Trim()) + "\",\r\n  \"Pincode\": \"" + mercr.Pincode + "\",\r\n  \"PanCard\": \"" + mercr.PanCard + "\",\r\n  \"Mobile\": \"" + mercr.Mobile + "\",\r\n  \"Email\": \"" + mercr.Email + "\",\r\n  \"DOB\": \"" + mercr.DOB + "\",\r\n  \"Accountno\": \"" + mercr.Bankaccountno + "\",\r\n  \"Ifsccode\": \"" + mercr.Ifsccode + "\",\r\n  \"PanPath\": \"" + HttpUtility.UrlEncode(mercr.PanPath) + "\",\r\n  \"PanFileName\": \"" + HttpUtility.UrlEncode(mercr.PanFileName) + "\",\r\n  \"AadharPath\": \"" + HttpUtility.UrlEncode(mercr.AadharPath) + "\",\r\n  \"AadharFileName\": \"" + HttpUtility.UrlEncode(mercr.AadharFileName) + "\",\r\n  \"MerchantCode\": \"" + mercr.MerchantCode + "\",\r\n  \"CancelCheckpath\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckpath) + "\",\r\n  \"CancelCheckFileName\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckFileName) + "\",\r\n  \"aadhar_number\": \"" + mercr.aadhar_number + "\"\r\n}", ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
 
             return response.StatusCode.ToString() == "OK" ? response.Content : null;
@@ -67,12 +67,10 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "Bearer " + mercr.vbtoken);
             request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", "{\r\n  \"Name\": \"" + mercr.Name + "\",\r\n  \"BrandName\": \"" + mercr.BrandName + "\",\r\n  \"Address\": \"" + HttpUtility.UrlEncode(mercr.Address) + "\",\r\n  \"Pincode\": \"" + mercr.Pincode + "\",\r\n  \"PanCard\": \"" + mercr.PanCard + "\",\r\n  \"Mobile\": \"" + mercr.Mobile + "\",\r\n  \"Email\": \"" + mercr.Email + "\",\r\n  \"DOB\": \"" + mercr.DOB + "\",\r\n  \"PanPath\": \"" + HttpUtility.UrlEncode(mercr.PanPath) + "\",\r\n  \"PanFileName\": \"" + HttpUtility.UrlEncode(mercr.PanFileName) + "\",\r\n  \"AadharPath\": \"" + HttpUtility.UrlEncode(mercr.AadharPath) + "\",\r\n  \"AadharFileName\": \"" + HttpUtility.UrlEncode(mercr.AadharFileName) + "\",\r\n  \"MerchantCode\": \"" + mercr.MerchantCode + "\",\r\n \"MerchantId\":\"" + merchantid + " \r\n,\r\n \"CancelCheckpath\":\"" + mercr.CancelCheckpath + " \r\n,\r\n \"CancelCheckFileName\":\"" + mercr.CancelCheckFileName + " \r\n}", ParameterType.RequestBody);
-            IRestResponse response = client.Execute(request);
+            request.AddParameter("application/json", "{\r\n" + "  \"Name\": \"" + mercr.Name + "\",\r\n" + "  \"BrandName\": \"" + mercr.BrandName + "\",\r\n" + "  \"Address\": \"" + HttpUtility.UrlEncode(mercr.Address) + "\",\r\n" + "  \"Pincode\": \"" + mercr.Pincode + "\",\r\n" + "  \"DOB\": \"" + mercr.DOB + "\",\r\n" + "  \"PanPath\": \"" + HttpUtility.UrlEncode(mercr.PanPath) + "\",\r\n" + "  \"PanFileName\": \"" + HttpUtility.UrlEncode(mercr.PanFileName) + "\",\r\n" + "  \"AadharPath\": \"" + HttpUtility.UrlEncode(mercr.AadharPath) + "\",\r\n" + "  \"AadharFileName\": \"" + HttpUtility.UrlEncode(mercr.AadharFileName) + "\",\r\n" + "  \"MerchantCode\": \"" + mercr.MerchantCode + "\",\r\n" + "  \"MerchantId\": \"" + merchantid + "\",\r\n" + "  \"CancelCheckpath\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckpath) + "\",\r\n" + "  \"CancelCheckFileName\": \"" + HttpUtility.UrlEncode(mercr.CancelCheckFileName) + "\",\r\n" + "  \"aadhar_number\": \"" + mercr.aadhar_number + "\"\r\n" + "}", ParameterType.RequestBody); IRestResponse response = client.Execute(request);
 
             return response.StatusCode.ToString() == "OK" ? response.Content : null;
         }
-
 
         public string TerminalSubmit(string merchantID, string vbtoken)     //5
         {
@@ -189,7 +187,8 @@ namespace Vastwebmulti.Areas.RETAILER.Models
         public string vbtoken { get; set; }
         [Required]
         public string MerchantCode { get; set; }
-
+        [Required]
+        public string aadhar_number { get; set; }
     }
 
 }

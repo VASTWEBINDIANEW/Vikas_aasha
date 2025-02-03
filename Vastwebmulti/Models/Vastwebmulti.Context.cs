@@ -5433,15 +5433,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Money_transfer_success_to_failed", transidParameter);
         }
     
-        public virtual int recharge_update_failed_to_success(Nullable<int> idno)
-        {
-            var idnoParameter = idno.HasValue ?
-                new ObjectParameter("idno", idno) :
-                new ObjectParameter("idno", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("recharge_update_failed_to_success", idnoParameter);
-        }
-    
         public virtual ObjectResult<Show_whitelabel_retailer_information_admin_Result> Show_whitelabel_retailer_information_admin(string userid)
         {
             var useridParameter = userid != null ?
@@ -6731,15 +6722,6 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("idno", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("recharge_update_success_to_failed_old", idnoParameter);
-        }
-    
-        public virtual int recharge_update_failed_to_success_old(Nullable<int> idno)
-        {
-            var idnoParameter = idno.HasValue ?
-                new ObjectParameter("idno", idno) :
-                new ObjectParameter("idno", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("recharge_update_failed_to_success_old", idnoParameter);
         }
     
         public virtual ObjectResult<daybook_api_old_Result> daybook_api_old(Nullable<System.DateTime> from, Nullable<System.DateTime> to)
@@ -21952,23 +21934,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<update_fino_Result>("update_fino", idParameter, statusParameter, operatorIdParameter, responseParameter, output);
         }
     
-        public virtual ObjectResult<all_dispute_list_Result> all_dispute_list(Nullable<int> pageIndex, Nullable<int> pageSize, string ser)
-        {
-            var pageIndexParameter = pageIndex.HasValue ?
-                new ObjectParameter("PageIndex", pageIndex) :
-                new ObjectParameter("PageIndex", typeof(int));
-    
-            var pageSizeParameter = pageSize.HasValue ?
-                new ObjectParameter("PageSize", pageSize) :
-                new ObjectParameter("PageSize", typeof(int));
-    
-            var serParameter = ser != null ?
-                new ObjectParameter("ser", ser) :
-                new ObjectParameter("ser", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<all_dispute_list_Result>("all_dispute_list", pageIndexParameter, pageSizeParameter, serParameter);
-        }
-    
         public virtual int insert_whitelabel_rempurchageorder(string remid, string paymode, string utrno, string banknm, string branchnm, string details, Nullable<decimal> amount, string orderto, string type, string toaccountno, string fromaccount, string slip, string pancard, string branch, string accountHolderName, Nullable<decimal> cashDepositCarge, Nullable<decimal> finalAmount)
         {
             var remidParameter = remid != null ?
@@ -22873,95 +22838,6 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("recharge_sell_update", orderidParameter, statusParameter, lapubalParameter, responseoutputParameter, rchTypeParameter);
         }
     
-        public virtual ObjectResult<Money_transfer_new_new_Result> Money_transfer_new_new(string userid, Nullable<decimal> amount, Nullable<decimal> finalamount, string sendernumber, string accountno, string banknm, string ifsccode, string common_req_id, string req_id, string reqtype, string req_from, string kycstatus, string impsrequest, string apiname, string ipaddress, string macaddress, string imeino, Nullable<decimal> apiprebal, Nullable<decimal> apipostbal, string dmtType, string uniqueid, ObjectParameter output)
-        {
-            var useridParameter = userid != null ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("amount", amount) :
-                new ObjectParameter("amount", typeof(decimal));
-    
-            var finalamountParameter = finalamount.HasValue ?
-                new ObjectParameter("finalamount", finalamount) :
-                new ObjectParameter("finalamount", typeof(decimal));
-    
-            var sendernumberParameter = sendernumber != null ?
-                new ObjectParameter("sendernumber", sendernumber) :
-                new ObjectParameter("sendernumber", typeof(string));
-    
-            var accountnoParameter = accountno != null ?
-                new ObjectParameter("accountno", accountno) :
-                new ObjectParameter("accountno", typeof(string));
-    
-            var banknmParameter = banknm != null ?
-                new ObjectParameter("banknm", banknm) :
-                new ObjectParameter("banknm", typeof(string));
-    
-            var ifsccodeParameter = ifsccode != null ?
-                new ObjectParameter("ifsccode", ifsccode) :
-                new ObjectParameter("ifsccode", typeof(string));
-    
-            var common_req_idParameter = common_req_id != null ?
-                new ObjectParameter("common_req_id", common_req_id) :
-                new ObjectParameter("common_req_id", typeof(string));
-    
-            var req_idParameter = req_id != null ?
-                new ObjectParameter("req_id", req_id) :
-                new ObjectParameter("req_id", typeof(string));
-    
-            var reqtypeParameter = reqtype != null ?
-                new ObjectParameter("reqtype", reqtype) :
-                new ObjectParameter("reqtype", typeof(string));
-    
-            var req_fromParameter = req_from != null ?
-                new ObjectParameter("req_from", req_from) :
-                new ObjectParameter("req_from", typeof(string));
-    
-            var kycstatusParameter = kycstatus != null ?
-                new ObjectParameter("kycstatus", kycstatus) :
-                new ObjectParameter("kycstatus", typeof(string));
-    
-            var impsrequestParameter = impsrequest != null ?
-                new ObjectParameter("impsrequest", impsrequest) :
-                new ObjectParameter("impsrequest", typeof(string));
-    
-            var apinameParameter = apiname != null ?
-                new ObjectParameter("apiname", apiname) :
-                new ObjectParameter("apiname", typeof(string));
-    
-            var ipaddressParameter = ipaddress != null ?
-                new ObjectParameter("ipaddress", ipaddress) :
-                new ObjectParameter("ipaddress", typeof(string));
-    
-            var macaddressParameter = macaddress != null ?
-                new ObjectParameter("macaddress", macaddress) :
-                new ObjectParameter("macaddress", typeof(string));
-    
-            var imeinoParameter = imeino != null ?
-                new ObjectParameter("imeino", imeino) :
-                new ObjectParameter("imeino", typeof(string));
-    
-            var apiprebalParameter = apiprebal.HasValue ?
-                new ObjectParameter("apiprebal", apiprebal) :
-                new ObjectParameter("apiprebal", typeof(decimal));
-    
-            var apipostbalParameter = apipostbal.HasValue ?
-                new ObjectParameter("apipostbal", apipostbal) :
-                new ObjectParameter("apipostbal", typeof(decimal));
-    
-            var dmtTypeParameter = dmtType != null ?
-                new ObjectParameter("DmtType", dmtType) :
-                new ObjectParameter("DmtType", typeof(string));
-    
-            var uniqueidParameter = uniqueid != null ?
-                new ObjectParameter("uniqueid", uniqueid) :
-                new ObjectParameter("uniqueid", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_new_new_Result>("Money_transfer_new_new", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, uniqueidParameter, output);
-        }
-    
         public virtual ObjectResult<DMT_Check_amount_Result> DMT_Check_amount(string retailerid, Nullable<decimal> finalamount, ObjectParameter output)
         {
             var retaileridParameter = retailerid != null ?
@@ -23829,6 +23705,146 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("CardNumber", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PaymentGateway_Fund_insert_Recharge_Result>("PaymentGateway_Fund_insert_Recharge", roleParameter, useridParameter, amountParameter, txnidParameter, typeParameter, cardNumberParameter, output);
+        }
+    
+        public virtual ObjectResult<Money_transfer_new_new_Result> Money_transfer_new_new(string userid, Nullable<decimal> amount, Nullable<decimal> finalamount, string sendernumber, string accountno, string banknm, string ifsccode, string common_req_id, string req_id, string reqtype, string req_from, string kycstatus, string impsrequest, string apiname, string ipaddress, string macaddress, string imeino, Nullable<decimal> apiprebal, Nullable<decimal> apipostbal, string dmtType, string uniqueid, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var finalamountParameter = finalamount.HasValue ?
+                new ObjectParameter("finalamount", finalamount) :
+                new ObjectParameter("finalamount", typeof(decimal));
+    
+            var sendernumberParameter = sendernumber != null ?
+                new ObjectParameter("sendernumber", sendernumber) :
+                new ObjectParameter("sendernumber", typeof(string));
+    
+            var accountnoParameter = accountno != null ?
+                new ObjectParameter("accountno", accountno) :
+                new ObjectParameter("accountno", typeof(string));
+    
+            var banknmParameter = banknm != null ?
+                new ObjectParameter("banknm", banknm) :
+                new ObjectParameter("banknm", typeof(string));
+    
+            var ifsccodeParameter = ifsccode != null ?
+                new ObjectParameter("ifsccode", ifsccode) :
+                new ObjectParameter("ifsccode", typeof(string));
+    
+            var common_req_idParameter = common_req_id != null ?
+                new ObjectParameter("common_req_id", common_req_id) :
+                new ObjectParameter("common_req_id", typeof(string));
+    
+            var req_idParameter = req_id != null ?
+                new ObjectParameter("req_id", req_id) :
+                new ObjectParameter("req_id", typeof(string));
+    
+            var reqtypeParameter = reqtype != null ?
+                new ObjectParameter("reqtype", reqtype) :
+                new ObjectParameter("reqtype", typeof(string));
+    
+            var req_fromParameter = req_from != null ?
+                new ObjectParameter("req_from", req_from) :
+                new ObjectParameter("req_from", typeof(string));
+    
+            var kycstatusParameter = kycstatus != null ?
+                new ObjectParameter("kycstatus", kycstatus) :
+                new ObjectParameter("kycstatus", typeof(string));
+    
+            var impsrequestParameter = impsrequest != null ?
+                new ObjectParameter("impsrequest", impsrequest) :
+                new ObjectParameter("impsrequest", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            var ipaddressParameter = ipaddress != null ?
+                new ObjectParameter("ipaddress", ipaddress) :
+                new ObjectParameter("ipaddress", typeof(string));
+    
+            var macaddressParameter = macaddress != null ?
+                new ObjectParameter("macaddress", macaddress) :
+                new ObjectParameter("macaddress", typeof(string));
+    
+            var imeinoParameter = imeino != null ?
+                new ObjectParameter("imeino", imeino) :
+                new ObjectParameter("imeino", typeof(string));
+    
+            var apiprebalParameter = apiprebal.HasValue ?
+                new ObjectParameter("apiprebal", apiprebal) :
+                new ObjectParameter("apiprebal", typeof(decimal));
+    
+            var apipostbalParameter = apipostbal.HasValue ?
+                new ObjectParameter("apipostbal", apipostbal) :
+                new ObjectParameter("apipostbal", typeof(decimal));
+    
+            var dmtTypeParameter = dmtType != null ?
+                new ObjectParameter("DmtType", dmtType) :
+                new ObjectParameter("DmtType", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Money_transfer_new_new_Result>("Money_transfer_new_new", useridParameter, amountParameter, finalamountParameter, sendernumberParameter, accountnoParameter, banknmParameter, ifsccodeParameter, common_req_idParameter, req_idParameter, reqtypeParameter, req_fromParameter, kycstatusParameter, impsrequestParameter, apinameParameter, ipaddressParameter, macaddressParameter, imeinoParameter, apiprebalParameter, apipostbalParameter, dmtTypeParameter, uniqueidParameter, output);
+        }
+    
+        public virtual ObjectResult<all_dispute_list_Result> all_dispute_list(Nullable<int> pageIndex, Nullable<int> pageSize, string ser, string from, string to)
+        {
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("PageIndex", pageIndex) :
+                new ObjectParameter("PageIndex", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("PageSize", pageSize) :
+                new ObjectParameter("PageSize", typeof(int));
+    
+            var serParameter = ser != null ?
+                new ObjectParameter("ser", ser) :
+                new ObjectParameter("ser", typeof(string));
+    
+            var fromParameter = from != null ?
+                new ObjectParameter("from", from) :
+                new ObjectParameter("from", typeof(string));
+    
+            var toParameter = to != null ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<all_dispute_list_Result>("all_dispute_list", pageIndexParameter, pageSizeParameter, serParameter, fromParameter, toParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> recharge_update_failed_to_success(Nullable<int> idno, string optval)
+        {
+            var idnoParameter = idno.HasValue ?
+                new ObjectParameter("idno", idno) :
+                new ObjectParameter("idno", typeof(int));
+    
+            var optvalParameter = optval != null ?
+                new ObjectParameter("optval", optval) :
+                new ObjectParameter("optval", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("recharge_update_failed_to_success", idnoParameter, optvalParameter);
+        }
+    
+        public virtual int recharge_update_failed_to_success_old(Nullable<int> idno, string optval)
+        {
+            var idnoParameter = idno.HasValue ?
+                new ObjectParameter("idno", idno) :
+                new ObjectParameter("idno", typeof(int));
+    
+            var optvalParameter = optval != null ?
+                new ObjectParameter("optval", optval) :
+                new ObjectParameter("optval", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("recharge_update_failed_to_success_old", idnoParameter, optvalParameter);
         }
     }
 }

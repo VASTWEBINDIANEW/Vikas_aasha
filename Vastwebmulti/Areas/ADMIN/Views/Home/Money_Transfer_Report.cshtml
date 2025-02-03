@@ -413,15 +413,7 @@
                 float: left;
                 margin-left: 0px !important;
             }
-
-                .fin2 .col-md-2.cltu.for-width {
-                    width: 48% !important;
-                }
-
-                .fin2 .col-md-2.gglk {
-                    width: 99% !important;
-                    margin-bottom: 5px;
-                }
+                
 
             .fin2 .col-md-3 {
                 width: 100% !important;
@@ -541,7 +533,9 @@
             .allpagefinincal-report .responcive-fify {
                 width: 100px !important;
             }
-
+            .kklo.money-transfer-admin #custnav ul li {
+                margin-bottom: 10px !important;
+            }
             #sidebar-open {
                 top: -1px;
                 left: -4px;
@@ -550,7 +544,50 @@
             .D_menu {
                 margin-top: 10px;
             }
+            .input-daterange {
+                display: flex;
+            }
+            .inputiconsateall {
+                width: 98px;
+            }
+            .modal-dialog {
+                margin: 0;
+            }
         }
+        @@media only screen and (max-width:600px){
+            .t_menu form {
+                display: block;
+            }
+            .allpagefinincal-report .responcive-fify {
+                width: 50% !important;
+            }
+            .allpagefinincal-report .reportdate-money-allpage {
+                width: 50%;
+            }
+            .inputiconsateall {
+                width: 50%;
+            }
+            .input-daterange {
+                padding-right: 3px;
+            }
+
+        }
+        @@media only screen and (max-width:480px){
+            .allpagefinincal-report .responcive-fify {
+                padding-right: 0px !important;
+            }
+            .allpagefinincal-report .responcive-fify {
+                width: 100% !important;
+            }
+            .input-daterange {
+                padding-right: 0px;
+            }
+            .allpagefinincal-report .responcive-fify {
+                margin-bottom: 5px !important;
+            }
+        }
+
+
     </style>
 </head>
 <body>
@@ -1489,6 +1526,7 @@
                 type: 'POST',
                 dataType: "json",
                 data: { idno: Idno, DmtType: "DMT2" },
+
                 success: function (data) {
                    document.getElementById("loadermoney").style.display = "none";
                    // swal("Good Job!", "Resend SuccessFully ", "success");
