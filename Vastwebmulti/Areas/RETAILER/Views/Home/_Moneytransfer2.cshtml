@@ -13,6 +13,68 @@
     }
 }
 <style>
+    .show_pop {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        background: #000000e5;
+        z-index: 9999999;
+    }
+
+    .box_otp {
+        width: 30%;
+        margin: auto;
+        position: relative;
+        top: 35%;
+        float: initial !important;
+        display: table !important;
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+    }
+
+        .box_otp h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .box_otp span {
+            margin-bottom: 18px;
+            float: left;
+            text-align: center;
+            width: 100%;
+            font-weight: 400;
+            text-transform: capitalize;
+        }
+
+        .box_otp input {
+            width: 100%;
+            float: left;
+        }
+
+    .show_pop input {
+        padding: 10px;
+    }
+
+    .box_otp button, .box_otp a {
+        padding: 4px 16px;
+        border: 1px solid #000;
+        margin-top: 20px !important;
+        width: auto;
+        float: right;
+        border-radius: 3px;
+    }
+
+    #dmtconfirm .amount span {
+        color: #000;
+    }
+
+    .high_light {
+        animation: high_light 2s linear infinite;
+    }
     @@keyframes blink {
         0% {
             color: #fff;
@@ -26,6 +88,7 @@
             color: black;
         }
     }
+
     #overlay {
         position: fixed;
         top: 0;
@@ -350,7 +413,7 @@
 <input type="hidden" id="latloc" />
 <input type="hidden" id="longloc" />
 <div class="loader"></div>
-<script src="~/Scripts/PageScript/Retailer/DMT/EKYCValidate.js"></script>
+<script src="~/Scripts/PageScript/Retailer/DMT/EKYCValidate_Radaint.js"></script>
 <!--------------------First Page--------------------------->
 <div id="Firstpage">
     <div class="button-container">
@@ -402,7 +465,7 @@
         <p class="note-content"><strong>.</strong>If any transaction is pending, it will be cleared on transaction date + two banking days.</p>
         <p class="note-content"><strong>.</strong>As per new guidelines Aadhaar number is mandatory for beneficiary registration. Beneficiary should follow the following steps:- Firstly Enter 10 digit sender mobile number > Enter OTP (will be sent by service provider bank) > Enter Adhaar Card number > Scan finger successfully.</p>
         <p class="note-content"><strong>.</strong>Once the transaction goes into pending, the transaction cannot be filed without entering OTP (OTP will send sender mobile number). </p>
-        
+
         <span id="sendererrorshow" style="color:red"></span>
     </div>
 </div>
@@ -456,10 +519,46 @@
 </div>
 
 <!---------------------- EKYC ------------------------>
-<div id="scancheckdmt1" class="gotoscan-changecss" style="display:none;text-align:center;">
-    <button onclick="gotoscan()" class="display-nonescanp" id="scanrecoveer"><strong>GO</strong> To Scan</button>
+<div id="scancheckdmt1" class="gotoscanDMT1-changecss" style="display:none;text-align:center;">
+    <button onclick="gotoscanDMT1()" class="display-nonescanp" id="scanrecoveerDMT1">
+    <strong>GO</strong> To Scan
+    </button>
 </div>
-<div id="Devicerror" style="display:none;">
+<style>
+    .gotoscanDMT1 button, .body-border-bottom-top {
+        border: 6px solid var(--main-bg-lcolor) !important;
+    }
+
+    .gotoscanDMT1-changecss button {
+        color: #545454;
+        background: transparent;
+        height: 150px !important;
+        width: 150px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .gotoscanDMT1-changecss button {
+        color: #545454;
+        background: transparent;
+        height: 150px !important;
+        width: 150px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .gotoscanDMT1-changecss button {
+        background: #a4a0a0;
+        border: 0;
+        color: #fff;
+        padding: 5px 10px;
+    }
+
+    .gotoscanDMT1-changecss button, .body-border-bottom-top {
+        border: 6px solid var(--main-bg-lcolor) !important;
+    }
+</style>
+<div id="DevicerrorDMT1" style="display:none;">
     <div class="container-fluid aepsid-login">
         <div class="col-md-12 aeps-start">
             <div class="col-md-12 aeps_id">
@@ -474,75 +573,75 @@
         font-size: 16px;
         font-weight: 700;
 " class="body-border-bottom"></span>
-                    <span id="deviceerror2" style="color:red;"></span>
+                    <span id="deviceerror2DMT1" style="color:red;"></span>
 
-                    <span id="deviceerror3" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror4" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror5" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror6" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror7" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror8" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <span id="deviceerror9" style="color:red;font-weight:400;text-transform:capitalize;"></span>
-                    <a href="#scanrecoveer" id="againscanclick" onclick="gotoscan()">Scan&nbsp;Again</a>
+                    <span id="deviceerror3DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror4DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror5DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror6DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror7DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror8DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <span id="deviceerror9DMT1" style="color:red;font-weight:400;text-transform:capitalize;"></span>
+                    <a href="#scanrecoveerDMT1" id="againscanclickDMT1" onclick="gotoscanDMT1()">Scan&nbsp;Again</a>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-<div id="loadaeps1" style="display: none;text-align:center;">
+<div id="loadDMT11" style="display: none;text-align:center;">
     <img class="body-border-bottom-top" src="~/ashok-images/portrait_mode_scanning.gif" style="height:150px;" />
 </div>
 
 <!------------------------------------------------------------->
 <!-------------------AAdhar Verify----------------->
-<div id="Devicefind" class="container-fluid otp_page_second" style="display:none;">
+<div id="DevicefindDMT1" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
             <strong style="width:auto;">Remitter Number</strong>
-            <span id="aadharekyc_Sendernumber"></span>
+            <span id="aadharekyc_Sendernumber1"></span>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Aadhar Number</strong>
-            <input id="aadhardetails_ekyc" type="text" placeholder="Enter Aadhar Number" />
+            <input id="aadhardetails_ekyc1" type="text" placeholder="Enter Aadhar Number" />
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Name</strong>
-            <input id="aadhardetails_Name" type="text" placeholder="Enter Name" />
+            <input id="aadhardetails_Name1" type="text" placeholder="Enter Name" />
         </div>
         <div class="col-md-12 amount amount_strong amount-changesse">
-            <span id="Aadhar_Error" style="color:red;"></span>
-            <input type="hidden" id="cap" />
-            <input type="hidden" id="capxmlP" />
+            <span id="Aadhar_Error1" style="color:red;"></span>
+            <input type="hidden" id="capDMT1" />
+            <input type="hidden" id="capxmlPDMT1" />
 
         </div>
     </div>
     <div class="container-fluid transaction-button">
         <button onclick="Register_EKYC()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Submit <i class="fa fa-angle-right otp_icon"></i></button>
-        <button onclick="gotoscan()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
+        <button onclick="gotoscanDMT1()" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Scan Again <i class="fa fa-angle-right otp_icon"></i></button>
 
     </div>
 </div>
 <!----------------------- OTP  --------------------->
-<div id="otpshow_ekyc" class="container-fluid otp_page_second" style="display:none;">
+<div id="otpshow_ekycDMT" class="container-fluid otp_page_second" style="display:none;">
     <div class="fullwidthaccount fullwidthaccount-top">
         <div class="col-md-12 amount amount_strong">
             <strong style="width:auto;">Remitter Number</strong>
-            <span id="otpsenderno_ekyc"></span>
+            <span id="otpsenderno_ekycDMT"></span>
         </div>
         <div class="col-md-12 amount amount_strong">
             <strong style="">Enter OTP</strong>
-            <input id="otpinsert_Ekyc" type="text" placeholder="Enter The OTP" />
+            <input id="otpinsert_EkycDMT" type="text" placeholder="Enter The OTP" />
         </div>
         <div class="col-md-12 amount amount_strong amount-changesse">
-            <span id="otperror_Ekyc" style="color:red;"></span>
-            <input type="hidden" id="otpstateResp_ekyc" />
-            <input type="hidden" id="otpekyc_id_ekyc" />
+            <span id="otperror_EkycDMT" style="color:red;"></span>
+            <input type="hidden" id="otpstateResp_ekycDMT" />
+            <input type="hidden" id="otpekyc_id_ekycDMT" />
 
         </div>
     </div>
-    <div class="container-fluid transaction-button" id="next_page_Ekyc">
-        <button onclick="verifyotp_Ekyc()" id="addaccount-add-ekyc" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
+    <div class="container-fluid transaction-button" id="next_page_EkycDMT">
+        <button onclick="verifyotp_EkycDMT()" id="addaccount-add-ekyc" class="fullbodydycolorbg addaccount-add-loderss" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>">Next <i class="fa fa-angle-right otp_icon"></i></button>
     </div>
 </div>
 
@@ -572,10 +671,10 @@
                     <input type="radio" name="bendetails" id="impsbutton" value="IMPS" checked><p>IMPS</p>
                     <span class="checkmark"></span>
                 </label>
-                <label id="creaditcbt" class="container container-last">
-                    <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
-                    <span class="checkmark"></span>
-                </label>
+                @*<label id="creaditcbt" class="container container-last">
+                        <input type="radio" name="bendetails" id="creaditbuttonss" value="creditcard"><p>Credit Card</p>
+                        <span class="checkmark"></span>
+                    </label>*@
                 <label class="container">
                     <input type="radio" name="bendetails" id="neftbutton" value="NEFT"><p>NEFT</p>
                     <span class="checkmark"></span>
@@ -696,7 +795,7 @@
                     @*<input type="button" id="btnphototakenby" name="btnphototakenby" value="PhotoUpload" />*@
                 </div>
             </div>
-            <div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="markuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
+       @*     <div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="markuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>*@
             <div id="idproffkyc" class="col-md-12 amount radiobuttonimps">
                 <strong>Id Proof<span class="spanstar" style="color:red;left:55px;">*</span></strong>
                 <div id="dividproof">
@@ -777,10 +876,10 @@
     <div class="col-md-12 accountholderde">
         <div class="fullwidthaccount">
             <div class="codepenss body-border-bottom">
-                <div class="col-md-4 account-holder account-holder1" id="account-holdername">
+                @*<div class="col-md-4 account-holder account-holder1" id="account-holdername">
                     <p class="bodycolormy">Mode</p>
                     <strong id="ccmodetransfer">Credit Card</strong>
-                </div>
+                </div>*@
                 <div class="col-md-4 account-holder account-holder2" id="account-holdernamefirst">
                     <p class="bodycolormy">Bank Name</p>
                     <strong id="ccbanknametransfer"></strong>
@@ -798,7 +897,7 @@
             <div class="col-md-12 amount" style="position:relative;">
                 <strong>amount<span class="spanstar" style="color:red">*</span></strong><input id="ccamounttransfer" type="text" placeholder="Enter Amount" onkeypress="return isNumber(event)" />
             </div>
-            <div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="ccmarkuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>
+            @*<div class="col-md-12 amount"><strong>service fee<span class="spanstar" style="color:red;left: 77px;">*</span></strong><input id="ccmarkuptransfer" type="text" placeholder="Enter Markup" value="0" onkeypress="return isNumber(event)" /></div>*@
 
 
             <div class="col-md-12 amount"><strong>Transfer PIN<span class="spanstar" style="color: red; left: 84px;">*</span></strong><input id="ccDMTPIN" type="password" placeholder="Enter Transfer Pin" autocomplete="new-password" /></div>
@@ -832,9 +931,9 @@
             <div class="col-md-12 amount amount_strong"><strong style="">A/C Name</strong><span id="nameconfirm"></span></div>
             <div id="confirmdivbankname" class="col-md-12 amount amount_strong"><strong style="">Bank Name</strong><span id="banknameconfirm"></span></div>
             <div class="col-md-12 amount"><strong>Net amount</strong><span id="amountconfirm"></span></div>
-            <div class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
+            @*<div class="col-md-12 amount"><strong>service fee</strong><span id="servicefeeconfirm"></span></div>
             <div class="col-md-12 amount"><strong>Id Proof Type</strong><span id="idprooftype"></span></div>
-            <div class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>
+            <div class="col-md-12 amount"><strong style="width:108px;">Id Proof Number</strong><span id="idproofnumber"></span></div>*@
             <div class="col-md-12 amount otpboxnotshow" style="display:none"><strong style="width:108px;">Enter Sender OTP</strong><input type="text" id="txtsenderotps" style=" background: white; float: right;" name="txtsenderotps" value="0"></div>
             @*<div class="col-md-12 amount"><strong>Debit Amount</strong><span id="chargeconfirm">20040</span></div>*@
             <div class="col-md-12 amount transfererroreee"><span id="transfererror" style="color:red;"></span></div>
@@ -876,10 +975,10 @@
                 <li class="transaction-right"><span id="responsemode"></span></li>
                 <li class="transaction-left"><span>amount</span></li>
                 <li class="transaction-right"><span id="responseamountnew"></span></li>
-                <li class="transaction-left"><span>service Fee</span></li>
+                @*<li class="transaction-left"><span>service Fee</span></li>
                 <li class="transaction-right"><span id="servicefee"></span></li>
                 <li class="transaction-left"><span>tax</span></li>
-                <li class="transaction-right"><span id="responsetax"></span></li>
+                <li class="transaction-right"><span id="responsetax"></span></li>*@
                 <li class="transaction-left"><span>total amount</span></li>
                 <li class="transaction-right"><span id="responsetotal"></span></li>
                 <li class="transaction-left" style="width:16%;"><span>Bank&nbsp;RRN</span></li>
@@ -926,10 +1025,10 @@
                             <input type="radio" name="addnewradio" id="paytmwalletbutton" onclick="document.getElementById('creaditcardnew').style.display = 'none';" value="WALLET"><p>PAYTM WALLET</p>
                             <span class="checkmark"></span>
                         </label>*@
-                    <label id="creditcardlink" class="container container-last" onclick="credicardshow();">
+                    @*<label id="creditcardlink" class="container container-last" onclick="credicardshow();">
                         <input type="radio" name="addnewradio" id="creaditbutton" onclick="credicardshow();" value="checked"><p>Credit Card</p>
                         <span class="checkmark"></span>
-                    </label>
+                    </label>*@
 
                 </form>
             </div>
@@ -1133,7 +1232,7 @@
                             url: '@Url.Action("savebencreaditcard", "Home")',
                             data: { name: name, Mobile: mobile, Ifsc: ifsc, OriginalIfsc: ifscoriginal, Account:cardno},
                             success: function (result) {
-                                console.log(result);
+                               // console.log(result);
                                 if (result.sts == "TXN") {
                                     back();
                                     $('#creaditcardnew').hide();
@@ -1252,6 +1351,28 @@
         <span class="spinner"></span>
     </div>
 </div>
+@*  DMT Success  *@
+<div class="show_pop" style="display:none" id="OTPinfo_show">
+    <div class="box_otp">
+        <h3>Enter OTP</h3>
+        <span style="font-size: 13px;padding-left: 0;">One Time Password (OTP) successfully sent to the Sender Mobile Number</span>
+        <input type="hidden" id="hidetxtagentid" />
+        <input type="hidden" id="hidebenidtxt" />
+        <input type="hidden" id="hidestateresptxt" />
+        <input type="text" id="txtsenderotps_pay" style=" background: white; width: 100%; margin: 0;" name="txtsenderotps_pay">
+
+        <span style="text-align: justify; padding: 0; font-size: 12px; margin-top: 10px; color: #b91010; margin-bottom: 0;"><b>Note :-</b> one time password is mandatory field, otherwise transaction getting pending or suspension entry. We will check pending transactions within three working hours.</span>
+        <a href="#" id="otp_back_b" class="cancel" onclick="otp_back_b()" style="color: #fff; background: #000; float: left; margin-left: 0;">BACK</a>
+        <a href="javascript:void(0);" style="display: none; color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " id="submitotp" class="cancel cancel-button impsbutton1 fullbodydycolorbg" onclick="submitotpinfo()">SUBMIT OTP<i style="margin-left: 6px;" class="fa fa-angle-right"></i></a>
+    </div>
+</div>
+<script>
+    function otp_back_b() {
+        document.getElementById("OTPinfo_show").style.display = 'none';
+    }
+
+</script>
+@*  DMT Success  *@
 <script>
 
     sendotp = () => {
@@ -1419,7 +1540,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-                 console.log(err)
+                // console.log(err)
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1439,7 +1560,7 @@
              body: requ
          }).then(Response => Response.json())
              .then(resp => {
-                 console.log(resp);
+               //  console.log(resp);
                  var statuscode = resp.statuscode;
                  if (statuscode == "TXN") {
                      typeof cb == 'function' && cb(null, resp.Response);
@@ -1458,7 +1579,7 @@
                      typeof cb == 'function' && cb('Something Went Wrong!');
                  }
              }).catch(err => {
-                 console.log(err)
+              //   console.log(err)
                  typeof cb == 'function' && cb(err.message);
              });
 
@@ -1468,11 +1589,11 @@
     function senderdetails(change, cb) {
         var latloc = $('#latloc').val()
         var longloc = $('#longloc').val()
-        $('#Devicefind').hide();
-        $('#otpshow_ekyc').hide();
-        $('#otpekyc_id_ekyc').val("");
-        $('#otpstateResp_ekyc').val("");
-        $('#otpinsert_Ekyc').val("");
+        $('#DevicefindDMT1').hide();
+        $('#otpshow_ekycDMT').hide();
+        $('#otpekyc_id_ekycDMT').val("");
+        $('#otpstateResp_ekycDMT').val("");
+        $('#otpinsert_EkycDMT').val("");
 
         $('#registerupi').show()
         $('#registerwallet').show()
@@ -1531,7 +1652,7 @@
         var senderno = "";
         if (change == "new") {
             senderno = $('#senderno').val();
-            $('#aadharekyc_Sendernumber').text(senderno)
+            $('#aadharekyc_Sendernumber1').text(senderno)
             len = senderno.length;
             if (senderno.length == 10) {
                 //$('#Firstpage').hide();
@@ -1540,7 +1661,7 @@
         }
         else {
             senderno = $('#changesender').val();
-            $('#aadharekyc_Sendernumber').text(senderno)
+            $('#aadharekyc_Sendernumber1').text(senderno)
             len = senderno.length;
             if (len == 10) {
                 $('#senderno').val(senderno);
@@ -1557,11 +1678,11 @@
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data)
+                  //  console.log(data)
                     $('#btnsenddd ,#cancelloder').html("Next");
                     $('#Firstpage').hide();
                     var output = JSON.parse(data.rt);
-            
+
                     var statuscode = output.statuscode;
                     var ekyc_status = output.ekyc_status;
 
@@ -1652,8 +1773,9 @@
                         if (respout.success == true) {
                             $('#remlist').show();
                             var name = respout.customer.name;
-                            var totallimit = 50000; //respout.customer.totallimit;
-                            var remaininglimit = 50000;// respout.customer.totallimit;
+                            var limit = output.limit;
+                            var totallimit = limit; //respout.customer.totallimit;
+                            var remaininglimit = limit;// respout.customer.totallimit;
                             var custid = respout.customer.id;
                             $('#hidecustid').val(custid)
                             $('#imgshow').hide();
@@ -1693,7 +1815,7 @@
                                 var bankname = respout.benes[i].bankname;
                                 var escapedBankname = encodeURIComponent(bankname);
                                 var escapedname = encodeURIComponent(name);
-                             
+
                                 //var isbankdown = output.data.beneficiary[i].isbankdown;
                                 var bandownmsg = "";
                                 //if (isbankdown == true) {
@@ -1707,14 +1829,14 @@
                             var ekyc_status = respout.ekyc_status;
                             if (ekyc_status == "0") {
                                 $('#scancheckdmt1').show()
-                                $('#scanrecoveer').show()
+                                $('#scanrecoveerDMT1').show()
                                 $('#sendername').val("");
                                 $('#remlist').hide();
                                 $('#newsender').text(senderno);
                                 $('#Firstpage').hide();
                                 $('#register_new_ben').hide();
                                 $('#NewSenderregister').hide();
-                                $('#otpsenderno_ekyc').text(senderno)
+                                $('#otpsenderno_ekycDMT').text(senderno)
                             }
                             //if (msginfo.includes("Sender data not found") || msginfo.includes("No customer found")) {
                             //    $('#sendername').val("");
@@ -1800,7 +1922,7 @@
         var ifsccode = $('#ifsccode').val();
         var originalifsccode = $('#banknm').val();
         var bankname = $('#banknm').find('option:selected').text();
-        console.log(bankname)
+  //      console.log(bankname)
         var benname = $('#benname').val();
            if (senderno != "" && account != "" && ifsccode != "" && originalifsccode != "" && benname!="") {
                $.ajax({
@@ -2157,9 +2279,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-                console.log(req)
+            //    console.log(req)
                 var outtt = JSON.parse(req);
-                console.log(outtt)
+             //   console.log(outtt)
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -2182,9 +2304,9 @@
             body: requ
         }).then(Response => Response.json()).
             then(req => {
-                console.log(req)
+               // console.log(req)
                 var outtt = JSON.parse(req);
-                console.log(outtt)
+               // console.log(outtt)
                 var sts = outtt.sts;
                 if (sts == true) {
                     senderdetails('change');
@@ -2282,7 +2404,7 @@
               $('.loader').show();
              },
             success: function (data) {
-                console.log("data " + data);
+          //      console.log("data " + data);
             var sts = data.statuscode;
             var msg = data.status;
             if (sts == "TXN") {
@@ -2541,7 +2663,7 @@
                 idstr += String.fromCharCode(ascicode);
             }
         } while (idstr.length < 32);
-        console.log(idstr)
+     //   console.log(idstr)
         return (idstr);
     }
 
@@ -2648,7 +2770,7 @@
     fundtransferWALLET = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-        console.log(str);
+     //   console.log(str);
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("Paytm No: ") + 9, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2682,7 +2804,7 @@
     fundtransferUPI = (e) => {
         var type = $('input[name=bendetails]:checked', '#myForm').val();
         var str = $(e).closest('td').prev('td').html();
-        console.log(str);
+      //  console.log(str);
         var Name = str.substring(str.lastIndexOf("<strong>") + 8, str.lastIndexOf("</strong>"));
         var vpaid = str.substring(str.lastIndexOf("VPA ID:") + 8, str.lastIndexOf("</span>"));
         $('#divbankifsc').hide();
@@ -2780,7 +2902,7 @@
         var accountno = $('#accountnotransfer').text();
         var name = $('#Nametransfer').text();
         var amount = $('#amounttransfer').val();
-        var markup = $('#markuptransfer').val();
+        var markup = "0"; //$('#markuptransfer').val();
         var Dmtpin = $('#DMTPIN').val();
         var sendermobileno = $('#changesender').val();
         var bankname = $('#banknametransfer').text();
@@ -2829,6 +2951,7 @@
                         cache: false,
                         type: "POST",
                         success: function (data) {
+                            console.log(data)
                             var sts = data.status;
                             var msg = data.Details;
                             if (sts == "Success") {
@@ -2927,7 +3050,7 @@
         var accountno = $('#ccnotransfer').text();
         var name = $('#ccNametransfer').text();
         var amount = $('#ccamounttransfer').val();
-        var markup = $('#ccmarkuptransfer').val();
+        var markup = 0;
         var Dmtpin = $('#ccDMTPIN').val();
         var sendermobileno = $('#changesender').val();
         var bankname = $('#ccbanknametransfer').text();
@@ -3052,7 +3175,7 @@
         var accountno = $('#accountnotransfer').text();
         var name = $('#Nametransfer').text();
         var amount = $('#amounttransfer').val();
-        var markup = $('#markuptransfer').val();
+        var markup = "0";//$('#markuptransfer').val();
         var Dmtpin = $('#DMTPIN').val();
         var bankname = $('#banknametransfer').text();
         var bencode = $('#bencodetransfer').text();
@@ -3062,7 +3185,7 @@
         var customerid = $('#hidecustid').val();
         accountno = accountno.trim();
         bankifsccode = bankifsccode.trim();
-        console.log(bnames + ',' + senderno + ',' + paymode + ',' + accountno + ',' + bankifsccode + ',' + Dmtpin + ',' + amount + ',' + bankname + ',' + bencode + ',' + markup + ',' + idprooftype + ',' + idproofnumber + ',' + senderotps + ',' + latss + ',' + longloc + ',' + imagebase64data + ',' + uniqueid + ',' + check_kyc + ',' + customerid);
+     //   console.log(bnames + ',' + senderno + ',' + paymode + ',' + accountno + ',' + bankifsccode + ',' + Dmtpin + ',' + amount + ',' + bankname + ',' + bencode + ',' + markup + ',' + idprooftype + ',' + idproofnumber + ',' + senderotps + ',' + latss + ',' + longloc + ',' + imagebase64data + ',' + uniqueid + ',' + check_kyc + ',' + customerid);
 
         $('#amounttransfer').val("");
             $('#DMTPIN').val("");
@@ -3091,7 +3214,7 @@
                 if (amount != "" && Dmtpin != "") {
                     var check_kyc = $('#checkkyc').text();
                 $.ajax({
-                    url: '@Url.Action("c","Home")',
+                    url: '@Url.Action("imps_transfer1", "Home")',
                     data: { name: bnames, NUMBER: senderno, type: paymode, account: accountno, ifsc: bankifsccode, dmtpin: Dmtpin, amount: amount, bankname: bankname, benCode: bencode, servicefee: markup, idprooftype: idprooftype, idproofnumber: idproofnumber, senderotps: senderotps, latss: latss, longloc: longloc, imageData: imagebase64data, uniqueid, check_kyc: check_kyc, customerid },
                     cache: false,
                     type: "POST",
@@ -3137,6 +3260,19 @@
                             $('#failed').hide();
                             $('#dmttransferfinal').show();
                             $('#dmtconfirm').hide();
+                        }
+                        else if (sts == "SENDOTP") {
+                            var bankrrn = data.data[0].bankrefid;
+                            var agentid = data.data[0].agentid;
+                            var benid = data.data[0].benid;
+                            $('#hidetxtagentid').val(agentid)
+                            $('#hidebenidtxt').val(benid)
+                            $('#hidestateresptxt').val(bankrrn)
+                            $('#OTPinfo_show').show();
+                            $('#dmt11').hide();
+                            $('#fpay').hide();
+                            $('#fpay1').hide();
+                            $('#submitotp').show();
                         }
                         else if (sts == "NOTDEFINE")
                         {
@@ -3704,20 +3840,20 @@
     }
 </script>
 <script>
-        function gotoscan() {
-            $('#cap').val("");
-            $('#capxmlP').val("");
-            $('#device_srno').val("");
-            $('#txtdevice').val("");
-            $('#scanrecoveer').hide();
-            $("#Devicerror").hide();
-            $('#Devicefind').hide();
+        function gotoscanDMT1() {
+            $('#capDMT1').val("");
+            $('#capxmlPDMT1').val("");
+            $('#device_srnoDMT1').val("");
+            $('#txtdeviceDMT1').val("");
+            $('#scanrecoveerDMT1').hide();
+            $("#DevicerrorDMT1").hide();
+            $('#DevicefindDMT1').hide();
         $.ajax({
             url: '@Url.Action("chk1","Home")',
             cache: false,
             type: "GET",
             beforeSend: function() {
-                  $("#loadaeps1").show();
+                  $("#loadDMT11").show();
              },
             success: function (data) {
 
@@ -3751,9 +3887,10 @@
         var benid = $('#hidebenidtxt').val()
         var stateresp = $('#hidestateresptxt').val()
         var otp = $('#txtsenderotps_pay').val()
+        var customerid = $('#hidecustid').val();
              $.ajax({
-                   url: '@Url.Action("imps_transfer_verifyotp", "Home")',
-                   data: { Agentid, benid, otp, stateresp },
+                   url: '@Url.Action("imps_transfer_verifyotp1", "Home")',
+                   data: { Agentid, benid, otp, stateresp, customerid },
                    cache: false,
                    type: "POST",
                 beforeSend: function () {
@@ -3887,13 +4024,13 @@
 <script>
     function Register_EKYC() {
         var senderno = $('#senderno').val();
-        var Name = $('#aadhardetails_Name').val();
-        var aadharnumber = $('#aadhardetails_ekyc').val();
+        var Name = $('#aadhardetails_Name1').val();
+        var aadharnumber = $('#aadhardetails_ekyc1').val();
         var latloc = $('#latloc').val();
         var longloc = $('#longloc').val();
-        var pid = $('#capxmlP').val()
+        var pid = $('#capxmlPDMT1').val()
 
-        $('#capxmlP').val("")
+        $('#capxmlPDMT1').val("")
         if (aadharnumber != "") {
             if (pid != "") {
                 $("#overlay").fadeIn(300);　
@@ -3911,41 +4048,41 @@
                           var stateresp = data.OTPRequestID;
                           if (status == true) {
                                         // senderdetails('change');
-                                        $('#Devicefind').hide();
-                                        $('#otpshow_ekyc').show();
-                                        $('#otpstateResp_ekyc').val(stateresp)
-                                        $('#otpekyc_id_ekyc').val(ekyc_id)
+                                        $('#DevicefindDMT1').hide();
+                                        $('#otpshow_ekycDMT').show();
+                                        $('#otpstateResp_ekycDMT').val(stateresp)
+                                        $('#otpekyc_id_ekycDMT').val(ekyc_id)
                                         $('#sendername').val("");
                                         $('#remlist').hide();
                                         $('#newsender').text(senderno);
                                         $('#Firstpage').hide();
                                         $('#register_new_ben').hide();
                                         $('#NewSenderregister').hide();
-                                        $('#otpsenderno_ekyc').text(senderno)
+                                        $('#otpsenderno_ekycDMT').text(senderno)
                                     }
                                     else {
-                                        $('#Aadhar_Error').text(message)
+                                        $('#Aadhar_Error1').text(message)
                                     }
                                   }
                           })
             }
             else {
-                $('#Aadhar_Error').text("Please Scan Again")
+                $('#Aadhar_Error1').text("Please Scan Again")
             }
         }
         else {
-            $('#Aadhar_Error').text("Enter The Aadhar Number")
+            $('#Aadhar_Error1').text("Enter The Aadhar Number")
         }
     }
 </script>
 <script>
-    function verifyotp_Ekyc() {
-        $('#otperror_Ekyc').text("")
-        var stateResp = $('#otpstateResp_ekyc').val()
-        var kyc_id = $('#otpekyc_id_ekyc').val()
-        var Sendernumber = $('#otpsenderno_ekyc').text();
-        var otp = $('#otpinsert_Ekyc').val()
-        var Name = $('#aadhardetails_Name').val();
+    function verifyotp_EkycDMT() {
+        $('#otperror_EkycDMT').text("")
+        var stateResp = $('#otpstateResp_ekycDMT').val()
+        var kyc_id = $('#otpekyc_id_ekycDMT').val()
+        var Sendernumber = $('#otpsenderno_ekycDMT').text();
+        var otp = $('#otpinsert_EkycDMT').val()
+        var Name = $('#aadhardetails_Name1').val();
         var latloc = $('#latloc').val();
         var longloc = $('#longloc').val();
         if (otp != "") {
@@ -3964,14 +4101,14 @@
               senderdetails('new');
           }
           else {
-              $('#otperror_Ekyc').text(message);
+              $('#otperror_EkycDMT').text(message);
           }
 
       }
   });
         }
         else {
-            $('#otperror_Ekyc').text("Please Enter The OTP");
+            $('#otperror_EkycDMT').text("Please Enter The OTP");
         }
     }
 </script>

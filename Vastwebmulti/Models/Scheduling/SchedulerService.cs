@@ -9,7 +9,7 @@ namespace Vastwebmulti.Models.Scheduling
     {
         private static readonly string ScheduleCronExpression = "0 0 3 * * ?";
         private static readonly string ScheduleCronExpression1 = "0 */10 * ? * *";
-        private static readonly string ScheduleCronExpression2 = "0 */2 * * * ? *"; // Updated cron expression
+        private static readonly string ScheduleCronExpression2 = "0 */2 * ? * *"; // Updated cron expression
 
         public static async System.Threading.Tasks.Task StartAsync()
         {
@@ -71,15 +71,15 @@ namespace Vastwebmulti.Models.Scheduling
                 await scheduler.ScheduleJob(job5, trigger5);
 
 
-                //var job4 = JobBuilder.Create<Radaint>()
-                //           .WithIdentity("ExecuteTaskServiceCallJob4", "group4")
-                //           .Build();
-                //var trigger4 = TriggerBuilder.Create()
-                //    .WithIdentity("ExecuteTaskServiceCallTrigger4", "group4")
-                //    .WithCronSchedule(ScheduleCronExpression2)
-                //    .Build();
+                var job6 = JobBuilder.Create<Radaint>()
+                           .WithIdentity("ExecuteTaskServiceCallJob6", "group6")
+                           .Build();
+                var trigger6 = TriggerBuilder.Create()
+                    .WithIdentity("ExecuteTaskServiceCallTrigger6", "group6")
+                    .WithCronSchedule(ScheduleCronExpression2)
+                    .Build();
 
-                //await scheduler.ScheduleJob(job4, trigger4);
+                await scheduler.ScheduleJob(job6, trigger6);
 
             }
             catch (Exception ex)

@@ -157,7 +157,28 @@ namespace Vastwebmulti.API
                                                         }
 
                                                         var chkout = db.Recharge_API_new(userid.UserId, api.Customernumber, api.Optcode, api.Amount, "API", api.Yourrchid, ordersend, api.optional1, api.optional2, api.optional3, localrch, currentip, apirequest,duedate, orderidinfo, msg).ToList();
+                                                        try
+                                                        {
+                                                            var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();    
+                                                            var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                         
+                                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                                            Backupinfo back = new Backupinfo();
+                                                            var model = new Backupinfo.Addinfo
+                                                            {
+                                                                Websitename = admininfo.WebsiteUrl,
+                                                                RetailerID = userid.UserId,
+                                                                Email = retailerdetails.emailid,
+                                                                Mobile = retailerdetails.mobile,
+                                                                Details = "Recharge " + api.Customernumber + " Amount " + api.Amount,
+                                                                RemainBalance = remdetails.balance,
+                                                                Usertype = "API"
+                                                            };
+                                                            back.Rechargeandutility(model);
 
+                                                           
+                                                        }
+                                                        catch { }
                                                         var msgoutput = chkout.SingleOrDefault().msg;
                                                         var orderid = chkout.SingleOrDefault().orderinfo;
                                                         try
@@ -311,6 +332,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -433,6 +476,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -548,6 +613,28 @@ namespace Vastwebmulti.API
                                                                                 {
                                                                                     status = "Failed";
                                                                                     db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                                    try
+                                                                                    {
+                                                                                        var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                        var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                        Backupinfo back = new Backupinfo();
+                                                                                        var model = new Backupinfo.Addinfo
+                                                                                        {
+                                                                                            Websitename = admininfo.WebsiteUrl,
+                                                                                            RetailerID = userid.UserId,
+                                                                                            Email = retailerdetails.emailid,
+                                                                                            Mobile = retailerdetails.mobile,
+                                                                                            Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                            RemainBalance = remdetails.balance,
+                                                                                            Usertype = "API"
+                                                                                        };
+                                                                                        back.Rechargeandutility(model);
+
+
+                                                                                    }
+                                                                                    catch { }
                                                                                     JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                                     try
                                                                                     {
@@ -676,6 +763,28 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         status = "Failed";
                                                                         db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), json.ToString(), "Response");
+                                                                        try
+                                                                        {
+                                                                            var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                            var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                                                            Backupinfo back = new Backupinfo();
+                                                                            var model = new Backupinfo.Addinfo
+                                                                            {
+                                                                                Websitename = admininfo.WebsiteUrl,
+                                                                                RetailerID = userid.UserId,
+                                                                                Email = retailerdetails.emailid,
+                                                                                Mobile = retailerdetails.mobile,
+                                                                                Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                RemainBalance = remdetails.balance,
+                                                                                Usertype = "API"
+                                                                            };
+                                                                            back.Rechargeandutility(model);
+
+
+                                                                        }
+                                                                        catch { }
                                                                         JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
@@ -807,6 +916,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -910,6 +1041,28 @@ namespace Vastwebmulti.API
                                                                             //status = "Failed";
                                                                             var status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), apiresponse, "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -934,6 +1087,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 var status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), apiresponse, "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -1043,6 +1218,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -1131,6 +1328,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -1225,6 +1444,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API"
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -1297,6 +1538,28 @@ namespace Vastwebmulti.API
                                                                         else
                                                                         {
                                                                             db.recharge_update(msgorderid, "FAILED", optid, remain, webcontent.ToString(), "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject rch = outputchk("Failed", "", optid, remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
@@ -1519,7 +1782,28 @@ namespace Vastwebmulti.API
                                                     }
 
                                                     var chkout = db.Recharge_API_new(userid.UserId, api.Customernumber, api.Optcode, api.Amount, "API", api.Yourrchid, ordersend, api.optional1, api.optional2, api.optional3, localrch, currentip, apirequest,duedate, orderidinfo, msg).ToList();
+                                                    try
+                                                    {
+                                                        var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                        var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
 
+                                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                                        Backupinfo back = new Backupinfo();
+                                                        var model = new Backupinfo.Addinfo
+                                                        {
+                                                            Websitename = admininfo.WebsiteUrl,
+                                                            RetailerID = userid.UserId,
+                                                            Email = retailerdetails.emailid,
+                                                            Mobile = retailerdetails.mobile,
+                                                            Details = "Recharge " + api.Customernumber + " Amount " + api.Amount,
+                                                            RemainBalance = remdetails.balance,
+                                                            Usertype = "API"
+                                                        };
+                                                        back.Rechargeandutility(model);
+
+
+                                                    }
+                                                    catch { }
                                                     var msgoutput = chkout.SingleOrDefault().msg;
                                                     var orderid = chkout.SingleOrDefault().orderinfo;
                                                     try
@@ -1675,6 +1959,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -1797,6 +2103,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -1912,6 +2240,28 @@ namespace Vastwebmulti.API
                                                                             {
                                                                                 status = "Failed";
                                                                                 db.recharge_update(msgorderid, status, errormsg, PRICE, json.ToString(), "Response");
+                                                                                try
+                                                                                {
+                                                                                    var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                    var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                    Backupinfo back = new Backupinfo();
+                                                                                    var model = new Backupinfo.Addinfo
+                                                                                    {
+                                                                                        Websitename = admininfo.WebsiteUrl,
+                                                                                        RetailerID = userid.UserId,
+                                                                                        Email = retailerdetails.emailid,
+                                                                                        Mobile = retailerdetails.mobile,
+                                                                                        Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                        RemainBalance = remdetails.balance,
+                                                                                        Usertype = "API "
+                                                                                    };
+                                                                                    back.Rechargeandutility(model);
+
+
+                                                                                }
+                                                                                catch { }
                                                                                 JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
@@ -2040,6 +2390,28 @@ namespace Vastwebmulti.API
                                                                 {
                                                                     status = "Failed";
                                                                     db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), json.ToString(), "Response");
+                                                                    try
+                                                                    {
+                                                                        var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                        var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                                                        Backupinfo back = new Backupinfo();
+                                                                        var model = new Backupinfo.Addinfo
+                                                                        {
+                                                                            Websitename = admininfo.WebsiteUrl,
+                                                                            RetailerID = userid.UserId,
+                                                                            Email = retailerdetails.emailid,
+                                                                            Mobile = retailerdetails.mobile,
+                                                                            Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                            RemainBalance = remdetails.balance,
+                                                                            Usertype = "API"
+                                                                        };
+                                                                        back.Rechargeandutility(model);
+
+
+                                                                    }
+                                                                    catch { }
                                                                     JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                     try
                                                                     {
@@ -2164,6 +2536,28 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         status = "Failed";
                                                                         db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                        try
+                                                                        {
+                                                                            var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                            var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                                                            Backupinfo back = new Backupinfo();
+                                                                            var model = new Backupinfo.Addinfo
+                                                                            {
+                                                                                Websitename = admininfo.WebsiteUrl,
+                                                                                RetailerID = userid.UserId,
+                                                                                Email = retailerdetails.emailid,
+                                                                                Mobile = retailerdetails.mobile,
+                                                                                Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                RemainBalance = remdetails.balance,
+                                                                                Usertype = "API"
+                                                                            };
+                                                                            back.Rechargeandutility(model);
+
+
+                                                                        }
+                                                                        catch { }
                                                                         JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
@@ -2267,6 +2661,28 @@ namespace Vastwebmulti.API
                                                                         //status = "Failed";
                                                                         var status = "Failed";
                                                                         db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), apiresponse, "Response");
+                                                                        try
+                                                                        {
+                                                                            var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                            var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                                                            Backupinfo back = new Backupinfo();
+                                                                            var model = new Backupinfo.Addinfo
+                                                                            {
+                                                                                Websitename = admininfo.WebsiteUrl,
+                                                                                RetailerID = userid.UserId,
+                                                                                Email = retailerdetails.emailid,
+                                                                                Mobile = retailerdetails.mobile,
+                                                                                Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                RemainBalance = remdetails.balance,
+                                                                                Usertype = "API"
+                                                                            };
+                                                                            back.Rechargeandutility(model);
+
+
+                                                                        }
+                                                                        catch { }
                                                                         JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
@@ -2399,6 +2815,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -2487,6 +2925,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge  Refund" + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -2581,6 +3041,28 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), webcontent, "Response");
+                                                                            try
+                                                                            {
+                                                                                var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                                var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                                Backupinfo back = new Backupinfo();
+                                                                                var model = new Backupinfo.Addinfo
+                                                                                {
+                                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                                    RetailerID = userid.UserId,
+                                                                                    Email = retailerdetails.emailid,
+                                                                                    Mobile = retailerdetails.mobile,
+                                                                                    Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                    RemainBalance = remdetails.balance,
+                                                                                    Usertype = "API"
+                                                                                };
+                                                                                back.Rechargeandutility(model);
+
+
+                                                                            }
+                                                                            catch { }
                                                                             JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
@@ -2653,6 +3135,28 @@ namespace Vastwebmulti.API
                                                                     else
                                                                     {
                                                                         db.recharge_update(msgorderid, "FAILED", optid, remain, webcontent.ToString(), "Response");
+                                                                        try
+                                                                        {
+                                                                            var retailerdetails = db.api_user_details.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+                                                                            var remdetails = db.api_remain_amount.Where(aa => aa.apiid == userid.UserId).SingleOrDefault();
+
+                                                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                                                            Backupinfo back = new Backupinfo();
+                                                                            var model = new Backupinfo.Addinfo
+                                                                            {
+                                                                                Websitename = admininfo.WebsiteUrl,
+                                                                                RetailerID = userid.UserId,
+                                                                                Email = retailerdetails.emailid,
+                                                                                Mobile = retailerdetails.mobile,
+                                                                                Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
+                                                                                RemainBalance = remdetails.balance,
+                                                                                Usertype = "API"
+                                                                            };
+                                                                            back.Rechargeandutility(model);
+
+
+                                                                        }
+                                                                        catch { }
                                                                         JObject rch = outputchk("Failed", "", optid, remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }

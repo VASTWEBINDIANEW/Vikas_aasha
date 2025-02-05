@@ -23,11 +23,12 @@ namespace Vastwebmulti
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            SchedulerService.StartAsync().GetAwaiter().GetResult();
             //Removing xml formatting
             GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
   
             //The Schedular Class
-             SchedulerService.StartAsync().GetAwaiter().GetResult();
+
 
         }
         protected void Application_BeginRequest()

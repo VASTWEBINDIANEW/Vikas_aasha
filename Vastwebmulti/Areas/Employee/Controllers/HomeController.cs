@@ -806,7 +806,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                     }
                     else if (checkforlive.Rstaus.ToUpper() == "FAILED" || checkforlive.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                     {
-                        db.recharge_update_failed_to_success(idno);
+                        db.recharge_update_failed_to_success(idno, "");
                         ApiUserResponse(idno, checkforlive.Rch_from, checkforlive.refid, "SUCCESS", optval);
                     }
                 }
@@ -822,7 +822,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (checkforold.Rstaus.ToUpper() == "FAILED" || checkforold.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                         {
-                            db.recharge_update_failed_to_success_old(idno);
+                            db.recharge_update_failed_to_success_old(idno, "Manual Success");
                             ApiUserResponse(idno, checkforold.Rch_from, checkforold.refid, "SUCCESS", optval);
                         }
                     }
@@ -1697,7 +1697,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1818,7 +1818,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1952,7 +1952,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2073,7 +2073,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2209,7 +2209,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2330,7 +2330,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap));
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");

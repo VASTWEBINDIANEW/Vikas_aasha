@@ -135,7 +135,7 @@
 
     .manual_form1 {
         padding: 4px;
-        width: 50%;
+        width: 33.33%;
         float: left;
     }
 
@@ -287,11 +287,11 @@
             Manual Pancard
         </button>
     </div>
-    @*<div class="manual_form1">
+    <div class="manual_form1">
         <button class="btmd" onclick="CorrectionForm()">
             Correction Pancard
         </button>
-    </div>*@
+    </div>
 </div>
 
 <div class="manual_form_m " id="manual" style="display:none">
@@ -776,7 +776,7 @@
            new SelectListItem{Text="Name",Value="Name"},
            new SelectListItem{Text="Father Name",Value="Father Name"},
            new SelectListItem{Text="DOB",Value="DOB"},
-           new SelectListItem{Text="Other",Value="Other"}
+           new SelectListItem{Text="Address",Value="Address"}
         }, new { @class = "form-control" })
     </div>
     <div class="manual_w">
@@ -1038,7 +1038,7 @@
             $('#purchase').hide();
             $('#pan-Confirm-Payment').hide();
             document.getElementsByClassName('btmd')[1].classList.remove('backgroundss');
-            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
+            document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[0].classList.add('backgroundss');
             document.getElementById('manual').style.display = 'none';
             document.getElementById('manualw1').style.display = 'block';
@@ -1176,7 +1176,7 @@
             })
             document.getElementsByClassName('btmd')[0].classList.remove('backgroundss');
             document.getElementsByClassName('btmd')[1].classList.add('backgroundss');
-            //document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
+            document.getElementsByClassName('btmd')[2].classList.remove('backgroundss');
             document.getElementById('manual').style.display = 'block';
             document.getElementById('manualw1').style.display = 'none';
              $.ajax({

@@ -1114,6 +1114,29 @@ namespace Vastwebmulti.Areas.API.Controllers
                                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                                      System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 var msg = db.auto_Fundtransfer_admin_Api_insert_balance(userid, transferid, output).Single().msg;
+                                try
+                                {
+                                    var apiuserdetails = db.api_user_details.Where(aa => aa.apiid == userid).SingleOrDefault();
+                                  
+                                    var apiinfo = db.api_remain_amount.Where(aa => aa.apiid == userid).SingleOrDefault();
+                                   
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                                    var modeln = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = userid,
+                                        Email = apiuserdetails.emailid,
+                                        Mobile = apiuserdetails.mobile,
+                                        Details = "Fund recived From Admin ",
+                                        RemainBalance = apiinfo.balance,
+                                        Usertype = "API"
+                                    };
+                                    back.Fundtransfer(modeln);
+
+                                }
+                                catch { }
+
                                 if (msg == "Success")
                                 {
                                     var TotalAmount = reaminbalance_master.balance + automainmiumbal.Transferamount;

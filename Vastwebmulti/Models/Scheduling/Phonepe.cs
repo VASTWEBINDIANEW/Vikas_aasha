@@ -96,6 +96,28 @@ namespace Vastwebmulti.Models.Scheduling
 
                                     //var chkinfo=dbsrs.upi
                                     db.UPI_TXN("Retailer", count.userid, custid, amount, status, "", upi_id, BankRRN, repp, "PHONEPE", output).SingleOrDefault();
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == count.userid).SingleOrDefault();
+                                        
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == count.userid).SingleOrDefault();
+                                       
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var model = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = count.userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Phone pe Upi Fund Recived ",
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.Fundtransfer(model);
+
+                                    }
+                                    catch { }
                                     var retailer = db.Retailer_Details.Where(aa => aa.RetailerId == count.userid).SingleOrDefault();
                                     var newremain = db.Remain_reteller_balance.Where(aa => aa.RetellerId == count.userid).SingleOrDefault().Remainamount.ToString();
                                     var AdminDetails = db.Admin_details.SingleOrDefault();

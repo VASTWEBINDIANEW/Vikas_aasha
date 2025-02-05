@@ -610,6 +610,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             model.bookInfo.destinationCity, doj, model.busOperatorName, model.bookInfo.boardingPoint.CityPointLocation,
                             model.bookInfo.droppingPoint.CityPointLocation, model.bookInfo.boardingPoint.CityPointTime.ToString(), model.bookInfo.droppingPoint.CityPointTime.ToString()
                             , TraceId, model.selectedSeats, JsonConvert.SerializeObject(model.bookInfo), 0, Idno, IsSuccess, Message);
+                            try
+                            {
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Bus Booking ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.info(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = dealerdetails.DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Bus Booking ",
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.info(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterdetails.SSId,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Bus Booking ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.info(model2);
+                            }
+                            catch { }
                             if (Convert.ToBoolean(IsSuccess.Value) == true)
                             {
 
@@ -650,6 +699,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     db.proc_UpdateBusBooking(Idno.Value.ToString(), userid, (totalFare - vastcharge), response.Content, 1,
                                     "Failed", "", "", "", "", IsSuccess, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Bus Booking Refund ",
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Bus Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Bus Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     TempData["Status"] = "Failed";
                                     TempData["Message"] = "Internal server error.";
                                     return RedirectToAction("Travel", "Home");
@@ -685,6 +783,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     else
                                     {
                                         db.proc_UpdateBusBooking(Idno.Value.ToString(), userid, totalFare, response.Content, 1, "Failed", "", "", "", "", IsSuccess, Message);
+                                        try
+                                        {
+                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                            var admininfo = db.Admin_details.SingleOrDefault();
+                                            Backupinfo back = new Backupinfo();
+                                            var modeln = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = userid,
+                                                Email = retailerdetails.Email,
+                                                Mobile = retailerdetails.Mobile,
+                                                Details = "Bus Booking Refund ",
+                                                RemainBalance = remdetails.Remainamount,
+                                                Usertype = "Retailer"
+                                            };
+                                            back.info(modeln);
+
+                                            var model1 = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = dealerdetails.DealerId,
+                                                Email = dealerdetails.Email,
+                                                Mobile = dealerdetails.Mobile,
+                                                Details = "Bus Booking Refund ",
+                                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                Usertype = "Dealer"
+                                            };
+                                            back.info(model1);
+
+                                            var model2 = new Backupinfo.Addinfo
+                                            {
+                                                Websitename = admininfo.WebsiteUrl,
+                                                RetailerID = masterdetails.SSId,
+                                                Email = masterdetails.Email,
+                                                Mobile = masterdetails.Mobile,
+                                                Details = "Bus Booking Refund ",
+                                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                Usertype = "Master"
+                                            };
+                                            back.info(model2);
+                                        }
+                                        catch { }
                                         //var ResponseToView = new { IsSuccess = false, Message = SeatBookingRespo.apiStatus.message ?? "Server Error!!" };
                                         //return Json(JsonConvert.SerializeObject(ResponseToView), JsonRequestBehavior.AllowGet);
                                         TempData["Status"] = "Failed";
@@ -1077,6 +1224,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         {
                             db.proc_UpdateBusBooking(ticket.idno.ToString(), userid, fareAmount, "", 2, "", "", "", "", "",
                                IsSuccess, Message);
+
                             var reqJson = JsonConvert.SerializeObject(requestObj);
                             var resJson = task.Result.Content;
                             if (Convert.ToBoolean(IsSuccess.Value) == true)
