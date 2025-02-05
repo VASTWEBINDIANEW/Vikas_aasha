@@ -143,6 +143,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     System.Data.Entity.Core.Objects.ObjectParameter output = new
                        System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     var ch = db.Proc_DthBookingPayment(userid, txtname, txtEmail, txtmobile, txtpincode, State1, District1, txtAddress, idno, output).Single().msg;
+                    try
+                    {
+                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                        var admininfo = db.Admin_details.SingleOrDefault();
+                        Backupinfo back = new Backupinfo();
+                        var model = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = userid,
+                            Email = retailerdetails.Email,
+                            Mobile = retailerdetails.Mobile,
+                            Details = "DTH Booking Payment ",
+                            RemainBalance = remdetails.Remainamount,
+                            Usertype = "Retailer"
+                        };
+                        back.info(model);
+
+                        var model1 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = dealerdetails.DealerId,
+                            Email = dealerdetails.Email,
+                            Mobile = dealerdetails.Mobile,
+                            Details = "DTH Booking Payment ",
+                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                            Usertype = "Dealer"
+                        };
+                        back.info(model1);
+
+                        var model2 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = masterdetails.SSId,
+                            Email = masterdetails.Email,
+                            Mobile = masterdetails.Mobile,
+                            Details = "DTH Booking Payment ",
+                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                            Usertype = "Master"
+                        };
+                        back.info(model2);
+                    }
+                    catch { }
                     if (ch == "DTH Connection Booking Success.")
                     {
                         TempData["Status"] = "Success";

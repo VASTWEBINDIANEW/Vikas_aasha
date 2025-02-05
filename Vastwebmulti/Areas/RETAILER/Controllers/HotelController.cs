@@ -779,7 +779,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         var dbrespo = db.proc_HotelBookingPayment(userid, "", roomblockModel.GuestNationality, roomblockModel.NoOfRooms, "", roomblockModel.IsVoucherBooking, "", "", "", roomblockModel.HotelCode, roomblockModel.HotelName, roomblockModel.ResultIndex.ToString(),
                          roomblockModel.TraceId, "", "", "", "", "", "", "", JsonConvert.SerializeObject(roomblockModel), totalOferFare, totalPublishedFare
                          , roomblockModel.checkindate, roomblockModel.checkoutdate, model.IsDomestic, Idno, IsSuccess, Message);
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
 
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = userid,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "Hotel Booking ",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.info(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "Hotel Booking ",
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.info(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "Hotel Booking ",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.info(model2);
+                        }
+                        catch { }
                         #endregion
                         if (Convert.ToBoolean(IsSuccess.Value) == true)
                         {
@@ -829,6 +877,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 if (respo.Content == null || respo.Content.ADDINFO == null || respo.Content.ADDINFO.Error.ErrorCode != 0)
                                 {
                                     db.proc_UpdateHotelBooking(Idno.Value.ToString(), userid, task.Result.Content, 1, "Failed", "", "", null, isVoucherBooking, "", null, "", IsSuccess, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Hotel Booking Refund " ,
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     TempData["Status"] = "Failed";
                                     TempData["Message"] = respo.Content.ADDINFO.Error.ErrorMessage;
                                     return RedirectToAction("Travel", "Home");
@@ -853,6 +950,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     db.proc_UpdateHotelBooking(Idno.Value.ToString(), userid, task.Result.Content, 1, BookingSts, InvoiceNumber, "", IsPriceChanged,
                                     isVoucherBooking, BookingRefNo, IsCancellationPolicyChanged, BookingId, IsSuccess, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     TempData["Status"] = "Failed";
                                     TempData["Message"] = "Hotel booking is " + BookingSts;
                                     return RedirectToAction("Travel", "Home");
@@ -973,6 +1119,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     db.proc_UpdateHotelBooking(Idno.Value.ToString(), userid, task.Result.Content, 1, "Failed", "", "", null,
                                         isVoucherBooking, "", null, "", IsSuccess, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Hotel Booking Refund " ,
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     TempData["Status"] = "Failed";
                                     TempData["Message"] = respo.Content.ADDINFO.Error.ErrorMessage;
                                     return RedirectToAction("Travel", "Home");
@@ -997,6 +1192,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     db.proc_UpdateHotelBooking(Idno.Value.ToString(), userid, task.Result.Content, 1, BookingSts, InvoiceNumber, "", IsPriceChanged,
                                     isVoucherBooking, BookingRefNo, IsCancellationPolicyChanged, BookingId, IsSuccess, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     TempData["Status"] = "Failed";
                                     TempData["Message"] = "Hotel booking is " + BookingSts;
                                     return RedirectToAction("Travel", "Home");
@@ -1264,6 +1508,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     {
                                         db.proc_UpdateHotelBooking(Entry.idno.ToString(), userid, respo.Content, 1, BookingSts, InvoiceNumber, "", IsPriceChanged,
                                    VoucherStatus, BookingRefNo, IsCancellationPolicyChanged, BookingId, IsSuccess, Message);
+                                   
                                         var AjaxRespo1 = new { Status = "Failed", Message = "Booking status : " + BookingSts };
                                         return Json(JsonConvert.SerializeObject(AjaxRespo1));
                                     }
@@ -1389,6 +1634,56 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(Boolean));
                     System.Data.Entity.Core.Objects.ObjectParameter Idno = new System.Data.Entity.Core.Objects.ObjectParameter("IdNo", typeof(int));
                     var dbrespo = db.proc_HotelGenerateVoucherForHoldBooking(userid, BId, voucherModeljson, Id, IsSuccess, Message);
+
+                    try
+                    {
+                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                        var admininfo = db.Admin_details.SingleOrDefault();
+                        Backupinfo back = new Backupinfo();
+                        var modeln = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = userid,
+                            Email = retailerdetails.Email,
+                            Mobile = retailerdetails.Mobile,
+                            Details = "Hotel Booking  ",
+                            RemainBalance = remdetails.Remainamount,
+                            Usertype = "Retailer"
+                        };
+                        back.info(modeln);
+
+                        var model1 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = dealerdetails.DealerId,
+                            Email = dealerdetails.Email,
+                            Mobile = dealerdetails.Mobile,
+                            Details = "Hotel Booking  ",
+                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                            Usertype = "Dealer"
+                        };
+                        back.info(model1);
+
+                        var model2 = new Backupinfo.Addinfo
+                        {
+                            Websitename = admininfo.WebsiteUrl,
+                            RetailerID = masterdetails.SSId,
+                            Email = masterdetails.Email,
+                            Mobile = masterdetails.Mobile,
+                            Details = "Hotel Booking  ",
+                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                            Usertype = "Master"
+                        };
+                        back.info(model2);
+                    }
+                    catch { }
                     if (Convert.ToBoolean(IsSuccess.Value) == true)
                     {
 
@@ -1428,6 +1723,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             db.proc_UpdateHotel_Hold_Booking(Entry.idno.ToString(), userid, respo.Content, 1, BookingSts, InvoiceNumber, "", IsPriceChanged,
                                         true, BookingRefNo, IsCancellationPolicyChanged, BookingId, IsSuccess, Message);
+                                            try
+                                            {
+                                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                Backupinfo back = new Backupinfo();
+                                                var modeln = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = userid,
+                                                    Email = retailerdetails.Email,
+                                                    Mobile = retailerdetails.Mobile,
+                                                    Details = "Hotel Booking Refund ",
+                                                    RemainBalance = remdetails.Remainamount,
+                                                    Usertype = "Retailer"
+                                                };
+                                                back.info(modeln);
+
+                                                var model1 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = dealerdetails.DealerId,
+                                                    Email = dealerdetails.Email,
+                                                    Mobile = dealerdetails.Mobile,
+                                                    Details = "Hotel Booking Refund ",
+                                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                    Usertype = "Dealer"
+                                                };
+                                                back.info(model1);
+
+                                                var model2 = new Backupinfo.Addinfo
+                                                {
+                                                    Websitename = admininfo.WebsiteUrl,
+                                                    RetailerID = masterdetails.SSId,
+                                                    Email = masterdetails.Email,
+                                                    Mobile = masterdetails.Mobile,
+                                                    Details = "Hotel Booking Refund ",
+                                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                    Usertype = "Master"
+                                                };
+                                                back.info(model2);
+                                            }
+                                            catch { }
                                             var AjaxRespo1 = new { Status = "Failed", Message = "Booking status : " + BookingSts };
                                             return Json(JsonConvert.SerializeObject(AjaxRespo1));
                                         }
@@ -1731,6 +2075,55 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     System.Data.Entity.Core.Objects.ObjectParameter Message = new System.Data.Entity.Core.Objects.ObjectParameter("Message", typeof(string));
                                     System.Data.Entity.Core.Objects.ObjectParameter Status = new System.Data.Entity.Core.Objects.ObjectParameter("Status", typeof(string));
                                     var dbRespo = db.proc_HotelCancellationRefund(idno, ChangeReqId, RefundedAmount, CancellationCharge, ChangeRequestStatus, respo.Content, Status, Message);
+                                    try
+                                    {
+                                        var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                        var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                        var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                        var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                        var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                        var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                        var admininfo = db.Admin_details.SingleOrDefault();
+                                        Backupinfo back = new Backupinfo();
+                                        var modeln = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = userid,
+                                            Email = retailerdetails.Email,
+                                            Mobile = retailerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = remdetails.Remainamount,
+                                            Usertype = "Retailer"
+                                        };
+                                        back.info(modeln);
+
+                                        var model1 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = dealerdetails.DealerId,
+                                            Email = dealerdetails.Email,
+                                            Mobile = dealerdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                            Usertype = "Dealer"
+                                        };
+                                        back.info(model1);
+
+                                        var model2 = new Backupinfo.Addinfo
+                                        {
+                                            Websitename = admininfo.WebsiteUrl,
+                                            RetailerID = masterdetails.SSId,
+                                            Email = masterdetails.Email,
+                                            Mobile = masterdetails.Mobile,
+                                            Details = "Hotel Booking Refund ",
+                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                            Usertype = "Master"
+                                        };
+                                        back.info(model2);
+                                    }
+                                    catch { }
                                     if (ChangeRequestStatus == 2 || ChangeRequestStatus == 1)
                                     {
                                         var AjaxRespo1 = new { Status = "Pending", Message = "Cancellation request is in proccess." };

@@ -217,6 +217,29 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
                                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                                      System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 var msg = db.Auto_Fundtransfer_Admin_to_master(userid, transferid, output).Single().msg;
+                                try
+                                {
+                                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == userid).SingleOrDefault();
+
+                                   var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == userid).SingleOrDefault();
+
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                                 
+
+                                    var model2 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = userid,
+                                        Email = masterdetails.Email,
+                                        Mobile = masterdetails.Mobile,
+                                        Details = "Fund Recived From Admin ",
+                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                        Usertype = "Master"
+                                    };
+                                    back.info(model2);
+                                }
+                                catch { }
                                 if (msg == "Success")
                                 {
                                     var TotalAmount = reaminbalance_master.Remainamount + automainmiumbal.Transferamount;
@@ -3408,6 +3431,45 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
                             // {
                             ch = db.Insert_SuperStokist_To_Dealer(masterid, DealerId, amount, 0, hdPaymentMode, comment, "Master", hdMDcollection, hdMDBank, hdMDaccountno, "Direct", transferid, output).Single().msg;
                             // }
+                            try
+                            {
+                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == DealerId).SingleOrDefault();
+                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == masterid).SingleOrDefault();
+
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == DealerId).SingleOrDefault();
+                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == masterid).SingleOrDefault();
+
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                          
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = DealerId,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Fund Recived From Master ",
+
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.Fundtransfer(model1);
+
+                                var model2 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = masterid,
+                                    Email = masterdetails.Email,
+                                    Mobile = masterdetails.Mobile,
+                                    Details = "Fund Transfer to Dealer ",
+                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                    Usertype = "Master"
+                                };
+                                back.Fundtransfer(model2);
+                            }
+                            catch { }
+
                             var Admindetails = db.Admin_details.Single();
                             if (ch == "Balance Transfer SuccessFully.")
                             {
@@ -3656,12 +3718,51 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
             {
                 hdtype = "rejected";
             }
-            var sts = _db.dlm_purchage.Where(a => a.id == hdidno.Value).Single().sts.ToUpper();
+            var payinfo = _db.dlm_purchage.Where(a => a.id == hdidno.Value).SingleOrDefault();
+            var sts= payinfo.sts.ToUpper();
             if (sts == "PENDING")
             {
                 System.Data.Entity.Core.Objects.ObjectParameter output = new
          System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var ch = _db.update_dlm_purchage(Convert.ToInt32(hdidno), hdtype, 0, txtcommentwrite, output).Single().msg;
+                try
+                {
+                   var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == payinfo.dlmid).SingleOrDefault();
+                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == payinfo.frm).SingleOrDefault();
+
+                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == payinfo.dlmid).SingleOrDefault();
+                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == payinfo.frm).SingleOrDefault();
+
+                    var admininfo = db.Admin_details.SingleOrDefault();
+                    Backupinfo back = new Backupinfo();
+                   
+
+                    var model1 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = payinfo.dlmid,
+                        Email = dealerdetails.Email,
+                        Mobile = dealerdetails.Mobile,
+                        Details = "Fund Recived From Master ",
+
+                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        Usertype = "Dealer"
+                    };
+                    back.Fundtransfer(model1);
+
+                    var model2 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = masterdetails.SSId,
+                        Email = masterdetails.Email,
+                        Mobile = masterdetails.Mobile,
+                        Details = "Fund Transfer to Dealer ",
+                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                        Usertype = "Master"
+                    };
+                    back.Fundtransfer(model2);
+                }
+                catch { }
                 if (ch == "Balance Transfer SuccessFully.")
                 {
                     TempData["successorder"] = ch;

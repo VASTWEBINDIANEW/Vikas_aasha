@@ -193,6 +193,30 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                      System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 //  var msg = db.Auto_Fundtransfer_Admin_to_Dealer(adminid,userid, transferid, output).Single().msg;
                                 var msg = db.Auto_Fundtransfer_Admin_to_Dealer(adminid, userid, transferid, output).Single().msg;
+                                try
+                                {
+                                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                                  
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                         
+
+                                    var model1 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = userid,
+                                        Email = dealerdetails.Email,
+                                        Mobile = dealerdetails.Mobile,
+                                        Details = "Fund Recived From Admin ",
+                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                        Usertype = "Dealer"
+                                    };
+                                    back.Fundtransfer(model1);
+
+                               
+                                }
+                                catch { }
                                 if (msg == "Success")
                                 {
                                     var TotalAmount = reaminbalance_master.Remainamount + automainmiumbal.Transferamount;
@@ -310,6 +334,44 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                                      System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 var msg = db.Auto_Fundtransfer_masterdistributor_to_Dealer(remdetailsallinform.SSId, userid, transferid, output).Single().msg;
+                                try
+                                {
+                                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                                    var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                                    var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                    var admininfo = db.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+                                  
+
+                                    var model1 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = dealerdetails.DealerId,
+                                        Email = dealerdetails.Email,
+                                        Mobile = dealerdetails.Mobile,
+                                        Details = "Fund Recived From Master ",
+
+                                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                        Usertype = "Dealer"
+                                    };
+                                    back.Fundtransfer(model1);
+
+                                    var model2 = new Backupinfo.Addinfo
+                                    {
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = masterdetails.SSId,
+                                        Email = masterdetails.Email,
+                                        Mobile = masterdetails.Mobile,
+                                        Details = "Fund Transfer to Dealer ",
+                                        RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                        Usertype = "Master"
+                                    };
+                                    back.Fundtransfer(model2);
+                                }
+                                catch { }
                                 if (msg == "Success")
                                 {
                                     var TotalAmount = reaminbalance_master.Remainamount + automainmiumbalbymaster.Transferamount;
@@ -2400,7 +2462,44 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                             //  if (ddl_fund_type == "Cash" || ddl_fund_type == "Credit")
                             // {
                             ch = db.insert_dealer_to_retailer_balance(userid, hdMDDLM, Convert.ToDecimal(balance), 0, hdPaymentMode, comment, collectionby, bankname, adminacco, "Direct", "Dealer", transferid, output).Single().msg;
+                            try
+                            {
+                               var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == hdMDDLM).SingleOrDefault();
 
+                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == hdMDDLM).SingleOrDefault();
+                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                              
+                                var admininfo = db.Admin_details.SingleOrDefault();
+                                Backupinfo back = new Backupinfo();
+                                var modeln = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = hdMDDLM,
+                                    Email = retailerdetails.Email,
+                                    Mobile = retailerdetails.Mobile,
+                                    Details = "Fund Recived From Dealer ",
+                                    RemainBalance = remdetails.Remainamount,
+                                    Usertype = "Retailer"
+                                };
+                                back.Fundtransfer(modeln);
+
+                                var model1 = new Backupinfo.Addinfo
+                                {
+                                    Websitename = admininfo.WebsiteUrl,
+                                    RetailerID = userid,
+                                    Email = dealerdetails.Email,
+                                    Mobile = dealerdetails.Mobile,
+                                    Details = "Fund Transfer To Retailer ",
+
+                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                    Usertype = "Dealer"
+                                };
+                                back.Fundtransfer(model1);
+
+                              
+                            }
+                            catch { }
                             // }
                             var Websitename = db.Admin_details.Single().WebsiteUrl;
                             if (ch == "Balance Transfer Successfully.")
@@ -3181,6 +3280,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
         [HttpPost]
         public ActionResult updatepurchage_dlmTOret(int hdidno, string hdtype, string txtcommentwrite)
         {
+            var userid = User.Identity.GetUserId();
             if (hdtype == "APP")
             {
                 hdtype = "Approved";
@@ -3189,12 +3289,50 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             {
                 hdtype = "rejected";
             }
-            var sts = db.rem_purchage.Where(a => a.idno == hdidno).Single().sts.ToUpper();
+            var purinfo = db.rem_purchage.Where(a => a.idno == hdidno).SingleOrDefault();
+            var sts = purinfo.sts.ToUpper();
             if (sts == "PENDING")
             {
                 System.Data.Entity.Core.Objects.ObjectParameter output = new
                 System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var ch = db.update_rem_purchage(Convert.ToInt32(hdidno), hdtype, 0, txtcommentwrite, output).Single().msg;
+                try
+                {
+                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == purinfo.remid).SingleOrDefault();
+                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                   
+                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == purinfo.remid).SingleOrDefault();
+                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                    
+                    var admininfo = db.Admin_details.SingleOrDefault();
+                    Backupinfo back = new Backupinfo();
+                    var modeln = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = purinfo.remid,
+                        Email = retailerdetails.Email,
+                        Mobile = retailerdetails.Mobile,
+                        Details = "Fund Recived From Dealer ",
+                        RemainBalance = remdetails.Remainamount,
+                        Usertype = "Retailer"
+                    };
+                    back.Fundtransfer(modeln);
+
+                    var model1 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = userid,
+                        Email = dealerdetails.Email,
+                        Mobile = dealerdetails.Mobile,
+                        Details = "Fund Transfer To Retailer ",
+                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        Usertype = "Dealer"
+                    };
+                    back.Fundtransfer(model1);
+
+                  
+                }
+                catch { }
                 if (ch == "Credit Pay Successfully." || ch == "Balance Transfer Successfully.")
                 {
                     TempData["successorder"] = ch;
@@ -3913,6 +4051,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
         [HttpPost]
         public ActionResult updatepurchage_dlm(int id, string type, string txtcomment, string HD_frm_date, string HD_to_date)
         {
+            var userid = User.Identity.GetUserId();
             if (type == "APP")
             {
                 type = "Approved";
@@ -3921,12 +4060,48 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
             {
                 type = "rejected";
             }
-            var sts = db.rem_purchage.Where(a => a.idno == id).Single().sts.ToUpper();
+            var purinfo = db.rem_purchage.Where(a => a.idno == id).SingleOrDefault();
+            var sts= purinfo.sts.ToUpper();
             if (sts == "PENDING")
             {
-                System.Data.Entity.Core.Objects.ObjectParameter output = new
-System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 var ch = db.update_rem_purchage(Convert.ToInt32(id), type, 0, txtcomment, output).Single().msg;
+                try
+                {
+                    var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == purinfo.remid).SingleOrDefault();
+                    var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                  
+                    var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == purinfo.remid).SingleOrDefault();
+                    var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                   
+                    var admininfo = db.Admin_details.SingleOrDefault();
+                    Backupinfo back = new Backupinfo();
+                    var modeln = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = userid,
+                        Email = retailerdetails.Email,
+                        Mobile = retailerdetails.Mobile,
+                        Details = "Fund Recived From Dealer ",
+                        RemainBalance = remdetails.Remainamount,
+                        Usertype = "Retailer"
+                    };
+                    back.Fundtransfer(modeln);
+
+                    var model1 = new Backupinfo.Addinfo
+                    {
+                        Websitename = admininfo.WebsiteUrl,
+                        RetailerID = dealerdetails.DealerId,
+                        Email = dealerdetails.Email,
+                        Mobile = dealerdetails.Mobile,
+                        Details = "Fund Transfer To Retailer ",
+
+                        RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        Usertype = "Dealer"
+                    };
+                    back.Fundtransfer(model1);
+                }
+                catch { }
                 if (ch == "Credit Pay Successfully." || ch == "Balance Transfer Successfully.")
                 {
                     TempData["successorder"] = ch;
@@ -3936,7 +4111,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                     TempData["failedorder"] = ch;
                 }
             }
-            string userid = User.Identity.GetUserId();
+     
             var userids = db.Users.FirstOrDefault(a => a.UserId == userid).UserId;
             string txt_frm_date = HD_frm_date;
             string txt_to_date = HD_to_date;
@@ -4938,6 +5113,45 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         System.Data.Entity.Core.Objects.ObjectParameter output = new
                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                         var outres = db.Update_Upitxn_Pending_toSuccessFailed(hideupiidres, hideupiidrestypes, txtBankRRN, output).SingleOrDefault().msg;
+                        var infochk = db.Upi_txn_details.Where(aa => aa.idno == hideupiidres).SingleOrDefault();
+                        try
+                        {
+                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == infochk.userid).SingleOrDefault();
+                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault();
+                           
+                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == infochk.userid).SingleOrDefault();
+                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault();
+                           
+                            var admininfo = db.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+                            var modeln = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = userid,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "UPI Txn Pending to Success",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.Fundtransfer(modeln);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "UPI Txn Pending to Success",
+
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.Fundtransfer(model1);
+
+                           
+                        }
+                        catch { }
                         if (outres == "Successfully")
                         {
                             TempData["msgupisucc"] = outres;
