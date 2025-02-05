@@ -7,16 +7,19 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.UI.WebControls;
+using System.Windows.Interop;
 using Vastwebmulti.Areas.ADMIN.Controllers;
 using Vastwebmulti.Areas.ADMIN.Models;
 using Vastwebmulti.Areas.WHITELABEL.Models;
@@ -840,6 +843,143 @@ namespace Vastwebmulti.Controllers
             return View();
         }
 
+        public ActionResult DeleteUser()
+        {
+            return View();
+        }
+
+        private string generatenum()
+        {
+            //Generate Random no.of 4 Digit between range 0 to 9999
+            Random _rdm = new Random();
+            var otp = _rdm.Next(0, 9999).ToString("0000");
+            return otp;
+        }
+        public ActionResult DeleteRetailer(string mobiles)
+        {
+            try
+            {
+                var retailer = DB.Retailer_Details.FirstOrDefault(x => x.Mobile == mobiles) ?? DB.Retailer_Details.FirstOrDefault(x => x.Email == mobiles);
+                if (retailer == null)
+                {
+                    return Json("This Email and Mobile Number is not registered with us!", JsonRequestBehavior.AllowGet);
+                }
+                var activeRetailer = DB.Retailer_Details.SingleOrDefault(aa => aa.RetailerId == retailer.RetailerId && !aa.ISDeleteuser == false);
+                if (activeRetailer == null)
+                {
+                    return Json("User is already deleted or inactive!", JsonRequestBehavior.AllowGet);
+                }
+                string userId = retailer.RetailerId;
+                var smsStatus = DB.SMSSendAlls.SingleOrDefault(a => a.ServiceName == "DeleteUserOTP")?.Status;
+                var emailStatus = DB.EmailSendAlls.SingleOrDefault(a => a.ServiceName == "DeleteUserOTP1")?.Status;
+                var otp = generatenum();
+                if (smsStatus == "Y" || emailStatus == "Y")
+                {
+                    var mobileOtp = new MobileOtp
+                    {
+                        Date = DateTime.Now,
+                        mobileno = activeRetailer.Mobile,
+                        Otp = otp,
+                        Type = "RetailerDelete",
+                        Userid = userId
+                    };
+                    DB.MobileOtps.Add(mobileOtp);
+                    DB.SaveChanges();
+                }
+                var txtMsgBody = $"Retailer Delete OTP: {otp}";
+                var adminDetails = DB.Admin_details.SingleOrDefault();
+                if (adminDetails == null)
+                {
+                    return Json("Admin details not found!", JsonRequestBehavior.AllowGet);
+                }
+                smssend.sms_init(smsStatus, smsStatus, "RetailerDelete", adminDetails.mobile, otp);
+                if (emailStatus == "Y")
+                {
+                    smssend.SendEmailAll(adminDetails.email, txtMsgBody, "User Delete", adminDetails.Companyname);
+                }
+                return Json("success", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json($"Error: {ex.Message}", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public async Task<ActionResult> ConfirmDeleteRetailerOTP(string mobile, string Deleteotp)
+        {
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            try
+            {
+                var retailer = DB.Retailer_Details.FirstOrDefault(x => x.Mobile == mobile) ?? DB.Retailer_Details.FirstOrDefault(x => x.Email == mobile);
+                if (retailer == null)
+                {
+                    return Json("This Email and Mobile Number is not registered with us!", JsonRequestBehavior.AllowGet);
+                }
+                var chk = await DB.MobileOtps.Where(aa => aa.Otp == Deleteotp).Take(1).OrderByDescending(aa => aa.Date).SingleOrDefaultAsync();
+                if (chk != null)
+                {
+                    var ekycstschk = await DB.ekycChecks.Where(x => x.userid == retailer.RetailerId).SingleOrDefaultAsync();
+                    string msg = "OK";
+                    if (ekycstschk != null)
+                    {
+                        if (ekycstschk.isvalid == true)
+                        {
+                            msg = "NOTOK";
+                        }
+                    }
+                    if(msg == "OK")
+                    {
+                        System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                        var msgres = DB.Retailer_delete_Only_change_Status(retailer.RetailerId, output).SingleOrDefault().msg;
+
+                        if (msgres.ToUpper() == "SUCCESS")
+                        {
+                            UserManager.UpdateSecurityStamp(retailer.RetailerId);
+
+                            var retailersss = await DB.Retailer_Details.Where(x => x.RetailerId == retailer.RetailerId).SingleOrDefaultAsync();
+
+                            string path = Server.MapPath("~/" + retailersss.videokycpath);
+                            if (System.IO.File.Exists(path))
+                            {
+                                System.IO.File.Delete(path);
+                                retailersss.videokycpath = null;
+                                DB.SaveChanges();
+                            }
+                        }
+                        viewmodel.select_retailer_details_paging = DB.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
+                        viewmodel.Show_Service_namelist = DB.Show_Service_name.ToList();
+                        viewmodel.Service_BlockUserwiseclslist = from tbl in DB.Show_Service_name
+                                                                 join tbl1 in DB.Service_BlockUserwise
+                                                                 on tbl.idno equals tbl1.Show_Service_name_id
+                                                                 select new Service_BlockUserwisecls
+                                                                 {
+                                                                     idno = tbl.idno,
+                                                                     servicename = tbl.servicename,
+                                                                     serviceidno = tbl1.Show_Service_name_id,
+                                                                     remid = tbl1.remid,
+                                                                     servicestatus = tbl1.status,
+                                                                     basedupdate_id = tbl1.idno
+                                                                 };
+                        return Json("success", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json("This User Kyc is Exists. You can not delete this user!", JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json("OTP Miss Match!", JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(ex, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
 
         public ActionResult DownloadLink()
         {
@@ -1819,7 +1959,7 @@ namespace Vastwebmulti.Controllers
         // Login From
         public ActionResult Login(string id)
         {
-            
+
 
             var userid = User.Identity.GetUserId();
             ViewBag.signin_signup = id;
@@ -2587,7 +2727,7 @@ namespace Vastwebmulti.Controllers
         }
         public ActionResult about_us()
         {
-                return View();
+            return View();
         }
         public ActionResult recharge_api()
         {
@@ -2681,7 +2821,7 @@ namespace Vastwebmulti.Controllers
         {
             ViewBag.Showboxid = id;
             return View();
-        } 
+        }
 
 
 
