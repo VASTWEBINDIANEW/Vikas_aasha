@@ -4610,6 +4610,139 @@ namespace Vastwebmulti.Controllers
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
                     }
+                    else if(Type== "DMT-WALLET-MONEY-WALLET-LOADN")
+                    {
+                        var data1 = Transid;
+                        dynamic dyrespchk = JsonConvert.DeserializeObject(data1);
+                        string Amount = dyrespchk.amount;
+                        string mobile = dyrespchk.mobile;
+                        string merchantcode = MSG;
+                        string account = "";
+                        string bankname = "";
+                        string ifsccode = "";
+                        string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                        Guid uniqueIdinfo = Guid.NewGuid();
+                        string uniqueid = uniqueIdinfo.ToString();
+                        var Ipaddress = GetComputer_InternetIP();
+                        System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                        decimal amt = Convert.ToDecimal(Amount);
+                        var msginfo = dbsrs.Money_transfer_PPI(merchantcode, amt, amt, mobile, account, bankname, ifsccode,
+                            agentid, agentid, "IMPS", "ONLINE", "Y", "", "VASTWEB", Ipaddress, "", "", 0, 0, "DMTPPI", uniqueid, outputchk).SingleOrDefault().msg;
+                        try
+                        {
+                            var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == merchantcode).SingleOrDefault();
+                            var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                            var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                            var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == merchantcode).SingleOrDefault();
+                            var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                            var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                            var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                            Backupinfo back = new Backupinfo();
+
+                            var model = new Backupinfo.Addinfo
+                            {
+
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = merchantcode,
+                                Email = retailerdetails.Email,
+                                Mobile = retailerdetails.Mobile,
+                                Details = "PPI Money Transfer",
+                                RemainBalance = remdetails.Remainamount,
+                                Usertype = "Retailer"
+                            };
+                            back.MoneyTransfer(model);
+
+                            var model1 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = dealerdetails.DealerId,
+                                Email = dealerdetails.Email,
+                                Mobile = dealerdetails.Mobile,
+                                Details = "PPI Money Transfer",
+                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                Usertype = "Dealer"
+                            };
+                            back.MoneyTransfer(model1);
+
+                            var model2 = new Backupinfo.Addinfo
+                            {
+                                Websitename = admininfo.WebsiteUrl,
+                                RetailerID = masterdetails.SSId,
+                                Email = masterdetails.Email,
+                                Mobile = masterdetails.Mobile,
+                                Details = "PPI Money Transfer",
+                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                Usertype = "Master"
+                            };
+                            back.MoneyTransfer(model2);
+                        }
+                        catch { }
+                        if (msginfo == "OK")
+                        {
+                            var resp = new
+                            {
+                                status = true,
+                                agentid = agentid,
+                                message = "Transaction Successfull"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                agentid = agentid,
+                                message = msginfo
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else if(Type== "DMT-WALLET-MONEY-V2-UPDATE")
+                    {
+                        var mobile = Status;
+                        var Amount = Reqid;
+                        var merchantcode = MSG;
+                        var data1 = Transid;
+                        dynamic dyrespchk = JsonConvert.DeserializeObject(data1);
+                        string benname = dyrespchk.benname;
+                        string bankname = dyrespchk.bankname;
+                        string account = dyrespchk.account;
+                        string transfertype = dyrespchk.transfertype;
+                        //  string wallet_refid = dyrespchk.wallet_refid;
+                        string ifsccode = dyrespchk.ifsccode;
+                        string txn_status = dyrespchk.txn_status;
+                        string response_code = dyrespchk.response_code;
+                        string utr = dyrespchk.utr;
+                        string agentinfo = dyrespchk.agentinfo;
+                        var entryinfochk = dbsrs.IMPS_transtion_detsils.Where(aa => aa.trans_id == agentinfo).SingleOrDefault();
+                        if(entryinfochk.Status.ToUpper()=="PENDING")
+                        {
+                            entryinfochk.accountno = account;
+                            entryinfochk.ifsccode = ifsccode;
+                            entryinfochk.bank_nm = bankname;
+                            entryinfochk.recivername = benname;
+                            dbsrs.SaveChanges();
+                            var resp = new
+                            {
+                                status = true,
+                                message = "Entry Updated"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            var resp = new
+                            {
+                                status = false,
+                                message = "Entry Not Found"
+                            };
+                            return Json(resp, JsonRequestBehavior.AllowGet);
+                        }
+
+                    }
                     else if(Type== "DMT-WALLET-MONEY-V2")
                     {
                         var mobile = Status;
@@ -4628,89 +4761,89 @@ namespace Vastwebmulti.Controllers
                         string utr = dyrespchk.utr;
                         string agentinfo = dyrespchk.agentinfo;
             
-                        if (response_code == "0")
-                        {
-                            string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-                            Guid uniqueIdinfo = Guid.NewGuid();
-                            string uniqueid = uniqueIdinfo.ToString();
-                            var Ipaddress = GetComputer_InternetIP();
-                            System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                            decimal amt = Convert.ToDecimal(Amount);
-                            var msginfo = dbsrs.Money_transfer_PPI(merchantcode, amt, amt, mobile, account, bankname, ifsccode,
-                                agentid, agentid, transfertype, "ONLINE", "Y", "", "VASTWEB", Ipaddress, "", "", 0, 0, "DMTPPI", uniqueid, outputchk).SingleOrDefault().msg;
-                            try
-                            {
-                                var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == merchantcode).SingleOrDefault();
-                                var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+                        //if (response_code == "0")
+                        //{
+                        //    string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                        //    Guid uniqueIdinfo = Guid.NewGuid();
+                        //    string uniqueid = uniqueIdinfo.ToString();
+                        //    var Ipaddress = GetComputer_InternetIP();
+                        //    System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                        //    decimal amt = Convert.ToDecimal(Amount);
+                        //    var msginfo = dbsrs.Money_transfer_PPI(merchantcode, amt, amt, mobile, account, bankname, ifsccode,
+                        //        agentid, agentid, transfertype, "ONLINE", "Y", "", "VASTWEB", Ipaddress, "", "", 0, 0, "DMTPPI", uniqueid, outputchk).SingleOrDefault().msg;
+                        //    try
+                        //    {
+                        //        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == merchantcode).SingleOrDefault();
+                        //        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                        //        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
 
-                                var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == merchantcode).SingleOrDefault();
-                                var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+                        //        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == merchantcode).SingleOrDefault();
+                        //        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                        //        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
 
-                                var admininfo = dbsrs.Admin_details.SingleOrDefault();
-                                Backupinfo back = new Backupinfo();
+                        //        var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                        //        Backupinfo back = new Backupinfo();
 
-                                var model = new Backupinfo.Addinfo
-                                {
+                        //        var model = new Backupinfo.Addinfo
+                        //        {
 
-                                    Websitename = admininfo.WebsiteUrl,
-                                    RetailerID = merchantcode,
-                                    Email = retailerdetails.Email,
-                                    Mobile = retailerdetails.Mobile,
-                                    Details = "PPI Money Transfer",
-                                    RemainBalance = remdetails.Remainamount,
-                                    Usertype = "Retailer"
-                                };
-                                back.MoneyTransfer(model);
+                        //            Websitename = admininfo.WebsiteUrl,
+                        //            RetailerID = merchantcode,
+                        //            Email = retailerdetails.Email,
+                        //            Mobile = retailerdetails.Mobile,
+                        //            Details = "PPI Money Transfer",
+                        //            RemainBalance = remdetails.Remainamount,
+                        //            Usertype = "Retailer"
+                        //        };
+                        //        back.MoneyTransfer(model);
 
-                                var model1 = new Backupinfo.Addinfo
-                                {
-                                    Websitename = admininfo.WebsiteUrl,
-                                    RetailerID = dealerdetails.DealerId,
-                                    Email = dealerdetails.Email,
-                                    Mobile = dealerdetails.Mobile,
-                                    Details = "PPI Money Transfer",
-                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
-                                    Usertype = "Dealer"
-                                };
-                                back.MoneyTransfer(model1);
+                        //        var model1 = new Backupinfo.Addinfo
+                        //        {
+                        //            Websitename = admininfo.WebsiteUrl,
+                        //            RetailerID = dealerdetails.DealerId,
+                        //            Email = dealerdetails.Email,
+                        //            Mobile = dealerdetails.Mobile,
+                        //            Details = "PPI Money Transfer",
+                        //            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                        //            Usertype = "Dealer"
+                        //        };
+                        //        back.MoneyTransfer(model1);
 
-                                var model2 = new Backupinfo.Addinfo
-                                {
-                                    Websitename = admininfo.WebsiteUrl,
-                                    RetailerID = masterdetails.SSId,
-                                    Email = masterdetails.Email,
-                                    Mobile = masterdetails.Mobile,
-                                    Details = "PPI Money Transfer",
-                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
-                                    Usertype = "Master"
-                                };
-                                back.MoneyTransfer(model2);
-                            }
-                            catch { }
-                            if (msginfo == "OK")
-                            {
-                                var resp = new
-                                {
-                                    status = true,
-                                    agentid = agentid,
-                                    message = "Transaction Successfull"
-                                };
-                                return Json(resp, JsonRequestBehavior.AllowGet);
-                            }
-                            else
-                            {
-                                var resp = new
-                                {
-                                    status = false,
-                                    agentid = agentid,
-                                    message = msginfo
-                                };
-                                return Json(resp, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else if(response_code=="1")
+                        //        var model2 = new Backupinfo.Addinfo
+                        //        {
+                        //            Websitename = admininfo.WebsiteUrl,
+                        //            RetailerID = masterdetails.SSId,
+                        //            Email = masterdetails.Email,
+                        //            Mobile = masterdetails.Mobile,
+                        //            Details = "PPI Money Transfer",
+                        //            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                        //            Usertype = "Master"
+                        //        };
+                        //        back.MoneyTransfer(model2);
+                        //    }
+                        //    catch { }
+                        //    if (msginfo == "OK")
+                        //    {
+                        //        var resp = new
+                        //        {
+                        //            status = true,
+                        //            agentid = agentid,
+                        //            message = "Transaction Successfull"
+                        //        };
+                        //        return Json(resp, JsonRequestBehavior.AllowGet);
+                        //    }
+                        //    else
+                        //    {
+                        //        var resp = new
+                        //        {
+                        //            status = false,
+                        //            agentid = agentid,
+                        //            message = msginfo
+                        //        };
+                        //        return Json(resp, JsonRequestBehavior.AllowGet);
+                        //    }
+                        //}
+                        if(response_code=="1")
                         {
                             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
 
