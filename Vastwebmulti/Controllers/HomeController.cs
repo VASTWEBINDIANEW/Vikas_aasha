@@ -203,7 +203,6 @@ namespace Vastwebmulti.Controllers
             }
         }
 
-
         public ActionResult Index1()
         {
 
@@ -864,7 +863,7 @@ namespace Vastwebmulti.Controllers
                 {
                     return Json("This Email and Mobile Number is not registered with us!", JsonRequestBehavior.AllowGet);
                 }
-                var activeRetailer = DB.Retailer_Details.SingleOrDefault(aa => aa.RetailerId == retailer.RetailerId && !aa.ISDeleteuser == false);
+                var activeRetailer = DB.Retailer_Details.SingleOrDefault(aa => aa.RetailerId == retailer.RetailerId && aa.ISDeleteuser == false);
                 if (activeRetailer == null)
                 {
                     return Json("User is already deleted or inactive!", JsonRequestBehavior.AllowGet);

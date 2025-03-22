@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Vastwebmulti.Models
@@ -191,6 +192,17 @@ namespace Vastwebmulti.Models
         [StringLength(300, ErrorMessage = "Bank address cannot exceed 300 characters.")]
         public string BankAddress { get; set; }
     }
-
-
+    public class PanAadharReportViewModel
+    {
+        public string RetailerId { get; set; }
+        public string TransactionId { get; set; }
+        public decimal PanCharge { get; set; }
+        public decimal AadharCharge { get; set; }
+        public string ChargeType { get; set; }
+        public string CreatedAt { get; set; }
+        public string RetailerName { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string Frm_Name { get; set; }
+    }
 }
