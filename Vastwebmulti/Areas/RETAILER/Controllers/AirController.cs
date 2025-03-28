@@ -1272,7 +1272,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Flight Boking ",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(modeln);
@@ -1344,7 +1344,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Flight Booking Refund ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.info(modeln);
@@ -1822,7 +1822,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Flight Booking ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);
@@ -2097,7 +2097,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Flight Booking ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);
@@ -2357,7 +2357,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Flight Booking ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);
@@ -2652,7 +2652,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Flight Booking ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);
@@ -2771,7 +2771,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Flight Booking Refund",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.info(modeln);
@@ -3218,7 +3218,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         return 0;
                     }
-                    return entry.marginPercentage;
+                    return (decimal)entry.marginPercentage;
                 }
                 else
                 {

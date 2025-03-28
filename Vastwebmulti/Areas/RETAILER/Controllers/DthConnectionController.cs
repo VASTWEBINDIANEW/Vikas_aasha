@@ -162,7 +162,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "DTH Booking Payment ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);

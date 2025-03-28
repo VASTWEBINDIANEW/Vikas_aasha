@@ -357,7 +357,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = remdetailsallinform.Email,
                                                 Mobile = remdetailsallinform.Mobile,
                                                 Details = "Auto Credit Transfer",
-                                                RemainBalance = remremain,
+                                                RemainBalance = (decimal)remremain,
                                                 Usertype = "Retailer"
                                             };
                                             back.Fundtransfer(model);
@@ -383,7 +383,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = remdetailsallinform.Email,
                                             Mobile = remdetailsallinform.Mobile,
                                             Details = "Auto Credit Transfer",
-                                            RemainBalance = remremain,
+                                            RemainBalance = (decimal)remremain,
                                             Usertype = "Retailer"
                                         };
                                         back.Fundtransfer(model);
@@ -522,7 +522,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = remdetailsallinform.Email,
                                                 Mobile = remdetailsallinform.Mobile,
                                                 Details = "Auto Credit Transfer",
-                                                RemainBalance = remremain,
+                                                RemainBalance = (decimal)remremain,
                                                 Usertype = "Retailer"
                                             };
                                             back.Fundtransfer(model);
@@ -566,7 +566,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = remdetailsallinform.Email,
                                             Mobile = remdetailsallinform.Mobile,
                                             Details = "Auto Credit Transfer",
-                                            RemainBalance = remremain,
+                                            RemainBalance = (decimal)remremain,
                                             Usertype = "Retailer"
                                         };
                                         back.Fundtransfer(model);
@@ -1914,7 +1914,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Recharge " + mobileno + " Amount " + amount,
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.Rechargeandutility(model);
@@ -2295,7 +2295,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -2487,7 +2487,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -2596,7 +2596,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -2815,7 +2815,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -3033,7 +3033,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.Rechargeandutility(model);
@@ -3159,7 +3159,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -3289,7 +3289,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -3458,7 +3458,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -3705,7 +3705,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -3957,7 +3957,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -5246,7 +5246,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Recharge " + mobileno + " Amount " + amount,
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.Rechargeandutility(model);
@@ -5635,7 +5635,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -5823,7 +5823,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(model);
@@ -5924,7 +5924,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(model);
@@ -6132,7 +6132,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Rechargeandutility(model);
@@ -6344,7 +6344,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -6468,7 +6468,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -6612,7 +6612,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Rechargeandutility(model);
@@ -6774,7 +6774,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -6943,7 +6943,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -7189,7 +7189,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -7440,7 +7440,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -9596,7 +9596,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Fund Transfer Rem To Rem",
-                                    RemainBalance = remainbal,
+                                    RemainBalance = (decimal)remainbal,
                                     Usertype = "Retailer"
                                 };
                                 back.Fundtransfer(model);
@@ -9608,7 +9608,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails1.Email,
                                     Mobile = retailerdetails1.Mobile,
                                     Details = "Fund Transfer Rem To Rem",
-                                    RemainBalance = remainbalretailer,
+                                    RemainBalance = (decimal)remainbalretailer,
                                     Usertype = "Retailer"
                                 };
                                 back.Fundtransfer(model);
@@ -11881,7 +11881,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Refund Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -11998,7 +11998,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Refund Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -12159,7 +12159,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Success To failed Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -12731,7 +12731,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Microatm ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Microatm(model);
@@ -15131,7 +15131,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Service Purchase ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15223,7 +15223,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Service Purchase ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15413,7 +15413,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "IRCTC Info ",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(model);
@@ -15523,7 +15523,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "IRCTC REFUND ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -15648,7 +15648,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15731,7 +15731,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15812,7 +15812,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15982,7 +15982,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -16073,7 +16073,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -16162,7 +16162,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -17067,7 +17067,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17158,7 +17158,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17247,7 +17247,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17538,7 +17538,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Gift Card Purchase ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -17646,7 +17646,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Gift Card Refund ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -18314,7 +18314,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Purchase Services ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.info(model);
@@ -18411,7 +18411,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Purchase Services ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.info(model);
@@ -19667,7 +19667,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -19809,7 +19809,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -19889,7 +19889,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -20014,7 +20014,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -20203,7 +20203,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -20361,7 +20361,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -21276,7 +21276,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Money Transfer Verify Accountnumber " + account + "",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.MoneyTransfer(model);
@@ -21478,7 +21478,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.MoneyTransfer(model);
@@ -21574,7 +21574,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.MoneyTransfer(model);
@@ -21987,7 +21987,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -22089,7 +22089,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -22173,7 +22173,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -28101,7 +28101,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -28203,7 +28203,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal) remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -28300,7 +28300,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -28648,7 +28648,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Dmt Ekyc Charge ",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.MoneyTransfer(model);
@@ -28718,7 +28718,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "DMT Ekyc Charge REfund ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -28836,7 +28836,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "DMT Ekyc Charge REfund ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -29666,7 +29666,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -29808,7 +29808,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -29964,7 +29964,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -30153,7 +30153,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -30311,7 +30311,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -31326,7 +31326,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.MoneyTransfer(model);
@@ -31598,7 +31598,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.MoneyTransfer(model);
@@ -31801,7 +31801,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -32003,7 +32003,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -33294,7 +33294,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -33396,7 +33396,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -33493,7 +33493,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -34851,7 +34851,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -34898,7 +34898,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35260,7 +35260,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35306,7 +35306,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35814,7 +35814,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "DMT Ekyc Charge",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.MoneyTransfer(model);
@@ -35873,7 +35873,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "DMT Ekyc Charge Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -36970,7 +36970,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -37112,7 +37112,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -37268,7 +37268,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -37331,7 +37331,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -37507,7 +37507,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -37665,7 +37665,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -38052,7 +38052,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Verify Accountnumber " + account + "",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -38185,7 +38185,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -38265,7 +38265,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -38693,7 +38693,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -38817,7 +38817,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -38885,7 +38885,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -39662,7 +39662,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.MoneyTransfer(model);
@@ -39935,7 +39935,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.MoneyTransfer(model);
@@ -40138,7 +40138,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -40369,7 +40369,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -40856,7 +40856,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -41017,7 +41017,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount " + Amount + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -41190,7 +41190,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Refund Accountnumber " + Accountnumber + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -41250,7 +41250,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Refund Accountnumber " + Accountnumber + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -41630,7 +41630,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Aahar Verify ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -42490,7 +42490,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -42572,7 +42572,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -42652,7 +42652,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -43115,7 +43115,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Ministatement",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.Aeps(model);
@@ -43217,7 +43217,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                         Email = retailerdetails.Email,
                                                                                         Mobile = retailerdetails.Mobile,
                                                                                         Details = "Ministatement Refund",
-                                                                                        RemainBalance = remdetails.Remainamount,
+                                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                                         Usertype = "Retailer"
                                                                                     };
                                                                                     back.Aeps(model);
@@ -43370,7 +43370,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Aeps",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.Aeps(model);
@@ -43529,7 +43529,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Aeps",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.Aeps(model);
@@ -43805,7 +43805,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "MiniStatement",
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Aeps(model);
@@ -44013,7 +44013,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Aeps",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44088,7 +44088,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "MiniStatement",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44212,7 +44212,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Aeps",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44268,7 +44268,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "MiniStatement Refund",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44325,7 +44325,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Ministatement Refund",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.Aeps(model);
@@ -44555,7 +44555,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "AEPS",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44678,7 +44678,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "MiniStatement",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Aeps(model);
@@ -44806,7 +44806,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Aeps",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Aeps(model);
@@ -44913,7 +44913,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "AEPS",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.MoneyTransfer(model);
@@ -44971,7 +44971,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "AEPS",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Aeps(model);
@@ -45358,7 +45358,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Ministatement",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Aeps(model);
@@ -45462,7 +45462,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Ministatement Refund",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.Aeps(model);
@@ -45592,7 +45592,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "AEPS",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Aeps(model);
@@ -46505,7 +46505,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Cash Widthdraw",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -46573,7 +46573,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Cash Widthdraw Refund",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -46714,7 +46714,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Cash Deposite",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(modeln);
@@ -46837,7 +46837,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Cash Depoiste Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.info(model3);
@@ -49068,7 +49068,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Refund Accountnumber ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -49350,7 +49350,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Purchase Paid Service",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(model);
@@ -49695,7 +49695,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Pan Card Purchase",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.Pancard(modeln);
@@ -50983,7 +50983,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Pos To Main",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Fundtransfer(model);
@@ -51033,7 +51033,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Pos To Main Refund",
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Fundtransfer(model);
@@ -51236,7 +51236,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Pos to Main",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Fundtransfer(model);
@@ -51481,7 +51481,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Paid Service",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -52601,7 +52601,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Refund",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -52699,7 +52699,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Refund ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -52805,7 +52805,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -52890,7 +52890,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -52956,7 +52956,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -53022,7 +53022,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -53175,7 +53175,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Purchase Noton Security ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -53262,7 +53262,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Purchase Noton Refund ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -54354,7 +54354,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Paytm UPi Payement",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.info(model);
@@ -54568,7 +54568,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Phone pe upi payment recived",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.info(model);
@@ -54779,7 +54779,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Bharat Pe Payment Recived",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -55656,7 +55656,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Payment Gateway Fund Transfer",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.info(model);
@@ -55727,7 +55727,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Payment Gateway Fund Transfer",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -55783,7 +55783,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Payment Gateway Fund Transfer",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -55813,7 +55813,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Payment Gateway Fund Transfer",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -59265,7 +59265,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Pancard Purchase",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.Pancard(model);
@@ -59329,7 +59329,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Pan Card Purchase Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Pancard(model);
@@ -59636,7 +59636,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Loan Payement",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -59674,7 +59674,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Loan Payement",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);

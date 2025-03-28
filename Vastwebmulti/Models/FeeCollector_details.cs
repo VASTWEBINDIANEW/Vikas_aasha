@@ -28,11 +28,11 @@ namespace Vastwebmulti.Models
         public string Email { get; set; }
         public Nullable<System.DateTime> JoinDate { get; set; }
         public string Status { get; set; }
-        public decimal CommissionAdmin { get; set; }
-        public decimal CommissionMD { get; set; }
-        public decimal CommissionDLM { get; set; }
-        public decimal CommissionREM { get; set; }
-        public decimal CommissionWL { get; set; }
+        public Nullable<decimal> CommissionAdmin { get; set; }
+        public Nullable<decimal> CommissionMD { get; set; }
+        public Nullable<decimal> CommissionDLM { get; set; }
+        public Nullable<decimal> CommissionREM { get; set; }
+        public Nullable<decimal> CommissionWL { get; set; }
         public string pancard { get; set; }
         public string adharcard { get; set; }
         public string gst { get; set; }

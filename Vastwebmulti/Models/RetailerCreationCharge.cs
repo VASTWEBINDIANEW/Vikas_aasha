@@ -15,8 +15,8 @@ namespace Vastwebmulti.Models
     public partial class RetailerCreationCharge
     {
         public int Idno { get; set; }
-        public decimal CreatedByAdminCharge { get; set; }
-        public decimal CreatedBySignUpCharge { get; set; }
+        public Nullable<decimal> CreatedByAdminCharge { get; set; }
+        public Nullable<decimal> CreatedBySignUpCharge { get; set; }
         public bool CreatedByAdminIsFree { get; set; }
         public bool CreatedBySignUpIsFree { get; set; }
     }

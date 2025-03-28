@@ -15,7 +15,7 @@ namespace Vastwebmulti.Models
     public partial class Flight_Commission_admin
     {
         public int idno { get; set; }
-        public decimal MDCommission { get; set; }
+        public Nullable<decimal> MDCommission { get; set; }
         public Nullable<decimal> DealerCommission { get; set; }
         public Nullable<decimal> RetailerCommission { get; set; }
         public Nullable<decimal> WhitelabelCommission { get; set; }

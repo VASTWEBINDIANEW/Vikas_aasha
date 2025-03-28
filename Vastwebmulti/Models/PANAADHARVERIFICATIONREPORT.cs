@@ -17,8 +17,8 @@ namespace Vastwebmulti.Models
         public int Id { get; set; }
         public string RetailerId { get; set; }
         public string TransactionId { get; set; }
-        public decimal PanCharge { get; set; }
-        public decimal AadharCharge { get; set; }
+        public Nullable<decimal> PanCharge { get; set; }
+        public Nullable<decimal> AadharCharge { get; set; }
         public string ChargeType { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
     }

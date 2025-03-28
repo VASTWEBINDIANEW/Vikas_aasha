@@ -17,7 +17,7 @@ namespace Vastwebmulti.Models
         public int idno { get; set; }
         public int optid { get; set; }
         public string SlabName { get; set; }
-        public decimal Commission { get; set; }
+        public Nullable<decimal> Commission { get; set; }
         public string UserType { get; set; }
         public string createdby { get; set; }
     }

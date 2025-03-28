@@ -84,7 +84,7 @@ namespace Vastwebmulti.Models.Scheduling
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Fund Recived From Radiant Collection ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Fundtransfer(model);

@@ -17,10 +17,10 @@ namespace Vastwebmulti.Models
         public int idno { get; set; }
         public int optid { get; set; }
         public string slabname { get; set; }
-        public decimal comm1 { get; set; }
-        public decimal comm2 { get; set; }
-        public decimal comm3 { get; set; }
-        public decimal comm4 { get; set; }
+        public Nullable<decimal> comm1 { get; set; }
+        public Nullable<decimal> comm2 { get; set; }
+        public Nullable<decimal> comm3 { get; set; }
+        public Nullable<decimal> comm4 { get; set; }
         public string usertype { get; set; }
         public string createdby { get; set; }
         public Nullable<decimal> cashback1 { get; set; }

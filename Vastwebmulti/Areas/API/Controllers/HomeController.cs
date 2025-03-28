@@ -1129,7 +1129,7 @@ namespace Vastwebmulti.Areas.API.Controllers
                                         Email = apiuserdetails.emailid,
                                         Mobile = apiuserdetails.mobile,
                                         Details = "Fund recived From Admin ",
-                                        RemainBalance = apiinfo.balance,
+                                        RemainBalance = (decimal)apiinfo.balance,
                                         Usertype = "API"
                                     };
                                     back.Fundtransfer(modeln);

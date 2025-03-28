@@ -17,7 +17,7 @@ namespace Vastwebmulti.Models
         public int idno { get; set; }
         public int optid { get; set; }
         public string slabname { get; set; }
-        public decimal comm { get; set; }
+        public Nullable<decimal> comm { get; set; }
         public string slabfor { get; set; }
         public string createdby { get; set; }
     }

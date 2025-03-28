@@ -17,7 +17,7 @@ namespace Vastwebmulti.Models
         public int Idno { get; set; }
         public string ServiceName { get; set; }
         public string PaymentType { get; set; }
-        public decimal Price { get; set; }
+        public Nullable<decimal> Price { get; set; }
         public bool IsFree { get; set; }
     }
 }

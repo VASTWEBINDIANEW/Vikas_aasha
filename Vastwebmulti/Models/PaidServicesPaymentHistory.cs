@@ -21,10 +21,10 @@ namespace Vastwebmulti.Models
         public string PaymentType { get; set; }
         public System.DateTime PurchaseDate { get; set; }
         public System.DateTime ExpiryDate { get; set; }
-        public decimal AmountPaid { get; set; }
-        public decimal RemainPre { get; set; }
-        public decimal RemainPost { get; set; }
-        public decimal AdminPre { get; set; }
-        public decimal AdminPost { get; set; }
+        public Nullable<decimal> AmountPaid { get; set; }
+        public Nullable<decimal> RemainPre { get; set; }
+        public Nullable<decimal> RemainPost { get; set; }
+        public Nullable<decimal> AdminPre { get; set; }
+        public Nullable<decimal> AdminPost { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Vastwebmulti.Models
     {
         public int ID { get; set; }
         public string RetellerId { get; set; }
-        public decimal Remainamount { get; set; }
+        public Nullable<decimal> Remainamount { get; set; }
         public string whitelabelid { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
     }

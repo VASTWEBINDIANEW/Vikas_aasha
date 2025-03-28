@@ -26,7 +26,7 @@ namespace Vastwebmulti.Models
         public string stdAddress { get; set; }
         public decimal AnnualFee { get; set; }
         public decimal BusFee { get; set; }
-        public decimal Discount { get; set; }
+        public Nullable<decimal> Discount { get; set; }
         public bool FeeDiscountEnabled { get; set; }
         public bool BusDiscountEnabled { get; set; }
         public string Remark { get; set; }

@@ -22,14 +22,14 @@ namespace Vastwebmulti.Models
         public string banknm { get; set; }
         public string branchnm { get; set; }
         public string details { get; set; }
-        public decimal amount { get; set; }
+        public Nullable<decimal> amount { get; set; }
         public string sts { get; set; }
         public Nullable<System.DateTime> reqdate { get; set; }
         public Nullable<System.DateTime> responsedate { get; set; }
         public string crests { get; set; }
         public string orderno { get; set; }
         public string type_ { get; set; }
-        public decimal comm { get; set; }
+        public Nullable<decimal> comm { get; set; }
         public string Toaccountno { get; set; }
         public string Fromaccountno { get; set; }
         public string Slip { get; set; }

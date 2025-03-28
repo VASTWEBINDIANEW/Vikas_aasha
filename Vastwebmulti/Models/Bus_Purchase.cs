@@ -15,6 +15,6 @@ namespace Vastwebmulti.Models
     public partial class Bus_Purchase
     {
         public int Idno { get; set; }
-        public decimal commPCT { get; set; }
+        public Nullable<decimal> commPCT { get; set; }
     }
 }
