@@ -23869,7 +23869,7 @@ namespace Vastwebmulti.Areas.WHITELABEL.Controllers
                         //var AdminEmail = db.Admin_details.Single().email;
                         decimal amount1 = Convert.ToDecimal(balance);
                         var oldrembal = db.Whitelabel_Remain_reteller_balance.Where(pp => pp.whitelabelid == userid && pp.RetellerId == RetailerId).SingleOrDefault().Remainamount;
-                        decimal finalvalue = oldrembal + amount1;
+                        decimal finalvalue = (decimal)oldrembal + amount1;
                         var msg = ""; var tp = "";
 
                         if (finalvalue >= 0)

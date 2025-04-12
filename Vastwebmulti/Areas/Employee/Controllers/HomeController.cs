@@ -7918,7 +7918,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         // string comment = TempData["comment"].ToString();
                         decimal amount1 = Convert.ToDecimal(balance);
                         var oldrembal = db.Remain_reteller_balance.Where(pp => pp.RetellerId == RetailerId).SingleOrDefault().Remainamount;
-                        decimal finalvalue = oldrembal + amount1;
+                        decimal finalvalue = (decimal)oldrembal + amount1;
                         var msg = ""; var tp = "";
                         // var ch = "";
                         if (finalvalue >= 0)
@@ -8870,7 +8870,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                mdbal = db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).SingleOrDefault().Remainamount;
+                mdbal = (decimal)db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).SingleOrDefault().Remainamount;
             }
             return Json(new { currntcr = ch, rembal = mdbal }, JsonRequestBehavior.AllowGet);
         }
@@ -8907,7 +8907,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                rembal = db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
+                rembal = (decimal)db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 
@@ -8934,7 +8934,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                rembal = db.api_remain_amount.Where(x => x.apiid == apiid).SingleOrDefault().balance;
+                rembal = (decimal)db.api_remain_amount.Where(x => x.apiid == apiid).SingleOrDefault().balance;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 

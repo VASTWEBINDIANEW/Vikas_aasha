@@ -19,14 +19,14 @@ namespace Vastwebmulti.Models
         public string BankName { get; set; }
         public string BankAccount { get; set; }
         public string IfscCode { get; set; }
-        public decimal Amount { get; set; }
-        public decimal ProcessingCharge { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public Nullable<decimal> ProcessingCharge { get; set; }
         public string TransferType { get; set; }
         public string Status { get; set; }
-        public decimal RemPre { get; set; }
-        public decimal RemPost { get; set; }
-        public decimal AdminPre { get; set; }
-        public decimal AdminPost { get; set; }
+        public Nullable<decimal> RemPre { get; set; }
+        public Nullable<decimal> RemPost { get; set; }
+        public Nullable<decimal> AdminPre { get; set; }
+        public Nullable<decimal> AdminPost { get; set; }
         public System.DateTime RequestDate { get; set; }
         public Nullable<System.DateTime> ResponseDate { get; set; }
         public string Email { get; set; }

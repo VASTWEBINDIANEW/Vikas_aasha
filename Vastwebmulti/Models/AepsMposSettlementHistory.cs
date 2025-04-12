@@ -16,11 +16,11 @@ namespace Vastwebmulti.Models
     {
         public int Idno { get; set; }
         public string UserId { get; set; }
-        public decimal Amount { get; set; }
-        public decimal remPre { get; set; }
-        public decimal remPost { get; set; }
-        public decimal adminPre { get; set; }
-        public decimal adminPost { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public Nullable<decimal> remPre { get; set; }
+        public Nullable<decimal> remPost { get; set; }
+        public Nullable<decimal> adminPre { get; set; }
+        public Nullable<decimal> adminPost { get; set; }
         public System.DateTime TxnDate { get; set; }
         public System.DateTime SettlementDate { get; set; }
     }

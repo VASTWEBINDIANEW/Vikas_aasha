@@ -17,7 +17,7 @@ namespace Vastwebmulti.Models
         public int Idno { get; set; }
         public string RetailerId { get; set; }
         public string Particulars { get; set; }
-        public decimal ProcessingFees { get; set; }
+        public Nullable<decimal> ProcessingFees { get; set; }
         public string UTI_TXN_ID { get; set; }
         public Nullable<decimal> RetailerIncome { get; set; }
         public Nullable<decimal> DealerIncome { get; set; }

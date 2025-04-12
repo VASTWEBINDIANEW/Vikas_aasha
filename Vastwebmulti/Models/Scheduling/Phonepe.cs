@@ -111,7 +111,7 @@ namespace Vastwebmulti.Models.Scheduling
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Phone pe Upi Fund Recived ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.Fundtransfer(model);

@@ -2479,7 +2479,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Fund Recived From Dealer ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Fundtransfer(modeln);
@@ -3313,7 +3313,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Fund Recived From Dealer ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.Fundtransfer(modeln);
@@ -4083,7 +4083,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Fund Recived From Dealer ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.Fundtransfer(modeln);
@@ -5131,7 +5131,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "UPI Txn Pending to Success",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Fundtransfer(modeln);

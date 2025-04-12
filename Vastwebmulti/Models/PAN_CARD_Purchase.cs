@@ -16,7 +16,7 @@ namespace Vastwebmulti.Models
     {
         public int Idno { get; set; }
         public string API_NAME { get; set; }
-        public decimal PurchaseInRs { get; set; }
+        public Nullable<decimal> PurchaseInRs { get; set; }
         public System.DateTime Date { get; set; }
     }
 }

@@ -357,7 +357,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = remdetailsallinform.Email,
                                                 Mobile = remdetailsallinform.Mobile,
                                                 Details = "Auto Credit Transfer",
-                                                RemainBalance = remremain,
+                                                RemainBalance = (decimal)remremain,
                                                 Usertype = "Retailer"
                                             };
                                             back.Fundtransfer(model);
@@ -383,7 +383,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = remdetailsallinform.Email,
                                             Mobile = remdetailsallinform.Mobile,
                                             Details = "Auto Credit Transfer",
-                                            RemainBalance = remremain,
+                                            RemainBalance = (decimal)remremain,
                                             Usertype = "Retailer"
                                         };
                                         back.Fundtransfer(model);
@@ -494,7 +494,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 var Dealerautocredit = db.autofundtransferdealer_to_retailer.Where(x => x.remid == userid && x.status == "Y").SingleOrDefault();
                                 if (Dealerautocredit.types.ToUpper().Contains("CREDIT"))
                                 {
-                                    if(Dealercr == null)
+                                    if (Dealercr == null)
                                     {
                                         Dealercr = 0;
                                     }
@@ -508,10 +508,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
                                             var Dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == remdetailsallinform.DealerId).SingleOrDefault();
-                                          
+
                                             var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == remdetailsallinform.DealerId).SingleOrDefault();
                                             var remremain = remdetails.Remainamount;
-                                            decimal dlmremain =  Convert.ToDecimal(dlmdetails.Remainamount);
+                                            decimal dlmremain = Convert.ToDecimal(dlmdetails.Remainamount);
 
                                             var admininfo = db.Admin_details.SingleOrDefault();
                                             Backupinfo back = new Backupinfo();
@@ -522,11 +522,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = remdetailsallinform.Email,
                                                 Mobile = remdetailsallinform.Mobile,
                                                 Details = "Auto Credit Transfer",
-                                                RemainBalance = remremain,
+                                                RemainBalance = (decimal)remremain,
                                                 Usertype = "Retailer"
                                             };
                                             back.Fundtransfer(model);
-                                           var model1 = new Backupinfo.Addinfo
+                                            var model1 = new Backupinfo.Addinfo
                                             {
                                                 Websitename = admininfo.WebsiteUrl,
                                                 RetailerID = remdetailsallinform.DealerId,
@@ -566,7 +566,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = remdetailsallinform.Email,
                                             Mobile = remdetailsallinform.Mobile,
                                             Details = "Auto Credit Transfer",
-                                            RemainBalance = remremain,
+                                            RemainBalance = (decimal)remremain,
                                             Usertype = "Retailer"
                                         };
                                         back.Fundtransfer(model);
@@ -1336,7 +1336,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Request.Files["mobilefile"].SaveAs(path1);
                     if (extension == ".csv")
                     {
-               
+
                         DataTable dt = ConvertCSVtoDataTable(path1);
                         var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
                         for (int i = 0; i <= dt.Rows.Count - 1; i++)
@@ -1348,7 +1348,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             var op2 = dt.Rows[i][4].ToString().Trim();
                             var op3 = dt.Rows[i][4].ToString().Trim();
 
-                   
+
 
                             if (string.IsNullOrEmpty(rchnumber) == false && string.IsNullOrEmpty(amount) == false && string.IsNullOrEmpty(opt_nm) == false)
                             {
@@ -1527,7 +1527,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 decimal amt = Convert.ToDecimal(amount);
                                 var fromdate = DateTime.Now.Date;
                                 var todate = fromdate.AddDays(1);
-                                var checkinfo = db.Recharge_excelupload_data.Where(aa => aa.Userid == userid && aa.Rch_no == rchnumber && aa.Amount == amt && aa.uploaddate>= fromdate && aa.uploaddate<=todate && aa.Status == "Pending").SingleOrDefault();
+                                var checkinfo = db.Recharge_excelupload_data.Where(aa => aa.Userid == userid && aa.Rch_no == rchnumber && aa.Amount == amt && aa.uploaddate >= fromdate && aa.uploaddate <= todate && aa.Status == "Pending").SingleOrDefault();
                                 if (checkinfo == null)
                                 {
                                     Recharge_excelupload_data excel = new Recharge_excelupload_data
@@ -1605,10 +1605,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var fromdate = DateTime.Now.Date;
             var todate = fromdate.AddDays(1);
             var info = db.Recharge_excelupload_data.Where(aa => aa.Userid == userid && aa.uploaddate >= fromdate && aa.uploaddate <= todate).ToList();
-            return View(info);                
+            return View(info);
         }
         [HttpPost]
-        public ActionResult ExceluploadRecharge(string ddl_status,DateTime txt_frm_date,DateTime txt_to_date)
+        public ActionResult ExceluploadRecharge(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
             var userid = User.Identity.GetUserId();
@@ -1705,11 +1705,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             db.SaveChanges();
             return Json("", JsonRequestBehavior.AllowGet);
         }
-        public string recharge(string mobileno, string Amount, string OperatorName, string optional1, string optional2,string optional3,int rchidno)
+        public string recharge(string mobileno, string Amount, string OperatorName, string optional1, string optional2, string optional3, int rchidno)
         {
             try
             {
-                var comm = "0";var circle = "";
+                var comm = "0"; var circle = "";
                 var userid = User.Identity.GetUserId();
                 var rchitem = db.Recharge_excelupload_data.Where(aa => aa.Status == "Pending" && aa.idno == rchidno).SingleOrDefault();
                 if (rchitem != null)
@@ -1894,17 +1894,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         catch { }
                                         var billduedate = "";
-                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
+                                        result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, false, output).Single().msg.ToString();
                                         try
                                         {
                                             var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
                                             var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
                                             var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-                                           
+
                                             var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
                                             var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
                                             var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-                                     
+
                                             var admininfo = db.Admin_details.SingleOrDefault();
                                             Backupinfo back = new Backupinfo();
                                             var model = new Backupinfo.Addinfo
@@ -1913,8 +1913,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 RetailerID = userid,
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
-                                                Details = "Recharge "+mobileno+" Amount "+amount,
-                                                RemainBalance = remdetails.Remainamount,
+                                                Details = "Recharge " + mobileno + " Amount " + amount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.Rechargeandutility(model);
@@ -1988,7 +1988,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 rchinforsss.Circle = circle;
                                                 db.SaveChanges();
                                             }
-                                        
+
                                             responsemsg = "Recharge Process Successfully.";
                                             rchitem.Status = "Proceed";
                                             rchitem.Reason = responsemsg;
@@ -2295,7 +2295,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -2487,7 +2487,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -2547,7 +2547,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 if (RESCODE == "TXN")
                                                 {
                                                     db.recharge_update(idno, "SUCCESS", optid, remain, webcontent, "Response");
-                                                  
+
                                                     var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                                     if (statusRetailer == "Y")
                                                     {
@@ -2596,7 +2596,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -2815,7 +2815,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -3033,7 +3033,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.Rechargeandutility(model);
@@ -3159,7 +3159,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -3289,7 +3289,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -3458,7 +3458,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -3705,7 +3705,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -3957,7 +3957,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -4227,13 +4227,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     {
                         rchitem.Status = "Not Proceed";
                         rchitem.Reason = "Operator MissMatch";
-                        
+
                     }
                 }
                 db.SaveChanges();
                 return "";
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 var responsemsg = ex.Message;
                 return responsemsg;
             }
@@ -4277,11 +4278,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     //for (int i = 0; i < Sheets.Rows.Count; i++)
                     //{
                     string worksheets = "Sheet1$"; //Sheets.Rows[i]["TABLE_NAME"].ToString();
-                        OleDbCommand cmd = new OleDbCommand(String.Format("SELECT * FROM [{0}]", worksheets), oledbConn);
-                        OleDbDataAdapter oleda = new OleDbDataAdapter();
-                        oleda.SelectCommand = cmd;
-                        oleda.Fill(ds);
-                 //   }
+                    OleDbCommand cmd = new OleDbCommand(String.Format("SELECT * FROM [{0}]", worksheets), oledbConn);
+                    OleDbDataAdapter oleda = new OleDbDataAdapter();
+                    oleda.SelectCommand = cmd;
+                    oleda.Fill(ds);
+                    //   }
                     dt = ds.Tables[0];
                 }
             }
@@ -4542,50 +4543,61 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     obj.Add("Message", "Invalid Retailer Aadhar Card");
                     return obj;
                 }
-                var token = Responsetoken.gettoken();
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var client = new RestClient("http://api.vastbazaar.com/api/Web/validaadhar?client_id=" + client_id + "&otp=" + otp + "&txnid= " + txnid + "&aadhaar_number=" + aadhar);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("Authorization", "Bearer " + token);
-                IRestResponse response = client.Execute(request);
-                if (response.Content.ToUpper().Contains("INVALID RESPONSE"))
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var measge = db.PROCPANAADHARVERIFICATIONCHARGE(userid, "AADHARCARD", output).SingleOrDefault().msg;
+                if (measge == "SUCCESS")
                 {
-                    obj.Add("Status", false);
-                    obj.Add("Message", "Bad Request");
-                }
-                else
-                {
-                    dynamic res = JsonConvert.DeserializeObject(response.Content);
-                    var status = (bool)res.Content.ADDINFO.success;
-                    if (status)
+                    var token = Responsetoken.gettoken();
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    var client = new RestClient("http://api.vastbazaar.com/api/Web/validaadhar?client_id=" + client_id + "&otp=" + otp + "&txnid= " + txnid + "&aadhaar_number=" + aadhar);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("Authorization", "Bearer " + token);
+                    IRestResponse response = client.Execute(request);
+                    if (response.Content.ToUpper().Contains("INVALID RESPONSE"))
                     {
-                        var full_name = (string)res.Content.ADDINFO.data.full_name;
-                        var dob = (string)res.Content.ADDINFO.data.dob;
-                        var profile_image = (string)res.Content.ADDINFO.data.profile_image;
-                        var house = (string)res.Content.ADDINFO.data.address.house;
-                        var street = (string)res.Content.ADDINFO.data.address.street;
-                        var landmark = (string)res.Content.ADDINFO.data.address.landmark;
-                        var loc = (string)res.Content.ADDINFO.data.address.loc;
-                        var subdist = (string)res.Content.ADDINFO.data.address.subdist;
-                        var dist = (string)res.Content.ADDINFO.data.address.dist;
-                        var state = (string)res.Content.ADDINFO.data.address.state;
-                        retailer.RetailerName = full_name;
-                        retailer.aadhar_image = "data:image/png;base64," + profile_image;
-                        retailer.residential_address = String.Format("{0} {1} {2} {3} {4} {5} {6}", house, street, landmark, loc, subdist, dist, state).Trim();
-                        retailer.AadharCard = aadhar;
-                        retailer.aadhar_verification = true;
-                        retailer.aadhar_dob = dob;
-                        db.SaveChanges();
-                        obj.Add("Status", true);
-                        obj.Add("Message", "Aadhar Verification Done");
+                        obj.Add("Status", false);
+                        obj.Add("Message", "Bad Request");
                     }
                     else
                     {
-                        var message = (string)res.Content.ADDINFO.message;
-                        obj.Add("Status", false);
-                        obj.Add("Message", message);
+                        dynamic res = JsonConvert.DeserializeObject(response.Content);
+                        var status = (bool)res.Content.ADDINFO.success;
+                        if (status)
+                        {
+                            var full_name = (string)res.Content.ADDINFO.data.full_name;
+                            var dob = (string)res.Content.ADDINFO.data.dob;
+                            var profile_image = (string)res.Content.ADDINFO.data.profile_image;
+                            var house = (string)res.Content.ADDINFO.data.address.house;
+                            var street = (string)res.Content.ADDINFO.data.address.street;
+                            var landmark = (string)res.Content.ADDINFO.data.address.landmark;
+                            var loc = (string)res.Content.ADDINFO.data.address.loc;
+                            var subdist = (string)res.Content.ADDINFO.data.address.subdist;
+                            var dist = (string)res.Content.ADDINFO.data.address.dist;
+                            var state = (string)res.Content.ADDINFO.data.address.state;
+                            retailer.RetailerName = full_name;
+                            retailer.aadhar_image = "data:image/png;base64," + profile_image;
+                            retailer.residential_address = String.Format("{0} {1} {2} {3} {4} {5} {6}", house, street, landmark, loc, subdist, dist, state).Trim();
+                            retailer.AadharCard = aadhar;
+                            retailer.aadhar_verification = true;
+                            retailer.aadhar_dob = dob;
+                            db.SaveChanges();
+                            obj.Add("Status", true);
+                            obj.Add("Message", "Aadhar Verification Done");
+                        }
+                        else
+                        {
+                            var message = (string)res.Content.ADDINFO.message;
+                            obj.Add("Status", false);
+                            obj.Add("Message", message);
+                        }
                     }
+                }
+                else
+                {
+                    obj.Add("Status", false);
+                    obj.Add("Message", measge);
+                    return obj;
                 }
             }
             return obj;
@@ -4618,20 +4630,24 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     obj.Add("Message", "Invalid Retailer Pancard");
                     return obj;
                 }
-                var token = Responsetoken.gettoken();
-                var txnid = new DateTime().Millisecond.ToString() + RandomString(4);
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var client = new RestClient("http://api.vastbazaar.com/api/Web/PanCardVerify?pancardno=" + pan + "&txnid=" + txnid);
-                client.Timeout = -1;
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("Authorization", "Bearer " + token);
-                IRestResponse response = client.Execute(request);
-                if (response.Content.ToUpper().Contains("INVALID RESPONSE"))
+                System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                var measge = db.PROCPANAADHARVERIFICATIONCHARGE(userid, "PANCARD", output).SingleOrDefault().msg;
+                if (measge == "SUCCESS")
                 {
-                    obj.Add("Status", false);
-                    obj.Add("Message", "Bad Request");
-                }
-                else
+                    var token = Responsetoken.gettoken();
+                    var txnid = new DateTime().Millisecond.ToString() + RandomString(4);
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    var client = new RestClient("http://api.vastbazaar.com/api/Web/PanCardVerify?pancardno=" + pan + "&txnid=" + txnid);
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("Authorization", "Bearer " + token);
+                    IRestResponse response = client.Execute(request);
+                    if (response.Content.ToUpper().Contains("INVALID RESPONSE"))
+                    {
+                        obj.Add("Status", false);
+                        obj.Add("Message", "Bad Request");
+                    }
+                    else
                 {
                     dynamic res = JsonConvert.DeserializeObject(response.Content);
                     var status = (bool)res.Content.ADDINFO.success;
@@ -4649,6 +4665,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         obj.Add("Status", false);
                         obj.Add("Message", message);
                     }
+                }
+                }
+                else
+                {
+                    obj.Add("Status", false);
+                    obj.Add("Message", measge);
+                    return obj;
                 }
             }
             return obj;
@@ -4740,7 +4763,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var Email = reminfo.Email;
             //  var salt = "i0dSyipJyJAzKovgBSPhWfUQAsj1GGIZ";
             var salt = auth.merchantsalt;
-          //  Amount = Amount + ".00";
+            //  Amount = Amount + ".00";
             //decimal amtt = Convert.ToDecimal(Amount);
             string hashString = key + "|" + OrderId + "|" + Amount + "|" + "Fund Transfer" + "|" + RetailerName + "|" + Email + "|||||||||||" + salt;
             //string hashString = "3Q5c3q|2590640|3053.00|OnlineBooking|vimallad|ladvimal@gmail.com|||||||||||mE2RxRwx";
@@ -4783,7 +4806,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult Recharge(string OperatorName, string OptCode, string mobileno, string Amount, string optional1, string optional2, string optional3, string optional4, string comm, string BillRefId, string servicefee, string billduedate = null, string circle = null)
         {
             string userid = User.Identity.GetUserId();
-			if (OptCode.ToUpper() == "EUH" || OptCode.ToUpper() == "EDH")
+            if (OptCode.ToUpper() == "EUH" || OptCode.ToUpper() == "EDH")
             {
                 optional1 = "9999999999";
             }
@@ -4989,7 +5012,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     isgatewaysts = true;
                                                 }
                                             }
-                                            else if(gatewaystschk.APIID == "PAYU")
+                                            else if (gatewaystschk.APIID == "PAYU")
                                             {
                                                 var payushk = db.Gateway_Auth.SingleOrDefault();
                                                 if (payushk != null)
@@ -5145,7 +5168,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         if (sts == true)
                                         {
                                             string redirecturl = resp.data.instrumentResponse.redirectInfo.url;
-                                            responsemsg = "  {'Message':'"+ redirecturl + "','Response':'GATEWAY'}";
+                                            responsemsg = "  {'Message':'" + redirecturl + "','Response':'GATEWAY'}";
                                             var jss = new JavaScriptSerializer();
                                             var dict = jss.Deserialize<dynamic>(responsemsg);
                                             return Json(dict, JsonRequestBehavior.AllowGet);
@@ -5164,10 +5187,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             return Json(dict, JsonRequestBehavior.AllowGet);
                                         }
                                     }
-                                    else if(gatewaystschk.APIID=="PAYU")
+                                    else if (gatewaystschk.APIID == "PAYU")
                                     {
-                                        string url = Url.Action("payucall", "Home", new { OrderId,Amount }, Request.Url.Scheme);
-                                        var responsemsg12 = "  {'Message':'"+ url + "','Response':'GATEWAY'}";
+                                        string url = Url.Action("payucall", "Home", new { OrderId, Amount }, Request.Url.Scheme);
+                                        var responsemsg12 = "  {'Message':'" + url + "','Response':'GATEWAY'}";
                                         var jss1 = new JavaScriptSerializer();
                                         var dict1 = jss1.Deserialize<dynamic>(responsemsg12);
                                         return Json(dict1, JsonRequestBehavior.AllowGet);
@@ -5202,7 +5225,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             else
                             {
-                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate,false, output).Single().msg.ToString();
+                                result = db.Recharge_retailer(userid, mobileno, OptCode, amount, "ONLINE", optional1, optional2, optional3, localrch, Ipaddress, macaddress, "", servicefee_user, OrderId, billduedate, false, output).Single().msg.ToString();
                                 //else if()
                                 try
                                 {
@@ -5223,7 +5246,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Recharge " + mobileno + " Amount " + amount,
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.Rechargeandutility(model);
@@ -5321,33 +5344,33 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         rchinforsss.Circle = circle;
                                         db.SaveChanges();
                                     }
-                                responsemsg = "  {'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
-                                var jss = new JavaScriptSerializer();
-                                var dict = jss.Deserialize<dynamic>(responsemsg);
-                                return Json(dict, JsonRequestBehavior.AllowGet);
-                            }
-                            else if (result.ToUpper() == "SELL")
-                            {
-                                var dlmid = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
-                                var dlmemail = db.Dealer_Details.Where(s => s.DealerId == dlmid.DealerId).SingleOrDefault().Email;
-                                var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
-                                var opts = db.operatorMerges.Where(s => s.self_optcode == OptCode).SingleOrDefault().api_optcode;
-                                var client1 = new RestClient("https://www.vastwebindia.com/DLMAPI/Recharge?Amount=" + amount + "&Mobile=" + mobileno + "OptCode=" + opts + "&Registeremail="+check1.API_ID+ "&Email="+ dlmemail+ "&rch_id="+ OrderId);
-                                var request1 = new RestRequest(Method.POST);
-                                request1.AddHeader("Content-Type", "application/json"); // Add headers if necessary
-                                // Execute the request asynchronously
-                                var response1 = client1.Execute(request1);
-                                dynamic json1 = JsonConvert.DeserializeObject(response1.Content);
-                                //if (json1.Responsecode == 1)
-                                //{ }
-                                responsemsg = "{'Message':'contact to admin'}";
-                                var jss = new JavaScriptSerializer();
-                                var dict = jss.Deserialize<dynamic>(responsemsg);
-                                return Json(dict, JsonRequestBehavior.AllowGet);
-                            }
-                            else if (result.ToUpper() == "INVALIDMDINCOME" || result.ToUpper() == "INVALIDDEINCOME" || result.ToUpper() == "INVALIDREINCOME")
-                            {
-                                var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                    responsemsg = "  {'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(responsemsg);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                                else if (result.ToUpper() == "SELL")
+                                {
+                                    var dlmid = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+                                    var dlmemail = db.Dealer_Details.Where(s => s.DealerId == dlmid.DealerId).SingleOrDefault().Email;
+                                    var check1 = db.Money_API_URLS.Where(s => s.API_Name.Contains("VASTWEB")).Take(1).SingleOrDefault();
+                                    var opts = db.operatorMerges.Where(s => s.self_optcode == OptCode).SingleOrDefault().api_optcode;
+                                    var client1 = new RestClient("https://www.vastwebindia.com/DLMAPI/Recharge?Amount=" + amount + "&Mobile=" + mobileno + "OptCode=" + opts + "&Registeremail=" + check1.API_ID + "&Email=" + dlmemail + "&rch_id=" + OrderId);
+                                    var request1 = new RestRequest(Method.POST);
+                                    request1.AddHeader("Content-Type", "application/json"); // Add headers if necessary
+                                                                                            // Execute the request asynchronously
+                                    var response1 = client1.Execute(request1);
+                                    dynamic json1 = JsonConvert.DeserializeObject(response1.Content);
+                                    //if (json1.Responsecode == 1)
+                                    //{ }
+                                    responsemsg = "{'Message':'contact to admin'}";
+                                    var jss = new JavaScriptSerializer();
+                                    var dict = jss.Deserialize<dynamic>(responsemsg);
+                                    return Json(dict, JsonRequestBehavior.AllowGet);
+                                }
+                                else if (result.ToUpper() == "INVALIDMDINCOME" || result.ToUpper() == "INVALIDDEINCOME" || result.ToUpper() == "INVALIDREINCOME")
+                                {
+                                    var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
                                     smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEDISTRIBUTORREMAINBALLOW", RetailerDetails.Mobile, mobileno, Amount, remainbal);
                                     if (Emailstatusretailerrechargefailed == "Y")
                                     {
@@ -5612,7 +5635,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -5800,7 +5823,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(model);
@@ -5901,7 +5924,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(model);
@@ -6109,7 +6132,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Rechargeandutility(model);
@@ -6321,7 +6344,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 Email = retailerdetails.Email,
                                                                 Mobile = retailerdetails.Mobile,
                                                                 Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                RemainBalance = remdetails.Remainamount,
+                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                 Usertype = "Retailer"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -6445,7 +6468,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -6514,16 +6537,16 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
                                         }
                                     }
-                                    else if(url.ToUpper().Contains("ACENEOBANK.DEV"))
+                                    else if (url.ToUpper().Contains("ACENEOBANK.DEV"))
                                     {
-										int idnn11 = 0;
-										idno = (from rch in db.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
-										idnn11 = Convert.ToInt32(idno);
-										decimal amt = Convert.ToDecimal(Amount);
-										var optinfo = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault();
+                                        int idnn11 = 0;
+                                        idno = (from rch in db.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                        idnn11 = Convert.ToInt32(idno);
+                                        decimal amt = Convert.ToDecimal(Amount);
+                                        var optinfo = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault();
                                         var opttype = optinfo.Operator_type;
-										string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
-										if (opttype == "Landline")
+                                        string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                        if (opttype == "Landline")
                                         {
                                             opttype = "Landline Postpaid";
                                         }
@@ -6541,35 +6564,35 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         dynamic response = RadiantBillPay(optinfo.Operator_type, OptCode, mobileno, optional1, optional2, optional3, Amount, opttype);
                                         string status = response.Response;
-										string msg = response.msg;
-										string Transid = response.txnid;
-										string chkresp = response.chkresp;
-										if (status.ToUpper() == "SUCCESS")
-										{
-										    var	remainamount = "0";
-											status = "Success";
-											db.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), chkresp, "Response");
-											var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-											if (statusRetailer == "Y")
-											{
-												SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-											}
-											smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-											if (Emailstatusretailerrechargesuccess == "Y")
-											{
-												smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-											}
-											responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
-										}
-										else if (status.ToUpper() == "ERROR")
-										{
+                                        string msg = response.msg;
+                                        string Transid = response.txnid;
+                                        string chkresp = response.chkresp;
+                                        if (status.ToUpper() == "SUCCESS")
+                                        {
+                                            var remainamount = "0";
+                                            status = "Success";
+                                            db.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(remainamount), chkresp, "Response");
+                                            var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                            if (statusRetailer == "Y")
+                                            {
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + amt + ". Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                            }
+                                            smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+                                            if (Emailstatusretailerrechargesuccess == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + amt + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                            }
+                                            responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                        }
+                                        else if (status.ToUpper() == "ERROR")
+                                        {
                                             Transid = msg;
-											var optcodei = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
-											var show = db.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
-											if (show == null)
-											{
-												status = "Failed";
-												db.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), chkresp, "Response");
+                                            var optcodei = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                            var show = db.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                            if (show == null)
+                                            {
+                                                status = "Failed";
+                                                db.recharge_update(idnn11.ToString(), status, Transid, Convert.ToDecimal(0), chkresp, "Response");
                                                 try
                                                 {
                                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -6589,7 +6612,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Rechargeandutility(model);
@@ -6620,82 +6643,82 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 }
                                                 catch { }
                                                 var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-												if (statusRetailer == "Y")
-												{
-													SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
-												}
-												smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
-												if (Emailstatusretailerrechargefailed == "Y")
-												{
-													smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-												}
-												responsemsg = "{'Message':'"+ Transid + "','Response':'ERROR'}";
-											}
-											else
-											{
-												var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
-												if (outputchk == "SUCCESS")
-												{
-													var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-													smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-													if (Emailstatusretailerrechargesuccess == "Y")
-													{
-														smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-													}
-													responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
-												}
-												else if (outputchk == "FAILED")
-												{
-													responsemsg = "{'Message':'" + Transid + "','Response':'ERROR'}";
-													var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-													smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
-													if (Emailstatusretailerrechargefailed == "Y")
-													{
-														smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
-													}
-												}
-												else
-												{
-													var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-													if (statusRetailer == "Y")
-													{
-														SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-													}
-													smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-													if (EmailstatusretailerrechargeProccess == "Y")
-													{
-														smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-													}
-													responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
-												}
-											}
-										}
-										else
-										{
-											var rchinforsss1 = db.Recharge_info.Where(x => x.idno == idvalrch).FirstOrDefault();
+                                                if (statusRetailer == "Y")
+                                                {
+                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + amt + " is FAILED. Transaction id: " + Transid + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                }
+                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, amt, Transid, remainbal);
+                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                {
+                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + amt + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                }
+                                                responsemsg = "{'Message':'" + Transid + "','Response':'ERROR'}";
+                                            }
+                                            else
+                                            {
+                                                var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, CommonTranid, ref Transid);
+                                                if (outputchk == "SUCCESS")
+                                                {
+                                                    var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
+                                                    if (Emailstatusretailerrechargesuccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + Transid + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                                }
+                                                else if (outputchk == "FAILED")
+                                                {
+                                                    responsemsg = "{'Message':'" + Transid + "','Response':'ERROR'}";
+                                                    var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, Transid, remainbal);
+                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + Transid + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+                                                    if (EmailstatusretailerrechargeProccess == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var rchinforsss1 = db.Recharge_info.Where(x => x.idno == idvalrch).FirstOrDefault();
                                             rchinforsss1.Recharge_response = chkresp;
                                             db.SaveChanges();
-											var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
-											if (statusRetailer == "Y")
-											{
-												SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
-											}
-											smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
-											if (EmailstatusretailerrechargeProccess == "Y")
-											{
-												smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
-											}
-											responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
-										}
-										var jssnn = new JavaScriptSerializer();
-										var dictnn = jssnn.Deserialize<dynamic>(responsemsg);
-										return Json(dictnn, JsonRequestBehavior.AllowGet);
-										//var responsemsgnn = " {'Message':'Some Techincal Issue Please Try Again, Please Try After Some Time.','Response':'ERROR'}";
-										//                              var jssnn = new JavaScriptSerializer();
-										//                              var dictnn = jssnn.Deserialize<dynamic>(responsemsgnn);
-										//                              return Json(dictnn, JsonRequestBehavior.AllowGet);
-									}
-									else
+                                            var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                            if (statusRetailer == "Y")
+                                            {
+                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                            }
+                                            smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+                                            if (EmailstatusretailerrechargeProccess == "Y")
+                                            {
+                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                            }
+                                            responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                        }
+                                        var jssnn = new JavaScriptSerializer();
+                                        var dictnn = jssnn.Deserialize<dynamic>(responsemsg);
+                                        return Json(dictnn, JsonRequestBehavior.AllowGet);
+                                        //var responsemsgnn = " {'Message':'Some Techincal Issue Please Try Again, Please Try After Some Time.','Response':'ERROR'}";
+                                        //                              var jssnn = new JavaScriptSerializer();
+                                        //                              var dictnn = jssnn.Deserialize<dynamic>(responsemsgnn);
+                                        //                              return Json(dictnn, JsonRequestBehavior.AllowGet);
+                                    }
+                                    else
                                     {
                                         var apiinfo = db.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
                                         if (apiinfo != null)
@@ -6751,7 +6774,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -6920,7 +6943,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -7166,7 +7189,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -7417,7 +7440,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -7686,7 +7709,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 }
             }
         }
-        public ActionResult payucall(string OrderId,decimal Amount)
+        public ActionResult payucall(string OrderId, decimal Amount)
         {
             var userid = User.Identity.GetUserId();
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -7728,16 +7751,16 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             try
             {
                 var userid = User.Identity.GetUserId();
-				if (OperatorName == "Bharti Axa Life Insurance")
+                if (OperatorName == "Bharti Axa Life Insurance")
                 {
                     optional1 = DateTime.ParseExact(optional1, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
                 }
-				//if (OperatorName.ToUpper().StartsWith("LIFE INSURANCE CORPORATION"))
-				//{
-				//    optional1 = db.Retailer_Details.Where(a => a.RetailerId == userid).Select(a => a.Email).SingleOrDefault();
-				//}
-				var responsemsg = "";
-				var chk1 = db.SRS_API.Where(aa => aa.opt_code == OptCode && aa.api.ToUpper().Contains("ACENEOBANK.DEV") && aa.status=="Y").SingleOrDefault();
+                //if (OperatorName.ToUpper().StartsWith("LIFE INSURANCE CORPORATION"))
+                //{
+                //    optional1 = db.Retailer_Details.Where(a => a.RetailerId == userid).Select(a => a.Email).SingleOrDefault();
+                //}
+                var responsemsg = "";
+                var chk1 = db.SRS_API.Where(aa => aa.opt_code == OptCode && aa.api.ToUpper().Contains("ACENEOBANK.DEV") && aa.status == "Y").SingleOrDefault();
                 if (chk1 != null)
                 {
                     var optinfo = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault();
@@ -7747,7 +7770,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 else
                 {
                     var chk = db.SRS_API.Where(aa => aa.opt_code == OptCode && aa.api.ToUpper().Contains("API.VASTBAZAAR.COM")).SingleOrDefault();
-                   
+
                     if (chk != null)
                     {
                         var api = chk.api;
@@ -8055,19 +8078,19 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
-        public dynamic RadiantViewBill(string opttype,string optcode,string mobileno,string Optional1, string Optional2, string Optional3)
+        public dynamic RadiantViewBill(string opttype, string optcode, string mobileno, string Optional1, string Optional2, string Optional3)
         {
             var userid = User.Identity.GetUserId();
-			string filePath = Server.MapPath("~/Scripts/PageScript/Retailer/Radiantoptcode.json");
-			// Read the JSON file
-			string json = System.IO.File.ReadAllText(filePath);
-			// Parse JSON data
-			dynamic jsonObj = JsonConvert.DeserializeObject(json);
-			dynamic jsonObj1 = jsonObj[opttype];
+            string filePath = Server.MapPath("~/Scripts/PageScript/Retailer/Radiantoptcode.json");
+            // Read the JSON file
+            string json = System.IO.File.ReadAllText(filePath);
+            // Parse JSON data
+            dynamic jsonObj = JsonConvert.DeserializeObject(json);
+            dynamic jsonObj1 = jsonObj[opttype];
             string jsonoptlist = JsonConvert.SerializeObject(jsonObj1);
-			List<dataradiantopt> electricityList = JsonConvert.DeserializeObject<List<dataradiantopt>>(jsonoptlist);
-			var filteredData = electricityList.Where(x => x.Operator_code == optcode).ToList();
-            var Response = "ERROR";var msg = ""; var Price = "";var billduedate = "";var reference_id = "";var custname = "";
+            List<dataradiantopt> electricityList = JsonConvert.DeserializeObject<List<dataradiantopt>>(jsonoptlist);
+            var filteredData = electricityList.Where(x => x.Operator_code == optcode).ToList();
+            var Response = "ERROR"; var msg = ""; var Price = ""; var billduedate = ""; var reference_id = ""; var custname = "";
             var radiantauthchk = db.radiantauths.SingleOrDefault();
             if (radiantauthchk != null)
             {
@@ -8090,11 +8113,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 radianttoken = tokenchk.accessToken;
                                 radianagentid = tokenchk.agentID;
                             }
-                            var respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret,  billerid.ToString(), radiantauthchk.APIKey);
+                            var respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, billerid.ToString(), radiantauthchk.APIKey);
                             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                             {
                                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret,  billerid.ToString(), radiantauthchk.APIKey);
+                                respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, billerid.ToString(), radiantauthchk.APIKey);
                             }
                             if (respchk.StatusCode == HttpStatusCode.OK)
                             {
@@ -8199,26 +8222,26 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 Price,
                 billduedate,
                 reference_id,
-                DisplayValues = "[{\"label\":\"Customer Name : \",\"value\":\""+ custname + "\"}]"
+                DisplayValues = "[{\"label\":\"Customer Name : \",\"value\":\"" + custname + "\"}]"
 
-			};
+            };
             var bodyreq = JsonConvert.SerializeObject(body);
-           dynamic respp = JsonConvert.DeserializeObject(bodyreq);
-			return respp;
-		}
-		public dynamic RadiantBillPay(string opttype, string optcode, string mobileno, string Optional1, string Optional2, string Optional3,string amount,string billcategory)
-		{
+            dynamic respp = JsonConvert.DeserializeObject(bodyreq);
+            return respp;
+        }
+        public dynamic RadiantBillPay(string opttype, string optcode, string mobileno, string Optional1, string Optional2, string Optional3, string amount, string billcategory)
+        {
             var userid = User.Identity.GetUserId();
-			string filePath = Server.MapPath("~/Scripts/PageScript/Retailer/Radiantoptcode.json");
-			// Read the JSON file
-			string json = System.IO.File.ReadAllText(filePath);
-			// Parse JSON data
-			dynamic jsonObj = JsonConvert.DeserializeObject(json);
-			dynamic jsonObj1 = jsonObj[opttype];
-			var Response = ""; var msg = ""; var txnid = ""; var radianttxnid = "";
-			var insertid = "";
+            string filePath = Server.MapPath("~/Scripts/PageScript/Retailer/Radiantoptcode.json");
+            // Read the JSON file
+            string json = System.IO.File.ReadAllText(filePath);
+            // Parse JSON data
+            dynamic jsonObj = JsonConvert.DeserializeObject(json);
+            dynamic jsonObj1 = jsonObj[opttype];
+            var Response = ""; var msg = ""; var txnid = ""; var radianttxnid = "";
+            var insertid = "";
             var chkresp = "";
-			if (jsonObj1 != null)
+            if (jsonObj1 != null)
             {
                 string jsonoptlist = JsonConvert.SerializeObject(jsonObj1);
                 List<dataradiantopt> electricityList = JsonConvert.DeserializeObject<List<dataradiantopt>>(jsonoptlist);
@@ -8246,11 +8269,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     radianttoken = tokenchk.accessToken;
                                     radianagentid = tokenchk.agentID;
                                 }
-                                var respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret,  billerid.ToString(), radiantauthchk.APIKey);
+                                var respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, billerid.ToString(), radiantauthchk.APIKey);
                                 if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                                 {
                                     radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                    respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret,  billerid.ToString(), radiantauthchk.APIKey);
+                                    respchk = radi.customerparamsAsync(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, billerid.ToString(), radiantauthchk.APIKey);
                                 }
                                 if (respchk.StatusCode == HttpStatusCode.OK)
                                 {
@@ -8371,7 +8394,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     {
                                                         if (Convert.ToDecimal(Price) == Convert.ToDecimal(amount))
                                                         {
-                                                            var paybillapi = radi.BillPay(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret,  billerid.ToString(), billcategory, insertid, mode, amount, radiantauthchk.APIKey);
+                                                            var paybillapi = radi.BillPay(radianagentid, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, billerid.ToString(), billcategory, insertid, mode, amount, radiantauthchk.APIKey);
                                                             if (paybillapi.StatusCode == HttpStatusCode.OK)
                                                             {
                                                                 chkresp = paybillapi.Content;
@@ -8500,30 +8523,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             else
             {
-				msg = "Operator Not Found";
-				Response = "ERROR";
-			}
-			var body = new
-			{
-				Response,
-			    msg,
-				txnid,
+                msg = "Operator Not Found";
+                Response = "ERROR";
+            }
+            var body = new
+            {
+                Response,
+                msg,
+                txnid,
                 chkresp
-			};
-			var bodyreq = JsonConvert.SerializeObject(body);
-			dynamic respp = JsonConvert.DeserializeObject(bodyreq);
-			return respp;
-		}
+            };
+            var bodyreq = JsonConvert.SerializeObject(body);
+            dynamic respp = JsonConvert.DeserializeObject(bodyreq);
+            return respp;
+        }
 
-		public class dataradiantopt
-		{
-			public string Operator_code { get; set; }
-			public string Radiant_code { get; set; }
-			public string fetchRequirement { get; set; }
-			public string blrSupportBillValidation { get; set; }
-			public int bill_id { get; set; }
-		}
-		public string View_Bill(string verifi, string code)
+        public class dataradiantopt
+        {
+            public string Operator_code { get; set; }
+            public string Radiant_code { get; set; }
+            public string fetchRequirement { get; set; }
+            public string blrSupportBillValidation { get; set; }
+            public int bill_id { get; set; }
+        }
+        public string View_Bill(string verifi, string code)
         {
             //var sts = "";
             //var traid = "";
@@ -9564,7 +9587,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
                                 var retailerdetails1 = db.Retailer_Details.Where(aa => aa.RetailerId == reatilerto).SingleOrDefault();
-                               
+
                                 Backupinfo back = new Backupinfo();
                                 var model = new Backupinfo.Addinfo
                                 {
@@ -9573,7 +9596,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Fund Transfer Rem To Rem",
-                                    RemainBalance = remainbal,
+                                    RemainBalance = (decimal)remainbal,
                                     Usertype = "Retailer"
                                 };
                                 back.Fundtransfer(model);
@@ -9585,7 +9608,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails1.Email,
                                     Mobile = retailerdetails1.Mobile,
                                     Details = "Fund Transfer Rem To Rem",
-                                    RemainBalance = remainbalretailer,
+                                    RemainBalance = (decimal)remainbalretailer,
                                     Usertype = "Retailer"
                                 };
                                 back.Fundtransfer(model);
@@ -10656,7 +10679,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                    select new Electricity
                                    {
                                        OperatorCode = ord.new_opt_code,
-                                       Commission = (cust.comm * charg.move1)/100,
+                                       Commission = (cust.comm * charg.move1) / 100,
                                        Commission1 = (cust.comm * charg.move2) / 100,
                                        Commission2 = (cust.comm * charg.move3) / 100,
                                        Commission3 = (cust.comm * charg.move4) / 100,
@@ -11671,13 +11694,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult PaysprintVerifyOTP(string txnid,string otp)
+        public ActionResult PaysprintVerifyOTP(string txnid, string otp)
         {
             VastBazaar cb = new VastBazaar();
             var responsechk = "";
             var responsecode1 = "";
             var tokn = Responsetoken.gettoken();
-            var responseall = cb.Paysprint_ClaimRefund(tokn, txnid,otp);
+            var responseall = cb.Paysprint_ClaimRefund(tokn, txnid, otp);
             responsechk = responseall.Content.ToString();
             responsecode1 = responseall.StatusCode.ToString();
             if (responsecode1 == "OK")
@@ -11688,9 +11711,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var sts = ADDINFO.status;
                 var message = ADDINFO.message;
                 var response_code = ADDINFO.response_code;
-                if(sts==true && response_code=="1")
+                if (sts == true && response_code == "1")
                 {
-                   MoneyFailedNew(txnid, "Transaction Refunded", "", "", "Pending");
+                    MoneyFailedNew(txnid, "Transaction Refunded", "", "", "Pending");
                 }
 
                 var results = JsonConvert.SerializeObject(ADDINFO);
@@ -11754,7 +11777,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult PaysprintVerifyOTPPPI(string txnid, string otp,string stateresp)
+        public ActionResult PaysprintVerifyOTPPPI(string txnid, string otp, string stateresp)
         {
             var userid = User.Identity.GetUserId();
             VastBazaar cb = new VastBazaar();
@@ -11858,7 +11881,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Refund Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -11927,7 +11950,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount" + transamount + " is Failed .", "Money Transfer", AdminEmail);
                                 }
-                              //  notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
+                                //  notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
                             }
                             else if (userrole == "API")
                             {
@@ -11975,7 +11998,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Refund Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -12048,7 +12071,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount" + transamount + " is Failed Due To " + ddl_refund + ".", "Money Transfer", AdminEmail);
                                 }
-                              //  notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
+                                //  notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
                             }
                             else if (userrole == "API")
                             {
@@ -12136,7 +12159,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money transfer Success To failed Account number " + bank_account + " Amount " + transamount,
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -12208,14 +12231,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount" + transamount + " is Failed .", "Money Transfer", AdminEmail);
                             }
-                         //   notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
+                            //   notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
                             return Json(new { Status = true, Message = "Successfully" });
                         }
                         else
                         {
                             //if (comm1.DmtType == "DMT1")
                             //{
-                                 db.Money_transfer_update_new_new_old(txtrefidno, "FAILED", bankid, recivername, ddl_refund, "", 0, 0);
+                            db.Money_transfer_update_new_new_old(txtrefidno, "FAILED", bankid, recivername, ddl_refund, "", 0, 0);
                             //}
                             //else
                             //{
@@ -12252,7 +12275,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Amount" + transamount + " is Failed Due To " + ddl_refund + ".", "Money Transfer", AdminEmail);
                             }
-                         //   notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
+                            //   notify.sendmessage(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + bank_account + "and Bank Refernce Id " + bankid + " and Amount " + transamount + " is Failed .");
 
                             return Json(new { Status = true, Message = "Successfully" });
                         }
@@ -12279,7 +12302,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             ViewBag.chk = "post";
             return View();
         }
-   
+
         [ChildActionOnly]
         public ActionResult _Money_Transfer_Report(string txt_frm_date, string txt_to_date, string ddl_status, string ddl_Type, string txtnumberfind)
         {
@@ -12708,7 +12731,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Microatm ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Microatm(model);
@@ -15108,12 +15131,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Service Purchase ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
 
-                                      
+
                                     }
                                     catch { }
                                 }
@@ -15200,7 +15223,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Service Purchase ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15390,7 +15413,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "IRCTC Info ",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(model);
@@ -15500,7 +15523,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "IRCTC REFUND ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -15625,7 +15648,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15708,7 +15731,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15789,7 +15812,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -15959,7 +15982,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -16050,7 +16073,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -16139,7 +16162,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
+                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -16900,49 +16923,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View(report);
         }
         [HttpPost]
-        public ActionResult ALL_CARDS(decimal? quantity,decimal? rupees)
-        { 
-              System.Data.Entity.Core.Objects.ObjectParameter output = new
-                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                Random rnd = new Random();
-                var num = rnd.Next(999, 9999);
+        public ActionResult ALL_CARDS(decimal? quantity, decimal? rupees)
+        {
+            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                         System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+            Random rnd = new Random();
+            var num = rnd.Next(999, 9999);
             var token = string.Empty;
             token = getAuthToken();
             var userid = User.Identity.GetUserId();
-                var retailer_data = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
+            var retailer_data = db.Retailer_Details.Where(s => s.RetailerId == userid).SingleOrDefault();
             var retailer_state = db.State_Desc.Where(s => s.State_id == retailer_data.State).SingleOrDefault();
-                var farmname1 = retailer_data.Frm_Name;
-                string farmname = farmname1;
+            var farmname1 = retailer_data.Frm_Name;
+            string farmname = farmname1;
             var fram = farmname[0];
             var fram1 = farmname[1];
             var fram2 = farmname[2];
             var fram3 = farmname[3];
-                var dob = DateTime.Now;
-                var setdob = dob.ToString("yyyy/MM/dd ss").Replace("/", "");
-                var reqid = (fram+fram1+fram2+fram3+ setdob + num).Replace(" ", "");
-                var entry = db.purchase_prepaid_card(userid, quantity, rupees, reqid, output).Single().msg.ToString();
+            var dob = DateTime.Now;
+            var setdob = dob.ToString("yyyy/MM/dd ss").Replace("/", "");
+            var reqid = (fram + fram1 + fram2 + fram3 + setdob + num).Replace(" ", "");
+            var entry = db.purchase_prepaid_card(userid, quantity, rupees, reqid, output).Single().msg.ToString();
             Session["succes"] = "";
             if (entry == "MINAMOUNT")
             {
                 Session["succes"] = "Please Enter Amount in Between 100 To 10000";
             }
-            else if (entry== "LOWCAPPING")
+            else if (entry == "LOWCAPPING")
             {
                 Session["succes"] = "please Check Your Balance";
             }
-            else if (entry== "OK")
+            else if (entry == "OK")
             {
                 var reque = new
                 {
-                    Quantity= quantity,
-                    PerCardAmount= rupees,
-                    DOB= retailer_data.dateofbirth,
-                    PinCode= retailer_data.Pincode,
-                    Name= retailer_data.RetailerName,
-                    Mobile= retailer_data.Mobile,
-                    Email= retailer_data.Email,
-                    StateName= retailer_state.State_name,
-                    Requestid=511
+                    Quantity = quantity,
+                    PerCardAmount = rupees,
+                    DOB = retailer_data.dateofbirth,
+                    PinCode = retailer_data.Pincode,
+                    Name = retailer_data.RetailerName,
+                    Mobile = retailer_data.Mobile,
+                    Email = retailer_data.Email,
+                    StateName = retailer_state.State_name,
+                    Requestid = 511
                 };
                 var resquestchk = JsonConvert.SerializeObject(reque);
                 var client2 = new RestClient("http://api.vastbazaar.com//api/PrepaidCard/Pay");
@@ -16960,7 +16983,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 Session["succes"] = "Please Try Again Later";
             }
             var report = db.prepaid_card_Transaction.Where(s => s.REtailerid == userid).OrderByDescending(s => s.idno).ToList();
-                return PartialView("_ALL_CARDS", report);
+            return PartialView("_ALL_CARDS", report);
         }
         //public PartialViewResult _ALL_CARDS()
         //{
@@ -17044,7 +17067,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17135,7 +17158,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17224,7 +17247,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Purchase Service ",
-                                            RemainBalance = remdetails_rem.Remainamount,
+                                            RemainBalance = (decimal)remdetails_rem.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -17365,81 +17388,81 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult Brand_details(string optcode)
         {
             var userid = User.Identity.GetUserId();
-                    VastBazaar1 cb1 = new VastBazaar1();
-                    var tokenapi = Responsetoken.gettoken();
-                    var responseall = cb1.ProductDetails(optcode, tokenapi);
-                    var responsechk = responseall.Content.ToString();
-                    var responsecode1 = responseall.StatusCode.ToString();
-                    if (responsecode1 == "OK")
+            VastBazaar1 cb1 = new VastBazaar1();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb1.ProductDetails(optcode, tokenapi);
+            var responsechk = responseall.Content.ToString();
+            var responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+                var stscode = ADDINFO.statuscode;
+                json = JsonConvert.SerializeObject(ADDINFO);
+                stscode = "TXN";
+                if (stscode == "TXN")
+                {
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(json);
+                    if (optcode == "AAQ")
                     {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var respcode = json.Content.ResponseCode.ToString();
-                        var ADDINFO = json.Content.ADDINFO;
-                        var stscode = ADDINFO.statuscode;
-                        json = JsonConvert.SerializeObject(ADDINFO);
-                        stscode = "TXN";
-                        if (stscode == "TXN")
+                        var req = new
                         {
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(json);
-                            if (optcode == "AAQ")
+                            data = new
                             {
-                                var req = new
-                                {
-                                    data = new
-                                    {
-                                        description = "Just For test",
-                                        product_type = "OK",
-                                        price_type = "Range",
-                                        tnc_mobile = "",
-                                        min_custom_price = 500,
-                                        max_custom_price = 1000,
-                                        custom_denominations = ""
-                                    },
-                                    message = "OK",
-                                    statuscode = "TXN"
-                                };
-                                return Json(req, JsonRequestBehavior.AllowGet);
-                            }
-                            else
-                            {
-                                var req = new
-                                {
-                                    data = new
-                                    {
-                                        description = "Just For test",
-                                        product_type = "OK",
-                                        price_type = "Fixed",
-                                        tnc_mobile = "",
-                                        min_custom_price = 500,
-                                        max_custom_price = 1000,
-                                        custom_denominations = ""
-                                    },
-                                    message = "OK",
-                                    statuscode = "TXN"
-                                };
-                                return Json(req, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else
-                        {
-                            var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(results);
-                            return Json(dict, JsonRequestBehavior.AllowGet);
-                        }
-                        //   var results = JsonConvert.SerializeObject(json);
+                                description = "Just For test",
+                                product_type = "OK",
+                                price_type = "Range",
+                                tnc_mobile = "",
+                                min_custom_price = 500,
+                                max_custom_price = 1000,
+                                custom_denominations = ""
+                            },
+                            message = "OK",
+                            statuscode = "TXN"
+                        };
+                        return Json(req, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var error = json.error.ToString();
-                        var error_decribe = json["error_description"].ToString();
-                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
+                        var req = new
+                        {
+                            data = new
+                            {
+                                description = "Just For test",
+                                product_type = "OK",
+                                price_type = "Fixed",
+                                tnc_mobile = "",
+                                min_custom_price = 500,
+                                max_custom_price = 1000,
+                                custom_denominations = ""
+                            },
+                            message = "OK",
+                            statuscode = "TXN"
+                        };
+                        return Json(req, JsonRequestBehavior.AllowGet);
                     }
+                }
+                else
+                {
+                    var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                //   var results = JsonConvert.SerializeObject(json);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var error = json.error.ToString();
+                var error_decribe = json["error_description"].ToString();
+                var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
         }
         //Buy Giftcard
         public ActionResult Buygitfcard(string optcode, decimal amount, string receiver_name, string receiver_email, string receiver_mobile, string gift_message, string latss, string longloc)
@@ -17491,11 +17514,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 sender_name = details.RetailerName;
                 sender_email = details.Email;
                 sender_mobile = details.Mobile;
-                        VastBazaar1 cb1 = new VastBazaar1();
-                        System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-                        string agentid = "G" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb1.RandomString(4);
-                        apirequest = "{\"optcode\":\"" + optcode + "\",\"agentid\":\"" + agentid + "\",\"account\":\"" + amount + "\",\"sender_name\":\"" + sender_name + "\",\"sender_email\":\"" + sender_email + "\",\"receiver_name\":\"" + receiver_name + "\",\"receiver_email\":\"" + receiver_email + "\",\"gift_message\":\"" + gift_message + "\",\"sender_mobile\":\"" + sender_mobile + "\",\"receiver_mobile\":\"" + receiver_mobile + "";
-                        var ch = db.giftcard_purchase(userid, optcode, agentid, amount, sender_name, sender_email, receiver_name, receiver_email, gift_message, sender_mobile, receiver_mobile, apirequest, outputchk).Single().msg;
+                VastBazaar1 cb1 = new VastBazaar1();
+                System.Data.Entity.Core.Objects.ObjectParameter outputchk = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                string agentid = "G" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + cb1.RandomString(4);
+                apirequest = "{\"optcode\":\"" + optcode + "\",\"agentid\":\"" + agentid + "\",\"account\":\"" + amount + "\",\"sender_name\":\"" + sender_name + "\",\"sender_email\":\"" + sender_email + "\",\"receiver_name\":\"" + receiver_name + "\",\"receiver_email\":\"" + receiver_email + "\",\"gift_message\":\"" + gift_message + "\",\"sender_mobile\":\"" + sender_mobile + "\",\"receiver_mobile\":\"" + receiver_mobile + "";
+                var ch = db.giftcard_purchase(userid, optcode, agentid, amount, sender_name, sender_email, receiver_name, receiver_email, gift_message, sender_mobile, receiver_mobile, apirequest, outputchk).Single().msg;
                 try
                 {
                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -17514,8 +17537,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         RetailerID = userid,
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
-                        Details = "Gift Card Purchase " ,
-                        RemainBalance = remdetails.Remainamount,
+                        Details = "Gift Card Purchase ",
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -17526,7 +17549,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         RetailerID = dealerdetails.DealerId,
                         Email = dealerdetails.Email,
                         Mobile = dealerdetails.Mobile,
-                        Details = "Gift Card Purchase " ,
+                        Details = "Gift Card Purchase ",
                         RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                         Usertype = "Dealer"
                     };
@@ -17548,62 +17571,62 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
 
                 if (ch == "Done")
+                {
+                    int idval = db.Gift_card_details.Where(aa => aa.retailerid == userid).OrderByDescending(aa => aa.idno).Select(c => c.idno).FirstOrDefault();
+                    //var idcjkkkkkk = (from mmm in db.Norton_history where mmm.customermobile == psM.txtmobile && mmm.Status == "Pending" && mmm.amount == amt && mmm.req_id == uniqueid && mmm.idno == idval select mmm.idno).SingleOrDefault().ToString();
+                    //int idnorchid = Convert.ToInt32(idcjkkkkkk);
+                    var rchinforsss = db.Gift_card_details.Where(x => x.idno == idval).FirstOrDefault();
+                    if (rchinforsss != null)
+                    {
+                        rchinforsss.Devicetoken = null;
+                        rchinforsss.Latitude = latss;
+                        rchinforsss.Longitude = longloc;
+                        rchinforsss.ModelNo = null;
+                        rchinforsss.City = city;
+                        rchinforsss.PostalCode = null;
+                        rchinforsss.InternetTYPE = null;
+                        rchinforsss.IPaddress = externalip;
+                        rchinforsss.Address = address;
+                        db.SaveChanges();
+                    }
+                    var tokn = Responsetoken.gettoken();
+                    var responseall = cb1.Transaction(optcode, tokn, agentid, amount, sender_name, sender_email, receiver_name, receiver_email, gift_message, sender_mobile, receiver_mobile);
+                    var responsechk = responseall.Content.ToString();
+                    var responsecode1 = responseall.StatusCode.ToString();
+                    if (responsecode1 == "OK")
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var respcode = json.Content.ResponseCode.ToString();
+                        var ADDINFO = json.Content.ADDINFO;
+                        var stscode = ADDINFO.statuscode;
+                        var msg = "";
+                        try
                         {
-                            int idval = db.Gift_card_details.Where(aa => aa.retailerid == userid).OrderByDescending(aa => aa.idno).Select(c => c.idno).FirstOrDefault();
-                            //var idcjkkkkkk = (from mmm in db.Norton_history where mmm.customermobile == psM.txtmobile && mmm.Status == "Pending" && mmm.amount == amt && mmm.req_id == uniqueid && mmm.idno == idval select mmm.idno).SingleOrDefault().ToString();
-                            //int idnorchid = Convert.ToInt32(idcjkkkkkk);
-                            var rchinforsss = db.Gift_card_details.Where(x => x.idno == idval).FirstOrDefault();
-                            if (rchinforsss != null)
-                            {
-                                rchinforsss.Devicetoken = null;
-                                rchinforsss.Latitude = latss;
-                                rchinforsss.Longitude = longloc;
-                                rchinforsss.ModelNo = null;
-                                rchinforsss.City = city;
-                                rchinforsss.PostalCode = null;
-                                rchinforsss.InternetTYPE = null;
-                                rchinforsss.IPaddress = externalip;
-                                rchinforsss.Address = address;
-                                db.SaveChanges();
-                            }
-                            var tokn = Responsetoken.gettoken();
-                            var responseall = cb1.Transaction(optcode, tokn, agentid, amount, sender_name, sender_email, receiver_name, receiver_email, gift_message, sender_mobile, receiver_mobile);
-                            var responsechk = responseall.Content.ToString();
-                            var responsecode1 = responseall.StatusCode.ToString();
-                            if (responsecode1 == "OK")
-                            {
-                                dynamic json = JsonConvert.DeserializeObject(responsechk);
-                                var respcode = json.Content.ResponseCode.ToString();
-                                var ADDINFO = json.Content.ADDINFO;
-                                var stscode = ADDINFO.statuscode;
-                                var msg = "";
-                                try
-                                {
-                                    msg = ADDINFO.msg.ToString();
-                                }
-                                catch { }
-                                json = JsonConvert.SerializeObject(ADDINFO);
-                                if (stscode == "TXN")
-                                {
-                                    //decimal apiopeningbal = ADDINFO.data.opening_bal;
-                                    var ipayid = ADDINFO.OperatorRefNo;
-                                    var optid = ADDINFO.OperatorRefNo;
-                                    var cardnumber = ""; DateTime exp_date = DateTime.Now; decimal price = 0;
-                                    var pin_or_url = "";
-                                    db.giftcard_purchase_update(agentid, "success", json.ToString(), cardnumber, pin_or_url, exp_date, price, 0, optid);
-                                    results = "{'message':'" + msg + "','status':'success' }";
-                                    var jss1 = new JavaScriptSerializer();
-                                    var dict1 = jss1.Deserialize<dynamic>(results);
-                                    return Json(dict1, JsonRequestBehavior.AllowGet);
-                                }
-                                else if (stscode == "TUP")
-                                {
-                                    //var madan = "";
-                                }
-                                else
-                                {
-                                    DateTime dt = DateTime.Now;
-                                    db.giftcard_purchase_update(agentid, "failed", "", "", "", dt, 0, 0, msg);
+                            msg = ADDINFO.msg.ToString();
+                        }
+                        catch { }
+                        json = JsonConvert.SerializeObject(ADDINFO);
+                        if (stscode == "TXN")
+                        {
+                            //decimal apiopeningbal = ADDINFO.data.opening_bal;
+                            var ipayid = ADDINFO.OperatorRefNo;
+                            var optid = ADDINFO.OperatorRefNo;
+                            var cardnumber = ""; DateTime exp_date = DateTime.Now; decimal price = 0;
+                            var pin_or_url = "";
+                            db.giftcard_purchase_update(agentid, "success", json.ToString(), cardnumber, pin_or_url, exp_date, price, 0, optid);
+                            results = "{'message':'" + msg + "','status':'success' }";
+                            var jss1 = new JavaScriptSerializer();
+                            var dict1 = jss1.Deserialize<dynamic>(results);
+                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                        }
+                        else if (stscode == "TUP")
+                        {
+                            //var madan = "";
+                        }
+                        else
+                        {
+                            DateTime dt = DateTime.Now;
+                            db.giftcard_purchase_update(agentid, "failed", "", "", "", dt, 0, 0, msg);
                             try
                             {
                                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -17623,7 +17646,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Gift Card Refund ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -17634,7 +17657,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     RetailerID = dealerdetails.DealerId,
                                     Email = dealerdetails.Email,
                                     Mobile = dealerdetails.Mobile,
-                                    Details = "Gift Card Refund " ,
+                                    Details = "Gift Card Refund ",
                                     RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                     Usertype = "Dealer"
                                 };
@@ -17654,29 +17677,29 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             catch { }
                             results = "{'message':'" + msg + "','status':'Failed' }";
-                                    var jss1 = new JavaScriptSerializer();
-                                    var dict1 = jss1.Deserialize<dynamic>(results);
-                                    return Json(dict1, JsonRequestBehavior.AllowGet);
-                                }
-                            }
-                            else
-                            {
-                                dynamic json = JsonConvert.DeserializeObject(responsechk);
-                                var error = json.error.ToString();
-                                var error_decribe = json["error_description"].ToString();
-                                results = "{'message':'" + error_decribe + "','status':'Failed'}";
-                                var jss = new JavaScriptSerializer();
-                                var dict = jss.Deserialize<dynamic>(results);
-                                return Json(dict, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-                        else
-                        {
-                            results = "{'message':'" + ch + "','status':'Failed' }";
                             var jss1 = new JavaScriptSerializer();
                             var dict1 = jss1.Deserialize<dynamic>(results);
                             return Json(dict1, JsonRequestBehavior.AllowGet);
                         }
+                    }
+                    else
+                    {
+                        dynamic json = JsonConvert.DeserializeObject(responsechk);
+                        var error = json.error.ToString();
+                        var error_decribe = json["error_description"].ToString();
+                        results = "{'message':'" + error_decribe + "','status':'Failed'}";
+                        var jss = new JavaScriptSerializer();
+                        var dict = jss.Deserialize<dynamic>(results);
+                        return Json(dict, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    results = "{'message':'" + ch + "','status':'Failed' }";
+                    var jss1 = new JavaScriptSerializer();
+                    var dict1 = jss1.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {
@@ -17692,123 +17715,123 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         public ActionResult CheckGiftVoucherBal(string cardnumber, string pin)
         {
             var userid = User.Identity.GetUserId();
-                    VastBazaar1 cb1 = new VastBazaar1();
-                    var tokenapi = Responsetoken.gettoken();
-                    var responseall = cb1.GiftVoucherbalance(cardnumber, pin, tokenapi);
-                    var responsechk = responseall.Content.ToString();
-                    var responsecode1 = responseall.StatusCode.ToString();
-                    if (responsecode1 == "OK")
-                    {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var respcode = json.Content.ResponseCode.ToString();
-                        var ADDINFO = json.Content.ADDINFO;
-                        var stscode = ADDINFO.statuscode;
-                        var cardnumberno = ADDINFO.data.cardnumber;
-                        var cardbalance = ADDINFO.data.cardbalance;
-                        var expiry = ADDINFO.data.expiry;
-                        json = JsonConvert.SerializeObject(ADDINFO);
-                        if (stscode == "TXN")
-                        {
-                            var results = "{'message':'" + ADDINFO.status + "','cardnumberno':'" + cardnumberno + "','cardbalance':'" + cardbalance + "','expiry':'" + expiry + "','status':'SUCCESS'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(results);
-                            return Json(dict, JsonRequestBehavior.AllowGet);
-                        }
-                        else
-                        {
-                            var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(results);
-                            return Json(dict, JsonRequestBehavior.AllowGet);
-                        }
-                        //   var results = JsonConvert.SerializeObject(json);
-                    }
-                    else
-                    {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var error = json.error.ToString();
-                        var error_decribe = json["error_description"].ToString();
-                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
-                    }
+            VastBazaar1 cb1 = new VastBazaar1();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb1.GiftVoucherbalance(cardnumber, pin, tokenapi);
+            var responsechk = responseall.Content.ToString();
+            var responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+                var stscode = ADDINFO.statuscode;
+                var cardnumberno = ADDINFO.data.cardnumber;
+                var cardbalance = ADDINFO.data.cardbalance;
+                var expiry = ADDINFO.data.expiry;
+                json = JsonConvert.SerializeObject(ADDINFO);
+                if (stscode == "TXN")
+                {
+                    var results = "{'message':'" + ADDINFO.status + "','cardnumberno':'" + cardnumberno + "','cardbalance':'" + cardbalance + "','expiry':'" + expiry + "','status':'SUCCESS'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                //   var results = JsonConvert.SerializeObject(json);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var error = json.error.ToString();
+                var error_decribe = json["error_description"].ToString();
+                var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
         }
         // Gift Card Resend Voucher
         public ActionResult Giftcardresendvoucher(string agentid)
         {
             var userid = User.Identity.GetUserId();
-                    VastBazaar1 cb1 = new VastBazaar1();
-                    var tokenapi = Responsetoken.gettoken();
-                    var responseall = cb1.GiftResendvoucher(agentid, tokenapi);
-                    var responsechk = responseall.Content.ToString();
-                    var responsecode1 = responseall.StatusCode.ToString();
-                    if (responsecode1 == "OK")
+            VastBazaar1 cb1 = new VastBazaar1();
+            var tokenapi = Responsetoken.gettoken();
+            var responseall = cb1.GiftResendvoucher(agentid, tokenapi);
+            var responsechk = responseall.Content.ToString();
+            var responsecode1 = responseall.StatusCode.ToString();
+            if (responsecode1 == "OK")
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var respcode = json.Content.ResponseCode.ToString();
+                var ADDINFO = json.Content.ADDINFO;
+                var stscode = ADDINFO.statuscode;
+                json = JsonConvert.SerializeObject(ADDINFO);
+                if (stscode == "TXN")
+                {
+                    var details1 = ADDINFO.data.carddetails.ToString();
+                    var jsObj1 = JsonConvert.DeserializeObject(details1);
+                    var name = "";
+                    var cardnumber = "";
+                    var pin_or_url = "";
+                    var expiry_date = "";
+                    var card_price = "";
+                    decimal cardprice = 0;
+                    DateTime exp_date = DateTime.Now;
+                    try
                     {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var respcode = json.Content.ResponseCode.ToString();
-                        var ADDINFO = json.Content.ADDINFO;
-                        var stscode = ADDINFO.statuscode;
-                        json = JsonConvert.SerializeObject(ADDINFO);
-                        if (stscode == "TXN")
-                        {
-                            var details1 = ADDINFO.data.carddetails.ToString();
-                            var jsObj1 = JsonConvert.DeserializeObject(details1);
-                            var name = "";
-                            var cardnumber = "";
-                            var pin_or_url = "";
-                            var expiry_date = "";
-                            var card_price = "";
-                            decimal cardprice = 0;
-                            DateTime exp_date = DateTime.Now;
-                            try
-                            {
-                                var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(details1);
-                            }
-                            catch (Exception ex)
-                            {
-                                var resp = ex.Message;
-                                int pFrom = resp.IndexOf("'") + "'".Length;
-                                int pTo = resp.LastIndexOf("'");
-                                name = resp.Substring(pFrom, pTo - pFrom);
-                            }
-                            pin_or_url = jsObj1[name][0].pin_or_url.ToString();
-                            expiry_date = jsObj1[name][0].expiry_date.ToString();
-                            exp_date = Convert.ToDateTime(expiry_date);
-                            cardnumber = jsObj1[name][0].cardnumber.ToString();
-                            card_price = jsObj1[name][0].card_price.ToString();
-                            cardprice = Convert.ToDecimal(card_price);
-                            // Update value in giftcard table 
-                            var show = db.Gift_card_details.Where(a => a.orderid == agentid).FirstOrDefault();
-                            show.cardnumber = cardnumber;
-                            show.pin = pin_or_url;
-                            show.card_price = cardprice;
-                            show.exp_date = exp_date;
-                            db.SaveChanges();
-                            var results = "{'message':'" + ADDINFO.status + "','status':'success'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict1 = jss.Deserialize<dynamic>(results);
-                            return Json(dict1, JsonRequestBehavior.AllowGet);
-                        }
-                        else
-                        {
-                            var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
-                            var jss = new JavaScriptSerializer();
-                            var dict = jss.Deserialize<dynamic>(results);
-                            return Json(dict, JsonRequestBehavior.AllowGet);
-                        }
-                        //   var results = JsonConvert.SerializeObject(json);
+                        var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(details1);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        dynamic json = JsonConvert.DeserializeObject(responsechk);
-                        var error = json.error.ToString();
-                        var error_decribe = json["error_description"].ToString();
-                        var results = "{'message':'" + error_decribe + "','status':'failure'}";
-                        var jss = new JavaScriptSerializer();
-                        var dict = jss.Deserialize<dynamic>(results);
-                        return Json(dict, JsonRequestBehavior.AllowGet);
+                        var resp = ex.Message;
+                        int pFrom = resp.IndexOf("'") + "'".Length;
+                        int pTo = resp.LastIndexOf("'");
+                        name = resp.Substring(pFrom, pTo - pFrom);
                     }
+                    pin_or_url = jsObj1[name][0].pin_or_url.ToString();
+                    expiry_date = jsObj1[name][0].expiry_date.ToString();
+                    exp_date = Convert.ToDateTime(expiry_date);
+                    cardnumber = jsObj1[name][0].cardnumber.ToString();
+                    card_price = jsObj1[name][0].card_price.ToString();
+                    cardprice = Convert.ToDecimal(card_price);
+                    // Update value in giftcard table 
+                    var show = db.Gift_card_details.Where(a => a.orderid == agentid).FirstOrDefault();
+                    show.cardnumber = cardnumber;
+                    show.pin = pin_or_url;
+                    show.card_price = cardprice;
+                    show.exp_date = exp_date;
+                    db.SaveChanges();
+                    var results = "{'message':'" + ADDINFO.status + "','status':'success'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict1 = jss.Deserialize<dynamic>(results);
+                    return Json(dict1, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var results = "{'message':'" + ADDINFO.status + "','status':'failure'}";
+                    var jss = new JavaScriptSerializer();
+                    var dict = jss.Deserialize<dynamic>(results);
+                    return Json(dict, JsonRequestBehavior.AllowGet);
+                }
+                //   var results = JsonConvert.SerializeObject(json);
+            }
+            else
+            {
+                dynamic json = JsonConvert.DeserializeObject(responsechk);
+                var error = json.error.ToString();
+                var error_decribe = json["error_description"].ToString();
+                var results = "{'message':'" + error_decribe + "','status':'failure'}";
+                var jss = new JavaScriptSerializer();
+                var dict = jss.Deserialize<dynamic>(results);
+                return Json(dict, JsonRequestBehavior.AllowGet);
+            }
         }
         public ActionResult Giftcard_Report()
         {
@@ -18291,12 +18314,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Purchase Services ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.info(model);
 
-                                              
+
                                             }
                                             catch { }
                                             ViewBag.chkcharge = "DONE";
@@ -18388,7 +18411,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Purchase Services ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.info(model);
@@ -18698,7 +18721,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
                                     }
                                 }
-                                else if(respchk.StatusCode == HttpStatusCode.Created)
+                                else if (respchk.StatusCode == HttpStatusCode.Created)
                                 {
                                     var apiresp = respchk.Content;
                                     dynamic respout = JsonConvert.DeserializeObject(apiresp);
@@ -18774,9 +18797,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult KYCRegister1(string senderno, string pid, string aadharnumber, string latloc, string longloc,string Name)
+        public ActionResult KYCRegister1(string senderno, string pid, string aadharnumber, string latloc, string longloc, string Name)
         {
-            var status = false;string message = "";string OTPRequestID = "";string KYCRequestID = "";
+            var status = false; string message = ""; string OTPRequestID = ""; string KYCRequestID = "";
             pid = HttpUtility.UrlDecode(pid);
             string userid = User.Identity.GetUserId();
 
@@ -18800,7 +18823,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             radianagentid = tokenchk.agentID;
                         }
                         var Ipaddress = GetComputer_InternetIP();
-                        var respchk = dmt.CustomerKYC(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name,aadharnumber,pid,latloc,longloc, Ipaddress);
+                        var respchk = dmt.CustomerKYC(radianagentid, senderno, radianttoken, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, Name, aadharnumber, pid, latloc, longloc, Ipaddress);
                         if (respchk.StatusCode == HttpStatusCode.NotAcceptable || respchk.StatusCode == HttpStatusCode.Gone)
                         {
                             dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -18813,7 +18836,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             var apiresp = respchk.Content;
                             dynamic respout = JsonConvert.DeserializeObject(apiresp);
                             OTPRequestID = respout.OTPRequestID;
-                            KYCRequestID= respout.KYCRequestID;
+                            KYCRequestID = respout.KYCRequestID;
                         }
                         else
                         {
@@ -18848,7 +18871,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
         }
         [HttpPost]
-        public ActionResult KYCEnterOTP1(string stateResp, string kyc_id, string Sendernumber, string otp,string Name,string latloc, string longloc)
+        public ActionResult KYCEnterOTP1(string stateResp, string kyc_id, string Sendernumber, string otp, string Name, string latloc, string longloc)
         {
             var status = false; string message = "";
             string userid = User.Identity.GetUserId();
@@ -19074,7 +19097,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             return Json(dict, JsonRequestBehavior.AllowGet);
                         }
                     }
-   
+
                     else
                     {
                         var error_decribe = "NO Api Open";
@@ -19244,7 +19267,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         return Json(dict, JsonRequestBehavior.AllowGet);
                     }
                 }
-       
+
                 else
                 {
                     var error_decribe = "NO Api Open";
@@ -19553,7 +19576,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         return Json(dict, JsonRequestBehavior.AllowGet);
                     }
                 }
-              
+
                 else
                 {
                     var error_decribe = "NO Api Open";
@@ -19644,7 +19667,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -19786,7 +19809,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -19866,7 +19889,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -19991,7 +20014,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -20180,7 +20203,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -20338,7 +20361,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -21253,7 +21276,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Money Transfer Verify Accountnumber " + account + "",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.MoneyTransfer(model);
@@ -21393,9 +21416,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             radianttoken = tokenchk.accessToken;
                                                             radianagentid = tokenchk.agentID;
                                                         }
-                                                        var responseinfo = dmt.FundtransferSendotp(customerid, name, radianagentid, account, latss, longloc, Ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken,amount);
+                                                        var responseinfo = dmt.FundtransferSendotp(customerid, name, radianagentid, account, latss, longloc, Ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, amount);
 
-                                                  //      var responseinfo = dmt.FundtransferSendotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                                        //      var responseinfo = dmt.FundtransferSendotp(radianagentid, radianttoken, senderno, otp, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                                                         if (responseinfo.StatusCode == HttpStatusCode.NotAcceptable)
                                                         {
                                                             dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -21412,7 +21435,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             {
                                                                 Response.servicefee = 0;
                                                                 Response.tax = 0;
-                                                             
+
                                                                 string rrn = json.OTPReferenceID;
                                                                 Response.total = amount;
                                                                 Response.status = "SENDOTP";
@@ -21434,8 +21457,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     payidno = json.message.ToString();
                                                                 }
                                                                 catch { }
-                                                                    //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
-                                                                    db.Money_transfer_update_by_paytm(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                                                                db.Money_transfer_update_by_paytm(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
                                                                 try
                                                                 {
                                                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -21455,7 +21478,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.MoneyTransfer(model);
@@ -21503,18 +21526,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                 //    //  smssend.sendsmsall(RetailerMob, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge");
                                                                 //}
                                                                 smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account + " ", " " + amount, payidno);
-                                                                    if (StatusSendMailMoneyTransferFailed == "Y")
-                                                                    {
-                                                                        smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
-                                                                    }
-                                                                    Response.status = "Failed";
-                                                                    Response.Details = payidno;
-                                                                    dynamic resp = new JObject();
-                                                                    resp.Amount = amt;
-                                                                    resp.Status = "Failed";
-                                                                    resp.bankrefid = payidno;
-                                                                    Response.data.Add(resp);
-                                                               
+                                                                if (StatusSendMailMoneyTransferFailed == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                                                                }
+                                                                Response.status = "Failed";
+                                                                Response.Details = payidno;
+                                                                dynamic resp = new JObject();
+                                                                resp.Amount = amt;
+                                                                resp.Status = "Failed";
+                                                                resp.bankrefid = payidno;
+                                                                Response.data.Add(resp);
+
                                                             }
                                                         }
                                                         else
@@ -21551,7 +21574,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.MoneyTransfer(model);
@@ -21623,17 +21646,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             }
                                                         }
 
-                                                               
 
-                                                         
-                                                        }
-                                                      
+
+
                                                     }
-                                                    var jjj = Response.ToString();
-                                                    var jss2 = new JavaScriptSerializer();
-                                                    var dict2 = jss2.Deserialize<dynamic>(jjj);
-                                                    return Json(dict2, JsonRequestBehavior.AllowGet);
-                                           }
+
+                                                }
+                                                var jjj = Response.ToString();
+                                                var jss2 = new JavaScriptSerializer();
+                                                var dict2 = jss2.Deserialize<dynamic>(jjj);
+                                                return Json(dict2, JsonRequestBehavior.AllowGet);
+                                            }
                                             else
                                             {
                                                 results = "{'Details':'API NOT FOUND','status':'Failed'}";
@@ -21776,7 +21799,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
 
         [HttpPost]
-        public ActionResult imps_transfer_verifyotp1(string Agentid, string benid, string otp, string stateresp,string customerid,string PID)
+        public ActionResult imps_transfer_verifyotp1(string Agentid, string benid, string otp, string stateresp, string customerid, string PID)
         {
             var userid = User.Identity.GetUserId();
             var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.Status == "Pending" && aa.trans_id == Agentid && aa.rch_from == userid).SingleOrDefault();
@@ -21861,17 +21884,17 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     responseinfo = dmt.Fundtransfer(radianagentid, radianttoken, NUMBER, benid, amt, customerid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, PID, Agentid, stateresp, otp);
                 }
 
-                  
-                    if (responseinfo.StatusCode == HttpStatusCode.OK )
-                    {
-                        var StatusSendSmsMoneyTransferSuccess = db.SMSSendAlls.Where(a => a.ServiceName == "dmtsucconline").SingleOrDefault();
-                        var StatusSendSmsMoneyTransferFailed = db.SMSSendAlls.Where(a => a.ServiceName == "dmtfailedonline").SingleOrDefault();
-                        var StatusSendMailMoneyTransferSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "dmtsucconline1").SingleOrDefault().Status;
-                        var StatusSendMailMoneyTransferFailed = db.EmailSendAlls.Where(a => a.ServiceName == "dmtfailedonline1").SingleOrDefault().Status;
 
-                        dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
-                        var sts = json.success;
-                        if (sts == true)
+                if (responseinfo.StatusCode == HttpStatusCode.OK)
+                {
+                    var StatusSendSmsMoneyTransferSuccess = db.SMSSendAlls.Where(a => a.ServiceName == "dmtsucconline").SingleOrDefault();
+                    var StatusSendSmsMoneyTransferFailed = db.SMSSendAlls.Where(a => a.ServiceName == "dmtfailedonline").SingleOrDefault();
+                    var StatusSendMailMoneyTransferSuccess = db.EmailSendAlls.Where(a => a.ServiceName == "dmtsucconline1").SingleOrDefault().Status;
+                    var StatusSendMailMoneyTransferFailed = db.EmailSendAlls.Where(a => a.ServiceName == "dmtfailedonline1").SingleOrDefault().Status;
+
+                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                    var sts = json.success;
+                    if (sts == true)
                     {
                         string txnSts = json.data.status;
                         if (txnSts.ToUpper() == "SUCCESS")
@@ -21883,7 +21906,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             //var bname = ADDINFO.data.name.ToString();
                             //string payidno = oprid;
                             decimal apiopeningbal = 0;
-                            decimal chargeAmt =0;
+                            decimal chargeAmt = 0;
                             decimal apicloseingbal = (apiopeningbal - chargeAmt);
                             var oprid = json.data.refnumber;
                             var bname = json.data.benefname;
@@ -21964,7 +21987,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -22008,7 +22031,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             resp.bankrefid = payidno;
                             Responsen.data.Add(resp);
                         }
-                        else 
+                        else
                         {
                             Responsen.servicefee = resp_imps.charge;
 
@@ -22021,7 +22044,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 var charge = Convert.ToDecimal(resp_imps.charge);
                                 Responsen.tax = (charge * 18) / 100;
                             }
-                            string rrn = json.message.ToString(); 
+                            string rrn = json.message.ToString();
                             Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
                             Responsen.status = "Pending";
                             Responsen.Details = "";
@@ -22034,9 +22057,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             resp.benid = "";
                             Responsen.data.Add(resp);
                         }
-                      
+
                     }
-                        else
+                    else
                     {
                         var bname = ""; string payidno = "";
                         try
@@ -22044,9 +22067,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             payidno = json.message.ToString();
                         }
                         catch { }
-                       
-                            //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
-                            db.Money_transfer_update_by_paytm(Agentid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+
+                        //db.Money_transfer_update_new_new(Tranid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
+                        db.Money_transfer_update_by_paytm(Agentid, "FAILED", payidno, bname, json.ToString(), "", 0, 0);
                         try
                         {
                             var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -22066,7 +22089,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -22097,28 +22120,28 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         }
                         catch { }
                         smssend.sms_init(StatusSendSmsMoneyTransferFailed.Status, StatusSendSmsMoneyTransferFailed.Whatsapp_Status, "MONEYTRANSFERMANUALMONEYFAILEDDUETO", NUMBER, bankname, account + " ", " " + amount, payidno);
-                            if (StatusSendMailMoneyTransferFailed == "Y")
-                            {
-                                smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
-                            }
+                        if (StatusSendMailMoneyTransferFailed == "Y")
+                        {
+                            smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
+                        }
 
-                            Responsen.status = "Failed";
-                            Responsen.Details = payidno;
-                            dynamic resp = new JObject();
-                            resp.Amount = amt;
-                            resp.Status = "Failed";
-                            resp.bankrefid = payidno;
-                            Responsen.data.Add(resp);
+                        Responsen.status = "Failed";
+                        Responsen.Details = payidno;
+                        dynamic resp = new JObject();
+                        resp.Amount = amt;
+                        resp.Status = "Failed";
+                        resp.bankrefid = payidno;
+                        Responsen.data.Add(resp);
 
 
 
-                       
+
                     }
-                    }
-                    else
-                    {
+                }
+                else
+                {
 
-                        dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
+                    dynamic json = JsonConvert.DeserializeObject(responseinfo.Content);
                     var sts = json.success;
                     if (sts == false)
                     {
@@ -22150,7 +22173,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -22200,9 +22223,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         resp.bankrefid = "Pending";
                         Responsen.data.Add(resp);
                     }
-                 }
-               
-          
+                }
+
+
 
             }
             else
@@ -22670,7 +22693,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var tokn = Responsetoken.gettoken();
                     var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
                     var statename = db.State_Desc.Where(aa => aa.State_id == reminfo.State).SingleOrDefault();
-          
+
                     var respchk = vast.Agent_register_PPI(reminfo.Mobile, tokn, userid, statename.State_name, reminfo.RetailerName, reminfo.Pincode.ToString(), reminfo.Email, reminfo.PanCard, reminfo.Frm_Name, reminfo.Address);
 
                     if (respchk.StatusCode == HttpStatusCode.OK)
@@ -22717,7 +22740,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         ViewBag.errormsg = "Something Went Wrong";
                     }
                 }
-              
+
                 Recent_report recent = new Recent_report();
                 recent.Recent_report_imps = db.recent_imps_report(userid).ToList();
                 recent.Recent_report_Aeps = null;
@@ -24321,18 +24344,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             }
                             var PPIAgentCheck = db.PPIAgents.Where(aa => aa.Retailer_id == userid).SingleOrDefault();
                             string URL = "";
-                            if (PPIAgentCheck==null)
+                            if (PPIAgentCheck == null)
                             {
                                 var tokn = Responsetoken.gettoken();
                                 var reminfo = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
                                 var statename = db.State_Desc.Where(aa => aa.State_id == reminfo.State).SingleOrDefault();
                                 VastBazaar vast = new VastBazaar();
-                               var respchk= vast.Agent_register_PPI(reminfo.Mobile, tokn, userid, statename.State_name, reminfo.RetailerName, reminfo.Pincode.ToString(), reminfo.Email, reminfo.PanCard, reminfo.Frm_Name, reminfo.Address);
-                             
-                                if(respchk.StatusCode==HttpStatusCode.OK)
+                                var respchk = vast.Agent_register_PPI(reminfo.Mobile, tokn, userid, statename.State_name, reminfo.RetailerName, reminfo.Pincode.ToString(), reminfo.Email, reminfo.PanCard, reminfo.Frm_Name, reminfo.Address);
+
+                                if (respchk.StatusCode == HttpStatusCode.OK)
                                 {
                                     dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
-                                    if(dyrespchk.Content.ADDINFO.status==true)
+                                    if (dyrespchk.Content.ADDINFO.status == true)
                                     {
                                         PPIAgent pp = new PPIAgent();
                                         pp.Retailer_id = userid;
@@ -24340,16 +24363,16 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         pp.Insertdate = DateTime.Now;
                                         db.PPIAgents.Add(pp);
                                         db.SaveChanges();
-                                      //  PPIAge
+                                        //  PPIAge
 
                                         //PPIAgents ppinfo = new PPIAgent();
                                         //ppinfo.
                                     }
                                     else
                                     {
-                                        
+
                                         string errorchk = dyrespchk.Content.ADDINFO.message;
-                                   
+
                                         errormsg = errorchk;
                                     }
                                 }
@@ -24364,7 +24387,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 VastBazaar cb = new VastBazaar();
                                 var tokenapi = Responsetoken.gettoken();
                                 string currentUrl = Request.Url.ToString();
-                                var responseall = cb.Remitter_details_PPI(senderno, tokenapi,userid, currentUrl);
+                                var responseall = cb.Remitter_details_PPI(senderno, tokenapi, userid, currentUrl);
                                 var responsechk = responseall.Content.ToString();
                                 var responsecode1 = responseall.StatusCode.ToString();
                                 var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
@@ -24419,11 +24442,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         catch
                                         { }
                                     }
-                                    else if(stscode== "REDIRECT")
+                                    else if (stscode == "REDIRECT")
                                     {
                                         URL = ADDINFO.data.url;
                                         var results = "{'status':'" + URL + "','statuscode':'LINK'}";
-                                      
+
                                         //  var jss = new JavaScriptSerializer();
                                         //  var dict = jss.Deserialize<dynamic>(results);
                                         var json121 = JsonConvert.DeserializeObject(results);
@@ -24448,7 +24471,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
                                 }
                             }
-                            else if(check== "LINK")
+                            else if (check == "LINK")
                             {
                                 var error_decribe = errormsg;
                                 var results = "{'status':'" + URL + "','statuscode':'LINK'}";
@@ -27333,7 +27356,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
         }
-       
+
         public JObject moneypayoutradiantPPI(string userid, decimal Amount, decimal FinalAmount, string sender_number, string Accountnumber, string bankname, string benIFSC, string CommonTranid, string typetransfer, string Name, string Ipaddress, string macaddress, string benid, string custid, decimal? servicefee, string idprooftype, string idproofnumber, string kycsts, string pincode, string slabname)
         {
             using (VastwebmultiEntities db = new VastwebmultiEntities())
@@ -27528,7 +27551,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
 
 
-      
+
         public ActionResult Print_Imps_PdfPPI(string orderid)
         {
             string userid = User.Identity.GetUserId();
@@ -27765,8 +27788,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             IRestResponse response = client.Execute(request);
             return response;
         }
-      
-       
+
+
         public ActionResult DMTreportnewPPI()
         {
             var userid = User.Identity.GetUserId();
@@ -27961,7 +27984,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             ViewBag.moneysts3 = money3;
             ViewBag.moneysts4 = money4;
 
-           
+
             if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
                 //////////////////////Check E KYC///////////////////////////
@@ -28078,12 +28101,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
 
-                                            
+
                                         }
                                         catch { }
                                         ViewBag.chkcharge = "DONE";
@@ -28180,7 +28203,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal) remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -28277,7 +28300,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -28391,9 +28414,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 var responseall = cb.Remitter_details(senderno, tokenapi);
                                 var responsechk = responseall.Content.ToString();
                                 var responsecode1 = responseall.StatusCode.ToString();
-                              //  var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
-                          //      var responsechk1 = responseall1.Content.ToString();
-                             //   var responsecode11 = responseall1.StatusCode.ToString();
+                                //  var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
+                                //      var responsechk1 = responseall1.Content.ToString();
+                                //   var responsecode11 = responseall1.StatusCode.ToString();
                                 if (responsecode1 == "OK")
                                 {
                                     dynamic json = JsonConvert.DeserializeObject(responsechk);
@@ -28402,11 +28425,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var stscode = ADDINFO.statuscode;
                                     json = JsonConvert.SerializeObject(ADDINFO);
 
-                                 //   dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
-                                  //  var respcode1 = json1.Content.ResponseCode.ToString();
-                                  //  var ADDINFO1 = json1.Content.ADDINFO;
-                                  //  var stscode1 = ADDINFO1.statuscode;
-                                   // json1 = JsonConvert.SerializeObject(ADDINFO1);
+                                    //   dynamic json1 = JsonConvert.DeserializeObject(responsechk1);
+                                    //  var respcode1 = json1.Content.ResponseCode.ToString();
+                                    //  var ADDINFO1 = json1.Content.ADDINFO;
+                                    //  var stscode1 = ADDINFO1.statuscode;
+                                    // json1 = JsonConvert.SerializeObject(ADDINFO1);
                                     if (stscode == "TXN")
                                     {
                                         //dynamic jobject = JsonConvert.DeserializeObject(json.ToString());
@@ -28443,7 +28466,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         //catch
                                         //{ }
                                     }
-                                   // return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
+                                    // return Json(new { rt = json, ct = json1 }, JsonRequestBehavior.AllowGet);
                                     return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -28596,7 +28619,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Register_aadhar_new(string senderno,string aadharno,string pancardnumber)
+        public ActionResult Register_aadhar_new(string senderno, string aadharno, string pancardnumber)
         {
             string userid = User.Identity.GetUserId();
             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
@@ -28625,7 +28648,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Dmt Ekyc Charge ",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.MoneyTransfer(model);
@@ -28668,12 +28691,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     dynamic json = JsonConvert.DeserializeObject(responsechk);
                     var ADDINFO = json.Content.ADDINFO;
-                   // dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
+                    // dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
                     var stsmsg = ADDINFO.success;
                     var msg = ADDINFO.message;
                     var clientid = ADDINFO.data.client_id;
-                   
-                    if(stsmsg==false)
+
+                    if (stsmsg == false)
                     {
                         db.RefundDMTEkycCharge(agentid, "Failed", message);
                         try
@@ -28695,7 +28718,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "DMT Ekyc Charge REfund ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -28743,10 +28766,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var error_decribe = "Please Try After Sometime";
                     var respchk = new
                     {
-                        stsmsg=false,
-                        msg= error_decribe,
-                        clientid="",
-                        agentid=""
+                        stsmsg = false,
+                        msg = error_decribe,
+                        clientid = "",
+                        agentid = ""
                     };
                     var results = JsonConvert.SerializeObject(respchk);
                     var jss = new JavaScriptSerializer();
@@ -28784,12 +28807,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             if (responsecode1 == "OK")
             {
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
-             //   var respcode = json.Content.ResponseCode.ToString();
+                //   var respcode = json.Content.ResponseCode.ToString();
                 var ADDINFO = json.Content.ADDINFO;
-            //    dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
+                //    dynamic respadd = JsonConvert.DeserializeObject(ADDINFO);
                 var stsmsg = ADDINFO.success;
                 string msg = ADDINFO.message;
- 
+
 
                 if (stsmsg == false)
                 {
@@ -28813,7 +28836,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "DMT Ekyc Charge REfund ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -28844,7 +28867,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     }
                     catch { }
                 }
-                else if(stsmsg==true)
+                else if (stsmsg == true)
                 {
                     db.RefundDMTEkycCharge(agentid, "Success", msg);
                 }
@@ -29643,7 +29666,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -29785,7 +29808,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -29941,7 +29964,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -30130,7 +30153,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -30288,7 +30311,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -30838,7 +30861,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 dynamic json = JsonConvert.DeserializeObject(responsechk);
                 var ADDINFO = json.Content.ADDINFO;
                 var stscode = ADDINFO.statuscode;
-                if(stscode=="TXN")
+                if (stscode == "TXN")
                 {
                     var results = "{'Details':'Otp Send Sender Number','status':'Success'}";
                     var jss1 = new JavaScriptSerializer();
@@ -31271,7 +31294,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             //        }
                                             //    }
                                             //}
-                                            if(apiname== "VASTWEB")
+                                            if (apiname == "VASTWEB")
                                             {
                                                 ////////////VastWeb/////////////////
                                                 requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + ifsc + "\",\"agentid\":\"" + CommonTranid + "";
@@ -31302,8 +31325,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = userid,
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.MoneyTransfer(model);
@@ -31314,7 +31337,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = retailerdetails.DealerId,
                                                         Email = dealerdetails.Email,
                                                         Mobile = dealerdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
                                                         RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                         Usertype = "Dealer"
                                                     };
@@ -31326,7 +31349,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = dealerdetails.SSId,
                                                         Email = masterdetails.Email,
                                                         Mobile = masterdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
                                                         RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                         Usertype = "Master"
                                                     };
@@ -31489,7 +31512,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     {
                                                         task = Task.Run(() =>
                                                         {
-                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar,senderotps,uniqueid);
+                                                            return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar, senderotps, uniqueid);
                                                         });
                                                     }
                                                     bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
@@ -31574,8 +31597,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     RetailerID = userid,
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
-                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.MoneyTransfer(model);
@@ -31586,7 +31609,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     RetailerID = retailerdetails.DealerId,
                                                                                     Email = dealerdetails.Email,
                                                                                     Mobile = dealerdetails.Mobile,
-                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount "+ amount + "",
+                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                     RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                                                     Usertype = "Dealer"
                                                                                 };
@@ -31777,8 +31800,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = userid,
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -31789,7 +31812,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = retailerdetails.DealerId,
                                                                                 Email = dealerdetails.Email,
                                                                                 Mobile = dealerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                                                 Usertype = "Dealer"
                                                                             };
@@ -31801,7 +31824,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = dealerdetails.SSId,
                                                                                 Email = masterdetails.Email,
                                                                                 Mobile = masterdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                                                 Usertype = "Master"
                                                                             };
@@ -31979,8 +32002,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = userid,
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -32839,7 +32862,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     if (respchk.response_code == "1")
                     {
                         status = true;
-                       // kyc_id = respchk.data.ekyc_id;
+                        // kyc_id = respchk.data.ekyc_id;
                         stateresp = respchk.stateresp;
                     }
                 }
@@ -32854,7 +32877,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult KYCEnterOTPAirtel(string stateResp, string kyc_id, string Sendernumber, string otp,string pid)
+        public ActionResult KYCEnterOTPAirtel(string stateResp, string kyc_id, string Sendernumber, string otp, string pid)
         {
             pid = HttpUtility.UrlDecode(pid);
             string key = "2dc2770e6938f17c";       // Replace with your AES key (must be 16 bytes for AES-128)
@@ -32892,7 +32915,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         [HttpPost]
         public ActionResult Register_benAirtel(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname, string hidebenid)
         {
-        
+
             try
             {
                 var RetailerID = User.Identity.GetUserId();
@@ -33068,7 +33091,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
 
         #region MONEYTRANSFER DMT       
-        
+
         [HttpGet]
         public ActionResult Money_transfer2()
         {
@@ -33079,14 +33102,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
             var chk1ekyc = db.DMT_Ekyc_Charge.SingleOrDefault();
             ViewBag.EkycCharge = chk1ekyc.Charge;
-          var money1 = false; var money2 = false;var money3 = false; var money4 = false;
-            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status==true).SingleOrDefault();
-            if (moneyapists_dmt!=null)
+            var money1 = false; var money2 = false; var money3 = false; var money4 = false;
+            var moneyapists_dmt = db.money_api_status.Where(aa => aa.catagory == "DMT" && aa.status == true).SingleOrDefault();
+            if (moneyapists_dmt != null)
             {
                 money1 = true;
-                if(dealerinfo.moneysts==true)
+                if (dealerinfo.moneysts == true)
                 {
-                    if(ChkKYC.moneysts==false)
+                    if (ChkKYC.moneysts == false)
                     {
                         money1 = false;
                     }
@@ -33144,7 +33167,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     money4 = false;
                 }
             }
-         
+
 
 
 
@@ -33154,7 +33177,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             ViewBag.moneysts4 = money4;
 
 
-        
+
             if (ChkKYC.PSAStatus == "Y" && ChkKYC.AadhaarStatus == "Y" && ChkKYC.ShopwithSalfieStatus == "Y")
             {
                 //////////////////////Check E KYC///////////////////////////
@@ -33271,12 +33294,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
 
-                                          
+
                                         }
                                         catch { }
                                         ViewBag.chkcharge = "DONE";
@@ -33373,7 +33396,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -33470,7 +33493,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -33725,11 +33748,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             bankAccountName,
                             ipAddress,
                             aadhaarNumber,
-                            emailid=retailer.Email,
-                            firmname=retailer.Frm_Name,
-                            merchantPanImage= "",
-                            maskedAadharImage= "",
-                            backgroundImageOfShop=""
+                            emailid = retailer.Email,
+                            firmname = retailer.Frm_Name,
+                            merchantPanImage = "",
+                            maskedAadharImage = "",
+                            backgroundImageOfShop = ""
                         };
                         var resquestchk = JsonConvert.SerializeObject(reque);
                         var client2 = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE");
@@ -33829,7 +33852,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(viewresponse1, JsonRequestBehavior.AllowGet);
             }
         }
-     
+
         [HttpPost]
         public ActionResult VerifyotpEkyc(string otp, string primaryhide, string encodehide)
         {
@@ -34828,12 +34851,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
 
-                              
+
                             }
                             catch { }
                         }
@@ -34875,7 +34898,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35237,7 +35260,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35283,7 +35306,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Aeps 2fa Charge ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.Aeps(model);
@@ -35387,7 +35410,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     customers.Add(new SelectListItem
                     {
-                        Value = item.branch_ifsc +"|"+item.id,
+                        Value = item.branch_ifsc + "|" + item.id,
                         Text = item.bank_name
                     });
                 }
@@ -35405,12 +35428,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpPost]
-        public ActionResult RAdiantKYCRegister(string senderno, string pid,string aadharnumber)
+        public ActionResult RAdiantKYCRegister(string senderno, string pid, string aadharnumber)
         {
             string lat = "27.609400";
-            string long1= "75.139908";
+            string long1 = "75.139908";
             var ipaddress = GetComputer_InternetIP();
             var userid = User.Identity.GetUserId();
 
@@ -35431,7 +35454,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         radianttoken = tokenchk.accessToken;
                         radianagentid = tokenchk.agentID;
                     }
-                    var respchk = dmt.KYCRegister(radianagentid, radianttoken, senderno,aadharnumber,pid, lat, long1, ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                    var respchk = dmt.KYCRegister(radianagentid, radianttoken, senderno, aadharnumber, pid, lat, long1, ipaddress, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                     if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                     {
                         dmt.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -35441,11 +35464,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }
-       
-        
-        
+
+
+
         [HttpPost]
-        public ActionResult Senderdetails(string senderno,string latloc,string longloc)
+        public ActionResult Senderdetails(string senderno, string latloc, string longloc)
         {
             var check = "OK"; var errormsg = "";
             var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "DMT").SingleOrDefault();
@@ -35485,7 +35508,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             {
                                 VastBazaar cb = new VastBazaar();
                                 var tokenapi = Responsetoken.gettoken();
-                                var responseall = cb.Remitter_details_DMT(senderno, tokenapi,latloc,longloc);
+                                var responseall = cb.Remitter_details_DMT(senderno, tokenapi, latloc, longloc);
                                 var responsechk = responseall.Content.ToString();
                                 var responsecode1 = responseall.StatusCode.ToString();
                                 var responseall1 = cb.creaditRemitter_details(senderno, tokenapi);
@@ -35694,10 +35717,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(new { rt = json }, JsonRequestBehavior.AllowGet);
             }
         }
-       
-        
-        
-       
+
+
+
+
         public static byte[] EncryptAES(string plainText, string key, string iv)
         {
             using (Aes aesAlg = Aes.Create())
@@ -35713,14 +35736,14 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return encryptor.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
             }
         }
-       
-        
-        
-        
+
+
+
+
         [HttpPost]
-        public ActionResult KYCRegister(string senderno,string pid,string aadharnumber, string latloc,string longloc)
+        public ActionResult KYCRegister(string senderno, string pid, string aadharnumber, string latloc, string longloc)
         {
-            pid= HttpUtility.UrlDecode(pid);
+            pid = HttpUtility.UrlDecode(pid);
             string key = "2dc2770e6938f17c";       // Replace with your AES key (must be 16 bytes for AES-128)
             string iv = "e2cb1fd94a96ff35";         // Replace with your Initialization Vector (must be 16 bytes)
 
@@ -35731,26 +35754,26 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             VastBazaar cb = new VastBazaar();
             var tokenapi = Responsetoken.gettoken();
 
-             var status = false; string message = "Please Try After Sometime";
+            var status = false; string message = "Please Try After Sometime";
             string kyc_id = ""; string stateresp = "";
 
             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
             var responseall = cb.EKYC_Register(senderno, tokenapi, latloc, longloc, aadharnumber, enctoken, agentid);
-                if (responseall.StatusCode == HttpStatusCode.OK)
+            if (responseall.StatusCode == HttpStatusCode.OK)
+            {
+                dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
+                dynamic respchk = respchkinfo.Content.ADDINFO;
+                message = respchk.message;
+                if (respchk.status == true)
                 {
-                    dynamic respchkinfo = JsonConvert.DeserializeObject(responseall.Content);
-                    dynamic respchk = respchkinfo.Content.ADDINFO;
-                    message = respchk.message;
-                    if (respchk.status == true)
+                    if (respchk.response_code == "1")
                     {
-                        if (respchk.response_code == "1")
-                        {
-                            status = true;
-                            kyc_id = respchk.data.ekyc_id;
-                            stateresp = respchk.data.stateresp;
-                        }
+                        status = true;
+                        kyc_id = respchk.data.ekyc_id;
+                        stateresp = respchk.data.stateresp;
                     }
                 }
+            }
             var respchk1 = new
             {
                 status,
@@ -35761,7 +35784,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult KYCEnterOTP(string stateResp,string kyc_id,string Sendernumber,string otp)
+        public ActionResult KYCEnterOTP(string stateResp, string kyc_id, string Sendernumber, string otp)
         {
             string userid = User.Identity.GetUserId();
             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
@@ -35791,12 +35814,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "DMT Ekyc Charge",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.MoneyTransfer(model);
 
-               
+
             }
             catch { }
             if (msginfo == "OK")
@@ -35804,7 +35827,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 VastBazaar cb = new VastBazaar();
                 var tokenapi = Responsetoken.gettoken();
                 var responseall = cb.EKYC_Register_OTP(Sendernumber, tokenapi, otp, stateResp, kyc_id, agentid);
-              
+
                 var stateinfo = "Pending";
                 if (responseall.StatusCode == HttpStatusCode.OK)
                 {
@@ -35850,7 +35873,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "DMT Ekyc Charge Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -35868,10 +35891,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             };
             return Json(respchk1, JsonRequestBehavior.AllowGet);
         }
-       
-        
-        
-        
+
+
+
+
         [HttpPost]
         public ActionResult UPI_Senderdetails(string senderno)
         {
@@ -36135,7 +36158,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Register_ben(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname,string hidebenid)
+        public ActionResult Register_ben(string senderno, string account, string ifsccode, string originalifsccode, string benname, string bankname, string hidebenid)
         {
             try
             {
@@ -36947,7 +36970,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -37089,7 +37112,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -37245,7 +37268,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -37308,7 +37331,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -37484,7 +37507,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -37642,7 +37665,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -38029,7 +38052,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Verify Accountnumber " + account + "",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -38162,7 +38185,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -38242,7 +38265,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.MoneyTransfer(model);
@@ -38670,7 +38693,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Verify Accountnumber " + account + "",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -38794,7 +38817,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -38862,7 +38885,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Verify Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -38973,7 +38996,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json(new { status = "Success", Message = msg }, JsonRequestBehavior.AllowGet);
         }
-       
+
         [HttpPost]
         public ActionResult Imps_check_transfer_DMT(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
         {
@@ -39205,7 +39228,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var stspinotp = "NOTOK";
             try
             {
-                
+
                 if (!string.IsNullOrEmpty(imageData))
                 {
                     //   filename = Server.MapPath("~/Retailer_image/") + DateTime.Now.ToString().Replace("/", "-").Replace(" ", "_").Replace(":", "") + ".jpeg";
@@ -39606,7 +39629,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             //        }
                                             //    }
                                             //}
-                                            if(apiname== "VASTWEB")
+                                            if (apiname == "VASTWEB")
                                             {
                                                 ////////////VastWeb/////////////////
                                                 requestsend = "{\"remittermobile\":\"" + NUMBER + "\",\"account\":\"" + account + "\",\"ifsc\":\"" + ifsc + "\",\"agentid\":\"" + CommonTranid + "";
@@ -39619,7 +39642,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 //    ch = db.Money_transfer_by_paytm1(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", kycsts, requestsend, apiname, Ipaddress, macaddress, "", servicefee, 0, "DMT2", idprooftype, idproofnumber, uniqueid, outputchk).Single().msg;
 
                                                 //}
-                                                 ch = db.Money_transfer_new_new(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", "Y", requestsend, apiname, Ipaddress, macaddress, "", 0, 0, "DMTN", uniqueid, outputchk).Single().msg;
+                                                ch = db.Money_transfer_new_new(userid, amt, finalamount, NUMBER, account, bankname, ifsc, CommonTranid, Tranid, typetransfer, "ONLINE", "Y", requestsend, apiname, Ipaddress, macaddress, "", 0, 0, "DMTN", uniqueid, outputchk).Single().msg;
                                                 try
                                                 {
                                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -39638,8 +39661,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = userid,
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.MoneyTransfer(model);
@@ -39650,7 +39673,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = retailerdetails.DealerId,
                                                         Email = dealerdetails.Email,
                                                         Mobile = dealerdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
                                                         RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                         Usertype = "Dealer"
                                                     };
@@ -39662,7 +39685,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         RetailerID = dealerdetails.SSId,
                                                         Email = masterdetails.Email,
                                                         Mobile = masterdetails.Mobile,
-                                                        Details = "Money Transfer  Accountnumber " + account + " Amount "+amount+"",
+                                                        Details = "Money Transfer  Accountnumber " + account + " Amount " + amount + "",
                                                         RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                         Usertype = "Master"
                                                     };
@@ -39911,8 +39934,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     RetailerID = userid,
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
-                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.MoneyTransfer(model);
@@ -39923,7 +39946,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     RetailerID = retailerdetails.DealerId,
                                                                                     Email = dealerdetails.Email,
                                                                                     Mobile = dealerdetails.Mobile,
-                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                     RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                                                     Usertype = "Dealer"
                                                                                 };
@@ -39935,7 +39958,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     RetailerID = dealerdetails.SSId,
                                                                                     Email = masterdetails.Email,
                                                                                     Mobile = masterdetails.Mobile,
-                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                    Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                     RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                                                     Usertype = "Master"
                                                                                 };
@@ -40114,8 +40137,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = userid,
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -40126,7 +40149,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = retailerdetails.DealerId,
                                                                                 Email = dealerdetails.Email,
                                                                                 Mobile = dealerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                                                 Usertype = "Dealer"
                                                                             };
@@ -40138,7 +40161,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = dealerdetails.SSId,
                                                                                 Email = masterdetails.Email,
                                                                                 Mobile = masterdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                                                 Usertype = "Master"
                                                                             };
@@ -40252,20 +40275,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         var charge = Convert.ToDecimal(resp_imps.charge);
                                                                         Response.tax = (charge * 18) / 100;
                                                                     }
-                                                                    string rrn= ADDINFO.result.rrn.ToString();
+                                                                    string rrn = ADDINFO.result.rrn.ToString();
                                                                     Response.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Response.tax);
                                                                     Response.status = "Pending";
                                                                     Response.Details = "";
                                                                     dynamic resp = new JObject();
                                                                     resp.Amount = amt;
                                                                     resp.Status = "Pending";
-                                                                   // resp.bankrefid = "Pending";
+                                                                    // resp.bankrefid = "Pending";
                                                                     resp.bankrefid = rrn;
                                                                     resp.agentid = Tranid;
                                                                     resp.benid = benCode;
                                                                     Response.data.Add(resp);
                                                                 }
-                                                                else if(txnSts== "SENDOTP")
+                                                                else if (txnSts == "SENDOTP")
                                                                 {
                                                                     Response.servicefee = resp_imps.charge;
                                                                     if (rem_details.gststatus == "N")
@@ -40345,8 +40368,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = userid,
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.MoneyTransfer(model);
@@ -40357,7 +40380,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = retailerdetails.DealerId,
                                                                                 Email = dealerdetails.Email,
                                                                                 Mobile = dealerdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                                                                 Usertype = "Dealer"
                                                                             };
@@ -40369,7 +40392,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 RetailerID = dealerdetails.SSId,
                                                                                 Email = masterdetails.Email,
                                                                                 Mobile = masterdetails.Mobile,
-                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount "+amount+"",
+                                                                                Details = "Money Transfer Refund Accountnumber " + account + " Amount " + amount + "",
                                                                                 RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                                                                                 Usertype = "Master"
                                                                             };
@@ -40586,12 +40609,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(dict1, JsonRequestBehavior.AllowGet);
             }
         }
- 
+
         [HttpPost]
-        public ActionResult imps_transfer_verifyotp(string Agentid,string benid,string otp,string stateresp)
+        public ActionResult imps_transfer_verifyotp(string Agentid, string benid, string otp, string stateresp)
         {
             var userid = User.Identity.GetUserId();
-            var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.Status == "Pending" && aa.trans_id == Agentid && aa.rch_from== userid).SingleOrDefault();
+            var resp_imps = db.IMPS_transtion_detsils.Where(aa => aa.Status == "Pending" && aa.trans_id == Agentid && aa.rch_from == userid).SingleOrDefault();
             dynamic Responsen = new JObject();
             Responsen.data = new JArray() as dynamic;
             if (resp_imps != null)
@@ -40603,7 +40626,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 string account = resp_imps.accountno;
                 string paymode = resp_imps.Trans_Type;
                 string AdminEmail = db.Admin_details.SingleOrDefault().email;
-                var rem_details = db.Retailer_Details.Where(aa=>aa.RetailerId==userid).SingleOrDefault();
+                var rem_details = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
                 string RetailerEmail = rem_details.Email;
                 string bankifsccode = resp_imps.ifsccode;
                 string orderid = resp_imps.trans_id;
@@ -40645,13 +40668,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 var tokn = Responsetoken.gettoken();
                 VastBazaar cb1 = new VastBazaar();
-                 var  task = Task.Run(() =>
-                {
-                    //return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
-                    return cb1.Fund_Transfer_Paysprint_Verifyotp(resp_imps.senderno, benid, Agentid, amount, resp_imps.Trans_Type, tokn, otp, stateresp);
-                });
+                var task = Task.Run(() =>
+               {
+                   //return cb1.Fund_Transfer(NUMBER, benCode, Tranid, amt.ToString(), type, account, ifsc, tokn, bankname, kycsts, aadhar);
+                   return cb1.Fund_Transfer_Paysprint_Verifyotp(resp_imps.senderno, benid, Agentid, amount, resp_imps.Trans_Type, tokn, otp, stateresp);
+               });
                 bool isCompletedSuccessfully = task.Wait(TimeSpan.FromMilliseconds(120000));
-                if(isCompletedSuccessfully==true)
+                if (isCompletedSuccessfully == true)
                 {
                     var responsechk = task.Result.Content.ToString();
                     var responsecode1 = task.Result.StatusCode.ToString();
@@ -40718,7 +40741,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 var charge = Convert.ToDecimal(resp_imps.charge);
                                 Responsen.tax = (charge * 18) / 100;
                             }
-                    
+
                             Responsen.total = Convert.ToDecimal(resp_imps.totalamount) + Convert.ToDecimal(resp_imps.charge) + Convert.ToDecimal(Responsen.tax);
                             dynamic resp = new JObject();
                             resp.Amount = amt;
@@ -40729,7 +40752,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         else if (txnSts == "ACCEPTED" || txnSts == "PENDING")
                         {
                             Responsen.servicefee = resp_imps.charge;
-                          
+
                             if (rem_details.gststatus == "N")
                             {
                                 Responsen.tax = 0;
@@ -40833,7 +40856,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Refund Accountnumber " + account + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -40884,7 +40907,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 {
                                     smssend.SendEmailAll(RetailerEmail, "Money Transfer in Bank " + bankname + " and Account Number " + account + "and Amount" + amount + " is Failed Due To " + payidno + ".", "Recharge", AdminEmail);
                                 }
-                             
+
                                 Responsen.status = "Failed";
                                 Responsen.Details = payidno;
                                 dynamic resp = new JObject();
@@ -40935,7 +40958,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             else
             {
                 Responsen.tax = 0;
-                
+
                 Responsen.total = resp_imps.totalamount + resp_imps.charge + Responsen.tax;
                 Responsen.status = "Pending";
                 Responsen.Details = "";
@@ -40993,8 +41016,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         RetailerID = userid,
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
-                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount "+Amount+"",
-                        RemainBalance = remdetails.Remainamount,
+                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount " + Amount + "",
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -41005,7 +41028,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         RetailerID = retailerdetails.DealerId,
                         Email = dealerdetails.Email,
                         Mobile = dealerdetails.Mobile,
-                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount "+Amount+"",
+                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount " + Amount + "",
                         RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                         Usertype = "Dealer"
                     };
@@ -41017,7 +41040,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         RetailerID = dealerdetails.SSId,
                         Email = masterdetails.Email,
                         Mobile = masterdetails.Mobile,
-                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount "+Amount+"",
+                        Details = "Money Transfer  Accountnumber " + Accountnumber + " Amount " + Amount + "",
                         RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
                         Usertype = "Master"
                     };
@@ -41167,7 +41190,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Money Transfer Refund Accountnumber " + Accountnumber + "",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.MoneyTransfer(model);
@@ -41227,7 +41250,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Money Transfer Refund Accountnumber " + Accountnumber + "",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.MoneyTransfer(model);
@@ -41607,12 +41630,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Aahar Verify ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
 
-                   
+
                 }
                 catch { }
                 if (outp == "OK")
@@ -42278,7 +42301,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 IRestResponse response = client.Execute(request);
                 AirtelGenerateUrl fino = new AirtelGenerateUrl();
                 fino.reqid = reqid;
-                fino.request = "http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid+ "&lat=" + lattitude + "&logni="+ longitude;
+                fino.request = "http://api.vastbazaar.com/api/Web/AirtelURL?Uniqueid=" + reqid + "&lat=" + lattitude + "&logni=" + longitude;
                 fino.response = response.Content;
                 fino.userid = userid;
                 fino.createdAt = DateTime.Now;
@@ -42287,7 +42310,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 dynamic obj = JsonConvert.DeserializeObject(response.Content);
                 var json = obj.Content.ADDINFO;
                 var status = (bool)json.status;
-                if((string)json.redirecturl == null)
+                if ((string)json.redirecturl == null)
                 {
                     status = false;
                 }
@@ -42320,7 +42343,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return PartialView("_AirtelCMSReport", report);
         }
         #endregion
-        
+
 
 
         public ActionResult PANCARDreportnew()
@@ -42332,7 +42355,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             recent.Recent_mPosInfo = null;
             recent.Recent_PAN_CARD_IPAY = db.pancard_transation.Where(aa => aa.Reailerid == userid).OrderByDescending(aa => aa.request_time).Take(10).ToList();
             return PartialView("_RecentReport", recent);
-        } 
+        }
         public ActionResult PANCARDreportnew_manual()
         {
             var userid = User.Identity.GetUserId();
@@ -42341,7 +42364,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             recent.Recent_report_Aeps = null;
             recent.Recent_mPosInfo = null;
             recent.Recent_PAN_CARD_IPAY = null;
-            recent.Recent_pancard_transation_manual = db.pancard_transation_manual.Where(aa => aa.Reailerid == userid).OrderByDescending(aa => aa.request_time).Take(10).ToList(); 
+            recent.Recent_pancard_transation_manual = db.pancard_transation_manual.Where(aa => aa.Reailerid == userid).OrderByDescending(aa => aa.request_time).Take(10).ToList();
             return PartialView("_RecentReport", recent);
         }
         public ActionResult MPOSreportnew()
@@ -42467,12 +42490,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
 
-                                            
+
                                         }
                                         catch { }
                                     }
@@ -42549,7 +42572,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -42629,7 +42652,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Purchase Paid Service ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(model);
@@ -42896,11 +42919,11 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         [HttpPost]
-        public ActionResult AEPS(string mobile, string uid, string bank, long iin, string cap,string capxml, string type, string tabvalue, int? amount, string remark, string DeviceSrNo, decimal servicefee, string usernm, string devicenm, string userotp, string pidata, bool _isAeps2)
+        public ActionResult AEPS(string mobile, string uid, string bank, long iin, string cap, string capxml, string type, string tabvalue, int? amount, string remark, string DeviceSrNo, decimal servicefee, string usernm, string devicenm, string userotp, string pidata, bool _isAeps2)
         {
             try
             {
-                var userid = User.Identity.GetUserId();      
+                var userid = User.Identity.GetUserId();
                 string chkamounts = "OK";
                 var counts = db.AEPS_Count(uid).SingleOrDefault().msg;
                 int msgcount = Convert.ToInt32(counts);
@@ -42963,7 +42986,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 longitude = retailer.UserLocation.Longitute;
                                             }
                                             var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
-                                            if(latLong != null)
+                                            if (latLong != null)
                                             {
                                                 lattitude = latLong.latitude;
                                                 longitude = latLong.longitude;
@@ -43013,7 +43036,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                                                                     var agentid = infoadmin + "" + DateTime.Now.ToString("dd-MM-yyy hh-mm-ss").Replace("-", "").Replace(" ", "");
                                                                     var respchk = (dynamic)null;
-                         
+
                                                                     dynamic respchk_resp = JsonConvert.DeserializeObject(respchk1.Content);
                                                                     if (respchk_resp.success == true)
                                                                     {
@@ -43092,7 +43115,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                         Email = retailerdetails.Email,
                                                                         Mobile = retailerdetails.Mobile,
                                                                         Details = "Ministatement",
-                                                                        RemainBalance = remdetails.Remainamount,
+                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                         Usertype = "Retailer"
                                                                     };
                                                                     back.Aeps(model);
@@ -43194,7 +43217,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                         Email = retailerdetails.Email,
                                                                                         Mobile = retailerdetails.Mobile,
                                                                                         Details = "Ministatement Refund",
-                                                                                        RemainBalance = remdetails.Remainamount,
+                                                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                                                         Usertype = "Retailer"
                                                                                     };
                                                                                     back.Aeps(model);
@@ -43347,7 +43370,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Aeps",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.Aeps(model);
@@ -43506,7 +43529,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                     Email = retailerdetails.Email,
                                                                                     Mobile = retailerdetails.Mobile,
                                                                                     Details = "Aeps",
-                                                                                    RemainBalance = remdetails.Remainamount,
+                                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                                     Usertype = "Retailer"
                                                                                 };
                                                                                 back.Aeps(model);
@@ -43782,7 +43805,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "MiniStatement",
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Aeps(model);
@@ -43990,7 +44013,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Aeps",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44065,7 +44088,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "MiniStatement",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44189,7 +44212,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "Aeps",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44245,7 +44268,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "MiniStatement Refund",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44302,7 +44325,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                                 Email = retailerdetails.Email,
                                                                                 Mobile = retailerdetails.Mobile,
                                                                                 Details = "Ministatement Refund",
-                                                                                RemainBalance = remdetails.Remainamount,
+                                                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                                                 Usertype = "Retailer"
                                                                             };
                                                                             back.Aeps(model);
@@ -44532,7 +44555,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                             Email = retailerdetails.Email,
                                                                             Mobile = retailerdetails.Mobile,
                                                                             Details = "AEPS",
-                                                                            RemainBalance = remdetails.Remainamount,
+                                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                                             Usertype = "Retailer"
                                                                         };
                                                                         back.Aeps(model);
@@ -44570,7 +44593,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     System.Data.Entity.Core.Objects.ObjectParameter procStatus = new System.Data.Entity.Core.Objects.ObjectParameter("ProcStatus", typeof(string));
                                                                     System.Data.Entity.Core.Objects.ObjectParameter procMessage = new System.Data.Entity.Core.Objects.ObjectParameter("ProcMessage", typeof(string));
                                                                     db.proc_AEPS_PostProcess(userid, refid, msg, "", "Failed", response.Content, "web", "", 0, procStatus, procMessage);
-                                                                   
+
                                                                     var viewresponse = new { Status = "Failed", Message = msg, userinfo = reminfo };
                                                                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                                                                 }
@@ -44655,7 +44678,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "MiniStatement",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Aeps(model);
@@ -44783,7 +44806,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "Aeps",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Aeps(model);
@@ -44849,7 +44872,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Videosts = retailer.videokycstatus,
                                                 };
                                                 var dbRespo = db.proc_AEPS_PreProcess(userid, agentid, uid, mobile, bank, remark ?? "TODO", amount, "web", req.ToString(), "", status1, "", servicefee, usernm, "Aadhar Pay", output).SingleOrDefault();
-                                                
+
                                                 if (dbRespo.Status == false)
                                                 {
                                                     var viewresponse = new { Status = "Failed", Message = dbRespo.Output, userinfo = reminfo };
@@ -44890,7 +44913,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "AEPS",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.MoneyTransfer(model);
@@ -44948,7 +44971,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                             Email = retailerdetails.Email,
                                                             Mobile = retailerdetails.Mobile,
                                                             Details = "AEPS",
-                                                            RemainBalance = remdetails.Remainamount,
+                                                            RemainBalance = (decimal)remdetails.Remainamount,
                                                             Usertype = "Retailer"
                                                         };
                                                         back.Aeps(model);
@@ -45335,7 +45358,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Ministatement",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Aeps(model);
@@ -45439,7 +45462,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Ministatement Refund",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.Aeps(model);
@@ -45569,7 +45592,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "AEPS",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Aeps(model);
@@ -46482,7 +46505,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Cash Widthdraw",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -46550,7 +46573,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Cash Widthdraw Refund",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -46691,7 +46714,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Cash Deposite",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(modeln);
@@ -46793,7 +46816,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 if (sts == "Success" || sts == "Failed")
                 {
                     db.update_cash_deposit(agentid, sts, bankrrn, response.Content);
-                    if(sts=="Failed")
+                    if (sts == "Failed")
                     {
                         try
                         {
@@ -46814,7 +46837,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Cash Depoiste Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.info(model3);
@@ -46878,7 +46901,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             try
             {
                 //ViewBag.tab = tabvalue;
-                var apinm = db.money_api_status.Where(aa => aa.status ==true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -47050,7 +47073,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         {
             var userid = User.Identity.GetUserId();
             //ViewBag.tab = tabvalue;
-            var apinm = db.money_api_status.Where(aa => aa.api_name== "VASTWEB" && aa.catagory== "PAYOUT").SingleOrDefault();
+            var apinm = db.money_api_status.Where(aa => aa.api_name == "VASTWEB" && aa.catagory == "PAYOUT").SingleOrDefault();
             var apiname = apinm == null ? "NO" : apinm.api_name;
             try
             {
@@ -47246,7 +47269,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 if (sts == "Y")
                 {
                     var ch = "";
-                    var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                    var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                     var apiname = apinm == null ? "NO" : apinm.api_name;
                     if (apiname != "NO")
                     {
@@ -47493,7 +47516,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             try
             {
                 var ch = "";
-                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -47659,7 +47682,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             try
             {
                 var ch = "";
-                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -47865,7 +47888,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             try
             {
                 ifsc = ifsc.ToUpper();
-                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -48065,7 +48088,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             try
             {
                 var ch = "";
-                var apinm = db.money_api_status.Where(aa => aa.status ==true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -48307,7 +48330,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 Ifsccode = Ifsccode.ToUpper();
                 var mob = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerID).Single().Mobile;
                 var reciep_mobile = mob;
-                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -48510,7 +48533,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         {
             try
             {
-                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+                var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
                 var apiname = apinm == null ? "NO" : apinm.api_name;
                 if (apiname != "NO")
                 {
@@ -48710,7 +48733,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         public ActionResult Fillbankcheck1(string bankname, string accountno)
         {
             moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
-            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
             var apiname = apinm.api_name;
             if (apiname == "INSTANTPAY")
             {
@@ -48847,7 +48870,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         public ActionResult Fillbankcheck_getname1(string bankname, string accountno)
         {
             moneytransfer_cyberplate cb = new moneytransfer_cyberplate();
-            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory== "PAYOUT").SingleOrDefault();
+            var apinm = db.money_api_status.Where(aa => aa.status == true && aa.catagory == "PAYOUT").SingleOrDefault();
             var apiname = apinm.api_name;
             if (apiname == "INSTANTPAY")
             {
@@ -49045,7 +49068,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Money Transfer Refund Accountnumber ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.MoneyTransfer(model);
@@ -49327,12 +49350,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Purchase Paid Service",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.info(model);
 
-               
+
             }
             catch { }
             var resp = new
@@ -49672,7 +49695,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Pan Card Purchase",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.Pancard(modeln);
@@ -50176,7 +50199,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     db.SaveChanges();
                 }
                 var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
-                if(tokendelete!=null)
+                if (tokendelete != null)
                 {
                     db.Reftkns.Remove(tokendelete);
                     db.SaveChanges();
@@ -50189,98 +50212,98 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         }
         public void Passcode3(string ids)
         {
-                if (ids != null && ids != "")
+            if (ids != null && ids != "")
             {
                 var whatsts = db.Email_show_passcode.SingleOrDefault();
                 var details = db.Users.Where(s => s.Email == ids).SingleOrDefault();
-                    if (details != null)
+                if (details != null)
+                {
+                    using (VastwebmultiEntities db = new VastwebmultiEntities())
                     {
-                        using (VastwebmultiEntities db = new VastwebmultiEntities())
+                        Random nm = new Random();
+                        var pin = nm.Next(1000, 10000);
+                        var apiurls = "";
+                        var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
+                        var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
+                        if (smsapionsts2 != null)
                         {
-                            Random nm = new Random();
-                            var pin = nm.Next(1000, 10000);
-                            var apiurls = "";
-                            var smsapi2 = db.apisms.Where(x => x.sts == "Y").ToList();
-                            var smsapionsts2 = smsapi2.Where(s => s.api_type == "whatsapp").SingleOrDefault();
-                            if (smsapionsts2 != null)
-                            {
-                                var setopt = db.Users.Where(s => s.Email == ids).SingleOrDefault();
-                                setopt.forgetpin = Convert.ToString(pin);
-                                db.SaveChanges();
-                                apiurls = smsapionsts2.smsapi;
-                                string text = "Your Reset Transaction Password otp is " + pin;
-                                text = string.Format(text, "1230");
-                                var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
-                                var client = new RestClient(apinamechange);
-                                var request = new RestRequest(Method.GET);
-                                VastBazaartoken Responsetoken = new VastBazaartoken();
+                            var setopt = db.Users.Where(s => s.Email == ids).SingleOrDefault();
+                            setopt.forgetpin = Convert.ToString(pin);
+                            db.SaveChanges();
+                            apiurls = smsapionsts2.smsapi;
+                            string text = "Your Reset Transaction Password otp is " + pin;
+                            text = string.Format(text, "1230");
+                            var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
+                            var client = new RestClient(apinamechange);
+                            var request = new RestRequest(Method.GET);
+                            VastBazaartoken Responsetoken = new VastBazaartoken();
                             var userid = User.Identity.GetUserId();
                             var userwise = db.retailerwise_whatsappsts.Where(a => a.userid == userid).ToList();
                             if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG") && whatsts.whatsappapists == true && userwise[0].sts != false)
-                                {
-                                    var token = Responsetoken.gettoken();
-                                    request.AddHeader("authorization", "bearer " + token);
-                                    request.AddHeader("content-type", "application/json");
-                                }
-                                var task = Task.Run(() =>
-                                {
-                                    return client.Execute(request).Content;
-                                });
-                                bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                                var resp = "";
-                                if (isCompletedSuccessfully == true)
-                                {
-                                    resp = task.Result;
-                                }
-                                sms_api_entry sms = new sms_api_entry();
-                                sms.apiname = apinamechange;
-                                sms.msg = text;
-                                sms.m_date = System.DateTime.Now;
-                                sms.response = resp;
-                                sms.messagefor = details.UserId;
-                                db.sms_api_entry.Add(sms);
-                                db.SaveChanges();
+                            {
+                                var token = Responsetoken.gettoken();
+                                request.AddHeader("authorization", "bearer " + token);
+                                request.AddHeader("content-type", "application/json");
                             }
-                            var AdminDetails = db.Admin_details.SingleOrDefault();
-                            smssend.SendEmailAll(details.Email, "Your  Reset Transaction Password otp is " + pin, "Transaction Password otp", AdminDetails.email);
-                            // var smsapionsts = smsapi2.Where(s => s.api_type == "sms").SingleOrDefault();
-                            //if (smsapionsts != null)
-                            //{
-                            //    apiurls = smsapionsts.smsapi;
-                            //    string text = "Your New Password is  81108706 Thank you for business with us Regards Vast Web India Pvt Ltd";
-                            //    text = string.Format(text, "1230");
-                            //    var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
-                            //    var client = new RestClient(apinamechange);
-                            //    var request = new RestRequest(Method.GET);
-                            //    VastBazaartoken Responsetoken = new VastBazaartoken();
-                            //    if (apinamechange.ToUpper().Contains("VASTBAZAAR.COM"))
-                            //    {
-                            //        var token = Responsetoken.gettoken();
-                            //        request.AddHeader("authorization", "bearer " + token);
-                            //        request.AddHeader("content-type", "application/json");
-                            //    }
-                            //    var task = Task.Run(() =>
-                            //    {
-                            //        return client.Execute(request).Content;
-                            //    });
-                            //    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                            //    var resp = "";
-                            //    if (isCompletedSuccessfully == true)
-                            //    {
-                            //        resp = task.Result;
-                            //    }
-                            //    sms_api_entry sms = new sms_api_entry();
-                            //    sms.apiname = apinamechange;
-                            //    sms.msg = text;
-                            //    sms.m_date = System.DateTime.Now;
-                            //    sms.response = resp;
-                            //    sms.messagefor = details.UserId;
-                            //    db.sms_api_entry.Add(sms);
-                            //    db.SaveChanges();
-                            //}
+                            var task = Task.Run(() =>
+                            {
+                                return client.Execute(request).Content;
+                            });
+                            bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                            var resp = "";
+                            if (isCompletedSuccessfully == true)
+                            {
+                                resp = task.Result;
+                            }
+                            sms_api_entry sms = new sms_api_entry();
+                            sms.apiname = apinamechange;
+                            sms.msg = text;
+                            sms.m_date = System.DateTime.Now;
+                            sms.response = resp;
+                            sms.messagefor = details.UserId;
+                            db.sms_api_entry.Add(sms);
+                            db.SaveChanges();
                         }
+                        var AdminDetails = db.Admin_details.SingleOrDefault();
+                        smssend.SendEmailAll(details.Email, "Your  Reset Transaction Password otp is " + pin, "Transaction Password otp", AdminDetails.email);
+                        // var smsapionsts = smsapi2.Where(s => s.api_type == "sms").SingleOrDefault();
+                        //if (smsapionsts != null)
+                        //{
+                        //    apiurls = smsapionsts.smsapi;
+                        //    string text = "Your New Password is  81108706 Thank you for business with us Regards Vast Web India Pvt Ltd";
+                        //    text = string.Format(text, "1230");
+                        //    var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
+                        //    var client = new RestClient(apinamechange);
+                        //    var request = new RestRequest(Method.GET);
+                        //    VastBazaartoken Responsetoken = new VastBazaartoken();
+                        //    if (apinamechange.ToUpper().Contains("VASTBAZAAR.COM"))
+                        //    {
+                        //        var token = Responsetoken.gettoken();
+                        //        request.AddHeader("authorization", "bearer " + token);
+                        //        request.AddHeader("content-type", "application/json");
+                        //    }
+                        //    var task = Task.Run(() =>
+                        //    {
+                        //        return client.Execute(request).Content;
+                        //    });
+                        //    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                        //    var resp = "";
+                        //    if (isCompletedSuccessfully == true)
+                        //    {
+                        //        resp = task.Result;
+                        //    }
+                        //    sms_api_entry sms = new sms_api_entry();
+                        //    sms.apiname = apinamechange;
+                        //    sms.msg = text;
+                        //    sms.m_date = System.DateTime.Now;
+                        //    sms.response = resp;
+                        //    sms.messagefor = details.UserId;
+                        //    db.sms_api_entry.Add(sms);
+                        //    db.SaveChanges();
+                        //}
                     }
                 }
+            }
         }
         public ActionResult Reset_IMPSPin(string txtemail, string oTP, string oTP1, string oTP2, string oTP3)
         {
@@ -50292,7 +50315,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var chk = db.Retailer_Details.Any(a => a.Email == txtemail);
             if (chk == true)
             {
-             var   chk1 = db.Retailer_Details.Where(a => a.Email == txtemail).SingleOrDefault();
+                var chk1 = db.Retailer_Details.Where(a => a.Email == txtemail).SingleOrDefault();
                 var optcheck = db.Users.Where(a => a.UserId == chk1.RetailerId).SingleOrDefault();
                 if (optcheck.forgetpin == OTp || OTp == null)
                 {
@@ -50960,12 +50983,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                         Email = retailerdetails.Email,
                                                         Mobile = retailerdetails.Mobile,
                                                         Details = "Pos To Main",
-                                                        RemainBalance = remdetails.Remainamount,
+                                                        RemainBalance = (decimal)remdetails.Remainamount,
                                                         Usertype = "Retailer"
                                                     };
                                                     back.Fundtransfer(model);
 
-                                                   
+
                                                 }
                                                 catch { }
                                                 if (response.Status == "Success")
@@ -51010,7 +51033,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Pos To Main Refund",
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Fundtransfer(model);
@@ -51213,12 +51236,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Pos to Main",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Fundtransfer(model);
 
-                       
+
                     }
                     catch { }
                     if (resp == "DONE")
@@ -51345,7 +51368,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
                         var admininfo = db.Admin_details.SingleOrDefault();
                         Backupinfo back = new Backupinfo();
-                       
+
                         var model1 = new Backupinfo.Addinfo
                         {
                             Websitename = admininfo.WebsiteUrl,
@@ -51358,7 +51381,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         };
                         back.Fundtransfer(model1);
 
-                       
+
                     }
                     catch { }
                     if (resp == "DONE")
@@ -51458,12 +51481,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Paid Service",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
 
-                        
+
                     }
                     catch { }
                     var viewRespone = new { Status = result.Status, Message = result.Message };
@@ -52578,7 +52601,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Refund",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -52676,7 +52699,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Money Transfer Refund ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.MoneyTransfer(model);
@@ -52782,7 +52805,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -52867,7 +52890,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -52933,7 +52956,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -52999,7 +53022,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Money Transfer Refund",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.MoneyTransfer(model);
@@ -53152,7 +53175,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Purchase Noton Security ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -53239,7 +53262,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Purchase Noton Refund ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -53874,11 +53897,11 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.chkmsg = TempData["upimsg"];
 
             var userid = User.Identity.GetUserId();
-            var upisettinginfo = db.UPIandGatewayStatus.Where(aa => aa.Status == true && aa.Name== "UPI_QR").SingleOrDefault();
-            if(upisettinginfo!=null)
+            var upisettinginfo = db.UPIandGatewayStatus.Where(aa => aa.Status == true && aa.Name == "UPI_QR").SingleOrDefault();
+            if (upisettinginfo != null)
             {
                 var apiname = db.UPI_QR_API.Where(aa => aa.Sts == true).SingleOrDefault();
-                if(apiname!=null)
+                if (apiname != null)
                 {
                     ViewBag.msg = "OK";
                     ViewBag.Api = apiname.Name;
@@ -53900,44 +53923,44 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     {
                         if (apiname.Name == "ICICI")
                         {
-                                var chk = db.UPI_Ref_details.Where(aa => aa.userid == userid).SingleOrDefault();
-                                if (chk == null)
+                            var chk = db.UPI_Ref_details.Where(aa => aa.userid == userid).SingleOrDefault();
+                            if (chk == null)
+                            {
+                                ViewBag.icicimsg = "QR Not Genrated";
+                                ViewBag.set = "NOTOK";
+                            }
+                            else
+                            {
+                                var upiinfo = db.Upi_info.SingleOrDefault();
+                                if (upiinfo != null)
                                 {
-                                    ViewBag.icicimsg = "QR Not Genrated";
-                                    ViewBag.set = "NOTOK";
+                                    var rem = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                    var finaltxn = db.UPI_Ref_details.Where(aa => aa.userid == userid).SingleOrDefault().UPITxnid;
+                                    var upitxt = "upi://pay?pa=" + upiinfo.MerchantVPA + "&pn=test&tr=" + finaltxn + "&am=&cu=INR&mc=5411";
+                                    var bw = new BarcodeWriter();
+                                    var encOptions = new ZXing.Common.EncodingOptions
+                                    {
+                                        Width = 500,
+                                        Height = 500,
+                                        Margin = 0,
+                                        PureBarcode = false
+                                    };
+                                    bw.Renderer = new BitmapRenderer();
+                                    bw.Options = encOptions;
+                                    bw.Format = ZXing.BarcodeFormat.QR_CODE;
+                                    using (MemoryStream memory = new MemoryStream())
+                                    {
+                                        Bitmap bm = bw.Write(upitxt);
+                                        bm.Save(memory, ImageFormat.Png);
+                                        ViewBag.QRCodeImage = "data:image/png;base64," + Convert.ToBase64String(memory.ToArray());
+                                        //    TempData["QRCodeImage"] = "data:image/png;base64," + Convert.ToBase64String(memory.ToArray());
+                                    }
                                 }
                                 else
                                 {
-                                    var upiinfo = db.Upi_info.SingleOrDefault();
-                                    if (upiinfo != null)
-                                    {
-                                        var rem = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                        var finaltxn = db.UPI_Ref_details.Where(aa => aa.userid == userid).SingleOrDefault().UPITxnid;
-                                        var upitxt = "upi://pay?pa=" + upiinfo.MerchantVPA + "&pn=test&tr=" + finaltxn + "&am=&cu=INR&mc=5411";
-                                        var bw = new BarcodeWriter();
-                                        var encOptions = new ZXing.Common.EncodingOptions
-                                        {
-                                            Width = 500,
-                                            Height = 500,
-                                            Margin = 0,
-                                            PureBarcode = false
-                                        };
-                                        bw.Renderer = new BitmapRenderer();
-                                        bw.Options = encOptions;
-                                        bw.Format = ZXing.BarcodeFormat.QR_CODE;
-                                        using (MemoryStream memory = new MemoryStream())
-                                        {
-                                            Bitmap bm = bw.Write(upitxt);
-                                            bm.Save(memory, ImageFormat.Png);
-                                            ViewBag.QRCodeImage = "data:image/png;base64," + Convert.ToBase64String(memory.ToArray());
-                                            //    TempData["QRCodeImage"] = "data:image/png;base64," + Convert.ToBase64String(memory.ToArray());
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ViewBag.msg = "Not Set Upi infomation";
-                                    }
+                                    ViewBag.msg = "Not Set Upi infomation";
                                 }
+                            }
                         }
                         else if (apiname.Name == "PAYU")
                         {
@@ -53976,7 +53999,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 }
                             }
                         }
-                        else if(apiname.Name=="RADIANT")
+                        else if (apiname.Name == "RADIANT")
                         {
                             var radiantauthchk = db.radiantauths.SingleOrDefault();
                             var msg = "";
@@ -54005,7 +54028,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             }
                             ViewBag.respmsg = msg;
                         }
-                        else if(apiname.Name == "PAYTM")
+                        else if (apiname.Name == "PAYTM")
                         {
                             var client = new RestClient("http://api.vastbazaar.com/api/Paytm/QRStatus");
                             var request = new RestRequest(Method.POST);
@@ -54038,7 +54061,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     chkss1.upiid = addnifo.upiid;
                                     chkss1.Cookie = addnifo.Cookie;
                                     chkss1.xtoken = addnifo.xtoken;
-                               
+
                                     db.SaveChanges();
                                 }
                                 var msg = "";
@@ -54050,7 +54073,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 ViewBag.msg = "Qr down contact To Admin";
                             }
                         }
-                        else if(apiname.Name == "PHONE PE")
+                        else if (apiname.Name == "PHONE PE")
                         {
                             var client = new RestClient("http://api.vastbazaar.com/api/Phonepe/QRStatus");
                             var request = new RestRequest(Method.POST);
@@ -54099,8 +54122,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             {
                                 ViewBag.msg = "Qr down contact To Admin";
                             }
-                        } 
-                        else if(apiname.Name == "BHARAT PE")
+                        }
+                        else if (apiname.Name == "BHARAT PE")
                         {
                             var client = new RestClient("http://api.vastbazaar.com/api/BharatPe/QRStatus");
                             var request = new RestRequest(Method.POST);
@@ -54114,7 +54137,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             if (status == true)
                             {
                                 var upiid = addnifo.upiid;
-                                
+
                                 var session = addnifo.session;
                                 var xtoken = addnifo.xtoken;
 
@@ -54125,7 +54148,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     d4.upiid = upiid;
                                     d4.token = xtoken;
                                     d4.session = session;
-                                    
+
                                     db.bharatpaygetwayinfoes.Add(d4);
                                     db.SaveChanges();
                                 }
@@ -54251,7 +54274,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             {
                                 return Json(new { success = false, message = "Something Went Wrong", txnid = "" }, JsonRequestBehavior.AllowGet);
                             }
-                           
+
                         }
                     }
                 }
@@ -54331,7 +54354,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Paytm UPi Payement",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.info(model);
@@ -54545,7 +54568,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Phone pe upi payment recived",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.info(model);
@@ -54756,7 +54779,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Bharat Pe Payment Recived",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(model);
@@ -54834,7 +54857,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var kycstatus = "NOTKYCUSER";
             var userid = User.Identity.GetUserId();
             var upiQR_API = db.UPI_QR_API.Where(aa => aa.Sts == true).SingleOrDefault();
-            if(upiQR_API.Name=="ICICI")
+            if (upiQR_API.Name == "ICICI")
             {
                 var upiinfo = db.Upi_info.SingleOrDefault();
                 var rem = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -54899,7 +54922,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     TempData["upimsg"] = "OK";
                 }
             }
-            else if(upiQR_API.Name== "PAYU")
+            else if (upiQR_API.Name == "PAYU")
             {
                 var upiinfochk = db.PAYU_QR_info.Where(aa => aa.userid == userid).SingleOrDefault();
                 var payuauth = db.Payu_QR_auth.SingleOrDefault();
@@ -54965,12 +54988,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         QR.QRID = qrId;
                         db.PAYU_QR_info.Add(QR);
                         db.SaveChanges();
-                      //  return RedirectToAction("UPITRANSFER");
+                        //  return RedirectToAction("UPITRANSFER");
                     }
                     else
                     {
                         TempData["upimsg"] = message;
-                      //  return RedirectToAction("UPITRANSFER");
+                        //  return RedirectToAction("UPITRANSFER");
                     }
                 }
                 else
@@ -54979,7 +55002,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     //return RedirectToAction("UPITRANSFER");
                 }
             }
-            else if(upiQR_API.Name== "RADIANT")
+            else if (upiQR_API.Name == "RADIANT")
             {
                 var radiantauthchk = db.radiantauths.SingleOrDefault();
                 var msg = "";
@@ -55047,7 +55070,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 }
                 TempData["respmsgreq"] = msg;
             }
-       
+
             return RedirectToAction("UPIQR");
         }
         [HttpPost]
@@ -55059,7 +55082,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
             Radiantdmt radi = new Radiantdmt();
             var tokenchk = db.radianttokens.SingleOrDefault();
-            var msg = "";var refid = "";var otpRef_id = "";
+            var msg = ""; var refid = ""; var otpRef_id = "";
             if (tokenchk == null)
             {
                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -55069,16 +55092,16 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 radianttoken = tokenchk.accessToken;
                 radianagentid = tokenchk.agentID;
             }
-            var respchk = radi.UPIATMsendOTP(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, retailerinfo.Mobile, retailerinfo.RetailerName,amount);
-            if(respchk.StatusCode== HttpStatusCode.NotAcceptable)
+            var respchk = radi.UPIATMsendOTP(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, retailerinfo.Mobile, retailerinfo.RetailerName, amount);
+            if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
             {
                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
                 respchk = radi.UPIATMsendOTP(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, retailerinfo.Mobile, retailerinfo.RetailerName, amount);
             }
-            if (respchk.StatusCode==HttpStatusCode.OK)
+            if (respchk.StatusCode == HttpStatusCode.OK)
             {
                 dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
-                if(dyrespchk.success==true)
+                if (dyrespchk.success == true)
                 {
                     msg = "OK";
                     refid = dyrespchk.refid;
@@ -55104,14 +55127,14 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             return Json(outmsg, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult RadaintUPIATMverifyOTP(string otp,string refid,string otprefid,decimal amount)
+        public ActionResult RadaintUPIATMverifyOTP(string otp, string refid, string otprefid, decimal amount)
         {
             var userid = User.Identity.GetUserId();
             var radiantauthchk = db.radiantauths.SingleOrDefault();
             var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == userid).SingleOrDefault();
             Radiantdmt radi = new Radiantdmt();
             var tokenchk = db.radianttokens.SingleOrDefault();
-            var msg = "";var QR = "";
+            var msg = ""; var QR = "";
             if (tokenchk == null)
             {
                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -55121,7 +55144,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 radianttoken = tokenchk.accessToken;
                 radianagentid = tokenchk.agentID;
             }
-            var respchk = radi.UPIATMverifyOTP(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken,otprefid,refid,otp);
+            var respchk = radi.UPIATMverifyOTP(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, otprefid, refid, otp);
             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
             {
                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
@@ -55279,15 +55302,15 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             radianagentid = tokenchk.agentID;
                         }
                         var respchk = radi.WalletCreateOrder(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, txtupi_amount, "collect");
-                        if(respchk.StatusCode==HttpStatusCode.NotAcceptable)
+                        if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                         {
                             radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
                             respchk = radi.WalletCreateOrder(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, txtupi_amount, "collect");
                         }
-                        if(respchk.StatusCode == HttpStatusCode.OK)
+                        if (respchk.StatusCode == HttpStatusCode.OK)
                         {
                             dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
-                            if(dyrespchk.success==true)
+                            if (dyrespchk.success == true)
                             {
                                 string expiryTime = dyrespchk.data.expiryTime;
                                 string orderId = dyrespchk.data.orderId;
@@ -55324,7 +55347,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     if (respchkagain.StatusCode == HttpStatusCode.OK)
                                     {
                                         dynamic dyrespchk1 = JsonConvert.DeserializeObject(respchkagain.Content);
-                                        if (dyrespchk1.success==true)
+                                        if (dyrespchk1.success == true)
                                         {
                                             msg = "DONE";
                                         }
@@ -55342,18 +55365,18 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                         }
                                         catch
                                         {
-                                       
+
                                         }
                                         if (string.IsNullOrEmpty(msg))
                                         {
                                             try
                                             {
                                                 msg = dyrespchk1.errors.payerVpa[0];
-                                               
+
                                             }
-                                            catch 
+                                            catch
                                             {
-                                               
+
 
                                             }
                                         }
@@ -55371,28 +55394,28 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         }
                         else
                         {
-                            
+
                             dynamic dyrespchk = JsonConvert.DeserializeObject(respchk.Content);
                             try
                             {
                                 msg = dyrespchk.message;
-                             
+
 
                             }
-                            catch (Exception ex) 
+                            catch (Exception ex)
                             {
-                               
+
                             }
-                            if(string.IsNullOrEmpty(msg))
+                            if (string.IsNullOrEmpty(msg))
                             {
                                 try
                                 {
                                     msg = dyrespchk.errors.payerVpa[0];
-                                   
+
                                 }
-                                catch(Exception ex) 
+                                catch (Exception ex)
                                 {
-                                   
+
 
                                 }
                             }
@@ -55565,10 +55588,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             {
                 return Json(new { Status = false, Message = ex.Message });
             }
-           
+
         }
         [HttpPost]
-        public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber,string Name, string CVV, string Exp, string Otp,string Idno,string reqid)
+        public ActionResult CreditCardTransfer(decimal Amount, string Cardnumber, string Name, string CVV, string Exp, string Otp, string Idno, string reqid)
         {
             var userid = User.Identity.GetUserId();
             string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
@@ -55589,7 +55612,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 {
                     var tokn = Responsetoken.gettoken();
                     Models.Vastbillpay vb = new Models.Vastbillpay();
-                    var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, Cardnumber, Exp, CVV, Amount, RequestId,"");
+                    var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, Cardnumber, Exp, CVV, Amount, RequestId, "");
                     var Content = Response.Content.ToString();
                     dynamic json = JsonConvert.DeserializeObject(Content);
                     var ADDINFO = json.Content.ADDINFO.ToString();
@@ -55633,7 +55656,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Payment Gateway Fund Transfer",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.info(model);
@@ -55659,7 +55682,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 var ADDINFO = json.Content.ADDINFO.ToString();
                 dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
                 string Status = json1.info.status;
-                string Message = "";string txnid = "";
+                string Message = ""; string txnid = "";
                 try
                 {
                     Message = json1.info.Message;
@@ -55704,7 +55727,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Payment Gateway Fund Transfer",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.info(model);
@@ -55716,7 +55739,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-        public ActionResult CreditCardFundTransfer(string Idno,string Name,  decimal Amount, string CardNumber, string Month, string Year, string CVV, string Otp, string RequestId)
+        public ActionResult CreditCardFundTransfer(string Idno, string Name, decimal Amount, string CardNumber, string Month, string Year, string CVV, string Otp, string RequestId)
         {
             string key = "gG1fJXc1azBcHr7GpD1lUY7XKgf4ABvH";
             var RetailerId = User.Identity.GetUserId();
@@ -55728,8 +55751,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var RetailerDetails = db.Retailer_Details.Where(x => x.RetailerId == RetailerId).FirstOrDefault();
             var tokn = Responsetoken.gettoken();
             Models.Vastbillpay vb = new Models.Vastbillpay();
-            var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, CardNumber, Exp, CVV, Amount, RequestId,"");
-           // var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
+            var Response = vb.CreditCard(tokn, Idno, RetailerId, Name, CardNumber, Exp, CVV, Amount, RequestId, "");
+            // var Response = vb.CreditCard(tokn, RetailerId, RetailerDetails.Frm_Name, RetailerDetails.Mobile, Amount, EnCardNumber, EnCVV, EnExp, Otp, RequestId);
             var Content = Response.Content.ToString();
             dynamic json = JsonConvert.DeserializeObject(Content);
             var ADDINFO = json.Content.ADDINFO.ToString();
@@ -55760,7 +55783,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Payment Gateway Fund Transfer",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -55790,7 +55813,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Payment Gateway Fund Transfer",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(model);
@@ -56045,7 +56068,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                                 }
                                                 else
                                                 {
-                                                    string msg1= resp.message;
+                                                    string msg1 = resp.message;
                                                     TempData["msg"] = msg1;
                                                 }
                                             }
@@ -58333,7 +58356,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var chek = db.SERVICECOLUMNs.Where(s => s.SERVICESNAME == service).ToList();
             return View(chek);
         }
-        public object SAVESERVIESDS( string set , string sess)
+        public object SAVESERVIESDS(string set, string sess)
         {
             if (!string.IsNullOrEmpty(set) && !string.IsNullOrEmpty(sess))
             {
@@ -58368,22 +58391,22 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     }
                     j++;
                 }
-                    Random dew = new Random();
-                    var rns1 = dew.Next(9999, 99999);
-                   var rns = Convert.ToString(rns1);
+                Random dew = new Random();
+                var rns1 = dew.Next(9999, 99999);
+                var rns = Convert.ToString(rns1);
                 SERVICES_DATA_INFO d2 = new SERVICES_DATA_INFO();
                 var userid = User.Identity.GetUserId();
                 var chdfk = db.SERVICES_DATA_INFO.Where(s => s.Userid == userid && s.SERVICESNAME == sess).ToList();
                 if (chdfk.Count == 0)
                 {
                     for (int z = 0; z < it1.Length; z++)
-                   {
-                    var hesd = it[z];
+                    {
+                        var hesd = it[z];
                         d2.header = it[z];
                         d2.INFO = it1[z];
                         d2.Userid = userid;
                         d2.SERVICESNAME = sess;
-                           d2.COUNTCOL = Convert.ToString(it1.Length);
+                        d2.COUNTCOL = Convert.ToString(it1.Length);
                         d2.uniqueid = Convert.ToString(rns);
                         d2.date = DateTime.Now;
                         db.SERVICES_DATA_INFO.Add(d2);
@@ -58652,7 +58675,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     {
                         message = "OTP";
                     }
-                    return Json(new { list = message , List1 = idno}, JsonRequestBehavior.AllowGet);
+                    return Json(new { list = message, List1 = idno }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -58661,7 +58684,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
             catch (Exception ex)
             {
-                return Json(new { list = "Please Try Again" , List1 = idno }, JsonRequestBehavior.AllowGet);
+                return Json(new { list = "Please Try Again", List1 = idno }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpPost]
@@ -58841,7 +58864,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             ViewBag.chk = "post";
             return PartialView("_sellRechargeReport", rowdata);
         }
-        public ActionResult Rechargesellupd(int ? id , string status , string txnid)
+        public ActionResult Rechargesellupd(int? id, string status, string txnid)
         {
             db.recharge_sell_update(txnid, status, null, null, null);
             return RedirectToAction("sellRechargeReport");
@@ -58937,7 +58960,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             {
                 return RedirectToAction("Profile");
             }
-            
+
         }
         [HttpPost]
         public ActionResult Rediantcreate(string gst, string tan, string compan, string distributorCode, string firstname, string lastname, string gender, string dob, string email, string phoneno, string altphoneno,
@@ -59178,7 +59201,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         {
             var userid = User.Identity.GetUserId();
             var chk = db.radiantauths.ToList();
-            var chk1 = db.rediantremtresponses.Where(s=>s.userid == userid).ToList();
+            var chk1 = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
             Radiantdmt d1 = new Radiantdmt();
             var chk2 = d1.AgentStatus(chk1[0].agent_code, chk[0].clientID, chk[0].clientSecret, chk[0].APIKey);
             dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(chk2.Content);
@@ -59193,7 +59216,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 {
                     chk1[0].Sts = Convert.ToString(sts);
                 }
-              
+
                 db.SaveChanges();
                 chk1 = db.rediantremtresponses.Where(s => s.userid == userid).ToList();
                 return Json(chk1[0].Sts);
@@ -59222,7 +59245,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var requestid = reqw.Replace("-", "").Replace(" ", "");
 
             System.Data.Entity.Core.Objects.ObjectParameter output = new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
-            var procres = db.proc_insert_PAN_CARD12_manual(userid,msts,gender, adharno,name,dob,mobile,father,Email,cmobile,107,requestid, state, output).SingleOrDefault().msg;
+            var procres = db.proc_insert_PAN_CARD12_manual(userid, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, 107, requestid, state, output).SingleOrDefault().msg;
             try
             {
                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -59242,7 +59265,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     Email = retailerdetails.Email,
                     Mobile = retailerdetails.Mobile,
                     Details = "Pancard Purchase",
-                    RemainBalance = remdetails.Remainamount,
+                    RemainBalance = (decimal)remdetails.Remainamount,
                     Usertype = "Retailer"
                 };
                 back.Pancard(model);
@@ -59286,7 +59309,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     if (res.ToUpper() == "FAILED")
                     {
                         var set = db.pancard_transation_manual.Where(s => s.requestid == requestid).SingleOrDefault();
-                        var resupdate = db.proc_PAN_CARD_Refund_new_manual(set.idno.ToString(), "FAILED","", requestid);
+                        var resupdate = db.proc_PAN_CARD_Refund_new_manual(set.idno.ToString(), "FAILED", "", requestid);
                         try
                         {
                             var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -59306,7 +59329,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Pan Card Purchase Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Pancard(model);
@@ -59345,7 +59368,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     return Json(new { status = "Failed", message = "Contact to Admin" });
                 }
             }
-            else if(procres == "CAPINGLOW")
+            else if (procres == "CAPINGLOW")
             {
                 return Json(new { status = "Failed", message = "Balance Low" });
             }
@@ -59353,7 +59376,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             {
                 return Json(new { status = "Failed", message = "Contact to Admin" });
             }
-           
+
         }
         public ActionResult slipview(int Idno)
         {
@@ -59385,13 +59408,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 {
                     // Log or handle the exception appropriately
                     Console.WriteLine("Exception occurred during file download: " + ex.Message);
-                    return HttpNotFound(); 
+                    return HttpNotFound();
                     // Or return an appropriate error response
                 }
             }
             else
             {
-              
+
                 // Handle the case where the record with the given Idno doesn't exist
                 return HttpNotFound();
             }
@@ -59424,10 +59447,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-         public ActionResult Extracomm_Report(string txt_frm_date, string txt_to_date)
+        public ActionResult Extracomm_Report(string txt_frm_date, string txt_to_date)
         {
             var userid = User.Identity.GetUserId();
-            
+
 
             if (txt_frm_date == null && txt_to_date == null)
             {
@@ -59446,8 +59469,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-           
-            var dfg = db.daywisecomms.Where(s => s.userid == userid && s.date>frm_date && s.date<to_date).OrderByDescending(s=>s.date).ToList();
+
+            var dfg = db.daywisecomms.Where(s => s.userid == userid && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
             return View(dfg);
         }
         public ActionResult openingbalance_Report()
@@ -59457,13 +59480,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
             if (clos.Count > 0 && clos[0].sts == true)
             {
-                
+
                 var dfg = db.closingbalances.Where(s => s.userid == userid).OrderByDescending(s => s.date).ToList();
                 return View(dfg);
             }
             else
             {
-                return RedirectToAction("","Home");
+                return RedirectToAction("", "Home");
             }
         }
         [HttpPost]
@@ -59561,7 +59584,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                 return RedirectToAction("");
             }
         }
-        public ActionResult loanrepayment(int ? id)
+        public ActionResult loanrepayment(int? id)
         {
             var userid = User.Identity.GetUserId();
             var sck = db.loanlimits.ToList();
@@ -59578,22 +59601,22 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             }
         }
         [HttpPost]
-        public ActionResult loanrepayment(string Lid , decimal? Amountss)
+        public ActionResult loanrepayment(string Lid, decimal? Amountss)
         {
             var userid = User.Identity.GetUserId();
             var sck = db.loanlimits.ToList();
             var usrchk = db.loanpermissions.Where(s => s.userid == userid).ToList();
             if (sck.Count > 0 && usrchk.Count > 0 && sck[0].status == true && usrchk[0].status == true)
             {
-                var chk = db.loanrequests.Where(s => s.loanid == Lid && s.status == "Success" ).ToList();
-            var cj = db.loanlimits.ToList();
-           if(chk.Count == 1)
-            {
-                if(chk[0].remainpayment== Amountss)
+                var chk = db.loanrequests.Where(s => s.loanid == Lid && s.status == "Success").ToList();
+                var cj = db.loanlimits.ToList();
+                if (chk.Count == 1)
                 {
-                    try
+                    if (chk[0].remainpayment == Amountss)
                     {
-                        db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
+                        try
+                        {
+                            db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
                             try
                             {
                                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -59613,25 +59636,25 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Loan Payement",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
 
-                               
+
                             }
                             catch { }
                         }
-                    catch
-                    {
+                        catch
+                        {
 
+                        }
                     }
-                }
-                else if (cj[0].fullorpartialpayment == true && chk[0].remainpayment < Amountss)
-                {
-                    try
+                    else if (cj[0].fullorpartialpayment == true && chk[0].remainpayment < Amountss)
                     {
-                        db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
+                        try
+                        {
+                            db.loanrequestRepayment(chk[0].idno.ToString(), Lid, Amountss);
                             try
                             {
                                 var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -59651,7 +59674,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Loan Payement",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(model);
@@ -59660,19 +59683,19 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             }
                             catch { }
                         }
-                    catch
-                    {
+                        catch
+                        {
 
+                        }
                     }
-                }
-                else
-                {
-                    TempData["Message"] = "Enter Valid Amount";
+                    else
+                    {
+                        TempData["Message"] = "Enter Valid Amount";
+                    }
+
                 }
 
-            }
-
-            return RedirectToAction("loanrequest");
+                return RedirectToAction("loanrequest");
             }
             else
             {

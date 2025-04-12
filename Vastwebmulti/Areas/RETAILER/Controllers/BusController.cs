@@ -629,7 +629,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "Bus Booking ",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);
@@ -718,7 +718,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Bus Booking Refund ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.info(modeln);
@@ -802,7 +802,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Bus Booking Refund ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.info(modeln);

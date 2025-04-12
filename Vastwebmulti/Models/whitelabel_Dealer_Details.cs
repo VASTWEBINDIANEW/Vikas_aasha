@@ -30,7 +30,7 @@ namespace Vastwebmulti.Models
         public string pancard { get; set; }
         public string adharcard { get; set; }
         public string gst { get; set; }
-        public decimal Limit { get; set; }
+        public Nullable<decimal> Limit { get; set; }
         public string Photo { get; set; }
         public Nullable<bool> SignupStatus { get; set; }
         public string FinincialRolesType { get; set; }
