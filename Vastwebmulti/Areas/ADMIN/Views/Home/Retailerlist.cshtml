@@ -17,6 +17,20 @@
 
     /*  new css  */
 
+
+    #serbystsdst, #Districtstates {
+        border: 1px solid #aaa;
+        padding: 6px 10px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .date_fa {
+        position: absolute;
+        background: #fff;
+        width: 100%;
+        z-index: 9;
+    }
+
     #srcbysts .select2 {
         margin-bottom: 5px;
     }
@@ -58,30 +72,38 @@
     .retailerlist-select {
         width: 100%;
     }
+
     .t_menu {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: 4px;
+        position: relative;
     }
+
     .retalerrlist-add-button {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
+
     .select_item {
-        width: 72px;
+        width: 58px;
         float: left;
         font-size: 11px;
         text-align: center;
         border: 1px solid;
         cursor: pointer;
+        line-height: 13px;
     }
+
     .retailerlist-select {
         display: flex;
         align-items: center;
         justify-content: space-between;
         position: relative;
     }
+
     #srcbysts {
         position: absolute;
         z-index: 999;
@@ -322,12 +344,12 @@
                 <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
                     <a href="@Url.Action("Showclosingbalance", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Show Opening Balance</a>
 
-                </div> 
+                </div>
                 <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
                     <a href="@Url.Action("daywisecomm", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm Status</a>
 
                 </div>
-               
+
                 <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
                     <a href="@Url.Action("daywisecommhistory", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm History</a>
 
@@ -358,26 +380,26 @@
                     <script>
                     function whtssupdate() {
 
-        var url = '@Url.Action("Whatsaapupdate","Home")'
-        $.ajax({
-            url: url,
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                console.log(data);
-                var upt = document.getElementById('whtup');
-                if (data == true) {
-
-                    upt.style.background = "green";
-
-                }
-                else {
-                    upt.style.background = "red";
-                }
-            },
-
-        });
-    }
+                            var url = '@Url.Action("Whatsaapupdate","Home")'
+                            $.ajax({
+                                url: url,
+                                cache: false,
+                                type: "POST",
+                                success: function (data) {
+                                    console.log(data);
+                                    var upt = document.getElementById('whtup');
+                                    if (data == true) {
+                        
+                                        upt.style.background = "green";
+                        
+                                    }
+                                    else {
+                                        upt.style.background = "red";
+                                    }
+                                },
+                        
+                            });
+                        }
                     </script>
                 </div>
                 <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
@@ -400,7 +422,7 @@
 
 
 
-            </div>
+        </div>
 
 
         <!--////-->
@@ -664,7 +686,7 @@
                                     <div class="input-group classborder-thirddesign" style="border: 1px solid #bfbebe; float: left;width: 200px">
                                         @*<span class="input-group-addon">
                         </span>*@
-                                        <div class="ffjkt">
+                                        <div class="ffjkt" style="overflow: hidden;">
                                             @Html.TextBox("txtmob", "", new { @class = "form-control", @placeholder = "Name,PinCode,Mob,Email,Firm,Aadhar,PAN", @style = "height:27px !important;margin-left:8px;padding:0px; background:none;font-size:12px;" })
                                         </div>
                                     </div>
@@ -676,10 +698,15 @@
                                 }
 
                                 <div class="select_item">
+                                    <div class="date_f">Search By Date</div>
+                                </div>
+
+
+                                <div class="select_item">
                                     <div onclick="document.getElementById('srcbysts').style.display = 'block';" id="sbarea">SEARCH BY AREA</div>
                                 </div>
                                 <div class="select_item" style="">
-                                    <a href="@Url.Action("Unloadlimitset","Home")">Wallet unload Limit</a>
+                                    <a style="font-size: 9px; color: #000;" href="@Url.Action("Unloadlimitset","Home")">Wallet unload Limit</a>
                                 </div>
                                 <div id="srcbysts" style="display:none">
                                     @{
@@ -714,6 +741,44 @@
                             </div>
 
                         </div>
+
+                        
+
+                        <div class="date_fa" style="display:none;">
+                           @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
+                           {
+                            <div class="col-md-5 mrj responcive-full" style="width: auto;margin-top:1px;">
+                                <div class="form-group jjp">
+                                    <div class="input-daterange input-group">
+                                        <div class="custom-date-icon ner height-icon-third">
+                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                        </div>
+                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
+
+                                        <div class="nrr3">
+                                            <div class="custom-date-icon ner height-icon-third">
+                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                            </div>
+                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mrj responcive-fifty search-resp-third" style="margin-right: 0px;background: #fff;">
+
+                                    <button type="submit" value="Old" name="submit" class="btn input-back-second" style="background: transparent;border: 1px solid #b1a6a638;">
+                                        <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
+                                        <span style="top:-2px;color:black;">Search</span>
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="date_f" style="float: right; padding-top: 4px; padding-right: 3px; cursor: pointer; ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor"><path d="M16.34 9.322a1 1 0 1 0-1.364-1.463l-2.926 2.728L9.322 7.66A1 1 0 0 0 7.86 9.024l2.728 2.926l-2.927 2.728a1 1 0 1 0 1.364 1.462l2.926-2.727l2.728 2.926a1 1 0 1 0 1.462-1.363l-2.727-2.926z" /><path fill-rule="evenodd" d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12m11 9a9 9 0 1 1 0-18a9 9 0 0 1 0 18" clip-rule="evenodd" /></g></svg>
+                            </div>
+
+                           }
+                        </div>
+
                         <script>
                         function srcbydist() {
                             var dr = document.getElementById('serbystsdst').value;
@@ -1550,6 +1615,37 @@
 
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
 <script src="~/select2/dist/js/select2.min.js"></script>
+
+
+
+@* New *@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(".date_f").click(function () {
+        $(".date_fa").toggle();
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+   $('.input-daterange').datepicker({
+                format: "yyyy-mm-dd",
+                todayHighlight: true,
+                autoclose: true,
+                orientation: "bottom auto",
+
+            });
+            var val = '@ViewBag.chk';
+            if (val != "post") {
+                $("#txt_frm_date").datepicker("setDate", new Date());
+                $("#txt_to_date").datepicker("setDate", new Date());
+            }
+            answers();
+    });
+</script>
+@* New End *@
+
 <script type="text/javascript">
     $(function () {
         $("#btnSubmit").click(function () {
