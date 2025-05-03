@@ -171,7 +171,7 @@ namespace Vastwebmulti.API
                                                                 Email = retailerdetails.emailid,
                                                                 Mobile = retailerdetails.mobile,
                                                                 Details = "Recharge " + api.Customernumber + " Amount " + api.Amount,
-                                                                RemainBalance = remdetails.balance,
+                                                                RemainBalance = (decimal)remdetails.balance,
                                                                 Usertype = "API"
                                                             };
                                                             back.Rechargeandutility(model);
@@ -242,7 +242,7 @@ namespace Vastwebmulti.API
                                                             var msgorderid = db.Recharge_info.Where(aa => aa.Order_id == orderid).OrderByDescending(aa => aa.idno).Take(1).SingleOrDefault().idno.ToString();
 
 
-                                                            JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                            JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                             return Ok(rch);
                                                         }
                                                         else if (msgoutput == "MOK" || msgoutput == "AOK" || msgoutput == "OKK")
@@ -251,7 +251,7 @@ namespace Vastwebmulti.API
                                                             var msgorderid = db.Recharge_info.Where(aa => aa.Order_id == orderid).OrderByDescending(aa => aa.idno).Take(1).SingleOrDefault().idno.ToString();
 
 
-                                                            JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                            JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                             return Ok(rch);
                                                         }
                                                         else
@@ -309,7 +309,7 @@ namespace Vastwebmulti.API
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                            JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -346,7 +346,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -354,7 +354,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -378,7 +378,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -386,7 +386,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -394,7 +394,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
@@ -403,7 +403,7 @@ namespace Vastwebmulti.API
                                                                         {
 
 
-                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
@@ -416,7 +416,7 @@ namespace Vastwebmulti.API
                                                                         db.recharge_update(msgorderid, status, error_decribe, remain, json.ToString(), "Response");
 
 
-                                                                        JObject rch = outputchk("Failed", "", error_decribe, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Failed", "", error_decribe, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -453,7 +453,7 @@ namespace Vastwebmulti.API
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                            JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -490,7 +490,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -498,7 +498,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -522,7 +522,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -530,7 +530,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -538,14 +538,14 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
@@ -590,7 +590,7 @@ namespace Vastwebmulti.API
                                                                                 status = "Success";
                                                                                 db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                                JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -627,7 +627,7 @@ namespace Vastwebmulti.API
                                                                                             Email = retailerdetails.emailid,
                                                                                             Mobile = retailerdetails.mobile,
                                                                                             Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                            RemainBalance = remdetails.balance,
+                                                                                            RemainBalance = (decimal)remdetails.balance,
                                                                                             Usertype = "API"
                                                                                         };
                                                                                         back.Rechargeandutility(model);
@@ -635,7 +635,7 @@ namespace Vastwebmulti.API
 
                                                                                     }
                                                                                     catch { }
-                                                                                    JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                                     try
                                                                                     {
                                                                                         Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -659,7 +659,7 @@ namespace Vastwebmulti.API
                                                                                                  { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                     if (outputchkBkp == "SUCCESS")
                                                                                     {
-                                                                                        JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                        JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                         Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                         obj.API_response = liveRes.ToString();
                                                                                         db.SaveChanges();
@@ -667,7 +667,7 @@ namespace Vastwebmulti.API
                                                                                     }
                                                                                     else if (outputchkBkp == "FAILED")
                                                                                     {
-                                                                                        JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                        JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                         Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                         obj.API_response = liveRes.ToString();
                                                                                         db.SaveChanges();
@@ -675,14 +675,14 @@ namespace Vastwebmulti.API
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                         return Ok(liverch);
                                                                                     }
                                                                                 }
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                                JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(rch);
                                                                             }
                                                                         }
@@ -695,7 +695,7 @@ namespace Vastwebmulti.API
                                                                             db.recharge_update(msgorderid, status, error_decribe, api.Amount, json.ToString(), "Response");
 
 
-                                                                            JObject rch = outputchk("Failed", "", error_decribe, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Failed", "", error_decribe, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
@@ -739,7 +739,7 @@ namespace Vastwebmulti.API
                                                                 {
                                                                     status = "Success";
                                                                     db.recharge_update(msgorderid, status, Transid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
-                                                                    JObject liveRes = outputchk("Success", Transid, "", remain, api.Yourrchid, orderid);
+                                                                    JObject liveRes = outputchk("Success", Transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                     try
                                                                     {
                                                                         Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -777,7 +777,7 @@ namespace Vastwebmulti.API
                                                                                 Email = retailerdetails.emailid,
                                                                                 Mobile = retailerdetails.mobile,
                                                                                 Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                RemainBalance = remdetails.balance,
+                                                                                RemainBalance = (decimal)remdetails.balance,
                                                                                 Usertype = "API"
                                                                             };
                                                                             back.Rechargeandutility(model);
@@ -785,7 +785,7 @@ namespace Vastwebmulti.API
 
                                                                         }
                                                                         catch { }
-                                                                        JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -809,7 +809,7 @@ namespace Vastwebmulti.API
                                                                                      { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                         if (outputchkBkp == "SUCCESS")
                                                                         {
-                                                                            JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                             obj.API_response = liveRes.ToString();
                                                                             db.SaveChanges();
@@ -817,7 +817,7 @@ namespace Vastwebmulti.API
                                                                         }
                                                                         else if (outputchkBkp == "FAILED")
                                                                         {
-                                                                            JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                             Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                             obj.API_response = liveRes.ToString();
                                                                             db.SaveChanges();
@@ -825,14 +825,14 @@ namespace Vastwebmulti.API
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                            JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(liverch);
                                                                         }
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                    JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(rch);
                                                                 }
                                                             }
@@ -892,7 +892,7 @@ namespace Vastwebmulti.API
 
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
-                                                                        JObject liveRes = outputchk("Success", Transid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Success", Transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -930,7 +930,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -938,7 +938,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -962,7 +962,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -970,7 +970,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -978,20 +978,20 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(liverch);
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(liverch);
                                                                 }
                                                             }
@@ -1016,7 +1016,7 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         var status = "Success";
                                                                         db.recharge_update(msgorderid, status, transid, Convert.ToDecimal(apiremain), apiresponse.ToString(), "Response");
-                                                                        JObject obj1 = outputchk("Success", transid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject obj1 = outputchk("Success", transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -1055,7 +1055,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -1063,7 +1063,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -1101,7 +1101,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -1109,7 +1109,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -1133,7 +1133,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1141,7 +1141,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1149,7 +1149,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
@@ -1157,7 +1157,7 @@ namespace Vastwebmulti.API
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject rch = outputchk("Pending", "", transid, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Pending", "", transid, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
 
@@ -1194,7 +1194,7 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, Operatorid, Convert.ToDecimal(remainamount), webcontent.ToString(), "Response");
-                                                                            JObject obj1 = outputchk("Success", Operatorid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject obj1 = outputchk("Success", Operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1232,7 +1232,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -1240,7 +1240,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1264,7 +1264,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1272,7 +1272,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1280,14 +1280,14 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject rch = outputchk("Pending", "", Operatorid, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Pending", "", Operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
@@ -1304,7 +1304,7 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, operatorid, Convert.ToDecimal(remain_amount), webcontent.ToString(), "Response");
-                                                                            JObject rch = outputchk("Success", operatorid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Success", operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1342,7 +1342,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -1350,7 +1350,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1374,7 +1374,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1382,7 +1382,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1390,14 +1390,14 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                            JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(liverch);
                                                                         }
                                                                     }
@@ -1420,7 +1420,7 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, operatorid, Convert.ToDecimal(amount1), webcontent.ToString(), "Response");
-                                                                            JObject rch = outputchk("Success", operatorid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Success", operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1458,7 +1458,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API"
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -1466,7 +1466,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1490,7 +1490,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1498,7 +1498,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -1506,14 +1506,14 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                            JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(liverch);
                                                                         }
                                                                     }
@@ -1527,12 +1527,12 @@ namespace Vastwebmulti.API
                                                                         if (RESCODE == "TXN")
                                                                         {
                                                                             db.recharge_update(msgorderid, "SUCCESS", optid, remainbal, webcontent.ToString(), "Response");
-                                                                            JObject rch = outputchk("Success", optid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Success", optid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                         else if (RESCODE.ToString() == "TUP")
                                                                         {
-                                                                            JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                            JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(liverch);
                                                                         }
                                                                         else
@@ -1552,7 +1552,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -1560,14 +1560,14 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject rch = outputchk("Failed", "", optid, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Failed", "", optid, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
 
                                                                     else
                                                                     {
-                                                                        JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -1576,7 +1576,7 @@ namespace Vastwebmulti.API
                                                     }
                                                     else
                                                     {
-                                                        JObject rch = outputchk("Failed", "", "Remain Balance Low.", remain, api.Yourrchid, "");
+                                                        JObject rch = outputchk("Failed", "", "Remain Balance Low.", (decimal)remain, api.Yourrchid, "");
                                                         return Ok(rch);
                                                     }
                                                 }
@@ -1796,7 +1796,7 @@ namespace Vastwebmulti.API
                                                             Email = retailerdetails.emailid,
                                                             Mobile = retailerdetails.mobile,
                                                             Details = "Recharge " + api.Customernumber + " Amount " + api.Amount,
-                                                            RemainBalance = remdetails.balance,
+                                                            RemainBalance = (decimal)remdetails.balance,
                                                             Usertype = "API"
                                                         };
                                                         back.Rechargeandutility(model);
@@ -1869,7 +1869,7 @@ namespace Vastwebmulti.API
                                                         var msgorderid = db.Recharge_info.Where(aa => aa.Order_id == orderid).OrderByDescending(aa => aa.idno).Take(1).SingleOrDefault().idno.ToString();
 
 
-                                                        JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                        JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                         return Ok(rch);
                                                     }
                                                     else if (msgoutput == "MOK" || msgoutput == "AOK" || msgoutput == "OKK")
@@ -1878,7 +1878,7 @@ namespace Vastwebmulti.API
                                                         var msgorderid = db.Recharge_info.Where(aa => aa.Order_id == orderid).OrderByDescending(aa => aa.idno).Take(1).SingleOrDefault().idno.ToString();
 
 
-                                                        JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                        JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                         return Ok(rch);
                                                     }
                                                     else
@@ -1936,7 +1936,7 @@ namespace Vastwebmulti.API
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                        JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -1973,7 +1973,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -1981,7 +1981,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2005,7 +2005,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2013,7 +2013,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2021,7 +2021,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
@@ -2030,7 +2030,7 @@ namespace Vastwebmulti.API
                                                                     {
 
 
-                                                                        JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -2043,7 +2043,7 @@ namespace Vastwebmulti.API
                                                                     db.recharge_update(msgorderid, status, error_decribe, remain, json.ToString(), "Response");
 
 
-                                                                    JObject rch = outputchk("Failed", "", error_decribe, remain, api.Yourrchid, orderid);
+                                                                    JObject rch = outputchk("Failed", "", error_decribe, (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(rch);
                                                                 }
                                                             }
@@ -2080,7 +2080,7 @@ namespace Vastwebmulti.API
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                        JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2117,7 +2117,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -2125,7 +2125,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2149,7 +2149,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2157,7 +2157,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2165,14 +2165,14 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -2217,7 +2217,7 @@ namespace Vastwebmulti.API
                                                                             status = "Success";
                                                                             db.recharge_update(msgorderid, status, TRANSID, PRICE, json.ToString(), "Response");
 
-                                                                            JObject liveRes = outputchk("Success", TRANSID, "", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Success", TRANSID, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2254,7 +2254,7 @@ namespace Vastwebmulti.API
                                                                                         Email = retailerdetails.emailid,
                                                                                         Mobile = retailerdetails.mobile,
                                                                                         Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                        RemainBalance = remdetails.balance,
+                                                                                        RemainBalance = (decimal)remdetails.balance,
                                                                                         Usertype = "API "
                                                                                     };
                                                                                     back.Rechargeandutility(model);
@@ -2262,7 +2262,7 @@ namespace Vastwebmulti.API
 
                                                                                 }
                                                                                 catch { }
-                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                                 try
                                                                                 {
                                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2286,7 +2286,7 @@ namespace Vastwebmulti.API
                                                                                              { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                                 if (outputchkBkp == "SUCCESS")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -2294,7 +2294,7 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else if (outputchkBkp == "FAILED")
                                                                                 {
-                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                    JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                     Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                     obj.API_response = liveRes.ToString();
                                                                                     db.SaveChanges();
@@ -2302,14 +2302,14 @@ namespace Vastwebmulti.API
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                     return Ok(liverch);
                                                                                 }
                                                                             }
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, remain, api.Yourrchid, orderid);
+                                                                            JObject rch = outputchk("Pending", TRANSID, errormsg, (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(rch);
                                                                         }
                                                                     }
@@ -2322,7 +2322,7 @@ namespace Vastwebmulti.API
                                                                         db.recharge_update(msgorderid, status, error_decribe, api.Amount, json.ToString(), "Response");
 
 
-                                                                        JObject rch = outputchk("Failed", "", error_decribe, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Failed", "", error_decribe, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -2366,7 +2366,7 @@ namespace Vastwebmulti.API
                                                             {
                                                                 status = "Success";
                                                                 db.recharge_update(msgorderid, status, Transid, Convert.ToDecimal(remainamount), json.ToString(), "Response");
-                                                                JObject liveRes = outputchk("Success", Transid, "", remain, api.Yourrchid, orderid);
+                                                                JObject liveRes = outputchk("Success", Transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                 try
                                                                 {
                                                                     Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2404,7 +2404,7 @@ namespace Vastwebmulti.API
                                                                             Email = retailerdetails.emailid,
                                                                             Mobile = retailerdetails.mobile,
                                                                             Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                            RemainBalance = remdetails.balance,
+                                                                            RemainBalance = (decimal)remdetails.balance,
                                                                             Usertype = "API"
                                                                         };
                                                                         back.Rechargeandutility(model);
@@ -2412,7 +2412,7 @@ namespace Vastwebmulti.API
 
                                                                     }
                                                                     catch { }
-                                                                    JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                    JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                     try
                                                                     {
                                                                         Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2436,7 +2436,7 @@ namespace Vastwebmulti.API
                                                                                  { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                     if (outputchkBkp == "SUCCESS")
                                                                     {
-                                                                        JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                         obj.API_response = liveRes.ToString();
                                                                         db.SaveChanges();
@@ -2444,7 +2444,7 @@ namespace Vastwebmulti.API
                                                                     }
                                                                     else if (outputchkBkp == "FAILED")
                                                                     {
-                                                                        JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                         Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                         obj.API_response = liveRes.ToString();
                                                                         db.SaveChanges();
@@ -2452,14 +2452,14 @@ namespace Vastwebmulti.API
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(liverch);
                                                                     }
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                 return Ok(rch);
                                                             }
                                                         }
@@ -2512,7 +2512,7 @@ namespace Vastwebmulti.API
 
                                                                     status = "Success";
                                                                     db.recharge_update(msgorderid, status, Transid, Convert.ToDecimal(remainamount), webcontent, "Response");
-                                                                    JObject liveRes = outputchk("Success", Transid, "", remain, api.Yourrchid, orderid);
+                                                                    JObject liveRes = outputchk("Success", Transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                     try
                                                                     {
                                                                         Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2550,7 +2550,7 @@ namespace Vastwebmulti.API
                                                                                 Email = retailerdetails.emailid,
                                                                                 Mobile = retailerdetails.mobile,
                                                                                 Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                RemainBalance = remdetails.balance,
+                                                                                RemainBalance = (decimal)remdetails.balance,
                                                                                 Usertype = "API"
                                                                             };
                                                                             back.Rechargeandutility(model);
@@ -2558,7 +2558,7 @@ namespace Vastwebmulti.API
 
                                                                         }
                                                                         catch { }
-                                                                        JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2582,7 +2582,7 @@ namespace Vastwebmulti.API
                                                                                      { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                         if (outputchkBkp == "SUCCESS")
                                                                         {
-                                                                            JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                             Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                             obj.API_response = liveRes.ToString();
                                                                             db.SaveChanges();
@@ -2590,7 +2590,7 @@ namespace Vastwebmulti.API
                                                                         }
                                                                         else if (outputchkBkp == "FAILED")
                                                                         {
-                                                                            JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                             Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                             obj.API_response = liveRes.ToString();
                                                                             db.SaveChanges();
@@ -2598,20 +2598,20 @@ namespace Vastwebmulti.API
                                                                         }
                                                                         else
                                                                         {
-                                                                            JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                            JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                             return Ok(liverch);
                                                                         }
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                    JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(liverch);
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                 return Ok(liverch);
                                                             }
                                                         }
@@ -2636,7 +2636,7 @@ namespace Vastwebmulti.API
                                                                 {
                                                                     var status = "Success";
                                                                     db.recharge_update(msgorderid, status, transid, Convert.ToDecimal(apiremain), apiresponse.ToString(), "Response");
-                                                                    JObject obj1 = outputchk("Success", transid, "", remain, api.Yourrchid, orderid);
+                                                                    JObject obj1 = outputchk("Success", transid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                     try
                                                                     {
                                                                         Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -2675,7 +2675,7 @@ namespace Vastwebmulti.API
                                                                                 Email = retailerdetails.emailid,
                                                                                 Mobile = retailerdetails.mobile,
                                                                                 Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                RemainBalance = remdetails.balance,
+                                                                                RemainBalance = (decimal)remdetails.balance,
                                                                                 Usertype = "API"
                                                                             };
                                                                             back.Rechargeandutility(model);
@@ -2683,7 +2683,7 @@ namespace Vastwebmulti.API
 
                                                                         }
                                                                         catch { }
-                                                                        JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                        JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -2707,7 +2707,7 @@ namespace Vastwebmulti.API
                                                                         {
                                                                             var status = "Failed";
                                                                             db.recharge_update(msgorderid, status, "NA", Convert.ToDecimal(0), apiresponse, "Response");
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
@@ -2731,7 +2731,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2739,7 +2739,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn111 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2747,7 +2747,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
@@ -2755,7 +2755,7 @@ namespace Vastwebmulti.API
                                                                 }
                                                                 else
                                                                 {
-                                                                    JObject rch = outputchk("Pending", "", transid, remain, api.Yourrchid, orderid);
+                                                                    JObject rch = outputchk("Pending", "", transid, (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(rch);
                                                                 }
                                                             }
@@ -2791,7 +2791,7 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, Operatorid, Convert.ToDecimal(remainamount), webcontent.ToString(), "Response");
-                                                                        JObject obj1 = outputchk("Success", Operatorid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject obj1 = outputchk("Success", Operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2829,7 +2829,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -2837,7 +2837,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2861,7 +2861,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2869,7 +2869,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2877,14 +2877,14 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject rch = outputchk("Pending", "", Operatorid, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Pending", "", Operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
@@ -2901,7 +2901,7 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, operatorid, Convert.ToDecimal(remain_amount), webcontent.ToString(), "Response");
-                                                                        JObject rch = outputchk("Success", operatorid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Success", operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2939,7 +2939,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge  Refund" + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -2947,7 +2947,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -2971,7 +2971,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2979,7 +2979,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -2987,14 +2987,14 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(liverch);
                                                                     }
                                                                 }
@@ -3017,7 +3017,7 @@ namespace Vastwebmulti.API
                                                                     {
                                                                         status = "Success";
                                                                         db.recharge_update(msgorderid, status, operatorid, Convert.ToDecimal(amount1), webcontent.ToString(), "Response");
-                                                                        JObject rch = outputchk("Success", operatorid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Success", operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         try
                                                                         {
                                                                             Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -3055,7 +3055,7 @@ namespace Vastwebmulti.API
                                                                                     Email = retailerdetails.emailid,
                                                                                     Mobile = retailerdetails.mobile,
                                                                                     Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                    RemainBalance = remdetails.balance,
+                                                                                    RemainBalance = (decimal)remdetails.balance,
                                                                                     Usertype = "API"
                                                                                 };
                                                                                 back.Rechargeandutility(model);
@@ -3063,7 +3063,7 @@ namespace Vastwebmulti.API
 
                                                                             }
                                                                             catch { }
-                                                                            JObject liveRes = outputchk("Failed", "", "Failed", remain, api.Yourrchid, orderid);
+                                                                            JObject liveRes = outputchk("Failed", "", "Failed", (decimal)remain, api.Yourrchid, orderid);
                                                                             try
                                                                             {
                                                                                 Recharge_info objj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
@@ -3087,7 +3087,7 @@ namespace Vastwebmulti.API
                                                                                          { operatorid = rch.OPt_id }).SingleOrDefault();
                                                                             if (outputchkBkp == "SUCCESS")
                                                                             {
-                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Success", entry.operatorid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -3095,7 +3095,7 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else if (outputchkBkp == "FAILED")
                                                                             {
-                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, remain, api.Yourrchid, orderid);
+                                                                                JObject liveRes = outputchk("Failed", "", entry.operatorid, (decimal)remain, api.Yourrchid, orderid);
                                                                                 Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
                                                                                 obj.API_response = liveRes.ToString();
                                                                                 db.SaveChanges();
@@ -3103,14 +3103,14 @@ namespace Vastwebmulti.API
                                                                             }
                                                                             else
                                                                             {
-                                                                                JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                                JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                                 return Ok(liverch);
                                                                             }
                                                                         }
                                                                     }
                                                                     else
                                                                     {
-                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(liverch);
                                                                     }
                                                                 }
@@ -3124,12 +3124,12 @@ namespace Vastwebmulti.API
                                                                     if (RESCODE == "TXN")
                                                                     {
                                                                         db.recharge_update(msgorderid, "SUCCESS", optid, remainbal, webcontent.ToString(), "Response");
-                                                                        JObject rch = outputchk("Success", optid, "", remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Success", optid, "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                     else if (RESCODE.ToString() == "TUP")
                                                                     {
-                                                                        JObject liverch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                        JObject liverch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(liverch);
                                                                     }
                                                                     else
@@ -3149,7 +3149,7 @@ namespace Vastwebmulti.API
                                                                                 Email = retailerdetails.emailid,
                                                                                 Mobile = retailerdetails.mobile,
                                                                                 Details = "Recharge Refund " + api.Customernumber + " Amount " + api.Amount,
-                                                                                RemainBalance = remdetails.balance,
+                                                                                RemainBalance = (decimal)remdetails.balance,
                                                                                 Usertype = "API"
                                                                             };
                                                                             back.Rechargeandutility(model);
@@ -3157,13 +3157,13 @@ namespace Vastwebmulti.API
 
                                                                         }
                                                                         catch { }
-                                                                        JObject rch = outputchk("Failed", "", optid, remain, api.Yourrchid, orderid);
+                                                                        JObject rch = outputchk("Failed", "", optid, (decimal)remain, api.Yourrchid, orderid);
                                                                         return Ok(rch);
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    JObject rch = outputchk("Pending", "", "", remain, api.Yourrchid, orderid);
+                                                                    JObject rch = outputchk("Pending", "", "", (decimal)remain, api.Yourrchid, orderid);
                                                                     return Ok(rch);
                                                                 }
                                                             }
@@ -3172,7 +3172,7 @@ namespace Vastwebmulti.API
                                                 }
                                                 else
                                                 {
-                                                    JObject rch = outputchk("Failed", "", "Remain Balance Low.", remain, api.Yourrchid, "");
+                                                    JObject rch = outputchk("Failed", "", "Remain Balance Low.", (decimal)remain, api.Yourrchid, "");
                                                     return Ok(rch);
                                                 }
                                             }

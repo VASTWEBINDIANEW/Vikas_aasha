@@ -16,9 +16,9 @@ namespace Vastwebmulti.Models
     {
         public int IdNo { get; set; }
         public string Api_name { get; set; }
-        public decimal Pan_purchase { get; set; }
-        public decimal Pan_purchase_rs { get; set; }
-        public decimal Pan_purchase_maxrs { get; set; }
+        public Nullable<decimal> Pan_purchase { get; set; }
+        public Nullable<decimal> Pan_purchase_rs { get; set; }
+        public Nullable<decimal> Pan_purchase_maxrs { get; set; }
         public string status { get; set; }
     }
 }

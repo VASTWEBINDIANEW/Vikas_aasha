@@ -19,9 +19,9 @@ namespace Vastwebmulti.Models
         public string Email { get; set; }
         public string Role { get; set; }
         public bool IsDomestic { get; set; }
-        public decimal marginPercentage { get; set; }
-        public decimal gst { get; set; }
-        public decimal tds { get; set; }
-        public decimal RetailerMarkupCharge { get; set; }
+        public Nullable<decimal> marginPercentage { get; set; }
+        public Nullable<decimal> gst { get; set; }
+        public Nullable<decimal> tds { get; set; }
+        public Nullable<decimal> RetailerMarkupCharge { get; set; }
     }
 }

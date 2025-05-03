@@ -17,16 +17,16 @@ namespace Vastwebmulti.Models
         public int Idno { get; set; }
         public string Userid { get; set; }
         public string userRole { get; set; }
-        public decimal RS100 { get; set; }
-        public decimal RS200 { get; set; }
-        public decimal RS500 { get; set; }
-        public decimal RS1000 { get; set; }
-        public decimal RS2500 { get; set; }
-        public decimal RS3000 { get; set; }
-        public decimal RS5000 { get; set; }
-        public decimal RS10000 { get; set; }
+        public Nullable<decimal> RS100 { get; set; }
+        public Nullable<decimal> RS200 { get; set; }
+        public Nullable<decimal> RS500 { get; set; }
+        public Nullable<decimal> RS1000 { get; set; }
+        public Nullable<decimal> RS2500 { get; set; }
+        public Nullable<decimal> RS3000 { get; set; }
+        public Nullable<decimal> RS5000 { get; set; }
+        public Nullable<decimal> RS10000 { get; set; }
         public bool IsGstApplicable { get; set; }
-        public decimal RS3500 { get; set; }
+        public Nullable<decimal> RS3500 { get; set; }
         public string Whitelabelid { get; set; }
         public Nullable<decimal> RS20 { get; set; }
         public Nullable<decimal> RS50 { get; set; }

@@ -18,7 +18,7 @@ namespace Vastwebmulti.Models
         public string type { get; set; }
         public int min { get; set; }
         public int max { get; set; }
-        public decimal value { get; set; }
+        public Nullable<decimal> value { get; set; }
         public string clienttype { get; set; }
         public string Slabname { get; set; }
         public string createdby { get; set; }

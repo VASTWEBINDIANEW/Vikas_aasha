@@ -17,12 +17,12 @@ namespace Vastwebmulti.Models
         public int Idno { get; set; }
         public string Userid { get; set; }
         public string userRole { get; set; }
-        public decimal CashWithdraw { get; set; }
-        public decimal salesDebitUpto2000 { get; set; }
-        public decimal salesDebitAbove2000 { get; set; }
-        public decimal saleCredit { get; set; }
-        public decimal saleCreditGrocery { get; set; }
-        public decimal saleCreditEduAndIns { get; set; }
+        public Nullable<decimal> CashWithdraw { get; set; }
+        public Nullable<decimal> salesDebitUpto2000 { get; set; }
+        public Nullable<decimal> salesDebitAbove2000 { get; set; }
+        public Nullable<decimal> saleCredit { get; set; }
+        public Nullable<decimal> saleCreditGrocery { get; set; }
+        public Nullable<decimal> saleCreditEduAndIns { get; set; }
         public Nullable<decimal> gst { get; set; }
         public string credit_type { get; set; }
         public Nullable<decimal> prepaidcard { get; set; }

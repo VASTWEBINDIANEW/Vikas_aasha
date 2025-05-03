@@ -29,7 +29,7 @@ namespace Vastwebmulti.Models
         public string slab_name { get; set; }
         public string AadharCard { get; set; }
         public string PanCard { get; set; }
-        public decimal Limit { get; set; }
+        public Nullable<decimal> Limit { get; set; }
         public string gst { get; set; }
         public string moneysts { get; set; }
         public Nullable<decimal> caption { get; set; }

@@ -898,7 +898,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Pan Card Booking ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Pancard(modeln);
@@ -996,7 +996,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Pan Card booking Refund",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.Pancard(modeln);
@@ -1075,7 +1075,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         Email = retailerdetails.Email,
                                         Mobile = retailerdetails.Mobile,
                                         Details = "Pan Card booking Refund",
-                                        RemainBalance = remdetails.Remainamount,
+                                        RemainBalance = (decimal)remdetails.Remainamount,
                                         Usertype = "Retailer"
                                     };
                                     back.Pancard(modeln);
@@ -1225,7 +1225,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "Pan Card booking Refund",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Pancard(modeln);
@@ -1303,7 +1303,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Pan Card booking Refund",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Pancard(modeln);
@@ -1688,7 +1688,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "DTH Booking ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.info(modeln);
@@ -1777,7 +1777,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
                                     Details = "DTH Boking Refund",
-                                    RemainBalance = remdetails.Remainamount,
+                                    RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
                                 back.info(modeln);

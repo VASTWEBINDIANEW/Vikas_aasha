@@ -894,6 +894,8 @@ namespace Vastwebmulti.Models
         public virtual DbSet<PPI_Retailer_comm_new> PPI_Retailer_comm_new { get; set; }
         public virtual DbSet<PPI_Distributor_Retailer_comm_new> PPI_Distributor_Retailer_comm_new { get; set; }
         public virtual DbSet<AppMessage> AppMessages { get; set; }
+        public virtual DbSet<PanAadharVerificationCharge> PanAadharVerificationCharges { get; set; }
+        public virtual DbSet<PANAADHARVERIFICATIONREPORT> PANAADHARVERIFICATIONREPORTs { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23845,6 +23847,19 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("optval", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("recharge_update_failed_to_success_old", idnoParameter, optvalParameter);
+        }
+    
+        public virtual ObjectResult<PROCPANAADHARVERIFICATIONCHARGE_Result> PROCPANAADHARVERIFICATIONCHARGE(string rETAILERID, string tYPE, ObjectParameter output)
+        {
+            var rETAILERIDParameter = rETAILERID != null ?
+                new ObjectParameter("RETAILERID", rETAILERID) :
+                new ObjectParameter("RETAILERID", typeof(string));
+    
+            var tYPEParameter = tYPE != null ?
+                new ObjectParameter("TYPE", tYPE) :
+                new ObjectParameter("TYPE", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCPANAADHARVERIFICATIONCHARGE_Result>("PROCPANAADHARVERIFICATIONCHARGE", rETAILERIDParameter, tYPEParameter, output);
         }
     }
 }

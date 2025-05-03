@@ -45,7 +45,7 @@ namespace Vastwebmulti.Models
                     db.sms_api_entry.Add(sms);
                     db.SaveChanges();
                 }
-                else if (apinamechange.ToUpper().Contains("API.VASTBAZAAR.COM/API/WEB/WHATSAPPMSG"))
+                else if (apinamechange != null)
                 {
                     VastBazaartoken Responsetoken = new VastBazaartoken();
                     var client = new RestClient(apinamechange);

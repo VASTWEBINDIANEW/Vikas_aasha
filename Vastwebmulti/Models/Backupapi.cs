@@ -42,7 +42,7 @@ namespace Vastwebmulti.Models
                             Email = apidetails.emailid,
                             Mobile = apidetails.mobile,
                             Details = "Recharge Refund ",
-                            RemainBalance = apiinforem.balance,
+                            RemainBalance = (decimal)apiinforem.balance,
                             Usertype = "API"
                         };
                         back.Rechargeandutility(modeln);
@@ -64,7 +64,7 @@ namespace Vastwebmulti.Models
                             Email = retailerdetails.Email,
                             Mobile = retailerdetails.Mobile,
                             Details = "Recharge Refund ",
-                            RemainBalance = remdetails.Remainamount,
+                            RemainBalance = (decimal)remdetails.Remainamount,
                             Usertype = "Retailer"
                         };
                         back.Rechargeandutility(modeln);
@@ -232,7 +232,7 @@ namespace Vastwebmulti.Models
                                             Email = apidetails.emailid,
                                             Mobile = apidetails.mobile,
                                             Details = "Recharge Refund ",
-                                            RemainBalance = apiinforem.balance,
+                                            RemainBalance = (decimal)apiinforem.balance,
                                             Usertype = "API"
                                         };
                                         back.Rechargeandutility(modeln);
@@ -254,7 +254,7 @@ namespace Vastwebmulti.Models
                                             Email = retailerdetails.Email,
                                             Mobile = retailerdetails.Mobile,
                                             Details = "Recharge Refund ",
-                                            RemainBalance = remdetails.Remainamount,
+                                            RemainBalance = (decimal)remdetails.Remainamount,
                                             Usertype = "Retailer"
                                         };
                                         back.Rechargeandutility(modeln);
@@ -362,7 +362,7 @@ namespace Vastwebmulti.Models
                                                 Email = apidetails.emailid,
                                                 Mobile = apidetails.mobile,
                                                 Details = "Recharge Refund ",
-                                                RemainBalance = apiinforem.balance,
+                                                RemainBalance = (decimal)apiinforem.balance,
                                                 Usertype = "API"
                                             };
                                             back.Rechargeandutility(modeln);
@@ -384,7 +384,7 @@ namespace Vastwebmulti.Models
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Recharge Refund ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.Rechargeandutility(modeln);
@@ -463,7 +463,7 @@ namespace Vastwebmulti.Models
                                                 Email = apidetails.emailid,
                                                 Mobile = apidetails.mobile,
                                                 Details = "Recharge Refund ",
-                                                RemainBalance = apiinforem.balance,
+                                                RemainBalance = (decimal)apiinforem.balance,
                                                 Usertype = "API"
                                             };
                                             back.Rechargeandutility(modeln);
@@ -485,7 +485,7 @@ namespace Vastwebmulti.Models
                                                 Email = retailerdetails.Email,
                                                 Mobile = retailerdetails.Mobile,
                                                 Details = "Recharge Refund ",
-                                                RemainBalance = remdetails.Remainamount,
+                                                RemainBalance = (decimal)remdetails.Remainamount,
                                                 Usertype = "Retailer"
                                             };
                                             back.Rechargeandutility(modeln);
@@ -570,7 +570,7 @@ namespace Vastwebmulti.Models
                                                     Email = apidetails.emailid,
                                                     Mobile = apidetails.mobile,
                                                     Details = "Recharge Refund ",
-                                                    RemainBalance = apiinforem.balance,
+                                                    RemainBalance = (decimal)apiinforem.balance,
                                                     Usertype = "API"
                                                 };
                                                 back.Rechargeandutility(modeln);
@@ -592,7 +592,7 @@ namespace Vastwebmulti.Models
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Recharge Refund ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(modeln);
@@ -668,7 +668,7 @@ namespace Vastwebmulti.Models
                                                     Email = apidetails.emailid,
                                                     Mobile = apidetails.mobile,
                                                     Details = "Recharge Refund ",
-                                                    RemainBalance = apiinforem.balance,
+                                                    RemainBalance = (decimal)apiinforem.balance,
                                                     Usertype = "API"
                                                 };
                                                 back.Rechargeandutility(modeln);
@@ -690,7 +690,7 @@ namespace Vastwebmulti.Models
                                                     Email = retailerdetails.Email,
                                                     Mobile = retailerdetails.Mobile,
                                                     Details = "Recharge Refund ",
-                                                    RemainBalance = remdetails.Remainamount,
+                                                    RemainBalance = (decimal)remdetails.Remainamount,
                                                     Usertype = "Retailer"
                                                 };
                                                 back.Rechargeandutility(modeln);

@@ -55,6 +55,6 @@ namespace Vastwebmulti.Models
         public string gststatus { get; set; }
         public string BackSideAadharcardphoto { get; set; }
         public string APPLOGIN_STS { get; set; }
-        public decimal caption { get; set; }
+        public Nullable<decimal> caption { get; set; }
     }
 }

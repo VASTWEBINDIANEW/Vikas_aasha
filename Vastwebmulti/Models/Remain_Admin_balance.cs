@@ -15,7 +15,7 @@ namespace Vastwebmulti.Models
     public partial class Remain_Admin_balance
     {
         public string admin { get; set; }
-        public decimal RemainAmount { get; set; }
+        public Nullable<decimal> RemainAmount { get; set; }
         public Nullable<System.DateTime> date { get; set; }
         public int Id { get; set; }
         public Nullable<decimal> VirtualAmount { get; set; }

@@ -15,10 +15,10 @@ namespace Vastwebmulti.Models
     public partial class WalletToBankAmountTransferCharge
     {
         public int Idno { get; set; }
-        public decimal AmtFromTatkal { get; set; }
+        public Nullable<decimal> AmtFromTatkal { get; set; }
         public Nullable<decimal> AmtToTatkal { get; set; }
-        public decimal chargeTatkal { get; set; }
-        public decimal TimeTakesTatkal { get; set; }
+        public Nullable<decimal> chargeTatkal { get; set; }
+        public Nullable<decimal> TimeTakesTatkal { get; set; }
         public bool IsEnabled { get; set; }
         public string ChargeType { get; set; }
         public string UserRole { get; set; }

@@ -18,11 +18,11 @@ namespace Vastwebmulti.Models
         public string UserId { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        public decimal min { get; set; }
-        public decimal max { get; set; }
-        public decimal charge { get; set; }
-        public decimal margin { get; set; }
-        public decimal gst { get; set; }
-        public decimal tds { get; set; }
+        public Nullable<decimal> min { get; set; }
+        public Nullable<decimal> max { get; set; }
+        public Nullable<decimal> charge { get; set; }
+        public Nullable<decimal> margin { get; set; }
+        public Nullable<decimal> gst { get; set; }
+        public Nullable<decimal> tds { get; set; }
     }
 }

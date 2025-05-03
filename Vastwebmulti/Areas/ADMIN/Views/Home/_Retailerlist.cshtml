@@ -12,7 +12,7 @@
         padding: 2px;
     }
 
-      /* new css */
+    /* new css */
 
     @@keyframes ldio-zdyd6mf6t5 {
         0% {
@@ -191,7 +191,12 @@
         <thead style="position: sticky; top: 0; color: white; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; z-index: 9; ">
             <tr>
                 <th>Sr</th>
-                <th>User&nbsp;Info&nbsp;&&nbsp;Login&nbsp;Status</th>
+                <th>
+                    <div>User&nbsp;Info&nbsp;&&nbsp;Login&nbsp;Status</div>
+                    <div>Create Date</div>
+                </th>
+
+                @*<th>Address</th>*@
                 <th>Users&nbsp;Mobile</th>
                 <th>Distributor&nbsp;Info</th>
                 <th style="font-size: 12px; text-align: center;">
@@ -210,7 +215,13 @@
 
                     @*PAN&nbsp;No*@
                 </th>
+
+                @*<th>
+                        <div>KYC&nbsp;/</div>
+                        <div>Video KYC</div>
+                    </th>*@
                 <th>KYC</th>
+                <th>Video KYC</th>
                 @*<th>Email&nbsp;V/F</th>*@
 
             </tr>
@@ -284,6 +295,7 @@
 
                     <tr class="tr" style="background-color:@colorchange">
                         @*<td></td>*@
+
                         <td style="display: flex; align-items: center; border: none;">
                             <div style="margin-right: 10px;">
                                 @if (item.aadhar_image != null)
@@ -312,16 +324,33 @@
                                                 {
                                                     <span id="" class="securtyoff-show" style="height:10px;width:10px;float:left;background:red;position: absolute; top:1px;border-radius: 50px;"></span>
                                                 }
-                                                @*<img class="class-upianimations"  style="height: 15px;width: 15px;background-color: #399f31 !important;margin-right:5px;max-width: 100%;padding: 0; border-radius:50%; background-color:#ffc107" src="../../ashok-images/clkk.png">*@
                                             </button>
-
                                         </span>
                                     </div>
                                     <div style="margin-left: 5px;">@item.Frm_Name</div>
                                 </div>
+
+                                <!-- ✅ New JoinDate Line -->
+                                <div style="font-size: 12px; color: black;">
+                                    Join: @item.JoinDate
+                                    @*?.ToString("dd-MM-yyyy hh:mm tt")*@
+                                </div>
                             </div>
                         </td>
 
+
+
+
+
+
+
+
+
+
+
+
+
+                        @*<td style="border-left:@borderleft">@item.Address</td>*@
                         <td style="width: 12%;">
                             <div style="display: flex; justify-content: space-around; border: none; align-items: center">
                                 <div style="margin-right: 1px;">
@@ -451,16 +480,47 @@
                             {
                                 <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 8px;float:left; font-size: 11px;">&nbsp;Due&nbsp;</div>
                             }
-                            @*<button class="btn" style="background:yellow;"><img src="~/images/reportimage/wall-clock.svg" /></button>
-                                <button class="btn btn-danger"><img src="~/images/reportimage/close.svg" /></button>
-                                <button class="btn btn-success"><img src="~/images/reportimage/check.svg" /></button>*@
-
 
                             <img class="email-popup-second" src="~/ashok-images/rightaeps.svg" style="width: 12px;margin-left: 6px;float: right;">
 
-
-                            @*@item.adharcard*@
                         </td>
+
+                        <td>
+                            @if (item.videokycstatus == "Y")
+                            {
+                                <span style="background-color: white; border: 1px solid #bbb; font-size: 11px !important; padding: 4px 7px; height: 25px; border: 1px solid #bbb; ">Done</span>
+                            }
+                            else
+                            {
+                                <span style="background-color: deepskyblue; border: 1px solid #bbb; font-size: 11px !important; padding: 5px 10px; height: 25px; border: 1px solid #bbb; "> Due </span>
+                            }
+
+
+                        </td>
+
+
+
+
+
+
+
+                        @*<td>
+                                @if (item.videokycstatus == "Y")
+                                {
+                                    <span style="color: green; font-weight: bold;">Done</span>
+                                }
+                                else
+                                {
+                                    <button style="padding: 2px 6px; background-color: orange; color: white; border: none; border-radius: 4px;">
+                                        Start
+                                    </button>
+                                }
+                            </td>*@
+
+
+
+
+
                         @* <td data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.RetailerId')">
                                 @if (item.EmailConfirmed == true)
                                 {
@@ -657,7 +717,7 @@
                                 </div>
                             </div>
                         </div><!--.row-->
-                        <div  style="display: flex; align-items: center; padding-top: 10px;">
+                        <div style="display: flex; align-items: center; padding-top: 10px;">
                             <label>Bulk Payment Mode</label>
                             <button class="btn" style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white;" title="Click here to change mode" id="bulkpayment" data-toggle="tab" onclick="bulkpaymentsetting()"></button>
                         </div>
@@ -671,8 +731,8 @@
                                     <button type="button" value="SaveChange" class="btn special-iii btnssl2233 btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
                                 </li>
                                 @*<li class="two">
-                                      <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                  </li>*@
+                                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
+                                    </li>*@
                                 <li class="three" id="isemailveryfy">
                                     <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify('Email')"><span style="color:#777;">Email Verify</span></button>
                                 </li>

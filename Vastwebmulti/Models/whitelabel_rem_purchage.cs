@@ -29,7 +29,7 @@ namespace Vastwebmulti.Models
         public string crests { get; set; }
         public string orderno { get; set; }
         public string type_ { get; set; }
-        public decimal comm { get; set; }
+        public Nullable<decimal> comm { get; set; }
         public string Toaccountno { get; set; }
         public string Fromaccountno { get; set; }
         public string Slip { get; set; }

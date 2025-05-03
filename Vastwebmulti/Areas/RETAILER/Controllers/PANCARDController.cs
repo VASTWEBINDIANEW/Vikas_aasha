@@ -1174,7 +1174,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         Email = retailerdetails.Email,
                         Mobile = retailerdetails.Mobile,
                         Details = "Pan Card Buy ",
-                        RemainBalance = remdetails.Remainamount,
+                        RemainBalance = (decimal)remdetails.Remainamount,
                         Usertype = "Retailer"
                     };
                     back.Pancard(modeln);
@@ -1247,7 +1247,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 Email = retailerdetails.Email,
                                 Mobile = retailerdetails.Mobile,
                                 Details = "PAn Card Refund ",
-                                RemainBalance = remdetails.Remainamount,
+                                RemainBalance = (decimal)remdetails.Remainamount,
                                 Usertype = "Retailer"
                             };
                             back.Pancard(modeln);

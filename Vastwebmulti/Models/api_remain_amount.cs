@@ -16,7 +16,7 @@ namespace Vastwebmulti.Models
     {
         public string apiid { get; set; }
         public string groupname { get; set; }
-        public decimal balance { get; set; }
+        public Nullable<decimal> balance { get; set; }
         public Nullable<System.DateTime> date { get; set; }
         public int idno { get; set; }
     }

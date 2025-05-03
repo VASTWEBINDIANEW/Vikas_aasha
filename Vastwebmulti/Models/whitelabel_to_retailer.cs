@@ -16,14 +16,14 @@ namespace Vastwebmulti.Models
     {
         public int idno { get; set; }
         public string retailerid { get; set; }
-        public decimal balance { get; set; }
-        public decimal whitelabelpre { get; set; }
-        public decimal whitelabelpost { get; set; }
-        public decimal retaileridpre { get; set; }
-        public decimal retaileridpost { get; set; }
+        public Nullable<decimal> balance { get; set; }
+        public Nullable<decimal> whitelabelpre { get; set; }
+        public Nullable<decimal> whitelabelpost { get; set; }
+        public Nullable<decimal> retaileridpre { get; set; }
+        public Nullable<decimal> retaileridpost { get; set; }
         public System.DateTime transfer_date { get; set; }
         public string baltype { get; set; }
-        public decimal oldcrbal { get; set; }
+        public Nullable<decimal> oldcrbal { get; set; }
         public string comment { get; set; }
         public string whitelabelid { get; set; }
         public string dealer_id { get; set; }
