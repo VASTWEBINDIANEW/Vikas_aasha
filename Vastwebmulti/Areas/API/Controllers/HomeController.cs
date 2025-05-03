@@ -2492,19 +2492,16 @@ namespace Vastwebmulti.Areas.API.Controllers
             string to_date = Convert.ToDateTime(txt_to_date1).AddDays(1).ToString();
             var ledger = db.Retailer_Cr_Dr_Report("API", userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
             return View(ledger);
-
         }
         [HttpPost]
-        public ActionResult Ledger_Report(string txt_frm_date)
+        public ActionResult Ledger_Report(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
             ViewBag.chk = "post";
             string txtfrm = DateTime.Now.Date.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString();
-            string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
-            var ledger = db.Retailer_Cr_Dr_Report("API", userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+            txt_to_date = txt_to_date.AddDays(1);
+            var ledger = db.Retailer_Cr_Dr_Report("API", userid, txt_frm_date, txt_to_date).ToList();
             return View(ledger);
-
         }
         public ActionResult ExcelLedger_Report(string txt_frm_date)
         {

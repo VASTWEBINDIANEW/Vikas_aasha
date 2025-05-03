@@ -32,6 +32,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse responsecheck = client.Execute(request);
             return responsecheck;
         }
+     
         public IRestResponse WalletUnloadrRquest(string token, string Email, decimal Amount, string comment, string AccountNo, string Bankname,string Ifsccode,string Accountholdername,string RequestId,string Type)
         {
             var client = new RestClient(VastbazaarBaseUrl + "api/Unload/WalletUnloaduserNew");

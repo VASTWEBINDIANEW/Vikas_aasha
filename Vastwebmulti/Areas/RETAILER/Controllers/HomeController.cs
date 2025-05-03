@@ -1007,54 +1007,27 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View(ch);
         }
         [HttpPost]
-        public ActionResult Actual_Retailer_income(string txt_frm_date)
+        public ActionResult Actual_Retailer_income(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_frm_date);
+            txt_to_date = txt_to_date.AddDays(1);
             ViewBag.chk = "post";
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            var txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            string frm_date = Convert.ToDateTime(dt).ToShortDateString();
-            string to_date = Convert.ToDateTime(dt1).AddDays(1).ToString();
-            var ch = db.show_all_user_income(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), "Retailer", userid).ToList();
+            var ch = db.show_all_user_income(txt_frm_date, txt_to_date, "Retailer", userid).ToList();
             return View(ch);
         }
-        public ActionResult PDF_Actual_Retailer_income(string txt_frm_date)
+        public ActionResult PDF_Actual_Retailer_income(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_frm_date);
             ViewBag.chk = "post";
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            var txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            string frm_date = Convert.ToDateTime(dt).ToShortDateString();
-            string to_date = Convert.ToDateTime(dt1).AddDays(1).ToString();
-            var ch = db.show_all_user_income(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), "Retailer", userid).ToList();
+            txt_to_date = txt_to_date.AddDays(1);
+            var ch = db.show_all_user_income(txt_frm_date, txt_to_date, "Retailer", userid).ToList();
             return new ViewAsPdf(ch);
         }
-        public ActionResult Excel_Actual_Retailer_income(string txt_frm_date)
+        public ActionResult Excel_Actual_Retailer_income(DateTime txt_frm_date, DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_frm_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            var txt_to_date = to.ToString("dd-MM-yyyy");
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            string frm_date = Convert.ToDateTime(dt).ToShortDateString();
-            string to_date = Convert.ToDateTime(dt1).AddDays(1).ToString();
-            var ch = db.show_all_user_income(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), "Retailer", userid).ToList();
+            txt_to_date = txt_to_date.AddDays(1);
+            var ch = db.show_all_user_income(txt_frm_date, txt_to_date, "Retailer", userid).ToList();
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Type", typeof(string));
             dataTbl.Columns.Add("Total Success", typeof(string));
@@ -2399,6 +2372,211 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                 rchitem.proceeddate = DateTime.Now;
                                                 rchitem.rch_sts = status;
                                                 db.SaveChanges();
+                                            }
+                                            else if(url.ToUpper().Contains("MOBIKWIK"))
+                                            {
+                                                mobikwikRecharge mv = new mobikwikRecharge();
+                                                int idnn11 = 0;
+                                                idno = (from rch in db.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                                                idnn11 = Convert.ToInt32(idno);
+                                                string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                                                var apioptcode = db.SRS_API.Where(aa => aa.api.ToUpper().Contains("MOBIKWIK") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                                                var responsechk1 = mv.BillValidate(mobileno, apioptcode, Amount, optional1, optional2, CommonTranid);
+                                                if (responsechk1.StatusCode == HttpStatusCode.OK)
+                                                {
+                                                    //var respchkk = mv.BillPayment(mobileno, apioptcode, Amount, optional1, optional2, CommonTranid);
+                                                    //if(respchkk.StatusCode==HttpStatusCode.OK)
+                                                    //{
+                                                    //    dynamic dyresp = JsonConvert.DeserializeObject(respchkk.Content);
+                                                    //}
+
+                                                    var responsechk = responsechk1.Content.ToString();
+                                                    var Request = responsechk1.Request.Parameters[2].Value;
+                                                    var ReqUrl = url + "  RequestBody : " + Request;
+                                                    dynamic json = JsonConvert.DeserializeObject(responsechk);
+                                                    var respcode = json.Content.ResponseCode.ToString();
+                                                    var ADDINFO = json.Content.ADDINFO.ToString();
+                                                    dynamic json1 = JsonConvert.DeserializeObject(ADDINFO);
+                                                    webcontent = json1.ToString();
+                                                    Recharge_info objCourse = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
+                                                    objCourse.Recharge_response = json1.ToString();
+                                                    objCourse.Recharge_request = ReqUrl;
+                                                    objCourse.Order_id = CommonTranid.ToString();
+                                                    db.SaveChanges();
+                                                    var status = json1.STATUS.ToString();
+                                                    var _price = (string)json1.PRICE.ToString();
+                                                    var errormsg = json1.ERRORMSG.ToString();
+                                                    var TRANSID = (string)json1.TRANSID.ToString();
+                                                    decimal PRICE = 0;
+                                                    try
+                                                    {
+                                                        PRICE = Convert.ToDecimal(_price);
+                                                    }
+                                                    catch { }
+                                                    if (status == "Success")
+                                                    {
+                                                        status = "Success";
+                                                        db.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, json.ToString(), "Response");
+                                                        var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge Success " + mobileno + ". Amount " + Amount + ". Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+                                                        smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                        if (Emailstatusretailerrechargesuccess == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Success.";
+                                                    }
+                                                    else if (status == "Failed")
+                                                    {
+                                                        var optcodei = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                                        var show = db.failed_recharge_move.Where(aa => aa.operator_code == optcodei && aa.status == "Y").SingleOrDefault();
+                                                        if (show == null)
+                                                        {
+                                                            status = "Failed";
+                                                            db.recharge_update(idnn11.ToString(), status, TRANSID, PRICE, webcontent, "Response");
+
+                                                            try
+                                                            {
+                                                                var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                                                var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                                                                var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+
+                                                                var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                                                                var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                                                                var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+
+                                                                var admininfo = db.Admin_details.SingleOrDefault();
+                                                                Backupinfo back = new Backupinfo();
+                                                                var model = new Backupinfo.Addinfo
+                                                                {
+                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                    RetailerID = userid,
+                                                                    Email = retailerdetails.Email,
+                                                                    Mobile = retailerdetails.Mobile,
+                                                                    Details = "Refund Recharge " + mobileno + " Amount " + amount,
+                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    Usertype = "Retailer"
+                                                                };
+                                                                back.Rechargeandutility(model);
+
+                                                                var model1 = new Backupinfo.Addinfo
+                                                                {
+                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                    RetailerID = dealerdetails.DealerId,
+                                                                    Email = dealerdetails.Email,
+                                                                    Mobile = dealerdetails.Mobile,
+                                                                    Details = "Refund Recharge " + mobileno + " Amount " + amount,
+                                                                    RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                                                                    Usertype = "Dealer"
+                                                                };
+                                                                back.Rechargeandutility(model1);
+
+                                                                var model2 = new Backupinfo.Addinfo
+                                                                {
+                                                                    Websitename = admininfo.WebsiteUrl,
+                                                                    RetailerID = masterdetails.SSId,
+                                                                    Email = masterdetails.Email,
+                                                                    Mobile = masterdetails.Mobile,
+                                                                    Details = "Refund Recharge " + mobileno + " Amount " + amount,
+                                                                    RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                                                                    Usertype = "Master"
+                                                                };
+                                                                back.Rechargeandutility(model2);
+                                                            }
+                                                            catch { }
+
+                                                            var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                            if (statusRetailer == "Y")
+                                                            {
+                                                                SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                            }
+                                                            smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                            if (Emailstatusretailerrechargefailed == "Y")
+                                                            {
+                                                                smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                            }
+                                                            responsemsg = "Recharge Failed.";
+                                                        }
+                                                        else
+                                                        {
+                                                            var outputchk = backup.recharge(mobileno, OptCode, ammt, userid, idnn11, optcodei, OrderId, ref TRANSID);
+                                                            if (outputchk == "SUCCESS")
+                                                            {
+                                                                var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                smssend.sms_init(statusretailerrechargesuccess.Status, statusretailerrechargesuccess.Whatsapp_Status, "RECHARGESUCCESS", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                                if (Emailstatusretailerrechargesuccess == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge Success " + mobileno + ".Amount " + Amount + ".Transaction id: " + TRANSID + ".Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                                responsemsg = "Recharge Process Successfully.";
+                                                            }
+                                                            else if (outputchk == "FAILED")
+                                                            {
+                                                                responsemsg = "Recharge Failed.";
+                                                                var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                                if (Emailstatusretailerrechargefailed == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
+                                                                obj.Recharge_response = webcontent.ToString();
+                                                                db.SaveChanges();
+                                                                var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                                if (statusRetailer == "Y")
+                                                                {
+                                                                    SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                                }
+                                                                smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+                                                                if (EmailstatusretailerrechargeProccess == "Y")
+                                                                {
+                                                                    smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                                }
+                                                                responsemsg = "Recharge Process Successfully.";
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                        if (statusRetailer == "Y")
+                                                        {
+                                                            SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                        }
+                                                        smssend.sms_init(statusretailerrechargeProccess.Status, statusretailerrechargeProccess.Whatsapp_Status, "RECHARGEPENDING", RetailerDetails.Mobile, mobileno, Amount, remainbal);
+                                                        if (EmailstatusretailerrechargeProccess == "Y")
+                                                        {
+                                                            smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ". Amount :" + Amount + " is In Process. Balance is Rs." + remainbal + "", "Recharge", AdminEmail);
+                                                        }
+                                                        responsemsg = "Recharge Pending.";
+                                                    }
+                                                    rchitem.Status = "Proceed";
+                                                    rchitem.Reason = responsemsg;
+                                                    rchitem.proceeddate = DateTime.Now;
+                                                    rchitem.rch_sts = status;
+                                                    db.SaveChanges();
+                                                }
+                                                else
+                                                {
+                                                    var TRANSID = "Recharge Failed";
+                                                    var remainbal = db.Remain_reteller_balance.Where(r => r.RetellerId == userid).Single().Remainamount;
+                                                    if (statusRetailer == "Y")
+                                                    {
+                                                        SendPushNotification(useridEmail, "Home/RechargeReport", "Recharge of " + mobileno + ". Amount :" + Amount + " is FAILED. Transaction id: " + TRANSID + ". Balance is Rs." + remainbal + "", "Recharge Response..");
+                                                    }
+                                                    smssend.sms_init(statusretailerrechargefailed.Status, statusretailerrechargefailed.Whatsapp_Status, "RECHARGEFAILED", RetailerDetails.Mobile, mobileno, Amount, TRANSID, remainbal);
+                                                    if (Emailstatusretailerrechargefailed == "Y")
+                                                    {
+                                                        smssend.SendEmailAll(RetailerDetails.Email, "Recharge of " + mobileno + ".Amount :" + Amount + " is FAILED.Transaction id: " + TRANSID + ". Remain Balance is :" + remainbal + "", "Recharge", AdminEmail);
+                                                    }
+                                                    responsemsg = "Recharge Failed.";
+                                                }
                                             }
                                             else if (url.ToUpper().Contains("INSTANTPAY.IN/WS/BBPS"))
                                             {
@@ -7869,6 +8047,57 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     };
                                     responsemsg = JsonConvert.SerializeObject(data);
                                 }
+                            }
+                        }
+                        else if(api.ToUpper().Contains("MOBIKWIK"))
+                        {
+                            string CommonTranid = "E" + DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
+                            var apioptcode = db.SRS_API.Where(aa => aa.api.ToUpper().Contains("MOBIKWIK") && aa.opt_code == OptCode).SingleOrDefault().apioptcode;
+                            mobikwikRecharge vb = new mobikwikRecharge();
+                            var responsechk1 = vb.Viewbill(mobileno, apioptcode, optional1, optional2);
+                            if (responsechk1.StatusCode == HttpStatusCode.OK)
+                            {
+                                dynamic dyresp = JsonConvert.DeserializeObject(responsechk1.Content);
+                                var apirespsts = dyresp.success;
+                                if (apirespsts == true)
+                                {
+                                  var  CustomerName = dyresp.data.userName;
+                                   var DueDate = dyresp.data.dueDate;
+                                   var Amt = dyresp.data.billnetamount;
+                                    var data = new
+                                    {
+                                        Response = "SUCCESS",
+                                        Price = Convert.ToString(Amt),
+                                        billduedate = Convert.ToString(DueDate),
+                                        DisplayValues = JsonConvert.SerializeObject(CustomerName)
+                                    };
+                                    responsemsg = JsonConvert.SerializeObject(data);
+                                }
+                                else
+                                {
+                                    var errormsg = "";
+                                    try
+                                    {
+                                        errormsg = dyresp.message.text;
+                                    }
+                                    catch { }
+                                    var data = new
+                                    {
+                                        Message = errormsg,
+                                        Response = "ERROR"
+                                    };
+                                    responsemsg = JsonConvert.SerializeObject(data);
+
+                                }
+                            }
+                            else
+                            {
+                                var data = new
+                                {
+                                    Message = "View Bill Response Error.",
+                                    Response = "ERROR"
+                                };
+                                responsemsg = JsonConvert.SerializeObject(data);
                             }
                         }
                         else if (api.ToUpper().Contains("INSTANTPAY.IN/WS/API/TRANSACTION"))
@@ -15903,6 +16132,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var json = JsonConvert.SerializeObject(json1);
             return Json(json, JsonRequestBehavior.AllowGet);
         }
+
+
         #region Micro ATM
         public ActionResult MicroATM()
         {
@@ -15940,32 +16171,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                             }
@@ -16031,32 +16236,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                             }
@@ -16120,32 +16299,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                                 else
@@ -16340,7 +16493,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             merCrt.Email = remdetails.Email;
                             merCrt.Bankaccountno = remdetails.Bankaccountno;
                             merCrt.Ifsccode = remdetails.Ifsccode;
-                            merCrt.aadhar_number = remdetails.AadharCard;
                             merCrt.DOB = DOBS.ToString("yyyy-MM-dd"); //Convert.ToDateTime(remdetails.dateofbirth).ToString("dd-MM-yyyy");//("yyyy-MM-dd");
                             var panpath = microATM.GetCurrentUrl() + remdetails.pancardPath.Replace(@"//", @"/");
                             merCrt.PanPath = panpath.ToLower(); //----path
@@ -16637,45 +16789,48 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     remdetails.RetailerName = remusrname;
                     remdetails.PanCard = rempanname;
                     var count = db.SaveChanges();
-                    if (count > 0)
-                    {
-                        var chkk = db.microATM_merch_termi_Info.Where(a => a.Userid == userid && a.status.ToUpper() == "PENDING").OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
-                        var token = string.Empty;
-                        token = getAuthToken();
-                        DateTime DOBS;
-                        string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                    //if (count > 0)
+                    //{
+                    var chkk = db.microATM_merch_termi_Info.Where(a => a.Userid == userid && a.status.ToUpper() == "PENDING").OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
+                    var token = string.Empty;
+                    token = getAuthToken();
+                    DateTime DOBS;
+                    string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
                             "yyyy-MM-dd", "dd-MM-yyyy", "MM-dd-yyyy", "dd MMM yyyy" ,"dd-MM-yyyy HH:mm:ss"};
-                        DateTime dt = !string.IsNullOrWhiteSpace(remdetails.dateofbirth) ? DateTime.ParseExact(remdetails.dateofbirth, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-                        DOBS = Convert.ToDateTime(dt).Date;
-                        MerchantCreate merCrt = new MerchantCreate();
-                        merCrt.Name = remdetails.RetailerName;
-                        merCrt.BrandName = remdetails.Frm_Name;
-                        merCrt.Address = remdetails.Address;
-                        merCrt.Pincode = remdetails.Pincode;
-                        merCrt.PanCard = remdetails.PanCard;
-                        merCrt.Mobile = remdetails.Mobile;
-                        merCrt.Email = remdetails.Email;
-                        merCrt.aadhar_number = remdetails.AadharCard;
-                        merCrt.DOB = DOBS.ToString("yyyy-MM-dd"); //Convert.ToDateTime(remdetails.dateofbirth).ToString("dd-MM-yyyy");//("yyyy-MM-dd");
-                        var panpath = microATM.GetCurrentUrl() + remdetails.pancardPath.Replace(@"//", @"/");
-                        merCrt.PanPath = panpath.ToLower(); //----path
-                        merCrt.PanFileName = remdetails.pancardPath.Replace("//Retailer_image//", "");//----fileName
-                        var AadharPaths = microATM.GetCurrentUrl() + remdetails.aadharcardPath.Replace(@"//", @"/");
-                        merCrt.AadharPath = AadharPaths.ToLower();//microATM.GetCurrentUrl() + remdetails.aadharcardPath;//----path
-                        merCrt.AadharFileName = remdetails.aadharcardPath.Contains("/Retailer_image/") == true ? remdetails.aadharcardPath.Replace("/Retailer_image/", "") : remdetails.aadharcardPath.Replace("\\Retailer_image\\", "");//----fileName
-                        var cancellcheckss = microATM.GetCurrentUrl() + cancllcheckpath.CancelCheckFile.Replace(@"//", @"/");
-                        merCrt.CancelCheckpath = cancellcheckss.ToLower();//microATM.GetCurrentUrl() + remdetails.aadharcardPath;//----path
-                        merCrt.CancelCheckFileName = cancllcheckpath.CancelCheckFile.Contains("/Retailer_image/") == true ? cancllcheckpath.CancelCheckFile.Replace("/Retailer_image/", "") : cancllcheckpath.CancelCheckFile.Replace("\\Retailer_image\\", "");//----fileName
-                        merCrt.vbtoken = token;
-                        merCrt.MerchantCode = remdetails.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b1" : remdetails.microATM_MCC_CODE; //5411	Grocery Stores, Supermarkets	5f293542d0962a0d379428b1																					
-                        var Merchantupdate = micro.MerchantUpdate(merCrt, chkk.MerchantId);
-                        var MerchantSubmitResponse = micro.MerchantSubmit(chkk.MerchantId, token);
-                        return Json(new { status = "Success", msg = "Pending" }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        return Json(new { status = "Failed", msg = "Pan Card And Name Not Update" }, JsonRequestBehavior.AllowGet);
-                    }
+                    DateTime dt = !string.IsNullOrWhiteSpace(remdetails.dateofbirth) ? DateTime.ParseExact(remdetails.dateofbirth, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+                    DOBS = Convert.ToDateTime(dt).Date;
+                    MerchantCreate merCrt = new MerchantCreate();
+                    merCrt.Name = remdetails.RetailerName;
+                    merCrt.BrandName = remdetails.Frm_Name;
+                    merCrt.Address = remdetails.Address;
+                    merCrt.Pincode = remdetails.Pincode;
+                    merCrt.PanCard = remdetails.PanCard;
+                    merCrt.Mobile = remdetails.Mobile;
+                    merCrt.Email = remdetails.Email;
+                    merCrt.Bankaccountno = cancllcheckpath.BankAccountNo;
+                    merCrt.Ifsccode = cancllcheckpath.IFSC_CODE;
+                    merCrt.aadhar_number = remdetails.AadharCard;
+                    merCrt.DOB = DOBS.ToString("yyyy-MM-dd"); //Convert.ToDateTime(remdetails.dateofbirth).ToString("dd-MM-yyyy");//("yyyy-MM-dd");
+                    var panpath = microATM.GetCurrentUrl() + remdetails.pancardPath.Replace(@"//", @"/");
+                    merCrt.PanPath = panpath.ToLower(); //----path
+                    merCrt.PanFileName = remdetails.pancardPath.Replace("//Retailer_image//", "");//----fileName
+                    var AadharPaths = microATM.GetCurrentUrl() + remdetails.aadharcardPath.Replace(@"//", @"/");
+                    merCrt.AadharPath = AadharPaths.ToLower();//microATM.GetCurrentUrl() + remdetails.aadharcardPath;//----path
+                    merCrt.AadharFileName = remdetails.aadharcardPath.Contains("/Retailer_image/") == true ? remdetails.aadharcardPath.Replace("/Retailer_image/", "") : remdetails.aadharcardPath.Replace("\\Retailer_image\\", "");//----fileName
+                    var cancellcheckss = microATM.GetCurrentUrl() + cancllcheckpath.CancelCheckFile.Replace(@"//", @"/");
+                    merCrt.CancelCheckpath = cancellcheckss.ToLower();//microATM.GetCurrentUrl() + remdetails.aadharcardPath;//----path
+                    merCrt.CancelCheckFileName = cancllcheckpath.CancelCheckFile.Contains("/Retailer_image/") == true ? cancllcheckpath.CancelCheckFile.Replace("/Retailer_image/", "") : cancllcheckpath.CancelCheckFile.Replace("\\Retailer_image\\", "");//----fileName
+                    merCrt.vbtoken = token;
+                    merCrt.MerchantCode = remdetails.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b1" : remdetails.microATM_MCC_CODE; //5411	Grocery Stores, Supermarkets	5f293542d0962a0d379428b1																					
+                    var Merchantupdate = micro.MerchantUpdate(merCrt, chkk.MerchantId);
+                    var MerchantSubmitResponse = micro.MerchantSubmit(chkk.MerchantId, token);
+                    return Json(new { status = "Success", msg = "Pending" }, JsonRequestBehavior.AllowGet);
+                    //}
+                    //else
+                    //{
+                    //    return Json(new { status = "Failed", msg = "Pan Card And Name Not Update" }, JsonRequestBehavior.AllowGet);
+                    //}
+
                 }
                 else
                 {
@@ -16891,6 +17046,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         #endregion
+
+
+
+
         #region Gift Card
         public ActionResult ALL_CARDS()
         {
@@ -43612,7 +43771,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                     var viewresponse = new { Status = "Failed", Message = "Failed at provider server.", userinfo = reminfo };
                                                     return Json(viewresponse, JsonRequestBehavior.AllowGet);
                                                 }
-                                                var clientnew = new RestClient("http://api.vastbazaar.com//api/SBAAEPS/Aepsmove");
+                                                var clientnew = new RestClient("http://api.vastbazaar.com/api/SBAAEPS/Aepsmove");
                                                 clientnew.Timeout = -1;
                                                 var requestnew = new RestRequest(Method.POST);
                                                 requestnew.AddHeader("Type", "Balance");
@@ -52433,49 +52592,43 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             return View(rep);
         }
         [HttpPost]
-        public ActionResult Retailer_Daybook_Report(string txt_frm_date)
+        public ActionResult Retailer_Daybook_Report(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
             ViewBag.chk = "post";
             Daybookretailerrreport rep = new Daybookretailerrreport();
-            string txtfrm = DateTime.Now.Date.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString();
-            string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
-            if (txtfrm == frm_date)
+            txt_to_date = txt_to_date.AddDays(1);
+            if (DateTime.Now.Date == txt_frm_date.Date)
             {
-                rep.Daybooklive = db.Retailer_daybook_report_live(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.Daybooklive = db.Retailer_daybook_report_live(userid, txt_frm_date, txt_to_date).ToList();
             }
             else
             {
-                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, txt_frm_date, txt_to_date).ToList();
             }
             return View(rep);
         }
-        public ActionResult PDF_Retailer_Day_Book_Report(string txt_frm_date)
+        public ActionResult PDF_Retailer_Day_Book_Report(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
             ViewBag.chk = "post";
             Daybookretailerrreport rep = new Daybookretailerrreport();
-            string txtfrm = DateTime.Now.Date.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString();
-            string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
-            if (txtfrm == frm_date)
+            txt_to_date = txt_to_date.AddDays(1);
+            if (DateTime.Now.Date == txt_frm_date.Date)
             {
-                rep.Daybooklive = db.Retailer_daybook_report_live(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.Daybooklive = db.Retailer_daybook_report_live(userid, txt_frm_date, txt_to_date).ToList();
             }
             else
             {
-                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, txt_frm_date, txt_to_date).ToList();
             }
             return new ViewAsPdf(rep);
         }
-        public ActionResult Excel_Retailer_Daybook_Report(string txt_frm_date)
+        public ActionResult Excel_Retailer_Daybook_Report(DateTime txt_frm_date,DateTime txt_to_date)
         {
             var userid = User.Identity.GetUserId();
             Daybookretailerrreport rep = new Daybookretailerrreport();
-            string txtfrm = DateTime.Now.Date.ToString();
-            string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString();
-            string to_date = Convert.ToDateTime(txt_frm_date).AddDays(1).ToString();
+            txt_to_date = txt_to_date.AddDays(1);
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Firm Name", typeof(string));
             dataTbl.Columns.Add("Recharge & Bill", typeof(string));
@@ -52490,13 +52643,13 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             dataTbl.Columns.Add("Old Day Refund", typeof(string));
             dataTbl.Columns.Add("Old Day Failed", typeof(string));
             dataTbl.Columns.Add("Diff", typeof(string));
-            if (txtfrm == frm_date)
+            if (DateTime.Now.Date == txt_frm_date.Date)
             {
-                rep.Daybooklive = db.Retailer_daybook_report_live(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.Daybooklive = db.Retailer_daybook_report_live(userid, txt_frm_date, txt_to_date).ToList();
             }
             else
             {
-                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date)).ToList();
+                rep.DayboolOLD = db.Retailer_daybook_report_Old(userid, txt_frm_date, txt_to_date).ToList();
             }
             if (rep.Daybooklive.Count() > 0)
             {

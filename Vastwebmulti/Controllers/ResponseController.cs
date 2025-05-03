@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -4700,7 +4701,7 @@ namespace Vastwebmulti.Controllers
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
                     }
-                    else if(Type== "DMT-WALLET-MONEY-V2-UPDATE")
+                    else if (Type == "DMT-WALLET-MONEY-V2-UPDATE")
                     {
                         var mobile = Status;
                         var Amount = Reqid;
@@ -4718,15 +4719,36 @@ namespace Vastwebmulti.Controllers
                         string utr = dyrespchk.utr;
                         string agentinfo = dyrespchk.agentinfo;
                         var entryinfochk = dbsrs.IMPS_transtion_detsils.Where(aa => aa.trans_id == agentinfo).SingleOrDefault();
-                         if(entryinfochk!=null)
+                        if (entryinfochk != null)
                         {
                             if (entryinfochk.Status.ToUpper() == "PENDING")
                             {
-                                entryinfochk.accountno = account;
-                                entryinfochk.ifsccode = ifsccode;
-                                entryinfochk.bank_nm = bankname;
-                                entryinfochk.recivername = benname;
-                                dbsrs.SaveChanges();
+
+                                if (response_code == "0")
+                                {
+                                    entryinfochk.accountno = account;
+                                    entryinfochk.ifsccode = ifsccode;
+                                    entryinfochk.bank_nm = bankname;
+                                    entryinfochk.recivername = benname;
+                                    dbsrs.SaveChanges();
+                                }
+                                else if (response_code == "1")
+                                {
+                                    var statuschk = "Pending";
+                                    if (txn_status == "0")
+                                    {
+                                        statuschk = "Failed";
+                                    }
+                                    else if (txn_status == "1")
+                                    {
+                                        statuschk = "Success";
+                                    }
+                                    if (statuschk == "Success" || statuschk == "Failed")
+                                    {
+                                        dbsrs.Money_transfer_update_new_new(agentinfo, statuschk, utr, benname, "", "", 0, 0);
+                                    }
+
+                                }
                                 var resp = new
                                 {
                                     status = true,
@@ -4751,11 +4773,31 @@ namespace Vastwebmulti.Controllers
                             {
                                 if (entryinfochkold.Status.ToUpper() == "PENDING")
                                 {
-                                    entryinfochkold.accountno = account;
-                                    entryinfochkold.ifsccode = ifsccode;
-                                    entryinfochkold.bank_nm = bankname;
-                                    entryinfochkold.recivername = benname;
-                                    dbsrs.SaveChanges();
+                                    if (response_code == "0")
+                                    {
+                                        entryinfochkold.accountno = account;
+                                        entryinfochkold.ifsccode = ifsccode;
+                                        entryinfochkold.bank_nm = bankname;
+                                        entryinfochkold.recivername = benname;
+                                        dbsrs.SaveChanges();
+                                    }
+                                    else if (response_code == "1")
+                                    {
+                                        var statuschk = "Pending";
+                                        if (txn_status == "0")
+                                        {
+                                            statuschk = "Failed";
+                                        }
+                                        else if (txn_status == "1")
+                                        {
+                                            statuschk = "Success";
+                                        }
+                                        if (statuschk == "Success" || statuschk == "Failed")
+                                        {
+                                            dbsrs.Money_transfer_update_new_new_old(agentinfo, statuschk, utr, benname, "", "", 0, 0);
+                                        }
+
+                                    }
                                     var resp = new
                                     {
                                         status = true,
@@ -10513,37 +10555,44 @@ namespace Vastwebmulti.Controllers
             return str;
         }
         
-        public void test()
+        public  string test()
         {
-               string radianttoken="";
-               string radianagentid="";
-            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            AppNotification app = new AppNotification();
+           var resp= app.sendmessage("","NOtification Test CHeck");
+            return resp;
+        }
+        public void insertGeoLocation(string userid, out string lat, out string longitude)
+        {
+            lat = string.Empty;
+            longitude = string.Empty;
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11|SecurityProtocolType.Tls12;
+            var client = new RestClient("https://ipinfo.io");
+            var request = new RestRequest(Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddHeader("content-type", "text/plain");
+            request.AddHeader("cache-control", "no-cache");
+            IRestResponse response = client.Execute(request);
+            dynamic respoJson = JsonConvert.DeserializeObject(response.Content);
+            //dynamic respoJson = JsonConvert.DeserializeObject("{\"Version\":\"1.0\",\"StatusCode\":200,\"Content\":{\"ResponseCode\":0,\"ADDINFO\":{\"status\":true,\"message\":\"Request Completed\",\"data\":{\"terminalId\":\"FA026069\",\"requestTransactionTime\":\"26\/09\/2018 10:26:58\",\"transactionAmount\":0.0,\"transactionStatus\":\"successful\",\"balanceAmount\":4408.83,\"bankRRN\":\"826910115647\",\"transactionType\":\"BE\",\"fpTransactionId\":\"826910115647\"},\"statusCode\":10000}}}");
+            if (response.StatusCode == HttpStatusCode.OK && !string.IsNullOrWhiteSpace(response.Content))
             {
-                 
-        var infochk = db.Rem_UPI_REQUEST.Where(aa => aa.status == "PENDING" && aa.Bankrrn == "RADIANTQR").ToList();
-                foreach (var item in infochk)
-                {
-                    Radiantdmt radi = new Radiantdmt();
-                    var tokenchk = db.radianttokens.SingleOrDefault();
-                    var radiantauthchk = db.radiantauths.SingleOrDefault();
-                    var radiantresponse = db.rediantremtresponses.Where(aa => aa.userid == item.retailerid).SingleOrDefault();
-                    if (tokenchk == null)
-                    {
-                        radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                    }
-                    else
-                    {
-                        radianttoken = tokenchk.accessToken;
-                        radianagentid = tokenchk.agentID;
-                    }
-                    var respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
-                    if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
-                    {
-                        radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                        respchk = radi.UPIATMstatusCheck(radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radianttoken, item.UPITXNID);
-                    }
-
-                }
+                string loc = Convert.ToString(respoJson.loc);
+                string[] latlong = loc.Split(new char[] { ',' });
+                //UserLocation entry = new UserLocation();
+                //entry.RetailerId = userid;
+                //entry.Address = "";
+                //entry.City = respoJson.city;
+                //entry.country = respoJson.country;
+                //entry.IP = respoJson.ip;
+                //entry.Lattitude = latlong[0];
+                //entry.Longitute = latlong[1];
+                //entry.postal = respoJson.postal;
+                //entry.CreatedOn = DateTime.Now;
+                //entry.UpdatedOn = DateTime.Now;
+                //db.UserLocations.Add(entry);
+                //db.SaveChanges();
+                lat = latlong[0];
+                longitude = latlong[1];
             }
         }
         public string GetMACAddress()

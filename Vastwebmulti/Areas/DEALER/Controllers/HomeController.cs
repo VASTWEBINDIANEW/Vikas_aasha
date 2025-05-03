@@ -30,6 +30,8 @@ using Vastwebmulti.Models;
 using System.Net;
 using Org.BouncyCastle.Asn1.Mozilla;
 using com.google.gson;
+using static QRCoder.PayloadGenerator;
+using static Vastwebmulti.Areas.ADMIN.Controllers.HomeController;
 
 namespace Vastwebmulti.Areas.DEALER.Controllers
 {
@@ -42,6 +44,7 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        VastBazaartoken Responsetoken = new VastBazaartoken();
         public ApplicationSignInManager SignInManager
         {
             get
@@ -4343,6 +4346,50 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                                             if (transaction.UnderlyingTransaction.Connection != null)
                                             {
                                                 transaction.Commit();
+                                                try
+                                                {
+                                                    var dealerinfo = db.Dealer_Details.Where(aa => aa.DealerId == user.Id).SingleOrDefault();
+                                                    var masterinfo = db.Superstokist_details.Where(aa => aa.SSId == dealerinfo.SSId).SingleOrDefault();
+
+                                                    var stateinfo_rem = db.State_Desc.Where(aa => aa.State_id == model.State).SingleOrDefault();
+                                                    var district_rem = db.District_Desc.Where(aa => aa.State_id == model.State && aa.Dist_id == model.District).SingleOrDefault();
+
+                                                    var stateinfo_dlm = db.State_Desc.Where(aa => aa.State_id == dealerinfo.State).SingleOrDefault();
+                                                    var district_dlm = db.District_Desc.Where(aa => aa.State_id == dealerinfo.State && aa.Dist_id == dealerinfo.District).SingleOrDefault();
+
+                                                    var stateinfo_master = db.State_Desc.Where(aa => aa.State_id == masterinfo.State).SingleOrDefault();
+                                                    var district_master = db.District_Desc.Where(aa => aa.State_id == masterinfo.State && aa.Dist_id == masterinfo.District).SingleOrDefault();
+
+                                                    var req = new pininsert
+                                                    {
+                                                        Mobile = model.Mobile,
+                                                        RetailerName = model.Name,
+                                                        Pincode = model.Pincode,
+                                                        Email = model.Email,
+                                                        Address = model.Address,
+                                                        State_name = stateinfo_rem.State_name,
+                                                        Dist_Desc = district_rem.Dist_Desc,
+                                                        Frm_Name = Firmname,
+                                                        DealerName = dealerinfo.DealerName,
+                                                        dlmpin = dealerinfo.Pincode.ToString(),
+                                                        dlmfirm = dealerinfo.FarmName,
+                                                        dlmmobile = dealerinfo.Mobile,
+                                                        dlmstate = stateinfo_dlm.State_name,
+                                                        dealerdistrict = district_dlm.Dist_Desc,
+                                                        dlmemail = dealerinfo.Email,
+                                                        mstername = masterinfo.SuperstokistName,
+                                                        msterfirmname = masterinfo.FarmName,
+                                                        mstermobile = masterinfo.Mobile,
+                                                        msteremail = masterinfo.Email,
+                                                        mstrpin = masterinfo.Pincode.ToString(),
+                                                        msterstatename = stateinfo_master.State_name,
+                                                        msterdistictname = district_master.Dist_Desc,
+                                                        isseleep = false
+                                                    };
+
+                                                    vastbazzarretailer(req);
+                                                }
+                                                catch { }
                                             }
                                         }
                                         else
@@ -4464,6 +4511,77 @@ namespace Vastwebmulti.Areas.DEALER.Controllers
                 }
             }
         }
+
+        public void vastbazzarretailer(pininsert model)
+        {
+            try
+            {
+                var tokenapi = Responsetoken.gettoken();
+
+                var client = new RestClient("http://api.vastbazaar.com/api/Update/Pin");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", "Bearer " + tokenapi);
+                request.AddHeader("Content-Type", "application/json");
+                var tbody = new
+                {
+                    model.Mobile,
+                    model.RetailerName,
+                    model.Pincode,
+                    model.Email,
+                    model.Address,
+                    model.State_name,
+                    model.Dist_Desc,
+                    model.Frm_Name,
+                    model.DealerName,
+                    model.dlmpin,
+                    model.dlmfirm,
+                    model.dlmmobile,
+                    model.dlmstate,
+                    model.dealerdistrict,
+                    model.dlmemail,
+                    model.mstername,
+                    model.msterfirmname,
+                    model.mstermobile,
+                    model.msteremail,
+                    model.mstrpin,
+                    model.msterstatename,
+                    model.msterdistictname,
+                    model.isseleep
+                };
+                var infodata = JsonConvert.SerializeObject(tbody);
+                request.AddParameter("application/json", infodata, ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+            }
+            catch { }
+        }
+
+        public class pininsert
+        {
+            public string Mobile { get; set; }
+            public string RetailerName { get; set; }
+            public string Pincode { get; set; }
+            public string Email { get; set; }
+            public string Address { get; set; }
+            public string State_name { get; set; }
+            public string Dist_Desc { get; set; }
+            public string Frm_Name { get; set; }
+            public string DealerName { get; set; }
+            public string dlmpin { get; set; }
+            public string dlmfirm { get; set; }
+            public string dlmmobile { get; set; }
+            public string dlmstate { get; set; }
+            public string dealerdistrict { get; set; }
+            public string dlmemail { get; set; }
+            public string mstername { get; set; }
+            public string msterfirmname { get; set; }
+            public string mstermobile { get; set; }
+            public string msteremail { get; set; }
+            public string mstrpin { get; set; }
+            public string msterstatename { get; set; }
+            public string msterdistictname { get; set; }
+            public bool isseleep { get; set; }
+        }
+
 
 
 
