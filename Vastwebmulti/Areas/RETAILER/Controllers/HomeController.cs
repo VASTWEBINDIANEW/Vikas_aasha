@@ -2457,7 +2457,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                                                     Email = retailerdetails.Email,
                                                                     Mobile = retailerdetails.Mobile,
                                                                     Details = "Refund Recharge " + mobileno + " Amount " + amount,
-                                                                    RemainBalance = remdetails.Remainamount,
+                                                                    RemainBalance =Convert.ToDecimal(remdetails.Remainamount),
                                                                     Usertype = "Retailer"
                                                                 };
                                                                 back.Rechargeandutility(model);
@@ -16157,6 +16157,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
         }
 
 
+
         #region Micro ATM
         public ActionResult MicroATM()
         {
@@ -16194,32 +16195,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                             }
@@ -16285,32 +16260,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                             }
@@ -16374,32 +16323,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         {
                                             var msg = db.proc_PurchasePaidServices(userid, chkadminperservice.Idno, Status, Message).SingleOrDefault();
                                         }
-                                        try
-                                        {
-                                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                            var remdetails_rem = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                            var admininfo = db.Admin_details.SingleOrDefault();
-                                            Backupinfo back = new Backupinfo();
-                                            var model = new Backupinfo.Addinfo
-                                            {
-                                                Websitename = admininfo.WebsiteUrl,
-                                                RetailerID = userid,
-                                                Email = retailerdetails.Email,
-                                                Mobile = retailerdetails.Mobile,
-                                                Details = "Purchase Service ",
-                                                RemainBalance = (decimal)remdetails_rem.Remainamount,
-                                                Usertype = "Retailer"
-                                            };
-                                            back.info(model);
-
-                                        }
-                                        catch { }
                                     }
                                 }
                                 else
@@ -16931,7 +16854,6 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     //{
                     //    return Json(new { status = "Failed", msg = "Pan Card And Name Not Update" }, JsonRequestBehavior.AllowGet);
                     //}
-
                 }
                 else
                 {
@@ -16943,6 +16865,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(new { status = "Failed", msg = "Error" }, JsonRequestBehavior.AllowGet);
             }
         }
+
         public ActionResult StatusCheck()
         {
             var token = string.Empty;
@@ -16957,6 +16880,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var MerStatus = micro.MerchantStatus(chkk.MerchantId, token);
                     if (MerStatus != null)
                     {
+
                         dynamic json = JsonConvert.DeserializeObject(MerStatus);
                         string status = json.Content.ADDINFO["status"] == null ? json.Content.ADDINFO["message"] : json.Content.ADDINFO["status"];
                         if (status.ToUpper() == "REFER_BACK")
@@ -16979,7 +16903,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 dynamic Terjson = JsonConvert.DeserializeObject(TerStatus);
                                 string Terstatus = Terjson.Content.ADDINFO["status"] == null ? Terjson.Content.ADDINFO["message"] : Terjson.Content.ADDINFO["status"];
                                 bool is_active = (bool)Terjson.Content.ADDINFO["is_active"];
-                                if (status.ToUpper() == "APPROVED" && TerStatus.ToUpper() == "REJECTED")
+                                if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "REJECTED")
                                 {
                                     var merchantId = chkk.MerchantId;
                                     /******** 2) TerminalCreate***********/
@@ -16998,7 +16922,26 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
                                     return Json(jsonResp1, JsonRequestBehavior.AllowGet);
                                 }
-                                else if (status.ToUpper() == "APPROVED" && TerStatus.ToUpper() == "NEW")
+                                else if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "DEACTIVATED")
+                                {
+                                    var merchantId = chkk.MerchantId;
+                                    /******** 2) TerminalCreate***********/
+                                    var TermiCreate = micro.TerminalUpdate(merchantId, remdetails.Address, remdetails.Address, remdetails.Pincode, token);
+                                    dynamic json2 = JsonConvert.DeserializeObject(TermiCreate);
+                                    string TerminalId = json2.Content.ADDINFO["_id"];
+                                    var UpdTerId = db.microATM_merch_termi_Info.Where(a => a.Userid == userid).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
+                                    UpdTerId.TerminalId = TerminalId;
+                                    UpdTerId.MerchantSubmittionStatus = "TerminalCreate";
+                                    db.SaveChanges();
+                                    var TerminalSubmit = micro.TerminalSubmit(TerminalId, token);
+                                    //terminal submit wali appi service with teriminal id
+                                    //return pending
+                                    var results1 = "{'status':'Failed','msg':'Pending'}";
+                                    var TerSubRes1 = JsonConvert.DeserializeObject(results1);
+                                    var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
+                                    return Json(jsonResp1, JsonRequestBehavior.AllowGet);
+                                }
+                                else if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "NEW")
                                 {
                                     var UpdTerId = db.microATM_merch_termi_Info.Where(a => a.Userid == userid).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
                                     var TerminalSubmit = micro.TerminalSubmit(UpdTerId.TerminalId, token);
@@ -17008,18 +16951,46 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
                                     return Json(jsonResp1, JsonRequestBehavior.AllowGet);
                                 }
-                                else if (Terstatus.ToUpper() == "APPROVED")
+                                else if (Terstatus.ToUpper() == "APPROVED" || Terstatus.ToUpper() == "ACTIVATED")
                                 {
                                     string tid = Terjson.Content.ADDINFO["id"];
                                     var updTid = db.microATM_merch_termi_Info.Where(a => a.Userid == userid).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
                                     updTid.t_id = tid;
                                     updTid.status = "APPROVED";
                                     db.SaveChanges();
+                                    try
+                                    {
+                                        var deviceCHK = db.microATM_Device_Info.Where(a => a.userid == userid).SingleOrDefault();
+                                        if (deviceCHK != null)
+                                        {
+                                            var SnNoSubmitResp = micro.ActivateDevice(tid, deviceCHK.Serialno, token);
+                                            dynamic json1 = JsonConvert.DeserializeObject(SnNoSubmitResp);
+                                            string status1 = json1.Content.ADDINFO["status"] == null ? json1.Content.ADDINFO["message"] : json1.Content.ADDINFO["status"];
+                                            if (status1.ToUpper() == "SUCCESS")
+                                            {
+                                                deviceCHK.Merchantid = tid;
+                                                db.SaveChanges();
+
+                                                var merchantlogininfo = db.microATM_LoginId_Pass.Where(aa => aa.userid == userid).SingleOrDefault();
+                                                if (merchantlogininfo != null)
+                                                {
+                                                    db.microATM_LoginId_Pass.Remove(merchantlogininfo);
+                                                    db.SaveChanges();
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                    catch { }
+
+
                                     var results1 = "{'status':'Success','msg':'Merchant and Terminal Successfully Approved.'}";
                                     var TerSubRes1 = JsonConvert.DeserializeObject(results1);
                                     var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
                                     return Json(jsonResp1, JsonRequestBehavior.AllowGet);
                                 }
+
                                 else
                                 {
                                     var results1 = "{'status':'Failed','msg':'Pending.'}";
@@ -17147,6 +17118,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
         }
         #endregion
+
+
+
 
 
 
@@ -23077,6 +23051,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
             }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+            }
 
             var token = string.Empty;
             token = getAuthToken();
@@ -23290,6 +23288,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             var Apiname = "";
             if (Apiname == "RADIANT")
@@ -23550,6 +23572,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             var apinm = "";
 
@@ -23832,24 +23878,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 radianttoken = tokenchk.accessToken;
                                 radianagentid = tokenchk.agentID;
                             }
-                            string lattitude1 = string.Empty;
-                            string longitude1 = string.Empty;
+                      
                             var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            string lattitude = string.Empty;
+                            string longitude = string.Empty;
                             if (retailer1.UserLocation == null)
                             {
-                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                                insertGeoLocation(retailer1.RetailerId, out lattitude, out longitude);
                             }
                             else
                             {
-                                lattitude1 = retailer1.UserLocation.Lattitude;
-                                longitude1 = retailer1.UserLocation.Longitute;
+                                lattitude = retailer1.UserLocation.Lattitude;
+                                longitude = retailer1.UserLocation.Longitute;
+                            }
+                            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                            if (latLong != null)
+                            {
+                                lattitude = latLong.latitude;
+                                longitude = latLong.longitude;
+                            }
+                            else
+                            {
+                                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                                if (Aeps_Update == "TXN")
+                                {
+                                    var data = new Update_Aeps_Info()
+                                    {
+                                        UserId = userid,
+                                        latitude = lattitude,
+                                        longitude = longitude,
+                                        UpdateTime = DateTime.Now,
+                                        status = true,
+                                        RequestFrom = "Web"
+                                    };
+                                    db.Update_Aeps_Info.Add(data);
+                                    db.SaveChanges();
+                                }
                             }
                             var remark = retailer1.Frm_Name;
-                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                             {
                                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             }
                             if (respchk.StatusCode == HttpStatusCode.OK)
                             {
@@ -23939,6 +24010,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
+                }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 if (retailer.AepsMerchandId == "")
                 {
@@ -24185,24 +24280,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 radianttoken = tokenchk.accessToken;
                                 radianagentid = tokenchk.agentID;
                             }
-                            string lattitude1 = string.Empty;
-                            string longitude1 = string.Empty;
+                         
                             var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            string lattitude = string.Empty;
+                            string longitude = string.Empty;
                             if (retailer1.UserLocation == null)
                             {
-                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                                insertGeoLocation(retailer1.RetailerId, out lattitude, out longitude);
                             }
                             else
                             {
-                                lattitude1 = retailer1.UserLocation.Lattitude;
-                                longitude1 = retailer1.UserLocation.Longitute;
+                                lattitude = retailer1.UserLocation.Lattitude;
+                                longitude = retailer1.UserLocation.Longitute;
+                            }
+                            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                            if (latLong != null)
+                            {
+                                lattitude = latLong.latitude;
+                                longitude = latLong.longitude;
+                            }
+                            else
+                            {
+                                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                                if (Aeps_Update == "TXN")
+                                {
+                                    var data = new Update_Aeps_Info()
+                                    {
+                                        UserId = userid,
+                                        latitude = lattitude,
+                                        longitude = longitude,
+                                        UpdateTime = DateTime.Now,
+                                        status = true,
+                                        RequestFrom = "Web"
+                                    };
+                                    db.Update_Aeps_Info.Add(data);
+                                    db.SaveChanges();
+                                }
                             }
                             var remark = retailer1.Frm_Name;
-                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                             {
                                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             }
                             if (respchk.StatusCode == HttpStatusCode.OK)
                             {
@@ -24295,6 +24415,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
+                }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 if (retailer.AepsMerchandId == "")
                 {
@@ -33887,6 +34031,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
             }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+            }
 
             var token = string.Empty;
             token = getAuthToken();
@@ -34098,8 +34266,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             token = getAuthToken();
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
             var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
-            string lattitude = string.Empty;
-            string longitude = string.Empty;
+        
             var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
             if ((Account.AccountNO == "" && Account.IFSC_CODE == "" && Account.BankName == "" && Account.BankAddress == "") || (Account == null))
             {
@@ -34107,6 +34274,8 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var viewresponse = new { Status = "Failed", Message = message };
                 return Json(viewresponse, JsonRequestBehavior.AllowGet);
             }
+            string lattitude = string.Empty;
+            string longitude = string.Empty;
             if (retailer.UserLocation == null)
             {
                 insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -34115,6 +34284,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             var Apiname = "";
             if (Apiname == "RADIANT")
@@ -34375,6 +34568,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             var apinm = "";
 
@@ -34765,24 +34982,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 radianttoken = tokenchk.accessToken;
                                 radianagentid = tokenchk.agentID;
                             }
-                            string lattitude1 = string.Empty;
-                            string longitude1 = string.Empty;
+                     
                             var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            string lattitude = string.Empty;
+                            string longitude = string.Empty;
                             if (retailer1.UserLocation == null)
                             {
-                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                                insertGeoLocation(retailer1.RetailerId, out lattitude, out longitude);
                             }
                             else
                             {
-                                lattitude1 = retailer1.UserLocation.Lattitude;
-                                longitude1 = retailer1.UserLocation.Longitute;
+                                lattitude = retailer1.UserLocation.Lattitude;
+                                longitude = retailer1.UserLocation.Longitute;
+                            }
+                            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                            if (latLong != null)
+                            {
+                                lattitude = latLong.latitude;
+                                longitude = latLong.longitude;
+                            }
+                            else
+                            {
+                                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                                if (Aeps_Update == "TXN")
+                                {
+                                    var data = new Update_Aeps_Info()
+                                    {
+                                        UserId = userid,
+                                        latitude = lattitude,
+                                        longitude = longitude,
+                                        UpdateTime = DateTime.Now,
+                                        status = true,
+                                        RequestFrom = "Web"
+                                    };
+                                    db.Update_Aeps_Info.Add(data);
+                                    db.SaveChanges();
+                                }
                             }
                             var remark = retailer1.Frm_Name;
-                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                             {
                                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AEPS", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             }
                             if (respchk.StatusCode == HttpStatusCode.OK)
                             {
@@ -34871,6 +35113,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     var viewResponse = new { Status = "Failed", Message = message };
                     return Json(viewResponse, JsonRequestBehavior.AllowGet);
                 }
+           
                 if (retailer.UserLocation == null)
                 {
                     insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -34879,6 +35122,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
+                }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 try
                 {
@@ -35214,24 +35481,49 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 radianttoken = tokenchk.accessToken;
                                 radianagentid = tokenchk.agentID;
                             }
-                            string lattitude1 = string.Empty;
-                            string longitude1 = string.Empty;
+                         
                             var retailer1 = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                            string lattitude = string.Empty;
+                            string longitude = string.Empty;
                             if (retailer1.UserLocation == null)
                             {
-                                insertGeoLocation(retailer1.RetailerId, out lattitude1, out longitude1);
+                                insertGeoLocation(retailer1.RetailerId, out lattitude, out longitude);
                             }
                             else
                             {
-                                lattitude1 = retailer1.UserLocation.Lattitude;
-                                longitude1 = retailer1.UserLocation.Longitute;
+                                lattitude = retailer1.UserLocation.Lattitude;
+                                longitude = retailer1.UserLocation.Longitute;
+                            }
+                            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                            if (latLong != null)
+                            {
+                                lattitude = latLong.latitude;
+                                longitude = latLong.longitude;
+                            }
+                            else
+                            {
+                                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                                if (Aeps_Update == "TXN")
+                                {
+                                    var data = new Update_Aeps_Info()
+                                    {
+                                        UserId = userid,
+                                        latitude = lattitude,
+                                        longitude = longitude,
+                                        UpdateTime = DateTime.Now,
+                                        status = true,
+                                        RequestFrom = "Web"
+                                    };
+                                    db.Update_Aeps_Info.Add(data);
+                                    db.SaveChanges();
+                                }
                             }
                             var remark = retailer1.Frm_Name;
-                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                            var respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             if (respchk.StatusCode == HttpStatusCode.NotAcceptable)
                             {
                                 radi.Token(out radianttoken, out radianagentid, radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey, radiantresponse.username, radiantresponse.password);
-                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude1, longitude1, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
+                                respchk = radi.AEPStwoFactorAuth(radianagentid, radianttoken, capxml, lattitude, longitude, retailer1.AadharCard, iin, remark, bankname, "AP", radiantauthchk.clientID, radiantauthchk.clientSecret, radiantauthchk.APIKey);
                             }
                             if (respchk.StatusCode == HttpStatusCode.OK)
                             {
@@ -35324,6 +35616,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
+                }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 if (retailer.AepsMerchandId == "")
                 {
@@ -42516,9 +42832,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 var firmName = db.Retailer_Details.Single(s => s.RetailerId == userid).Frm_Name;
 
 
+            
+                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
                 string lattitude = string.Empty;
                 string longitude = string.Empty;
-                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
                 if (retailer.UserLocation == null)
                 {
                     insertGeoLocation(retailer.RetailerId, out lattitude, out longitude);
@@ -42527,6 +42844,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     lattitude = retailer.UserLocation.Lattitude;
                     longitude = retailer.UserLocation.Longitute;
+                }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 firmName = firmName.Replace(" ", "");
                 firmName = firmName.Substring(0, 4);
@@ -43227,6 +43568,24 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             {
                                                 lattitude = latLong.latitude;
                                                 longitude = latLong.longitude;
+                                            }
+                                            else
+                                            {
+                                                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                                                if (Aeps_Update == "TXN")
+                                                {
+                                                    var data = new Update_Aeps_Info()
+                                                    {
+                                                        UserId = userid,
+                                                        latitude = lattitude,
+                                                        longitude = longitude,
+                                                        UpdateTime = DateTime.Now,
+                                                        status = true,
+                                                        RequestFrom = "Web"
+                                                    };
+                                                    db.Update_Aeps_Info.Add(data);
+                                                    db.SaveChanges();
+                                                }
                                             }
                                             if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
                                             {
@@ -45459,6 +45818,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         lattitude = retailer.UserLocation.Lattitude;
                         longitude = retailer.UserLocation.Longitute;
                     }
+                    var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                    if (latLong != null)
+                    {
+                        lattitude = latLong.latitude;
+                        longitude = latLong.longitude;
+                    }
+                    else
+                    {
+                        string Aeps_Update = UpdateAeps(lattitude, longitude);
+                        if (Aeps_Update == "TXN")
+                        {
+                            var data = new Update_Aeps_Info()
+                            {
+                                UserId = userid,
+                                latitude = lattitude,
+                                longitude = longitude,
+                                UpdateTime = DateTime.Now,
+                                status = true,
+                                RequestFrom = "Web"
+                            };
+                            db.Update_Aeps_Info.Add(data);
+                            db.SaveChanges();
+                        }
+                    }
                     if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
                     {
                         var viewresponse = new { Status = "Failed", Message = "We are unable to find you location.", userinfo = reminfo };
@@ -46115,6 +46498,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     lattitude = rem.UserLocation.Lattitude;
                     longitude = rem.UserLocation.Longitute;
                 }
+                var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+                if (latLong != null)
+                {
+                    lattitude = latLong.latitude;
+                    longitude = latLong.longitude;
+                }
+                else
+                {
+                    string Aeps_Update = UpdateAeps(lattitude, longitude);
+                    if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
+                }
                 var client = new RestClient("http://api.vastbazaar.com/api/AEPSINSTANT/Register");
                 client.Timeout = -1;
                 var request = new RestRequest(Method.POST);
@@ -46235,6 +46642,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 lattitude = rem.UserLocation.Lattitude;
                 longitude = rem.UserLocation.Longitute;
             }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data1 = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data1);
+                    db.SaveChanges();
+                }
+            }
             var client = new RestClient(VastbazaarBaseUrl + url);
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -46285,6 +46716,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 lattitude = rem.UserLocation.Lattitude;
                 longitude = rem.UserLocation.Longitute;
             }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data1 = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data1);
+                    db.SaveChanges();
+                }
+            }
             var client = new RestClient(VastbazaarBaseUrl + url);
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -46334,6 +46789,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = rem.UserLocation.Lattitude;
                 longitude = rem.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data1 = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data1);
+                    db.SaveChanges();
+                }
             }
             var client = new RestClient(VastbazaarBaseUrl + url);
             client.Timeout = -1;
@@ -46442,6 +46921,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             CashDepositModel model = new CashDepositModel();
             model.superMerchantId = Convert.ToInt32(superid);
@@ -46603,6 +47106,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             CashDepositModel model = new CashDepositModel();
             model.superMerchantId = Convert.ToInt32(superid);
@@ -46910,6 +47437,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 lattitude = retailer.UserLocation.Lattitude;
                 longitude = retailer.UserLocation.Longitute;
+            }
+            var latLong = db.Update_Aeps_Info.Where(x => x.UserId == userid).FirstOrDefault();
+            if (latLong != null)
+            {
+                lattitude = latLong.latitude;
+                longitude = latLong.longitude;
+            }
+            else
+            {
+                string Aeps_Update = UpdateAeps(lattitude, longitude);
+                if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
             CashDepositModel model = new CashDepositModel();
             model.superMerchantId = Convert.ToInt32(superid);

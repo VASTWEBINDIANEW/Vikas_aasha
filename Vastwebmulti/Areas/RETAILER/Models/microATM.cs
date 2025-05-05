@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Vastwebmulti.Areas.ADMIN.Models;
 using Vastwebmulti.Models;
 
 namespace Vastwebmulti.Areas.RETAILER.Models
@@ -60,6 +61,18 @@ namespace Vastwebmulti.Areas.RETAILER.Models
             IRestResponse response = client.Execute(request);
             return response.StatusCode.ToString() == "OK" ? response.Content : null;
         }
+        public string TerminalUpdate(string merchantid, string location, string address, int pincode, string vbtoken)          //4
+        {
+            var client = new RestClient("http://api.vastbazaar.com/api/MicroATM/terminalUpdate");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "Bearer " + vbtoken);
+            //request.AddHeader("Authorization", "Bearer 1NWecleNYqVjWrwvXKROj_cBkrEgcHgUjbjYCTH_1uq-GCKx6Zs9NOSCkcuPFkht70EMGtGCnzovCkNbgKHI_HwWbq6mgY2dWnQF1rW4dzEIYDFQCU1x23UIXWwJDqlEEfrvNS42K3yX7vyz3pDJwUaNvBA6joebAuT1d5vwYNN9RW4UtOPVZBWIi4O4G4Cj3Q8ZqAGPVTAaOCAx8WjLVEagJJkDzd9aQHIiIbcg8aCCcltLbnXgvOfUINxeqnFcOSsU16XGRiUdTsgOBOK6gUaMGfTM7kUAge9fVNckq8NLvS29MLXbVcJRF02ws1Wtf7EwgLh6h08mpY7df9duHooPLho1mNqOZuEjq4fszawc4_lnwRGY3Wx8MMgb6xGWhf_Rk7mOCuGbMblgSFp_4eoCx9ddqa8RITJSfEfJ0vcTRjtir3ZumEpANWc8jaNGp039kAwM8uxOYIBmqUpChTGlLvQ_U9CiewS5bvc0GcfezmxG-wEKD-3l5mcmUyOul5ezvwSUgjLOfbBA0p_V8g");
+            request.AddHeader("Content-Type", "application/json");
+            request.AddParameter("application/json", "{\r\n  \"merchantid\": \"" + merchantid + "\",\r\n  \"location\": \"" + location + "\",\r\n  \"address\": \"" + HttpUtility.UrlEncode(address) + "\",\r\n  \"pincode\": \"" + pincode + "\"\r\n}", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return response.StatusCode.ToString() == "OK" ? response.Content : null;
+        }
 
         public string MerchantUpdate(MerchantCreate mercr, string merchantid)         // 3
         {
@@ -98,7 +111,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
 
         public string TerminalSubmit(string merchantID, string vbtoken)     //5
         {
-            var client = new RestClient("http://api.vastbazaar.com/api/MicroATM/terminallsubmit?termid=" + merchantID + "");
+            var client = new RestClient("http://api.vastbazaar.com/api/MicroATM/terminalsubmit?terminalid=" + merchantID + "");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "Bearer " + vbtoken);
