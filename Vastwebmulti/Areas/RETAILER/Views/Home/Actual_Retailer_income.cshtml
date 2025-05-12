@@ -161,14 +161,22 @@
                         @using (Html.BeginForm("Actual_Retailer_income", "Home", FormMethod.Post))
                         {
 
-                            <div class="customeright rightcustomeclass" style="float:left;">
+                            <div class="customeright rightcustomeclass" style="float: left; width: 32%;">
 
-                                <div class="col-md-4 dispute-date dayend-date" style="float:left;">
+
+                                <div class="col-md-4 dispute-date dayend-date" style="float: left; width: 60%; ">
                                     <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="datesate datesates">
+                                        <div class="input-daterange input-group" style="display: flex;">
+                                            <div class="datesate datesates focused" style="width:50%;">
                                                 <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
+                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
+                                            </div>
+                                            <span class="input-group-addon" style="display:none;">
+                                                <i class="fa fa-exchange" style="padding-top:8px;"></i>
+                                            </span>
+                                            <div class="datesate datesatese">
+                                                <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
+                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:32px;", autocomplete = "off" })
                                             </div>
                                         </div>
                                         <!-- /.input group -->
@@ -298,14 +306,16 @@ $(document).ready(function(){
     $("#btnExport").click(function (e) {
         e.preventDefault()
         var txt_frm_date = $('#txt_frm_date').val();
-        var url = '@Url.Action("Excel_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date;
+        var txt_to_date = $('#txt_to_date').val();
+        var url = '@Url.Action("Excel_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
         location.href = url;
 });
 </script>
 <script>
     $("#btnPDF").click(function () {
      var txt_frm_date = $('#txt_frm_date').val();
-        var url = '@Url.Action("PDF_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date;
+        var txt_to_date = $('#txt_to_date').val();
+        var url = '@Url.Action("PDF_Actual_Retailer_income", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
         window.open(
 url,
   '_blank' // <- This is what makes it open in a new window.
