@@ -1,5 +1,4 @@
-﻿
-@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
+﻿@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
 
 <style type="text/css">
     .mastetr222Modal .modal-dialog {
@@ -90,11 +89,11 @@
             </tr>
         </thead>
         <tbody id="body">
-            @if (Model.Select_super_Permissionwise != null)
+            @if (Model._Select_super_total_Result != null)
             {
                 int i = 0;
                 int id = 1;
-                foreach (var item in Model.Select_super_Permissionwise)
+                foreach (var item in Model._Select_super_total_Result)
                 {
                     var idno = "subTbl";
                     idno = idno + i;
@@ -257,18 +256,34 @@
 
                         </div><!--.row-->
                         <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                            <div class="col-md-3 col-sm-3 col-xs-12 col">
                                 <div class="form-group">
-                                    <label>Area Pin Code</label>
-                                    @Html.TextBox("pincode11", "", new { @class = "form-control", placeholder = "Enter Area Pin Code", maxlength = 6, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                                    <label>Pin Code</label>
+                                    @Html.TextBox("pincode11", "", new { @class = "form-control", placeholder = "Enter Pin Code", maxlength = 6, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
+                            <div class="col-md-4 col-sm-4 col-xs-12 col-2">
                                 <div class="form-group">
-                                    <label>GST Registration No</label>
-                                    @Html.TextBox("GSTRegistrationNo11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                                    <label>GST Reg. No</label>
+                                    @Html.TextBox("GSTRegistrationNo11", "", new { @class = "form-control", placeholder = "Enter Gst No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
                                 </div>
                             </div>
+
+
+                            <div class="col-md-3 col-sm-3 col-xs-12 col">
+                                <div class="form-group">
+                                    <label>Margine(Offline)<span>%</span></label>
+                                    <span id="offmargine" style="background: #fff;border: 1px solid #ccc;height: 32px;display: inline-block;width: 100%;line-height: 30px;color: #555;padding-left: 10px"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-12 col">
+                                <div class="form-group">
+                                    <label>Capping</label>
+                                    <span id="Capping" style="background: #fff;border: 1px solid #ccc;height: 32px;display: inline-block;width: 100%;line-height: 30px;color: #555;padding-left: 10px"></span>
+                                </div>
+                            </div>
+
                         </div><!--.row-->
 
 
@@ -288,12 +303,14 @@
                                     @Html.TextBox("District11", "", new { @class = "form-control", placeholder = "Enter District", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
 
                                     @*@Html.DropDownList("District11",
-                                        new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
-                                               "Select district",
-                                               new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
+                    new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
+                           "Select district",
+                           new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
                                 </div>
                             </div>
                         </div><!--.row-->
+
+                        
 
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -304,6 +321,7 @@
                             </div>
                         </div><!--.row-->
                         <div class="modal-footer width100 float-left button-seconddesign">
+                            <div style="color:red;" id="errormsg"></div>
                             <ul class="width100 float-left">
                                 <li class="one">
                                     <button type="button" value="Edit" class="btn btn-first button-third"><span style="color:#777;">Edit & Update KYC</span></button>
@@ -312,8 +330,8 @@
                                     <button type="button" value="SaveChange" class="btn special-iii btnssl2233 btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
                                 </li>
                                 @*<li class="two">
-                                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                    </li>*@
+                    <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
+                </li>*@
                                 <li class="three">
                                     <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify()"><span style="color:#777;">Email Verify</span></button>
                                 </li>
@@ -528,7 +546,7 @@
                             </div><!--.row-->
 
                             <div class="row" id="roleShowNot">
-                                <div class="col-md-6 col-sm-6 col-xs-6 col">
+                                <div class="col-md-4 col-sm-4 col-xs-12 col">
                                     <div class="form-group spspl">
                                         <label>Financial Role</label>
                                         @*<input type="text" id="frmagrEdit" name="frmagrEdit" readonly />*@
@@ -544,15 +562,29 @@
                                         <input type="text" readonly value="" style="display:none;width:100%;height:32px;" id="Edittxtlrole" name="Edittxtlrole" />
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-6 col-xs-6 col-2">
+                                <div class="col-md-4 col-sm-4 col-xs-6 col-2">
                                     <div class="form-group">
                                         <label>Pin Code</label>
                                         @Html.TextBox("PinEdit", "", new { @class = "form-control", placeholder = "Enter Pin Code", @style = "text-transform:uppercase", required = "required" })
                                     </div>
                                 </div>
 
+
+                                <div class="col-md-4 col-sm-4 col-xs-12 col-2">
+                                    <div class="form-group">
+                                        <label>Margine <span style="color: #555;font-size: 11px;">(Offline)</span></label>
+                                        @Html.TextBox("offmargineEdit", "", new { @class = "form-control", placeholder = "Enter Offline Margine Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
+                                    </div>
+                                </div>
+
                             </div><!--.row-->
 
+                            <div class="col-md-3 col-sm-3 col-xs-12 col-2">
+                                <div class="form-group">
+                                    <label>Capping <span style="color: #555;font-size: 11px;">(Amount)</span></label>
+                                    @Html.TextBox("CappingEdit", "", new { @class = "form-control", placeholder = "Enter Capping Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
@@ -572,14 +604,14 @@
                                         <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 btn-first" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
                                     </li>
                                     @*<li class="two">
-                                            <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                        </li>
-                                        <li class="three">
-                                            <button type="button" value="Email_Verify" class="btn">Email Verify</button>
-                                        </li>
-                                        <li class="four">
-                                            <button type="button" value="Delet" class="btn">Delete MD</button>
-                                        </li>*@
+                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
+                    </li>
+                    <li class="three">
+                        <button type="button" value="Email_Verify" class="btn">Email Verify</button>
+                    </li>
+                    <li class="four">
+                        <button type="button" value="Delet" class="btn">Delete MD</button>
+                    </li>*@
                                 </ul>
                             </div><!--.modal-footer-->
                         }
@@ -743,8 +775,7 @@
                     $('#otpmodal').modal('show');
                 }
                 else {
-                    $('#otpmodal').modal('show');
-                    $('#otpwrong').text(response);
+                    $('#errormsg').text(response);
                 }
             }
         });
@@ -1078,7 +1109,7 @@
 </script>
 <script>
     function mdActionBtn(SSId, values) {
-        
+
       $('#loadredmodel').show();
          $('#userinfodiv').hide();
         $('#alinks').html('');
@@ -1090,7 +1121,8 @@
             cache: false,
             success: function (data2) {
                 $('#error').text("");
-                
+                var CCNValue = data2.list[0].adharcard;
+                CCNValue = CCNValue.substring(0, 8).replace(/\d/g, "X") + CCNValue.substring(8);
                 var date = new Date(parseInt((data2.list[0].JoinDate).match(/\d+/)[0]))
                 var createddate = converttoDate(date);
                 $("#ssid").val(data2.list[0].SSId);
@@ -1104,7 +1136,7 @@
                 $("#Email11").val(data2.list[0].Email);
                 $("#Pancard11").val(data2.list[0].pancard);
                 $("#pancardEdit").val(data2.list[0].pancard);
-                $("#Aadhar11").val(data2.list[0].adharcard);
+                $("#Aadhar11").val(CCNValue);
                 $("#AadhaarEdit").val(data2.list[0].adharcard);
                 $("#GSTRegistrationNo11").val(data2.list[0].gst);
                 $("#gstEdit").val(data2.list[0].gst);
@@ -1116,8 +1148,14 @@
                 
                 $("#pincode11").val(data2.list[0].Pincode);
                 $("#PinEdit").val(data2.list[0].Pincode);
+                $("#Capping").text(data2.list[0].caption);
+                $("#CappingEdit").val(data2.list[0].caption);
                 $("#masterremain").html(data2.list[0].superremain);
                 $("#dealerremain").val(data2.list[0].dealer_remain);
+
+                $("#offmargine").html(data2.list[0].mastercomminper);
+                $("#offmargineEdit").val(data2.list[0].mastercomminper);
+
                 $("#retailerremain").val(data2.list[0].retailer_remain);
                 $("#State11").val(data2.list[0].State_name);
                 $("#District11").val(data2.list[0].Dist_Desc);

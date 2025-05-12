@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using DocumentFormat.OpenXml.Vml;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using org.vwipl;
@@ -806,7 +807,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                     }
                     else if (checkforlive.Rstaus.ToUpper() == "FAILED" || checkforlive.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                     {
-                        db.recharge_update_failed_to_success(idno, "");
+                        db.recharge_update_failed_to_success(idno, "optval");
                         ApiUserResponse(idno, checkforlive.Rch_from, checkforlive.refid, "SUCCESS", optval);
                     }
                 }
@@ -822,7 +823,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (checkforold.Rstaus.ToUpper() == "FAILED" || checkforold.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                         {
-                            db.recharge_update_failed_to_success_old(idno, "Manual Success");
+                            db.recharge_update_failed_to_success_old(idno, "optval");
                             ApiUserResponse(idno, checkforold.Rch_from, checkforold.refid, "SUCCESS", optval);
                         }
                     }
@@ -1697,7 +1698,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1818,7 +1819,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1952,7 +1953,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2073,7 +2074,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2209,7 +2210,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2330,7 +2331,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -4864,7 +4865,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(a =>  a.api_name == "VASTWEB" && a.catagory== "PAYOUT").ToList();
+            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory == "PAYOUT").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -4909,7 +4910,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory== "DMT").ToList();
+            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory == "DMT").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -6205,7 +6206,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB" && aa.catagory== "PAYOUT").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name == "VASTWEB" && aa.catagory == "PAYOUT").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -6274,7 +6275,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB" && aa.catagory== "PAYOUT").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name == "VASTWEB" && aa.catagory == "PAYOUT").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -7918,7 +7919,8 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         // string comment = TempData["comment"].ToString();
                         decimal amount1 = Convert.ToDecimal(balance);
                         var oldrembal = db.Remain_reteller_balance.Where(pp => pp.RetellerId == RetailerId).SingleOrDefault().Remainamount;
-                        decimal finalvalue = (decimal)oldrembal + amount1;
+                        //decimal finalvalue = oldrembal + amount1;
+                        decimal finalvalue = oldrembal.Value + amount1;
                         var msg = ""; var tp = "";
                         // var ch = "";
                         if (finalvalue >= 0)
@@ -8861,7 +8863,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
         }
         public ActionResult M_Creditchk(string MID)
         {
-            decimal mdbal;
+            decimal? mdbal;
             var ch = (db.admin_to_super_balance.Where(aa => aa.SuperStokistID == MID).OrderByDescending(aa => aa.ID).Select(c => c.cr).FirstOrDefault());
             ch = ch ?? 0;
             if (string.IsNullOrEmpty(MID))
@@ -8870,7 +8872,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                mdbal = (decimal)db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).SingleOrDefault().Remainamount;
+                mdbal = db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).SingleOrDefault().Remainamount;
             }
             return Json(new { currntcr = ch, rembal = mdbal }, JsonRequestBehavior.AllowGet);
         }
@@ -8900,14 +8902,14 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             string userid = db.Admin_details.SingleOrDefault().userid;
             var ch = db.Dealer_To_Retailer_Balance.Where(aa => aa.RetailerId == retailerid && aa.DealerId == userid).OrderByDescending(aa => aa.id).Select(c => c.cr).FirstOrDefault();
             ch = ch ?? 0;
-            decimal rembal;
+            decimal? rembal;
             if (string.IsNullOrEmpty(retailerid))
             {
                 rembal = 0;
             }
             else
             {
-                rembal = (decimal)db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
+                rembal = db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 
@@ -8927,14 +8929,14 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             var ch = (db.API_Balance_transfer.Where(aa => aa.apiid == apiid && aa.groupname == userid).OrderByDescending(aa => aa.id).Select(c => c.cr).FirstOrDefault());
             ch = ch ?? 0;
 
-            decimal rembal;
+            decimal? rembal;
             if (string.IsNullOrEmpty(apiid))
             {
                 rembal = 0;
             }
             else
             {
-                rembal = (decimal)db.api_remain_amount.Where(x => x.apiid == apiid).SingleOrDefault().balance;
+                rembal = db.api_remain_amount.Where(x => x.apiid == apiid).SingleOrDefault().balance;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 
