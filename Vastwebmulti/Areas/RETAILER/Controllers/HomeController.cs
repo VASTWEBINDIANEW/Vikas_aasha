@@ -80,6 +80,8 @@ using sun.security.krb5.@internal;
 using Microsoft.Ajax.Utilities;
 using static sun.swing.plaf.synth.DefaultSynthStyle;
 using com.sun.security.ntlm;
+using System.Data.SqlClient;
+using DocumentFormat.OpenXml.Office2010.Excel;
 //using paytmresponselibrary;
 
 
@@ -58200,6 +58202,69 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
         {
             return View();
         }
+
+
+        [HttpGet]
+        public ActionResult RedaintWalletTransfer()
+        {
+            string userid = User.Identity.GetUserId();
+            string txt_frm_date = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd");
+            string txt_to_date = DateTime.Now.ToString("yyyy-MM-dd");
+
+            DateTime frm_date = Convert.ToDateTime(txt_frm_date);
+            DateTime to_date = Convert.ToDateTime(txt_to_date).AddDays(1);
+
+
+            // Status dropdown
+            ViewBag.StatusList = new SelectList(new List<string> {  "Approved", "Reject", "PENDING" });
+
+            // Default data
+            var data = db.Database.SqlQuery<RadiantTransfer_Report>(
+                "RadiantTransfer_Report @UserId, @Sts, @FromDate, @ToDate",
+                new SqlParameter("@UserId", userid),
+                new SqlParameter("@Sts", DBNull.Value),
+                new SqlParameter("@FromDate", frm_date),
+                new SqlParameter("@ToDate", to_date)
+            ).ToList();
+
+            return View("RedaintWalletTransfer", data);
+        }
+
+        // POST: RedaintWalletTransfer
+        [HttpPost]
+        public ActionResult RedaintWalletTransfer(string txt_frm_date, string txt_to_date, string ddl_status)
+        {
+
+
+            ViewBag.chk = "post";
+            string userid = User.Identity.GetUserId();
+
+            ddl_status = ddl_status == "ALL" ? null : ddl_status;
+
+            // Parse dates
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime frm_date = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None).Date;
+            DateTime to_date = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None).Date.AddDays(1);
+
+
+            ViewBag.StatusList = new SelectList(new List<string> { "Approved", "Reject", "PENDING" }, ddl_status ?? "ALL");
+
+            // Fetch data
+            var data = db.Database.SqlQuery<RadiantTransfer_Report>(
+                "RadiantTransfer_Report @UserId, @Sts, @FromDate, @ToDate",
+                new SqlParameter("@UserId", string.IsNullOrEmpty(userid) ? (object)DBNull.Value : userid),
+                new SqlParameter("@Sts", string.IsNullOrEmpty(ddl_status) ? (object)DBNull.Value : ddl_status),
+                new SqlParameter("@FromDate", frm_date),
+                new SqlParameter("@ToDate", to_date)
+            ).ToList();
+
+            return View("RedaintWalletTransfer", data);
+        }
+
+
+
+
+
         public ActionResult Aeps_print(string id)
         {
             var chk = db.AEPS_TXN_Details.Where(aa => aa.MerchantTxnId == id).SingleOrDefault();
