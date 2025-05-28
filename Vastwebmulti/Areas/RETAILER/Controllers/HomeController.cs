@@ -16513,6 +16513,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             merCrt.Name = remdetails.RetailerName;
                             merCrt.BrandName = remdetails.Frm_Name;
                             merCrt.Address = remdetails.Address;
+                            merCrt.aadhar_number = remdetails.AadharCard;
                             merCrt.Pincode = remdetails.Pincode;
                             merCrt.PanCard = remdetails.PanCard;
                             merCrt.Mobile = remdetails.Mobile;
