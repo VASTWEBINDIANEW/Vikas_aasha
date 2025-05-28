@@ -16509,6 +16509,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             DOBS = Convert.ToDateTime(dt).Date;
                             MerchantCreate merCrt = new MerchantCreate();
                             merCrt.Name = remdetails.RetailerName;
+                            merCrt.aadhar_number= remdetails.AadharCard;
                             merCrt.BrandName = remdetails.Frm_Name;
                             merCrt.Address = remdetails.Address;
                             merCrt.Pincode = remdetails.Pincode;
@@ -16845,7 +16846,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     merCrt.CancelCheckpath = cancellcheckss.ToLower();//microATM.GetCurrentUrl() + remdetails.aadharcardPath;//----path
                     merCrt.CancelCheckFileName = cancllcheckpath.CancelCheckFile.Contains("/Retailer_image/") == true ? cancllcheckpath.CancelCheckFile.Replace("/Retailer_image/", "") : cancllcheckpath.CancelCheckFile.Replace("\\Retailer_image\\", "");//----fileName
                     merCrt.vbtoken = token;
-                    merCrt.MerchantCode = remdetails.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b1" : remdetails.microATM_MCC_CODE; //5411	Grocery Stores, Supermarkets	5f293542d0962a0d379428b1																					
+                    merCrt.MerchantCode = remdetails.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b0" : remdetails.microATM_MCC_CODE; //5411	Grocery Stores, Supermarkets	5f293542d0962a0d379428b1																					
                     var Merchantupdate = micro.MerchantUpdate(merCrt, chkk.MerchantId);
                     var MerchantSubmitResponse = micro.MerchantSubmit(chkk.MerchantId, token);
                     return Json(new { status = "Success", msg = "Pending" }, JsonRequestBehavior.AllowGet);
@@ -16890,7 +16891,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                             var jsonResp2 = JsonConvert.SerializeObject(TerSubRes2);
                             return Json(jsonResp2, JsonRequestBehavior.AllowGet);
                         }
-                        else if (status.ToUpper() == "APPROVED")
+                        else if (status.ToUpper().Contains("APPROVED"))
                         {
                             string mid = json.Content.ADDINFO["id"];
                             var updMid = db.microATM_merch_termi_Info.Where(a => a.Userid == userid).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
@@ -16903,7 +16904,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                 dynamic Terjson = JsonConvert.DeserializeObject(TerStatus);
                                 string Terstatus = Terjson.Content.ADDINFO["status"] == null ? Terjson.Content.ADDINFO["message"] : Terjson.Content.ADDINFO["status"];
                                 bool is_active = (bool)Terjson.Content.ADDINFO["is_active"];
-                                if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "REJECTED")
+                                if (status.ToUpper().Contains("APPROVED") && Terstatus.ToUpper() == "REJECTED")
                                 {
                                     var merchantId = chkk.MerchantId;
                                     /******** 2) TerminalCreate***********/
@@ -16922,7 +16923,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
                                     return Json(jsonResp1, JsonRequestBehavior.AllowGet);
                                 }
-                                else if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "DEACTIVATED")
+                                else if (status.ToUpper().Contains("APPROVED") && Terstatus.ToUpper() == "DEACTIVATED")
                                 {
                                     var merchantId = chkk.MerchantId;
                                     /******** 2) TerminalCreate***********/
@@ -16941,7 +16942,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                     var jsonResp1 = JsonConvert.SerializeObject(TerSubRes1);
                                     return Json(jsonResp1, JsonRequestBehavior.AllowGet);
                                 }
-                                else if (status.ToUpper() == "APPROVED" && Terstatus.ToUpper() == "NEW")
+                                else if (status.ToUpper().Contains("APPROVED") && Terstatus.ToUpper() == "NEW")
                                 {
                                     var UpdTerId = db.microATM_merch_termi_Info.Where(a => a.Userid == userid).OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault();
                                     var TerminalSubmit = micro.TerminalSubmit(UpdTerId.TerminalId, token);
@@ -17033,6 +17034,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 return Json(jsonResp, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpPost]
         public ActionResult microATMSnNo(string DeviceSnNo)
         {
