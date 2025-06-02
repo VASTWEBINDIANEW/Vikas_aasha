@@ -4,13 +4,8 @@
     VastwebmultiEntities DB = new VastwebmultiEntities();
     var stsotp = "N";
     var dmtotpsts = DB.dmtpin_otp_status.SingleOrDefault();
-    dmtotpsts.status = false;
- 
+    dmtotpsts.status = false; 
 }
-
-
-
-
 <style>
    /* New css */
     #remlist .radiobuttonimps label.container {
@@ -566,7 +561,7 @@
             @*<div id="imgshow" class="col-md-5 userName" style="float:left;display:none;margin: -4px 0px 0px 5px;padding: 0;width: 25px;height: 25px;">
             <img id="remimg" src="#" style="height:25px;width:25px;" />
             </div>*@
-
+            <input type="hidden" id="hidepayoutsts" />
             <span class="hi">Hi , </span> <span id="username"></span> <input type="hidden" id="hidecustid" />
         </div>
         <div id="validatekyc" class="col-md-5 userName" style="width: 10%;margin-left: 7px;text-align: center;"><a href="#" onclick="validkyc()">KYC</a> </div>
@@ -1608,11 +1603,13 @@
                             var remaininglimit = output.data.remitter.remaininglimit;
                             var iskycdone = output.data.remitter.kycdone;
                             var photo = output.data.remitter.Photo;
+                            var payoutekyc = output.data.remitter.payoutekyc;
+
 
                             $('#username').text(name);
                             $('#tlimit').text(totallimit);
                             $('#checkkyc').text(iskycdone);
-
+                            $('#hidepayoutsts').val(payoutekyc);
 
                             if (iskycdone == false) {
                                 $('#validatekyc').show()
@@ -2983,6 +2980,7 @@
         var idproffid = $('#idproofid').val();
         var modesss = $('#paymentmodetransfer').text();
         var remainlimit = $('#Rlimit').text();
+        var payoutsts = $('#hidepayoutsts').val();
 
         if (amount != "" && markup != "" && Dmtpin != "" && idproff != undefined) {
 
@@ -3020,7 +3018,7 @@
                    var chkkyc= true;
                     $.ajax({
                         url: '@Url.Action("Imps_check_transfer_new", "Home")',
-                        data: { Mode: modesss, dmtpin: Dmtpin, account: accountno, amount: amount, sendermobileno: sendermobileno, chkkyc: chkkyc },
+                        data: { Mode: modesss, dmtpin: Dmtpin, account: accountno, amount: amount, sendermobileno: sendermobileno, chkkyc: chkkyc, payoutsts },
                         cache: false,
                         type: "POST",
                         success: function (data) {
@@ -3069,6 +3067,30 @@
                                 $('#idproofnumber').text(idproffid);
 
                                 $('#dmtconfirm').show();
+                                $('#dmttransfer').hide();
+                            }
+                            else if (sts == "WSuccess")
+                            {
+                                uniqueid = uniqueId();
+                                $('#accountconfirm').text(accountno);
+                                $('#nameconfirm').text(name);
+                                $('#ifscconfirm').text(bankifsccode);
+                                $('#modeconfirm').text(paymode);
+                                $('#amountconfirm').text(amount);
+                                $('#servicefeeconfirm').text(markup);
+                                $('#banknameconfirm').text(bankname);
+                                $('#idprooftype').text(idproff);
+                                $('#idproofnumber').text(idproffid);
+                                if (paymode == "UPI" || paymode == "WALLET") {
+                                    $('#divbankifsccode').hide();
+                                    $('#confirmdivbankname').hide();
+                                } else {
+                                    $('#divbankifsccode').show();
+                                    $('#confirmdivbankname').show();
+                                }
+                                $('#dmtconfirm').show();
+                                $('#fpay').show();
+                                $('#fotp').hide();
                                 $('#dmttransfer').hide();
                             }
                             else {

@@ -24,6 +24,7 @@ using Vastwebmulti.Hubs;
 using Vastwebmulti.Models;
 using ZXing;
 using ZXing.Rendering;
+using static QRCoder.PayloadGenerator;
 using static sun.net.ftp.FtpClient;
 using static Vastwebmulti.Areas.ADMIN.Controllers.HomeController;
 using static Vastwebmulti.Areas.RETAILER.Controllers.HomeController;
@@ -14389,6 +14390,8 @@ namespace Vastwebmulti.Controllers
             string url = Url.Action("hojabhai", "Response", new { userid}, Request.Url.Scheme);
             return Json(url, JsonRequestBehavior.AllowGet);
         }
+    
+      
         public ActionResult hojabhai(string userid,string txtupi_amount)
         {
             string orderId = "";
@@ -14433,6 +14436,291 @@ namespace Vastwebmulti.Controllers
                 }
             }
             return View();
+        }
+
+        public ActionResult AEPSUserinfo(string Mobile)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                Mobile = Mobile.Trim();
+                var sts = false; var Message = ""; var lat = ""; var lng = "";
+                var retailerinfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobile).SingleOrDefault();
+                if (retailerinfo != null)
+                {
+                    var infochk = db.Update_Aeps_Info.Where(aa => aa.UserId == retailerinfo.RetailerId).SingleOrDefault();
+                    if (infochk != null)
+                    {
+                        sts = true;
+                        lat = infochk.latitude;
+                        lng = infochk.longitude;
+                    }
+                    else
+                    {
+                        sts = true;
+                        var loginInfo = db.Login_info.Where(aa => aa.UserId.ToUpper() == retailerinfo.Email.ToUpper() && string.IsNullOrEmpty(aa.Latitude) == false).OrderByDescending(aa => aa.CurrentLoginTime).Take(1).SingleOrDefault();
+                        lat = loginInfo.Latitude;
+                        lng = loginInfo.Logitude;
+                    }
+                }
+                else
+                {
+                    Message = "Retailer Not Found";
+                }
+                var data = new { sts = sts, Message = Message, lat = lat, lng = lng };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult updatelatlong(string Mobile,string lat,string lon)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var sts = false;var message = "";var M_request = "";var M_response = ""; string message_info = "";
+                var retailerinfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobile).SingleOrDefault();
+                if (retailerinfo != null)
+                {
+                    var infochk = db.Update_Aeps_Info.Where(aa => aa.UserId == retailerinfo.RetailerId).SingleOrDefault();
+                    if (infochk != null)
+                    {
+                    
+                         UpdateAeps(retailerinfo.RetailerId, lat, lon,out message_info,out M_request,out M_response);
+                        if (message_info == "TXN")
+                        {
+                            sts = true;
+                            infochk.status = true;
+                            infochk.latitude = lat;
+                            infochk.longitude = lon;
+                            infochk.UpdateTime = DateTime.Now;
+                            infochk.RequestFrom = "Web";
+
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            message = message_info;
+                        }
+                    }
+                    else
+                    {
+                         UpdateAeps(retailerinfo.RetailerId, lat, lon, out message_info, out M_request, out M_response);
+                        if (message_info == "TXN")
+                        {
+                            sts = true;
+                            Update_Aeps_Info obj = new Update_Aeps_Info();
+                            obj.UserId = retailerinfo.RetailerId;
+                            obj.latitude = lat;
+                            obj.longitude = lon;
+                            obj.status = true;
+                            obj.UpdateTime = DateTime.Now;
+                            obj.RequestFrom = "Web";
+                            db.Update_Aeps_Info.Add(obj);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            message = message_info;
+                        }
+                       
+                    }
+                }
+                else
+                {
+                    message = "No User Found";
+                }
+                var data = new { sts, message, M_request, M_response };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult ResetAeps(string Mobile)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var sts = false;var message = "";
+                var reminfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobile).SingleOrDefault();
+                if(reminfo!=null)
+                {
+                    sts = true;
+                    var twofacheck = db.Aeps_2Fa_Status.Where(aa => aa.userid == reminfo.RetailerId).ToList();
+                    if (twofacheck.Count > 0)
+                    {
+                        db.Aeps_2Fa_Status.RemoveRange(twofacheck);
+                    }
+                    reminfo.AepsMerchandId = null;
+                    reminfo.AepsMPIN = null;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    message = "No User Found";
+                }
+                var data = new { sts, message};
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public void UpdateAeps(string userid, string lattitude, string longitude,out string message_info,out string M_request,out string M_response  )
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var token = string.Empty;
+                token = getAuthToken();
+                var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
+                var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+                var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+                string companyBankAccountNumber = Account.AccountNO;
+                string bankIfscCode = Account.IFSC_CODE;
+                string companyBankName = Account.BankName;
+                string bankBranchName = Account.BankAddress;
+                string bankAccountName = Account.AccountHolder;
+                string aadhaarNumber = retailer.AadharCard;
+                var ipAddress = GetComputer_InternetIP();
+                var reque = new
+                {
+                    merchantLoginId = retailer.AepsMerchandId,
+                    merchantName = retailer.RetailerName,
+                    stateid = retailer.State,
+                    latitude = lattitude,
+                    longitude = longitude,
+                    merchantPhoneNumber = retailer.Mobile,
+                    merchantPinCode = retailer.Pincode,
+                    merchantCityName = city,
+                    merchantAddress = retailer.Address,
+                    userPan = retailer.PanCard,
+                    retilerid = retailer.Email,
+                    OTP = "",
+                    companyBankAccountNumber,
+                    bankIfscCode,
+                    companyBankName,
+                    bankBranchName,
+                    bankAccountName,
+                    ipAddress,
+                    aadhaarNumber,
+                    emailid = retailer.Email,
+                    firmname = retailer.Frm_Name,
+                    merchantPanImage = "",
+                    maskedAadharImage = "",
+                    backgroundImageOfShop = ""
+                };
+                var Data = JsonConvert.SerializeObject(reque);
+                M_request = Data;
+                var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE_UPDATE");
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Authorization", "Bearer " + token);
+                request.AddHeader("Content-Type", "application/json");
+                request.AddParameter("application/json", Data, ParameterType.RequestBody);
+                IRestResponse response2 = client.Execute(request);
+                M_response = response2.Content.ToString();
+                dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+                var stscode = resp.Content.ADDINFO.statuscode.ToString();
+                var message = resp.Content.ADDINFO.status.ToString();
+                string fullUrl = Request.Url?.ToString();
+                UpdateAepsLog("****************************************************************");
+                UpdateAepsLog("Time : " + DateTime.Now.ToString());
+                UpdateAepsLog("fullUrl: " + fullUrl);
+                UpdateAepsLog("Request: " + Data.ToString());
+                UpdateAepsLog("Response : " + resp.Content);
+                if (stscode == "TXN")
+                {
+                    message_info= "TXN";
+                }
+                else
+                {
+                    message_info= message;
+                }
+            }
+        }
+        public static void UpdateAepsLog(string strMessage)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "UpdateAepsInfo-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+
+                }
+                catch (Exception ex)
+                { }
+            }
+
+        }
+        public ActionResult ResetMicroATM(string Mobileno)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var sts = false;var msg = "";
+                var reminfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobileno).SingleOrDefault();
+                if(reminfo!=null)
+                {
+                    var micro=db.microATM_Device_Info.Where(aa=>aa.userid==reminfo.RetailerId).SingleOrDefault();
+                    if(micro!=null)
+                    {
+                        db.microATM_Device_Info.Remove(micro);
+                    }
+                    var merchant = db.microATM_merch_termi_Info.Where(aa => aa.Userid == reminfo.RetailerId).SingleOrDefault();
+                    if(merchant!=null)
+                    {
+                        db.microATM_merch_termi_Info.Remove(merchant);
+                    }
+                    var micropass = db.microATM_LoginId_Pass.Where(aa => aa.userid == reminfo.RetailerId).SingleOrDefault();
+                    if(micropass != null)
+                    {
+                        db.microATM_LoginId_Pass.Remove(micropass);
+                    }
+                    db.SaveChanges();
+                    sts = true;
+                    msg = "MicroATM Removed Successfully.";
+                }
+                else
+                {
+                    msg = "User not Found";
+                }
+                var data = new { sts, msg };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult ResetSerialnumberMicroATM(string Mobileno)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                var sts = false; var msg = "";
+                var reminfo = db.Retailer_Details.Where(aa => aa.Mobile == Mobileno).SingleOrDefault();
+                if (reminfo != null)
+                {
+                    var micro = db.microATM_Device_Info.Where(aa => aa.userid == reminfo.RetailerId).SingleOrDefault();
+                    if (micro != null)
+                    {
+                        micro.Serialno = null;
+                    }
+                    db.SaveChanges();
+                    sts = true;
+                    msg = "MicroATM Removed Successfully.";
+                }
+                else
+                {
+                    msg = "User not Found";
+                }
+                var data = new { sts, msg };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

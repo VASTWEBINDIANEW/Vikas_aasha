@@ -31007,7 +31007,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             //}
         }
         [HttpPost]
-        public ActionResult Imps_check_transfer_new(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc)
+        public ActionResult Imps_check_transfer_new(string Mode, string dmtpin, string account, string amount, string sendermobileno, bool chkkyc,bool payoutsts)
         {
             try
             {
@@ -31172,10 +31172,21 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                         }
                                         else
                                         {
-                                            var results = "{'Details':'','status':'Success' }";
-                                            var jss1 = new JavaScriptSerializer();
-                                            var dict1 = jss1.Deserialize<dynamic>(results);
-                                            return Json(dict1, JsonRequestBehavior.AllowGet);
+                                            if(payoutsts==true)
+                                            {
+                                                var results = "{'Details':'','status':'Success' }";
+                                                var jss1 = new JavaScriptSerializer();
+                                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                                            }
+                                            else
+                                            {
+                                                var results = "{'Details':'','status':'WSuccess' }";
+                                                var jss1 = new JavaScriptSerializer();
+                                                var dict1 = jss1.Deserialize<dynamic>(results);
+                                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                                            }
+                                          
                                         }
                                     }
                                     else
