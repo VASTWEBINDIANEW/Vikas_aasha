@@ -3610,6 +3610,12 @@ namespace Vastwebmulti.API
             if (ipaddress == "" || ipaddress == null)
                 ipaddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
             return ipaddress;
+            //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
+            //using (WebClient client = new WebClient())
+            //{
+            //    ipaddress = client.DownloadString("https://api64.ipify.org");
+            //}
+            //return ipaddress;
         }
         public string Encrypt(string input, string key)
         {

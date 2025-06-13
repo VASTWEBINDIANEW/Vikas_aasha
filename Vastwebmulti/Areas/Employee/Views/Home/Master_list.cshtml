@@ -1,13 +1,22 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
 @{
-    ViewBag.Title = "Retailerlist";
+    ViewBag.Title = "Master_list";
     Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Retailerlist</h2>
+@using Vastwebmulti.Models;
+@using Microsoft.AspNet.Identity
+@{
+    Layout = "~/Areas/Employee/Views/Shared/_Layout.cshtml";
+    VastwebmultiEntities DB1 = new VastwebmultiEntities();
+    var currentuser = User.Identity.GetUserId();
+    var iswritepermision = DB1.tbl_permission_Services.Where(x => x.Employee_ID == currentuser && x.Servicename == "USERS" && x.iswrite == true).Any();
 
-
-
+}
+@if (iswritepermision)
+{
+    <input type="submit" value="Add New API User" />
+}
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -15,6 +24,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
 <style>
+    /* new css   */
+
+    body.stop-scrolling {
+        overflow: inherit;
+        overflow-x: hidden;
+    }
+
+    .Masterlist-page .left-first-tabs, .tab-design .left-first-tabs {
+        background: #fff;
+    }
+
+    #Masterlistupdate {
+        background: #fff !important;
+    }
+
+    .res_div {
+        width: 50%;
+        float: left;
+    }
+
+    .pageheader-margin-third {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .search-after-third {
+        margin-right: 3px;
+    }
+
+    #mdList i {
+        cursor: pointer;
+    }
+
+    /* new css   */
+
     .btn-group, .btn-group-vertical {
         box-shadow: none;
     }
@@ -48,8 +93,7 @@
     }
 
     .for-search {
-        position: absolute;
-        right: 130px;
+        float: left;
     }
 
         .for-search input {
@@ -57,6 +101,47 @@
             border: 1px solid #dbdbdb;
             padding: 3px 10px;
         }
+
+
+    @@media only screen and (max-width:1280px) {
+
+        section.content {
+            margin: 75px 0px 0 160px;
+        }
+    }
+
+    @@media only screen and (max-width:1169px) {
+
+        .ls-closed section.content {
+            margin-left: 0px;
+        }
+    }
+
+    @@media only screen and (max-width:1024px) {
+
+        #sidebar-open {
+            top: 29px;
+            left: -147px;
+        }
+    }
+
+    @@media only screen and (max-width:767px) {
+        #sidebar-open {
+            top: -1px;
+            left: -4px;
+        }
+
+        .pageheader-margin-third {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+
+        .res_div {
+            width: 100%;
+            padding: 2px 0;
+        }
+    }
 
     @@media screen and (max-width:768px) {
         .third-design {
@@ -69,12 +154,6 @@
             position: static !important;
         }
 
-        .for-search {
-            position: absolute;
-            top: 107px;
-            left: 15px;
-            right: auto;
-        }
 
         .Masterlist-page .left-first-tabs {
             margin-top: 15px;
@@ -84,16 +163,40 @@
             width: 100%;
         }
     }
+
+    @@media only screen and (max-width:480px) {
+
+        .for-search.tablesearch-second {
+            width: 100%;
+            float: left;
+            margin-bottom: 3px;
+        }
+
+        .res_w {
+            width: 100%;
+        }
+
+        .search-after-third {
+            margin: 0;
+        }
+
+        .create-bulk-add-image {
+            margin-right: 0px;
+        }
+
+        .Upload-form input[type="file"] {
+            padding: 10px;
+        }
+    }
 </style>
 
 <section class="content Masterlist-page fourdesign-section-admin">
 
     <div class="container-fluid">
 
-     
 
         <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
+            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only res_div">
                 <ul class="">
                     <li class="smli">
                         <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
@@ -108,22 +211,27 @@
                 </ul>
             </div>
 
-            <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;position:absolute;right:15px;">
-                <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                <input type="button" id="btnPDF" value="PDF" style="margin-left:7px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
+            <div class="web-white-filter pdfexpoer-second pdf-third-design res_div" style="float: right;">
+
+                <div class="res_w" style="float: right;">
+
+                    <div class="for-search tablesearch-second">
+                        <div class="search-after-third">
+                            <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" />
+                        </div>
+                    </div>
+                    <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
+                    <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
+
+                </div>
 
             </div>
-            <div class="for-search tablesearch-second">
-                <div class="search-after-third">
-                    <input id="myInput" name="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" />
-                </div>
-            </div>
+
         </div>
 
         <div class="row clearfix margin-top-admin-four">
-
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div id="Masterlistupdate" class="right-first float-left width100 table-responsive tablefourdesign-admin boxback-allpage-admin" style="background:var(--second-bg-color);height:80vh;">
+                <div id="Masterlistupdate" class="right-first float-left width100 table-responsive tablefourdesign-admin boxback-allpage-admin page-header-third" style="background:var(--second-bg-color);height:80vh;">
                     @Html.Partial("_Masterlist")
                 </div>
             </div>
@@ -1028,7 +1136,6 @@ window.open(
                 cache: false,
                 type: "POST",
                 success: function (data) {
-
                     $("#SuperstokistName1").val(data[0].SuperstokistName);
                     $("#txtSSID").val(SSID);
                     $("#FarmName1").val(data[0].FarmName);

@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using java.awt;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using org.vwipl;
+using VWMain = org.vwipl.Main;
 using RestSharp;
 using Rotativa;
+using sun.security.tools.keytool;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,6 +25,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Vastwebmulti.Areas.ADMIN.Controllers;
 using Vastwebmulti.Areas.ADMIN.Models;
 using Vastwebmulti.Areas.Employee.Model;
 using Vastwebmulti.Areas.Employee.ViewModel;
@@ -27,6 +33,9 @@ using Vastwebmulti.Areas.RETAILER.Models;
 using Vastwebmulti.Areas.RETAILER.ViewModels;
 using Vastwebmulti.Hubs;
 using Vastwebmulti.Models;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using DocumentFormat.OpenXml.Vml;
 
 namespace Vastwebmulti.Areas.Employee.Controllers
 {
@@ -806,7 +815,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                     }
                     else if (checkforlive.Rstaus.ToUpper() == "FAILED" || checkforlive.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                     {
-                        db.recharge_update_failed_to_success(idno, "");
+                        db.recharge_update_failed_to_success(idno, optval);
                         ApiUserResponse(idno, checkforlive.Rch_from, checkforlive.refid, "SUCCESS", optval);
                     }
                 }
@@ -822,7 +831,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (checkforold.Rstaus.ToUpper() == "FAILED" || checkforold.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                         {
-                            db.recharge_update_failed_to_success_old(idno, "Manual Success");
+                            db.recharge_update_failed_to_success_old(idno,optval);
                             ApiUserResponse(idno, checkforold.Rch_from, checkforold.refid, "SUCCESS", optval);
                         }
                     }
@@ -1697,7 +1706,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1818,7 +1827,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -1952,7 +1961,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2073,7 +2082,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2209,7 +2218,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -2330,7 +2339,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (currentstatus.ToUpper() == "FAILED")
                         {
-                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "Manual Success");
+                            db.recharge_update_failed_to_success_old(Convert.ToInt32(idap), "optval");
                             if (statusAdmin == "Y")
                             {
                                 SendPushNotification(AdminEmail, Url.Action("Operator_report_new", "Home"), "Recharge Mobile No " + mobileno + ", Operator " + OperatorName + " is Success.", "Txn. Failed To Success..");
@@ -4864,7 +4873,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(a =>  a.api_name == "VASTWEB" && a.catagory== "PAYOUT").ToList();
+            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory == "PAYOUT").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -4909,7 +4918,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             //api users 
             ViewBag.apiid = new SelectList(db.select_apiusers_for_ddl("Admin"), "apiid", "username", null);
             //apiname
-            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory== "DMT").ToList();
+            var apiname = db.money_api_status.Where(a => a.api_name == "VASTWEB" && a.catagory == "DMT").ToList();
             IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                         select new SelectListItem
                                                         {
@@ -5670,7 +5679,8 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                     }
                     var token = string.Empty;
                     token = Responsetoken.gettoken();
-                    Main obj = new Main();
+                    // Main obj = new Main();
+                    VWMain obj = new VWMain();
                     if (string.IsNullOrWhiteSpace(token))
                     {
                         var viewresponse = new { Status = "Failed", Message = "Failed at provider server." };
@@ -6205,7 +6215,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB" && aa.catagory== "PAYOUT").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name == "VASTWEB" && aa.catagory == "PAYOUT").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -6274,7 +6284,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                                               Text = s.FrmName.ToString()
                                                           };
                 ViewBag.whitelabel = new SelectList(selectList1, "Value", "Text");
-                var apiname = db.money_api_status.Where(aa=>aa.api_name== "VASTWEB" && aa.catagory== "PAYOUT").ToList();
+                var apiname = db.money_api_status.Where(aa => aa.api_name == "VASTWEB" && aa.catagory == "PAYOUT").ToList();
                 IEnumerable<SelectListItem> selectapiname = from p in apiname
                                                             select new SelectListItem
                                                             {
@@ -7291,6 +7301,18 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
         #endregion
 
+
+
+
+
+
+
+
+
+
+
+
+
         #region securityservices
 
         [PermissioncheckingAttribute(servicename = "SECURITYSERVICE", permision = "Read")]
@@ -7913,12 +7935,13 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         var retaileremail = db.Retailer_Details.Where(p => p.RetailerId == RetailerId).Single().Email;
                         var AdminEmail = db.Admin_details.Single().email;
-                        // string txtbal = TempData["txtbal"].ToString();
-                        // string type = TempData["type"].ToString();
-                        // string comment = TempData["comment"].ToString();
+                        //string txtbal = TempData["txtbal"].ToString();
+                        //string type = TempData["type"].ToString();
+                        //string comment = TempData["comment"].ToString();
                         decimal amount1 = Convert.ToDecimal(balance);
-                        var oldrembal = db.Remain_reteller_balance.Where(pp => pp.RetellerId == RetailerId).SingleOrDefault().Remainamount;
-                        decimal finalvalue = (decimal)oldrembal + amount1;
+                        var remObj = db.Remain_reteller_balance.SingleOrDefault(pp => pp.RetellerId == RetailerId);
+                        decimal oldrembal = remObj?.Remainamount ?? 0;
+                        decimal finalvalue = oldrembal + amount1;
                         var msg = ""; var tp = "";
                         // var ch = "";
                         if (finalvalue >= 0)
@@ -8870,7 +8893,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                mdbal = (decimal)db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).SingleOrDefault().Remainamount;
+                mdbal = db.Remain_superstokist_balance.Where(x => x.SuperStokistID == MID).Select(x => x.Remainamount).FirstOrDefault() ?? 0;
             }
             return Json(new { currntcr = ch, rembal = mdbal }, JsonRequestBehavior.AllowGet);
         }
@@ -8899,15 +8922,21 @@ namespace Vastwebmulti.Areas.Employee.Controllers
         {
             string userid = db.Admin_details.SingleOrDefault().userid;
             var ch = db.Dealer_To_Retailer_Balance.Where(aa => aa.RetailerId == retailerid && aa.DealerId == userid).OrderByDescending(aa => aa.id).Select(c => c.cr).FirstOrDefault();
-            ch = ch ?? 0;
+            //ch = ch ?? 0;
+            
             decimal rembal;
+            
             if (string.IsNullOrEmpty(retailerid))
             {
                 rembal = 0;
             }
             else
             {
-                rembal = (decimal)db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
+                //rembal = db.Remain_reteller_balance.Where(x => x.RetellerId == retailerid).SingleOrDefault().Remainamount;
+                rembal = db.Remain_reteller_balance
+             .Where(x => x.RetellerId == retailerid)
+             .Select(x => x.Remainamount)
+             .FirstOrDefault() ?? 0;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 
@@ -8934,7 +8963,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
             else
             {
-                rembal = (decimal)db.api_remain_amount.Where(x => x.apiid == apiid).SingleOrDefault().balance;
+                rembal = db.api_remain_amount.Where(x => x.apiid == apiid).Select(x => x.balance).FirstOrDefault() ?? 0;
             }
             return Json(new { currntcr = ch, rembal = rembal }, JsonRequestBehavior.AllowGet);
 
@@ -9023,10 +9052,163 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             return View(vmodel);
         }
 
-        [HttpGet]
+
+        //----------------------------------master----------------------------------------
+        /////////////////////////////////Master//////////////////////////////////
+        #region MasterUserList
+
+        public ActionResult ExcellGenerateForMaster(string usernm)
+        {
+            DataTable dt = new DataTable("Grid");
+            dt.Columns.AddRange(new DataColumn[7] {
+                                            new DataColumn("Master Distributor Firm"),
+                                            new DataColumn("Master Distributor Name"),
+                                            new DataColumn("Mobile No"),
+                                            new DataColumn("PANNo"),
+                                            new DataColumn("M/D Bal"),
+                                            new DataColumn("KYC"),
+                                            new DataColumn("Email V/F") });
+            // var retaiulerlist = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
+            //if (!string.IsNullOrEmpty(usernm))
+            //{
+            //   var retaiulerlist1 = retaiulerlist.Where(x=>x.Frm_Name.ToUpper().Contains(usernm) || x.RetailerName.ToUpper().Contains(usernm) || x.Mobile.ToUpper().Contains(usernm) ||x.PanCard.ToUpper().Contains(usernm));
+            //}
+
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            var Details = db.Select_super_total().ToList();
+            var listall = new List<Select_super_total_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+                var masterlist = Details.Where(x => !string.IsNullOrEmpty(x.SuperstokistName) && x.SuperstokistName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                listall = masterlist;
+                if (listall.Count == 0)
+                {
+                    var filterbyfrm = Details.Where(x => x.FarmName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbyfrm;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+
+
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            // viewmodel.select_retailer_details = listall;
+
+
+
+            foreach (var item in listall)
+            {
+                var psaveri = item.PSAStatus == "Y" && item.AadhaarStatus == "Y" ? "Done" : "Due";
+                var emailssvarify = item.EmailConfirmed == true ? "Done" : "Due";
+                dt.Rows.Add(item.FarmName, item.SuperstokistName, item.Mobile, item.pancard, item.superremain, psaveri, emailssvarify);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.ColumnWidth = 24.14;
+                wb.Worksheets.Add(dt);
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MasterDistributorlist.xlsx");
+                }
+            }
+
+
+        }
+
+        public ActionResult PrintMasterPartialViewToPdf(string usernm)
+        {
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            var Details = db.Select_super_total().ToList();
+            var listall = new List<Select_super_total_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+                var masterlist = Details.Where(x => !string.IsNullOrEmpty(x.SuperstokistName) && x.SuperstokistName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                listall = masterlist;
+                if (listall.Count == 0)
+                {
+                    var filterbyfrm = Details.Where(x => x.FarmName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbyfrm;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+
+
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            viewModel._Select_super_total_Result = listall;
+
+
+
+            //var report = new PartialViewAsPdf("_PDFMaster_list", viewModel);
+            //return report;
+
+            return View("_PDFMaster_list", viewModel); // Just to check if rest works
+
+
+
+        }
+
+        [PermissioncheckingAttribute(servicename = "USERS", permision = "Read")]
         public ActionResult Master_list()
         {
-            var employeeuserid = User.Identity.GetUserId();
+            ViewData["value"] = "";
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            var results = (from p in db.Slab_name where p.SlabFor == "Master" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+
+            var ch = db.Select_super_total();
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            viewModel._Select_super_total_Result = ch;
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [PermissioncheckingAttribute(servicename = "USERS", permision = "Read")]
+
+        public ActionResult Master_list(string MID)
+        {
+            if (MID != "" && MID != null)
+            {
+                ViewData["value"] = "OK";
+            }
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var results = (from p in db.master_slab where p.slabName != "Default" group p.slabName by p.slabName into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "slabName", "slabName");
+            var ch = db.Select_super_total();
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            viewModel._Select_super_total_Result = ch;
+            viewModel.show_master_dealer = db.show_master_dealer(MID).ToList();
+            return View(viewModel);
+        }
+
+        public PartialViewResult MasterlistPart()
+        {
+
             ViewData["value"] = "";
             ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
             ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
@@ -9037,14 +9219,452 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
             var results = (from p in db.Slab_name where p.SlabFor == "Master" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
             ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
-            var ch = db.Select_super_Permissionwise_total(employeeuserid).ToList();
+            var ch = db.Select_super_total();
             TempData.Keep("msgrem");
             MasterDistributerModel viewModel = new MasterDistributerModel();
-            viewModel.Select_super_Permissionwise = ch.ToList();
-            ViewData["ResendMail"] = TempData["ResendMAil"];
-            return View(viewModel);
+            viewModel._Select_super_total_Result = ch;
+
+            return PartialView("_Masterlist", viewModel);
+        }
+
+        [HttpPost]
+        public PartialViewResult _SelectDlmID(string MdId)
+        {
+            var Details = db.Select_Dealer_total(MdId).ToList();
+            MasterDistributerModel dlmViewModel = new MasterDistributerModel();
+            dlmViewModel.Select_dealer_list = Details;
+            return PartialView("_SelectDlmID", dlmViewModel);
+        }
+        [HttpPost]
+        public async Task<ActionResult> insert_master_super(MasterDistributerModel model, string role)
+        {
+            string message = "";
+            var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            using (var transaction = appDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+                    var chckmobile = db.Users.Where(a => a.PhoneNumber == model.Mb).Any();
+                    if (chckmobile == true)
+                    {
+                        //  TempData["mobileno"] = "This Mobile Number Already Exists.";
+                        message = "This Mobile Number Already Exists.";
+                        return Json(new { status = "Error", message = message }, JsonRequestBehavior.AllowGet); //RedirectToAction("Master_list");
+                    }
+                    var check = db.Superstokist_details.Where(es => es.Mobile == model.Mb).Any();
+                    if (check == false)
+                    {
+                        //    if (db.Superstokist_details.Any(u => u.Mobile != model.Mb.ToString()))
+                        //{
+                        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.Mb.ToString() };
+                        //Generate Random Password
+
+                        bool includeLowercase = false;
+                        bool includeUppercase = false;
+                        bool includeNumeric = true;
+                        bool includeSpecial = false;
+                        bool includeSpaces = false;
+                        int lengthOfPassword = 8;
+
+                        string pass = PasswordGenerator.GeneratePassword(includeLowercase, includeUppercase, includeNumeric, includeSpecial, includeSpaces, lengthOfPassword);
+
+                        while (!PasswordGenerator.PasswordIsValid(includeLowercase, includeUppercase, includeNumeric, includeSpecial, includeSpaces, pass))
+                        {
+                            pass = PasswordGenerator.GeneratePassword(includeLowercase, includeUppercase, includeNumeric, includeSpecial, includeSpaces, lengthOfPassword);
+                        }
+
+
+                        model.Password = pass.ToString();
+                        model.ConfirmPassword = pass.ToString();
+                        var result = await UserManager.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
+                        {
+                            System.Data.Entity.Core.Objects.ObjectParameter output = new
+                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                            var ch = db.Insert_SuperStokist(user.Id, model.SuperstokistName, model.FarmName, model.State, model.District, model.Mb.ToString(), model.Address, model.Pincode, model.Email,
+                               "", string.IsNullOrWhiteSpace(model.pancard) ? "" : model.pancard, string.IsNullOrWhiteSpace(model.adharcard) ? "" : model.adharcard, string.IsNullOrWhiteSpace(model.gst) ? "" : model.gst, "", role, output).Single().msg.ToString();
+                            var adminemail = db.Admin_details.SingleOrDefault().email;
+
+                            var AdminMailId = db.Admin_details.Single().email;
+                            var statusAdmin = db.PushNotificationStatus.Where(a => a.UserRole == "Admin").SingleOrDefault().Status;
+                            var statusSendSmsMaster = db.SMSSendAlls.Where(a => a.ServiceName == "MasterCreate").SingleOrDefault();
+                            var statusSendEmailMaster = db.EmailSendAlls.Where(a => a.ServiceName == "MasterCreate1").SingleOrDefault().Status;
+                            if (ch.Contains("successfully"))
+                            {
+                                string passsss = HttpUtility.UrlEncode(model.Password);
+                                transaction.Commit();
+
+                                // Send an email with this link
+                                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                                var callbackUrl = Url.Action("ConfirmEmailAdmin", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                                callbackUrl = callbackUrl.Replace("/ADMIN", "");
+                                string body = new CommonUtil().PopulateBodyDealer("", "Confirm your account", "", "" + callbackUrl + "", model.Email, model.Password);
+                                new CommonUtil().Insertsendmail(model.Email, "Confirm your account", body, callbackUrl);
+
+                                string Welcomebody = new CommonUtil().PopulateBodyWelcome("", "Confirm your account", "", "" + callbackUrl + "", model.Email, model.Password);
+                                new CommonUtil().InsertsendmailWelcome(model.Email, "Confirm your account", Welcomebody, callbackUrl);
+
+                                new CommonUtil().Rsendmailadmin(adminemail, "Confirm your account", body, callbackUrl);
+
+                                ResendConfirmMail resend = new ResendConfirmMail();
+                                resend.CallBackUrl = callbackUrl;
+                                resend.Email = model.Email;
+                                resend.Password = model.Password;
+                                resend.Pin = "";
+                                db.ResendConfirmMails.Add(resend);
+                                db.SaveChanges();
+
+                                //if (statusSendSmsMaster == "Y")
+                                //{
+                                //    string msgssss = "";
+                                //    string tempid = "";
+                                //    string urlss = "";
+
+                                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
+                                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "ADMIN_CREATE_NEW_USERS" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
+                                //    if (smsstypes != null)
+                                //    {
+
+
+
+                                //        msgssss = string.Format(smsstypes.Templates, model.Mb, passsss);
+                                //        tempid = smsstypes.Templateid;
+                                //        urlss = smsapionsts.smsapi;
+
+                                //        smssend.sendsmsallnew(model.Mb, msgssss, urlss, tempid);
+                                //    }
+
+
+                                //    //smssend.sendsmsall(model.Mb, "Dear Partner ! Welcome Your user Id " + model.Mb + " and Password " + passsss + ". Thanks For Your Business . ", "User Create");
+                                //}
+
+                                smssend.sms_init(statusSendSmsMaster.Status, statusSendSmsMaster.Whatsapp_Status, "ADMIN_CREATE_NEW_USERS", model.Mb, model.Mb + " ", passsss);
+
+                                if (statusSendEmailMaster == "Y")
+                                {
+                                    smssend.SendEmailAll(model.Email, "Dear Partner ! Welcome Your user Id " + model.Mb + " and Password " + passsss + ". Thanks For Your Business . ", "User Create", AdminMailId);
+                                }
+
+                                if (statusAdmin == "Y")
+                                {
+                                    SendPushNotification(AdminMailId, Url.Action("Master_list", "Home"), "The New Master Id " + model.Email + " is Created Successfully.", "Master ID Create.");
+                                }
+                                // TempData["msgrem"] = ch;
+                                return Json(new { status = "Success", message = ch }, JsonRequestBehavior.AllowGet);
+                                //  return RedirectToAction("Master_list");
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                                // TempData["Error"] = "User Not Created. Please Create After Some Time.";
+                                message = "User Not Created. Please Create After Some Time.";
+                                return Json(new { status = "Error", message = message }, JsonRequestBehavior.AllowGet);
+                                // return RedirectToAction("Master_list");
+                            }
+
+                        }
+                        else
+                        {
+                            // TempData["emailconfrim"] = "This Email Id Allready Exists.";
+                            message = "This Email Id Allready Exists.";
+                        }
+                        return Json(new { status = "Error", message = message }, JsonRequestBehavior.AllowGet);
+                        // return RedirectToAction("Master_list");
+                    }
+                    else
+                    {
+                        // TempData["mobileno"] = "This Mobile Number Already Exists.";
+                        // return RedirectToAction("Master_list");
+                        message = "This Mobile Number Already Exists.";
+                        return Json(new { status = "Error", message = message }, JsonRequestBehavior.AllowGet);
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    transaction.UnderlyingTransaction.Connection.Open();
+                    transaction.Rollback();
+                    message = "User Not Created. Please Create After Some Time.";
+                    return Json(new { status = "Error", message = message }, JsonRequestBehavior.AllowGet);
+
+                    // TempData["Error"] = "User Not Created. Please Create After Some Time.";
+                    // return RedirectToAction("Master_list");
+                }
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit_master_dealer(string ssid, string NameEdit, string FirmEdit, string pancardEdit, string AadhaarEdit, string gstEdit, string StateEdit, string DistrictEdit, string AddressEdit, string Editddlrole, string PinEdit, decimal? CappingEdit, decimal? offmargineEdit)
+        {
+            try
+            {
+                var super = db.Superstokist_details.Where(p => p.SSId == ssid).SingleOrDefault();
+                super.SuperstokistName = NameEdit;
+                super.FarmName = FirmEdit;
+                super.pancard = pancardEdit;
+                super.adharcard = AadhaarEdit;
+                super.gst = gstEdit;
+                super.State = Convert.ToInt32(StateEdit);
+                super.District = Convert.ToInt32(DistrictEdit);
+                super.Address = AddressEdit;
+                super.RolesType = Editddlrole;
+                super.Pincode = Convert.ToInt32(PinEdit);
+                super.caption = (decimal)CappingEdit;
+                db.SaveChanges();
+                var marginsetmaster = db.admin_to_master_margine.Where(x => x.ssid == ssid).FirstOrDefault();
+                marginsetmaster.marginecomm = offmargineEdit;
+                db.SaveChanges();
+                ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+                ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+                var district = from s in db.District_Desc
+                               where s.State_id == 0
+                               select s;
+                ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+                MasterDistributerModel viewModel = new MasterDistributerModel();
+                var ch = db.Select_super_total();
+                viewModel._Select_super_total_Result = ch;
+                return PartialView("_Masterlist", viewModel);
+
+            }
+            catch
+            {
+                return RedirectToAction("Master_list");
+            }
+        }
+
+        public ActionResult emailverify(string ssid)
+        {
+            var usersts = db.Users.Where(aa => aa.UserId == ssid).SingleOrDefault();
+            usersts.EmailConfirmed = true;
+            db.SaveChanges();
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            var ch = db.Select_super_total();
+            viewModel._Select_super_total_Result = ch;
+            return PartialView("_Masterlist", viewModel);
 
         }
+
+        public ActionResult ConfirmDeleteOTP(string ssiddelete, string Deleteotp)
+        {
+
+            var chk = db.MobileOtps.Where(aa => aa.Otp == Deleteotp).Take(1).OrderByDescending(aa => aa.Date).SingleOrDefault();
+            MasterDistributerModel viewModel = new MasterDistributerModel();
+            try
+            {
+                var isdealerexist = db.Dealer_Details.Where(s => s.SSId == ssiddelete).ToList();
+                if (isdealerexist.Count > 0)
+                {
+                    throw new Exception("Not Allow To Delete, First Change The Distributor.");
+                }
+                if (chk != null)
+                {
+                    db.delete_Master(ssiddelete);
+
+                    //for logout from all devices web
+                    UserManager.UpdateSecurityStamp(ssiddelete);
+
+                    ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+                    ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+                    var district = from s in db.District_Desc
+                                   where s.State_id == 0
+                                   select s;
+                    ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+                    var ch = db.Select_super_total();
+                    viewModel._Select_super_total_Result = ch;
+                    return PartialView("_Masterlist", viewModel);
+                }
+                else
+                {
+                    throw new HttpException(404, "Product not found");
+                    // return Json("failed", JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(ex, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+
+
+
+
+        #endregion
+        /////////////////////////////////Master//////////////////////////////////
+        /////////////////////////////////DistibutorList///////////////////////////////
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpGet]
+        [PermissioncheckingAttribute(servicename = "USERS", permision = "Read")]
+        public ActionResult DistibutorList()
+        {
+            var results = (from p in db.Slab_name where p.SlabFor == "Distributor" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            var Details = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
+            DealerModel viewModel = new DealerModel();
+            viewModel.Select_dealer_list = Details;
+            var stands = db.Superstokist_details.ToList();
+            IEnumerable<SelectListItem> selectList = from s in stands
+                                                     select new SelectListItem
+                                                     {
+                                                         Value = s.SSId,
+                                                         Text = s.Email + " -- " + s.FarmName.ToString()
+                                                     };
+            ViewBag.masterid = new SelectList(selectList, "Value", "Text");
+            TempData.Keep("Message");
+            ViewData["ResendMail"] = TempData["ResendMAil"];
+            return View(viewModel);
+        }
+        public ActionResult DistibutorListforseller()
+        {
+            var set = db.Recharge_sell_by_dealer.Where(s => s.registration_Status == true && s.Status == true).ToList();
+            ViewBag.dealerdetailess = db.Dealer_Details.ToList();
+            return View(set);
+        }
+        [HttpPost]
+        public ActionResult DistibutorListforseller(string Dealertdd)
+        {
+            var set = db.Recharge_sell_by_dealer.Where(s => s.registration_Status == true && s.Status == true && s.Dealerid.Contains(Dealertdd)).ToList();
+            ViewBag.dealerdetailess = db.Dealer_Details.ToList();
+            return View(set);
+        }
+
+
+        public ActionResult ExcellGenerateForDistibutor(string usernm)
+        {
+            DataTable dt = new DataTable("Grid");
+            dt.Columns.AddRange(new DataColumn[8] {
+
+                                              new DataColumn(" Master Distributor Firm"),
+                                            new DataColumn("DistributorFirm"),
+                                            new DataColumn("Distributor Name"),
+                                            new DataColumn("Mobile No"),
+                                            new DataColumn("Aadhar No"),
+                                            new DataColumn("PANNo"),
+                                            new DataColumn("KYC"),
+                                            new DataColumn("Email V/F") });
+
+
+            var Details = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
+            var listall = new List<Select_Dealer_total_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+                var dealerlist = Details.Where(x => !string.IsNullOrEmpty(x.FarmName) && x.FarmName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                listall = dealerlist;
+                if (listall.Count == 0)
+                {
+                    var filterbyname = Details.Where(x => x.DealerName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbyname;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+
+
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            // viewmodel.select_retailer_details = listall;
+
+
+
+            foreach (var item in listall)
+            {
+                var psaveri = item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.pancardsts == "Y" ? "Done" : "Due";
+                var emailssvarify = item.Emailconfirmed == true ? "Done" : "Due";
+                dt.Rows.Add(item.MasterEmail, item.FarmName, item.DealerName, item.Mobile, item.adharcard, item.pancard, psaveri, emailssvarify);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.ColumnWidth = 24.14;
+                wb.Worksheets.Add(dt);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Dealerlist.xlsx");
+                }
+            }
+
+
+        }
+
+        public ActionResult Stscanhgedlmsell(string userid, bool? status)
+        {
+            try
+            {
+                var dlmsell = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == userid).SingleOrDefault();
+                dlmsell.Status = status;
+                db.SaveChanges();
+            }
+            catch
+            {
+                var dlmsell = db.Recharge_sell_by_dealer.Where(s => s.Dealerid == userid).SingleOrDefault();
+                status = dlmsell.Status;
+            }
+
+            return Json(status, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult PrintDistibutorPartialViewToPdf(string usernm)
+        {
+            DealerModel viewModel = new DealerModel();
+            var Details = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
+            var listall = new List<Select_Dealer_total_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+                var dealerlist = Details.Where(x => !string.IsNullOrEmpty(x.FarmName) && x.FarmName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                listall = dealerlist;
+                if (listall.Count == 0)
+                {
+                    var filterbyname = Details.Where(x => x.DealerName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbyname;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+
+
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            viewModel.Select_dealer_list = listall;
+
+            var report = new PartialViewAsPdf("_PDFDistibutorlist", viewModel);
+            return report;
+
+        }
+
 
 
         [HttpPost]
@@ -9069,13 +9689,35 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
             var results = (from p in db.Slab_name where p.SlabFor == "Distributor" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
             ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
-            int stateid = db.Select_Dealer_total("ADMIN").Where(ii => ii.DealerId == ssid).Select(aa => aa.State).FirstOrDefault();
+            int stateid = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).Where(ii => ii.DealerId == ssid).Select(aa => aa.State).FirstOrDefault();
             ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name", stateid).ToList();
-            var ch = db.Select_Dealer_total("ADMIN").Where(ii => ii.DealerId == ssid);
+            var ch = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).Where(ii => ii.DealerId == ssid);
             return Json(new { list = ch, state = ViewBag.state1 }, JsonRequestBehavior.AllowGet);
 
         }
 
+        public ActionResult ChargeBack_OTP_ON_OFF(string DealerId)
+        {
+            var stschk = db.Dealer_Details.Where(a => a.DealerId == DealerId).SingleOrDefault();
+            var updateotpsts = stschk.chargeback_otpsts == true ? false : true;
+            stschk.chargeback_otpsts = updateotpsts;
+            db.SaveChanges();
+
+            return Json(new { status = "Success", Message = updateotpsts }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        public ActionResult Self_Upi_STS_ON_OFF(string DealerId)
+        {
+            var dd = db.Dealer_Details.Where(a => a.DealerId == DealerId).SingleOrDefault();
+            var updateUPIsts = dd.DealerSelf_sts == true ? false : true;
+            dd.DealerSelf_sts = updateUPIsts;
+            db.SaveChanges();
+
+            return Json(new { status = "Success", Message = updateUPIsts }, JsonRequestBehavior.AllowGet);
+
+        }
         public ActionResult ConfirmDeleteDealerOTP(string DealerIddelete, string Deleteotp)
         {
             try
@@ -9084,6 +9726,10 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                 if (chk != null)
                 {
                     db.delete_Dealer(DealerIddelete);
+
+                    //for logout from all devices web
+                    UserManager.UpdateSecurityStamp(DealerIddelete);
+
                     ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
                     ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
                     var district = from s in db.District_Desc
@@ -9091,7 +9737,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                    select s;
                     ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
                     DealerModel viewModel = new DealerModel();
-                    viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").ToList(); ;
+                    viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList(); ;
                     return PartialView("_DistibutorList", viewModel);
                 }
                 else
@@ -9106,48 +9752,9 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             }
         }
 
-        public JsonResult DistrictList(int Id)
-        {
-            var district = from s in db.District_Desc
-                           where s.State_id == Id
-                           select s;
-            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
-            return Json(new SelectList(district.ToArray(), "Dist_id", "Dist_Desc"), JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult MasterIdSearch(string ssid)
-        {
-            var empuserid = User.Identity.GetUserId();
-            // var ch = db.Select_super_total().Where(ii => ii.SSId == ssid);
-            //  return Json(ch, JsonRequestBehavior.AllowGet);
-            var ch = db.Select_super_Permissionwise_total(empuserid).Where(ii => ii.SSId == ssid);
-
-            ViewData["value"] = "";
-
-
-            var district = from s in db.District_Desc
-                           where s.State_id == 0
-                           select s;
-            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
-
-
-            int stateid = db.Select_super_Permissionwise_total(empuserid).Where(aa => aa.SSId == ssid).Select(aa => aa.state).FirstOrDefault();
-            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name", stateid).ToList();
-            return Json(new { list = ch, state = ViewBag.state1 }, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult DealerIdSearch(string dealerid)
-        {
-            var ch = db.Dealer_Details.Where(ii => ii.DealerId == dealerid);
-            return Json(ch.ToArray(), JsonRequestBehavior.AllowGet);
-        }
-
-
-
-
-
         public PartialViewResult DealerlistPart()
         {
-            var empuserid = User.Identity.GetUserId();
+
             ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
             ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
             var district = from s in db.District_Desc
@@ -9160,14 +9767,13 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             var ch = db.Select_super_total();
             TempData.Keep("msgrem");
             DealerModel viewModel = new DealerModel();
-            viewModel.Select_Permissionwise_Dealer_total = db.Select_Permissionwise_Dealer_total(empuserid);
+            viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
             return PartialView("_DistibutorList", viewModel);
         }
 
         [HttpPost]
-        public ActionResult Edit_Distributer_dealer(string DealerId, string NameEdit, string DOBEdit, string FirmEdit, string pancardEdit, string AadhaarEdit, string gstEdit, string StateEdit, string DistrictEdit, string AddressEdit, string Editddlrole, string PinEdit)
+        public ActionResult Edit_Distributer_dealer(string DealerId, string NameEdit, string DOBEdit, string FirmEdit, string pancardEdit, string AadhaarEdit, string gstEdit, string StateEdit, string DistrictEdit, string AddressEdit, string Editddlrole, string PinEdit, int CappingEdit, decimal? offmargineEdit)
         {
-            var empuserid = User.Identity.GetUserId();
             DealerModel viewModel = new DealerModel();
             try
             {
@@ -9183,6 +9789,10 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                 super.Pincode = Convert.ToInt32(PinEdit);
                 super.DOF = Convert.ToDateTime(DOBEdit);
                 super.FinincialRolesType = Editddlrole;
+                super.caption = CappingEdit;
+                db.SaveChanges();
+                var dlmmargin = db.master_to_dlm_margine.Where(x => x.dlm == DealerId && x.masterid == db.Admin_details.FirstOrDefault().userid).FirstOrDefault();
+                dlmmargin.marginecomm = offmargineEdit == null ? 0 : offmargineEdit;
                 db.SaveChanges();
                 ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
                 ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
@@ -9191,7 +9801,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                                select s;
                 ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
 
-                viewModel.Select_Permissionwise_Dealer_total = db.Select_Permissionwise_Dealer_total(empuserid).ToList(); ;
+                viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList().ToList();
 
                 return PartialView("_DistibutorList", viewModel);
 
@@ -9199,7 +9809,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             catch
             {
 
-                viewModel.Select_Permissionwise_Dealer_total = db.Select_Permissionwise_Dealer_total(empuserid).ToList(); ;
+                viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
 
                 return PartialView("_DistibutorList", viewModel);
             }
@@ -9207,28 +9817,9 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
         }
 
-        public ActionResult emailverify(string ssid)
-        {
-            var empuserid = User.Identity.GetUserId();
-            var usersts = db.Users.Where(aa => aa.UserId == ssid).SingleOrDefault();
-            usersts.EmailConfirmed = true;
-            db.SaveChanges();
-            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
-            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
-            var district = from s in db.District_Desc
-                           where s.State_id == 0
-                           select s;
-            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
-            MasterDistributerModel viewModel = new MasterDistributerModel();
-            var ch = db.Select_super_Permissionwise_total(empuserid);
-            viewModel.Select_super_Permissionwise = ch;
-            return PartialView("_Masterlist", viewModel);
-
-        }
 
         public ActionResult emailverifyfordealer(string dealerid)
         {
-            var empuserid = User.Identity.GetUserId();
             var usersts = db.Users.Where(aa => aa.UserId == dealerid).SingleOrDefault();
             usersts.EmailConfirmed = true;
             db.SaveChanges();
@@ -9240,12 +9831,873 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
             // var Details = db.Select_Dealer_total("ADMIN").ToList();
             DealerModel viewModel = new DealerModel();
-            viewModel.Select_Permissionwise_Dealer_total = db.Select_Permissionwise_Dealer_total(empuserid).ToList(); ;
+            viewModel.Select_dealer_list = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList(); ;
 
             return PartialView("_DistibutorList", viewModel);
 
         }
 
+        //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Retailer\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+        public ActionResult ExcellGenerateForRetailer(string usernm, string usernminput)
+        {
+            DataTable dt = new DataTable("Grid");
+            dt.Columns.AddRange(new DataColumn[10] {
+                                            new DataColumn("DistributorFirm"),
+                                            new DataColumn("RetailerFirm"),
+                                            new DataColumn("RetailerName"),
+                                            new DataColumn("MobileNo"),
+                                            new DataColumn("Cap♽"),
+                                            new DataColumn("Balance"),
+                                            new DataColumn("AadharNo"),
+                                            new DataColumn("PANNo"),
+                                            new DataColumn("KYC"),
+                                            new DataColumn("Email V/F") });
+            // var retaiulerlist = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
+            //if (!string.IsNullOrEmpty(usernm))
+            //{
+            //   var retaiulerlist1 = retaiulerlist.Where(x=>x.Frm_Name.ToUpper().Contains(usernm) || x.RetailerName.ToUpper().Contains(usernm) || x.Mobile.ToUpper().Contains(usernm) ||x.PanCard.ToUpper().Contains(usernm));
+            //}
+
+            var Details = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").ToList();
+            var listall = new List<Select_Retailer_Details_all_paging_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+
+                var filterbyfrm = Details.Where(x => x.DealerId == usernm).ToList();
+                listall = filterbyfrm;
+                usernminput = null;
+                //var dealerlist = Details.Where(x => !string.IsNullOrEmpty(x.DealerFarmName) && x.DealerFarmName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //listall = dealerlist;
+                //if (listall.Count == 0)
+                //{
+                //    var filterbyfrm = Details.Where(x => x.Frm_Name.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbyfrm;
+                //}
+                //if (listall.Count == 0)
+                //{
+                //    var filterbyremname = Details.Where(x => x.RetailerName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbyremname;
+                //}
+                //if (listall.Count == 0)
+                //{
+                //    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbymob;
+                //}
+
+
+            }
+            else if (!string.IsNullOrEmpty(usernminput))
+            {
+                var dealerlist = Details.Where(x => !string.IsNullOrEmpty(x.DealerFarmName) && x.DealerFarmName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                listall = dealerlist;
+
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().StartsWith(usernminput.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbyfrm = Details.Where(x => x.Frm_Name.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbyfrm;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbyremname = Details.Where(x => x.RetailerName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbyremname;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.DealerFarmName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            // viewmodel.select_retailer_details = listall;
+
+
+
+            foreach (var item in listall)
+            {
+                var psaveri = item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.ShopwithSalfieStatus == "Y" ? "Done" : "Due";
+                var emailssvarify = item.EmailConfirmed == true ? "Done" : "Due";
+                dt.Rows.Add(item.DealerFarmName, item.Frm_Name, item.RetailerName, item.Mobile, item.caption, item.Remainamount, item.AadharCard, item.PanCard, psaveri, emailssvarify);
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.ColumnWidth = 24.14;
+                wb.Worksheets.Add(dt);
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Retailerlist.xlsx");
+                }
+            }
+
+
+        }
+
+        public ActionResult PrintPartialViewToPdf(string usernm, string usernminput)
+        {
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            var Details = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").ToList();
+            var listall = new List<Select_Retailer_Details_all_paging_Result>();
+            if (!string.IsNullOrEmpty(usernm))
+            {
+                var dealerlist = Details.Where(x => x.DealerId == usernm).ToList();
+                listall = dealerlist;
+                //if (listall.Count == 0)
+                //{
+                //    var filterbyfrm = Details.Where(x => x.Frm_Name.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbyfrm;
+                //}
+                //if (listall.Count == 0)
+                //{
+                //    var filterbyremname = Details.Where(x => x.RetailerName.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbyremname;
+                //}
+                //if (listall.Count == 0)
+                //{
+                //    var filterbymob = Details.Where(x => x.Mobile.ToUpper().Contains(usernm.ToUpper())).ToList();
+                //    listall = filterbymob;
+                //}
+                usernminput = null;
+
+            }
+            else if (!string.IsNullOrEmpty(usernminput))
+            {
+                var dealerlist = Details.Where(x => !string.IsNullOrEmpty(x.DealerFarmName) && x.DealerFarmName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                listall = dealerlist;
+
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.Mobile.ToUpper().StartsWith(usernminput.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbyfrm = Details.Where(x => x.Frm_Name.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbyfrm;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbyremname = Details.Where(x => x.RetailerName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbyremname;
+                }
+                if (listall.Count == 0)
+                {
+                    var filterbymob = Details.Where(x => x.DealerFarmName.ToUpper().Contains(usernminput.ToUpper())).ToList();
+                    listall = filterbymob;
+                }
+            }
+            else
+            {
+                var dealerlist = Details;
+                listall = dealerlist;
+            }
+            viewmodel.select_retailer_details_paging = listall;
+
+            var report = new PartialViewAsPdf("_PDFRetailerlist", viewmodel);
+            return report;
+
+        }
+
+        public ActionResult retailerekyccheck()
+        {
+            var results = db.retailer_Ekycreport().ToList();
+            return View("retailerekyccheck", results);
+        }
+
+        public ActionResult Excel_retailerekyccheck()
+        {
+            var results = db.retailer_Ekycreport().ToList();
+
+            DataTable dataTbl = new DataTable();
+            dataTbl.Columns.Add("Status", typeof(string));
+            dataTbl.Columns.Add("Firm Name", typeof(string));
+            dataTbl.Columns.Add("Email Id", typeof(string));
+            dataTbl.Columns.Add("Mobile No", typeof(string));
+            dataTbl.Columns.Add("Adharcard No", typeof(string));
+            dataTbl.Columns.Add("Pancard", typeof(string));
+            dataTbl.Columns.Add("Merchant Id", typeof(string));
+            dataTbl.Columns.Add("e-kyc Mobile", typeof(string));
+            dataTbl.Columns.Add("e-kyc Adhaar", typeof(string));
+            dataTbl.Columns.Add("In Date", typeof(string));
+            dataTbl.Columns.Add("Update Date", typeof(string));
+            dataTbl.Columns.Add("Device Info", typeof(string));
+
+            if (results.Count > 0)
+            {
+                foreach (var item in results)
+                {
+                    var sts = "";
+                    if (item.ekycstatus == true)
+                    {
+                        sts = "verify";
+                    }
+                    else if (item.ekycstatus == false)
+                    {
+                        sts = "unverify";
+                    }
+                    else
+                    {
+                        sts = "unregisterd";
+                    }
+
+                    dataTbl.Rows.Add(sts, item.frm_name, item.email, item.mobile, item.AadharCard, item.Pancard, item.AepsMerchandId, item.ekycmobile, item.ekycadhaar, item.insertdate, item.updatedate, item.devicename + " " + item.devicesrno);
+                }
+            }
+            else
+            {
+                dataTbl.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "");
+            }
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=Excel_retailer_ekyc.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View();
+        }
+
+        public ActionResult PDF_retailerekyccheck()
+        {
+            var results = db.retailer_Ekycreport().ToList();
+            return new ViewAsPdf(results);
+        }
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+
+
+        public JsonResult RetailerByIdSearch(string RetailerId)
+        {
+            ViewData["value"] = "";
+
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+
+            var ch = db.Select_Retailer_Details_all_paging(1, 1, RetailerId).ToList();
+            if (RetailerId != null)
+            {
+                ch = ch.Where(s => s.RetailerId == RetailerId).ToList();
+            }
+            int stateid = db.Select_Retailer_Details_all_paging(1, 1, RetailerId).Select(aa => aa.State).FirstOrDefault();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name", stateid).ToList();
+            var poscp = db.Retailer_Details.Where(s => s.RetailerId == RetailerId).SingleOrDefault().POS_CAPPING;
+            if (poscp == null)
+            {
+                poscp = 0;
+            }
+            return Json(new { list = ch, state = ViewBag.state1, poscapp = poscp }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult emailverifyforRetailer(string RetailerId, string Type)
+        {
+            var usersts = db.Users.Where(aa => aa.UserId == RetailerId).SingleOrDefault();
+            if (Type == "Email")
+            {
+                usersts.EmailConfirmed = true;
+            }
+            else
+            {
+                usersts.PhoneNumberConfirmed = true;
+            }
+            db.SaveChanges();
+            ViewData["value"] = "";
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            var results = (from p in db.Slab_name where p.SlabFor == "Retailer" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+
+            var ch = db.Select_Retailer_Details_all_paging(1, 1, RetailerId);
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            viewmodel.select_retailer_details_paging = ch.ToList();
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+
+
+
+                                                     };
+            return PartialView("_Retailerlist", viewmodel);
+
+        }
+
+
+
+        //RetailerList
+        [HttpGet]
+
+        [PermissioncheckingAttribute(servicename = "USERS", permision = "Read")]
+        public ActionResult Retailerlist()
+        {
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.Dealername = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "FarmName", null);
+
+            ViewData["msg"] = TempData["msgshow"];
+            var Details = db.Select_Retailer_Details_all_paging(1, 50, "ADMIN").ToList();
+            var results = (from p in db.Slab_name where p.SlabFor == "Retailer" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            //ViewBag.slab = new SelectList(results, "SlabName", "SlabName");
+            // ViewBag.slabedit = new SelectList(results, "SlabName", "SlabName");
+            //var slab = (from p in db.retailer_slab where p.retailer_id != "Default" group p.retailer_id by p.retailer_id into g select new { retailer_id = g.Key });
+            //ViewBag.slab = new SelectList(slab, "retailer_id", "retailer_id");
+            //ViewBag.slabedit = new SelectList(slab, "retailer_id", "retailer_id");
+            var state = db.Select_State_Details().ToList();
+            TempData.Remove("Message");
+            ViewData["ResendMail"] = TempData["ResendMAil"];
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            List<SelectListItem> items = new List<SelectListItem>();
+            //foreach (var item in db.select_Dealer_for_ddl())
+            //{
+            //    items.Add(new SelectListItem { Text = item.FarmName, Value = item.DealerId.ToString() });
+
+            //}
+            //viewmodel.Dealerlist = items;
+
+            viewmodel.Dealerlist = new SelectList(db.select_Dealer_for_ddl(), "DealerId", "FarmName").ToList();
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+            viewmodel.select_retailer_details_paging = Details;
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+
+
+
+                                                     };
+            return View(viewmodel);
+
+        }
+        public ActionResult InfiniteScroll_retailer(int pageindex)
+        {
+            int pagesize = 50;
+            var ch = db.Select_Retailer_Details_all_paging(pageindex, pagesize, "ADMIN").ToList();
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            viewmodel.select_retailer_details_paging = ch;
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+
+
+
+                                                     };
+            JsonModel jsonmodel = new JsonModel();
+            jsonmodel.NoMoredata = ch.Count < pagesize;
+            jsonmodel.HTMLString = renderPartialViewtostring("_Retailerlist_Paging", viewmodel);
+            return Json(jsonmodel);
+        }
+
+
+
+
+        [HttpPost]
+
+
+        public ActionResult ApprovedRetailersts(string val, string RetailerId)
+        {
+
+            var Retailerdetail = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
+            if (val == "pan")
+            {
+                Retailerdetail.PSAStatus = "Y";
+            }
+            else if (val == "aadhar")
+            {
+                Retailerdetail.AadhaarStatus = "Y";
+            }
+            else if (val == "gst")
+            {
+                Retailerdetail.gststatus = "Y";
+            }
+            else if (val == "Aggrement")
+            {
+                Retailerdetail.IsAgreement = true;
+
+            }
+            else if (val == "Salfie")
+            {
+                Retailerdetail.ShopwithSalfieStatus = "Y";
+
+            }
+            else if (val == "VIDEOKYC")
+            {
+                Retailerdetail.videokycstatus = "Y";
+
+            }
+            var res = db.SaveChanges();
+            if (res > 0)
+            {
+
+
+                return Json(val, JsonRequestBehavior.AllowGet);
+            }
+            return Json("sdfdsgdf", JsonRequestBehavior.AllowGet);
+            //RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            //ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            //ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            //var district = from s in db.District_Desc
+            //               where s.State_id == 0
+            //               select s;
+            //ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
+
+            //return PartialView("_Retailerlist", viewmodel);
+
+
+        }
+
+        public ActionResult PanAadharDelete(string hdval, string RetailerIddeletedocument, string Deletedocumentotp)
+        {
+
+            try
+            {
+                var Retailerdetail = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerIddeletedocument).SingleOrDefault();
+                var chk = db.MobileOtps.Where(aa => aa.Otp == Deletedocumentotp).Take(1).OrderByDescending(aa => aa.Date).SingleOrDefault();
+                if (chk != null)
+                {
+                    if (hdval == "pan")
+                    {
+                        Retailerdetail.PSAStatus = "N";
+                        Retailerdetail.pancardPath = null;
+                    }
+                    else if (hdval == "aadhar")
+                    {
+                        Retailerdetail.AadhaarStatus = "N";
+                        Retailerdetail.aadharcardPath = null;
+                    }
+
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                    {
+                        RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+
+
+                        viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 1, RetailerIddeletedocument).ToList();
+                        viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+                        viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                                 join tbl1 in db.Service_BlockUserwise
+                                                                 on tbl.idno equals tbl1.Show_Service_name_id
+                                                                 select new Service_BlockUserwisecls
+                                                                 {
+                                                                     idno = tbl.idno,
+                                                                     servicename = tbl.servicename,
+                                                                     serviceidno = tbl1.Show_Service_name_id,
+                                                                     remid = tbl1.remid,
+                                                                     servicestatus = tbl1.status,
+                                                                     basedupdate_id = tbl1.idno
+
+
+
+                                                                 };
+                        return PartialView("_Retailerlist", viewmodel);
+                    }
+                }
+                else
+                {
+                    throw new HttpException(404, "Product not found");
+
+                }
+            }
+            catch (Exception ewx)
+            {
+                return Json("WrongOTP", JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("WrongOTP", JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        public ActionResult RejectedPancardAadharRetailersts(string hdval, string RetailerIddeletedocument, string Deletedocumentotp)
+        {
+            try
+            {
+                var Retailerdetail = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerIddeletedocument).SingleOrDefault();
+                var adminids = db.Admin_details.SingleOrDefault().userid;
+                var chk = db.MobileOtps.Where(aa => aa.Userid == adminids).OrderByDescending(aa => aa.Date).Select(a => a.Otp).FirstOrDefault();
+                var chktype = db.MobileOtps.Where(aa => aa.Userid == adminids).OrderByDescending(aa => aa.Date).Select(a => a.Type).FirstOrDefault();
+                if (chk == Deletedocumentotp && chktype == "DeleteRetailerAADharCard" || chktype == "DeleteRetailerPancard" || chktype == "DeleteRetailerMPOSID")
+                {
+                    if (hdval == "pan")
+                    {
+                        Retailerdetail.PSAStatus = "N";
+                        Retailerdetail.pancardPath = null;
+                    }
+                    else if (hdval == "aadhar")
+                    {
+                        Retailerdetail.AadhaarStatus = "N";
+                        Retailerdetail.aadharcardPath = null;
+                        Retailerdetail.BackSideAadharcardphoto = null;
+                    }
+                    else if (hdval == "MPOSID")
+                    {
+
+                        Retailerdetail.PartnerID = null;
+                    }
+
+                    var res = db.SaveChanges();
+                    if (res > 0)
+                    {
+                        RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+
+
+                        viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 1, RetailerIddeletedocument).ToList();
+                        viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+                        viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                                 join tbl1 in db.Service_BlockUserwise
+                                                                 on tbl.idno equals tbl1.Show_Service_name_id
+                                                                 select new Service_BlockUserwisecls
+                                                                 {
+                                                                     idno = tbl.idno,
+                                                                     servicename = tbl.servicename,
+                                                                     serviceidno = tbl1.Show_Service_name_id,
+                                                                     remid = tbl1.remid,
+                                                                     servicestatus = tbl1.status,
+                                                                     basedupdate_id = tbl1.idno
+
+
+
+                                                                 };
+                        return PartialView("_Retailerlist", viewmodel);
+                    }
+                }
+                else
+                {
+                    throw new HttpException(400, "Product not found");
+
+                }
+            }
+            catch (Exception ewx)
+            {
+                Response.StatusCode = 400;
+                return Json(ewx.Message, JsonRequestBehavior.AllowGet);
+            }
+            return Json("drgdhfjgh", JsonRequestBehavior.AllowGet);
+
+
+        }
+        public ActionResult RejectedRetailersts(string val, string RetailerId)
+        {
+            var Retailerdetail = db.Retailer_Details.Where(aa => aa.RetailerId == RetailerId).SingleOrDefault();
+            if (Retailerdetail.vastbazaarsts == "N" || string.IsNullOrEmpty(Retailerdetail.vastbazaarsts))
+            {
+                if (val == "gst")
+                {
+                    Retailerdetail.gststatus = "N";
+                    Retailerdetail.frimregistrationPath = null;
+                }
+                else if (val == "Aggrement")
+                {
+                    Retailerdetail.IsAgreement = false;
+
+                    Retailerdetail.Agreementpath = null;
+                }
+                else if (val == "Salfie")
+                {
+                    Retailerdetail.ShopwithSalfieStatus = "N";
+
+                    Retailerdetail.ShopwithSalfie = null;
+                }
+
+
+            }
+            if (val == "VIDEOKYC")
+            {
+                Retailerdetail.videokycstatus = "N";
+
+                string path = Server.MapPath("~/" + Retailerdetail.videokycpath);
+
+
+                //   System.IO.DirectoryInfo di = new DirectoryInfo(path);
+
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                    Retailerdetail.videokycpath = null;
+
+                }
+
+
+            }
+
+            var res = db.SaveChanges();
+            if (res > 0)
+            {
+                return Json(val, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("drgdhfjgh", JsonRequestBehavior.AllowGet);
+            //RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            //ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            //ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            //var district = from s in db.District_Desc
+            //               where s.State_id == 0
+            //               select s;
+            //ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
+
+            //return PartialView("_Retailerlist", viewmodel);
+
+
+        }
+
+        public PartialViewResult RetailerlistPart(string dealerid)
+        {
+
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            var results = (from p in db.Slab_name where p.SlabFor == "Retailer" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            if (!string.IsNullOrEmpty(dealerid))
+            {
+                viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").Where(x => x.DealerId == dealerid).ToList();
+            }
+            else
+            {
+                viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
+            }
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+
+
+
+                                                     };
+            return PartialView("_Retailerlist", viewmodel);
+        }
+
+
+        public PartialViewResult RetailerSearchBy(string txtmob)
+        {
+
+            RetailerDetalsModel viewmodel = new RetailerDetalsModel();
+            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+            var district = from s in db.District_Desc
+                           where s.State_id == 0
+                           select s;
+            var results = (from p in db.Slab_name where p.SlabFor == "Retailer" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+
+            if (!string.IsNullOrEmpty(txtmob))
+            {
+                try
+                {
+                    viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").Where(x =>
+                    x.Mobile.ToUpper().StartsWith(txtmob.Trim().ToUpper()) ||
+                    x.RetailerName.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.Email.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.AadharCard.Contains(txtmob.Trim()) ||
+                    x.PanCard.Contains(txtmob.Trim()) ||
+                    x.Frm_Name.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.DealerFarmName.ToUpper().Contains(txtmob.Trim().ToUpper())).ToList();
+                }
+
+                catch (Exception ex)
+                {
+                    string aaharwise = db.Retailer_Details.Where(a => a.AadharCard.Contains(txtmob.Trim())).Select(a => a.Mobile).FirstOrDefault();
+                    if (aaharwise != null)
+                    {
+                        txtmob = aaharwise;
+                    }
+                    else
+                    {
+                        string pancardwise = db.Retailer_Details.Where(a => a.PanCard.Contains(txtmob.Trim())).Select(a => a.Mobile).FirstOrDefault();
+                        if (pancardwise != null)
+                        {
+                            txtmob = pancardwise;
+                        }
+                    }
+
+                    viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 50000, "ADMIN").Where(x =>
+                    x.Mobile.ToUpper().StartsWith(txtmob.Trim().ToUpper()) ||
+                    x.RetailerName.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.Email.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.Frm_Name.ToUpper().Contains(txtmob.Trim().ToUpper()) ||
+                    x.DealerFarmName.ToUpper().Contains(txtmob.Trim().ToUpper())).ToList();
+                }
+
+            }
+            else
+            {
+                viewmodel.select_retailer_details_paging = db.Select_Retailer_Details_all_paging(1, 500, "ADMIN").ToList();
+            }
+            viewmodel.Show_Service_namelist = db.Show_Service_name.ToList();
+            viewmodel.Service_BlockUserwiseclslist = from tbl in db.Show_Service_name
+                                                     join tbl1 in db.Service_BlockUserwise
+                                                     on tbl.idno equals tbl1.Show_Service_name_id
+                                                     select new Service_BlockUserwisecls
+                                                     {
+                                                         idno = tbl.idno,
+                                                         servicename = tbl.servicename,
+                                                         serviceidno = tbl1.Show_Service_name_id,
+                                                         remid = tbl1.remid,
+                                                         servicestatus = tbl1.status,
+                                                         basedupdate_id = tbl1.idno
+
+
+
+                                                     };
+            return PartialView("_Retailerlist", viewmodel);
+        }
+
+        //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\Api_user\\\\\\\\\\\\\\\\\\\\\\
+
+        [PermissioncheckingAttribute(servicename = "USERS", permision = "Read")]
+        public ActionResult Api_user()
+        {
+            var results = (from p in db.Slab_name where p.SlabFor == "API" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            //var results = (from p in db.API_Slab where p.Slab_Name != "Default" group p.Slab_Name by p.Slab_Name into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            var sate = db.Select_State_Details().ToList();
+            ViewBag.state = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.state1 = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.ch = db.API_all_uesers();
+            APIModelcs vmodel = new APIModelcs();
+            vmodel.ApiList = db.API_all_uesers();
+            ViewData["ResendMail"] = TempData["ResendMAil"];
+            return View(vmodel);
+        }
+
+        public ActionResult PDF_Api_user()
+        {
+            var results = (from p in db.Slab_name where p.SlabFor == "API" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            var sate = db.Select_State_Details().ToList();
+            ViewBag.state = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.state1 = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.ch = db.API_all_uesers();
+            APIModelcs vmodel = new APIModelcs();
+            vmodel.ApiList = db.API_all_uesers();
+            ViewData["ResendMail"] = TempData["ResendMAil"];
+            return new ViewAsPdf(vmodel);
+        }
+
+        public ActionResult Excel_Api_user()
+        {
+            var results = (from p in db.Slab_name where p.SlabFor == "API" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+            //var results = (from p in db.API_Slab where p.Slab_Name != "Default" group p.Slab_Name by p.Slab_Name into g select new { SlabName = g.Key });
+            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+            var sate = db.Select_State_Details().ToList();
+            ViewBag.state = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.state1 = new SelectList(sate, "State_Id", "State_Name");
+            ViewBag.ch = db.API_all_uesers();
+            APIModelcs vmodel = new APIModelcs();
+            vmodel.ApiList = db.API_all_uesers();
+
+            DataTable dataTbl = new DataTable();
+            dataTbl.Columns.Add("User Firm", typeof(string));
+            dataTbl.Columns.Add("User Name", typeof(string));
+            dataTbl.Columns.Add("Mobile No", typeof(string));
+            dataTbl.Columns.Add("PAN No", typeof(string));
+            dataTbl.Columns.Add("KYC", typeof(string));
+            dataTbl.Columns.Add("Email V/F", typeof(string));
+
+            foreach (var item in vmodel.ApiList)
+            {
+                dataTbl.Rows.Add(item.farmname, item.username, item.mobile, item.pancard, item.PSAStatus == "Y" && item.AadhaarStatus == "Y" ? "Done" : "Due", item.EmailConfirmed == true ? "Done" : "Due");
+            }
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=Api_user.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return View();
+        }
+
+        public ActionResult emailverifyforapi(string apiid)
+        {
+            var usersts = db.Users.Where(aa => aa.UserId == apiid).SingleOrDefault();
+            usersts.EmailConfirmed = true;
+            db.SaveChanges();
+            APIModelcs vmodel = new APIModelcs();
+            vmodel.ApiList = db.API_all_uesers();
+            return PartialView("_Api_user", vmodel);
+
+        }
 
 
         [HttpPost]
@@ -9338,16 +10790,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
 
 
-        [HttpPost]
-        public PartialViewResult _SelectDlmID(string MdId)
-        {
-            var empuserid = User.Identity.GetUserId();
-            // var Details = db.Select_Permissionwise_Dealer_total(empuserid).Where(x=>x.MdId)().ToList();
-            var Details = db.Select_Dealer_total(MdId).ToList();
-            MasterDistributerModel dlmViewModel = new MasterDistributerModel();
-            dlmViewModel.Select_dealer_list = Details;
-            return PartialView("_SelectDlmID", dlmViewModel);
-        }
+
 
         [HttpPost]
         public ActionResult Edit_master_dealer(string ssid, string NameEdit, string FirmEdit, string pancardEdit, string AadhaarEdit, string gstEdit, string StateEdit, string DistrictEdit, string AddressEdit, string Editddlrole, string PinEdit)
@@ -9387,32 +10830,32 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
 
         [HttpGet]
-        public ActionResult DistibutorList()
-        {
-            var results = (from p in db.Slab_name where p.SlabFor == "Distributor" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
-            ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
-            ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
-            ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
-            var district = from s in db.District_Desc
-                           where s.State_id == 0
-                           select s;
-            ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
-            var adminuserid = User.Identity.GetUserId();
-            var Details = db.Select_Permissionwise_Dealer_total(adminuserid).ToList();
-            DealerModel viewModel = new DealerModel();
-            viewModel.Select_Permissionwise_Dealer_total = Details;
-            var stands = db.Superstokist_details.ToList();
-            IEnumerable<SelectListItem> selectList = from s in stands
-                                                     select new SelectListItem
-                                                     {
-                                                         Value = s.SSId,
-                                                         Text = s.Email + " -- " + s.FarmName.ToString()
-                                                     };
-            ViewBag.masterid = new SelectList(selectList, "Value", "Text");
-            TempData.Keep("Message");
-            ViewData["ResendMail"] = TempData["ResendMAil"];
-            return View(viewModel);
-        }
+        //public ActionResult DistibutorList()
+        //{
+        //    var results = (from p in db.Slab_name where p.SlabFor == "Distributor" group p.SlabName by p.SlabName into g select new { SlabName = g.Key });
+        //    ViewBag.slabname = new SelectList(results, "SlabName", "SlabName");
+        //    ViewBag.state = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+        //    ViewBag.state1 = new SelectList(db.Select_State_Details(), "State_Id", "State_Name").ToList();
+        //    var district = from s in db.District_Desc
+        //                   where s.State_id == 0
+        //                   select s;
+        //    ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
+        //    var adminuserid = User.Identity.GetUserId();
+        //    var Details = db.Select_Permissionwise_Dealer_total(adminuserid).ToList();
+        //    DealerModel viewModel = new DealerModel();
+        //    viewModel.Select_Permissionwise_Dealer_total = Details;
+        //    var stands = db.Superstokist_details.ToList();
+        //    IEnumerable<SelectListItem> selectList = from s in stands
+        //                                             select new SelectListItem
+        //                                             {
+        //                                                 Value = s.SSId,
+        //                                                 Text = s.Email + " -- " + s.FarmName.ToString()
+        //                                             };
+        //    ViewBag.masterid = new SelectList(selectList, "Value", "Text");
+        //    TempData.Keep("Message");
+        //    ViewData["ResendMail"] = TempData["ResendMAil"];
+        //    return View(viewModel);
+        //}
 
 
 

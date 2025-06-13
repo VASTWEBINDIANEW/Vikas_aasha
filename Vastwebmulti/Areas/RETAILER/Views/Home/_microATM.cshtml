@@ -1,10 +1,11 @@
 ﻿
 <style>
-   /* New css  */
+    /* New css  */
 
     .col-md-12.remitter_button {
         height: auto;
     }
+
     #statuschk {
         padding: 10px;
         width: 100%;
@@ -12,10 +13,12 @@
         margin-top: 15px;
         border-radius: 4px;
     }
+
     #firstMICRO button {
         padding: 6px 15px !important;
         border-radius: 4px;
     }
+
     #firstpur2 button {
         padding: 6px 15px !important;
         border-radius: 4px;
@@ -97,9 +100,6 @@
             font-size: 14px;
             text-transform: capitalize;
         }
-
-
-
 </style>
 <div class="loader loaderpancard"></div>
 <div>
@@ -207,14 +207,14 @@
 
 
     </div>
-    <div>
-        <span id="errormicrrefer2"></span>
-    </div>
+
 
 
 
 </div>
-
+<div>
+    <span id="errormicrrefer2"></span>
+</div>
 <div id="SecondSerialNoSubmit" class=" remitter_button" style="display: none; margin-top: 20px; margin-bottom: 20px; font-size: 26px; float: left; width: 100%;">
     <span style="padding: 0px; background: #fff; height: 34px; border: 1px solid #dddddd; width: 100%; float: left;">
         <span style="background:#f5f5f5; float:left;padding: 8px 10px;height:32px;font-size:12px;">Merchant id </span>
@@ -254,7 +254,7 @@
 </script>
 <script>
     function UpdateRemdetails(data) {
-        
+
         $('#errormicrrefer2').text(data.msg)
     }
 
@@ -272,7 +272,7 @@
             type: "POST",
             dataType: 'json',
             success: function (data) {
-                
+
                 $('#secpur111').show();
                 $('#PaymentType111').html(data.PaymentType);
                 $('#Price111').html(data.Price);
@@ -388,7 +388,7 @@
                 }
                 else if (output.status == "ERROR") {
                     alert(output.msg);
-                    
+
                     //buttonEnable
                     $('#errormposid123').text(output.msg);
                 //    $('#firstRegister').show();
@@ -434,7 +434,7 @@
             success: function (data) {
                 $('.loader').hide();
                 var output = JSON.parse(data);
-                
+
                 if (output.status == "Success") {
                     //buttonDisable
                     $('#alredyexist').text(output.msg);

@@ -158,12 +158,18 @@
                         {
                             <div class="customeright rightcustomeclass" style="float:left;">
                                 <div class="col-md-2 customerightdate" style="padding-left:0;">
-                                    <div class="input-daterange input-group" style="">
+                                    <div class="input-daterange input-group">
                                         <div class="datesate datesates">
                                             <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;height:33px;", @autocomplete = "off" })
+                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
                                         </div>
-
+                                        <span class="input-group-addon" style="display:none;">
+                                            <i class="fa fa-exchange" style="padding-top:10px;"></i>
+                                        </span>
+                                        <div class="datesate datesatese">
+                                            <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i></div>
+                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1customerightsearch">
@@ -334,14 +340,16 @@
     $("#btnExport").click(function (e) {
         e.preventDefault()
         var txt_frm_date = $('#txt_frm_date').val();
-        var url = '@Url.Action("Excel_Retailer_Daybook_Report", "Home")?txt_frm_date=' + txt_frm_date;
+        var txt_to_date = $('#txt_to_date').val();
+        var url = '@Url.Action("Excel_Retailer_Daybook_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
         location.href = url;
 });
 </script>
 <script>
     $("#btnPDF").click(function () {
      var txt_frm_date = $('#txt_frm_date').val();
-        var url = '@Url.Action("PDF_Retailer_Day_Book_Report", "Home")?txt_frm_date=' + txt_frm_date;
+        var txt_to_date = $('#txt_to_date').val();
+        var url = '@Url.Action("PDF_Retailer_Day_Book_Report", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
         window.open(
 url,
   '_blank' // <- This is what makes it open in a new window.

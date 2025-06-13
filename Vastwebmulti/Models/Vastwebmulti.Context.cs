@@ -896,6 +896,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<AppMessage> AppMessages { get; set; }
         public virtual DbSet<PanAadharVerificationCharge> PanAadharVerificationCharges { get; set; }
         public virtual DbSet<PANAADHARVERIFICATIONREPORT> PANAADHARVERIFICATIONREPORTs { get; set; }
+        public virtual DbSet<RadiantTransfer> RadiantTransfers { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23860,6 +23861,31 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("TYPE", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCPANAADHARVERIFICATIONCHARGE_Result>("PROCPANAADHARVERIFICATIONCHARGE", rETAILERIDParameter, tYPEParameter, output);
+        }
+    
+        public virtual ObjectResult<RadiantTransfer_Report_Result> RadiantTransfer_Report(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, string userid, string role, string status)
+        {
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("fromDate", fromDate) :
+                new ObjectParameter("fromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("toDate", toDate) :
+                new ObjectParameter("toDate", typeof(System.DateTime));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RadiantTransfer_Report_Result>("RadiantTransfer_Report", fromDateParameter, toDateParameter, useridParameter, roleParameter, statusParameter);
         }
     }
 }
