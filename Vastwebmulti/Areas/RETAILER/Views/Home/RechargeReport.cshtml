@@ -312,6 +312,9 @@
                                     }
                                 </tbody>
                             </table>
+
+                            
+
                             <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
                                 <div class="loadertablecssnew">Loading...</div>
                             </div>
@@ -323,6 +326,179 @@
         </div>
     </div>
 </section>
+
+<div class="Complaint_box" style="">
+
+        <style>
+
+            .Complaint_box {
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                z-index: 99999999;
+                background: #00000069;
+                height: 120vh;
+                display: table;
+            }
+            .Complaint_container {
+                width: 50%;
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                display: table;
+                margin: 100px auto;
+            }
+
+            .Complaint_container h2 {
+                color: #e05d00;
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+
+            .subtext {
+                font-size: 13px;
+                color: #666;
+                margin-bottom: 20px;
+            }
+
+            .highlight-box {
+                background-color: #ffe5dc;
+                border-left: 4px solid #e05d00;
+                padding: 10px;
+                margin-bottom: 20px;
+                font-weight: bold;
+                width: 100%;
+                float: left;
+            }
+
+            .Complaint_container .form-group {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: 15px;
+            }
+
+                .Complaint_container .form-group label {
+                    width: 100%;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                .Complaint_container .form-group input,
+                .Complaint_container .form-group select,
+                .Complaint_container .form-group textarea {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                }
+                .Complaint_container .form-group select {
+                    width: 100% !important;
+                }
+            .Complaint_container .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .Complaint_container textarea {
+                resize: vertical;
+                height: 80px;
+            }
+
+            .Complaint_container .submit-btn {
+                background-color: #e05d00;
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                font-weight: bold;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+                float: right;
+            }
+
+            @@media only screen and (max-width:767px){
+                .Complaint_container {
+                    width: 100%;
+                }
+                    .Complaint_container .form-grid {
+                        grid-template-columns: auto;
+                    }
+
+            }
+        </style>
+    
+
+        <div class="Complaint_container">
+            <div>
+                <div style=" float: left;">
+                    <h2>Bharat Connect – Raise Complaint</h2>
+                    <div class="subtext">Select service type of complaint</div>
+                </div>
+
+                <img style="width: 150px; float: right;" src="~/AdminDesign/BBPSlogo.png" />
+            </div>
+
+            <div class="highlight-box">Enter Details to Raise Complaint</div>
+
+            <form style="float: left; width: 100%;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Type of Complaint</label>
+                        <input type="text" id="type" name="type" value="Service" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="participation">Participation Type</label>
+                        <select  name="participation" required>
+                            <option value="">-- Select Participation Type --</option>
+                            <option value="Retailer">Retailer</option>
+                            <option value="Distributor">Distributor</option>
+                            <option value="API">API</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reason">Service Reason</label>
+                        <select name="reason" required>
+                            <option value="">- Select Service Reason -</option>
+                            <option value="Recharge Issue">Recharge Issue</option>
+                            <option value="Payment Not Reflected">Payment Not Reflected</option>
+                            <option value="Commission Issue">Commission Issue</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Enter detailed complaint..."></textarea>
+                </div>
+
+                <div>
+                    <button style="float: left;" type="submit" class="submit-btn complaint_CLOSE">CLOSE</button>
+                    <button type="submit" class="submit-btn">SUBMIT</button>
+                </div>
+            </form>
+        </div>
+    <script>
+        $(".complaint_CLOSE").click(function () {
+            $(".Complaint_box").toggle();
+        });
+    </script>
+
+</div>
+
+
+
 <!--Dispute Reason Model-->
 <!-- Jquery Core Js -->
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
