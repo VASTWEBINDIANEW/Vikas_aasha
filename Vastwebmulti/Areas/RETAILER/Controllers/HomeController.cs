@@ -23080,6 +23080,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     db.Update_Aeps_Info.Add(data);
                     db.SaveChanges();
                 }
+                else
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
 
             var token = string.Empty;
@@ -23305,6 +23319,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 string Aeps_Update = UpdateAeps(lattitude, longitude);
                 if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+                else
                 {
                     var data = new Update_Aeps_Info()
                     {
@@ -23589,6 +23617,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 string Aeps_Update = UpdateAeps(lattitude, longitude);
                 if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+                else
                 {
                     var data = new Update_Aeps_Info()
                     {
@@ -24040,6 +24082,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         db.Update_Aeps_Info.Add(data);
                         db.SaveChanges();
                     }
+                    else
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 if (retailer.AepsMerchandId == "")
                 {
@@ -24432,6 +24488,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     string Aeps_Update = UpdateAeps(lattitude, longitude);
                     if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
+                    else
                     {
                         var data = new Update_Aeps_Info()
                         {
@@ -34071,6 +34141,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                     db.Update_Aeps_Info.Add(data);
                     db.SaveChanges();
                 }
+                else
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
             }
 
             var token = string.Empty;
@@ -34312,6 +34396,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 string Aeps_Update = UpdateAeps(lattitude, longitude);
                 if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+                else
                 {
                     var data = new Update_Aeps_Info()
                     {
@@ -34596,6 +34694,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 string Aeps_Update = UpdateAeps(lattitude, longitude);
                 if (Aeps_Update == "TXN")
+                {
+                    var data = new Update_Aeps_Info()
+                    {
+                        UserId = userid,
+                        latitude = lattitude,
+                        longitude = longitude,
+                        UpdateTime = DateTime.Now,
+                        status = true,
+                        RequestFrom = "Web"
+                    };
+                    db.Update_Aeps_Info.Add(data);
+                    db.SaveChanges();
+                }
+                else
                 {
                     var data = new Update_Aeps_Info()
                     {
@@ -35163,6 +35275,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                         db.Update_Aeps_Info.Add(data);
                         db.SaveChanges();
                     }
+                    else
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
                 }
                 try
                 {
@@ -35644,6 +35770,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     string Aeps_Update = UpdateAeps(lattitude, longitude);
                     if (Aeps_Update == "TXN")
+                    {
+                        var data = new Update_Aeps_Info()
+                        {
+                            UserId = userid,
+                            latitude = lattitude,
+                            longitude = longitude,
+                            UpdateTime = DateTime.Now,
+                            status = true,
+                            RequestFrom = "Web"
+                        };
+                        db.Update_Aeps_Info.Add(data);
+                        db.SaveChanges();
+                    }
+                    else
                     {
                         var data = new Update_Aeps_Info()
                         {
@@ -43590,6 +43730,20 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                                             {
                                                 string Aeps_Update = UpdateAeps(lattitude, longitude);
                                                 if (Aeps_Update == "TXN")
+                                                {
+                                                    var data = new Update_Aeps_Info()
+                                                    {
+                                                        UserId = userid,
+                                                        latitude = lattitude,
+                                                        longitude = longitude,
+                                                        UpdateTime = DateTime.Now,
+                                                        status = true,
+                                                        RequestFrom = "Web"
+                                                    };
+                                                    db.Update_Aeps_Info.Add(data);
+                                                    db.SaveChanges();
+                                                }
+                                                else
                                                 {
                                                     var data = new Update_Aeps_Info()
                                                     {
