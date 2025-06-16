@@ -11794,6 +11794,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             //return View(rowdata);
             return View();
         }
+        [HttpPost]
         public ActionResult dispute(string id, string txtregion)
         {
             try
