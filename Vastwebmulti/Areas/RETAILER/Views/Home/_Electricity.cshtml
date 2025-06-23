@@ -485,6 +485,48 @@
                             $('.loader').show();
                         },
                         success: function (result) {
+                            console.log(result);
+
+                            var status = result.Response;
+                            var message = result.Message;
+
+                            console.log(status);
+                            console.log(message);
+
+                            if (status == "GATEWAY") {
+                                window.open(message, "_self");
+                                $('#rchstatuschkelec').text("Pending");
+                                $('#rchmsgelec').text("Please Wait While Redirect The Gateway");
+                            }
+                            else {
+                                $('#rchstatuschkelec').text(status);
+                                $('#rchmsgelec').text(message);
+
+                                if (status === "SUCCESS") {
+                                    // ✅ Fill popup form fields
+                                    document.querySelector("input[name='biller']").value = eleddl || "Not Available";
+                                    document.querySelector("input[name='billNumber']").value = txtval || "N/A";
+                                    document.querySelector("input[name='billDate']").value = new Date().toISOString().split("T")[0];
+                                    /*document.querySelector("input[name='dueDate']").value = duedate || new Date().toISOString().split("T")[0];*/
+                                    document.querySelector("input[name='txnId']").value = "TXN" + Date.now();
+                                    document.querySelector("input[name='amount']").value = Amount || 0;
+                                    document.querySelector("input[name='total']").value = Amount || 0;
+                                    document.querySelector("input[name='txnTime']").value = new Date().toISOString().slice(0, 16);
+                                    document.querySelector("input[name='status']").value = status;
+
+                                    // ✅ Show popup
+                                    const popup = document.getElementById("payConfirmationPopup");
+                                    popup.style.display = "block";
+                                    popup.scrollIntoView({ behavior: "smooth" });
+                                }
+                            }
+
+                            // ✅ Always toggle sections
+                            $('#confirmelec').hide();
+                            $('#rechargeconfirmelec').show();
+                        },
+
+                        /*success: function (result) {
                             console.log(result)
                           
                             var status = result.Response;
@@ -503,7 +545,7 @@
                             $('#confirmelec').hide();
                             $('#rechargeconfirmelec').show();
                   
-                        },
+                        },*/
                         complete: function () {
                             $("#remainretailer").load(location.href + " #remainretailer");
                             $('.loader').hide();
