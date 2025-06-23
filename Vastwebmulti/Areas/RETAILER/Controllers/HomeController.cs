@@ -15535,6 +15535,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return Json(statsss, JsonRequestBehavior.AllowGet);
         }
+
         #region irctc
         public ActionResult ShowtravlesstsIRCTC()
         {

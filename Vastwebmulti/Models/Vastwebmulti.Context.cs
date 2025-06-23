@@ -23863,29 +23863,25 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PROCPANAADHARVERIFICATIONCHARGE_Result>("PROCPANAADHARVERIFICATIONCHARGE", rETAILERIDParameter, tYPEParameter, output);
         }
     
-        public virtual ObjectResult<RadiantTransfer_Report_Result> RadiantTransfer_Report(Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate, string userid, string role, string status)
+        public virtual ObjectResult<RadiantTransfer_Report_Result> RadiantTransfer_Report(string userId, string sts, Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
         {
+            var userIdParameter = userId != null ?
+                new ObjectParameter("UserId", userId) :
+                new ObjectParameter("UserId", typeof(string));
+    
+            var stsParameter = sts != null ?
+                new ObjectParameter("Sts", sts) :
+                new ObjectParameter("Sts", typeof(string));
+    
             var fromDateParameter = fromDate.HasValue ?
-                new ObjectParameter("fromDate", fromDate) :
-                new ObjectParameter("fromDate", typeof(System.DateTime));
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
     
             var toDateParameter = toDate.HasValue ?
-                new ObjectParameter("toDate", toDate) :
-                new ObjectParameter("toDate", typeof(System.DateTime));
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
     
-            var useridParameter = userid != null ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(string));
-    
-            var roleParameter = role != null ?
-                new ObjectParameter("role", role) :
-                new ObjectParameter("role", typeof(string));
-    
-            var statusParameter = status != null ?
-                new ObjectParameter("status", status) :
-                new ObjectParameter("status", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RadiantTransfer_Report_Result>("RadiantTransfer_Report", fromDateParameter, toDateParameter, useridParameter, roleParameter, statusParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RadiantTransfer_Report_Result>("RadiantTransfer_Report", userIdParameter, stsParameter, fromDateParameter, toDateParameter);
         }
     }
 }
