@@ -2343,6 +2343,8 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                // change security code
+                await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
                 string userid = User.Identity.GetUserId();
                 var chk22 = db.checklogouts.Where(a => a.userid == userid).SingleOrDefault();
                 if (chk22 == null)
@@ -2365,12 +2367,12 @@ namespace Vastwebmulti.Areas.MASTER.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
-                if (tokendelete != null)
-                {
-                    db.Reftkns.Remove(tokendelete);
-                    db.SaveChanges();
-                }
+                //var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
+                //if (tokendelete != null)
+                //{
+                //    db.Reftkns.Remove(tokendelete);
+                //    db.SaveChanges();
+                //}
 
                 TempData["Message"] = "Your Password has been Changed Successfully..";
                 return RedirectToAction("ChangePassword");

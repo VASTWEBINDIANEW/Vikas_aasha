@@ -411,7 +411,7 @@
     }
 </script>
 
-<script>
+@*<script>
     function confirm(e) {
         $('#disp-'+e).hide();
         $('#confirm-'+e).show();
@@ -443,6 +443,43 @@
            });
         }
     }
+</script>*@
+
+<script>
+  $(document).ready(function () {
+    $('#Complaint_Form').on('submit', function (e) {
+        e.preventDefault();
+        console.log("Form submitted");
+
+        let id = $('#complaintId').val();
+        var txtregion = $('#txtdescription').val();
+
+        if (id) {
+            $.post('@Url.Action("dispute", "Home")',
+                { id: id, txtregion: txtregion },
+                function (response) {
+                    console.log("Server response:", response);
+
+                    if (response === "Success") {
+                        $('#complaintSuccessModal').modal('show'); // Show Bootstrap success modal
+                        $('#Complaint_Form')[0].reset(); // Reset form
+                        $('.Complaint_box').hide(); // Hide form popup
+                    } else if (response === "Already Disputed") {
+                        toastr.warning("Complaint already submitted!");
+                    } else {
+                        toastr.error("Unexpected response: " + response);
+                    }
+                }
+            ).fail(function () {
+                toastr.error("Error while submitting complaint.");
+            });
+        } else {
+            alert("Please enter both ID and Description.");
+        }
+    });
+});
+
+
 </script>
 
 <script>

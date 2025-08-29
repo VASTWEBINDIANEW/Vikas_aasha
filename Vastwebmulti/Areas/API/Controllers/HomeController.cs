@@ -3700,6 +3700,8 @@ namespace Vastwebmulti.Areas.API.Controllers
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                // change security code
+                await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
                 string userid = User.Identity.GetUserId();
                 var chk22 = db.checklogouts.Where(a => a.userid == userid).SingleOrDefault();
                 if (chk22 == null)
