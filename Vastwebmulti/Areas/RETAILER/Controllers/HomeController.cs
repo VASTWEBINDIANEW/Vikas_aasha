@@ -9340,40 +9340,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var AdminEmail = db.Admin_details.SingleOrDefault().email;
             if (ch == "Balance Transfer SuccessFully.")
             {
-                //if (statusSendSmsREMToREMFundTransferRetailer == "Y")
-                //{
-                //    string msgssss = "";
-                //    string tempid = "";
-                //    string urlss = "";
-                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RETAILERTORETAILERFROMFUNDTRANSFER" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                //    if (smsstypes != null)
-                //    {
-                //        msgssss = string.Format(smsstypes.Templates, txtbal, useremail, remainbalretailer);
-                //        tempid = smsstypes.Templateid;
-                //        urlss = smsapionsts.smsapi;
-                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                //    }
-                //    // smssend.sendsmsall(RetailerMobileRetailerDetails.Mobile, "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer");
-                //}
+               
                 smssend.sms_init(statusSendSmsREMToREMFundTransferRetailer.Status, statusSendSmsREMToREMFundTransferRetailer.Whatsapp_Status, "RETAILERTORETAILERFROMFUNDTRANSFER", RetailerDetails.Mobile, txtbal, useremail, remainbalretailer);
-                //if (statusSendSmsREMToREMFundTransfer == "Y")
-                //{
-                //    string msgssss = "";
-                //    string tempid = "";
-                //    string urlss = "";
-                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RETAILERTORETAILERTOFUNDTRANSFER" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                //    if (smsstypes != null)
-                //    {
-                //        msgssss = string.Format(smsstypes.Templates, retaileremaillid, txtbal, remainbal);
-                //        tempid = smsstypes.Templateid;
-                //        urlss = smsapionsts.smsapi;
-                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                //    }
-                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer");
-                //}
-                smssend.sms_init(statusSendSmsREMToREMFundTransfer.Status, statusSendSmsREMToREMFundTransfer.Whatsapp_Status, "RETAILERTORETAILERTOFUNDTRANSFER", RetailerDetails.Mobile, retaileremaillid, txtbal, remainbal);
+                      smssend.sms_init(statusSendSmsREMToREMFundTransfer.Status, statusSendSmsREMToREMFundTransfer.Whatsapp_Status, "RETAILERTORETAILERTOFUNDTRANSFER", RetailerDetails.Mobile, retaileremaillid, txtbal, remainbal);
                 if (statusSendMailREMToREMFundTransferRetailer == "Y")
                 {
                     smssend.SendEmailAll(RetailerMobileRetailerDetails.Email, "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer", AdminEmail);
@@ -9382,20 +9351,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     smssend.SendEmailAll(RetailerDetails.Email, "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer", AdminEmail);
                 }
-                //if (statusRetailer == "Y")
-                //{
-                //    SendPushNotification(useremail, "Home/Retailer_to_retailer", "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer ..");
-                //    SendPushNotification(retaileremaillid, "Home/Retailer_to_retailer", "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer..");
-                //}
+               
                 TempData["success"] = ch;
             }
             else
             {
-                //if (statusRetailer == "Y")
-                //{
-                //    SendPushNotification(useremail, "Home/Retailer_to_retailer", "Balance Not Transfer To Retailer Id is " + retaileremaillid + " Due to " + ch + ", Remain Balance is " + remainbal + "", "Fund Transfer ..");
-                //    SendPushNotification(retaileremaillid, "Home/Retailer_to_retailer", "Balance " + txtbal + " Transfer to " + useremail + " is Not Transfer Due To " + ch + ". Remain Balance is " + remainbalretailer + "", "Fund Transfer..");
-                //}
+               
                 TempData["error"] = ch;
             }
             return RedirectToAction("Retailer_to_retailer");
@@ -9603,30 +9564,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             RetailerFundRequestViewmodel vmodel = new RetailerFundRequestViewmodel();
             string userid = User.Identity.GetUserId();
             vmodel.ShowRem_to_Rem = db.show_rem_to_rem_bal(userid, "ALL", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
-            //RetailerFundRequestViewmodel vmodel = new RetailerFundRequestViewmodel();
-            //string dealerid = User.Identity.GetUserId();
-            //var stands = (from rem in db.Retailer_Details where rem.DealerId == dealerid select rem).ToList();
-            //List<SelectListItem> items = new List<SelectListItem>();
-            //foreach (var item in stands)
-            //{
-            //    items.Add(new SelectListItem { Text = item.Frm_Name + " / " + item.Mobile, Value = item.RetailerId.ToString() });
-            //}
-            //vmodel.ddlRetailer = items;
-            //var bindbank = db.bank_info.Where(x => x.userid == dealerid).ToList();
-            //List<SelectListItem> bankitem = new List<SelectListItem>();
-            //foreach (var bank in bindbank)
-            //{
-            //    bankitem.Add(new SelectListItem { Text = bank.banknm + " / " + bank.holdername, Value = bank.acno });
-            //}
-            //vmodel.ddlFillAllBank = bankitem;
-            //var bindwallet = db.tblwallet_info.Where(x => x.userid == dealerid).ToList();
-            //List<SelectListItem> walletitem = new List<SelectListItem>();
-            //foreach (var wallet in bindwallet)
-            //{
-            //    walletitem.Add(new SelectListItem { Text = wallet.walletname + " / " + wallet.walletholdername, Value = wallet.walletno });
-            //}
-            //vmodel.ddlFillAllwallet = walletitem;
-            //return View(vmodel);
+           
             return View();
         }
         private static string GenerateUniqueTransectionID()
@@ -9644,14 +9582,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return transferids;
         }
-        //public JsonResult FundtransferRemn_To_Remn_Generate_Unique_ID()
-        //{
-        //    var adminuserid = User.Identity.GetUserId();
-        //  string transferids = GenerateUniqueTransectionID();
-        //    var transferid = "RR" + transferids;
-        //    TempData["transferremtorem"] = transferid;
-        //    return Json(transferid, JsonRequestBehavior.AllowGet);
-        //}
+       
         public ActionResult retailer_To_retailer_fund_transfer(string Retaileramount, string RetailerId, string txtRetailercomment, string txtRetailerdmtpin, string latss, string longloc)
         {
             try
