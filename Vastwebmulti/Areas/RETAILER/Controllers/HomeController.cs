@@ -51096,12 +51096,16 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                // change security code
+                await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
                 var chk22 = db.checklogouts.Where(a => a.userid == userid).SingleOrDefault();
                 if (chk22 == null)
                 {
-                    checklogout chlogout = new checklogout();
-                    chlogout.userid = userid;
-                    chlogout.lastupdatedate = DateTime.UtcNow;
+                    checklogout chlogout = new checklogout
+                    {
+                        userid = userid,
+                        lastupdatedate = DateTime.UtcNow
+                    };
                     db.checklogouts.Add(chlogout);
                     db.SaveChanges();
                 }
@@ -51122,12 +51126,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     item.change = true;
                     db.SaveChanges();
                 }
-                var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
-                if (tokendelete != null)
-                {
-                    db.Reftkns.Remove(tokendelete);
-                    db.SaveChanges();
-                }
+                //var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
+                //if (tokendelete != null)
+                //{
+                //    db.Reftkns.Remove(tokendelete);
+                //    db.SaveChanges();
+                //}
                 TempData["success"] = "Your Password has been Changed Successfully";
                 return RedirectToAction("ChangePassword");
             }

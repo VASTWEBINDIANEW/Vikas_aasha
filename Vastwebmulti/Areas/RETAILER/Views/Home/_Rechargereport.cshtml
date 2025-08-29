@@ -332,7 +332,8 @@
 
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea id="description" name="description" placeholder="Enter detailed complaint..."></textarea>
+                                    @Html.TextArea("txtdescription", "", new { placeholder = "Enter detailed complaint..." })
+                                   
                                 </div>
 
                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; ">
@@ -359,42 +360,7 @@
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
                         <!-- ✅ Your code that uses jQuery -->
-                        <script>
-                          $(document).ready(function () {
-                            $('#Complaint_Form').on('submit', function (e) {
-                                e.preventDefault();
-                                console.log("Form submitted");
                         
-                                let id = $('#complaintId').val();
-                                let txtregion = $('#description').val();
-                        
-                                if (id && txtregion) {
-                                    $.post('@Url.Action("dispute", "Home")',
-                                        { id: id, txtregion: txtregion },
-                                        function (response) {
-                                            console.log("Server response:", response);
-                        
-                                            if (response === "Success") {
-                                                $('#complaintSuccessModal').modal('show'); // Show Bootstrap success modal
-                                                $('#Complaint_Form')[0].reset(); // Reset form
-                                                $('.Complaint_box').hide(); // Hide form popup
-                                            } else if (response === "Already Disputed") {
-                                                toastr.warning("Complaint already submitted!");
-                                            } else {
-                                                toastr.error("Unexpected response: " + response);
-                                            }
-                                        }
-                                    ).fail(function () {
-                                        toastr.error("Error while submitting complaint.");
-                                    });
-                                } else {
-                                    alert("Please enter both ID and Description.");
-                                }
-                            });
-                        });
-
-
-                        </script>
 
 
 
