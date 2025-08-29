@@ -14071,13 +14071,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             ViewBag.MD_Details = ch;
             try
             {
-                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == (ch.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b1" : ch.microATM_MCC_CODE)).SingleOrDefault().DESCRIPTION;
+                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == (ch.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b0" : ch.microATM_MCC_CODE)).SingleOrDefault().DESCRIPTION;
             }
             catch
             {
                 ch.microATM_MCC_CODE = null;
                 db.SaveChanges();
-                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == "5f293542d0962a0d379428b1").SingleOrDefault().DESCRIPTION;
+                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == "5f293542d0962a0d379428b0").SingleOrDefault().DESCRIPTION;
             }
             var gt = db.State_Desc.Where(a => a.State_id == ch.State).SingleOrDefault().State_name;
             ViewBag.ddlstate = gt;
@@ -34981,16 +34981,42 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var userid = User.Identity.GetUserId();
             var token = string.Empty;
             token = getAuthToken();
+
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
-            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+            if (retailer == null)
+            {
+                return "Retailer not found.";
+            }
+
+            var cityData = db.District_Desc
+                .Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District)
+                .SingleOrDefault();
+
+            if (cityData == null)
+            {
+                return "District data not found.";
+            }
+
+            var city = cityData.Dist_Desc;
+
             var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+            if (Account == null)
+            {
+                // Return English message if bank account is missing
+                return "Bank account details not found. Please add your bank account and try again.";
+            }
+
+            // Extract values from account and retailer
             string companyBankAccountNumber = Account.AccountNO;
             string bankIfscCode = Account.IFSC_CODE;
             string companyBankName = Account.BankName;
             string bankBranchName = Account.BankAddress;
             string bankAccountName = Account.AccountHolder;
             string aadhaarNumber = retailer.AadharCard;
+
             var ipAddress = GetComputer_InternetIP();
+
+            // Request object
             var reque = new
             {
                 merchantLoginId = retailer.AepsMerchandId,
@@ -35018,7 +35044,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 maskedAadharImage = "",
                 backgroundImageOfShop = ""
             };
+
             var Data = JsonConvert.SerializeObject(reque);
+
+            // API call
             var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE_UPDATE");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -35026,15 +35055,19 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             request.AddHeader("Content-Type", "application/json");
             request.AddParameter("application/json", Data, ParameterType.RequestBody);
             IRestResponse response2 = client.Execute(request);
+
             dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+
             var stscode = resp.Content.ADDINFO.statuscode.ToString();
             var message = resp.Content.ADDINFO.status.ToString();
+
             string fullUrl = Request.Url?.ToString();
             UpdateAepsLog("****************************************************************");
             UpdateAepsLog("Time : " + DateTime.Now.ToString());
             UpdateAepsLog("fullUrl: " + fullUrl);
             UpdateAepsLog("Request: " + Data.ToString());
             UpdateAepsLog("Response : " + resp.Content);
+
             if (stscode == "TXN")
             {
                 return "TXN";
