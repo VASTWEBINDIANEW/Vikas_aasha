@@ -11726,31 +11726,85 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult dispute(string id, string txtregion)
+   
+        public ActionResult dispute(string id, string txtregion, string mobileno, string optname, decimal amount)
         {
             try
             {
-                System.Data.Entity.Core.Objects.ObjectParameter output = new
-                System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+                System.Data.Entity.Core.Objects.ObjectParameter output =
+                    new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+
                 var ch = db.distute_insert(id, txtregion, output).SingleOrDefault().msg.ToString();
+
+                // Current logged in userid
+                string userid = User.Identity.GetUserId();
+
+                // Retailer Details
+                var retailer = db.Retailer_Details.FirstOrDefault(a => a.RetailerId == userid);
+                if (retailer == null)
+                {
+                    return Json("Retailer not found", JsonRequestBehavior.AllowGet);
+                }
+
+                string retailerMobile = retailer.Mobile;
+                string retailerName = retailer.RetailerName;  // Assuming column Name hai Retailer_Details me
+
+                // Admin Details (agar admin ko bhejna hai)
+                var admin = db.Admin_details.FirstOrDefault();
+                string adminMobile = admin?.mobile;
+
+                // SMS/WhatsApp bhejna (DISPUTE template use karke)
+                smssend.sms_init(
+                    "Y",                 // sms_status
+                    "Y",                 // whatsapp_status
+                    "DISPUTE",           // sms_type (jo template banaya hai)
+                    adminMobile,         // message admin ko jayega
+                    retailerName,        // param[0] = Retailer Name
+                    mobileno,            // param[1] = Mobile Number
+                    optname,             // param[2] = Operator Name
+                    amount               // param[3] = Amount
+                );
+
                 return Json(ch, JsonRequestBehavior.AllowGet);
-                //if (ch == "Success")
-                //{
-                //    TempData["success"] = "Disputed Successfully.";
-                //}
-                //else
-                //{
-                //    TempData["failed"] = "Already Disputed!";
-                //}
-                //return RedirectToAction("DisputeReport");
             }
             catch (Exception ex)
             {
-                return Json("", JsonRequestBehavior.AllowGet);
-                //TempData["failed"] = ex;
-                //return RedirectToAction("DisputeReport");
+                return Json("Error: " + ex.Message, JsonRequestBehavior.AllowGet);
             }
         }
+
+        //public ActionResult dispute(string id, string txtregion)
+        //{
+        //    try
+        //    {
+        //        System.Data.Entity.Core.Objects.ObjectParameter output = new
+        //        System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+        //        var ch = db.distute_insert(id, txtregion, output).SingleOrDefault().msg.ToString();
+
+        //        string userid = User.Identity.GetUserId();
+        //        var user = db.Retailer_Details.Where(a => a.RetailerId == userid).FirstOrDefault();
+        //        var users =  db.Admin_details.Where(a => a.email == )
+
+        //        smssend.SendEmailAll(user.Email,"your dispute added succesfully in this reacharge  " + id, "dispute", AdminEmail);
+
+        //        return Json(ch, JsonRequestBehavior.AllowGet);
+        //        //if (ch == "Success")
+        //        //{
+        //        //    TempData["success"] = "Disputed Successfully.";
+        //        //}
+        //        //else
+        //        //{
+        //        //    TempData["failed"] = "Already Disputed!";
+        //        //}
+        //        //return RedirectToAction("DisputeReport");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json("", JsonRequestBehavior.AllowGet);
+        //        //TempData["failed"] = ex;
+        //        //return RedirectToAction("DisputeReport");
+        //    }
+        //}
         public ActionResult GotoInvoicePDF1(string Id, string RechargeTo, string OptName, string amt, string OptID, string Date)
         {
             return new Rotativa.ActionAsPdf("InvoicePDF1", new { Id = Id, RechargeTo = RechargeTo, OptName = OptName, amt = amt, OptID = OptID, Date = Date });
