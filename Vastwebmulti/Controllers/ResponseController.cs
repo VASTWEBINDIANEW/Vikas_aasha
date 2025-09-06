@@ -9436,6 +9436,42 @@ namespace Vastwebmulti.Controllers
                 ipaddress = Request.ServerVariables["REMOTE_ADDR"];
             return ipaddress;
         }
+
+        public static void WriteLogrefgayhbg(string strMessage)
+        {
+            using (VastwebmultiEntities db = new VastwebmultiEntities())
+            {
+                try
+                {
+                    string name = db.Admin_details.SingleOrDefault().WebsiteUrl;
+                    StreamWriter log;
+                    FileStream fileStream = null;
+                    DirectoryInfo logDirInfo = null;
+                    FileInfo logFileInfo;
+                    string logFilePath = "C:\\Logs\\";
+                    logFilePath = logFilePath + "REchARGESDDFFFHR-" + name + " -" + DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                    logFileInfo = new FileInfo(logFilePath);
+                    logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+                    if (!logDirInfo.Exists) logDirInfo.Create();
+                    if (!logFileInfo.Exists)
+                    {
+                        fileStream = logFileInfo.Create();
+                    }
+                    else
+                    {
+                        fileStream = new FileStream(logFilePath, FileMode.Append);
+                    }
+                    log = new StreamWriter(fileStream);
+                    log.WriteLine(strMessage);
+                    log.Close();
+
+                }
+                catch (Exception ex)
+                { }
+            }
+
+        }
+
         public string apiresponse(int id)
         {
             string resp = "api response";
@@ -9560,6 +9596,7 @@ namespace Vastwebmulti.Controllers
                         {
                             content = reader.ReadToEnd();
                         }
+
                         dynamic resp1 = JsonConvert.DeserializeObject(content);
                         var status = resp1[apicall.keystatus];
                         agentid = resp1[apicall.keyrchid];
@@ -9640,66 +9677,21 @@ namespace Vastwebmulti.Controllers
                             if (finalstatus.ToUpper() == "SUCCESS" && failed_to_success)
                             {
                                 resp = "recharge failed to success";
-                                dbsrs.recharge_update_failed_to_success(entry.Idno, "Manual Success");
+                                dbsrs.recharge_update_failed_to_success(entry.Idno,"");
 
+                                string disputerchid = Apientry.idno.ToString();
+
+                                var stschange = dbsrs.dispute_list.FirstOrDefault(s => s.rch_id == disputerchid);
+                                if (stschange != null)
+                                {
+                                    stschange.sts = "Approved";
+                                    dbsrs.SaveChanges();
+                                }
                                 rch1.response_output = outpt + ", Failed To Success";
                                 dbsrs.SaveChanges();
 
                                 if (role == "Retailer")
                                 {
-                                    try
-                                    {
-                                        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
-                                        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
-                                        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
-                                        Backupinfo back = new Backupinfo();
-                                        string mobileno = entry.Mobile;
-                                        string amount = entry.Amount.ToString();
-                                        var model = new Backupinfo.Addinfo
-                                        {
-
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = entry.userid,
-                                            Email = retailerdetails.Email,
-                                            Mobile = retailerdetails.Mobile,
-                                            Details = "Recharge Failed To Success" + mobileno + " Amount " + amount,
-                                            RemainBalance = (decimal)remdetails.Remainamount,
-                                            Usertype = "Retailer"
-                                        };
-                                        back.Rechargeandutility(model);
-
-                                        var model1 = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = dealerdetails.DealerId,
-                                            Email = dealerdetails.Email,
-                                            Mobile = dealerdetails.Mobile,
-                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
-                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
-                                            Usertype = "Dealer"
-                                        };
-                                        back.Rechargeandutility(model1);
-
-                                        var model2 = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = masterdetails.SSId,
-                                            Email = masterdetails.Email,
-                                            Mobile = masterdetails.Mobile,
-                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
-                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
-                                            Usertype = "Master"
-                                        };
-                                        back.Rechargeandutility(model2);
-                                    }
-                                    catch { }
-
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
                                     //if (statusretailerrechargesuccess == "Y")
@@ -9736,31 +9728,6 @@ namespace Vastwebmulti.Controllers
                                 }
                                 if (Apientry.rch_type == "API")
                                 {
-                                    try
-                                    {
-                                        var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                        var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-
-                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
-                                        Backupinfo back = new Backupinfo();
-                                        string mobileno = entry.Mobile;
-                                        string amount = entry.Amount.ToString();
-                                        var model = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = entry.userid,
-                                            Email = retailerdetails.emailid,
-                                            Mobile = retailerdetails.mobile,
-                                            Details = "Recharge Failed To Success " + mobileno + " Amount " + amount,
-                                            RemainBalance = (decimal)remdetails.balance,
-                                            Usertype = "API"
-                                        };
-                                        back.Rechargeandutility(model);
-
-
-                                    }
-                                    catch { }
-
                                     var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                     if (urlchk != null)
                                     {
@@ -9788,72 +9755,48 @@ namespace Vastwebmulti.Controllers
                                     }
                                 }
                             }
+                            else
+                            {
+                                string disputerchid = Apientry.idno.ToString();
+                                var stschange = dbsrs.dispute_list.FirstOrDefault(s => s.rch_id == disputerchid);
+                                if (stschange != null)
+                                {
+                                    stschange.sts = "Rejected";
+                                    dbsrs.SaveChanges();
+                                }
+
+                            }
                         }
                         else if (entry.CurrentStatus.ToUpper() == "SUCCESS")
                         {
+
+                            WriteLogrefgayhbg("Dispute Log success to faild");
+                            WriteLogrefgayhbg("staus: " + finalstatus.ToUpper());
+                            WriteLogrefgayhbg("staus: " + success_to_failed);
+                            WriteLogrefgayhbg("opt_id: " + optid);
+
+
                             if (finalstatus.ToUpper() == "FAILED" && success_to_failed)    // Callback Status Failed, So change status according to callback response
                             {
+
                                 resp = "recharge success to failed";
                                 dbsrs.recharge_update_success_to_failed(entry.Idno);
 
+
+                                string disputerchid = Apientry.idno.ToString();
+
+
+                                var stschange = dbsrs.dispute_list.FirstOrDefault(s => s.rch_id == disputerchid);
+                                if (stschange != null)
+                                {
+                                    stschange.sts = "Approved";
+                                    dbsrs.SaveChanges();
+                                }
                                 rch1.response_output = outpt + ", Success To Failed";
                                 dbsrs.SaveChanges();
 
                                 if (role == "Retailer")
                                 {
-                                    try
-                                    {
-                                        var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == entry.userid).SingleOrDefault();
-                                        var dealerdetails = dbsrs.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                                        var masterdetails = dbsrs.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
-
-                                        var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == entry.userid).SingleOrDefault();
-                                        var dlmdetails = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                                        var Masterdetails = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
-
-                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
-                                        Backupinfo back = new Backupinfo();
-                                        string mobileno = entry.Mobile;
-                                        string amount = entry.Amount.ToString();
-                                        var model = new Backupinfo.Addinfo
-                                        {
-
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = entry.userid,
-                                            Email = retailerdetails.Email,
-                                            Mobile = retailerdetails.Mobile,
-                                            Details = "Recharge Success To Failed" + mobileno + " Amount " + amount,
-                                            RemainBalance = (decimal)remdetails.Remainamount,
-                                            Usertype = "Retailer"
-                                        };
-                                        back.Rechargeandutility(model);
-
-                                        var model1 = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = dealerdetails.DealerId,
-                                            Email = dealerdetails.Email,
-                                            Mobile = dealerdetails.Mobile,
-                                            Details = "Recharge Success To Failed " + mobileno + " Amount " + amount,
-                                            RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
-                                            Usertype = "Dealer"
-                                        };
-                                        back.Rechargeandutility(model1);
-
-                                        var model2 = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = masterdetails.SSId,
-                                            Email = masterdetails.Email,
-                                            Mobile = masterdetails.Mobile,
-                                            Details = "Recharge Success To Failed " + mobileno + " Amount " + amount,
-                                            RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
-                                            Usertype = "Master"
-                                        };
-                                        back.Rechargeandutility(model2);
-                                    }
-                                    catch { }
-
                                     var RetailerDetails = dbsrs.Retailer_Details.Where(a => a.RetailerId == entry.userid).SingleOrDefault();
                                     var remainbal = dbsrs.Remain_reteller_balance.Where(r => r.RetellerId == entry.userid).Single().Remainamount;
 
@@ -9866,30 +9809,6 @@ namespace Vastwebmulti.Controllers
                                 }
                                 if (Apientry.rch_type == "API")
                                 {
-                                    try
-                                    {
-                                        var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                        var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-
-                                        var admininfo = dbsrs.Admin_details.SingleOrDefault();
-                                        Backupinfo back = new Backupinfo();
-                                        string mobileno = entry.Mobile;
-                                        string amount = entry.Amount.ToString();
-                                        var model = new Backupinfo.Addinfo
-                                        {
-                                            Websitename = admininfo.WebsiteUrl,
-                                            RetailerID = entry.userid,
-                                            Email = retailerdetails.emailid,
-                                            Mobile = retailerdetails.mobile,
-                                            Details = "Recharge Success To Failed " + mobileno + " Amount " + amount,
-                                            RemainBalance = (decimal)remdetails.balance,
-                                            Usertype = "API"
-                                        };
-                                        back.Rechargeandutility(model);
-
-
-                                    }
-                                    catch { }
                                     var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
                                     if (urlchk != null)
                                     {
@@ -9918,6 +9837,16 @@ namespace Vastwebmulti.Controllers
                                             dbsrs.SaveChanges();
                                         }
                                     }
+                                }
+                            }
+                            else
+                            {
+                                string disputerchid = Apientry.idno.ToString();
+                                var stschange = dbsrs.dispute_list.FirstOrDefault(s => s.rch_id == disputerchid);
+                                if (stschange != null)
+                                {
+                                    stschange.sts = "Rejected";
+                                    dbsrs.SaveChanges();
                                 }
                             }
                         }
