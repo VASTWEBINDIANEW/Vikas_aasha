@@ -897,6 +897,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<PanAadharVerificationCharge> PanAadharVerificationCharges { get; set; }
         public virtual DbSet<PANAADHARVERIFICATIONREPORT> PANAADHARVERIFICATIONREPORTs { get; set; }
         public virtual DbSet<RadiantTransfer> RadiantTransfers { get; set; }
+        public virtual DbSet<Uniquetxnid> Uniquetxnids { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23882,6 +23883,47 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("ToDate", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RadiantTransfer_Report_Result>("RadiantTransfer_Report", userIdParameter, stsParameter, fromDateParameter, toDateParameter);
+        }
+    
+        public virtual ObjectResult<string> update_UPI_TXN_update(string refid, string status, string bankrrn, string appname, string approvalrefno, string responsecode, string txnref, string launcherror, string uniqueid, ObjectParameter output)
+        {
+            var refidParameter = refid != null ?
+                new ObjectParameter("refid", refid) :
+                new ObjectParameter("refid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var bankrrnParameter = bankrrn != null ?
+                new ObjectParameter("bankrrn", bankrrn) :
+                new ObjectParameter("bankrrn", typeof(string));
+    
+            var appnameParameter = appname != null ?
+                new ObjectParameter("appname", appname) :
+                new ObjectParameter("appname", typeof(string));
+    
+            var approvalrefnoParameter = approvalrefno != null ?
+                new ObjectParameter("approvalrefno", approvalrefno) :
+                new ObjectParameter("approvalrefno", typeof(string));
+    
+            var responsecodeParameter = responsecode != null ?
+                new ObjectParameter("responsecode", responsecode) :
+                new ObjectParameter("responsecode", typeof(string));
+    
+            var txnrefParameter = txnref != null ?
+                new ObjectParameter("txnref", txnref) :
+                new ObjectParameter("txnref", typeof(string));
+    
+            var launcherrorParameter = launcherror != null ?
+                new ObjectParameter("launcherror", launcherror) :
+                new ObjectParameter("launcherror", typeof(string));
+    
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("update_UPI_TXN_update", refidParameter, statusParameter, bankrrnParameter, appnameParameter, approvalrefnoParameter, responsecodeParameter, txnrefParameter, launcherrorParameter, uniqueidParameter, output);
         }
     }
 }
