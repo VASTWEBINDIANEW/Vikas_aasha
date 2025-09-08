@@ -1,21 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using Quartz;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Xml;
-using Vastwebmulti.Areas.RETAILER.Models;
-using Vastwebmulti.Models;
 using Vastwebmulti.Areas.RETAILER.Controllers;
 namespace Vastwebmulti.Models.Scheduling
 {

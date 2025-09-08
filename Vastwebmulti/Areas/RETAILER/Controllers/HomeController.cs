@@ -55316,7 +55316,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             db.SaveChanges();
                             if (cid.amt == amiunts / 100)
                             {
-                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output);
+                                string uniqueId = Guid.NewGuid().ToString("N");
+                                db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, uniqueId, output);
                                 try
                                 {
                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -55530,7 +55531,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             db.SaveChanges();
                             if (cid.amt == amiunts / 100)
                             {
-                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, output);
+                                string uniqueId = Guid.NewGuid().ToString("N");
+                                db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, uniqueId, output);
                                 try
                                 {
                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -55741,7 +55743,9 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 db.SaveChanges();
                                 if (cid.amt == amiunts)
                                 {
-                                    db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Bharatpe", null, null, null, null, output);
+                                    string uniqueId = Guid.NewGuid().ToString("N");
+                                    db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Bharatpe", null, null, null, null, uniqueId, output);
+
                                     try
                                     {
                                         var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
