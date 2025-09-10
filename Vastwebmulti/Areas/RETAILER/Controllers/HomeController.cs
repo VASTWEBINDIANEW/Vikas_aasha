@@ -9340,40 +9340,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var AdminEmail = db.Admin_details.SingleOrDefault().email;
             if (ch == "Balance Transfer SuccessFully.")
             {
-                //if (statusSendSmsREMToREMFundTransferRetailer == "Y")
-                //{
-                //    string msgssss = "";
-                //    string tempid = "";
-                //    string urlss = "";
-                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RETAILERTORETAILERFROMFUNDTRANSFER" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                //    if (smsstypes != null)
-                //    {
-                //        msgssss = string.Format(smsstypes.Templates, txtbal, useremail, remainbalretailer);
-                //        tempid = smsstypes.Templateid;
-                //        urlss = smsapionsts.smsapi;
-                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                //    }
-                //    // smssend.sendsmsall(RetailerMobileRetailerDetails.Mobile, "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer");
-                //}
+               
                 smssend.sms_init(statusSendSmsREMToREMFundTransferRetailer.Status, statusSendSmsREMToREMFundTransferRetailer.Whatsapp_Status, "RETAILERTORETAILERFROMFUNDTRANSFER", RetailerDetails.Mobile, txtbal, useremail, remainbalretailer);
-                //if (statusSendSmsREMToREMFundTransfer == "Y")
-                //{
-                //    string msgssss = "";
-                //    string tempid = "";
-                //    string urlss = "";
-                //    var smsapionsts = db.apisms.Where(x => x.sts == "Y").SingleOrDefault();
-                //    var smsstypes = db.Sending_SMS_Templates.Where(x => x.SMS_TYPE == "RETAILERTORETAILERTOFUNDTRANSFER" && x.SMSAPIID == smsapionsts.id).SingleOrDefault();
-                //    if (smsstypes != null)
-                //    {
-                //        msgssss = string.Format(smsstypes.Templates, retaileremaillid, txtbal, remainbal);
-                //        tempid = smsstypes.Templateid;
-                //        urlss = smsapionsts.smsapi;
-                //        smssend.sendsmsallnew(RetailerDetails.Mobile, msgssss, urlss, tempid);
-                //    }
-                //    // smssend.sendsmsall(RetailerDetails.Mobile, "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer");
-                //}
-                smssend.sms_init(statusSendSmsREMToREMFundTransfer.Status, statusSendSmsREMToREMFundTransfer.Whatsapp_Status, "RETAILERTORETAILERTOFUNDTRANSFER", RetailerDetails.Mobile, retaileremaillid, txtbal, remainbal);
+                      smssend.sms_init(statusSendSmsREMToREMFundTransfer.Status, statusSendSmsREMToREMFundTransfer.Whatsapp_Status, "RETAILERTORETAILERTOFUNDTRANSFER", RetailerDetails.Mobile, retaileremaillid, txtbal, remainbal);
                 if (statusSendMailREMToREMFundTransferRetailer == "Y")
                 {
                     smssend.SendEmailAll(RetailerMobileRetailerDetails.Email, "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer", AdminEmail);
@@ -9382,20 +9351,12 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 {
                     smssend.SendEmailAll(RetailerDetails.Email, "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer", AdminEmail);
                 }
-                //if (statusRetailer == "Y")
-                //{
-                //    SendPushNotification(useremail, "Home/Retailer_to_retailer", "Balance Transfer Successfully To Retailer Id is " + retaileremaillid + " and Balance is " + txtbal + ", Remain Balance is " + remainbal + "", "Fund Transfer ..");
-                //    SendPushNotification(retaileremaillid, "Home/Retailer_to_retailer", "Balance " + txtbal + " Transfer to " + useremail + " is Successfully Transfer. Remain Balance is " + remainbalretailer + "", "Fund Transfer..");
-                //}
+               
                 TempData["success"] = ch;
             }
             else
             {
-                //if (statusRetailer == "Y")
-                //{
-                //    SendPushNotification(useremail, "Home/Retailer_to_retailer", "Balance Not Transfer To Retailer Id is " + retaileremaillid + " Due to " + ch + ", Remain Balance is " + remainbal + "", "Fund Transfer ..");
-                //    SendPushNotification(retaileremaillid, "Home/Retailer_to_retailer", "Balance " + txtbal + " Transfer to " + useremail + " is Not Transfer Due To " + ch + ". Remain Balance is " + remainbalretailer + "", "Fund Transfer..");
-                //}
+               
                 TempData["error"] = ch;
             }
             return RedirectToAction("Retailer_to_retailer");
@@ -9603,30 +9564,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             RetailerFundRequestViewmodel vmodel = new RetailerFundRequestViewmodel();
             string userid = User.Identity.GetUserId();
             vmodel.ShowRem_to_Rem = db.show_rem_to_rem_bal(userid, "ALL", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
-            //RetailerFundRequestViewmodel vmodel = new RetailerFundRequestViewmodel();
-            //string dealerid = User.Identity.GetUserId();
-            //var stands = (from rem in db.Retailer_Details where rem.DealerId == dealerid select rem).ToList();
-            //List<SelectListItem> items = new List<SelectListItem>();
-            //foreach (var item in stands)
-            //{
-            //    items.Add(new SelectListItem { Text = item.Frm_Name + " / " + item.Mobile, Value = item.RetailerId.ToString() });
-            //}
-            //vmodel.ddlRetailer = items;
-            //var bindbank = db.bank_info.Where(x => x.userid == dealerid).ToList();
-            //List<SelectListItem> bankitem = new List<SelectListItem>();
-            //foreach (var bank in bindbank)
-            //{
-            //    bankitem.Add(new SelectListItem { Text = bank.banknm + " / " + bank.holdername, Value = bank.acno });
-            //}
-            //vmodel.ddlFillAllBank = bankitem;
-            //var bindwallet = db.tblwallet_info.Where(x => x.userid == dealerid).ToList();
-            //List<SelectListItem> walletitem = new List<SelectListItem>();
-            //foreach (var wallet in bindwallet)
-            //{
-            //    walletitem.Add(new SelectListItem { Text = wallet.walletname + " / " + wallet.walletholdername, Value = wallet.walletno });
-            //}
-            //vmodel.ddlFillAllwallet = walletitem;
-            //return View(vmodel);
+           
             return View();
         }
         private static string GenerateUniqueTransectionID()
@@ -9644,14 +9582,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             }
             return transferids;
         }
-        //public JsonResult FundtransferRemn_To_Remn_Generate_Unique_ID()
-        //{
-        //    var adminuserid = User.Identity.GetUserId();
-        //  string transferids = GenerateUniqueTransectionID();
-        //    var transferid = "RR" + transferids;
-        //    TempData["transferremtorem"] = transferid;
-        //    return Json(transferid, JsonRequestBehavior.AllowGet);
-        //}
+       
         public ActionResult retailer_To_retailer_fund_transfer(string Retaileramount, string RetailerId, string txtRetailercomment, string txtRetailerdmtpin, string latss, string longloc)
         {
             try
@@ -11794,32 +11725,83 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             //return View(rowdata);
             return View();
         }
+
         [HttpPost]
-        public ActionResult dispute(string id, string txtregion)
+
+
+        public ActionResult dispute(string id, string txtregion, string mobileno, string optname, decimal? amount)
         {
+
             try
             {
-                System.Data.Entity.Core.Objects.ObjectParameter output = new
-                System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
-                var ch = db.distute_insert(id, txtregion, output).SingleOrDefault().msg.ToString();
+                System.Data.Entity.Core.Objects.ObjectParameter output =
+                    new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+
+                var ch = db.distute_insert(id, txtregion, output).SingleOrDefault()?.msg?.ToString();
+
+                string userid = User.Identity.GetUserId();
+                var retailer = db.Retailer_Details.FirstOrDefault(a => a.RetailerId == userid);
+                if (retailer == null)
+                {
+                    return Json("Retailer not found", JsonRequestBehavior.AllowGet);
+                }
+
+                string retailerName = retailer.RetailerName;
+
+                // Admin details
+                var admin = db.Admin_details.FirstOrDefault();
+                string adminMobile = admin?.mobile ?? "9999999999";  // fallback
+
+                // SMS send
+                smssend.sms_init(
+                    "Y",
+                    "Y",
+                    "DISPUTE",
+                    adminMobile,
+                    retailerName,
+                    mobileno,
+                    optname,
+                    amount
+                );
+
                 return Json(ch, JsonRequestBehavior.AllowGet);
-                //if (ch == "Success")
-                //{
-                //    TempData["success"] = "Disputed Successfully.";
-                //}
-                //else
-                //{
-                //    TempData["failed"] = "Already Disputed!";
-                //}
-                //return RedirectToAction("DisputeReport");
             }
             catch (Exception ex)
             {
-                return Json("", JsonRequestBehavior.AllowGet);
-                //TempData["failed"] = ex;
-                //return RedirectToAction("DisputeReport");
+                return Json("Error: " + ex.Message, JsonRequestBehavior.AllowGet);
             }
-        }
+        }    //public ActionResult dispute(string id, string txtregion)
+        //{
+        //    try
+        //    {
+        //        System.Data.Entity.Core.Objects.ObjectParameter output = new
+        //        System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
+        //        var ch = db.distute_insert(id, txtregion, output).SingleOrDefault().msg.ToString();
+
+        //        string userid = User.Identity.GetUserId();
+        //        var user = db.Retailer_Details.Where(a => a.RetailerId == userid).FirstOrDefault();
+        //        var users =  db.Admin_details.Where(a => a.email == )
+
+        //        smssend.SendEmailAll(user.Email,"your dispute added succesfully in this reacharge  " + id, "dispute", AdminEmail);
+
+        //        return Json(ch, JsonRequestBehavior.AllowGet);
+        //        //if (ch == "Success")
+        //        //{
+        //        //    TempData["success"] = "Disputed Successfully.";
+        //        //}
+        //        //else
+        //        //{
+        //        //    TempData["failed"] = "Already Disputed!";
+        //        //}
+        //        //return RedirectToAction("DisputeReport");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json("", JsonRequestBehavior.AllowGet);
+        //        //TempData["failed"] = ex;
+        //        //return RedirectToAction("DisputeReport");
+        //    }
+        //}
         public ActionResult GotoInvoicePDF1(string Id, string RechargeTo, string OptName, string amt, string OptID, string Date)
         {
             return new Rotativa.ActionAsPdf("InvoicePDF1", new { Id = Id, RechargeTo = RechargeTo, OptName = OptName, amt = amt, OptID = OptID, Date = Date });
@@ -13910,15 +13892,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View(ch);
         }
         [HttpPost]
+
         public ActionResult Complaint_insert(string message)
         {
             var statusAdmin = db.PushNotificationStatus.Where(a => a.UserRole == "Admin").SingleOrDefault().Status;
-            var Emailid = db.Admin_details.Single().email;
+            var admin = db.Admin_details.FirstOrDefault();
             string userid = User.Identity.GetUserId();
-            var retaileremaillid = db.Users.Where(p => p.UserId == userid).Single().Email;
+            var retailer = db.Users.Where(p => p.UserId == userid).SingleOrDefault();
+
             Guid randomId = Guid.NewGuid();
             string uniqueId = randomId.ToString().Substring(0, 18).ToUpper();
             DateTime date = System.DateTime.Now;
+
             complaint_request objCourse = new complaint_request();
             objCourse.subject = "Chatting";
             objCourse.complant = message;
@@ -13928,12 +13913,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             objCourse.rdate = date;
             db.complaint_request.Add(objCourse);
             db.SaveChanges();
+
+            // 🔹 Admin ko SMS bhejna
+            if (admin != null)
+            {
+                smssend.sms_init(
+                    "Y",                 // sms_status
+                    "Y",                 // whatsapp_status
+                    "CHATSUPPORT",       // template type
+                    admin.mobile,        // Admin ka mobile
+                    retailer.Email,      // param[0] = Retailer Email / Name
+                    message              // param[1] = Chat message
+                );
+            }
+
             if (statusAdmin == "Y")
             {
-                SendPushNotification(Emailid, Url.Action("Money_Transfer_Report", "Home"), "User " + retaileremaillid + " is Send the Complaint For You .And Compalint is that " + message + "", "Complaint Insert..");
+                SendPushNotification(admin.email, Url.Action("Money_Transfer_Report", "Home"),
+                    "User " + retailer.Email + " sent a Complaint: " + message, "Complaint Insert..");
             }
+
             return RedirectToAction("Complaint");
         }
+
+
         //End
         //Profile
         [HttpGet]
@@ -14071,13 +14074,13 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             ViewBag.MD_Details = ch;
             try
             {
-                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == (ch.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b1" : ch.microATM_MCC_CODE)).SingleOrDefault().DESCRIPTION;
+                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == (ch.microATM_MCC_CODE == null ? "5f293542d0962a0d379428b0" : ch.microATM_MCC_CODE)).SingleOrDefault().DESCRIPTION;
             }
             catch
             {
                 ch.microATM_MCC_CODE = null;
                 db.SaveChanges();
-                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == "5f293542d0962a0d379428b1").SingleOrDefault().DESCRIPTION;
+                ViewBag.businessCategory = db.microATM_MCC_CODE.Where(a => a.Credopay_MCC_CODE_Val == "5f293542d0962a0d379428b0").SingleOrDefault().DESCRIPTION;
             }
             var gt = db.State_Desc.Where(a => a.State_id == ch.State).SingleOrDefault().State_name;
             ViewBag.ddlstate = gt;
@@ -34981,16 +34984,42 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             var userid = User.Identity.GetUserId();
             var token = string.Empty;
             token = getAuthToken();
+
             var retailer = db.Retailer_Details.SingleOrDefault(a => a.RetailerId == userid);
-            var city = db.District_Desc.Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District).SingleOrDefault().Dist_Desc;
+            if (retailer == null)
+            {
+                return "Retailer not found.";
+            }
+
+            var cityData = db.District_Desc
+                .Where(aa => aa.State_id == retailer.State && aa.Dist_id == retailer.District)
+                .SingleOrDefault();
+
+            if (cityData == null)
+            {
+                return "District data not found.";
+            }
+
+            var city = cityData.Dist_Desc;
+
             var Account = db.BankAccountForAeps.Where(x => x.RetailerId == userid).FirstOrDefault();
+            if (Account == null)
+            {
+                // Return English message if bank account is missing
+                return "Bank account details not found. Please add your bank account and try again.";
+            }
+
+            // Extract values from account and retailer
             string companyBankAccountNumber = Account.AccountNO;
             string bankIfscCode = Account.IFSC_CODE;
             string companyBankName = Account.BankName;
             string bankBranchName = Account.BankAddress;
             string bankAccountName = Account.AccountHolder;
             string aadhaarNumber = retailer.AadharCard;
+
             var ipAddress = GetComputer_InternetIP();
+
+            // Request object
             var reque = new
             {
                 merchantLoginId = retailer.AepsMerchandId,
@@ -35018,7 +35047,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
                 maskedAadharImage = "",
                 backgroundImageOfShop = ""
             };
+
             var Data = JsonConvert.SerializeObject(reque);
+
+            // API call
             var client = new RestClient("http://api.vastbazaar.com/api/AEPS/RegisterAEPS_LIVE_UPDATE");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
@@ -35026,15 +35058,19 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             request.AddHeader("Content-Type", "application/json");
             request.AddParameter("application/json", Data, ParameterType.RequestBody);
             IRestResponse response2 = client.Execute(request);
+
             dynamic resp = JsonConvert.DeserializeObject(response2.Content);
+
             var stscode = resp.Content.ADDINFO.statuscode.ToString();
             var message = resp.Content.ADDINFO.status.ToString();
+
             string fullUrl = Request.Url?.ToString();
             UpdateAepsLog("****************************************************************");
             UpdateAepsLog("Time : " + DateTime.Now.ToString());
             UpdateAepsLog("fullUrl: " + fullUrl);
             UpdateAepsLog("Request: " + Data.ToString());
             UpdateAepsLog("Response : " + resp.Content);
+
             if (stscode == "TXN")
             {
                 return "TXN";
@@ -51132,12 +51168,16 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                // change security code
+                await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
                 var chk22 = db.checklogouts.Where(a => a.userid == userid).SingleOrDefault();
                 if (chk22 == null)
                 {
-                    checklogout chlogout = new checklogout();
-                    chlogout.userid = userid;
-                    chlogout.lastupdatedate = DateTime.UtcNow;
+                    checklogout chlogout = new checklogout
+                    {
+                        userid = userid,
+                        lastupdatedate = DateTime.UtcNow
+                    };
                     db.checklogouts.Add(chlogout);
                     db.SaveChanges();
                 }
@@ -51158,12 +51198,12 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                     item.change = true;
                     db.SaveChanges();
                 }
-                var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
-                if (tokendelete != null)
-                {
-                    db.Reftkns.Remove(tokendelete);
-                    db.SaveChanges();
-                }
+                //var tokendelete = db.Reftkns.Where(aa => aa.Userid == userid).SingleOrDefault();
+                //if (tokendelete != null)
+                //{
+                //    db.Reftkns.Remove(tokendelete);
+                //    db.SaveChanges();
+                //}
                 TempData["success"] = "Your Password has been Changed Successfully";
                 return RedirectToAction("ChangePassword");
             }
@@ -55276,7 +55316,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             db.SaveChanges();
                             if (cid.amt == amiunts / 100)
                             {
-                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, output);
+                                string uniqueId = Guid.NewGuid().ToString("N");
+                                db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Paytm", null, null, null, null, uniqueId, output);
                                 try
                                 {
                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -55490,7 +55531,8 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                             db.SaveChanges();
                             if (cid.amt == amiunts / 100)
                             {
-                                db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, output);
+                                string uniqueId = Guid.NewGuid().ToString("N");
+                                db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Phonepe", null, null, null, null, uniqueId, output);
                                 try
                                 {
                                     var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -55701,7 +55743,9 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
                                 db.SaveChanges();
                                 if (cid.amt == amiunts)
                                 {
-                                    db.update_UPI_TXN(txnid, stss.ToString(), bankarrn.ToString(), "Bharatpe", null, null, null, null, output);
+                                    string uniqueId = Guid.NewGuid().ToString("N");
+                                    db.update_UPI_TXN_update(txnid, stss.ToString(), bankarrn.ToString(), "Bharatpe", null, null, null, null, uniqueId, output);
+
                                     try
                                     {
                                         var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();

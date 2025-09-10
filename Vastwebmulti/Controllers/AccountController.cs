@@ -2374,6 +2374,10 @@ namespace Vastwebmulti.Controllers
                     new CommonUtil().Rsendmailadmin(adminemail, "Confirm your account", body, callbackUrl);
                     var userroleid = DB.UserRoles.Where(aa => aa.UserId == user.Id).SingleOrDefault().RoleId;
                     var userrole = DB.Roles.Where(aa => aa.RoleId == userroleid).SingleOrDefault().Name;
+                    // change security code
+                    await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
+
+
                     forgottable fot = new forgottable();
                     fot.adminid = whitelabelid;
                     fot.Email = user.Email;
@@ -2401,6 +2405,10 @@ namespace Vastwebmulti.Controllers
                     var Password = pass;
                     var result = await UserManager.RemovePasswordAsync(user.Id);
                     result = await UserManager.AddPasswordAsync(user.Id, pass);
+                    // change security code
+                    await UserManager.UpdateSecurityStampAsync(User.Identity.GetUserId());
+
+
                     //var smsapichk = db.whitelabel_apisms.Where(aa => aa.sts == "Y" && aa.userfor == whitelabelid).SingleOrDefault();
                     var websiteurl = db.WhiteLabel_userList.Where(aa => aa.WhiteLabelID == whitelabelid).SingleOrDefault().websitename;
                     Password = System.Web.HttpUtility.UrlEncode(Password);

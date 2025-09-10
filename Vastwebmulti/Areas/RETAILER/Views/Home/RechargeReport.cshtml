@@ -422,27 +422,91 @@
         $('#confirm-'+e).hide();
         $('#close-'+e).hide();
     }
-    function disputedata(e) {
-         var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-         var ddl_status = $('#ddl_status').val();
-         var Operator = $('#Operator').val();
+     function disputedata(e, mobileno, optname, amount) {
+        var txt_frm_date = $('#txt_frm_date').val();
+        var txt_to_date = $('#txt_to_date').val();
+        var ddl_status = $('#ddl_status').val();
+        var Operator = $('#Operator').val();
         var txtmob = $('#txtmob').val();
+
+        // Description input
         let descript = prompt('Enter Description');
-        if (descript!= null) {
-             $.post("@Url.Action("dispute","Home")",
-                 { "id": e, "txtregion": descript },
-                 function (data) {
-                     ToastrMessage();
-                     toastr.info(data);
-                     $.post("@Url.Action("InfiniteScroll","Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date,"ddl_status":ddl_status,"Operator":Operator,"txtmob":txtmob },
-                    function (data) {
-                        $("#trow").html(data.HTMLString);
-                    });
-           });
+
+        if (descript != null && descript.trim() != "") {
+            // Row se values uthao
+
+
+            $.post("@Url.Action("dispute","Home")",
+                {
+                    "id": e,
+                    "txtregion": descript,
+                    "mobileno": mobileno,
+                    "optname": optname,
+                    "amount": amount
+                },
+                function (data) {
+                    ToastrMessage();
+                    toastr.info(data);
+
+                    // Refresh report after dispute
+                    $.post("@Url.Action("InfiniteScroll","Home")",
+                        {
+                            "pageindex": pageindex,
+                            "txt_frm_date": txt_frm_date,
+                            "txt_to_date": txt_to_date,
+                            "ddl_status": ddl_status,
+                            "Operator": Operator,
+                            "txtmob": txtmob
+                        },
+                        function (data) {
+                            $("#trow").html(data.HTMLString);
+                        });
+                })
+                .fail(function (xhr) {
+                    toastr.error("Error: " + xhr.responseText);
+                });
+        } else {
+            toastr.warning("Please enter a description!");
         }
     }
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    $('#Complaint_Form').on('submit', function (e) {
+        e.preventDefault();
+        console.log("Form submitted");
+
+        let id = $('#complaintId').val();
+        var txtregion = $('#txtdescription').val();
+
+        if (id) {
+            $.post('@Url.Action("dispute", "Home")',
+                { id: id, txtregion: txtregion },
+                function (response) {
+                    console.log("Server response:", response);
+
+                    if (response === "Success") {
+                        $('#complaintSuccessModal').modal('show'); // Show Bootstrap success modal
+                        $('#Complaint_Form')[0].reset(); // Reset form
+                        $('.Complaint_box').hide(); // Hide form popup
+                    } else if (response === "Already Disputed") {
+                        toastr.warning("Complaint already submitted!");
+                    } else {
+                        toastr.error("Unexpected response: " + response);
+                    }
+                }
+            ).fail(function () {
+                toastr.error("Error while submitting complaint.");
+            });
+        } else {
+            alert("Please enter both ID and Description.");
+        }
+    });
+});
+
+
 </script>
 
 <script>

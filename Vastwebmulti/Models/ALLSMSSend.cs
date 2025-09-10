@@ -47,30 +47,63 @@ namespace Vastwebmulti.Models
                 }
                 else if (apinamechange != null)
                 {
-                    VastBazaartoken Responsetoken = new VastBazaartoken();
-                    var client = new RestClient(apinamechange);
-                    var request = new RestRequest(Method.GET);
-                    var token = Responsetoken.gettoken();
-                    request.AddHeader("authorization", "bearer " + token);
-                    request.AddHeader("content-type", "application/json");
-                    var task = Task.Run(() =>
+                    if (apinamechange.ToUpper().Contains("VASTBAZAAR"))
                     {
-                        return client.Execute(request).Content;
-                    });
-                    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                    var resp = "";
-                    if (isCompletedSuccessfully == true)
-                    {
-                        resp = task.Result;
+                        VastBazaartoken Responsetoken = new VastBazaartoken();
+                        var client = new RestClient(apinamechange);
+                        var request = new RestRequest(Method.GET);
+                        var token = Responsetoken.gettoken();
+                        request.AddHeader("authorization", "bearer " + token);
+                        request.AddHeader("content-type", "application/json");
+                        var task = Task.Run(() =>
+                        {
+                            return client.Execute(request).Content;
+                        });
+                        bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                        var resp = "";
+                        if (isCompletedSuccessfully == true)
+                        {
+                            resp = task.Result;
+                        }
+                        sms_api_entry sms = new sms_api_entry();
+                        sms.apiname = apinamechange;
+                        sms.msg = text;
+                        sms.m_date = System.DateTime.Now;
+                        sms.response = resp;
+                        sms.messagefor = userid;
+                        db.sms_api_entry.Add(sms);
+                        db.SaveChanges();
                     }
-                    sms_api_entry sms = new sms_api_entry();
-                    sms.apiname = apinamechange;
-                    sms.msg = text;
-                    sms.m_date = System.DateTime.Now;
-                    sms.response = resp;
-                    sms.messagefor = userid;
-                    db.sms_api_entry.Add(sms);
-                    db.SaveChanges();
+                    else
+                    {
+                        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+                        var client = new RestClient(apinamechange);
+                        client.Timeout = -1;
+                        var request = new RestRequest(Method.GET);
+                        IRestResponse response = client.Execute(request);
+                        Console.WriteLine(response.Content);
+                        var resp = response.Content;
+                        //var client = new RestClient(apinamechange);
+                        //var request = new RestRequest(Method.GET);
+                        //var task = Task.Run(() =>
+                        //{
+                        //    return client.Execute(request).Content;
+                        //});
+                        //bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
+                        //var resp = "";
+                        //if (isCompletedSuccessfully == true)
+                        //{
+                        //    resp = task.Result;
+                        //}
+                        sms_api_entry sms = new sms_api_entry();
+                        sms.apiname = apinamechange;
+                        sms.msg = text;
+                        sms.m_date = System.DateTime.Now;
+                        sms.response = resp;
+                        sms.messagefor = userid;
+                        db.sms_api_entry.Add(sms);
+                        db.SaveChanges();
+                    }
                 }
                 else
                 {
