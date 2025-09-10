@@ -513,8 +513,8 @@
                                     <button type="button" style="background-color:transparent;border-color:transparent; " onclick="fillval()" title="Add New Virtural Value">
                                         <i class="material-icons " style="font-size: 36px;top: -4px;position: relative;color: var(--main-bg-lcolor);">add_circle_outline</i>
                                     </button>
-                                </div>
-
+                                </div> 
+                                
                                 <div class="content" style="width:70%;">
                                     <a href="@Url.Action("AllDetails", "Home")" style=" text-decoration:none;cursor:pointer;">
                                         <div class="text">@ViewData["total"]</div>
@@ -537,22 +537,32 @@
             <div class="col-md-4 second-design-tab sevent_box0" style="padding-right:inherit;">
                 <div class="page-header-third">
                     <ul class="tabs2  width100 float-left nav-tabs">
+
                         <li id="tab1click" class="tab-link current2" data-tab="tab-1">
-                            <a href="#useraccount" style="background-color:transparent;">
+                            <a href="#UserController" style="background-color:transparent;">
                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                &nbsp;User's&nbsp;&&nbsp;Account
+                                @*&nbsp;User's&nbsp;&*@&nbsp;User Controller
                             </a>
                         </li>
+
+                        <li id="tab3click" class="tab-link" data-tab="tab-3">
+                            <a href="#useraccount" style="background-color:transparent;">
+                                <i class="fa fa-bank" aria-hidden="true"></i>
+                                &nbsp;Account
+                            </a>
+                        </li>
+
                         <li id="tab2click" class="tab-link" data-tab="tab-2">
                             <a href="#setting" style="background-color:transparent;">
                                 <i class="fa fa-cog" aria-hidden="true"></i>
                                 &nbsp;Basic Setting
                             </a>
                         </li>
+
                     </ul>
 
                     <div id="tab-1" class="tab-content2 current2">
-                        <div class="icon-button-demo">
+                        <div class="icon-button-demo" style="min-height: 606px;">
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                     <a href="@Url.Action("Master_list","Home")">
@@ -628,17 +638,17 @@
                                     <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Other&nbsp;User's</a>
                                 </div>
                                 @*<div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                        <a href="@Url.Action("new_Employee","Home")">
-                                            <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                <center>
-                                                    <div class="slds">
-                                                        <img src="~/AdminDesign/images/share.svg" />
-                                                    </div>
-                                                </center>
-                                            </button>
-                                        </a>
-                                        <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Employee&nbsp;</a>
-                                    </div>*@
+                        <a href="@Url.Action("new_Employee","Home")">
+                            <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                <center>
+                                    <div class="slds">
+                                        <img src="~/AdminDesign/images/share.svg" />
+                                    </div>
+                                </center>
+                            </button>
+                        </a>
+                        <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Employee&nbsp;</a>
+                    </div>*@
 
 
                             </div><!--.row-->
@@ -669,6 +679,20 @@
                                     </a>
                                     <a href="@Url.Action("Switch_Users","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Switch&nbsp;User's</a>
                                 </div>
+
+
+                                <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                    <a href="@Url.Action("RetailerCreationCharge","Home")">
+                                        <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                            <center>
+                                                <img src="~/images/reportimage/Signup.svg" style="width:32px;" />
+                                            </center>
+                                        </button>
+                                    </a>
+                                    <a href="@Url.Action("RetailerCreationCharge","Home")" style="cursor: pointer; font-size: 11px; font-weight: 700;">SignUp&nbsp;Setting</a>
+                                </div>
+
+
                                 <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                     <a href="@Url.Action("Set_Referral","Home")">
                                         <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
@@ -679,153 +703,32 @@
                                             </center>
                                         </button>
                                     </a>
-                                    <a href="@Url.Action("Set_Referral","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Set Referral</a>
+                                    <a href="@Url.Action("Set_Referral","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Set/Exit Referral Earn</a>
                                 </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                    <a href="@Url.Action("WebLogin","Home")">
+                                        <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                            <center>
+                                                <img src="~/img/padlock.svg" style="width:96%;" />
+                                            </center>
+                                        </button>
+                                    </a>
+                                    <a href="@Url.Action("WebLogin","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Login&nbsp;Setting</a>
+                                </div>
+
+
+                                <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                    <a href="@Url.Action("Set_target","Home")">
+                                        <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+
+                                            <img src="~/AdminDesign/images/set-target.svg" />
+                                        </button>
+                                    </a>
+                                    <a href="@Url.Action("Set_target","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Set&nbsp;Target</a>
+                                </div>
+
                             </div><!--.row-->
-
-
-
-                            <div class="width100 float-left border-k-liye">
-                                <div class="borderbefore float-left width100">
-                                    <div class="row" style="border-top: 5px solid #fff;padding-top:12px;">
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("businessbyOperator","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/operator-b.svg" />
-                                                        </div>
-
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("businessbyOperator","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By Operator</a>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("Admin_Income","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/api-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("Admin_Income","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By Port/API</a>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("User_wise_operator_comm","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/business-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("User_wise_operator_comm","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By User's</a>
-                                        </div>
-                                    </div><!--.row-->
-                                    <div class="row">
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("Add_purchase","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/purchase-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("Add_purchase","Home")" style="cursor: pointer;font-size: 11px;font-weight: 700;">Add Purchase</a>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="#">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img class="seven_bmenu1" src="~/AdminDesign/images/expence-b.svg" />
-                                                            <i class="fa fa-trophy seven_bmenu" aria-hidden="true"></i>
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="#" style="cursor:pointer;font-size:11px;font-weight:700;">Add Expenses</a>
-                                        </div>
-
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("Bankinfo","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/wallet-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("Bankinfo","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Add A/C&nbsp;&&nbsp;Wallet</a>
-                                        </div>
-                                    </div><!--.row-->
-                                    <div class="row">
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("AdminLedger","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img class="seven_bmenu1" src="~/AdminDesign/images/ladger-b.svg" style="width:27px;" />
-                                                            <i class="fa fa-book seven_bmenu" aria-hidden="true"></i>
-
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("AdminLedger","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Ledger Book</a>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("Actual_Admin_income","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/daybook-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("Actual_Admin_income","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Day Book</a>
-                                        </div>
-                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                            <a href="@Url.Action("All_Retailer_Status","Home")">
-                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                    <center>
-                                                        <div class="slds">
-                                                            <img src="~/AdminDesign/images/user-b.svg" />
-                                                        </div>
-                                                    </center>
-                                                </button>
-                                            </a>
-                                            <a href="@Url.Action("All_Retailer_Status","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">User's Book</a>
-                                        </div>
-                                    </div><!--.row-->
-                                    @*<div class="row">
-                                            <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                <a href="@Url.Action("ShowEmployeeWithPermission","Home")">
-                                                    <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                        <center>
-                                                            <img src="~/AdminDesign/images/share.svg" />
-                                                        </center>
-                                                    </button>
-                                                </a>
-                                                <a href="@Url.Action("ShowEmployeeWithPermission","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Employee&nbsp;User's</a>
-                                            </div>
-                                        </div>*@
-
-
-
-
-
-
-                                </div>
-                            </div>
 
 
                         </div>
@@ -840,16 +743,7 @@
                                             <div role="tabpanel" class="tab-pane fade in active" id="basicsetting">
                                                 <div class="icon-button-demo" style="min-height:606px;">
                                                     <div class="row">
-                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                            <a href="@Url.Action("RetailerCreationCharge","Home")">
-                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                                    <center>
-                                                                        <img src="~/images/reportimage/Signup.svg" style="width:32px;" />
-                                                                    </center>
-                                                                </button>
-                                                            </a>
-                                                            <a href="@Url.Action("RetailerCreationCharge","Home")" style="cursor: pointer; font-size: 11px; font-weight: 700;">SignUp&nbsp;Setting</a>
-                                                        </div>
+
                                                         <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                                             <a href="@Url.Action("Email_Security","Home")">
                                                                 <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
@@ -868,19 +762,21 @@
                                                             </a>
                                                             <a href="@Url.Action("SMSAPI","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">SMS&nbsp;Setting</a>
                                                         </div>
+
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("UploadAPK","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+
+                                                                    <img src="~/AdminDesign/images/apk.svg" />
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("UploadAPK","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">APK&nbsp;Setting</a>
+                                                        </div>
+
                                                     </div><!--.row-->
 
                                                     <div class="row">
-                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                            <a href="@Url.Action("WebLogin","Home")">
-                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                                    <center>
-                                                                        <img src="~/img/padlock.svg" style="width:96%;" />
-                                                                    </center>
-                                                                </button>
-                                                            </a>
-                                                            <a href="@Url.Action("WebLogin","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Login&nbsp;Setting</a>
-                                                        </div>
+
                                                         <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                                             <a href="@Url.Action("CashDepositCharge","Home")">
                                                                 <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
@@ -898,6 +794,18 @@
                                                             </a>
                                                             <a href="@Url.Action("tran_passslabsetting","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Commission</a>
                                                         </div>
+
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("Outside_logo","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <img class="seven_bmenu1" src="~/img/computer.svg" style="width:90%;" />
+                                                                    <i class="fa fa-desktop seven_bmenu" aria-hidden="true"></i>
+
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("Outside_logo","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Logo&nbsp;& &nbsp;Theme</a>
+                                                        </div>
+
                                                     </div><!--.row-->
 
                                                     <div class="row">
@@ -970,30 +878,7 @@
                                                             @*  <a href="@Url.Action("Repairandservice","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Repair&nbsp;&&nbsp;Service</a>*@
                                                             <a href="@Url.Action("MicroAtm_Device_info","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">M-ATM&nbsp;Device's</a>
                                                         </div>
-                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                            <a href="@Url.Action("Outside_logo","Home")">
-                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                                                    <img class="seven_bmenu1" src="~/img/computer.svg" style="width:90%;" />
-                                                                    <i class="fa fa-desktop seven_bmenu" aria-hidden="true"></i>
 
-                                                                </button>
-                                                            </a>
-                                                            <a href="@Url.Action("Outside_logo","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Logo&nbsp;& &nbsp;Theme</a>
-                                                        </div>
-
-                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                            <a href="@Url.Action("UploadAPK","Home")">
-                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-
-                                                                    <img src="~/AdminDesign/images/apk.svg" />
-                                                                </button>
-                                                            </a>
-                                                            <a href="@Url.Action("UploadAPK","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">APK&nbsp;Setting</a>
-                                                        </div>
-                                                    </div><!--.row-->
-
-
-                                                    <div class="row">
                                                         <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                                             <a href="@Url.Action("ChangeSecurityPassword","Home")">
                                                                 <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
@@ -1013,15 +898,12 @@
                                                             <a href="@Url.Action("Socialmedia","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Social&nbsp;Media</a>
                                                         </div>
 
-                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                                                            <a href="@Url.Action("Set_target","Home")">
-                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                    </div><!--.row-->
 
-                                                                    <img src="~/AdminDesign/images/set-target.svg" />
-                                                                </button>
-                                                            </a>
-                                                            <a href="@Url.Action("Set_target","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Set&nbsp;Target</a>
-                                                        </div>
+
+                                                    <div class="row">
+                                                        
+
 
                                                     </div><!--.row-->
 
@@ -1034,9 +916,148 @@
                             </div>
                         </div><!--.row-->
                     </div><!--#tab-2 -->
+
+                    <div id="tab-3" class="tab-content2">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="card first-card">
+                                    <div class="just-card">
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="basicsetting">
+                                                <div class="icon-button-demo" style="min-height:606px;">
+                                                    
+                                                    <div class="row">
+
+                                                        
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("businessbyOperator","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/operator-b.svg" />
+                                                                        </div>
+
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("businessbyOperator","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By Operator</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("Admin_Income","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                              <img src="~/AdminDesign/images/api-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("Admin_Income","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By Port/API</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("User_wise_operator_comm","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/business-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("User_wise_operator_comm","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Business By User's</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("Add_purchase","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/purchase-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("Add_purchase","Home")" style="cursor: pointer;font-size: 11px;font-weight: 700;">Add Purchase</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="#">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img class="seven_bmenu1" src="~/AdminDesign/images/expence-b.svg" />
+                                                                            <i class="fa fa-trophy seven_bmenu" aria-hidden="true"></i>
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="#" style="cursor:pointer;font-size:11px;font-weight:700;">Add Expenses</a>
+                                                        </div>
+
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("Bankinfo","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/wallet-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("Bankinfo","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Add A/C&nbsp;&&nbsp;Wallet</a>
+                                                        </div>
+
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("AdminLedger","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img class="seven_bmenu1" src="~/AdminDesign/images/ladger-b.svg" style="width:27px;" />
+                                                                            <i class="fa fa-book seven_bmenu" aria-hidden="true"></i>
+
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("AdminLedger","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Ledger Book</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("Actual_Admin_income","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/daybook-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("Actual_Admin_income","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Day Book</a>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
+                                                            <a href="@Url.Action("All_Retailer_Status","Home")">
+                                                                <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                                    <center>
+                                                                        <div class="slds">
+                                                                            <img src="~/AdminDesign/images/user-b.svg" />
+                                                                        </div>
+                                                                    </center>
+                                                                </button>
+                                                            </a>
+                                                            <a href="@Url.Action("All_Retailer_Status","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">User's Book</a>
+                                                        </div>
+
+                                                    </div><!--.row-->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--.row-->
+                    </div>
                 </div>
             </div>
-
+            
 
             @*  seven theme design start  *@
             <div class="col-md-4 second-design-tab sevent_box1" style="padding-right:inherit;">
@@ -1375,7 +1396,7 @@
                                                                     </button>
                                                                 </a>
                                                                 <a href="@Url.Action("RetailerCreationCharge","Home")" style="cursor: pointer; font-size: 11px; font-weight: 700;">SignUp&nbsp;Setting</a>
-                                                            </div>
+                                                            </div>  
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                                             <div class="seventheme_box">

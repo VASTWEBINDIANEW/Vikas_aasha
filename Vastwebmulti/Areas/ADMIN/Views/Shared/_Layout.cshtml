@@ -111,9 +111,74 @@
     <link href="~/MainFrontDesign/css/seven_design.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @*    .seven_design css link   *@
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        #round_buttone:hover .card_web_renewal{
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card_web_renewal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px 40px;
+            width: 300px;
+            position: absolute;
+            right: 13px;
+            top: 59px; /* Only one top value */
+            transform: translateY(25px);
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.4s linear;
+        }
+
+            .card_web_renewal .section {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+                .card_web_renewal .section div {
+                    padding-left: 10px;
+                }
+
+                .card_web_renewal .section:last-child {
+                    margin-bottom: 0;
+                }
+
+            .card_web_renewal .icon {
+                font-size: 24px;
+                margin-right: 10px;
+                color: #34495e;
+            }
+
+            .card_web_renewal .label {
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 20px;
+                padding: 0;
+            }
+
+            .card_web_renewal .value {
+                display: block;
+                margin-top: 5px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .card_web_renewal .green {
+                color: #27ae60;
+            }
+
+            .card_web_renewal hr {
+                border: none;
+                border-top: 1px solid #eee;
+                margin: 15px 0;
+            }
+
         i.arrow-left.fas.fa-angle-right {
             display: none !important;
         }
@@ -992,7 +1057,7 @@
     </style>
 
     @*   New responcve   *@
-<style>
+    <style>
 
         @@media only screen and (max-width:1169px) {
             #sidebar-open {
@@ -1050,56 +1115,55 @@
             }
         }
 
-    @@media only screen and (max-width: 768px) {
-        .tmw-layoutht .navbar-nav > li {
-            margin-right: 6px;
-            margin-top: -17px !important;
-        }
-        i.material-icons.four-image-nav {
-            left: -9px !important;
-            top: -3px;
-        }
-    }
+        @@media only screen and (max-width: 768px) {
+            .tmw-layoutht .navbar-nav > li {
+                margin-right: 6px;
+                margin-top: -17px !important;
+            }
 
-    @@media only screen and (max-width:767px) {
-        body #navbar-collapse {
-            margin-right: 0;
+            i.material-icons.four-image-nav {
+                left: -9px !important;
+                top: -3px;
+            }
         }
 
-        .navbar .navbar-nav {
-            width: 100% !important;
-            margin: 0px !important;
+        @@media only screen and (max-width:767px) {
+            body #navbar-collapse {
+                margin-right: 0;
+            }
+
+            .navbar .navbar-nav {
+                width: 100% !important;
+                margin: 0px !important;
+            }
+
+            .tmw-layoutht .navbar-nav > li {
+                margin: 0px !important;
+                margin-top: 0px !important;
+            }
+
+            .navbar-collapse {
+                border-top: 0px solid transparent !important;
+                box-shadow: none;
+            }
+
+            i.material-icons.four-image-nav {
+                left: -8px !important;
+                top: -1px;
+            }
         }
 
-        .tmw-layoutht .navbar-nav > li {
-            margin: 0px !important;
-            margin-top: 0px !important;
+        @@media only screen and (max-width: 600px) {
+
+            .list-group {
+                padding-right: 6px !important;
+            }
+
+            body #navbar-collapse {
+                padding: 0;
+            }
         }
-
-        .navbar-collapse {
-            border-top: 0px solid transparent !important;
-            box-shadow: none;
-        }
-        i.material-icons.four-image-nav {
-            left: -8px !important;
-            top: -1px;
-        }
-    }
-
-    @@media only screen and (max-width: 600px) {
-
-        .list-group {
-            padding-right: 6px !important;
-        }
-
-        body #navbar-collapse {
-            padding: 0;
-        }
-
-    }
-
-
-</style>
+    </style>
 
 
 
@@ -1907,7 +1971,7 @@
 
                     </li>
                     <div id="round_buttone" class="tow-round1">
-                        <div class="tooltip_1">
+                        <div class="tooltip_1" style="display:none !important;">
                             <h2>Website renewl  date is</h2>
                             <h2 style="letter-spacing: 1px; font-size: 18px; font-weight: 900; animation: backgrounder 2s linear infinite !important; text-transform:uppercase;"> @renewaldate </h2>
                             <h2> web ip is @ipaddress </h2>
@@ -1921,7 +1985,43 @@
                                 <h2>domin exp date <a style="letter-spacing: 1px; font-size: 18px; font-weight: 500; animation: backgrounder 2s linear infinite !important;" id="Domainexpiredate1"> </a>  </h2>
                             }
                         </div>
-                    <li class="list-group" style=" margin: -7px 0px 0px 17px; width: 120px; position: relative;">
+
+                        <div class="card_web_renewal">
+                            <div class="section">
+                                <i class="fa-solid fa-calendar icon"></i>
+                                <div>
+                                    <span class="label">Renewal Date</span>
+                                    <span class="value green"> @renewaldate </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="section">
+                                <i class="fa-solid fa-globe icon"></i>
+                                <div>
+                                    <span class="label">Web IP</span>
+                                    <span class="value"> @ipaddress </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="section">
+                                <i class="fa-solid fa-lock icon"></i>
+                                <div>
+                                    <span class="label">Domain Expiry</span>
+                                    @if (expire != null && DateTime.Now < expire.ExpireDate)
+                                    {
+                                        expiredate = DB.Domain_Expiration.FirstOrDefault().ExpireDate.ToString("dd MMM yyy");
+                                        <span class="value"> @expiredate </span>
+                                    }
+                                    else
+                                    {
+                                        <span>domin exp date <a style="letter-spacing: 1px; font-size: 18px; font-weight: 500; animation: backgrounder 2s linear infinite !important;" id="Domainexpiredate1"> </a>  </span>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                      <li class="list-group" style=" margin: -7px 0px 0px 17px; width: 120px; position: relative;">
                         @if (shoreneval != 0)
                         {
 

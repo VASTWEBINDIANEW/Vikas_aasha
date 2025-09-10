@@ -7,6 +7,47 @@
 <style>
 
     /* new css  */
+    
+    .res_div svg {
+        width: 23px;
+        color: #000;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+
+    .all_page_alert {
+        position: absolute;
+        top: 109px;
+        z-index: 99;
+        right: 15px;
+        display: none;
+        padding: 10px;
+    }
+
+    .alert-success {
+        background-color: #2b982b;
+    }
+
+    .res_div svg:hover + .all_page_alert {
+        display: block;
+    }
+
+    .bread-same-all-page {
+        width: auto;
+    }
+
+    .headline_set {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .res_div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 
     .p_one {
         position: fixed;
@@ -347,10 +388,38 @@
             </ul>
         </div>
         <!--Four-Design-Admin-page-Header-Section-End-->
+        <div class="page-header-third pageheader-margin-third retailerlist-header-resp headline_set">
+            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
+                <ul class="padding-top-third">
+                    <li class="smli">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
+                        </a>
+                    </li>
 
-        <div class="row clearfix">
+                    <li class="fullbodydycolorbg tmw-total-color-one">
+                        Loan History
+                    </li>
+                </ul>
+            </div>
+            <div class="res_div">
 
-            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                </svg>
+                <div class="alert alert-success all_page_alert" role="alert">
+                    Loan History
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row clearfix" style="margin:0;">
+
+            <div class="page-header-third">
                 <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
                     <tr>
 
@@ -364,7 +433,7 @@
                         <th>Loan ID</th>
                         <th>#</th>
                     </tr>
-                    @{ 
+                    @{
                         var h = 0;
                     }
                     @foreach (var i in Model)
@@ -385,9 +454,9 @@
                                     <button style="color:white;background:red" class="fails" onclick="onoffs('Failed',@h,'@frm',@i.amount,@i.loanid,@i.idno)">Failed</button>
                                     @*<a href="@Url.Action("LoanreqUpdate","Home",new {sts = "Failed",idno = i.idno,Loanid = i.loanid})"><button style="color:white;background:red;display:none" class="fails1">Sure?</button></a>*@
                                     <button style="color:white;background:green" class="succ" onclick="onoffs('Success',@h,'@frm',@i.amount,@i.loanid,@i.idno)">Success</button>
-                                  
+
                                 }
-</td>
+                            </td>
                         </tr>
                         h++;
                     }
@@ -413,7 +482,7 @@
                 <div class="p_menu" id="buttomss">
 
                 </div>
-                
+
             </div>
 
         </div>
