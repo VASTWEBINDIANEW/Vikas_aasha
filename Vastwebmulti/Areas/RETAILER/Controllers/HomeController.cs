@@ -11739,6 +11739,7 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
 
                 var ch = db.distute_insert(id, txtregion, output).SingleOrDefault()?.msg?.ToString();
 
+
                 string userid = User.Identity.GetUserId();
                 var retailer = db.Retailer_Details.FirstOrDefault(a => a.RetailerId == userid);
                 if (retailer == null)
@@ -11770,7 +11771,10 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 return Json("Error: " + ex.Message, JsonRequestBehavior.AllowGet);
             }
-        }    //public ActionResult dispute(string id, string txtregion)
+        }    
+        
+        
+        //public ActionResult dispute(string id, string txtregion)
         //{
         //    try
         //    {
