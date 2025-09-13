@@ -23925,5 +23925,30 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("update_UPI_TXN_update", refidParameter, statusParameter, bankrrnParameter, appnameParameter, approvalrefnoParameter, responsecodeParameter, txnrefParameter, launcherrorParameter, uniqueidParameter, output);
         }
+    
+        public virtual ObjectResult<GetRetailerTxnSummary_Result> GetRetailerTxnSummary(string masterId, string dealerId, string retailerId, Nullable<System.DateTime> fromDate, Nullable<System.DateTime> toDate)
+        {
+            var masterIdParameter = masterId != null ?
+                new ObjectParameter("MasterId", masterId) :
+                new ObjectParameter("MasterId", typeof(string));
+    
+            var dealerIdParameter = dealerId != null ?
+                new ObjectParameter("DealerId", dealerId) :
+                new ObjectParameter("DealerId", typeof(string));
+    
+            var retailerIdParameter = retailerId != null ?
+                new ObjectParameter("RetailerId", retailerId) :
+                new ObjectParameter("RetailerId", typeof(string));
+    
+            var fromDateParameter = fromDate.HasValue ?
+                new ObjectParameter("FromDate", fromDate) :
+                new ObjectParameter("FromDate", typeof(System.DateTime));
+    
+            var toDateParameter = toDate.HasValue ?
+                new ObjectParameter("ToDate", toDate) :
+                new ObjectParameter("ToDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRetailerTxnSummary_Result>("GetRetailerTxnSummary", masterIdParameter, dealerIdParameter, retailerIdParameter, fromDateParameter, toDateParameter);
+        }
     }
 }
