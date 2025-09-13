@@ -5,6 +5,14 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+    /* New css */
+    .set_button button {
+        padding: 6px 14px !important;
+        height: auto !important;
+        border-radius: 3px !important;
+        border: 1px #ccc !important;
+    }
+    /* New css */
     .second-design .datepicker-dropdown.datepicker {
         margin-top: 0px !important;
     }
@@ -343,47 +351,49 @@
 
             </div>
 
-            <div>
-                <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
-                    <tr>
-                        <th>Sr.</th>
-                        <th>USER</th>
-                        <th>Dealer</th>
-                        <th>Master</th>
-                        <th>Status</th>
-                    </tr>
-                    @{ var id = 0; }
-                    @{ var id1 = 1; }
-                    @foreach (var i in Model)
-                    {
-                        var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.userid).SingleOrDefault();
-                        var dlmfrmname = db.Dealer_Details.Where(s => s.DealerId == frmname.DealerId).SingleOrDefault();
-                        var ssfrmname = db.Superstokist_details.Where(s => s.SSId == dlmfrmname.SSId).SingleOrDefault();
-
+            <div class="col-md-12 set_button">
+                <div class="page-header-third">
+                    <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
                         <tr>
-                            <td>@id1</td>
-                            <td>@frmname.Frm_Name</td>
-                            <td>@dlmfrmname.FarmName</td>
-                            <td>@ssfrmname.FarmName</td>
-                            <td class="idchanges">
-                                @if (i.status == true)
-                                {
-                                    <button class="btn btn-success" onclick="stsupd('@i.userid',@id, false)">ON</button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-danger" onclick="stsupd('@i.userid',@id, true)">OFF</button>
-                                }
-
-                            </td>
+                            <th>Sr.</th>
+                            <th>USER</th>
+                            <th>Dealer</th>
+                            <th>Master</th>
+                            <th>Status</th>
                         </tr>
-                        id++;
-                        id1++;
-                    }
-                </table>
+                        @{ var id = 0; }
+                        @{ var id1 = 1; }
+                        @foreach (var i in Model)
+                        {
+                            var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.userid).SingleOrDefault();
+                            var dlmfrmname = db.Dealer_Details.Where(s => s.DealerId == frmname.DealerId).SingleOrDefault();
+                            var ssfrmname = db.Superstokist_details.Where(s => s.SSId == dlmfrmname.SSId).SingleOrDefault();
+
+                            <tr>
+                                <td>@id1</td>
+                                <td>@frmname.Frm_Name</td>
+                                <td>@dlmfrmname.FarmName</td>
+                                <td>@ssfrmname.FarmName</td>
+                                <td class="idchanges">
+                                    @if (i.status == true)
+                                    {
+                                        <button class="btn btn-success" onclick="stsupd('@i.userid',@id, false)">ON</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-danger" onclick="stsupd('@i.userid',@id, true)">OFF</button>
+                                    }
+
+                                </td>
+                            </tr>
+                            id++;
+                            id1++;
+                        }
+                    </table>
+                </div>
+
+
             </div>
-
-
 
 
         </div>

@@ -35,7 +35,7 @@
         var State = db2.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
 
         var notshow = db2.tblMenus.Where(a => (a.MenuName == "CARDS" || a.MenuName == "TRAVEL") && a.Status == "Y" && a.Role == "ADMIN").ToList();
-
+        
         var Card = db2.tblMenus.Where(a => a.MenuName == "CARDS" && a.Role == "ADMIN").SingleOrDefault().Status;
         var Travel = db2.tblMenus.Where(a => a.MenuName == "TRAVEL" && a.Role == "ADMIN").SingleOrDefault().Status;
         var outerlink = db2.OuterUpload_Link.ToList();
@@ -91,6 +91,23 @@
         //var menucolor = allcolor.SingleOrDefault().MenuColor;
     }
     <style type="text/css">
+
+        .mobiledev {
+            display: flex !important;
+            align-items: center;
+        }
+
+        .main_menu_bg .navbar-nav > li > a {
+            padding: 6px 14px;
+        }
+        .navbar-default .custom-control-font .navbar-nav > li > a:hover, .navbar-default .custom-control-font .navbar-nav > li > a:focus {
+            background: white;
+        }
+        .navbar-right {
+            margin-right: 0px;
+            margin-top: 9px;
+        }
+
         .for-blink {
             color: #fff;
             animation: blink 2s linear infinite;
@@ -136,10 +153,15 @@
             height: 90%;
         }
 
-        #menu-item-5999:hover .color-scheme-dark {
-            visibility: visible;
-        }
 
+        .color-scheme-dark::after {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: 2px;
+            border: 3px solid var(--main-bg-lcolor);
+            transform: rotate(50deg);
+        }
         li#menu-item-5999 {
             position: relative;
         }
@@ -151,21 +173,25 @@
             background: var(--main-bg-lcolor);
             color: #fff;
             font-size: 15px;
-            top: 44px;
+            top: 75px;
             left: 0px;
             text-align: center;
             width: 155px;
             transition: 0.30s;
         }
+        #menu-item-5999:hover .color-scheme-dark {
+            visibility: visible;
+            top: 37px;
+        }
 
             .color-scheme-dark a:hover {
-                background: #666060;
+                background: #000;
             }
 
             .color-scheme-dark a {
                 width: 100%;
                 float: left;
-                padding: 10px;
+                padding: 6px;
             }
     </style>
 </head>
@@ -189,7 +215,7 @@
         col = "#da097d";
     }
     var color = col;
-
+      
     var allcolor1 = db.tblMenuColors.ToList();
     var selectedcolor1 = allcolor1.Count == 0 ? "" : allcolor1.SingleOrDefault().SelectedColor;
     var menucolor1 = allcolor1.Count == 0 ? "" : allcolor1.SingleOrDefault().MenuColor;
@@ -268,7 +294,7 @@
                                     <li><a href="#ABOUT">about</a></li>
                                     <li><a href="#SERVICES">service</a></li>
                                     @*
-        <li><a href="#PRODUCTS">product</a></li>*@
+                                       <li><a href="#PRODUCTS">product</a></li>*@
                                     <li><a href="#WORKS">works</a></li>
                                     @if (Card != "Y")
                                     {
@@ -281,48 +307,41 @@
                                     }
 
                                     @*
-        <li><a href="#CONTACTUS">contact us</a></li>*@
+                                    <li><a href="#CONTACTUS">contact us</a></li>*@
                                     <li><a href="#WHYCHOOSEUS">why choose us</a></li>
 
 
                                     @*@foreach (var item in ViewBag.menuname)
-        {
-        <li><a href="#@item.MenuName">@item.MenuName</a></li>
+                                    {
+                                    <li><a href="#@item.MenuName">@item.MenuName</a></li>
+                                    
+                                    }*@
 
-        }*@
-
-
+                                    
 
 
                                     @if (outerlink.Count() > 0)
                                     {
                                         <li id="menu-item-5999" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-5999">
-                                            <a href="javascript:void(0);" class="mobiledev">@Outerlinkname_change</a>
+                                            <a href="javascript:void(0);" class="mobiledev">@Outerlinkname_change <i style="font-size: 18px;margin-left: 5px;" class="fa fa-angle-down"></i> </a>
 
                                             <div class="color-scheme-dark" style="">
-
-
                                                 <div>
                                                     @foreach (var item in outerlink)
                                                     {
                                                         <a href="@item.Link" target="_blank" style="border-bottom:1px solid #cec6c6;">
                                                             <span style="text-decoration: none;">@item.Name </span>
                                                         </a>
-
                                                     }
-
-
                                                 </div>
-
                                             </div>
-
-
                                         </li>
                                     }
-                                    <li><a href='@Url.Action("Login","Home",new { id="singin" })'><span style="background:#fff;padding: 3px 10px;border-radius: 40px;color:var(--main-bg-lcolor);">LOGIN</span></a></li>
-                                    <li><a href='@Url.Action("Login","Home",new { id="singup" })'><span style="background:#fff;padding: 3px 8px;border-radius: 40px;color:var(--main-bg-rcolor);">SIGN&nbsp;UP</span></a></li>
+
+                                    <li><a style="background: transparent;" href='@Url.Action("Login","Home",new { id="singin" })'><span style="background:#fff;padding: 3px 10px;border-radius: 40px;color:var(--main-bg-lcolor);">LOGIN</span></a></li>
+                                    <li><a style="background: transparent;" href='@Url.Action("Login","Home",new { id="singup" })'><span style="background:#fff;padding: 3px 8px;border-radius: 40px;color:var(--main-bg-rcolor);">SIGN&nbsp;UP</span></a></li>
                                     @*
-        <li><a href='@Url.Action("Login","Home")'>LOGIN / SIGNUP</a></li>*@
+                                        <li><a href='@Url.Action("Login","Home")'>LOGIN / SIGNUP</a></li>*@
                                 </ul>
                             </div>
                         </div>
@@ -347,7 +366,7 @@
 
 
                         <li class="footer-phone">
-                            <h4 style="font-size:18px;">
+                            <h4 style="font-size:18px;"> 
                                 <img src="~/AdminDesign/images/customer-support.svg" style="width:20px;" />&nbsp;24&nbsp;x&nbsp;7 Customer Care
                             </h4>
                             <a href="tel:+91+@CustCareNo" style="letter-spacing: 2px;">
