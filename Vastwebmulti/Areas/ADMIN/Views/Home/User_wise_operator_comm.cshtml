@@ -328,8 +328,9 @@
                                         <th>Name</th>
                                         <th>Frim&nbsp;Name</th>
                                         <th>Operator&nbsp;Name</th>
-                                        <th>Distributor Income</th>
-                                        <th>Retailer Income</th>
+                                        <th id="distributor_income1" style="display: none; border: none !important;">Distributor Income</th>
+                                        @*<th>Retailer Income</th>*@
+                                        <th>Income</th>
                                         <th>Total Success</th>
 
                                     </tr>
@@ -350,7 +351,9 @@
                                             <td><p style="font-size:13px;">@item.RetailerName</p></td>
                                             <td><p style="font-size:13px;">@item.Frm_Name</p></td>
                                             <td><p style="font-size:13px;">@item.optnm</p></td>
-                                            <td><p style="font-size:13px;">@item.remincome</p></td>
+
+                                            <td class="distributor_income2" style="display: none; border: none !important;"><p style="font-size:13px;"> @*@item.DealerIncome*@ </p></td>
+
                                             <td><p style="font-size:13px;">@item.remincome</p></td>
                                             <td><p style="font-size:13px;">@item.total</p></td>
                                         </tr>
@@ -361,6 +364,9 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+
+                                        <td id="distributor_income3" style="display: none; border: none !important;"> @*@Model.Sum(a => a.DealerIncome)*@ </td>
+
                                         <td>@Model.Sum(a => a.remincome)</td>
                                         <td>@Model.Sum(a => a.total)</td>
                                     </tr>
@@ -549,6 +555,14 @@ $("#alldealer").change(function () {
             document.getElementById("Servicelist").style.display = "block";
             document.getElementById("rem").style.display = "none";
             document.getElementById("apiid").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "block";
+            document.getElementById("distributor_income3").style.display = "block";
+
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "block";
+            });
+
+
         }
         else if (answer == "Whitelabel") {
             document.getElementById("allmaster").style.display = "none";
@@ -558,6 +572,11 @@ $("#alldealer").change(function () {
             document.getElementById("Servicelist").style.display = "none";
             document.getElementById("rem").style.display = "none";
             document.getElementById("apiid").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "none";
+            document.getElementById("distributor_income3").style.display = "none";
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "none";
+            });
         }
         else if (answer == "Master") {
             document.getElementById("allmaster").style.display = "block";
@@ -567,6 +586,11 @@ $("#alldealer").change(function () {
             document.getElementById("Servicelist").style.display = "none";
             document.getElementById("rem").style.display = "none";
             document.getElementById("apiid").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "none";
+            document.getElementById("distributor_income3").style.display = "none";
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "none";
+            });
         }
         else if (answer == "Admin") {
             document.getElementById("allwhitelabel").style.display = "none";
@@ -576,6 +600,11 @@ $("#alldealer").change(function () {
             document.getElementById("retailerlist").style.display = "none";
             document.getElementById("Servicelist").style.display = "none";
             document.getElementById("rem").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "none";
+            document.getElementById("distributor_income3").style.display = "none";
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "none";
+            });
         }
         else if (answer == "Retailer") {
             document.getElementById("allwhitelabel").style.display = "none";
@@ -585,6 +614,11 @@ $("#alldealer").change(function () {
             document.getElementById("Servicelist").style.display = "none";
             document.getElementById("rem").style.display = "block";
             document.getElementById("apiid").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "none";
+            document.getElementById("distributor_income3").style.display = "none";
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "none";
+            });
         }
         else if (answer == "APIID") {
             document.getElementById("allwhitelabel").style.display = "none";
@@ -594,6 +628,11 @@ $("#alldealer").change(function () {
             document.getElementById("retailerlist").style.display = "none";
             document.getElementById("Servicelist").style.display = "none";
             document.getElementById("rem").style.display = "none";
+            document.getElementById("distributor_income1").style.display = "none";
+            document.getElementById("distributor_income3").style.display = "none";
+            document.querySelectorAll(".distributor_income2").forEach(el => {
+                el.style.display = "none";
+            });
         }
     }
 </script>
