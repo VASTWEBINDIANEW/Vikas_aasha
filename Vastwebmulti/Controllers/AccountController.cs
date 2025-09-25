@@ -1,4 +1,7 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿//<%@ WebHandler Language = "C#" Class="CaptchaHandler" %>
+using System.Drawing;
+using System.Drawing.Imaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -1479,12 +1482,17 @@ namespace Vastwebmulti.Controllers
                 }
             }
         }
+
+        // ✅ GET: Signup
+        
+        
         //Insert Retailer
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Insert_retailer(RegisterViewModel rem)
+        public async Task<ActionResult> Insert_retailer(RegisterViewModel rem, string CaptchaInput)
         {
+
             var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
             using (var transaction = appDbContext.Database.BeginTransaction())
             {
