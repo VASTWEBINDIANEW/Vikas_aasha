@@ -23950,5 +23950,10 @@ namespace Vastwebmulti.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRetailerTxnSummary_Result>("GetRetailerTxnSummary", masterIdParameter, dealerIdParameter, retailerIdParameter, fromDateParameter, toDateParameter);
         }
+
+        internal object select_retailer_for_ddl(object dealerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
