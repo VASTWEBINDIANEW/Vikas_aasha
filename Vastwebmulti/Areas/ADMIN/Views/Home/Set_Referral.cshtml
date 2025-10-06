@@ -7,8 +7,186 @@
 
 <style>
     /* new css */
+    section.content {
+        margin: 75px 0px 0 180px;
+    }
+
+    .body_sidebar_menu span {
+        background: #000 !important;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        width: 50px;
+        float: left;
+        height: 42px;
+    }
+    
+    .tablinks a {
+        cursor: pointer !important;
+    }
+    .disablevalue {
+        width: 50%;
+        float: left;
+    }   
+
+    .disablevalue {
+        padding: 7px 10px;
+        background: #ddd;
+        color: #555;
+    }
+    .reffael-fullseting select.form-control {
+        width: 50%;
+        float: left;
+    }
+
+    .reffael-fullseting button.reffralactivedeacrt {
+        float: right;
+        padding: 7px 14px !important;
+        text-align: center;
+        border: 0;
+        font-weight: bold;
+    }
+
+    .classfullsavechange button {
+        width: 100%;
+        float: left;
+        margin-top: 30px;
+        border: 0 !important;
+        background: #d3d3d3;
+        width: 100%;
+        border-radius: 30px !important;
+        height: 40px !important;
+    }
+
+    p.prag_1 {
+        font-size: 9px;
+        padding-right: 0px;
+        font-weight: 500;
+        padding-top: 2px;
+    }
+
+    p.prag_2 {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        font-size: 14px;
+        color: #000;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1.4px;
+    }
+
+    .butttuno_2 {
+        width: auto;
+        height: 22px;
+        float: left;
+        border: 1px #ddd solid;
+        margin-left: 5px;
+        margin-top: 3px;
+        text-align: center;
+        color: #000;
+        padding: 0px 3px;
+    }
+
+    #refferalsetinpartial {
+        height: 29px;
+        margin-right: 4px;
+    }
+
+    div#refferalsetinpartial button {
+        width: 137px;
+        height: 29px;
+        border: 1px solid #ddd;
+        text-align: end;
+        padding-right: 5px;
+        position: relative;
+    }
+
+    .bkp:hover .dropdown-submenu {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        top: 34px;
+        border-top: 0;
+    }
+
+    .bkp.seventd {
+        float: left;
+        position: relative;
+    }
+
+    .dropdown-submenu {
+        background: #fff;
+        width: 200px;
+        display: block;
+        float: left;
+        position: absolute;
+        top: 51px;
+        left: 2px;
+        transform: translateY(25px);
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.4s linear;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        text-transform: capitalize;
+        font-weight: 300;
+        z-index: 9999;
+    }
+
+        .dropdown-submenu::before, .custum-dropdown::before {
+            border-style: solid;
+            border-width: 0 6px 6px;
+            content: "";
+            height: 0;
+            position: absolute;
+            left: 1em;
+            top: -6px;
+            width: 0;
+            z-index: 9999;
+            border-color: transparent transparent #fff;
+            display: block;
+        }
+
+    .all_page_alert {
+        position: absolute;
+        top: 109px;
+        z-index: 99;
+        right: 15px;
+        display: none;
+        padding: 10px;
+    }
+
+    .res_div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .res_div svg:hover + .all_page_alert {
+            display: block;
+        }
+
+        .res_div svg {
+            width: 23px;
+            color: #000;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+    .retailerlist-header-resp {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     .refferal-type-left, .refferal-type-right {
-        height: auto;
+        height: 400px;
+    }
+
+    .bread-same-all-page {
+        width: auto;
     }
 
     .refferal-type ul li {
@@ -105,7 +283,7 @@
         </div>
         <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="page-header-third pageheader-margin-third">
+        <div class="page-header-third pageheader-margin-third retailerlist-header-resp">
             <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
                 <ul class="padding-top-third">
                     <li class="smli">
@@ -115,9 +293,58 @@
                     </li>
 
                     <li class="fullbodydycolorbg tmw-total-color-one">
-                        Set Referral
+                        Set/Exit Referral Earn
                     </li>
                 </ul>
+            </div>
+            <div class="res_div">
+
+                <div class="web-white-filter pdfexpoer-second pdf-third-design" id="refferalsetinpartial" style="float: left;">
+
+                    @Html.Action("_RefferalSettingpage")
+
+
+                </div>
+
+                <div>
+                    <ul style="position:relative;">
+                        <li class="bkp seventd">
+                            <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
+                                <a href="@Url.Action("daywisecomm", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm Status</a>
+
+                            </div>
+
+                            <div class="dropdown-submenu">
+                                <ul>
+                                    <li style="font-weight:700;"> Extra Commission Status </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="bkp seventd">
+                            <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
+                                <a href="@Url.Action("daywisecommhistory", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm History</a>
+
+                            </div>
+
+                            <div class="dropdown-submenu">
+                                <ul>
+                                    <li style="font-weight:700;"> Extra Commission History </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
+
+
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                </svg>
+                <div class="alert alert-success all_page_alert" role="alert">
+                    Set Referral Earn
+                </div>
             </div>
         </div>
 
@@ -127,20 +354,27 @@
 
         <div class="row clearfix ">
             <div class="switch-user-tab">
-                <div class="col-md-4 switch-user-tab-left">
+
+                <div class="col-md-4 switch-user-tab-left"  id="body_left">
 
                     <div class="page-header-third">
-                        <ul class="nav nav-tabs fullbodydycolorbg" id="tabs">
-                            <li class="tab-link active-seconddesign" data-tab="tab-1" style="width:100%;">
-                                <a data-toggle="tab" href=".home" aria-expanded="false" style="font-size: 17px;padding: 4px;">
+                        <ul class="nav nav-tabs fullbodydycolorbg tab" id="tabs">
+                            <li class="tab-link tablinks active" onclick="openCity(event, 'tab-1')" style="width:100%;">
+                                <a style="font-size: 17px;padding: 4px;">
                                     <img src="~/AdminDesign/images/referral.svg" style="width:25px;" /> Referral Setting
                                 </a>
                             </li>
-
+                            @*<li id="tab2click" class="tab-link tablinks" onclick="openCity(event, 'tab-2')">
+                                <a class="Reffaralclass" onclick="Rerffaralse();" style="font-size: 17px;padding: 4px;">
+                                    <img src="~/AdminDesign/images/referral.svg" style="width:25px;" /> Referral Limit
+                                </a>
+                            </li>*@
 
                         </ul>
+
+
                         <div class="width100 home float-left tab-pane fade active in input-border-third">
-                            <div class="fund-transfer-form tabcurrent-seconddesign boxback-allpage-admin">
+                            <div class="fund-transfer-form tabcurrent-seconddesign boxback-allpage-admin tabcontent" id="tab-1">
                                 <form id="newsletter-form" method="post">
                                     <div class="col-md-12 col-sm-12 col-xs-12 ">
                                         <label>Referral Type </label>
@@ -239,8 +473,53 @@
                                         </div>
                                     </div>
                                 </form>
+
+
+
                             </div>
 
+                            <div class="fund-transfer-form tabcurrent-seconddesign boxback-allpage-admin tabcontent" id="tab-2" style="display:none;">
+                                @using (Ajax.BeginForm("Refferal_Setting", new AjaxOptions() { HttpMethod = "Post", UpdateTargetId = "comments1234" }))
+                                {
+                                    <div class="body-foure special-iii" id="" style="float: left; width: 100%; background: var(--second-bg-color); padding: 10px; height: 75vh;">
+                                        <div class="reffael-fullseting">
+
+                                            <div class="select-reffralcode">
+                                                <p><strong>Set Refferal Code Limit</strong></p>
+                                                <select class="form-control" id="limit123" name="limit123">
+                                                    <option>--Select Limit--</option>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                </select>
+                                                <span class="disablevalue" id="showvalueid" style="display:none;"></span>
+                                                <div>
+                                                    <input type="hidden" id="status123" name="status123" />
+                                                </div>
+                                                <button type="button" onclick="togglereferrel('N');" class="reffralactivedeacrt" id="active-reffrasl" name="active-reffrasl" style="background: #d3d3d3; padding: 7px 0;"><span class="reffralactive" style="color:green;">Active</span></button>
+                                                <button type="button" onclick="togglereferrel('Y');" class="reffralactivedeacrt" id="deactive-reffrasl" name="deactive-reffrasl" style="display:none;background: #d3d3d3; padding: 7px 0;"><span class="reffraldeactive" style="color:red;">Deactive</span></button>
+                                            </div>
+                                            <div class="classfullsavechange">
+                                                <button type="submit" id="tnSave" class="btn waves-effect btnssl2233 ees btn-first button-third" style="overflow:hidden;display:none;" value="Save" data-loading-text="">
+                                                    <span class="loaderclick">Save Change</span>
+                                                    <i class='fa fa-spinner fa-spin loaderclickspiner' style="display:none;"></i>
+                                                </button>
+                                                <button type="submit" id="Editbutton" class="btn waves-effect btnssl2233 ees btn-first button-third" style="overflow:hidden;" value="Save" data-loading-text="">
+                                                    <span class="">Edit</span>
+                                                    @*<i class='fa fa-spinner fa-spin loaderclickspiner' style="display:none;"></i>*@
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
                         </div>
 
                     </div>
@@ -250,16 +529,21 @@
 
                     <div class="page-header-third">
                         <ul class="nav nav-tabs tab-seconddesign setretab-seconddesign tab-third-design tabactive-bac-third" id="tabs">
-                            <li class="tab-link active" data-tab="tab-1" style="border-right: 2px solid #fff; width: 33.33% !important;"><a data-toggle="tab" href="#home" aria-expanded="false">Referral Set Detail </a></li>
-                            <li class="tab-link tablchangess" data-tab="tab-2" style="border-right: 2px solid #fff; width: 33.33% !important;"><a data-toggle="tab" href="#menu1" aria-expanded="false">Referral Achievement History</a></li>
-                            <li class="tab-link tablchangess3" data-tab="tab-3" style="width: 33.33% !important;"><a data-toggle="tab" href="#menu3" aria-expanded="false">Referral Unachived History</a></li>
+                            @*<li class="body_sidebar_menu" data-component="body_sidebar" data-target="body_left" style="width: 7%; height: 42px;background:#fff;">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 56 56"><path fill="currentColor" fill-rule="evenodd" d="M10 36a3 3 0 1 1 0 6a3 3 0 0 1 0-6m35.998 1c1.106 0 2.002.888 2.002 2c0 1.105-.89 2-2.002 2H18.002A1.996 1.996 0 0 1 16 39c0-1.105.89-2 2.002-2zM10 26a3 3 0 1 1 0 6a3 3 0 0 1 0-6m35.998 1c1.106 0 2.002.888 2.002 2c0 1.105-.89 2-2.002 2H18.002A1.996 1.996 0 0 1 16 29c0-1.105.89-2 2.002-2zM10 16a3 3 0 1 1 0 6a3 3 0 0 1 0-6m35.998 1c1.106 0 2.002.888 2.002 2c0 1.105-.89 2-2.002 2H18.002A1.996 1.996 0 0 1 16 19c0-1.105.89-2 2.002-2z" /></svg>
+                                </span>
+                            </li>*@
+                            <li class="tab-link active" data-tab="tab-1" style="border-right: 2px solid #fff; width: 33.3% !important;"><a data-toggle="tab" href="#home" aria-expanded="false">Referral Set Detail </a></li>
+                            <li class="tab-link tablchangess" data-tab="tab-2" style="border-right: 2px solid #fff; width: 33.3% !important;"><a data-toggle="tab" href="#menu1" aria-expanded="false">Referral Achievement History</a></li>
+                            <li class="tab-link tablchangess3" data-tab="tab-3" style="width: 33.3% !important;"><a data-toggle="tab" href="#menu3" aria-expanded="false">Referral Unachived History</a></li>
 
                         </ul>
 
                         <div id="home" class="width100 home float-left tab-pane fade active in">
                             <div class="switch-history-table padding-topclass-third boxback-allpage-admin">
                                 <div class="refferal-type refferal-type-second">
-                                    <p class="background-thirddesign" style="background: var(--main-bg-lcolor);color:#fff;padding: 5px;text-align: center;font-weight: 600;border-radius: 20px;">
+                                    <p class="background-thirddesign" style="background: var(--main-bg-lcolor); color: #fff; padding: 5px; text-align: center; font-weight: 600; border-radius: 20px; margin-top: 8px;">
                                         <b>NOTE:-&nbsp;</b>Referrals can be given only in one way. If you want to set another method, you must remove the former.
                                     </p>
                                     <div class="refferal-type-left purchasebas-second ulbackg-third-design" id="purchasetype" style="margin-right:4%; display:none;">
@@ -267,10 +551,7 @@
 
                                         <ul class="ulpurchaseshow">
 
-
-
                                             <li>Minimum Limit <span id="spnbusneww"></span></li>
-
                                             <li>Expery No. Of Days<span id="expnoofday"></span></li>
                                             <li>Sharing Type<span id="spansharingtypes"></span></li>
                                             <li>Sharing Value<span id="spnsharingvalue"></span></li>
@@ -511,7 +792,201 @@
     </div>
 </section>
 
+<!-- Jquery Core Js -->
+<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+<script src="~/AdminDesign/js/demo.js"></script>
+<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<!-- Custom Js -->
+<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+
+<script>
+
+    document.querySelectorAll('[data-component~="body_sidebar"]').forEach((button) => {
+        button.addEventListener("click", function () {
+            document.getElementById(this.dataset.target).classList.toggle("body_sidebar_active");
+        });
+    });
+
+</script>
+
+
+
+
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".sweet-alert").addClass("fullbodydycolorbg");
+    });
+</script>
+<script>
+    function Editmode(id) {
+
+          $.ajax({
+            url: '@Url.Action("PaidServicesChargeByID","Home")',
+              data: {id:id},
+
+              success: function (data) {
+                  $('#paidservicetbl').html(data);
+            }
+        });
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.second-design .example-second').DataTable({
+
+
+            paging: false
+        });
+    });
+
+</script>
+
+<script>
+    $('.third-design .third-design-table tbody td').mouseenter(function () {
+        var colIndex = $(this).parent().children().index($(this)) + 1;
+        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
+        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
+        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
+    });
+
+    $('.third-design .third-design-table tbody td').mouseleave(function () {
+        var colIndex = $(this).parent().children().index($(this)) + 1;
+        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
+        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
+        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
+    });
+</script>
+
+<script>
+
+
+    $("#deactive-reffrasl").click(function () {
+        $('#status123').val("Y")
+        $("#active-reffrasl").show();
+        $(this).hide();
+    });
+    $("#active-reffrasl").click(function () {
+        $('#status123').val("N")
+        $("#deactive-reffrasl").show();
+        $(this).hide();
+    });
+
+    $("#limit123").change(function () {
+        var selectvalue = $(this).find(":selected").val();
+        $("#showvalueid").html(selectvalue);
+    });
+
+    $("#tnSave").click(function () {
+        $("#tnSave").hide();
+        $("#Editbutton").show();
+        $(".loaderclick").hide();
+        $(".loaderclickspiner").show();
+        setTimeout(function () { $(".loaderclick").show(); }, 3000);
+        setTimeout(function () { $(".loaderclickspiner").hide(); }, 3000);
+
+        $("#limit123").hide();
+        $("#showvalueid").show();
+
+    });
+    $("#Editbutton").click(function () {
+        $("#tnSave").show();
+        $("#Editbutton").hide();
+        $("#limit123").show();
+        $("#showvalueid").hide();
+
+
+    });
+    function togglereferrel(status) {
+        $.ajax({
+            url: '@Url.Action("Refferal_Status", "Home")',
+            method: 'GET',
+            data: {status123: status },
+            success: function ({ data }) {
+                $('#status123').val(data.status)
+          }
+        });
+    }
+
+    function Rerffaralse() {
+        $('.body.body-one').hide()
+        $.ajax({
+            url: '@Url.Action("ReferrelLimit", "Home")',
+            method: 'GET',
+            success: function ({ data }) {
+                if (!data) {
+                    data = { status: 'Y', limit : '3'};
+                }
+                if (!data?.status) data.status = 'Y';
+                if (!data?.limit) data.limit = '3';
+
+                $('#limit123').val(data.limit)
+
+                if (data.status == "Y") {
+                    $('#status123').val(data.status)
+                    $('#active-reffrasl').show()
+                    $('#deactive-reffrasl').hide();
+                    $('#showvalueid').show();
+                    $('#limit123').hide();
+                    $('#showvalueid').html(data.limit);
+                }
+                else {
+                    $('#status123').val(data.status)
+                    $('#active-reffrasl').hide()
+                    $('#deactive-reffrasl').show();
+                    $('#showvalueid').show();
+                    $('#limit123').hide();
+                    $('#showvalueid').html(data.limit);
+                }
+
+            }
+        })
+    }
+
+</script>
+
+
+
+
+
+<script>
+    function refferalsetup(numberee,statuss) {
+         $.ajax({
+            url: '@Url.Action("Refferal_Setting", "Home")',
+             type: 'POST',
+             data: { status123: statuss, limit123: numberee},
+            cache: false,
+            success: function (dlmresponse) {
+
+                $('#refferalsetinpartial').html(dlmresponse);
+            }
+        });
+    }
+</script>
 
 <script>
 

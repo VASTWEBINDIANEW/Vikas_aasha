@@ -5,6 +5,12 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+    button {
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        padding: 5px 12px !important;
+    }
+
     .second-design .datepicker-dropdown.datepicker {
         margin-top: 0px !important;
     }
@@ -292,7 +298,74 @@
         }
     }
 </style>
+<style>
+    /* new css */
 
+    select {
+        margin-right: 4px;
+        float: left;
+        padding: 0px 4px;
+        border: 0.2px solid #b1a6a638;
+        font-size: 14px;
+        color: #555;
+        height: 29px;
+    }
+
+    input {
+        float: left;
+        padding: 0px 7px;
+        border: 0.2px solid #b1a6a638;
+        background: #b1a6a638;
+        font-size: 14px;
+        color: #4a4a4a;
+        display: flex;
+        align-items: center;
+        position: relative;
+        height: 29px;
+    }
+
+    .res_div svg {
+        width: 23px;
+        color: #000;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+
+    .all_page_alert {
+        position: absolute;
+        top: 109px;
+        z-index: 99;
+        right: 15px;
+        display: none;
+        padding: 10px;
+    }
+
+    .alert-success {
+        background-color: #2b982b;
+    }
+
+    .res_div svg:hover + .all_page_alert {
+        display: block;
+    }
+
+    .bread-same-all-page {
+        width: auto;
+    }
+
+    .headline_set {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .res_div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* new css */
+</style>
 <section class="content">
     <div class="container-fluid">
 
@@ -307,9 +380,36 @@
         </div>
         <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="row clearfix">
+        <div class="page-header-third pageheader-margin-third retailerlist-header-resp headline_set">
+            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
+                <ul class="padding-top-third">
+                    <li class="smli">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
+                        </a>
+                    </li>
 
-            <div>
+                    <li class="fullbodydycolorbg tmw-total-color-one">
+                        Loan Limit Set
+                    </li>
+                </ul>
+            </div>
+            <div class="res_div">
+
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                </svg>
+                <div class="alert alert-success all_page_alert" role="alert">
+                    Loan Limit Set
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row clearfix" style="margin:0;">
+
+            <div class="page-header-third">
                 <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
                     <tr>
 
@@ -329,14 +429,14 @@
                                 @if (i.fullorpartialpayment == true)
                                 {
 
-                                <a href="@Url.Action("Loanpaysts","Home",new {sts=false})"><button style="background: brown; color: white; padding: 3px;">Partial Payment</button></a>
+                                    <a href="@Url.Action("Loanpaysts","Home",new {sts=false})"><button style="background: brown; color: white; padding: 3px;">Partial Payment</button></a>
                                 }
                                 else
                                 {
-                            <a href="@Url.Action("Loanpaysts","Home",new {sts=true})"> <button style="background: green; color: white; padding: 3px; ">Full Payment</button></a>
+                                    <a href="@Url.Action("Loanpaysts","Home",new {sts=true})"> <button style="background: green; color: white; padding: 3px; ">Full Payment</button></a>
                                 }
 
-</td>
+                            </td>
                             <td>
                                 @if (i.status == true)
                                 {
@@ -353,19 +453,19 @@
                         <tr id="hidess" style="display:none">
                             @using (Html.BeginForm("Loanlimitset", "Home", FormMethod.Post))
                             {
-                            <td>
-                                <input 
-                                       type="number"
-                                       min="1"
-                                       step="1"
-                                       onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                       title="Numbers only" value="@i.min_days" name="mindays">
-                            </td>
-                            <td>
-                                <input type="number" required name="charge" min="0" value="@i.charge" step="any"></td>
-                            <td></td>
-                            <td></td>
-                            <td><input type="submit" name="submit" style="padding: 3px;" /></td>
+                                <td>
+                                    <input type="number"
+                                           min="1"
+                                           step="1"
+                                           onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                           title="Numbers only" value="@i.min_days" name="mindays">
+                                </td>
+                                <td>
+                                    <input type="number" required name="charge" min="0" value="@i.charge" step="any">
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="submit" name="submit" style="padding: 3px;" /></td>
                             }
                         </tr>
                     }

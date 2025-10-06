@@ -11725,44 +11725,44 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             //return View(rowdata);
             return View();
         }
+
         [HttpPost]
-   
-        public ActionResult dispute(string id, string txtregion, string mobileno, string optname, decimal amount)
+
+
+        public ActionResult dispute(string id, string txtregion, string mobileno, string optname, decimal? amount)
         {
+
             try
             {
                 System.Data.Entity.Core.Objects.ObjectParameter output =
                     new System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
 
-                var ch = db.distute_insert(id, txtregion, output).SingleOrDefault().msg.ToString();
+                var ch = db.distute_insert(id, txtregion, output).SingleOrDefault()?.msg?.ToString();
 
-                // Current logged in userid
+
                 string userid = User.Identity.GetUserId();
-
-                // Retailer Details
                 var retailer = db.Retailer_Details.FirstOrDefault(a => a.RetailerId == userid);
                 if (retailer == null)
                 {
                     return Json("Retailer not found", JsonRequestBehavior.AllowGet);
                 }
 
-                string retailerMobile = retailer.Mobile;
-                string retailerName = retailer.RetailerName;  // Assuming column Name hai Retailer_Details me
+                string retailerName = retailer.RetailerName;
 
-                // Admin Details (agar admin ko bhejna hai)
+                // Admin details
                 var admin = db.Admin_details.FirstOrDefault();
-                string adminMobile = admin?.mobile;
+                string adminMobile = admin?.mobile ?? "9999999999";  // fallback
 
-                // SMS/WhatsApp bhejna (DISPUTE template use karke)
+                // SMS send
                 smssend.sms_init(
-                    "Y",                 // sms_status
-                    "Y",                 // whatsapp_status
-                    "DISPUTE",           // sms_type (jo template banaya hai)
-                    adminMobile,         // message admin ko jayega
-                    retailerName,        // param[0] = Retailer Name
-                    mobileno,            // param[1] = Mobile Number
-                    optname,             // param[2] = Operator Name
-                    amount               // param[3] = Amount
+                    "Y",
+                    "Y",
+                    "DISPUTE",
+                    adminMobile,
+                    retailerName,
+                    mobileno,
+                    optname,
+                    amount
                 );
 
                 return Json(ch, JsonRequestBehavior.AllowGet);
@@ -11771,8 +11771,9 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             {
                 return Json("Error: " + ex.Message, JsonRequestBehavior.AllowGet);
             }
-        }
-
+        }    
+        
+        
         //public ActionResult dispute(string id, string txtregion)
         //{
         //    try
@@ -13895,15 +13896,18 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             return View(ch);
         }
         [HttpPost]
+
         public ActionResult Complaint_insert(string message)
         {
             var statusAdmin = db.PushNotificationStatus.Where(a => a.UserRole == "Admin").SingleOrDefault().Status;
-            var Emailid = db.Admin_details.Single().email;
+            var admin = db.Admin_details.FirstOrDefault();
             string userid = User.Identity.GetUserId();
-            var retaileremaillid = db.Users.Where(p => p.UserId == userid).Single().Email;
+            var retailer = db.Users.Where(p => p.UserId == userid).SingleOrDefault();
+
             Guid randomId = Guid.NewGuid();
             string uniqueId = randomId.ToString().Substring(0, 18).ToUpper();
             DateTime date = System.DateTime.Now;
+
             complaint_request objCourse = new complaint_request();
             objCourse.subject = "Chatting";
             objCourse.complant = message;
@@ -13913,12 +13917,30 @@ namespace Vastwebmulti.Areas.RETAILER.Controllers
             objCourse.rdate = date;
             db.complaint_request.Add(objCourse);
             db.SaveChanges();
+
+            // 🔹 Admin ko SMS bhejna
+            if (admin != null)
+            {
+                smssend.sms_init(
+                    "Y",                 // sms_status
+                    "Y",                 // whatsapp_status
+                    "CHATSUPPORT",       // template type
+                    admin.mobile,        // Admin ka mobile
+                    retailer.Email,      // param[0] = Retailer Email / Name
+                    message              // param[1] = Chat message
+                );
+            }
+
             if (statusAdmin == "Y")
             {
-                SendPushNotification(Emailid, Url.Action("Money_Transfer_Report", "Home"), "User " + retaileremaillid + " is Send the Complaint For You .And Compalint is that " + message + "", "Complaint Insert..");
+                SendPushNotification(admin.email, Url.Action("Money_Transfer_Report", "Home"),
+                    "User " + retailer.Email + " sent a Complaint: " + message, "Complaint Insert..");
             }
+
             return RedirectToAction("Complaint");
         }
+
+
         //End
         //Profile
         [HttpGet]

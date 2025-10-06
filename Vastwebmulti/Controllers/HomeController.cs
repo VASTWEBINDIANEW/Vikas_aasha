@@ -2160,8 +2160,61 @@ namespace Vastwebmulti.Controllers
 
             }
             RegisterViewModel mo = new RegisterViewModel();
+
+            // 🔑 Captcha generate karna zaroori hai yaha
+            string captcha = GenerateCaptchaCode(6);
+            Session["CaptchaCode"] = captcha;
+            ViewBag.CaptchaCode = captcha;
+
             return View(mo);
         }
+
+        [HttpGet]
+        public ActionResult RefreshCaptcha()
+        {
+            string captcha = GenerateAndSetCaptcha();
+            return Json(new { Captcha = captcha }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        // ✅ Helper: Generate Captcha & Save in Session
+
+
+        [HttpGet]
+        private string GenerateAndSetCaptcha()
+        {
+            string captcha = GenerateCaptchaCode(6);
+            Session["CaptchaCode"] = captcha;
+            ViewBag.CaptchaCode = captcha;
+            return captcha;
+        }
+
+
+        private string GenerateCaptchaCode(int length)
+        {
+            const string chars = "!@#$%^&*()?abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            Random random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+
+        [HttpPost]
+        public JsonResult VerifyCaptcha(string inputCaptcha)
+        {
+            string sessionCaptcha = Session["CaptchaCode"]?.ToString();
+            if (string.IsNullOrEmpty(sessionCaptcha))
+                return Json(new { success = false, message = "Captcha expired. Please refresh." });
+
+            if (sessionCaptcha.Equals(inputCaptcha, StringComparison.OrdinalIgnoreCase))
+                return Json(new { success = true, message = "Captcha verified successfully." });
+
+            return Json(new { success = false, message = "Invalid captcha. Please try again." });
+        }
+
+
+
         public ActionResult fetchlatlong(string lat, string lon)
         {
             var sts = false; var resp = "";

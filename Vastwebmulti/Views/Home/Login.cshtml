@@ -80,6 +80,11 @@
         color = "Gray";
     }
     //var color = col.Count == 0 ? "" : col.SingleOrDefault(p => p.Role == "ADMIN").adminandouterheadercolor;
+
+    // New work
+    var entry = db.RetailerCreationCharges.FirstOrDefault();
+    bool isAdminFree = entry?.CreatedByAdminIsFree ?? false;
+    bool isSignUpFree = entry?.CreatedBySignUpIsFree ?? false;
 }
 
 <!DOCTYPE html>
@@ -143,6 +148,21 @@
 
     }
     <style>
+
+/*        #CaptchaInput::placeholder {
+            font-size: 20px;
+        }*/
+
+        #CaptchaInput:valid {
+            font-size: 22px;
+            letter-spacing: 4px !important;
+            font-family: monospace;
+            
+        }
+        .for-border-effect.custom-district::before {
+            display: none;
+        }
+
         .hidden {
             display: none;
         }
@@ -320,9 +340,6 @@
             height: 0;
         }
     </style>
-
-
-
 
 
     <style>
@@ -590,156 +607,292 @@ margin-top: 10px;}
 
                                     }
 
-                                    @using (Html.BeginForm("Insert_retailer", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "frmsignup" }))
+
+                                    @if (isAdminFree || isSignUpFree)   // dono OFF hone par hi form show nhi hoga
                                     {
-                                        @Html.AntiForgeryToken()
 
-                                        @Html.Hidden("Email_Id")
-                                        @Html.Hidden("Mobile_Id")
+                                        using (Html.BeginForm("Insert_retailer", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "frmsignup" }))
+                                        {
+                                            @Html.AntiForgeryToken()
 
-                                        <div class="tab-1 resp-tab-content" id="signupform">
-                                            <div class="login-top sign-top">
+                                            @Html.Hidden("Email_Id")
+                                            @Html.Hidden("Mobile_Id")
 
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="for-border-effect" style="position:relative;">
-                                                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
-                                                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control phone", onkeypress = "return isNumber(event)", maxlength = "10", @placeholder = "Enter Mobile No", @required = "", @field = "mobile" })
-                                                            <small style="color: red;" id="mobile_err"></small>
-                                                            <div class="spinner-border hidden" id="Mobileno_spinner" style="font-size: 8px;position: absolute;right: 10px;top: 8px;height: 20px;width: 20px;">
-                                                            </div>
-                                                            <img class="hidden" id="success_mobile_img" src="~/images/check_img_input.jpg" style="width:25px; position:absolute; right:7px; top:5px; background-color:none;" />
-                                                            <div class="otp_m">
-                                                                <div class="form_otp" id="otp_continer_inputs">
-                                                                    <div class="otp_block">
-                                                                        <p class="opt_pra_1"> OTP sent successfully to <br />entered mobile number</p>
-                                                                    </div>
-                                                                    <div class="otp_set">
-                                                                        <input id="codeBox1" type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" />
-                                                                        <input id="codeBox2" type="number" maxlength="1" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" />
-                                                                        <input id="codeBox3" type="number" maxlength="1" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" />
-                                                                        <input id="codeBox4" type="number" maxlength="1" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="for-border-effect" style="position: relative;}">
-                                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control email", @type = "email", @placeholder = "Enter Email-ID", @required = "", @field = "email" })
-                                                            <small style="color: red;" id="email_err"></small>
-                                                            <input type="button" name="button" value="Send OTP" id="btnsendOTP_Email" style="cursor: pointer;">
-                                                            <div class="spinner-border hidden" id="Email_spinner" style="font-size: 8px;position: absolute;right: 10px;top: 8px;height: 20px;width: 20px;"></div>
-                                                            <img class="hidden" id="success_email_img" src="~/images/check_img_input.jpg" style="width:25px; position:absolute; right:7px; top:5px; background-color:none;" />
-                                                            <div class="form_otp" id="otp_continer_inputs_email" style="margin-top:-20px;">
-                                                                <div class="otp_block_1">
-                                                                    <p class="opt_pra"> OTP sent successfully to <br />entered mobile number</p>
-                                                                </div>
-                                                                <div class="otp_set_1">
-                                                                    <input id="codeBox5" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(5, event)" onfocus="onFocusEvent(5)" />
-                                                                    <input id="codeBox6" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(6, event)" onfocus="onFocusEvent(6)" />
-                                                                    <input id="codeBox7" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(7, event)" onfocus="onFocusEvent(7)" />
-                                                                    <input id="codeBox8" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(8, event)" onfocus="onFocusEvent(8)" />
-                                                                </div>
-                                                            </div>
+                                           
 
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="tab-1 resp-tab-content" id="signupform">
+                                                <div class="login-top sign-top">
 
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="for-border-effect">
-                                                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-                                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control name", @placeholder = "Enter Customer Name", @required = "" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="for-border-effect">
-                                                            @Html.TextBoxFor(m => m.Companyname, new { @class = "form-control phone", maxlength = "40", @placeholder = "Enter Business Name(Optional)" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="for-border-effect">
-                                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control phone", maxlength = "10", @placeholder = "Enter Password", @required = "" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="for-border-effect">
-                                                            @Html.ValidationMessageFor(m => m.Pin, "", new { @class = "text-danger " })
-                                                            @Html.TextBoxFor(m => m.Pin, new { @class = "form-control phone", maxlength = "4", minlength = "4", @placeholder = "Enter Pin", @required = "", onkeypress = "return isNumber(event)" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="for-border-effect custom-district">
-                                                            @Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
-                                                            @Html.DropDownListFor(model => model.state, (IEnumerable<SelectListItem>)ViewBag.Sate, "Select State", new { @class = "form-control", @onchange = "FillDistict()", @required = "" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="for-border-effect custom-district">
-                                                            @Html.ValidationMessageFor(m => m.distict, "", new { @class = "text-danger" })
-                                                            @Html.DropDownListFor(model => model.distict, new SelectList("Value", "Text"), "Select District", new { @class = "form-control", @required = "" })
-                                                            <div class="focus-border"><i></i></div>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="login-bottom">
                                                     <div class="row">
-                                                        <div class="col-md-6">
-                                                            <ul>
-                                                                <li>
-                                                                    <label>@Html.CheckBoxFor(m => m.RememberMe)&nbsp;Remember Me&nbsp;?</label>
-                                                                </li>
+                                                        <div class="col-md-12">
 
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-6" style="margin-top:5px;">
-                                                            @*<input type="checkbox" id="referrral" onclick="myFunction()" style="float:left;"><span id="referrral1" style="float: left;font-size: 15px;margin-top: -5px;margin-left:3px;color:#999;">Have a referral code</span>*@
-                                                            <div class="for-border-effect" style="position: absolute;top: -11px;right: 14px;width: 78%;">
-                                                                @Html.TextBoxFor(m => m.referralcode, new { @class = "form-control", @placeholder = "Referral Code", @style = "height:32px;width:100%;margin-top:0px;margin-bottom:0px;", @maxlength = "10" })
+                                                            <div class="alert alert-danger text-center p-2 mb-2"
+                                                                 style="border-radius: 10px; font-size: 14px;">
+                                                                <strong>🔑 Please verify the Captcha first.</strong><br />
+
+
+                                                                @*Captcha start  *@
+                                                            <div class="row" style=" margin-top: 1rem; ">
+                                                                <!-- Captcha Display & Refresh -->
+                                                                <div class="col-md-6 mb-3" style="margin-bottom:.1rem !important; ">
+                                                                    <div class="d-flex align-items-center justify-content-between bg-light border rounded p-2"
+                                                                         style="padding: .1rem !important; padding-left: .5rem !important; max-width: 230px;">
+                                                                        <!-- Captcha Text -->
+                                                                        <span id="captcha-text" class="fw-bold text-dark"
+                                                                              style="font-size: 22px; letter-spacing: 4px; font-family: monospace;">
+                                                                            @ViewBag.CaptchaCode
+                                                                        </span>
+
+                                                                        <!-- Refresh Button -->
+                                                                        <button type="button" id="refreshCaptcha"
+                                                                                class="btn btn-outline-primary btn-sm d-flex align-items-center"
+                                                                                style="border-radius: 50px;">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30">
+                                                                                <path d="M 15 3 C 12.031398 3 9.3028202 4.0834384 7.2070312 5.875 A 1.0001 1.0001 0 1 0 8.5058594 7.3945312 C 10.25407 5.9000929 12.516602 5 15 5 C 20.19656 5 24.450989 8.9379267 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.437925 7.8516588 21.277839 3 15 3 z M 4 10 L 0 16 L 3.0507812 16 C 3.562075 22.148341 8.7221607 27 15 27 C 17.968602 27 20.69718 25.916562 22.792969 24.125 A 1.0001 1.0001 0 1 0 21.494141 22.605469 C 19.74593 24.099907 17.483398 25 15 25 C 9.80344 25 5.5490109 21.062074 5.0488281 16 L 8 16 L 4 10 z">
+                                                                                </path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Captcha Input & Verify -->
+                                                                <div class="col-md-6 mb-3" style="margin-bottom:.1rem !important; ">
+                                                                    <div class="d-flex align-items-center">
+                                                                        @*<input type="text" class="form-control shadow-sm me-1" id="CaptchaInput"
+                name="CaptchaInput" placeholder="Enter Captcha"
+                required style="letter-spacing: 0.5px; max-width: 150px; margin-left: -25px; height: 37px; border-radius: 3px;  ">*@
+                                                                        <input type="text" class="form-control shadow-sm me-1" id="CaptchaInput"
+                                                                               name="CaptchaInput" placeholder="Enter Captcha"
+                                                                               required
+                                                                               style="letter-spacing: 0.5px; max-width: 150px; margin-left: -25px; height: 37px; border-radius: 3px;">
+
+                                                                        <!-- Verify Button -->
+                                                                        <button type="button" id="verifyCaptchaBtn" class="btn btn-success btn-sm d-flex align-items-center" style="height: 34px; justify-content: center;
+          font-size: .9rem; width: 5rem" ;>
+                                                                            <i class="bi bi-check2-circle me-1"></i> Verify
+                                                                        </button>
+
+                                                                        <!-- Spinner (Hidden Initially) -->
+                                                                        <div class="spinner-border text-primary ms-2 d-none" id="captcha_spinner"
+                                                                             style="height: 20px; width: 20px;"></div>
+
+                                                                        <!-- Success Image (Hidden Initially) -->
+                                                                        <img id="captcha_success_img" src="~/images/check_img_input.jpg"
+                                                                             class="d-none ms-2" style="width: 25px; height: 25px;" />
+                                                                    </div>
+                                                                    <small id="captcha_msg" class="form-text mt-1"></small>
+                                                                </div>
+                                                            </div>
+
+
+                                                                <!--<div class="row">
+        <div class="col-md-12 mb-3">-->
+                                                                @*<label for="CaptchaInput" class="form-label fw-bold">Captcha</label>*@
+
+                                                                <!--<div class="d-flex align-items-center justify-content-between bg-light border rounded mb-1 p-2" style=" padding: .1rem !important; padding-left: .5rem !important; width: 230px;">-->
+                                                                <!-- Captcha Text -->
+                                                                <!--<span id="captcha-text" class="fw-bold text-dark" style="font-size: 22px; letter-spacing: 4px; font-family: monospace;">
+        @@ViewBag.CaptchaCode
+    </span>-->
+                                                                <!-- Refresh Button with Icon -->
+                                                                <!--<button type="button" id="refreshCaptcha"
+                class="btn btn-outline-primary btn-sm d-flex align-items-center"
+                style="border-radius: 50px;">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 30 30">
+                <path d="M 15 3 C 12.031398 3 9.3028202 4.0834384 7.2070312 5.875 A 1.0001 1.0001 0 1 0 8.5058594 7.3945312 C 10.25407 5.9000929 12.516602 5 15 5 C 20.19656 5 24.450989 8.9379267 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.437925 7.8516588 21.277839 3 15 3 z M 4 10 L 0 16 L 3.0507812 16 C 3.562075 22.148341 8.7221607 27 15 27 C 17.968602 27 20.69718 25.916562 22.792969 24.125 A 1.0001 1.0001 0 1 0 21.494141 22.605469 C 19.74593 24.099907 17.483398 25 15 25 C 9.80344 25 5.5490109 21.062074 5.0488281 16 L 8 16 L 4 10 z"></path>
+            </svg>
+
+        </button>
+    </div>
+
+
+
+    <div class="d-flex align-items-center mt-1" style="position: relative;">
+        <input type="text" class="form-control shadow-sm me-1" id="CaptchaInput" name="CaptchaInput"
+               placeholder="Enter Captcha" required style="letter-spacing: 1px; max-width:150px;">-->
+                                                                <!-- Verify Button -->
+                                                                <!--<button type="button" id="verifyCaptchaBtn" class="btn btn-success btn-sm d-flex align-items-center">
+        <i class="bi bi-check2-circle me-1" style="letter-spacing: 1px; max-width:100px; padding:3px;"></i> Verify
+    </button>-->
+                                                                <!-- Spinner (Hidden Initially) -->
+                                                                <!--<div class="spinner-border text-primary ms-2 d-none" id="captcha_spinner"
+         style="height: 20px; width: 20px;"></div>-->
+                                                                <!-- Success Image (Hidden Initially) -->
+                                                                <!--<img id="captcha_success_img" src="~/images/check_img_input.jpg"
+             class="d-none ms-2" style="width: 25px; height: 25px;" />
+    </div>
+
+    <small id="captcha_msg" class="form-text mt-1"></small>-->
+                                                                <!-- Captcha Input + Verify Button -->
+                                                                <!--</div>
+    </div>-->
+                                                                @*Captcha end  *@
+                                                            </div>
+
+                                                            <div class="for-border-effect" style="position:relative;">
+                                                                @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control phone", onkeypress = "return isNumber(event)", maxlength = "10", @placeholder = "Enter Mobile No", @required = "", @field = "mobile", @id = "Mobile", disabled = "disabled" })
+
+
+                                                                <small style="color: red;" id="mobile_err"></small>
+                                                                <div class="spinner-border hidden" id="Mobileno_spinner" style="font-size: 8px;position: absolute;right: 10px;top: 8px;height: 20px;width: 20px;">
+                                                                </div>
+                                                                <img class="hidden" id="success_mobile_img" src="~/images/check_img_input.jpg" style="width:25px; position:absolute; right:7px; top:5px; background-color:none;" />
+                                                                <div class="otp_m">
+                                                                    <div class="form_otp" id="otp_continer_inputs">
+                                                                        <div class="otp_block">
+                                                                            <p class="opt_pra_1"> OTP sent successfully to <br />entered mobile number</p>
+
+                                                                        </div>
+                                                                        <div class="otp_set">
+                                                                            <input id="codeBox1" type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" />
+                                                                            <input id="codeBox2" type="number" maxlength="1" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" />
+                                                                            <input id="codeBox3" type="number" maxlength="1" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" />
+                                                                            <input id="codeBox4" type="number" maxlength="1" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="focus-border"><i></i></div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="for-border-effect" style="position: relative;}">
+                                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control email", @type = "email", @placeholder = "Enter Email-ID", @required = "", @field = "email" })
+                                                                <small style="color: red;" id="email_err"></small>
+                                                                <input type="button" name="button" value="Send OTP" id="btnsendOTP_Email" style="cursor: pointer;">
+                                                                <div class="spinner-border hidden" id="Email_spinner" style="font-size: 8px;position: absolute;right: 10px;top: 8px;height: 20px;width: 20px;"></div>
+                                                                <img class="hidden" id="success_email_img" src="~/images/check_img_input.jpg" style="width:25px; position:absolute; right:7px; top:5px; background-color:none;" />
+                                                                <div class="form_otp" id="otp_continer_inputs_email" style="margin-top:-20px;">
+                                                                    <div class="otp_block_1">
+                                                                        <p class="opt_pra"> OTP sent successfully to <br />entered Email Id</p>
+                                                                    </div>
+                                                                    <div class="otp_set_1">
+                                                                        <input id="codeBox5" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(5, event)" onfocus="onFocusEvent(5)" />
+                                                                        <input id="codeBox6" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(6, event)" onfocus="onFocusEvent(6)" />
+                                                                        <input id="codeBox7" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(7, event)" onfocus="onFocusEvent(7)" />
+                                                                        <input id="codeBox8" type="number" maxlength="1" onkeyup="onKeyUpEvent_Email(8, event)" onfocus="onFocusEvent(8)" />
+                                                                    </div>
+                                                                </div>
 
-                                                <div class="submit" style="float:none;">
-                                                    <div class="loadingio-spinner-gear-94vo528ab8 second-login" style="display:none;">
-                                                        <div class="loader"></div>
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <input id="SignUp" type="submit" disabled="disabled" value="Sign Up Now" class="fullbodydycolorbg" />
-                                                </div>
 
-                                                @* <input type="submit" id="SignUp" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" value="Sign Up Now" class="fullbodydycolorbg">*@
-                                                @*<button type="submit" onclick="sendLove(this);"   class="fullbodydycolorbg SignUp">Sign Up Now</button>*@
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="for-border-effect">
+                                                                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control name", @placeholder = "Enter Customer Name", @required = "" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="for-border-effect">
+                                                                @Html.TextBoxFor(m => m.Companyname, new { @class = "form-control phone", maxlength = "40", @placeholder = "Enter Business Name(Optional)" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="for-border-effect">
+                                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                                @Html.TextBoxFor(m => m.Password, new { @class = "form-control phone", maxlength = "10", @placeholder = "Enter Password", @required = "" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="for-border-effect">
+                                                                @Html.ValidationMessageFor(m => m.Pin, "", new { @class = "text-danger " })
+                                                                @Html.TextBoxFor(m => m.Pin, new { @class = "form-control phone", maxlength = "6", minlength = "4", @placeholder = "Enter Pin", @required = "", onkeypress = "return isNumber(event)" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="for-border-effect custom-district">
+                                                                @Html.ValidationMessageFor(m => m.state, "", new { @class = "text-danger" })
+                                                                @Html.DropDownListFor(model => model.state, (IEnumerable<SelectListItem>)ViewBag.Sate, "Select State", new { @class = "form-control", @onchange = "FillDistict()", @required = "" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="for-border-effect custom-district">
+                                                                @Html.ValidationMessageFor(m => m.distict, "", new { @class = "text-danger" })
+                                                                @Html.DropDownListFor(model => model.distict, new SelectList("Value", "Text"), "Select District", new { @class = "form-control", @required = "" })
+                                                                <div class="focus-border"><i></i></div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="login-bottom">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <ul>
+                                                                    <li>
+                                                                        <label>@Html.CheckBoxFor(m => m.RememberMe)&nbsp;Remember Me&nbsp;?</label>
+                                                                    </li>
+
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-md-6" style="margin-top:5px;">
+                                                                @*<input type="checkbox" id="referrral" onclick="myFunction()" style="float:left;"><span id="referrral1" style="float: left;font-size: 15px;margin-top: -5px;margin-left:3px;color:#999;">Have a referral code</span>*@
+                                                                <div class="for-border-effect" style="position: absolute;top: -11px;right: 14px;width: 78%;">
+                                                                    @Html.ValidationMessageFor(m => m.referralcode, "", new { @class = "text-danger" })
+                                                                    @if (TempData["referralerror"] != null)
+                                                                    {
+                                                                        <span class="text-danger">@TempData["referralerror"]</span>
+                                                                    }
+                                                                    @Html.TextBoxFor(m => m.referralcode, new { @class = "form-control", @placeholder = "Referral Code", @style = "height:32px;width:100%;margin-top:0px;margin-bottom:0px;", @maxlength = "10" })
+                                                                    <div class="focus-border"><i></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                 
+
+                                                    <div class="submit" style="float:none;">
+                                                        <div class="loadingio-spinner-gear-94vo528ab8 second-login" style="display:none;">
+                                                            <div class="loader"></div>
+                                                        </div>
+                                                        <input id="SignUp" type="submit" disabled="disabled" value="Sign Up Now" class="fullbodydycolorbg" />
+                                                    </div>
+
+                                                    @* <input type="submit" id="SignUp" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" value="Sign Up Now" class="fullbodydycolorbg">*@
+                                                    @*<button type="submit" onclick="sendLove(this);"   class="fullbodydycolorbg SignUp">Sign Up Now</button>*@
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
+
                                     }
+                                    else
+                                    {
+
+                                        <div class="alert alert-info text-center p-3 rounded">
+
+                                            <strong>ℹ️ Registration is currently free.</strong><br />
+                                            No sign-up form is required at this time.
+                                        </div>
+
+                                    }
+
 
 
                                     <div class="tab-1 resp-tab-content" id="forget" style="display:none;">
@@ -775,11 +928,11 @@ margin-top: 10px;}
 
                                                                             @*<input type="number" id="OTp" name="OTp" placeholder="Enter OTP" required="required" maxlength="4" style="height: 31px; width: 100%; border: 2px solid #dad9df; outline: none; text-align: center; font-size: 1.5em; border-radius: -1.7em; background-color: #ffffff; outline: none; margin-top: 6px; " />*@
                                                                             <div class="inputfield" style=" width: 100%; margin-top: 5px; text-align: end; ">
-                                                                                
+
 
                                                                                 <div class="otp_set2">
 
-                                                                                    <input class="tested" name="oTP"  type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" required>
+                                                                                    <input class="tested" name="oTP" type="number" maxlength="1" onkeyup="onKeyUpEvent(1, event)" onfocus="onFocusEvent(1)" required>
                                                                                     <input class="tested" name="oTP1" type="number" maxlength="1" onkeyup="onKeyUpEvent(2, event)" onfocus="onFocusEvent(2)" required>
                                                                                     <input class="tested" name="oTP2" type="number" maxlength="1" onkeyup="onKeyUpEvent(3, event)" onfocus="onFocusEvent(3)" required>
                                                                                     <input class="tested" name="oTP3" type="number" maxlength="1" onkeyup="onKeyUpEvent(4, event)" onfocus="onFocusEvent(4)" required>
@@ -870,6 +1023,16 @@ margin-top: 10px;}
     <script src="~/Swalalert/sweetalert-dev.js"></script>
     <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
+    <script>
+        function toggleSignupForm(adminFree, signupFree) {
+            if (adminFree || signupFree) {
+                $("#frmsignup").show(); // koi bhi ek ON hai to form dikhao
+            } else {
+                $("#frmsignup").hide(); // dono OFF hai to form hide
+            }
+        }
+
+    </script>
 
 
 
@@ -1851,3 +2014,88 @@ margin-top: 10px;}
     }*@
 
 </script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#CaptchaInput").val("").prop("disabled", false);
+        // 🔒 Signup fields initially disable
+        //$("#signupFields input, #signupFields select, #SignUp").prop("disabled", true);
+
+        // 🟢 Captcha Verify Button Click
+        $("#verifyCaptchaBtn").click(function () {
+            var captchaInput = $("#CaptchaInput");
+
+            if (captchaInput.length === 0) {
+                console.error("❌ Captcha input field not found!");
+                return;
+            }
+
+            var input = captchaInput.val().trim();
+            if (input === "") {
+                $("#captcha_msg").text("Please enter captcha first.")
+                    .removeClass("text-success")
+                    .addClass("text-danger");
+                return;
+            }
+
+            // Spinner show + success image hide
+            $("#captcha_spinner").removeClass("d-none");
+            $("#captcha_success_img").addClass("d-none");
+            $("#captcha_msg").text("");
+
+            $.ajax({
+                url: '@Url.Action("VerifyCaptcha", "Home")', // ✅ Correct controller & action
+                type: 'POST',
+                data: { inputCaptcha: input }, // ✅ Backend parameter match
+                success: function (response) {
+                    $("#captcha_spinner").addClass("d-none");
+
+                    if (response.success) {
+                        $("#captcha_msg").removeClass("text-danger")
+                            .addClass("text-success")
+                            .text(response.message);
+
+                        $("#captcha_success_img").removeClass("d-none"); // ✅ Tick image show
+
+                        $("#Mobile").prop("disabled", false);
+
+                        // 🔓 Enable Signup Fields
+                        //$("#signupFields input, #signupFields select, #SignUp").prop("disabled", false);
+
+                        // ❌ Disable Captcha fields once verified
+                        //$("#CaptchaInput, #verifyCaptchaBtn").prop("disabled", true);
+                    } else {
+                        $("#captcha_msg").removeClass("text-success")
+                            .addClass("text-danger")
+                            .text(response.message);
+
+                        $("#captcha_success_img").addClass("d-none");
+                    }
+                },
+                error: function () {
+                    $("#captcha_spinner").addClass("d-none");
+                    $("#captcha_msg").removeClass("text-success")
+                        .addClass("text-danger")
+                        .text("Error verifying captcha.");
+                }
+            });
+        });
+
+        // 🔄 Captcha Refresh
+        $("#refreshCaptcha").click(function () {
+            $.get('@Url.Action("RefreshCaptcha", "Home")', function (data) {
+                $("#captcha-text").text(data.Captcha); // New Captcha show
+                $("#CaptchaInput").val("").prop("disabled", false);
+                $("#verifyCaptchaBtn").prop("disabled", false);
+                $("#captcha_msg").text("");
+                $("#captcha_success_img").addClass("d-none");
+            });
+        });
+
+    });
+
+
+    </script>
+

@@ -7628,6 +7628,13 @@
       <Parameter Name="uniqueid" Mode="In" Type="String" />
       <Parameter Name="output" Mode="InOut" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="GetRetailerTxnSummary" ReturnType="Collection(VastwebmultiModel.GetRetailerTxnSummary_Result)">
+      <Parameter Name="MasterId" Mode="In" Type="String" />
+      <Parameter Name="DealerId" Mode="In" Type="String" />
+      <Parameter Name="RetailerId" Mode="In" Type="String" />
+      <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+      <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -33251,4 +33258,17 @@
     <Property Name="txnid" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="uniqueid" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
+  <ComplexType Name="GetRetailerTxnSummary_Result">
+    <Property Type="String" Name="RetailerId" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="RetailerName" Nullable="false" MaxLength="150" />
+    <Property Type="String" Name="Frm_Name" Nullable="true" MaxLength="75" />
+    <Property Type="Decimal" Name="Imps_UserDiff" Nullable="false" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="Imps_DealerDiff" Nullable="false" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="Recharge_UserDiff" Nullable="false" Precision="38" Scale="4" />
+    <Property Type="Decimal" Name="Recharge_DealerDiff" Nullable="false" Precision="38" Scale="4" />
+    <Property Type="Decimal" Name="Aeps_UserDiff" Nullable="false" Precision="19" />
+    <Property Type="Decimal" Name="Aeps_DealerDiff" Nullable="false" Precision="19" />
+    <Property Type="Decimal" Name="MicroAtm_UserDiff" Nullable="false" Precision="38" Scale="4" />
+    <Property Type="Decimal" Name="MicroAtm_DealerDiff" Nullable="false" Precision="38" Scale="4" />
+  </ComplexType>
 </Schema>

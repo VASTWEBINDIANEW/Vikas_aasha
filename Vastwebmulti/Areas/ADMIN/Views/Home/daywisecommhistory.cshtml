@@ -5,6 +5,11 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+    #inphidess input {
+        width: 100%;
+    }
+
+    /* New css  */
     .second-design .datepicker-dropdown.datepicker {
         margin-top: 0px !important;
     }
@@ -240,6 +245,10 @@
     }
 
     @@media only screen and (max-width:480px) {
+
+        .gift-select, .ytr-okpli {
+            width: 100%;
+        }
         .gift-card-top .col-md-1 {
             width: 100%;
             float: left;
@@ -360,66 +369,68 @@
 
             </div>
 
-            <div>
-                <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
-                    <tr>
-                        <th>Sr.</th>
-                        <th>USER</th>
-                        <th>Commission</th>
-                        <th>Remain-Pre</th>
-                        <th>Remain-Post</th>
-                        <th>Distributer Comm</th>
-                        <th>Distributer Remain-Pre</th>
-                        <th>Distributer Remain-Post</th>
-                        <th>Md Comm</th>
-                        <th>Md Remain-Pre</th>
-                        <th>Md Remain-Post</th>
-                        <th>Date</th>
-                    </tr>
-                    @{ var id = 0; }
-                    @{ var id1 = 1; }
-                    @foreach (var i in Model)
-                    {
-                        var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.userid).SingleOrDefault().Frm_Name;
+            <div class="col-lg-12 col-md-12">
+                <div class="page-header-third">
+                    <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
+                        <tr>
+                            <th>Sr.</th>
+                            <th>USER</th>
+                            <th>Commission</th>
+                            <th>Remain-Pre</th>
+                            <th>Remain-Post</th>
+                            <th>Distributer Comm</th>
+                            <th>Distributer Remain-Pre</th>
+                            <th>Distributer Remain-Post</th>
+                            <th>Md Comm</th>
+                            <th>Md Remain-Pre</th>
+                            <th>Md Remain-Post</th>
+                            <th>Date</th>
+                        </tr>
+                        @{ var id = 0; }
+                        @{ var id1 = 1; }
+                        @foreach (var i in Model)
+                        {
+                            var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.userid).SingleOrDefault().Frm_Name;
 
-                <tr>
-                    <td>@id1</td>
-                    <td>@frmname</td>
-                    <td>
-                        @i.comm
-                    </td>
-                    <td>
-                        @i.remainpre
-                    </td>
-                    <td>
-                        @i.remainpost
-                    </td>
-                    <td>
-                        @i.dlmcomm
-                    </td>
-                    <td>
-                        @i.dlmpre
-                    </td>
-                    <td>
-                        @i.dlmpost
-                    </td>
-                    <td>
-                        @i.mdcomm
-                    </td>
-                    <td>
-                        @i.mdpre
-                    </td>
-                    <td>
-                        @i.mdpost
-                    </td>
-                    <td>
-                        @i.date
-                    </td>
-                </tr>
-                        id++;
-                        id1++;
-                    }
-                </table>
+                            <tr>
+                                <td>@id1</td>
+                                <td>@frmname</td>
+                                <td>
+                                    @i.comm
+                                </td>
+                                <td>
+                                    @i.remainpre
+                                </td>
+                                <td>
+                                    @i.remainpost
+                                </td>
+                                <td>
+                                    @i.dlmcomm
+                                </td>
+                                <td>
+                                    @i.dlmpre
+                                </td>
+                                <td>
+                                    @i.dlmpost
+                                </td>
+                                <td>
+                                    @i.mdcomm
+                                </td>
+                                <td>
+                                    @i.mdpre
+                                </td>
+                                <td>
+                                    @i.mdpost
+                                </td>
+                                <td>
+                                    @i.date
+                                </td>
+                            </tr>
+                            id++;
+                            id1++;
+                        }
+                    </table>
+                </div>
             </div>
 
 

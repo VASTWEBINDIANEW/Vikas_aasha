@@ -1,4 +1,7 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿//<%@ WebHandler Language = "C#" Class="CaptchaHandler" %>
+using System.Drawing;
+using System.Drawing.Imaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -1479,11 +1482,233 @@ namespace Vastwebmulti.Controllers
                 }
             }
         }
+
+        // ✅ GET: Signup
+        
+        
         //Insert Retailer
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Insert_retailer(RegisterViewModel rem)
+        public async Task<ActionResult> Insert_retailer(RegisterViewModel rem, string CaptchaInput)
+        {
+
+            var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            using (var transaction = appDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    rem.Mobile = DB.MobileOtps.Where(s => s.idno == rem.Mobile_Id).Single().mobileno;
+                    var email_verify = DB.Email_Mobile_Verify.Single().emailmobile_verified;
+                    if (email_verify != "OFF")
+                    {
+                        rem.Email = DB.MobileOtps.Where(s => s.idno == rem.Email_Id).Single().mobileno;
+                    }
+
+                    var distributorid = "";
+                    var referelcode = "";
+
+                    // ---------------- Referral Code Check ----------------
+                    if (!string.IsNullOrEmpty(rem.referralcode))
+                    {
+                        var chkreffralcode = DB.Retailer_Details
+                            .FirstOrDefault(x => x.SelfReferalCode == rem.referralcode);
+
+                        if (chkreffralcode == null)
+                        {
+                            TempData["defaultstatus"] = "Invalid Referral Code.";
+                            return View("Login", rem);
+                        }
+
+                        // ---------------- Referral Code Limit Check from token_limit ----------------
+                        var refferalsetting = DB.token_limit.SingleOrDefault();
+
+                        if (refferalsetting == null)
+                        {
+                            TempData["defaultstatus"] = "Referral limit setting not found. Please contact admin.";
+                            return View("Login", rem);
+                        }
+
+                        var chknoofrefral = DB.Retailer_Details
+                            .Count(x => x.referralcode == rem.referralcode);
+
+                        if (chknoofrefral >= refferalsetting.limit)
+                        {
+                            TempData["defaultstatus"] = "Referral Code is already used.";
+                            return View("Login", rem);
+                        }
+
+                        // अगर यहां तक पहुंचा है तो मतलब referral code valid है
+                        referelcode = rem.referralcode;
+                    }
+                    else
+                    {
+                        // Referral Code blank allow करो
+                        referelcode = ""; // DB में खाली save होगा
+                    }
+                    // ---------------------------------------------------------------
+
+                    var status = DB.Dealer_Details.Where(pp => pp.DefaultStatus == "Y").ToList();
+                    if (status.Count == 0)
+                    {
+                        TempData["defaultstatus"] = "You are not authorized to create. Please contact customer care.";
+                        return RedirectToAction("Login", "Home");
+                    }
+                    else
+                    {
+                        distributorid = status.SingleOrDefault().DealerId;
+                    }
+
+                    var chkmobile = DB.Users.Where(a => a.PhoneNumber == rem.Mobile).Any();
+                    if (chkmobile == true)
+                    {
+                        TempData["mobileno"] = "This Mobile Number already exists.";
+                        return RedirectToAction("Login", "Home");
+                    }
+                    if (DB.Dealer_Details.Any(a => a.Mobile == rem.Mobile))
+                    {
+                        TempData["mobileno"] = "This Mobile Number already exists.";
+                        return RedirectToAction("Login", "Home");
+                    }
+                    else if (DB.Dealer_Details.Any(a => a.Email == rem.Email))
+                    {
+                        TempData["emailconfirm"] = "This Email Id already exists.";
+                        return RedirectToAction("Login", "Home");
+                    }
+                    else
+                    {
+                        var check = DB.Retailer_Details.Where(es => es.Mobile == rem.Mobile).Any();
+
+                        if (check == false)
+                        {
+                            var user = new ApplicationUser { UserName = rem.Email, Email = rem.Email, PhoneNumber = rem.Mobile };
+
+                            var enpin = Encrypt(rem.Pin.ToString());
+                            var result = await UserManager.CreateAsync(user, rem.Password);
+                            if (result.Succeeded)
+                            {
+                                System.Data.Entity.Core.Objects.ObjectParameter output =
+                                    new System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+
+                                string Firmname = !string.IsNullOrWhiteSpace(rem.Companyname) ? rem.Companyname : rem.Name;
+                                var frmname = DB.Retailer_Details.Any(x => x.Frm_Name.ToUpper() == Firmname.ToUpper());
+
+                                if (frmname)
+                                {
+                                    var frmnamecontain = DB.Retailer_Details
+                                        .Where(x => x.Frm_Name.ToUpper() == Firmname.ToUpper())
+                                        .FirstOrDefault().Frm_Name;
+
+                                    var fname = Firmname.First();
+                                    var lchar = Firmname.Last();
+                                    int i = 0;
+                                    while (Firmname.ToUpper() == frmnamecontain.ToUpper())
+                                    {
+                                        Firmname = Firmname + "_" + fname + lchar + "+" + i;
+                                        i++;
+                                    }
+                                }
+
+                                var ch = DB.Insert_Retailer(
+                                    distributorid, user.Id, rem.Name, Convert.ToInt32(rem.state),
+                                    Convert.ToInt32(rem.distict), rem.Mobile, "", 0, rem.Email, "", "",
+                                    Firmname, "", "", 0, "", enpin.ToString(), referelcode, "Signup", output
+                                ).SingleOrDefault().msg;
+
+                                if (ch == "Register SuccessFully.")
+                                {
+                                    if (transaction.UnderlyingTransaction.Connection != null)
+                                    {
+                                        transaction.Commit();
+                                    }
+                                    var users = DB.Users.Where(a => a.Email == rem.Email && a.PhoneNumber == rem.Mobile).SingleOrDefault();
+                                    if (email_verify != "OFF")
+                                    {
+                                        users.EmailConfirmed = true;
+                                    }
+                                    users.PhoneNumberConfirmed = true;
+                                    DB.SaveChanges();
+                                }
+                                else
+                                {
+                                    if (transaction.UnderlyingTransaction.Connection != null)
+                                    {
+                                        transaction.Rollback();
+                                    }
+                                    else
+                                    {
+                                        transaction.UnderlyingTransaction.Connection.Open();
+                                        transaction.Rollback();
+                                    }
+                                    TempData["mobileno"] = ch;
+                                    return RedirectToAction("Login", "Home");
+                                }
+
+                                // Send an email with this link
+                                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                                var callbackUrl = Url.Action("ConfirmEmailAdmin", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                                callbackUrl = callbackUrl.Replace("/ADMIN", "");
+
+                                string body = new CommonUtil().PopulateBody(rem.Email, "Confirm your account", "", "" + callbackUrl + "", rem.Email, rem.Password, rem.Pin.ToString(), rem.referralcode);
+                                string Welcomebody = new CommonUtil().PopulateBodyWelcome(rem.Email, "Confirm your account", "", "SignUp" + callbackUrl + "", rem.Email, rem.Password, rem.Pin.ToString(), rem.referralcode);
+
+                                new CommonUtil().Insertsendmail(rem.Email, "Confirm your account", body, callbackUrl);
+                                new CommonUtil().InsertsendmailWelcome(rem.Email, "Confirm your account", Welcomebody, callbackUrl);
+
+                                var adminemail = DB.Admin_details.SingleOrDefault().email;
+                                new CommonUtil().Rsendmailadmin(adminemail, "Confirm your account", body, callbackUrl);
+
+                                ResendConfirmMail resend = new ResendConfirmMail();
+                                resend.CallBackUrl = callbackUrl;
+                                resend.Email = rem.Email;
+                                resend.Password = rem.Password;
+                                resend.Pin = rem.Pin.ToString();
+                                DB.ResendConfirmMails.Add(resend);
+                                DB.SaveChanges();
+
+                                if (ch.ToString() == "Register SuccessFully.")
+                                {
+                                    var resultssss = await SignInManager.PasswordSignInAsync(rem.Email, rem.Password, isPersistent: false, shouldLockout: false);
+                                    TempData["success"] = "Welcome to our family. Dear Business Partner, your account has been successfully created. Please verify your email.";
+                                    return RedirectToAction("Dashboard", "Home", new { area = "Retailer" });
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                    TempData["mobileno"] = ch;
+                                    return RedirectToAction("Login", "Home");
+                                }
+                            }
+                            else
+                            {
+                                var ss = "";
+                                foreach (var error in result.Errors)
+                                {
+                                    ss = error;
+                                }
+                                TempData["emailconfrim"] = ss;
+                                return RedirectToAction("Login", "Home");
+                            }
+                        }
+                        else
+                        {
+                            TempData["mobileno"] = "This Mobile Number already exists.";
+                            return RedirectToAction("Login", "Home");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    TempData["errorretailer"] = "User not created. Please try again later.";
+                    return RedirectToAction("Login", "Home");
+                }
+            }
+        }
+
+
+        
+        /*public async Task<ActionResult> Insert_retailer(RegisterViewModel rem)
         {
             var appDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
             using (var transaction = appDbContext.Database.BeginTransaction())
@@ -1713,7 +1938,7 @@ namespace Vastwebmulti.Controllers
             }
         }
 
-
+*/
 
 
 
