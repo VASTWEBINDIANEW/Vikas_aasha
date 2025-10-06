@@ -535,7 +535,7 @@ function discoverAvdm() {
                         RdStatus = true;
                         return;
                     }
-                    else if (RegExp('\\b' + 'Morpho').test(CmbData2) == true) {
+                    else if (RegExp('\\b' + 'IDEMIA').test(CmbData2) == true) {
                         // closeNav();
                         DeviceKonsi = 'Morpho';
                         //console.log("Morpho found");

@@ -436,6 +436,7 @@ function discoverAvdm() {
         var jsonstr = "";
         var data = new Object();
         var obj = new Object();
+    
         //  console.log(primaryUrl + i.toString());
         $.ajax({
             type: "RDSERVICE",
@@ -538,7 +539,7 @@ function discoverAvdm() {
                         RdStatus = true;
                         return;
                     }
-                    else if (RegExp('\\b' + 'Morpho').test(CmbData2) == true) {
+                    else if (RegExp('\\b' + 'IDEMIA').test(CmbData2) == true) {
                         // closeNav();
                         DeviceKonsi = 'Morpho';
                         //console.log("Morpho found");
