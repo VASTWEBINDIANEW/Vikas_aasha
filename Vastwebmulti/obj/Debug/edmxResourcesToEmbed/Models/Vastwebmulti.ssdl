@@ -9437,6 +9437,19 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="maxrs" Type="decimal" Precision="18" Scale="4" />
     <Property Name="RtlCommPrc" Type="decimal" Precision="18" Scale="4" />
   </EntityType>
+  <EntityType Name="Retailer_to_Dealer">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="Role" Type="varchar" MaxLength="50" />
+    <Property Name="insertdate" Type="datetime" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Firmname" Type="nvarchar(max)" />
+    <Property Name="Mobile" Type="varchar" MaxLength="50" />
+    <Property Name="Remainbal" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
   <EntityType Name="Retailer_upload_gst">
     <Key>
       <PropertyRef Name="idno" />
@@ -18054,6 +18067,11 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="month" Type="varchar" Mode="In" />
     <Parameter Name="year" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="retailer_to_delaer_transfer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userid" Type="varchar" Mode="In" />
+    <Parameter Name="ssid" Type="varchar" Mode="In" />
+    <Parameter Name="output" Type="varchar" Mode="InOut" />
+  </Function>
   <Function Name="Retailer_Today_Recharges" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userid" Type="varchar" Mode="In" />
     <Parameter Name="type" Type="varchar" Mode="In" />
@@ -21993,6 +22011,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="Retailer_Outlet2" EntityType="Self.Retailer_Outlet2" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Retailer_Recharge_upload_gst" EntityType="Self.Retailer_Recharge_upload_gst" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="retailer_slab" EntityType="Self.retailer_slab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Retailer_to_Dealer" EntityType="Self.Retailer_to_Dealer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Retailer_upload_gst" EntityType="Self.Retailer_upload_gst" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RetailerCreationCharge" EntityType="Self.RetailerCreationCharge" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RetailerCreationTokens" EntityType="Self.RetailerCreationTokens" Schema="dbo" store:Type="Tables" />
