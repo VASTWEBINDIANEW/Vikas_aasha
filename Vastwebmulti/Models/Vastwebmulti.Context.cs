@@ -898,6 +898,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<PANAADHARVERIFICATIONREPORT> PANAADHARVERIFICATIONREPORTs { get; set; }
         public virtual DbSet<RadiantTransfer> RadiantTransfers { get; set; }
         public virtual DbSet<Uniquetxnid> Uniquetxnids { get; set; }
+        public virtual DbSet<Retailer_to_Dealer> Retailer_to_Dealer { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23949,6 +23950,19 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("ToDate", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetRetailerTxnSummary_Result>("GetRetailerTxnSummary", masterIdParameter, dealerIdParameter, retailerIdParameter, fromDateParameter, toDateParameter);
+        }
+    
+        public virtual ObjectResult<retailer_to_delaer_transfer_Result> retailer_to_delaer_transfer(string userid, string ssid, ObjectParameter output)
+        {
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var ssidParameter = ssid != null ?
+                new ObjectParameter("ssid", ssid) :
+                new ObjectParameter("ssid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retailer_to_delaer_transfer_Result>("retailer_to_delaer_transfer", useridParameter, ssidParameter, output);
         }
     }
 }

@@ -334,6 +334,7 @@ $("#chkHttpsPort").change(function () {
 });
 
 function discoverAvdmFirstNode(PortNo) {
+    alert("ok")
     $('#txtWadh').val('');
     //$('#txtdevice_aadharInfo').val('');
     txtdevice_aadharInfo = '';

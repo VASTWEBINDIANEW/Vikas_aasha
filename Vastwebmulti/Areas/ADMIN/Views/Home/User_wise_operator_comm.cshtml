@@ -320,6 +320,7 @@
 
                     <div style="width: 100%; float: left; margin-top: 5px;">
                         <div class="table-responsive tableseconddes-admin" style="position:inherit;">
+                            
                             <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;font-size:12px;">
                                 <thead style="background-color:whitesmoke;">
                                     <tr>
@@ -352,7 +353,45 @@
                                             <td><p style="font-size:13px;">@item.Frm_Name</p></td>
                                             <td><p style="font-size:13px;">@item.optnm</p></td>
 
-                                            <td class="distributor_income2" style="display: none; border: none !important;"><p style="font-size:13px;"> @*@item.DealerIncome*@ </p></td>
+
+                                            @*@{
+            var dealerIncomeDict = ViewBag.DealerIncome as Dictionary<string, decimal> ?? new Dictionary<string, decimal>();
+        }
+        <td class="distributor_income2" style="display: none; border: none !important;">
+            @(dealerIncomeDict.ContainsKey(item.Frm_Name) ? dealerIncomeDict[item.Frm_Name] : 0)
+        </td>*@
+
+                                            @*@{
+                                                var dealerIncomeDict = ViewBag.DealerIncome as Dictionary<string, decimal> ?? new Dictionary<string, decimal>();
+                                            }
+                                            <td class="distributor_income2" style="display: none; border: none !important;">
+                                                @(dealerIncomeDict.ContainsKey(item.RetailerName) ? dealerIncomeDict[item.RetailerName] : 0)
+                                            </td>*@
+                                            @{
+                                                var dealerIncomeDict = ViewBag.DealerIncome as Dictionary<string, decimal> ?? new Dictionary<string, decimal>();
+                                            }
+
+                                            <td>
+                                                @(dealerIncomeDict.ContainsKey(item.RetailerName) ? dealerIncomeDict[item.RetailerName] : 0)
+                                            </td>
+
+
+
+
+                                            @*@{
+            var dealerIncomeDict = ViewBag.DealerIncome as Dictionary<string, decimal>;
+        }
+
+        @if (dealerIncomeDict != null && dealerIncomeDict.ContainsKey(item.DealerId))
+        {
+            <span>@dealerIncomeDict[item.DealerId]</span>
+        }
+        else
+        {
+            <span>0</span>
+        }*@
+
+
 
                                             <td><p style="font-size:13px;">@item.remincome</p></td>
                                             <td><p style="font-size:13px;">@item.total</p></td>
@@ -365,7 +404,7 @@
                                         <td></td>
                                         <td></td>
 
-                                        <td id="distributor_income3" style="display: none; border: none !important;"> @*@Model.Sum(a => a.DealerIncome)*@ </td>
+                                        <td id="distributor_income3" style="display: none; border: none !important;"> </td>
 
                                         <td>@Model.Sum(a => a.remincome)</td>
                                         <td>@Model.Sum(a => a.total)</td>
