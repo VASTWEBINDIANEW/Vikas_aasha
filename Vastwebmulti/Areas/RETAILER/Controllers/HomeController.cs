@@ -60352,76 +60352,76 @@ System.Data.Entity.Core.Objects.ObjectParameter("output", typeof(string));
             catch { }
             if (procres == "Success")
             {
+                return Json(new { status = "Success", message = " under process" });
+                //var tokn = Responsetoken.gettoken();
+                //VastBazaar vb = new VastBazaar();
+                //var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state, retailer.Mobile);
+                //dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
 
-                var tokn = Responsetoken.gettoken();
-                VastBazaar vb = new VastBazaar();
-                var response = vb.pancardnew(tokn, msts, gender, adharno, name, dob, mobile, father, Email, cmobile, requestid, state, retailer.Mobile);
-                dynamic responseData = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
+                //if (responseData.StatusCode == 200)
+                //{
+                //    string res = responseData.Content.ADDINFO.Status;
+                //    if (res.ToUpper() == "FAILED")
+                //    {
+                //        var set = db.pancard_transation_manual.Where(s => s.requestid == requestid).SingleOrDefault();
+                //        var resupdate = db.proc_PAN_CARD_Refund_new_manual(set.idno.ToString(), "FAILED", "", requestid);
+                //        try
+                //        {
+                //            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                //            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
+                //            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
 
-                if (responseData.StatusCode == 200)
-                {
-                    string res = responseData.Content.ADDINFO.Status;
-                    if (res.ToUpper() == "FAILED")
-                    {
-                        var set = db.pancard_transation_manual.Where(s => s.requestid == requestid).SingleOrDefault();
-                        var resupdate = db.proc_PAN_CARD_Refund_new_manual(set.idno.ToString(), "FAILED", "", requestid);
-                        try
-                        {
-                            var retailerdetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                            var dealerdetails = db.Dealer_Details.Where(aa => aa.DealerId == retailerdetails.DealerId).SingleOrDefault();
-                            var masterdetails = db.Superstokist_details.Where(aa => aa.SSId == dealerdetails.SSId).SingleOrDefault();
+                //            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+                //            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
+                //            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
 
-                            var remdetails = db.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                            var dlmdetails = db.Remain_dealer_balance.Where(aa => aa.DealerID == retailerdetails.DealerId).SingleOrDefault();
-                            var Masterdetails = db.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == dealerdetails.SSId).SingleOrDefault();
+                //            var admininfo = db.Admin_details.SingleOrDefault();
+                //            Backupinfo back = new Backupinfo();
+                //            var model = new Backupinfo.Addinfo
+                //            {
+                //                Websitename = admininfo.WebsiteUrl,
+                //                RetailerID = userid,
+                //                Email = retailerdetails.Email,
+                //                Mobile = retailerdetails.Mobile,
+                //                Details = "Pan Card Purchase Refund",
+                //                RemainBalance = (decimal)remdetails.Remainamount,
+                //                Usertype = "Retailer"
+                //            };
+                //            back.Pancard(model);
 
-                            var admininfo = db.Admin_details.SingleOrDefault();
-                            Backupinfo back = new Backupinfo();
-                            var model = new Backupinfo.Addinfo
-                            {
-                                Websitename = admininfo.WebsiteUrl,
-                                RetailerID = userid,
-                                Email = retailerdetails.Email,
-                                Mobile = retailerdetails.Mobile,
-                                Details = "Pan Card Purchase Refund",
-                                RemainBalance = (decimal)remdetails.Remainamount,
-                                Usertype = "Retailer"
-                            };
-                            back.Pancard(model);
+                //            var model1 = new Backupinfo.Addinfo
+                //            {
+                //                Websitename = admininfo.WebsiteUrl,
+                //                RetailerID = retailerdetails.DealerId,
+                //                Email = dealerdetails.Email,
+                //                Mobile = dealerdetails.Mobile,
+                //                Details = "Pan Card Purchase Refund",
+                //                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
+                //                Usertype = "Dealer"
+                //            };
+                //            back.Pancard(model1);
 
-                            var model1 = new Backupinfo.Addinfo
-                            {
-                                Websitename = admininfo.WebsiteUrl,
-                                RetailerID = retailerdetails.DealerId,
-                                Email = dealerdetails.Email,
-                                Mobile = dealerdetails.Mobile,
-                                Details = "Pan Card Purchase Refund",
-                                RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
-                                Usertype = "Dealer"
-                            };
-                            back.Pancard(model1);
-
-                            var model2 = new Backupinfo.Addinfo
-                            {
-                                Websitename = admininfo.WebsiteUrl,
-                                RetailerID = dealerdetails.SSId,
-                                Email = masterdetails.Email,
-                                Mobile = masterdetails.Mobile,
-                                Details = "Pan Card Purchase Refund",
-                                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
-                                Usertype = "Master"
-                            };
-                            back.Pancard(model2);
-                        }
-                        catch { }
-                    }
-                    string mess = responseData.Content.ADDINFO.Message;
-                    return Json(new { status = responseData.Content.ADDINFO.Status, message = mess });
-                }
-                else
-                {
-                    return Json(new { status = "Failed", message = "Contact to Admin" });
-                }
+                //            var model2 = new Backupinfo.Addinfo
+                //            {
+                //                Websitename = admininfo.WebsiteUrl,
+                //                RetailerID = dealerdetails.SSId,
+                //                Email = masterdetails.Email,
+                //                Mobile = masterdetails.Mobile,
+                //                Details = "Pan Card Purchase Refund",
+                //                RemainBalance = Convert.ToDecimal(Masterdetails.Remainamount),
+                //                Usertype = "Master"
+                //            };
+                //            back.Pancard(model2);
+                //        }
+                //        catch { }
+                //    }
+                //    string mess = responseData.Content.ADDINFO.Message;
+                //    return Json(new { status = responseData.Content.ADDINFO.Status, message = mess });
+                //}
+                //else
+                //{
+                //    return Json(new { status = "Failed", message = "Contact to Admin" });
+                //}
             }
             else if (procres == "CAPINGLOW")
             {
