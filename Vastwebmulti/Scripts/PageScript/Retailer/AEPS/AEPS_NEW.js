@@ -721,10 +721,8 @@ function CaptureAvdm() {
                 /*   console.log(data)*/
                 $doc = data;
             }
-            var xmlText = new XMLSerializer().serializeToString($doc);
-            console.log(xmlText)
-            $('#pidata_doc').val(xmlText);
-            $("#capxml").val(xmlText);
+            $("#capxml").val($doc);
+         
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {

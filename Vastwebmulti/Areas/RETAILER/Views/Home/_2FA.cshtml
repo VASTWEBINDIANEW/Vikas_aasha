@@ -353,6 +353,7 @@
             var otp = $('#txtotp').val();
             var primaryhide = $('#primaryhide').val();
             var encodehide = $('#encodehide').val();
+            var apinm = $('#checkapi').val()
             if (otp == "") {
                 $('#verifyotperr').text("Please Enter The OTP");
             }
@@ -361,7 +362,7 @@
                     url: '@Url.Action("VerifyotpEkyc", "Home")',
                     cache: false,
                     type: "POST",
-                    data: { otp:otp, primaryhide:primaryhide, encodehide:encodehide},
+                    data: { otp: otp, primaryhide: primaryhide, encodehide: encodehide, apinameinfo: apinm },
                     beforeSend: function () {
                         $(".loader").show();
                     },
@@ -421,20 +422,22 @@
             $('#namechnage').hide();
             $('#EditName').show();
             $('#updatename').hide();
-
+            var apinm = $('#checkapi').val()
 
             var requestData =  {
                 cap,
                 capxml,
                 devicesrno,
-                devicenm
+                devicenm,
+                apinm
             };
             var jsonData = JSON.stringify(requestData);
-          
+    
                 $.ajax({
                     url: '@Url.Action("Validate2FA", "Home")',
                     cache: false,
                     type: "POST",
+
                     contentType: "application/json", // Set content type to JSON
                     data: jsonData,
                     beforeSend: function () {

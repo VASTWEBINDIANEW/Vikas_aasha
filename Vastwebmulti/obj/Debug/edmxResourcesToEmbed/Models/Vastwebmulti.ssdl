@@ -5075,6 +5075,29 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
     <Property Name="maxrs_5001_10000" Type="decimal" Precision="18" Scale="4" />
     <Property Name="Type_5001_10000" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Nifipaymerchantinfo">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Retailerid" Type="varchar" MaxLength="50" />
+    <Property Name="Merchantid" Type="varchar" MaxLength="50" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="MerchantCreateDate" Type="datetime" />
+    <Property Name="OTPVerifyDate" Type="datetime" />
+    <Property Name="MerchantCompleteDate" Type="datetime" />
+    <Property Name="OtpverifyUniqueid" Type="varchar" MaxLength="50" />
+    <Property Name="KycUniqueid" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="NifiStatename">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Stateid" Type="int" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="OrginalName" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Nill_Com">
     <Key>
       <PropertyRef Name="idno" />
@@ -21828,6 +21851,8 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="mtm_Comm_comm" EntityType="Self.mtm_Comm_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="mtm_Comm_Dlm_rem" EntityType="Self.mtm_Comm_Dlm_rem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="mtm_Comm_User_Wise" EntityType="Self.mtm_Comm_User_Wise" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nifipaymerchantinfo" EntityType="Self.Nifipaymerchantinfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NifiStatename" EntityType="Self.NifiStatename" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nill_Com" EntityType="Self.Nill_Com" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Norton_history" EntityType="Self.Norton_history" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NoticationData" EntityType="Self.NoticationData" Schema="dbo" store:Type="Tables" />
