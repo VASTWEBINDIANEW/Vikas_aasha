@@ -29,6 +29,7 @@ namespace Vastwebmulti.Models
         public string trans_from { get; set; }
         public Nullable<System.DateTime> response_time { get; set; }
         public string api_name { get; set; }
+
         public Nullable<decimal> purchase { get; set; }
         public Nullable<decimal> income { get; set; }
         public Nullable<decimal> md_income { get; set; }

@@ -197,6 +197,7 @@
                 </p>
             </td>
             <td>@item.api_name </td>
+          
             <td style="width:8%">
                 <p>
                 <p>
@@ -209,43 +210,43 @@
                         {
                         <p>IMPS/</p>
                     }
-                    }
-                    else if (item.Trans_type == "NEFT")
+                }
+                else if (item.Trans_type == "NEFT")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
-                        {
-                            <p>NEFT/</p>
-                        }
+                        <p>NEFT/</p>
                     }
-                    else if (item.Trans_type == "WALLET")
+                }
+                else if (item.Trans_type == "WALLET")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
-                        {
-                            <p>WALLET/</p>
-                        }
+                        <p>WALLET/</p>
                     }
-                    else if (item.Trans_type == "UPI")
+                }
+                else if (item.Trans_type == "UPI")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
-                        {
-                            <p>UPI</p>
-                        }
+                        <p>UPI</p>
                     }
-                    else if (item.Trans_type == "Credit Card")
+                }
+                else if (item.Trans_type == "Credit Card")
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
-                        {
-                            <p>Credit Card</p>
-                        }
-                    
+                        <p>Credit Card</p>
                     }
-                    else
+
+                }
+                else
+                {
+                    if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
                     {
-                        if (item.status == "Pending" || item.status == "FAILED" || item.status == "SUCCESS" || item.response_output == "Manual SUCCESS")
-                        {
-                            <p>Verify/</p>
-                        }
+                        <p>Verify/</p>
                     }
+                }
                     @if (item.DmtType == "DMT2" && item.Trans_type == "EKYC CHARGE")
                     {
                         <p>PAYOUT E-KYC</p>
@@ -368,23 +369,23 @@
                             </div>
                             if (item.DmtType == "DMT2")
                             {
-                            <div class="ctti" style="margin-bottom:0px;">
-                                @{
-                                    var jj = "rrr";
-                                    var kk = item.idno;
-                                    var mkmk = jj + kk;
-                                    if ((item.Trans_type == "IMPS" && item.DmtType == "DMT2") || (item.Trans_type == "NEFT" && item.DmtType == "DMT2"))
-                                    {
-                                        <button id="@mkmk" type="button" class="ff" style="background-color:transparent; color:@color;border:none;margin-top:0px;" data-toggle="modal" title="Resend" onclick="resendchk11(@item.idno)">
-                                            <i class="fa fa-registered" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;"></i>
-                                        </button>
+                                <div class="ctti" style="margin-bottom:0px;">
+                                    @{
+                                        var jj = "rrr";
+                                        var kk = item.idno;
+                                        var mkmk = jj + kk;
+                                        if ((item.Trans_type == "IMPS" && item.DmtType == "DMT2") || (item.Trans_type == "NEFT" && item.DmtType == "DMT2"))
+                                        {
+                                            <button id="@mkmk" type="button" class="ff" style="background-color:transparent; color:@color;border:none;margin-top:0px;" data-toggle="modal" title="Resend" onclick="resendchk11(@item.idno)">
+                                                <i class="fa fa-registered" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;"></i>
+                                            </button>
+                                        }
                                     }
-                                }
 
-                            </div>
-                                    }
+                                </div>
+                            }
                             <span class="fftt" data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.idno')"> <img src="~/ashok-images/rightaeps.svg" style="border: 1px solid #c7c2c2;padding: 3px 5px;font-size: 10px;"> </span>
-                                        
+
                         }
                         @if (item.status.ToUpper() == "SUCCESS" && (item.uniqueid == null || !item.uniqueid.StartsWith("MANUAL")))
                         {
