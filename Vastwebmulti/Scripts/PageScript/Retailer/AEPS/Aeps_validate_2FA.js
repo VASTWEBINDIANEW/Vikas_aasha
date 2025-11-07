@@ -730,9 +730,8 @@ function CaptureAvdm() {
             else if (DeviceKonsi == "Startek") {
                 $doc = data;
             }
-            var serializer = new XMLSerializer();
-            var xmlString = serializer.serializeToString($doc);
-            $("#capxml").val(xmlString);
+          
+            $("#capxml").val($doc);
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {

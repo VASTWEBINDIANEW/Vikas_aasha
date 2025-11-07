@@ -831,7 +831,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         }
                         else if (checkforold.Rstaus.ToUpper() == "FAILED" || checkforold.Rstaus.ToUpper().Contains("SUCCESS TO FAILED"))
                         {
-                            db.recharge_update_failed_to_success_old(idno,optval);
+                            db.recharge_update_failed_to_success_old(idno, optval);
                             ApiUserResponse(idno, checkforold.Rch_from, checkforold.refid, "SUCCESS", optval);
                         }
                     }
@@ -916,7 +916,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                 else
                 {
                     decimal? Amount; var mobileno = ""; var OptCode = ""; var optional1 = ""; var optional2 = ""; var idno = "";
-                    var url = ""; decimal ammt; string webcontent = ""; int idnn11;
+                    var url = ""; decimal ammt; string webcontent = ""; int idnn11; string OrderId = "";
                     int id = Convert.ToInt32(s);
                     var data = db.Recharge_info.Where(pp => pp.idno == id).SingleOrDefault();
                     if (data != null)
@@ -929,6 +929,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         optional2 = data.optional2;
                         url = ch.Replace("AOK", "");
                         ammt = Convert.ToDecimal(Amount);
+                        OrderId = data.Order_id;
                     }
                     else
                     {
@@ -941,7 +942,13 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         idnn11 = data1.idno;
                         url = ch.Replace("AOK", "");
                         ammt = Convert.ToDecimal(Amount);
+                        OrderId = data1.Order_id;
                     }
+                    var infochkk = db.Recharge_info.Where(aa => aa.Mobile == mobileno && aa.amount == ammt && (aa.Rstaus == "Request Send" || aa.Rstaus == "Request Sent")).SingleOrDefault();
+                    // idno = (from rch in db.Recharge_info where rch.Mobile == mobileno where rch.amount == ammt where rch.Rstaus == "Request Send" || rch.Rstaus == "Request Sent" select rch.idno).SingleOrDefault().ToString();
+                    idno = infochkk.idno.ToString();
+                    idnn11 = Convert.ToInt32(idno);
+                    OrderId = infochkk.Order_id;
                     if (url.ToUpper().Contains("API.VASTBAZAAR.COM"))
                     {
 
@@ -953,7 +960,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                         var responsechk1 = vb.billpay(tokenapi, mobileno, apioptcode, Amount.ToString(), optional1, optional2, CommonTranid);
 
                         var Request = responsechk1.Request.Parameters[2].Value;
-                        var ReqUrl = url + "  RequestBody : " + Request;
+                        var ReqUrl = url + "RequestBody : " + Request;
 
                         var responsechk = responsechk1.Content.ToString();
                         dynamic json = JsonConvert.DeserializeObject(responsechk);
@@ -1118,6 +1125,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                             TempData.Keep("Output");
                             TempData["OutputMessage"] = ch;
                             TempData.Keep("OutputMessage");
+                            responsemsg = " {'Message':'Recharge Success.','Response':'SUCCESS'}";
                         }
                         else if (status.ToUpper() == "FAILURE")
                         {
@@ -1128,6 +1136,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                             TempData.Keep("Output");
                             TempData["OutputMessage"] = ch;
                             TempData.Keep("OutputMessage");
+                            responsemsg = "{'Message':'Recharge Failed.','Response':'ERROR'}";
                         }
                         else
                         {
@@ -1139,6 +1148,7 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                             TempData.Keep("Output");
                             TempData["OutputMessage"] = ch;
                             TempData.Keep("OutputMessage");
+                            responsemsg = " {'Message':'Recharge Processed.','Response':'SUCCESS'}";
                         }
                     }
                     else if (url.ToUpper() == "OKK" || url.ToUpper() == "AOK" || url.ToUpper() == "MOK")
@@ -1147,16 +1157,54 @@ namespace Vastwebmulti.Areas.Employee.Controllers
                     }
                     else
                     {
-                        ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                        HttpWebRequest WebRequestObject = (HttpWebRequest)HttpWebRequest.Create(url);
-                        WebRequestObject.Timeout = (System.Int32)TimeSpan.FromSeconds(25).TotalMilliseconds;
                         try
                         {
+                            var apiinfo = db.RechargeapiInfoes.Where(aa => aa.apiendpoint.ToUpper() == url.ToUpper()).SingleOrDefault();
+                            if (apiinfo != null)
+                            {
+                                var apiremain = "0"; var _status = "Pending"; var transid = ""; var errormsg = "";
 
-                            WebResponse Response = WebRequestObject.GetResponse();
-                            Stream WebStream = Response.GetResponseStream();
-                            StreamReader Reader = new StreamReader(WebStream);
-                            webcontent = Reader.ReadToEnd();
+                                ApiResponse rech = RechargeServices.Recharge(apiinfo, mobileno, OptCode, ammt, OrderId);
+                                _status = rech.status;
+                                transid = rech.operatorId;
+                                errormsg = rech.errormsg;
+                                apiremain = rech.apiremain;
+                                webcontent = rech.api_response;
+                                idnn11 = rech.id;
+
+                                if (_status == "Success")
+                                {
+                                    db.recharge_update(idnn11.ToString(), "Success", transid, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                    responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                }
+                                else if (_status == "Failed")
+                                {
+                                    var optcodei = db.Operator_Code.Where(aa => aa.new_opt_code == OptCode).SingleOrDefault().Operator_id.ToString();
+                                    db.recharge_update(idnn11.ToString(), "Failed", errormsg, Convert.ToDecimal(apiremain), webcontent, "Response");
+                                    responsemsg = "{'Message':'Recharge Failed.','Response':'ERROR'}";
+                                }
+                                else
+                                {
+                                    Recharge_info obj = (from p in db.Recharge_info where p.idno == idnn11 select p).Single();
+                                    obj.Recharge_response = webcontent.ToString();
+                                    db.SaveChanges();
+
+                                    responsemsg = "{'Message':'Recharge Process Successfully.','Response':'SUCCESS'}";
+                                }
+
+                                var jss1 = new JavaScriptSerializer();
+                                var dict1 = jss1.Deserialize<dynamic>(responsemsg);
+                                return Json(dict1, JsonRequestBehavior.AllowGet);
+                            }
+
+                            //  end
+
+                            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                            var client = new RestClient(url);
+                            client.Timeout = (System.Int32)TimeSpan.FromSeconds(25).TotalMilliseconds; ;
+                            var request = new RestRequest(Method.GET);
+                            IRestResponse response = client.Execute(request);
+                            webcontent = response.Content;
 
                             if (url.ToUpper().Contains("LIVE.VASTWEBINDIA.COM"))
                             {
@@ -2982,6 +3030,432 @@ namespace Vastwebmulti.Areas.Employee.Controllers
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
         #endregion
+
+
+
+        public ActionResult ShowAll(int idno, string disput)
+        {
+            var ch = db.clear_dispute_list(idno);
+            ViewBag.dis = disput == null ? "Not Region Found" : disput;
+            return View(ch);
+        }
+        public ActionResult Dispute_list()
+        {
+            ViewData["success"] = TempData["success"];
+            ViewData["error"] = TempData["error"];
+            TempData.Remove("success");
+            TempData.Remove("error");
+
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            ViewBag.chk = "post";
+
+            return View();
+        }
+        [ChildActionOnly]
+        public ActionResult _Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            if (string.IsNullOrEmpty(txt_frm_date) || string.IsNullOrEmpty(txt_to_date))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+                string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
+                string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
+                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
+                return View(ch);
+            }
+            else
+            {
+                DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                to = to.AddDays(1);
+                string frm_date = frm.ToString("yyyy-MM-dd");
+                string to_date = to.ToString("yyyy-MM-dd");
+                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
+                return View(ch);
+            }
+        }
+        public ActionResult InfiniteScrollDispute(int pageindex, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            int pagesize = 20;
+            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            to = to.AddDays(1);
+            string frm_date = frm.ToString("yyyy-MM-dd");
+            string to_date = to.ToString("yyyy-MM-dd");
+            var tbrow = db.all_dispute_list(pageindex, pagesize, ddl_status, frm_date, to_date).ToList();
+            JsonModel jsonmodel = new JsonModel();
+            jsonmodel.NoMoredata = tbrow.Count < pagesize;
+            jsonmodel.HTMLString = renderPartialViewtostring("_Dispute_list", tbrow);
+            return Json(jsonmodel);
+
+        }
+        public virtual ActionResult ExcelRechargereport_Dispute(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            DataTable dt2 = new DataTable();
+            dt2.Columns.Add("Status", typeof(string));
+            dt2.Columns.Add("User Firm", typeof(string));
+            dt2.Columns.Add("Rch No.", typeof(string));
+            dt2.Columns.Add("Amount", typeof(string));
+            dt2.Columns.Add("Operator", typeof(string));
+            dt2.Columns.Add("Port No", typeof(string));
+            dt2.Columns.Add("Port Nm", typeof(string));
+            dt2.Columns.Add("Rch Time", typeof(string));
+            dt2.Columns.Add("Disp Time", typeof(string));
+            dt2.Columns.Add("Dispute Reason", typeof(string));
+            dt2.Columns.Add("Transition ID", typeof(string));
+            dt2.Columns.Add("Response", typeof(string));
+
+            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            to = to.AddDays(1);
+            string frm_date = frm.ToString("yyyy-MM-dd");
+            string to_date = to.ToString("yyyy-MM-dd");
+            var respo = db.all_dispute_list(1, 1000000, ddl_status, frm_date, to_date).ToList();
+            if (respo.Count > 0)
+            {
+                foreach (var item in respo)
+                {
+                    dt2.Rows.Add(item.sts, item.rch_from, item.rch_number, item.rch_amount, item.opt, item.portno, item.portnm, item.rch_time,
+            item.dis_time, item.dispute_region, item.opt_id, item.comment);
+                }
+            }
+            else
+            {
+                dt2.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "");
+            }
+
+
+            var grid = new GridView();
+            grid.DataSource = dt2;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=Report.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return View();
+        }
+
+
+        public ActionResult diputerejected(string idno, string txtregion)
+        {
+            try
+            {
+                int idn = Convert.ToInt32(idno);
+
+                // Sabhi matching records fetch karo
+                var disputes = db.dispute_list.Where(a => a.rch_id == idn.ToString()).ToList();
+
+                if (disputes.Count == 0)
+                {
+                    TempData["error"] = "No dispute entry found with this ID.";
+                    return RedirectToAction("Dispute_list");
+                }
+
+                // Pehle record se email nikal lo
+                var userid = disputes.FirstOrDefault().rch_from;
+                var EmailId = db.Users.Where(a => a.UserId == userid).Select(a => a.Email).FirstOrDefault();
+
+                // Sabhi disputes ko update karo (agar delete chahte ho to `db.dispute_list.RemoveRange(disputes);` use karein)
+                foreach (var dispute in disputes)
+                {
+                    dispute.sts = "Rejected";
+                    dispute.comment = txtregion;
+                }
+
+                db.SaveChanges();
+
+                // Push notification bhejo
+                SendPushNotification(EmailId, Url.Action("Dispute_list", "Home"),
+                    "Your Dispute is Clear By Admin and Dispute Message is that " + txtregion + " .", "Dispute Clear..");
+
+                TempData["success"] = "Dispute Rejected Successfully.";
+                return RedirectToAction("Dispute_list");
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("Dispute_list");
+            }
+        }
+
+
+
+        [HttpGet]
+        public ActionResult All_Retailer_Status()
+        {
+            var ch = db.show_all_active_inactive_rem_list().ToList();
+            activeinactive viewModel = new activeinactive();
+            viewModel.active = ch.Where(aa => aa.type == "ACTIVE");
+            viewModel.inactive = ch.Where(aa => aa.type == "INACTIVE");
+            return View(viewModel);
+        }
+
+        public ActionResult Excel_All_Retailer_Status()
+        {
+            var ch = db.show_all_active_inactive_rem_list().ToList();
+
+            DataTable dataTbl = new DataTable();
+            dataTbl.Columns.Add("Firm Name", typeof(string));
+            dataTbl.Columns.Add("Mobile", typeof(string));
+            dataTbl.Columns.Add("Date", typeof(string));
+            dataTbl.Columns.Add("Day's", typeof(string));
+            dataTbl.Columns.Add("Status", typeof(string));
+
+            if (ch.Count > 0)
+            {
+                foreach (var item in ch)
+                {
+                    dataTbl.Rows.Add(item.frm_name, item.mobile, item.Rch_time, item.todays, item.type);
+                }
+            }
+            else
+            {
+                dataTbl.Rows.Add("", "", "", "", "");
+            }
+
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=All_Retailer_Status.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View();
+        }
+
+        #region Retailer Bank List
+        public ActionResult RetailerBnk()
+        {
+            TempData.Keep("msgbox");
+            //var ad = db.Retailer_Details.Single(a => a.RetailerId == txtid3);
+            //ad.accountholder = string.IsNullOrWhiteSpace(txtaccholder) ? ad.accountholder : txtaccholder;
+            //ad.Bankaccountno = string.IsNullOrWhiteSpace(txtbankaccountno) ? ad.Bankaccountno : txtbankaccountno;
+            //ad.Ifsccode = string.IsNullOrWhiteSpace(txtifsc) ? ad.Ifsccode : txtifsc;
+            //ad.bankname = string.IsNullOrWhiteSpace(txtbankname) ? ad.bankname : txtbankname;
+            //ad.bankAddress = string.IsNullOrWhiteSpace(txtbranchaddress) ? ad.bankAddress : txtbranchaddress;
+            //db.SaveChanges();
+
+            var RemPendingAc = db.ShowBankRequest().ToList();// db.UpdateREMAccounts.ToList();
+            //db.UpdateREMAccounts.Where(a => a.UserId == userid && a.Status.ToUpper() == "PENDING").OrderByDescending(a => a.Date).Take(1);
+            return View(RemPendingAc);
+        }
+
+        public ActionResult bankApproveOTP(string userid)
+        {
+            //var BANKEXIST = db.UpdateREMAccounts.Where(a => a.UserId == userid && a.Status.ToUpper() == "Approved").Any();
+            //if (BANKEXIST == false)
+            //{
+            Random ran = new Random();
+            var otprem = ran.Next(1111, 9999);
+
+            MobileOtp mob = new MobileOtp();
+            mob.mobileno = "";
+            mob.Userid = userid;
+            mob.Type = "RetailerBANKAPPROVEDOTP";
+            mob.Otp = otprem.ToString();
+            mob.Date = DateTime.Now;
+            db.MobileOtps.Add(mob);
+            db.SaveChanges();
+
+
+            var admininfo = db.Admin_details.SingleOrDefault();
+
+            CommUtilEmail emailsend = new CommUtilEmail();
+            var retaileremail = db.Users.Where(x => x.UserId == userid).SingleOrDefault();
+            if (retaileremail != null)
+            {
+                emailsend.EmailLimitChk(retaileremail.Email, "OK", "Retailer Bank Approved", "Retailer Bank Approved OTP is " + otprem, "");
+            }
+
+            var otpadmin = ran.Next(1111, 9999);
+
+
+            MobileOtp mob1 = new MobileOtp();
+            mob1.mobileno = "";
+            mob1.Userid = userid;
+            mob1.Type = "AdminBANKAPPROVEDOTP";
+            mob1.Otp = otpadmin.ToString();
+            mob1.Date = DateTime.Now;
+            db.MobileOtps.Add(mob1);
+            db.SaveChanges();
+
+            emailsend.EmailLimitChk(admininfo.email, "OK", "Admin Bank Approved", "Admin Bank Approved OTP is " + otpadmin, "");
+
+            return Json("DONE", JsonRequestBehavior.AllowGet);
+            //}
+            //else
+            //{
+            //    return Json("NOTDONE", JsonRequestBehavior.AllowGet);
+            //}
+        }
+        [HttpPost]
+        public ActionResult RetailerBnkApprove(int hdidno, string remotp, string adminotp, string hduserid)
+        {
+            var otpchkretailer = db.MobileOtps.Where(aa => aa.Userid == hduserid && aa.Type == "RetailerBANKAPPROVEDOTP").OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault().Otp;
+            var otpchkadmin = db.MobileOtps.Where(aa => aa.Userid == hduserid && aa.Type == "AdminBANKAPPROVEDOTP").OrderByDescending(aa => aa.Date).Take(1).SingleOrDefault().Otp;
+            if (otpchkretailer == remotp && otpchkadmin == adminotp)
+            {
+                if (hdidno > 0)
+                {
+                    var acDts = db.UpdateREMAccounts.Single(a => a.Idno == hdidno && a.Status.ToUpper() == "PENDING");
+                    if (acDts != null)
+                    {
+                        var userid = acDts.UserId;
+                        var ad = db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).Single(a => a.RetailerId == hduserid);
+
+                        if (ad.Bankaccountno == null)
+                        {
+                            ad.accountholder = string.IsNullOrWhiteSpace(acDts.AcconutHolderName) ? ad.accountholder : acDts.AcconutHolderName;
+                            ad.Bankaccountno = string.IsNullOrWhiteSpace(acDts.BankAccountNo) ? ad.Bankaccountno : acDts.BankAccountNo;
+                            ad.Ifsccode = string.IsNullOrWhiteSpace(acDts.IFSC_CODE) ? ad.Ifsccode : acDts.IFSC_CODE;
+                            ad.bankname = string.IsNullOrWhiteSpace(acDts.Bank_Name) ? ad.bankname : acDts.Bank_Name;
+                            ad.bankAddress = string.IsNullOrWhiteSpace(acDts.Bank_Address) ? ad.bankAddress : acDts.Bank_Address;
+                        }
+
+                        acDts.Status = "Approved";
+                        acDts.Approved_Date = DateTime.Now;
+
+                        db.SaveChanges();
+                        TempData["msgbox"] = "Successfuly Approve";
+                        return RedirectToAction("RetailerBnk");
+                    }
+                }
+
+                //  return Json("OK", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                TempData["msgbox"] = "OTP MissMatch";
+                //  return Json("OTP MissMatch", JsonRequestBehavior.AllowGet);
+                return RedirectToAction("RetailerBnk");
+            }
+            TempData["msgbox"] = "Error";
+            //  return Json("OTP MissMatch", JsonRequestBehavior.AllowGet);
+            return RedirectToAction("RetailerBnk");
+
+        }
+        public ActionResult RetailerBnkReject(int Idno)
+        {
+            if (Idno > 0)
+            {
+                var acDts = db.UpdateREMAccounts.Where(a => a.Idno == Idno).SingleOrDefault();
+                if (acDts != null)
+                {
+                    string path = Server.MapPath("~/" + acDts.CancelCheckFile);
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                    db.UpdateREMAccounts.Remove(acDts);
+                    db.SaveChanges();
+
+
+                }
+            }
+            return RedirectToAction("RetailerBnk");
+        }
+
+
+        public ActionResult DeleteRetailerBnkt(int Idno)
+        {
+            if (Idno > 0)
+            {
+                var acDts = db.UpdateREMAccounts.Where(a => a.Idno == Idno).SingleOrDefault();
+                var isdeleteallow = true;
+
+                if (acDts.Status == "Approved")
+                {
+                    if (Convert.ToDateTime(acDts.Approved_Date).AddMonths(1) >= DateTime.Now)
+                    {
+                        isdeleteallow = false;
+                    }
+                }
+                if (isdeleteallow)
+                {
+                    if (acDts != null)
+                    {
+                        deletedApprveBankInfo tblbank = new deletedApprveBankInfo();
+                        tblbank.UserId = acDts.UserId;
+                        tblbank.AcconutHolderName = acDts.AcconutHolderName;
+                        tblbank.BankAccountNo = acDts.BankAccountNo;
+                        tblbank.IFSC_CODE = acDts.IFSC_CODE;
+                        tblbank.Bank_Name = acDts.Bank_Name;
+                        tblbank.Bank_Address = acDts.Bank_Address;
+                        tblbank.Status = acDts.Status;
+                        tblbank.Date = acDts.Date;
+                        tblbank.Approved_Date = acDts.Approved_Date;
+                        tblbank.Email = acDts.Email;
+                        tblbank.Firm_Name = acDts.Firm_Name;
+                        tblbank.CancelCheckFile = acDts.CancelCheckFile;
+                        tblbank.deleteddate = DateTime.Now;
+                        db.deletedApprveBankInfoes.Add(tblbank);
+                        db.SaveChanges();
+
+                        var ad = db.UpdateREMAccounts.Single(a => a.Idno == Idno);
+                        var retailerbank = db.Retailer_Details.Where(x => x.RetailerId == ad.UserId && x.Bankaccountno == ad.BankAccountNo).FirstOrDefault();
+                        if (retailerbank != null)
+                        {
+                            retailerbank.bankAddress = null;
+                            retailerbank.bankname = null;
+                            retailerbank.Bankaccountno = null;
+                            retailerbank.Ifsccode = null;
+                            retailerbank.accountholder = null;
+                            db.SaveChanges();
+
+
+                            db.UpdateREMAccounts.Remove(ad);
+                            db.SaveChanges();
+
+                            var sdbanks = db.UpdateREMAccounts.Where(a => a.UserId == ad.UserId && a.Status == "Approved").FirstOrDefault();
+                            var retailersd = db.Retailer_Details.Where(a => a.RetailerId == ad.UserId).FirstOrDefault();
+                            if (sdbanks != null && retailersd.Bankaccountno == null)
+                            {
+
+                                retailersd.accountholder = string.IsNullOrWhiteSpace(sdbanks.AcconutHolderName) ? retailersd.accountholder : sdbanks.AcconutHolderName;
+                                retailersd.Bankaccountno = string.IsNullOrWhiteSpace(sdbanks.BankAccountNo) ? retailersd.Bankaccountno : sdbanks.BankAccountNo;
+                                retailersd.Ifsccode = string.IsNullOrWhiteSpace(sdbanks.IFSC_CODE) ? retailersd.Ifsccode : sdbanks.IFSC_CODE;
+                                retailersd.bankname = string.IsNullOrWhiteSpace(sdbanks.Bank_Name) ? retailersd.bankname : sdbanks.Bank_Name;
+                                retailersd.bankAddress = string.IsNullOrWhiteSpace(sdbanks.Bank_Address) ? retailersd.bankAddress : sdbanks.Bank_Address;
+                                db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            db.UpdateREMAccounts.Remove(ad);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("RetailerBnk");
+        }
+
+        public ActionResult Delete_Approve_Bank_list()
+        {
+            var model = db.deletedApprveBankInfoes.OrderByDescending(x => x.deleteddate).ToList();
+            return View(model);
+        }
+        #endregion 
 
         #region Imps Report
         //IMPS 
@@ -6161,6 +6635,100 @@ namespace Vastwebmulti.Areas.Employee.Controllers
 
         #endregion
 
+        public ActionResult Pancard_new_manual()
+        {
+            var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
+            IEnumerable<SelectListItem> selectallretailer = from p in allretailername
+                                                            select new SelectListItem
+                                                            {
+                                                                Value = p.RetailerId,
+                                                                Text = p.Frm_Name,
+                                                            };
+            ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
+
+
+            var txt_frm_date = DateTime.Now.ToString();
+            var txt_to_date = DateTime.Now.ToString();
+
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+
+
+            pancard_reports p1 = new pancard_reports();
+            var asas = Convert.ToDateTime(frm_date);
+            p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time > asas).OrderByDescending(s => s.idno).ToList();
+            return View(p1);
+
+        }
+        [HttpPost]
+        public ActionResult Pancard_new_manual(string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
+            IEnumerable<SelectListItem> selectallretailer = from p in allretailername
+                                                            select new SelectListItem
+                                                            {
+                                                                Value = p.RetailerId,
+                                                                Text = p.Frm_Name,
+                                                            };
+            ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
+                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
+            DateTime frm_date = Convert.ToDateTime(dt).Date;
+            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            pancard_reports p1 = new pancard_reports();
+            var asd = Convert.ToDateTime(frm_date);
+            var asd1 = Convert.ToDateTime(to_date);
+            if (frm_date == null)
+            {
+                p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time > asd).OrderByDescending(s => s.idno).ToList();
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(allretailer))
+                {
+                    if (ddl_status == "ALL")
+                    {
+                        p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time >= asd && s.request_time <= asd1).OrderByDescending(s => s.idno).ToList();
+                    }
+                    else
+                    {
+                        p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time > asd && s.request_time < asd1 && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
+
+                    }
+                }
+                else
+                {
+                    if (ddl_status == "ALL")
+                    {
+                        p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer).OrderByDescending(s => s.idno).ToList();
+                    }
+                    else
+                    {
+                        p1.pancard_Transations_report_new_manual = db.pancard_transation_manual.Where(s => s.request_time > asd && s.request_time < asd1 && s.Reailerid == allretailer && s.status.ToUpper() == ddl_status.ToUpper()).OrderByDescending(s => s.idno).ToList();
+
+                    }
+                }
+
+            }
+            return View(p1);
+        }
+
         #region UITPANCARD
         [HttpGet]
         [PermissioncheckingAttribute(servicename = "PANCARD", permision = "Read")]
@@ -8923,9 +9491,9 @@ namespace Vastwebmulti.Areas.Employee.Controllers
             string userid = db.Admin_details.SingleOrDefault().userid;
             var ch = db.Dealer_To_Retailer_Balance.Where(aa => aa.RetailerId == retailerid && aa.DealerId == userid).OrderByDescending(aa => aa.id).Select(c => c.cr).FirstOrDefault();
             //ch = ch ?? 0;
-            
+
             decimal rembal;
-            
+
             if (string.IsNullOrEmpty(retailerid))
             {
                 rembal = 0;
