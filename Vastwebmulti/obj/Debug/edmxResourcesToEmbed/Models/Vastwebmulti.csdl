@@ -7635,6 +7635,14 @@
       <Parameter Name="FromDate" Mode="In" Type="DateTime" />
       <Parameter Name="ToDate" Mode="In" Type="DateTime" />
     </FunctionImport>
+    <EntitySet Name="Retailer_to_Dealer" EntityType="VastwebmultiModel.Retailer_to_Dealer" />
+    <FunctionImport Name="retailer_to_delaer_transfer" ReturnType="Collection(VastwebmultiModel.retailer_to_delaer_transfer_Result)">
+      <Parameter Name="userid" Mode="In" Type="String" />
+      <Parameter Name="ssid" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="Nifipaymerchantinfoes" EntityType="VastwebmultiModel.Nifipaymerchantinfo" />
+    <EntitySet Name="NifiStatenames" EntityType="VastwebmultiModel.NifiStatename" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -33271,4 +33279,43 @@
     <Property Type="Decimal" Name="MicroAtm_UserDiff" Nullable="false" Precision="38" Scale="4" />
     <Property Type="Decimal" Name="MicroAtm_DealerDiff" Nullable="false" Precision="38" Scale="4" />
   </ComplexType>
+  <EntityType Name="Retailer_to_Dealer">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Firmname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remainbal" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <ComplexType Name="retailer_to_delaer_transfer_Result">
+    <Property Type="String" Name="msg" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="Nifipaymerchantinfo">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Retailerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Merchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MerchantCreateDate" Type="DateTime" Precision="3" />
+    <Property Name="OTPVerifyDate" Type="DateTime" Precision="3" />
+    <Property Name="MerchantCompleteDate" Type="DateTime" Precision="3" />
+    <Property Name="OtpverifyUniqueid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="KycUniqueid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="NifiStatename">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Stateid" Type="Int32" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrginalName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

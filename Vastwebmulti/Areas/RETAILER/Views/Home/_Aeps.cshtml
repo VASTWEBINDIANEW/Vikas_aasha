@@ -787,18 +787,21 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         $("#Devicerror").hide();
         $("#transferfnd").show();
         $("#transferser").show();
-
+        var chknmm = $('#checkapi').val()
+     
         $.ajax({
             url: '@Url.Action("AEPS","Home")',
             cache: false,
             type: "GET",
+            data: { apinameinfo:chknmm },
             //beforeSend: function() {
             //      $("#loadaeps").show();
             // },
             success: function (data) {
 
               var output = JSON.parse(data);
-              var status = output.status;
+                var status = output.status;
+
                 if (status == "OK") {
                     var frm = output.From;
 
@@ -827,6 +830,23 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                             }
                         }
                     }
+                    else if (frm == "Nifi")
+                    {
+                        var list = JSON.parse(output.banklist);
+                        var count = list.Content.ADDINFO.length;
+                            var i;
+                            var ddlCustomers = $("#banklistshow");
+                            ddlCustomers.append(
+                                $('<option></option>').val("").html("Select Bank")
+                            );
+                            for (i = 1; i < count; i++) {
+                                ddlCustomers.append(
+                                    $('<option></option>').val(list.Content.ADDINFO[i].BankIIN).html(list.Content.ADDINFO[i].BankName)
+                                );
+
+                            }
+                        
+                    }
                     else {
                         var list = JSON.parse(output.banklist);
                         var sts = list.status;
@@ -845,7 +865,7 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
                             }
                         }
-                        }
+                    }
 
                     var aepsid = output.aepsid;
                     $('#errormessgeshow').text("");
@@ -1153,7 +1173,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         var devicesrno = $('#devicesrno').val();
         var usernm = $('#txtusernm').val();
         var devicenm = $('#txtdevice').val();
-        var pidata = $('#pidata_doc').val();
+            var pidata = $('#pidata_doc').val();
+            var apinm = $('#checkapi').val()
             pidata = escape(pidata);
 
             var requestData = {
@@ -1172,7 +1193,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                 userotp: otpss,
                 pidata: pidata,
                 _isAeps2,
-                capxml
+                capxml,
+                apinm
             };
             var jsonData = JSON.stringify(requestData);
 
@@ -1190,10 +1212,12 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                         $('.loader').show();
                     },
                     success: function (data) {
+                  
                         var sts = data.Status;
-
+                      
                         if (sts == "Failed") {
                             var msg = data.Message;
+                       
 
                             $('#capAEPS').val("");
                             $('#capxml').val("");
@@ -1279,7 +1303,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
         var capxml = $('#capxml').val();
         var txtfee = $('#txtfee').val();
         var usernm = $('#txtusernm').val();
-        var devicenm = $('#txtdevice').val();
+            var devicenm = $('#txtdevice').val();
+            var apinm = $('#checkapi').val()
         var type = "";
         if (val == "balance") {
                type = "BE";
@@ -1308,7 +1333,8 @@ color: blue;margin-bottom: 3px;">Morpho</a>
                 usernm: usernm,
                 devicenm: devicenm,
                 pidata: pidata,
-                _isAeps2
+                _isAeps2,
+                apinm
             };
             var jsonData = JSON.stringify(requestData);
 
@@ -1347,9 +1373,9 @@ color: blue;margin-bottom: 3px;">Morpho</a>
 
                                     var len = mini_statement.length;
 
-                                    //var openbal = parseFloat(ouut.balanceAmount);
+                                    var openbal = parseFloat(ouut.balanceAmount);
 
-                                    var openbal = parseFloat(mini_statement[0].amount);
+                                   // var openbal = parseFloat(mini_statement[0].amount);
 
                                     var closebal = openbal;
                                     for (i = 0; i < len; i++) {

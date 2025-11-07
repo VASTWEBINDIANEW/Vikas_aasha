@@ -284,12 +284,13 @@
 <script src="~/Scripts/PageScript/Retailer/AEPS/Aeps_validate.js"></script>
 <script>
     function Genrateotpekyc() {
-  
+        var apinm = $('#checkapi').val()
         $('#verifyotperr').text("")
             $.ajax({
                 url: '@Url.Action("GenrateOtpEKYC", "Home")',
                 cache: false,
                 type: "POST",
+                data: {apinameinfo:apinm },
                 beforeSend: function () {
                     $(".loader").show();
                 },
@@ -327,6 +328,7 @@
             var otp = $('#txtotp').val();
             var primaryhide = $('#primaryhide').val();
             var encodehide = $('#encodehide').val();
+            var apinm = $('#checkapi').val()
             if (otp == "") {
                 $('#verifyotperr').text("Please Enter The OTP");
             }
@@ -335,7 +337,7 @@
                     url: '@Url.Action("VerifyotpEkyc", "Home")',
                     cache: false,
                     type: "POST",
-                    data: { otp:otp, primaryhide:primaryhide, encodehide:encodehide},
+                    data: { otp: otp, primaryhide: primaryhide, encodehide: encodehide, apinameinfo:apinm },
                     beforeSend: function () {
                         $(".loader").show();
                     },
@@ -343,7 +345,6 @@
                         var output = data;//JSON.parse(data);
                         var status = output.Status;
                         var msg = output.Message;
-                        status = "Success";
                         if (status == "Success") {
                             $('#divotpsend').hide();
                             $('#verifyotp').hide();
@@ -393,10 +394,11 @@
             var capxml= $('#capxml').val();
             var devicesrno = $('#device_srno').val();
             var devicenm = $('#txtdevice').val();
+            var apinm = $('#checkapi').val()
             $('#namechnage').hide();
             $('#EditName').show();
             $('#updatename').hide();
-
+            console.log(capxml)
             if (cap == "") {
                 $('#errdevicefind').text("Please Scan Again");
             }
@@ -405,7 +407,7 @@
                     url: '@Url.Action("ValidateDeviceinfo", "Home")',
                     cache: false,
                     type: "POST",
-                    data: { cap: cap, devicesrno: devicesrno, devicenm: devicenm },
+                    data: { cap: cap, capxml: encodeURIComponent(capxml), devicesrno: devicesrno, devicenm: devicenm, activeapinm:apinm },
                     beforeSend: function () {
                         $(".loader").show();
                     },
