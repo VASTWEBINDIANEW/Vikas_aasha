@@ -722,16 +722,22 @@ function CaptureAvdm() {
             $("#cap").val(JSON.stringify(captureJson));
             txtPidOptions = XML;
             var $doc;
+            var infokkk;
             if (DeviceKonsi == "Mantra") {
                 $doc = $.parseXML(data);
+                infokkk = data;
             } else if (DeviceKonsi == "Morpho") {
                 $doc = data;
+                const xmlText = new XMLSerializer().serializeToString(data);
+                infokkk = xmlText;
             }
             else if (DeviceKonsi == "Startek") {
                 $doc = data;
+     
+                infokkk = data;
             }
           
-            $("#capxml").val($doc);
+            $("#capxml").val(infokkk);
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {

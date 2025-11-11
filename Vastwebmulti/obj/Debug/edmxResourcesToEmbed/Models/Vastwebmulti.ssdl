@@ -284,6 +284,16 @@
     <Property Name="status" Type="bit" />
     <Property Name="insertdate" Type="datetime" />
   </EntityType>
+  <EntityType Name="Aeps_2Fa_Status_nifi">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="50" />
+    <Property Name="Aepsmerchantid" Type="varchar" MaxLength="50" />
+    <Property Name="status" Type="bit" />
+    <Property Name="insertdate" Type="datetime" />
+  </EntityType>
   <EntityType Name="Aeps_aadharpay_comm">
     <Key>
       <PropertyRef Name="idno" />
@@ -9404,6 +9414,10 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="moneysts1" Type="bit" />
     <Property Name="moneyppi" Type="bit" />
     <Property Name="payout" Type="bit" />
+    <Property Name="pincode1" Type="varchar" MaxLength="50" />
+    <Property Name="pincode2" Type="varchar" MaxLength="50" />
+    <Property Name="pincode3" Type="varchar" MaxLength="50" />
+    <Property Name="pincode4" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Retailer_invoice_Numbers">
     <Key>
@@ -21542,6 +21556,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="AdminProfileAllUserOTP" EntityType="Self.AdminProfileAllUserOTP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_2Fa_Status" EntityType="Self.Aeps_2Fa_Status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_2Fa_Status_aadharpay" EntityType="Self.Aeps_2Fa_Status_aadharpay" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Aeps_2Fa_Status_nifi" EntityType="Self.Aeps_2Fa_Status_nifi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_aadharpay_comm" EntityType="Self.Aeps_aadharpay_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AEPS_comm_details" EntityType="Self.AEPS_comm_details" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Aeps_comm_Dlm_rem" EntityType="Self.Aeps_comm_Dlm_rem" Schema="dbo" store:Type="Tables" />

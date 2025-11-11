@@ -109,6 +109,10 @@ namespace Vastwebmulti.Models
         public Nullable<bool> moneysts1 { get; set; }
         public Nullable<bool> moneyppi { get; set; }
         public Nullable<bool> payout { get; set; }
+        public string pincode1 { get; set; }
+        public string pincode2 { get; set; }
+        public string pincode3 { get; set; }
+        public string pincode4 { get; set; }
     
         public virtual AEPS_Merchants AEPS_Merchants { get; set; }
         public virtual RetailerOutlet RetailerOutlet { get; set; }

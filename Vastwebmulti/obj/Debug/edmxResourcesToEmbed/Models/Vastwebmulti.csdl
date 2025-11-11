@@ -7643,6 +7643,7 @@
     </FunctionImport>
     <EntitySet Name="Nifipaymerchantinfoes" EntityType="VastwebmultiModel.Nifipaymerchantinfo" />
     <EntitySet Name="NifiStatenames" EntityType="VastwebmultiModel.NifiStatename" />
+    <EntitySet Name="Aeps_2Fa_Status_nifi" EntityType="VastwebmultiModel.Aeps_2Fa_Status_nifi" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -31343,6 +31344,10 @@
     <Property Name="moneysts1" Type="Boolean" />
     <Property Name="moneyppi" Type="Boolean" />
     <Property Name="payout" Type="Boolean" />
+    <Property Name="pincode1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK__AEPS_Merc__UserI__46D346CA">
     <End Type="VastwebmultiModel.Retailer_Details" Role="Retailer_Details" Multiplicity="1" />
@@ -33317,5 +33322,15 @@
     <Property Name="Stateid" Type="Int32" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="OrginalName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Aeps_2Fa_Status_nifi">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Aepsmerchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>
