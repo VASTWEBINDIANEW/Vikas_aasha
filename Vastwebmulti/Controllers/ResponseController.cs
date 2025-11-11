@@ -10485,11 +10485,36 @@ namespace Vastwebmulti.Controllers
             return str;
         }
         
-        public  string test()
+        public  string test(string lat,string longitude)
         {
-            AppNotification app = new AppNotification();
-           var resp= app.sendmessage("","NOtification Test CHeck");
-            return resp;
+            decimal latlong = 0;
+            decimal longlong = 0;
+            try
+            {
+                 latlong = Convert.ToDecimal(lat);
+                 longlong = Convert.ToDecimal(longitude);
+            }
+            catch { }
+            if (IsValidLatitudeLongitude(latlong, longlong) == false)
+            {
+                var result = GenerateRandomLocationInIndia();
+                lat = result.Item1.ToString();
+                longitude = result.Item2.ToString();
+            }
+            return "";
+        }
+        private static readonly Random _random = new Random();
+        private static Tuple<double, double> GenerateRandomLocationInIndia()
+        {
+            double minLat = 8.0;   // South (Kanyakumari)
+            double maxLat = 37.0;  // North (Jammu & Kashmir)
+            double minLon = 68.0;  // West (Gujarat)
+            double maxLon = 97.0;  // East (Arunachal Pradesh)
+
+            double randomLat = minLat + (_random.NextDouble() * (maxLat - minLat));
+            double randomLon = minLon + (_random.NextDouble() * (maxLon - minLon));
+
+            return System.Tuple.Create(randomLat, randomLon);
         }
         public void insertGeoLocation(string userid, out string lat, out string longitude)
         {

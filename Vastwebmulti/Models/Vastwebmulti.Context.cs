@@ -901,6 +901,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Retailer_to_Dealer> Retailer_to_Dealer { get; set; }
         public virtual DbSet<Nifipaymerchantinfo> Nifipaymerchantinfoes { get; set; }
         public virtual DbSet<NifiStatename> NifiStatenames { get; set; }
+        public virtual DbSet<Aeps_2Fa_Status_nifi> Aeps_2Fa_Status_nifi { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

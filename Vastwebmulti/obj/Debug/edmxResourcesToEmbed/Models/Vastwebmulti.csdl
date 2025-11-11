@@ -7643,6 +7643,7 @@
     </FunctionImport>
     <EntitySet Name="Nifipaymerchantinfoes" EntityType="VastwebmultiModel.Nifipaymerchantinfo" />
     <EntitySet Name="NifiStatenames" EntityType="VastwebmultiModel.NifiStatename" />
+    <EntitySet Name="Aeps_2Fa_Status_nifi" EntityType="VastwebmultiModel.Aeps_2Fa_Status_nifi" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -30749,6 +30750,45 @@
     <Property Name="status" Type="Boolean" />
     <Property Name="insertdate" Type="DateTime" Precision="3" />
   </EntityType>
+  <ComplexType Name="reminfo_Result">
+    <Property Type="String" Name="RetailerName" Nullable="false" MaxLength="150" />
+    <Property Type="String" Name="Mobile" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Address" Nullable="false" />
+    <Property Type="Int32" Name="Pincode" Nullable="false" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
+    <Property Type="String" Name="Frm_Name" Nullable="true" MaxLength="75" />
+    <Property Type="String" Name="AadharCard" Nullable="true" MaxLength="12" />
+    <Property Type="String" Name="PanCard" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="gst" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="dateofbirth" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="pancardPath" Nullable="true" />
+    <Property Type="String" Name="aadharcardPath" Nullable="true" />
+    <Property Type="String" Name="frimregistrationPath" Nullable="true" />
+    <Property Type="String" Name="AadhaarStatus" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="Agreementpath" Nullable="true" />
+    <Property Type="String" Name="PSAStatus" Nullable="true" MaxLength="1" />
+    <Property Type="Boolean" Name="IsAgreement" Nullable="true" />
+    <Property Type="String" Name="BackSideAadharcardphoto" Nullable="true" />
+    <Property Type="String" Name="ShopwithSalfie" Nullable="true" />
+    <Property Type="String" Name="ShopwithSalfieStatus" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Dist_Desc" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="State_name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="vastbazaarsts" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DealerName" Nullable="true" MaxLength="150" />
+    <Property Type="Int32" Name="dlmpin" Nullable="true" />
+    <Property Type="String" Name="dlmfirm" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="dlmmobile" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="dlmstate" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="dealerdistrict" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="dlmemail" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="mstername" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="msterfirmname" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="mstermobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="msteremail" Nullable="true" MaxLength="150" />
+    <Property Type="Int32" Name="mstrpin" Nullable="true" />
+    <Property Type="String" Name="msterstatename" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="msterdistictname" Nullable="true" MaxLength="150" />
+  </ComplexType>
   <EntityType Name="ADDNEWSERVICE">
     <Key>
       <PropertyRef Name="idno" />
@@ -33283,47 +33323,14 @@
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="OrginalName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <ComplexType Name="reminfo_Result">
-    <Property Type="String" Name="RetailerName" Nullable="false" MaxLength="150" />
-    <Property Type="String" Name="Mobile" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="Address" Nullable="false" />
-    <Property Type="Int32" Name="Pincode" Nullable="false" />
-    <Property Type="String" Name="Email" Nullable="false" MaxLength="150" />
-    <Property Type="String" Name="Frm_Name" Nullable="true" MaxLength="75" />
-    <Property Type="String" Name="AadharCard" Nullable="true" MaxLength="12" />
-    <Property Type="String" Name="PanCard" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="gst" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="dateofbirth" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="pancardPath" Nullable="true" />
-    <Property Type="String" Name="aadharcardPath" Nullable="true" />
-    <Property Type="String" Name="frimregistrationPath" Nullable="true" />
-    <Property Type="String" Name="AadhaarStatus" Nullable="true" MaxLength="1" />
-    <Property Type="String" Name="Agreementpath" Nullable="true" />
-    <Property Type="String" Name="PSAStatus" Nullable="true" MaxLength="1" />
-    <Property Type="Boolean" Name="IsAgreement" Nullable="true" />
-    <Property Type="String" Name="BackSideAadharcardphoto" Nullable="true" />
-    <Property Type="String" Name="ShopwithSalfie" Nullable="true" />
-    <Property Type="String" Name="ShopwithSalfieStatus" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="Dist_Desc" Nullable="true" MaxLength="150" />
-    <Property Type="String" Name="State_name" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="vastbazaarsts" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="DealerName" Nullable="true" MaxLength="150" />
-    <Property Type="Int32" Name="dlmpin" Nullable="true" />
-    <Property Type="String" Name="dlmfirm" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="dlmmobile" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="dlmstate" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="dealerdistrict" Nullable="true" MaxLength="150" />
-    <Property Type="String" Name="dlmemail" Nullable="true" MaxLength="150" />
-    <Property Type="String" Name="pincode1" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="pincode2" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="pincode3" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="pincode4" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="mstername" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="msterfirmname" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="mstermobile" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="msteremail" Nullable="true" MaxLength="150" />
-    <Property Type="Int32" Name="mstrpin" Nullable="true" />
-    <Property Type="String" Name="msterstatename" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="msterdistictname" Nullable="true" MaxLength="150" />
-  </ComplexType>
+  <EntityType Name="Aeps_2Fa_Status_nifi">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Aepsmerchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
+  </EntityType>
 </Schema>

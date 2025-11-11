@@ -43,10 +43,6 @@ namespace Vastwebmulti.Models
         public string dlmstate { get; set; }
         public string dealerdistrict { get; set; }
         public string dlmemail { get; set; }
-        public string pincode1 { get; set; }
-        public string pincode2 { get; set; }
-        public string pincode3 { get; set; }
-        public string pincode4 { get; set; }
         public string mstername { get; set; }
         public string msterfirmname { get; set; }
         public string mstermobile { get; set; }
