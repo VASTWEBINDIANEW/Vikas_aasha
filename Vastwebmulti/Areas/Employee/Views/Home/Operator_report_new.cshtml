@@ -1877,6 +1877,7 @@
         $.each($("input[name='datavalue']:checked"), function () {
 
             var val = $(this).val();
+
             var split = val.split("-");
             var id = split[0].trim();
             var rstatus = split[1].trim();
@@ -1884,6 +1885,7 @@
             var mobile = split[3].trim();
             var Operator_name = split[4].trim();
             var amount = split[5].trim();
+            var circle = split[6].trim();
             rstatus = rstatus.trim();
             if (rstatus.includes("Req")) {
                 rstatus = "Pending";
@@ -1892,7 +1894,7 @@
             if (rstatus.toUpperCase() == "PENDING") {
                 tableBody = $("#resresendtable");
 
-                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td>" + mobile + "</td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
+                markup = "<tr><td>" + int + "</td><td>" + rstatus + "</td><td>" + name + "</td><td>" + mobile + " <br/> <small>" + circle + "</small> </td><td>" + Operator_name + "</td><td>" + amount + "</td></tr>";
                 tableBody.append(markup);
                 favorite.push(id);
                 int++;
@@ -1901,7 +1903,6 @@
         $("#hiddenidR").val(favorite);
     }
 </script>
-
 <script>
     function Resendall() {
         var idnval = $('#hiddenidR').val();

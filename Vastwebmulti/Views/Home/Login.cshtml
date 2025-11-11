@@ -149,6 +149,10 @@
     }
     <style>
 
+        #signupform .for-border-effect {
+            margin-bottom: 8px;
+        }
+
 /*        #CaptchaInput::placeholder {
             font-size: 20px;
         }*/
@@ -621,18 +625,18 @@ margin-top: 10px;}
                                            
 
                                             <div class="tab-1 resp-tab-content" id="signupform">
-                                                <div class="login-top sign-top">
+                                                <div class="login-top sign-top" style=" padding-bottom: 16px;">
 
                                                     <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-12" style="margin-top:-15px;">
 
                                                             <div class="alert alert-danger text-center p-2 mb-2"
-                                                                 style="border-radius: 10px; font-size: 14px;">
+                                                                 style="border-radius: 10px; font-size: 14px; padding: 4px 8px !important;">
                                                                 <strong>🔑 Please verify the Captcha first.</strong><br />
 
 
                                                                 @*Captcha start  *@
-                                                            <div class="row" style=" margin-top: 1rem; ">
+                                                            <div class="row" style=" margin-top: 5px; ">
                                                                 <!-- Captcha Display & Refresh -->
                                                                 <div class="col-md-6 mb-3" style="margin-bottom:.1rem !important; ">
                                                                     <div class="d-flex align-items-center justify-content-between bg-light border rounded p-2"
@@ -644,9 +648,7 @@ margin-top: 10px;}
                                                                         </span>
 
                                                                         <!-- Refresh Button -->
-                                                                        <button type="button" id="refreshCaptcha"
-                                                                                class="btn btn-outline-primary btn-sm d-flex align-items-center"
-                                                                                style="border-radius: 50px;">
+                                                                        <button type="button" id="refreshCaptcha" class="btn btn-outline-primary btn-sm d-flex align-items-center" style="border-radius: 50px;">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30">
                                                                                 <path d="M 15 3 C 12.031398 3 9.3028202 4.0834384 7.2070312 5.875 A 1.0001 1.0001 0 1 0 8.5058594 7.3945312 C 10.25407 5.9000929 12.516602 5 15 5 C 20.19656 5 24.450989 8.9379267 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.437925 7.8516588 21.277839 3 15 3 z M 4 10 L 0 16 L 3.0507812 16 C 3.562075 22.148341 8.7221607 27 15 27 C 17.968602 27 20.69718 25.916562 22.792969 24.125 A 1.0001 1.0001 0 1 0 21.494141 22.605469 C 19.74593 24.099907 17.483398 25 15 25 C 9.80344 25 5.5490109 21.062074 5.0488281 16 L 8 16 L 4 10 z">
                                                                                 </path>
@@ -667,8 +669,7 @@ margin-top: 10px;}
                                                                                style="letter-spacing: 0.5px; max-width: 150px; margin-left: -25px; height: 37px; border-radius: 3px;">
 
                                                                         <!-- Verify Button -->
-                                                                        <button type="button" id="verifyCaptchaBtn" class="btn btn-success btn-sm d-flex align-items-center" style="height: 34px; justify-content: center;
-          font-size: .9rem; width: 5rem" ;>
+                                                                        <button type="button" id="verifyCaptchaBtn" class="btn btn-success btn-sm d-flex align-items-center" style="height: 34px; justify-content: center; font-size: .9rem; width: 5rem" ;>
                                                                             <i class="bi bi-check2-circle me-1"></i> Verify
                                                                         </button>
 
@@ -851,7 +852,7 @@ margin-top: 10px;}
                                                             </div>
                                                             <div class="col-md-6" style="margin-top:5px;">
                                                                 @*<input type="checkbox" id="referrral" onclick="myFunction()" style="float:left;"><span id="referrral1" style="float: left;font-size: 15px;margin-top: -5px;margin-left:3px;color:#999;">Have a referral code</span>*@
-                                                                <div class="for-border-effect" style="position: absolute;top: -11px;right: 14px;width: 78%;">
+                                                                <div class="for-border-effect" style="position: absolute;top: -8px;right: 14px;width: 78%;">
                                                                     @Html.ValidationMessageFor(m => m.referralcode, "", new { @class = "text-danger" })
                                                                     @if (TempData["referralerror"] != null)
                                                                     {
@@ -1022,6 +1023,8 @@ margin-top: 10px;}
     <script src="~/NewLoginDesign/js/easyResponsiveTabs.js"></script>
     <script src="~/Swalalert/sweetalert-dev.js"></script>
     <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+
 
     <script>
         function toggleSignupForm(adminFree, signupFree) {
@@ -2085,6 +2088,7 @@ margin-top: 10px;}
 
         // 🔄 Captcha Refresh
         $("#refreshCaptcha").click(function () {
+    
             $.get('@Url.Action("RefreshCaptcha", "Home")', function (data) {
                 $("#captcha-text").text(data.Captcha); // New Captcha show
                 $("#CaptchaInput").val("").prop("disabled", false);
