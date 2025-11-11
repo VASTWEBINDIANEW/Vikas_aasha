@@ -711,18 +711,23 @@ function CaptureAvdm() {
             //$('#txtPidOptions').val(XML); AJ
             txtPidOptions = XML;
             var $doc;
+            var infochkkk;
             if (DeviceKonsi == "Mantra") {
                 $doc = $.parseXML(data);
+                infochkkk = data;
 
             } else if (DeviceKonsi == "Morpho") {
                 $doc = data;
+                const xmlText = new XMLSerializer().serializeToString(data);
+                infochkkk = xmlText;
             }
             else if (DeviceKonsi == "Startek") {
                 /*   console.log(data)*/
                 $doc = data;
+                infochkkk = data;
             }
-            $("#capxml").val($doc);
-         
+            $("#capxml").val(infochkkk);
+
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {

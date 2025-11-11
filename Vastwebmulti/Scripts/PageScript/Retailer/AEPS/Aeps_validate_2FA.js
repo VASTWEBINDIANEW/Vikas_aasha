@@ -436,7 +436,7 @@ function discoverAvdm() {
         var jsonstr = "";
         var data = new Object();
         var obj = new Object();
-    
+
         //  console.log(primaryUrl + i.toString());
         $.ajax({
             type: "RDSERVICE",
@@ -448,7 +448,7 @@ function discoverAvdm() {
             cache: false,
             crossDomain: true,
             success: function (data, status, xhr) {
-       
+
                 //  console.log("success()");
                 var ct = xhr.getResponseHeader("content-type") || "";
                 // console.log(ct);
@@ -465,13 +465,13 @@ function discoverAvdm() {
                 } else {
                     $doc = data;
                 }
-          
+
                 //if (ct.indexOf('TEXT/XML') > -1) {
                 //    console.log('TEXT/XML response');
                 //}
 
                 var status = $($doc).find('RDService').attr('status');
-              
+
 
                 //var $doc = $.parseXML(data);
                 //console.log("2");
@@ -514,7 +514,7 @@ function discoverAvdm() {
                     }
                     else if (RegExp('\\b' + 'Startek' + '\\b').test(CmbData2) == true || RegExp('\\b' + 'L1 provided by Access Computech' + '\\b').test(CmbData2) == true) {
                         DeviceKonsi = 'Startek';
-                       
+
                         //  closeNav();
                         // console.log("Startek found");
                         //$("#txtDeviceInfo").val(data); aj
@@ -716,22 +716,27 @@ function CaptureAvdm() {
             res = { httpStaus: httpStaus, data: data };
             // $('#txtPidData').val(data); AJ
             txtPidData = data;
-          
+
 
             //$('#txtPidOptions').val(data); AJ
             $("#cap").val(JSON.stringify(captureJson));
             txtPidOptions = XML;
             var $doc;
+            var infochkkk;
             if (DeviceKonsi == "Mantra") {
                 $doc = $.parseXML(data);
+                infochkkk = data;
             } else if (DeviceKonsi == "Morpho") {
                 $doc = data;
+                const xmlText = new XMLSerializer().serializeToString(data);
+                infochkkk = xmlText;
             }
             else if (DeviceKonsi == "Startek") {
                 $doc = data;
+                infochkkk = data;
             }
-          
-            $("#capxml").val($doc);
+
+            $("#capxml").val(infochkkk);
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {
