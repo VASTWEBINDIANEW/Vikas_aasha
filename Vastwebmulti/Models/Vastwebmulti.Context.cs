@@ -902,6 +902,14 @@ namespace Vastwebmulti.Models
         public virtual DbSet<Nifipaymerchantinfo> Nifipaymerchantinfoes { get; set; }
         public virtual DbSet<NifiStatename> NifiStatenames { get; set; }
         public virtual DbSet<Aeps_2Fa_Status_nifi> Aeps_2Fa_Status_nifi { get; set; }
+        public virtual DbSet<paytm_imps_api_commUPI> paytm_imps_api_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_common_commUPI> paytm_imps_common_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_dealer_commUPI> paytm_imps_dealer_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_dlm_rem_commUPI> paytm_imps_dlm_rem_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_master_commUPI> paytm_imps_master_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_retailer_commUPI> paytm_imps_retailer_commUPI { get; set; }
+        public virtual DbSet<paytm_imps_whitelabel_commUPI> paytm_imps_whitelabel_commUPI { get; set; }
+        public virtual DbSet<KotakQRDetail> KotakQRDetails { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -23966,6 +23974,51 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("ssid", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retailer_to_delaer_transfer_Result>("retailer_to_delaer_transfer", useridParameter, ssidParameter, output);
+        }
+    
+        public virtual ObjectResult<string> UPI_TXN_KOTAK(string role, string userid, string txnid, Nullable<decimal> amount, string status, string payername, string payvpn, string bankrrn, string response, string apiname, ObjectParameter output)
+        {
+            var roleParameter = role != null ?
+                new ObjectParameter("role", role) :
+                new ObjectParameter("role", typeof(string));
+    
+            var useridParameter = userid != null ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(string));
+    
+            var txnidParameter = txnid != null ?
+                new ObjectParameter("txnid", txnid) :
+                new ObjectParameter("txnid", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("amount", amount) :
+                new ObjectParameter("amount", typeof(decimal));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var payernameParameter = payername != null ?
+                new ObjectParameter("payername", payername) :
+                new ObjectParameter("payername", typeof(string));
+    
+            var payvpnParameter = payvpn != null ?
+                new ObjectParameter("payvpn", payvpn) :
+                new ObjectParameter("payvpn", typeof(string));
+    
+            var bankrrnParameter = bankrrn != null ?
+                new ObjectParameter("bankrrn", bankrrn) :
+                new ObjectParameter("bankrrn", typeof(string));
+    
+            var responseParameter = response != null ?
+                new ObjectParameter("response", response) :
+                new ObjectParameter("response", typeof(string));
+    
+            var apinameParameter = apiname != null ?
+                new ObjectParameter("apiname", apiname) :
+                new ObjectParameter("apiname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("UPI_TXN_KOTAK", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
         }
     }
 }

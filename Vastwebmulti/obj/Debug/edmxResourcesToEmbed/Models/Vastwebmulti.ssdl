@@ -4142,6 +4142,46 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.District_Desc' does not have
     <Property Name="tokenval" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Commtoken" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
+  <EntityType Name="KotakQRDetails">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Retailerid" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="GatewayReferenceId" Type="varchar" MaxLength="200" />
+    <Property Name="GatewayResponseMessage" Type="nvarchar(max)" />
+    <Property Name="GatewayResponseStatus" Type="varchar" MaxLength="100" />
+    <Property Name="GatewayTransactionId" Type="varchar" MaxLength="200" />
+    <Property Name="MerchantChannelId" Type="varchar" MaxLength="200" />
+    <Property Name="MerchantId" Type="varchar" MaxLength="200" />
+    <Property Name="MerchantRequestId" Type="varchar" MaxLength="200" />
+    <Property Name="PayeeMcc" Type="varchar" MaxLength="50" />
+    <Property Name="PayeeVpa" Type="varchar" MaxLength="200" />
+    <Property Name="PayeeName" Type="varchar" MaxLength="200" />
+    <Property Name="PayerAccBin" Type="varchar" MaxLength="50" />
+    <Property Name="PayerActype" Type="varchar" MaxLength="50" />
+    <Property Name="PayerIfsc" Type="varchar" MaxLength="20" />
+    <Property Name="PayerName" Type="varchar" MaxLength="200" />
+    <Property Name="PayerVpa" Type="varchar" MaxLength="200" />
+    <Property Name="SubMerchantChannelId" Type="varchar" MaxLength="200" />
+    <Property Name="SubMerchantId" Type="varchar" MaxLength="200" />
+    <Property Name="TransactionTimestamp" Type="varchar" MaxLength="50" />
+    <Property Name="Type" Type="varchar" MaxLength="50" />
+    <Property Name="RetailerMobile" Type="varchar" MaxLength="20" />
+    <Property Name="RequestDate" Type="datetime" Nullable="false" />
+    <Property Name="ResponseDate" Type="datetime" />
+    <Property Name="APIRequest" Type="nvarchar(max)" />
+    <Property Name="APIResponse" Type="nvarchar(max)" />
+    <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="AdminRemainPre" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="AdminRemainPost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="CallBackResponse" Type="nvarchar(max)" />
+    <Property Name="Responsemessage" Type="nvarchar(max)" />
+    <Property Name="Customertype" Type="varchar" MaxLength="50" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="LapuDetails">
@@ -6284,6 +6324,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_24000" Type="varchar" MaxLength="50" />
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="paytm_imps_api_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="paytm_imps_common_comm">
     <Key>
       <PropertyRef Name="idno" />
@@ -6374,6 +6503,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="paytm_imps_common_comm1">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usertype" Type="varchar" MaxLength="50" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="paytm_imps_common_commUPI">
     <Key>
       <PropertyRef Name="idno" />
     </Key>
@@ -6640,6 +6858,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_24000" Type="varchar" MaxLength="50" />
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="paytm_imps_dealer_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="paytm_imps_dlm_rem_comm">
     <Key>
       <PropertyRef Name="idno" />
@@ -6730,6 +7037,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="paytm_imps_dlm_rem_comm1">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="paytm_imps_dlm_rem_commUPI">
     <Key>
       <PropertyRef Name="idno" />
     </Key>
@@ -6996,6 +7392,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_24000" Type="varchar" MaxLength="50" />
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="paytm_imps_master_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="paytm_imps_retailer_comm">
     <Key>
       <PropertyRef Name="idno" />
@@ -7086,6 +7571,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Type_25000" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="paytm_imps_retailer_comm1">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="paytm_imps_retailer_commUPI">
     <Key>
       <PropertyRef Name="idno" />
     </Key>
@@ -7388,6 +7962,95 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="tds_sts" Type="bit" />
   </EntityType>
   <EntityType Name="paytm_imps_whitelabel_comm1">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="100" />
+    <Property Name="verify_comm" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="bit" />
+    <Property Name="tds_sts" Type="bit" />
+    <Property Name="per_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_1000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_2000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_3000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_4000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_5000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_6000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_7000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_8000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_9000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_10000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_11000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_12000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_13000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_14000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_15000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_16000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_17000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_18000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_19000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_20000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_21000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_22000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_23000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_24000" Type="varchar" MaxLength="50" />
+    <Property Name="Type_25000" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="paytm_imps_whitelabel_commUPI">
     <Key>
       <PropertyRef Name="idno" />
     </Key>
@@ -20700,6 +21363,19 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="apiname" Type="varchar" Mode="In" />
     <Parameter Name="output" Type="varchar" Mode="InOut" />
   </Function>
+  <Function Name="UPI_TXN_KOTAK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="role" Type="varchar" Mode="In" />
+    <Parameter Name="userid" Type="varchar" Mode="In" />
+    <Parameter Name="txnid" Type="varchar" Mode="In" />
+    <Parameter Name="amount" Type="decimal" Mode="In" />
+    <Parameter Name="status" Type="varchar" Mode="In" />
+    <Parameter Name="payername" Type="nvarchar" Mode="In" />
+    <Parameter Name="payvpn" Type="varchar" Mode="In" />
+    <Parameter Name="bankrrn" Type="varchar" Mode="In" />
+    <Parameter Name="response" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="apiname" Type="varchar" Mode="In" />
+    <Parameter Name="output" Type="varchar" Mode="InOut" />
+  </Function>
   <Function Name="User_wise_comm_report" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="type" Type="varchar" Mode="In" />
     <Parameter Name="userid" Type="varchar" Mode="In" />
@@ -21807,6 +22483,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="IRCTC_master_Common_comm" EntityType="Self.IRCTC_master_Common_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IRCTC_retailer_Common_comm" EntityType="Self.IRCTC_retailer_Common_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IRCTC_whitelabel_Common_comm" EntityType="Self.IRCTC_whitelabel_Common_comm" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KotakQRDetails" EntityType="Self.KotakQRDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="lapumaster" EntityType="Self.lapumaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="latlongstore" EntityType="Self.latlongstore" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LedgerReport" EntityType="Self.LedgerReport" Schema="dbo" store:Type="Tables" />
@@ -21932,20 +22609,27 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="PaymentGatewaycharge_new_dlm_rem" EntityType="Self.PaymentGatewaycharge_new_dlm_rem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_api_comm" EntityType="Self.paytm_imps_api_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_api_comm1" EntityType="Self.paytm_imps_api_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_api_commUPI" EntityType="Self.paytm_imps_api_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_common_comm" EntityType="Self.paytm_imps_common_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_common_comm1" EntityType="Self.paytm_imps_common_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_common_commUPI" EntityType="Self.paytm_imps_common_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_dealer_comm" EntityType="Self.paytm_imps_dealer_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_dealer_comm1" EntityType="Self.paytm_imps_dealer_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_dealer_commUPI" EntityType="Self.paytm_imps_dealer_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_dlm_rem_comm" EntityType="Self.paytm_imps_dlm_rem_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_dlm_rem_comm1" EntityType="Self.paytm_imps_dlm_rem_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_dlm_rem_commUPI" EntityType="Self.paytm_imps_dlm_rem_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_master_comm" EntityType="Self.paytm_imps_master_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_master_comm1" EntityType="Self.paytm_imps_master_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_master_commUPI" EntityType="Self.paytm_imps_master_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_retailer_comm" EntityType="Self.paytm_imps_retailer_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_retailer_comm1" EntityType="Self.paytm_imps_retailer_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_retailer_commUPI" EntityType="Self.paytm_imps_retailer_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_comm" EntityType="Self.paytm_imps_whitelabel_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_comm_comm" EntityType="Self.paytm_imps_whitelabel_comm_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_comm_comm1" EntityType="Self.paytm_imps_whitelabel_comm_comm1" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_comm1" EntityType="Self.paytm_imps_whitelabel_comm1" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="paytm_imps_whitelabel_commUPI" EntityType="Self.paytm_imps_whitelabel_commUPI" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_dealer_comm" EntityType="Self.paytm_imps_whitelabel_dealer_comm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_dealer_comm1" EntityType="Self.paytm_imps_whitelabel_dealer_comm1" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="paytm_imps_whitelabel_Retailer_comm" EntityType="Self.paytm_imps_whitelabel_Retailer_comm" Schema="dbo" store:Type="Tables" />
