@@ -716,7 +716,10 @@ function CaptureAvdm() {
                 $doc = $.parseXML(data);
                 infochkkk = data;
 
-            } else if (DeviceKonsi == "Morpho") {
+            }
+
+
+            else if (DeviceKonsi == "Morpho") {
                 $doc = data;
                 const xmlText = new XMLSerializer().serializeToString(data);
                 infochkkk = xmlText;

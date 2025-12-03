@@ -1793,9 +1793,21 @@ namespace Vastwebmulti.Controllers
                             setopt.forgetpin = Convert.ToString(pin);
                             db.SaveChanges();
 
+
                             apiurls = smsapionsts2.smsapi;
                             string text = "Your Forget Password otp is " + pin;
                             text = string.Format(text, "1230");
+
+                            var forgetotp = db.Email_show_passcode.SingleOrDefault();
+
+                            if (forgetotp?.forgetotp == true)
+                            {
+                                smssend.sms_init("Y", "Y", "ForgetPassOtp", details.PhoneNumber, text);
+                            }
+
+
+
+
 
                             var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
 
@@ -1833,55 +1845,13 @@ namespace Vastwebmulti.Controllers
                         }
                         var AdminDetails = db.Admin_details.SingleOrDefault();
 
+
                         smssend.SendEmailAll(details.Email, "Your Forget Password otp is " + pin, "Forget Password OTP", AdminDetails.email);
 
 
 
 
 
-
-                        // var smsapionsts = smsapi2.Where(s => s.api_type == "sms").SingleOrDefault();
-                        //if (smsapionsts != null)
-                        //{
-
-                        //    apiurls = smsapionsts.smsapi;
-                        //    string text = "Your New Password is  81108706 Thank you for business with us Regards Vast Web India Pvt Ltd";
-                        //    text = string.Format(text, "1230");
-
-                        //    var apinamechange = apiurls.Replace("tttt", details.PhoneNumber).Replace("mmmm", text);
-
-                        //    var client = new RestClient(apinamechange);
-                        //    var request = new RestRequest(Method.GET);
-
-                        //    VastBazaartoken Responsetoken = new VastBazaartoken();
-
-                        //    if (apinamechange.ToUpper().Contains("VASTBAZAAR.COM"))
-                        //    {
-                        //        var token = Responsetoken.gettoken();
-                        //        request.AddHeader("authorization", "bearer " + token);
-                        //        request.AddHeader("content-type", "application/json");
-                        //    }
-                        //    var task = Task.Run(() =>
-                        //    {
-                        //        return client.Execute(request).Content;
-                        //    });
-                        //    bool isCompletedSuccessfully = task.Wait(TimeSpan.FromSeconds(10000));
-                        //    var resp = "";
-                        //    if (isCompletedSuccessfully == true)
-                        //    {
-                        //        resp = task.Result;
-                        //    }
-
-                        //    sms_api_entry sms = new sms_api_entry();
-                        //    sms.apiname = apinamechange;
-                        //    sms.msg = text;
-                        //    sms.m_date = System.DateTime.Now;
-                        //    sms.response = resp;
-                        //    sms.messagefor = details.UserId;
-                        //    db.sms_api_entry.Add(sms);
-                        //    db.SaveChanges();
-
-                        //}
                     }
                 }
             }
