@@ -343,6 +343,12 @@ function discoverAvdmFirstNode(PortNo) {
     txtPidData = '';
     //alert(PortNo);
     var primaryUrl = "http://127.0.0.1:";
+    try {
+        var protocol = window.location.href;
+        if (protocol.indexOf("https") >= 0) {
+            primaryUrl = "https://127.0.0.1:";
+        }
+    } catch (e) { }
     url = "";
     var verb = "RDSERVICE";
     var err = "";
@@ -413,9 +419,9 @@ function discoverAvdm() {
     var primaryUrl = "http://127.0.0.1:";
     try {
         var protocol = window.location.href;
-        //if (protocol.indexOf("https") >= 0) {
-        //    primaryUrl = "https://127.0.0.1:";
-        //}
+        if (protocol.indexOf("https") >= 0) {
+            primaryUrl = "https://127.0.0.1:";
+        }
     } catch (e) { }
     url = "";
     //$("#ddlAVDM").empty();
@@ -611,9 +617,12 @@ function deviceInfoAvdm() {
     //alert($("#ddlAVDM").val());
     // ddlAVDM.empty(); 
     url = "";
-    // alert(i.toString()); 
+    // alert(i.toString());
     // $("#lblStatus").text("Discovering RD Service on Port : " + i.toString());
     //Dynamic URL
+
+
+
 
     //finalUrl = "http://127.0.0.1:" + $("#ddlAVDM").val(); AJ
     finalUrl = "http://127.0.0.1:" + ddlAVDM;

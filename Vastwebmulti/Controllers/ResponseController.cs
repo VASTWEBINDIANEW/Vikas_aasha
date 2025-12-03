@@ -3772,6 +3772,242 @@ namespace Vastwebmulti.Controllers
 
                         }
                     }
+                    else if (Type == "UPIKOTAK")
+                    {
+                        var splitmsg = MSG.Split(')');
+                        var name = splitmsg[0].ToString();
+                        var vpa = splitmsg[1].ToString();
+                        var amt = splitmsg[2].ToString();
+                        var chkrem = dbsrs.KotakQRDetails.Where(aa => aa.MerchantRequestId == Reqid).SingleOrDefault();
+                        if (chkrem != null)
+                        {
+                            var role = "Retailer";
+                            var userid = chkrem.Retailerid.ToString();
+                            if (Status.ToUpper() == "SUCCESS")
+                            {
+                                System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                    System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                decimal amount = Convert.ToDecimal(amt);
+                                //var chkinfo=dbsrs.upi
+                                dbsrs.UPI_TXN(role, userid, Reqid, amount, Status, name, vpa, Transid, outpt, "VASTBAZAAR", output).SingleOrDefault();
+                                try
+                                {
+                                    var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+
+                                    var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
+
+                                    var admininfo = dbsrs.Admin_details.SingleOrDefault();
+                                    Backupinfo back = new Backupinfo();
+
+                                    var model = new Backupinfo.Addinfo
+                                    {
+
+                                        Websitename = admininfo.WebsiteUrl,
+                                        RetailerID = userid,
+                                        Email = retailerdetails.Email,
+                                        Mobile = retailerdetails.Mobile,
+                                        Details = "UPI Fund Transfer",
+                                        RemainBalance = (decimal)remdetails.Remainamount,
+                                        Usertype = "Retailer"
+                                    };
+                                    back.Fundtransfer(model);
+
+                                }
+                                catch { }
+                                var retailer = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var newremain = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount.ToString();
+                                var AdminDetails = dbsrs.Admin_details.SingleOrDefault();
+                                try
+                                {
+                                    smssend.sms_init("Y", "Y", "UPITRANSFERSUCCESSFULLY", retailer.Mobile, amt, newremain);
+
+                                }
+                                catch { }
+                                try
+                                {
+                                    smssend.SendEmailAll(retailer.Email, "UPI Transfer Rs." + amt + " SuccessFul .New Balance is " + newremain + "", "Fund Transfer", AdminDetails.email);
+                                }
+                                catch { }
+                            }
+                            else
+                            {
+                                decimal amount = Convert.ToDecimal(amt);
+                                var adminremain = dbsrs.Remain_Admin_balance.SingleOrDefault();
+                                decimal? remain = 0;
+                                if (role == "Retailer")
+                                {
+                                    remain = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount;
+                                }
+                                else if (role == "Dealer")
+                                {
+                                    remain = dbsrs.Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault().Remainamount;
+                                }
+                                else if (role == "Master")
+                                {
+                                    remain = dbsrs.Remain_superstokist_balance.Where(aa => aa.SuperStokistID == userid).SingleOrDefault().Remainamount;
+                                }
+                                else if (role == "Whitelabel")
+                                {
+                                    remain = dbsrs.White_label_remainbal.Where(aa => aa.userid == userid).SingleOrDefault().remainbal;
+                                }
+                                var retailer = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                var newremain = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount.ToString();
+                                var AdminDetails = dbsrs.Admin_details.SingleOrDefault();
+                                try
+                                {
+                                    smssend.sms_init("Y", "Y", "UPITRANSFERFAILED", retailer.Mobile, amt, newremain);
+
+                                }
+                                catch { }
+                                try
+                                {
+                                    smssend.SendEmailAll(retailer.Email, "UPI Transfer Rs." + amt + " Failed .New Balance is " + newremain + "", "Fund Transfer", AdminDetails.email);
+                                }
+                                catch { }
+                                Upi_txn_details txn = new Upi_txn_details();
+                                txn.adminpost = adminremain.RemainAmount;
+                                txn.adminpre = adminremain.RemainAmount;
+                                txn.amt = amount;
+                                txn.BankRRN = Transid;
+                                txn.charge = 0;
+                                txn.finalpay = 0;
+                                txn.gst = 0;
+                                txn.PayerName = name;
+                                txn.PayerVA = vpa;
+                                txn.refid = Reqid;
+                                txn.remainpost = remain;
+                                txn.remainpost = remain;
+                                txn.response = "";
+                                txn.rolename = role;
+                                txn.status = Status;
+                                txn.tds = 0;
+                                txn.txndate = DateTime.Now;
+                                txn.userid = userid;
+                                txn.whitelabelid = outpt;
+                                txn.wlpost = 0;
+                                txn.wlpre = 0;
+                                dbsrs.Upi_txn_details.Add(txn);
+                                dbsrs.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            var chkwrem = dbsrs.Whitelabel_UPI_Ref_details.Where(aa => aa.UPITxnid == Reqid).SingleOrDefault();
+                            if (chkwrem != null)
+                            {
+                                var role = chkwrem.role.ToString();
+                                var userid = chkwrem.userid.ToString();
+                                var whitelabelid = chkwrem.whitelabelid.ToString();
+                                if (Status.ToUpper() == "SUCCESS")
+                                {
+                                    System.Data.Entity.Core.Objects.ObjectParameter output = new
+                                        System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                    decimal amount = Convert.ToDecimal(amt);
+                                    //var chkinfo=dbsrs.upi
+                                    dbsrs.Whitelabel_UPI_TXN(role, userid, whitelabelid, Reqid, amount, Status, name, vpa, Transid, outpt, output).SingleOrDefault();
+                                    var retailer = dbsrs.Whitelabel_Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                    var newremain = dbsrs.Whitelabel_Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount.ToString();
+                                    //var AdminDetails = dbsrs.WhiteLabel_userList.Where(r => r.WhiteLabelID == whitelabelid).SingleOrDefault();
+                                    var AdminDetails = dbsrs.Admin_details.SingleOrDefault();
+                                    try
+                                    {
+                                        smssend.sms_init("Y", "Y", "UPITRANSFERSUCCESSFULLY", retailer.Mobile, amt, newremain);
+
+                                    }
+                                    catch { }
+                                    try
+                                    {
+                                        smssend.SendEmailAll(retailer.Email, "UPI Transfer Rs." + amt + " SuccessFul .New Balance is " + newremain + "", "Fund Transfer", AdminDetails.email);
+                                    }
+                                    catch { }
+                                }
+                                else
+                                {
+                                    decimal amount = Convert.ToDecimal(amt);
+                                    var adminremain = dbsrs.Remain_Admin_balance.SingleOrDefault();
+                                    decimal? remain = 0;
+                                    if (role.ToUpper() == "WHITELABELRETAILER")
+                                    {
+                                        remain = dbsrs.Whitelabel_Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount;
+                                    }
+                                    else if (role.ToUpper() == "WHITELABELDEALER")
+                                    {
+                                        remain = dbsrs.Whitelabel_Remain_dealer_balance.Where(aa => aa.DealerID == userid).SingleOrDefault().Remainamount;
+                                    }
+                                    else if (role.ToUpper() == "WHITELABELMASTER")
+                                    {
+                                        remain = dbsrs.Remain_whitelabel_superstokist_balance.Where(aa => aa.superstokistid == userid).SingleOrDefault().remainbalance;
+                                    }
+
+                                    var retailer = dbsrs.Whitelabel_Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+                                    var newremain = dbsrs.Whitelabel_Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault().Remainamount.ToString();
+                                    var AdminDetails = dbsrs.Admin_details.SingleOrDefault();
+                                    try
+                                    {
+                                        smssend.sms_init("Y", "Y", "UPITRANSFERFAILED", retailer.Mobile, amt, newremain);
+
+                                    }
+                                    catch { }
+                                    try
+                                    {
+                                        smssend.SendEmailAll(retailer.Email, "UPI Transfer Rs." + amt + " Failed .New Balance is " + newremain + "", "Fund Transfer", AdminDetails.email);
+                                    }
+                                    catch { }
+                                    Upi_txn_details txn = new Upi_txn_details();
+                                    txn.adminpost = adminremain.RemainAmount;
+                                    txn.adminpre = adminremain.RemainAmount;
+                                    txn.amt = amount;
+                                    txn.BankRRN = Transid;
+                                    txn.charge = 0;
+                                    txn.finalpay = 0;
+                                    txn.gst = 0;
+                                    txn.PayerName = name;
+                                    txn.PayerVA = vpa;
+                                    txn.refid = Reqid;
+                                    txn.remainpost = remain;
+                                    txn.response = "";
+                                    txn.rolename = role;
+                                    txn.status = Status;
+                                    txn.tds = 0;
+                                    txn.txndate = DateTime.Now;
+                                    txn.userid = userid;
+                                    txn.whitelabelid = outpt;
+                                    txn.wlpost = 0;
+                                    txn.wlpre = 0;
+                                    dbsrs.Upi_txn_details.Add(txn);
+                                    dbsrs.SaveChanges();
+
+
+                                    var whitelabelremain = dbsrs.White_label_remainbal.Where(w => w.userid == whitelabelid).SingleOrDefault().remainbal;
+
+                                    Whitelabel_Upi_txn_details txn1 = new Whitelabel_Upi_txn_details();
+                                    txn.adminpost = whitelabelremain;
+                                    txn.adminpre = whitelabelremain;
+                                    txn.amt = amount;
+                                    txn.BankRRN = Transid;
+                                    txn.charge = 0;
+                                    txn.finalpay = 0;
+                                    txn.gst = 0;
+                                    txn.PayerName = name;
+                                    txn.PayerVA = vpa;
+                                    txn.refid = Reqid;
+                                    txn.remainpost = remain;
+                                    txn.response = "";
+                                    txn.rolename = role;
+                                    txn.status = Status;
+                                    txn.tds = 0;
+                                    txn.txndate = DateTime.Now;
+                                    txn.userid = userid;
+                                    txn.whitelabelid = outpt;
+                                    txn.wlpost = 0;
+                                    txn.wlpre = 0;
+                                    dbsrs.Whitelabel_Upi_txn_details.Add(txn1);
+                                    dbsrs.SaveChanges();
+                                }
+                            }
+
+                        }
+                    }
                     else if (Type == "MICROATM")
                     {
 

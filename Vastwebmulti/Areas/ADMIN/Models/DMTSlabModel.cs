@@ -1213,6 +1213,7 @@ namespace Vastwebmulti.Areas.ADMIN.Models
     public class DMT2SlabModel1
     {
         public List<paytm_imps_common_comm1> common { get; set; }
+        public List<paytm_imps_common_commUPI> commonUPI { get; set; }
         public List<imps_common_comm_new> commonnew { get; set; }
         public List<MasterComm21> Materuser { get; set; }
         public List<DealerComm21> Dealeruser { get; set; }
