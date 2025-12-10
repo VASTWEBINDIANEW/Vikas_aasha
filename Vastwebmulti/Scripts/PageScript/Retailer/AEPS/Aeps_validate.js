@@ -436,7 +436,7 @@ function discoverAvdm() {
         var jsonstr = "";
         var data = new Object();
         var obj = new Object();
-      //  console.log(primaryUrl + i.toString());
+        //  console.log(primaryUrl + i.toString());
         $.ajax({
             type: "RDSERVICE",
             async: false,
@@ -447,16 +447,16 @@ function discoverAvdm() {
             cache: false,
             crossDomain: true,
             success: function (data, status, xhr) {
-              //  console.log("success()");
+                //  console.log("success()");
                 var ct = xhr.getResponseHeader("content-type") || "";
-               // console.log(ct);
+                // console.log(ct);
                 httpStaus = true;
                 res = { httpStaus: httpStaus, data: data };
-              //  console.log(data);
+                //  console.log(data);
                 finalUrl = primaryUrl + i.toString();
-              //  console.log("1");
+                //  console.log("1");
                 var ResponseDatatype = typeof data;
-              //  console.log("ResponseDatatype : " + ResponseDatatype);
+                //  console.log("ResponseDatatype : " + ResponseDatatype);
                 var $doc;
                 if (ResponseDatatype == 'string') {
                     $doc = $.parseXML(data);
@@ -478,14 +478,14 @@ function discoverAvdm() {
                 //console.log("3");
                 var CmbData1 = $($doc).find('RDService').attr('status');
                 var CmbData2 = $($doc).find('RDService').attr('info');
-             //   console.log("CmbData1 " + CmbData1);
-             //   console.log("CmbData2 " + CmbData2);
+                //   console.log("CmbData1 " + CmbData1);
+                //   console.log("CmbData2 " + CmbData2);
 
                 if (CmbData1 == "READY") {
                     if (RegExp('\\b' + 'Mantra' + '\\b').test(CmbData2) == true) {
                         DeviceKonsi = 'Mantra';
                         //closeNav();
-                      //  console.log("Mantra found");
+                        //  console.log("Mantra found");
                         //$("#txtDeviceInfo").val(data); aj
                         txtDeviceInfo = data;
                         if ($($doc).find('Interface').eq(0).attr('path') == "/rd/capture") {
@@ -512,7 +512,7 @@ function discoverAvdm() {
 
                         DeviceKonsi = 'Startek';
                         //  closeNav();
-                       // console.log("Startek found");
+                        // console.log("Startek found");
                         //$("#txtDeviceInfo").val(data); aj
                         txtDeviceInfo = data;
                         if ($($doc).find('Interface').eq(0).attr('path') == "/rd/capture") {
@@ -715,16 +715,21 @@ function CaptureAvdm() {
             //$('#txtPidOptions').val(XML); AJ
             txtPidOptions = XML;
             var $doc;
+            var infochkkk;
             if (DeviceKonsi == "Mantra") {
                 $doc = $.parseXML(data);
+                infochkkk = data;
             } else if (DeviceKonsi == "Morpho") {
                 $doc = data;
+                const xmlText = new XMLSerializer().serializeToString(data);
+                infochkkk = xmlText;
             }
             else if (DeviceKonsi == "Startek") {
                 $doc = data;
+                infochkkk = data;
             }
-           // var xmlText = new XMLSerializer().serializeToString($doc);
-            $("#capxml").val($doc);
+            // var xmlText = new XMLSerializer().serializeToString($doc);
+            $("#capxml").val(infochkkk);
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {
@@ -759,15 +764,15 @@ function CaptureAvdm() {
                     //console.log(captureJson);
                     //console.log(JSON.stringify(captureJson));
                     try {
-                      //  console.log("sr no : " + $($doc).find('DeviceInfo additional_info Param').attr("value"));
+                        //  console.log("sr no : " + $($doc).find('DeviceInfo additional_info Param').attr("value"));
 
                         $("#device_srno").val($($doc).find('DeviceInfo additional_info Param').attr("value"));
                     } catch (err) { }
                     $('#Devicefind').show();
                     $('#txtdevice').val(DeviceKonsi);
                     $("#cap").val(JSON.stringify(captureJson));
-                  //  $("#scanimage").hide();
-                   // $('#AEPSFOUND').show();
+                    //  $("#scanimage").hide();
+                    // $('#AEPSFOUND').show();
                     $("#Devicerror").hide();
                     //  $("#fingImgBlack").hide();
                     //  $("#fingImgGreen").show();
@@ -817,7 +822,7 @@ function scanfing() {
     //}
     discoverAvdm();
     if (RdStatus) {
-       // $("#response2").text("Tap on " + DeviceKonsi + " scanner !");
+        // $("#response2").text("Tap on " + DeviceKonsi + " scanner !");
         //alert("Tap on " + DeviceKonsi + " scanner !");
         //document.getElementById("loadermoney").style.display = "block";
         CaptureAvdm();

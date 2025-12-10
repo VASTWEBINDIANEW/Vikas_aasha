@@ -7643,6 +7643,28 @@
     </FunctionImport>
     <EntitySet Name="Nifipaymerchantinfoes" EntityType="VastwebmultiModel.Nifipaymerchantinfo" />
     <EntitySet Name="NifiStatenames" EntityType="VastwebmultiModel.NifiStatename" />
+    <EntitySet Name="Aeps_2Fa_Status_nifi" EntityType="VastwebmultiModel.Aeps_2Fa_Status_nifi" />
+    <EntitySet Name="paytm_imps_api_commUPI" EntityType="VastwebmultiModel.paytm_imps_api_commUPI" />
+    <EntitySet Name="paytm_imps_common_commUPI" EntityType="VastwebmultiModel.paytm_imps_common_commUPI" />
+    <EntitySet Name="paytm_imps_dealer_commUPI" EntityType="VastwebmultiModel.paytm_imps_dealer_commUPI" />
+    <EntitySet Name="paytm_imps_dlm_rem_commUPI" EntityType="VastwebmultiModel.paytm_imps_dlm_rem_commUPI" />
+    <EntitySet Name="paytm_imps_master_commUPI" EntityType="VastwebmultiModel.paytm_imps_master_commUPI" />
+    <EntitySet Name="paytm_imps_retailer_commUPI" EntityType="VastwebmultiModel.paytm_imps_retailer_commUPI" />
+    <EntitySet Name="paytm_imps_whitelabel_commUPI" EntityType="VastwebmultiModel.paytm_imps_whitelabel_commUPI" />
+    <FunctionImport Name="UPI_TXN_KOTAK" ReturnType="Collection(String)">
+      <Parameter Name="role" Mode="In" Type="String" />
+      <Parameter Name="userid" Mode="In" Type="String" />
+      <Parameter Name="txnid" Mode="In" Type="String" />
+      <Parameter Name="amount" Mode="In" Type="Decimal" />
+      <Parameter Name="status" Mode="In" Type="String" />
+      <Parameter Name="payername" Mode="In" Type="String" />
+      <Parameter Name="payvpn" Mode="In" Type="String" />
+      <Parameter Name="bankrrn" Mode="In" Type="String" />
+      <Parameter Name="response" Mode="In" Type="String" />
+      <Parameter Name="apiname" Mode="In" Type="String" />
+      <Parameter Name="output" Mode="InOut" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="KotakQRDetails" EntityType="VastwebmultiModel.KotakQRDetail" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -31343,6 +31365,10 @@
     <Property Name="moneysts1" Type="Boolean" />
     <Property Name="moneyppi" Type="Boolean" />
     <Property Name="payout" Type="Boolean" />
+    <Property Name="pincode1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pincode4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK__AEPS_Merc__UserI__46D346CA">
     <End Type="VastwebmultiModel.Retailer_Details" Role="Retailer_Details" Multiplicity="1" />
@@ -33317,5 +33343,678 @@
     <Property Name="Stateid" Type="Int32" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="OrginalName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Aeps_2Fa_Status_nifi">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Aepsmerchantid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="paytm_imps_api_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_common_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="usertype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_dealer_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_dlm_rem_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_master_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_retailer_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="paytm_imps_whitelabel_commUPI">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="verify_comm" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_1000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_2000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_3000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_4000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_5000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_6000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_7000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_8000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_9000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_10000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_11000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_12000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_13000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_14000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_15000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_16000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_17000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_18000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_19000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_20000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_21000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_22000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_23000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_24000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_25000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_27000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_28000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_29000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_30000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_31000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_32000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_33000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_34000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_35000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_36000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_37000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_38000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_39000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_40000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_41000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_42000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_43000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_44000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_45000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_46000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_47000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_48000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_49000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="comm_50000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="gst_sts" Type="Boolean" />
+    <Property Name="tds_sts" Type="Boolean" />
+    <Property Name="per_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="maxrs_26000" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Type_26000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_1000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_2000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_3000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_4000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_5000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_6000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_7000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_8000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_9000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_10000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_11000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_12000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_13000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_14000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_15000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_16000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_17000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_18000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_19000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_20000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_21000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_22000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_23000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_24000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type_25000" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="KotakQRDetail">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Retailerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="GatewayReferenceId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="GatewayResponseMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="GatewayResponseStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="GatewayTransactionId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="MerchantChannelId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="MerchantId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="MerchantRequestId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PayeeMcc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PayeeVpa" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PayeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PayerAccBin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PayerActype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PayerIfsc" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PayerName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PayerVpa" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="SubMerchantChannelId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="SubMerchantId" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="TransactionTimestamp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RetailerMobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="RequestDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ResponseDate" Type="DateTime" Precision="3" />
+    <Property Name="APIRequest" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="APIResponse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="RemainPre" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="AdminRemainPre" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="AdminRemainPost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CallBackResponse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Responsemessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Customertype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

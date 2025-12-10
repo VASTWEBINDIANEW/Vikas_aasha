@@ -410,8 +410,7 @@ function discoverAvdm() {
         //if (protocol.indexOf("https") >= 0) {
         //    primaryUrl = "https://127.0.0.1:";
         //}
-    } catch (e)
-    { }
+    } catch (e) { }
     url = "";
     //$("#ddlAVDM").empty();
     ddlAVDM = '';
@@ -605,8 +604,7 @@ function deviceInfoAvdm() {
             //finalUrl = "https://127.0.0.1:" + $("#ddlAVDM").val(); AJ
             finalUrl = "https://127.0.0.1:" + ddlAVDM;
         }
-    } catch (e)
-    { }
+    } catch (e) { }
 
     //
     var verb = "DEVICEINFO";

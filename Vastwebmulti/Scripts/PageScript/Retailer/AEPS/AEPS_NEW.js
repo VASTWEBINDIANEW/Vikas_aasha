@@ -343,6 +343,12 @@ function discoverAvdmFirstNode(PortNo) {
     txtPidData = '';
     //alert(PortNo);
     var primaryUrl = "http://127.0.0.1:";
+    try {
+        var protocol = window.location.href;
+        if (protocol.indexOf("https") >= 0) {
+            primaryUrl = "https://127.0.0.1:";
+        }
+    } catch (e) { }
     url = "";
     var verb = "RDSERVICE";
     var err = "";
@@ -413,9 +419,9 @@ function discoverAvdm() {
     var primaryUrl = "http://127.0.0.1:";
     try {
         var protocol = window.location.href;
-        //if (protocol.indexOf("https") >= 0) {
-        //    primaryUrl = "https://127.0.0.1:";
-        //}
+        if (protocol.indexOf("https") >= 0) {
+            primaryUrl = "https://127.0.0.1:";
+        }
     } catch (e) { }
     url = "";
     //$("#ddlAVDM").empty();
@@ -711,18 +717,26 @@ function CaptureAvdm() {
             //$('#txtPidOptions').val(XML); AJ
             txtPidOptions = XML;
             var $doc;
+            var infochkkk;
             if (DeviceKonsi == "Mantra") {
                 $doc = $.parseXML(data);
+                infochkkk = data;
 
-            } else if (DeviceKonsi == "Morpho") {
+            }
+
+
+            else if (DeviceKonsi == "Morpho") {
                 $doc = data;
+                const xmlText = new XMLSerializer().serializeToString(data);
+                infochkkk = xmlText;
             }
             else if (DeviceKonsi == "Startek") {
                 /*   console.log(data)*/
                 $doc = data;
+                infochkkk = data;
             }
-            $("#capxml").val($doc);
-         
+            $("#capxml").val(infochkkk);
+
             var errInfo = $($doc).find('Resp').attr('errInfo');
             console.log("errInfo => " + errInfo);
             try {
