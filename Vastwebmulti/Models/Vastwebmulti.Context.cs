@@ -23976,7 +23976,7 @@ namespace Vastwebmulti.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<retailer_to_delaer_transfer_Result>("retailer_to_delaer_transfer", useridParameter, ssidParameter, output);
         }
     
-        public virtual ObjectResult<string> UPI_TXN_KOTAK(string role, string userid, string txnid, Nullable<decimal> amount, string status, string payername, string payvpn, string bankrrn, string response, string apiname, ObjectParameter output)
+        public virtual ObjectResult<UPI_TXN_KOTAK_Result> UPI_TXN_KOTAK(string role, string userid, string txnid, Nullable<decimal> amount, string status, string payername, string payvpn, string bankrrn, string response, string apiname, ObjectParameter output)
         {
             var roleParameter = role != null ?
                 new ObjectParameter("role", role) :
@@ -24018,7 +24018,7 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("apiname", apiname) :
                 new ObjectParameter("apiname", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("UPI_TXN_KOTAK", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UPI_TXN_KOTAK_Result>("UPI_TXN_KOTAK", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
         }
     }
 }

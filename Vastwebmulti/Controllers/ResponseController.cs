@@ -3789,7 +3789,7 @@ namespace Vastwebmulti.Controllers
                                     System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                 decimal amount = Convert.ToDecimal(amt);
                                 //var chkinfo=dbsrs.upi
-                                dbsrs.UPI_TXN(role, userid, Reqid, amount, Status, name, vpa, Transid, outpt, "VASTBAZAAR", output).SingleOrDefault();
+                                dbsrs.UPI_TXN_KOTAK(role, userid, Reqid, amount, Status, name, vpa, Transid, outpt, "VASTBAZAAR", output).SingleOrDefault();
                                 try
                                 {
                                     var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
@@ -3829,7 +3829,7 @@ namespace Vastwebmulti.Controllers
                                 }
                                 catch { }
                             }
-                            else
+                            else if(Status.ToUpper() == "FAILURE")
                             {
                                 decimal amount = Convert.ToDecimal(amt);
                                 var adminremain = dbsrs.Remain_Admin_balance.SingleOrDefault();
@@ -3864,30 +3864,10 @@ namespace Vastwebmulti.Controllers
                                     smssend.SendEmailAll(retailer.Email, "UPI Transfer Rs." + amt + " Failed .New Balance is " + newremain + "", "Fund Transfer", AdminDetails.email);
                                 }
                                 catch { }
-                                Upi_txn_details txn = new Upi_txn_details();
-                                txn.adminpost = adminremain.RemainAmount;
-                                txn.adminpre = adminremain.RemainAmount;
-                                txn.amt = amount;
-                                txn.BankRRN = Transid;
-                                txn.charge = 0;
-                                txn.finalpay = 0;
-                                txn.gst = 0;
-                                txn.PayerName = name;
-                                txn.PayerVA = vpa;
-                                txn.refid = Reqid;
-                                txn.remainpost = remain;
-                                txn.remainpost = remain;
-                                txn.response = "";
-                                txn.rolename = role;
-                                txn.status = Status;
-                                txn.tds = 0;
-                                txn.txndate = DateTime.Now;
-                                txn.userid = userid;
-                                txn.whitelabelid = outpt;
-                                txn.wlpost = 0;
-                                txn.wlpre = 0;
-                                dbsrs.Upi_txn_details.Add(txn);
-                                dbsrs.SaveChanges();
+                                System.Data.Entity.Core.Objects.ObjectParameter output = new
+                           System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
+                                dbsrs.UPI_TXN_KOTAK(role, userid, Reqid, amount, "Failed", name, vpa, Transid, outpt, "VASTBAZAAR", output).SingleOrDefault();
+
                             }
                         }
                         else
