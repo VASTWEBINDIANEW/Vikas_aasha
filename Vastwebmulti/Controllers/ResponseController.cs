@@ -1972,7 +1972,7 @@ namespace Vastwebmulti.Controllers
 
                                     var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                         
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -2142,7 +2142,7 @@ namespace Vastwebmulti.Controllers
                                 }
                             }
                         }
-                        else if(currentsts.ToUpper()=="SUCCESS")
+                        else if (currentsts.ToUpper() == "SUCCESS")
                         {
                             if (type != "IMPS_VERIFY")
                             {
@@ -2161,7 +2161,7 @@ namespace Vastwebmulti.Controllers
                                         dbsrs.SaveChanges();
                                     }
                                 }
-                                else if(Status.ToUpper()=="FAILED")
+                                else if (Status.ToUpper() == "FAILED")
                                 {
 
                                     dbsrs.Money_transfer_success_to_failed(Reqid);
@@ -2431,7 +2431,7 @@ namespace Vastwebmulti.Controllers
 
                             idno = name.idno;
                             userid = name.Reailerid;
-                       
+
                         }
                         catch
                         { }
@@ -2737,9 +2737,9 @@ namespace Vastwebmulti.Controllers
                                                 try
                                                 {
                                                     var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                                  
+
                                                     var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                                 
+
                                                     var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                                     Backupinfo back = new Backupinfo();
 
@@ -2756,7 +2756,7 @@ namespace Vastwebmulti.Controllers
                                                     };
                                                     back.Rechargeandutility(model);
 
-                                                    
+
                                                 }
                                                 catch { }
                                                 var urlchk = dbsrs.Recharge_Update_Url.Where(aa => aa.UserId == Apientry.Rch_from).SingleOrDefault();
@@ -3117,9 +3117,9 @@ namespace Vastwebmulti.Controllers
                                             try
                                             {
                                                 var retailerdetails = dbsrs.api_user_details.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                              
+
                                                 var remdetails = dbsrs.api_remain_amount.Where(aa => aa.apiid == entry.userid).SingleOrDefault();
-                                            
+
                                                 var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                                 Backupinfo back = new Backupinfo();
 
@@ -3404,12 +3404,12 @@ namespace Vastwebmulti.Controllers
                                     try
                                     {
                                         var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == pp.RetailerId).SingleOrDefault();
-                                       
+
                                         var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == pp.RetailerId).SingleOrDefault();
-                                        
+
                                         var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                         Backupinfo back = new Backupinfo();
-                                       
+
                                         var model = new Backupinfo.Addinfo
                                         {
 
@@ -3514,7 +3514,7 @@ namespace Vastwebmulti.Controllers
                                             RetailerID = dealerdetails.DealerId,
                                             Email = dealerdetails.Email,
                                             Mobile = dealerdetails.Mobile,
-                                            Details = "Gift Card Refund " ,
+                                            Details = "Gift Card Refund ",
                                             RemainBalance = Convert.ToDecimal(dlmdetails.Remainamount),
                                             Usertype = "Dealer"
                                         };
@@ -3557,12 +3557,12 @@ namespace Vastwebmulti.Controllers
                                 try
                                 {
                                     var retailerdetails = dbsrs.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                                   
+
                                     var remdetails = dbsrs.Remain_reteller_balance.Where(aa => aa.RetellerId == userid).SingleOrDefault();
-                                  
+
                                     var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                 
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -3829,7 +3829,7 @@ namespace Vastwebmulti.Controllers
                                 }
                                 catch { }
                             }
-                            else if(Status.ToUpper() == "FAILURE")
+                            else if (Status.ToUpper() == "FAILURE")
                             {
                                 decimal amount = Convert.ToDecimal(amt);
                                 var adminremain = dbsrs.Remain_Admin_balance.SingleOrDefault();
@@ -4031,7 +4031,7 @@ namespace Vastwebmulti.Controllers
 
                                     var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                     Backupinfo back = new Backupinfo();
-                                
+
                                     var model = new Backupinfo.Addinfo
                                     {
 
@@ -4274,7 +4274,7 @@ namespace Vastwebmulti.Controllers
                                     RetailerID = currentsts.remid,
                                     Email = retailerdetails.Email,
                                     Mobile = retailerdetails.Mobile,
-                                    Details = "IRCTC Booking" ,
+                                    Details = "IRCTC Booking",
                                     RemainBalance = (decimal)remdetails.Remainamount,
                                     Usertype = "Retailer"
                                 };
@@ -4356,7 +4356,7 @@ namespace Vastwebmulti.Controllers
 
                                 var admininfo = dbsrs.Admin_details.SingleOrDefault();
                                 Backupinfo back = new Backupinfo();
-                         
+
                                 var model = new Backupinfo.Addinfo
                                 {
 
@@ -4438,7 +4438,7 @@ namespace Vastwebmulti.Controllers
                             }
 
                             string msg = dbsrs.update_fino(fino_obj.id, "Success", MSG, outpt, output).Single().msg.ToString();
-                      
+
                         }
                         catch (Exception ex)
                         {
@@ -4711,7 +4711,7 @@ namespace Vastwebmulti.Controllers
                         }
                     }
                     //PPI 
-                    else if(Type== "DMT-WALLET-MONEY-REMITTER-EKYC")
+                    else if (Type == "DMT-WALLET-MONEY-REMITTER-EKYC")
                     {
                         var mobile = Status;
                         var kyccharge = Reqid;
@@ -4775,12 +4775,12 @@ namespace Vastwebmulti.Controllers
                             back.info(model2);
                         }
                         catch { }
-                        if (msginfo=="OK")
+                        if (msginfo == "OK")
                         {
                             var resp = new
                             {
                                 status = true,
-                                agentid= agentid,
+                                agentid = agentid,
                                 message = "Transaction Successfull"
                             };
                             return Json(resp, JsonRequestBehavior.AllowGet);
@@ -4795,13 +4795,13 @@ namespace Vastwebmulti.Controllers
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
                     }
-                    else if(Type== "DMT-WALLET-MONEY-WALLET-LOAD")
+                    else if (Type == "DMT-WALLET-MONEY-WALLET-LOAD")
                     {
                         var mobile = Status;
                         var Amount = Reqid;
                         decimal amt = Convert.ToDecimal(Amount);
                         var merchantcode = MSG;
-                      
+
                         string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
                         Guid uniqueIdinfo = Guid.NewGuid();
                         string uniqueid = uniqueIdinfo.ToString();
@@ -4828,7 +4828,7 @@ namespace Vastwebmulti.Controllers
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
                     }
-                    else if(Type== "DMT-WALLET-MONEY-WALLET-LOADN")
+                    else if (Type == "DMT-WALLET-MONEY-WALLET-LOADN")
                     {
                         var data1 = Transid;
                         dynamic dyrespchk = JsonConvert.DeserializeObject(data1);
@@ -5045,7 +5045,7 @@ namespace Vastwebmulti.Controllers
 
 
                     }
-                    else if(Type== "DMT-WALLET-MONEY-V2")
+                    else if (Type == "DMT-WALLET-MONEY-V2")
                     {
                         var mobile = Status;
                         var Amount = Reqid;
@@ -5056,13 +5056,13 @@ namespace Vastwebmulti.Controllers
                         string bankname = dyrespchk.bankname;
                         string account = dyrespchk.account;
                         string transfertype = dyrespchk.transfertype;
-                      //string wallet_refid = dyrespchk.wallet_refid;
+                        //string wallet_refid = dyrespchk.wallet_refid;
                         string ifsccode = dyrespchk.ifsccode;
                         string txn_status = dyrespchk.txn_status;
                         string response_code = dyrespchk.response_code;
                         string utr = dyrespchk.utr;
                         string agentinfo = dyrespchk.agentinfo;
-            
+
                         //if (response_code == "0")
                         //{
                         //    string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
@@ -5145,22 +5145,22 @@ namespace Vastwebmulti.Controllers
                         //        return Json(resp, JsonRequestBehavior.AllowGet);
                         //    }
                         //}
-                        if(response_code=="1")
+                        if (response_code == "1")
                         {
                             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
 
                             var statusinfo = "Pending";
-                            if(txn_status=="0")
+                            if (txn_status == "0")
                             {
                                 statusinfo = "Failed";
                             }
-                            else if(txn_status=="1")
+                            else if (txn_status == "1")
                             {
                                 statusinfo = "Success";
                             }
-                            if(statusinfo== "Success" || statusinfo=="Failed")
+                            if (statusinfo == "Success" || statusinfo == "Failed")
                             {
-                                var entryinfochk = dbsrs.IMPS_transtion_detsils.Where(aa => aa.trans_id == agentinfo && aa.Status.ToUpper()=="PENDING").SingleOrDefault();
+                                var entryinfochk = dbsrs.IMPS_transtion_detsils.Where(aa => aa.trans_id == agentinfo && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
                                 if (entryinfochk != null)
                                 {
                                     dbsrs.Money_transfer_update_new_new(agentinfo, statusinfo, utr, benname, "", "", 0, 0);
@@ -5222,7 +5222,7 @@ namespace Vastwebmulti.Controllers
                                 else
                                 {
                                     var entryinfochkold = dbsrs.IMPS_transtion_detsils_old.Where(aa => aa.trans_id == agentinfo && aa.Status.ToUpper() == "PENDING").SingleOrDefault();
-                                    if(entryinfochkold!=null)
+                                    if (entryinfochkold != null)
                                     {
                                         dbsrs.Money_transfer_update_new_new_old(agentinfo, statusinfo, utr, benname, "", "", 0, 0);
                                         if (statusinfo == "Failed")
@@ -5300,13 +5300,13 @@ namespace Vastwebmulti.Controllers
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
                     }
-                    else if(Type == "DMT-WALLET-MONEY-BENE-VERIFY")
+                    else if (Type == "DMT-WALLET-MONEY-BENE-VERIFY")
                     {
                         var mobile = Status;
                         var Amount = Reqid;
                         var merchantcode = MSG;
                         var data1 = Transid;
-                     
+
                         dynamic dyresp = JsonConvert.DeserializeObject(data1);
                         string benename = dyresp.benename;
                         string bankname = dyresp.bankname;
@@ -5348,7 +5348,7 @@ namespace Vastwebmulti.Controllers
                                 return Json(resp, JsonRequestBehavior.AllowGet);
                             }
                         }
-                        else if(response_code=="1")
+                        else if (response_code == "1")
                         {
                             string agentid = DateTime.Parse(DateTime.Now.ToString()).ToString("yyMMddHHmmss") + RandomString(4);
 
