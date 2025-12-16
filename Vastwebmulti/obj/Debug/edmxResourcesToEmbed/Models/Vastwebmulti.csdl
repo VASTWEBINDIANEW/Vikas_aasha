@@ -7665,6 +7665,7 @@
       <Parameter Name="output" Mode="InOut" Type="String" />
     </FunctionImport>
     <EntitySet Name="KotakQRDetails" EntityType="VastwebmultiModel.KotakQRDetail" />
+    <EntitySet Name="RadiantPrepayTransfers" EntityType="VastwebmultiModel.RadiantPrepayTransfer" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -34020,4 +34021,21 @@
   <ComplexType Name="UPI_TXN_KOTAK_Result">
     <Property Type="String" Name="msg" Nullable="true" MaxLength="100" />
   </ComplexType>
+  <EntityType Name="RadiantPrepayTransfer">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CEID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Updatedate" Type="DateTime" Precision="3" />
+    <Property Name="sts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RequestID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>
