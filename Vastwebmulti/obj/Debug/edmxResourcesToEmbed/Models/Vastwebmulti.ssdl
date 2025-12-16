@@ -9231,6 +9231,23 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="clientSecret" Type="nvarchar(max)" />
     <Property Name="APIKey" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="RadiantPrepayTransfer">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="CEID" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="datetime" />
+    <Property Name="Updatedate" Type="datetime" />
+    <Property Name="sts" Type="varchar" MaxLength="50" />
+    <Property Name="Adminremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RequestID" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="radianttoken">
     <Key>
       <PropertyRef Name="idno" />
@@ -17386,7 +17403,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="PageSize" Type="int" Mode="In" />
   </Function>
   <Function Name="Money_transfer_success_to_failed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="transid" Type="varchar" Mode="In" />
+    <Parameter Name="transid" Type="varchar(max)" Mode="In" />
   </Function>
   <Function Name="Money_transfer_success_to_failed_old" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="transid" Type="varchar" Mode="In" />
@@ -22687,6 +22704,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="PurchaseOrderCashDepositeChargeDistributor" EntityType="Self.PurchaseOrderCashDepositeChargeDistributor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PushNotificationStatus" EntityType="Self.PushNotificationStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radiantauth" EntityType="Self.radiantauth" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RadiantPrepayTransfer" EntityType="Self.RadiantPrepayTransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radianttoken" EntityType="Self.radianttoken" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RadiantTransfers" EntityType="Self.RadiantTransfers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="rang_of_imps_transaction_ALL_retailer" EntityType="Self.rang_of_imps_transaction_ALL_retailer" Schema="dbo" store:Type="Tables" />
