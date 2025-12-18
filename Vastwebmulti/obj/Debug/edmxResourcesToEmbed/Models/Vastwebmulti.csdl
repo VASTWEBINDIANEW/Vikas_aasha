@@ -7651,7 +7651,7 @@
     <EntitySet Name="paytm_imps_master_commUPI" EntityType="VastwebmultiModel.paytm_imps_master_commUPI" />
     <EntitySet Name="paytm_imps_retailer_commUPI" EntityType="VastwebmultiModel.paytm_imps_retailer_commUPI" />
     <EntitySet Name="paytm_imps_whitelabel_commUPI" EntityType="VastwebmultiModel.paytm_imps_whitelabel_commUPI" />
-    <FunctionImport Name="UPI_TXN_KOTAK" ReturnType="Collection(String)">
+    <FunctionImport Name="UPI_TXN_KOTAK" ReturnType="Collection(VastwebmultiModel.UPI_TXN_KOTAK_Result)">
       <Parameter Name="role" Mode="In" Type="String" />
       <Parameter Name="userid" Mode="In" Type="String" />
       <Parameter Name="txnid" Mode="In" Type="String" />
@@ -7665,6 +7665,7 @@
       <Parameter Name="output" Mode="InOut" Type="String" />
     </FunctionImport>
     <EntitySet Name="KotakQRDetails" EntityType="VastwebmultiModel.KotakQRDetail" />
+    <EntitySet Name="RadiantPrepayTransfers" EntityType="VastwebmultiModel.RadiantPrepayTransfer" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -34016,5 +34017,25 @@
     <Property Name="CallBackResponse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Responsemessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Customertype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="UPI_TXN_KOTAK_Result">
+    <Property Type="String" Name="msg" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <EntityType Name="RadiantPrepayTransfer">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CEID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Updatedate" Type="DateTime" Precision="3" />
+    <Property Name="sts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RequestID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

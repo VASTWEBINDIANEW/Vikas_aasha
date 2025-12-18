@@ -29446,7 +29446,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="UPI_TXN_KOTAK" FunctionName="VastwebmultiModel.Store.UPI_TXN_KOTAK" />
+    <FunctionImportMapping FunctionImportName="UPI_TXN_KOTAK" FunctionName="VastwebmultiModel.Store.UPI_TXN_KOTAK">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VastwebmultiModel.UPI_TXN_KOTAK_Result">
+          <ScalarProperty Name="msg" ColumnName="msg" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="KotakQRDetails">
       <EntityTypeMapping TypeName="VastwebmultiModel.KotakQRDetail">
         <MappingFragment StoreEntitySet="KotakQRDetails">
@@ -29485,6 +29491,24 @@
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="Retailerid" ColumnName="Retailerid" />
           <ScalarProperty Name="Idno" ColumnName="Idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RadiantPrepayTransfers">
+      <EntityTypeMapping TypeName="VastwebmultiModel.RadiantPrepayTransfer">
+        <MappingFragment StoreEntitySet="RadiantPrepayTransfer">
+          <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+          <ScalarProperty Name="Adminremainpost" ColumnName="Adminremainpost" />
+          <ScalarProperty Name="Adminremainpre" ColumnName="Adminremainpre" />
+          <ScalarProperty Name="sts" ColumnName="sts" />
+          <ScalarProperty Name="Updatedate" ColumnName="Updatedate" />
+          <ScalarProperty Name="Insertdate" ColumnName="Insertdate" />
+          <ScalarProperty Name="RemainPost" ColumnName="RemainPost" />
+          <ScalarProperty Name="RemainPre" ColumnName="RemainPre" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CEID" ColumnName="CEID" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
