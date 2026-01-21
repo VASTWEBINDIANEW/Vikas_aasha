@@ -20,21 +20,24 @@
             background: linear-gradient(to bottom right, #ffffff, #e8e8e8) !important;
             animation: popupAnim 0.25s ease-out;
         }
-        
+
         @@keyframes popupAnim {
             from {
                 transform: scale(0.85);
                 opacity: 0;
             }
+
             to {
                 transform: scale(1);
                 opacity: 1;
             }
         }
+
         .swal2-container.swal2-center.swal2-backdrop-hide {
             z-index: 99999;
             position: fixed;
         }
+
         #swal2-html-container {
             font-size: 16px;
         }
@@ -1471,32 +1474,200 @@
     }
 </script>
 
-<!--Manual SUCCESS -->
+
+<!-- Manual SUCCESS -->
+<div class="modal fade mastetr222Modal" id="successModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="width: 650px; min-height: 230px; ">
+        <div class="modal-content">
+
+            <div class="modal-header" style="border-bottom:1px solid #ece7e7;">
+                <h4 class="modal-title">Manual Success Confirmation</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="body">
+
+                    <!-- hidden values -->
+                    <input type="hidden" id="h_trans_id" />
+                    <input type="hidden" id="h_bank_trans_id" />
+                    <input type="hidden" id="h_recivername" />
+                    <input type="hidden" id="h_status" />
+
+                    <!-- Success Reason -->
+                    <div class="row clearfix">
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                            <label>Success Reason</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                @Html.DropDownList(
+                                    "ddl_success_reason",
+                                    new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text="Manual Success",Value="Manual Success"},
+                                        new SelectListItem{ Text="Bank Success Confirmed",Value="Bank Success Confirmed"},
+                                        new SelectListItem{ Text="System Delay Resolved",Value="System Delay Resolved"}
+                                    },
+                                    "-- Select Reason --",
+                                    new { @class = "form-control" }
+                                )
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Password -->
+                    <div class="row clearfix" style="margin-top:10px;">
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-5 form-control-label">
+                            <label>Security Password</label>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
+                            <div class="form-group">
+                                <input type="password"
+                                       id="success_securitypass"
+                                       class="form-control"
+                                       autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer" style="padding: 15px; padding-top: 0;">
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="confirmSuccess()">
+                    Confirm Success
+                </button>
+
+                <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 <script>
-    function success(trans_id, bank_trans_id, recivername, status)
-    {
-        $.ajax({
-                url: '@Url.Action("Moneysucess", "Home")',
-                type: 'POST',
-                dataType: "html",
-                data: { trans_id: trans_id, bank_trans_id: bank_trans_id, recivername: recivername, currentstatus: status },
-                success: function (data) {
-                    var response = JSON.parse(data);
-                       if (response.Status) {
-                           //swal("Good Job", response.Message, "success");
-                           window.location.reload();
-                           reloadPageeee();
-                           //moneyReport();
-                    }
-                    else {
-                        //swal("Oops...", response.Message, "error");
-                    }
-                },
-                error: function (data) {
-                }
-            });
+    function openSuccessModal(trans_id, bank_trans_id, recivername, status) {
+
+    $("#h_trans_id").val(trans_id);
+    $("#h_bank_trans_id").val(bank_trans_id);
+    $("#h_recivername").val(recivername);
+    $("#h_status").val(status);
+
+    $("#ddl_success_reason").val("");
+    $("#success_securitypass").val("");
+
+    $("#successModal").modal("show");
+}
+
+function confirmSuccess() {
+
+    var ddl_refund = $("#ddl_success_reason").val();
+    var securitypass = $("#success_securitypass").val();
+
+    if (ddl_refund === "" || securitypass === "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Required',
+            text: 'Please select success reason and enter security password'
+        });
+        return;
     }
+
+    $.ajax({
+        url: '@Url.Action("Moneysucess", "Home")',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: function () {
+            Swal.fire({
+                title: "Processing...",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => Swal.showLoading()
+            });
+        },
+        data: {
+            trans_id: $("#h_trans_id").val(),
+            bank_trans_id: $("#h_bank_trans_id").val(),
+            recivername: $("#h_recivername").val(),
+            currentstatus: $("#h_status").val(),
+            ddl_refund: ddl_refund,
+            securitypass: securitypass
+        },
+        success: function (response) {
+
+            Swal.close(); // ✅ loader close here
+
+            if (response.Status) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.Message || 'Transaction marked as SUCCESS'
+                }).then(() => {
+                    $("#successModal").modal("hide");
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: response.Message || 'Something went wrong'
+                }).then(() => {
+                    $("#successModal").modal("hide");
+                    location.reload();
+                });
+            }
+        },
+        error: function () {
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Server error occurred'
+            });
+        }
+    });
+}
+
+
+
+
 </script>
+
+<!--Manual SUCCESS -->
+@*<script>
+        function success(trans_id, bank_trans_id, recivername, status)
+        {
+            $.ajax({
+                    url: '@Url.Action("Moneysucess", "Home")',
+                    type: 'POST',
+                    dataType: "html",
+                    data: { trans_id: trans_id, bank_trans_id: bank_trans_id, recivername: recivername, currentstatus: status },
+                    success: function (data) {
+                        var response = JSON.parse(data);
+                           if (response.Status) {
+                               //swal("Good Job", response.Message, "success");
+                               window.location.reload();
+                               reloadPageeee();
+                               //moneyReport();
+                        }
+                        else {
+                            //swal("Oops...", response.Message, "error");
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+        }
+    </script>*@
 
 <!--failed show model popup-->
 <script>

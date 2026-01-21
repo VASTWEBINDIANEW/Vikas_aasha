@@ -358,8 +358,19 @@
                         @if (item.status.ToUpper() == "PENDING")
                         {
                             <div class="ctti" style="margin-bottom:0px;">
-                                <button id="@idshow" class="ss" data-toggle="tooltip" onclick="btn_showhide(@i)" style="display:block;border:none;color:black; background:transparent;" title="Success"><i class="fa fa-check" style="top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;"></i></button>
+                                @*<button id="@idshow" class="ss" data-toggle="tooltip" onclick="btn_showhide(@i)" style="display:block;border:none;color:black; background:transparent;" title="Success"><i class="fa fa-check" style="top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;"></i></button>
                                 <button id="@idhide" class="ss" data-toggle="tooltip" onclick="success('@item.trans_id','@item.bank_trans_id','@item.recivername','@item.status')" style="display:none; border:none;color:black; background:transparent;" title="Are you sure ?"><i class="fa fa-question-circle-o" style="top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;"></i></button>
+                                *@
+                                <button class="ss"
+                                        style="border:none;color:black;background:transparent;"
+                                        title="Success"
+                                        onclick="openSuccessModal('@item.trans_id',
+                                      '@item.bank_trans_id',
+                                      '@item.recivername',
+                                      '@item.status')">
+                                    <i class="fa fa-check" style="border:1px solid #c7c2c2;padding:3px;font-size:10px;"></i>
+                                </button>
+                            
                             </div>
                             <div class="ctti" style="margin-bottom:0px;">
 
