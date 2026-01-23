@@ -17,5 +17,6 @@ namespace Vastwebmulti.Models
         public int idno { get; set; }
         public string androidversion { get; set; }
         public string iosversion { get; set; }
+        public string Packagename { get; set; }
     }
 }

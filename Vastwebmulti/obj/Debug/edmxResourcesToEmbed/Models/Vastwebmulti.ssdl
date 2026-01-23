@@ -998,6 +998,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="androidversion" Type="varchar" MaxLength="50" />
     <Property Name="iosversion" Type="varchar" MaxLength="50" />
+    <Property Name="Packagename" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="appicon">
     <Key>
@@ -9230,6 +9231,32 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="clientID" Type="varchar" MaxLength="50" />
     <Property Name="clientSecret" Type="nvarchar(max)" />
     <Property Name="APIKey" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="RadiantCashDeposite">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="AdminRemainPre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="AdminRemainPost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="InsertDate" Type="datetime" />
+    <Property Name="UpdateDate" Type="datetime" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="BankName" Type="varchar" MaxLength="50" />
+    <Property Name="Ifsccode" Type="varchar" MaxLength="50" />
+    <Property Name="SlipName" Type="nvarchar(max)" />
+    <Property Name="Charge" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FinalCharge" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Mode" Type="varchar" MaxLength="50" />
+    <Property Name="SlipID" Type="varchar" MaxLength="50" />
+    <Property Name="RejectReason" Type="varchar" MaxLength="50" />
+    <Property Name="ResponseBy" Type="varchar" MaxLength="50" />
+    <Property Name="Gst" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="tds" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="RadiantPrepayTransfer">
     <Key>
@@ -21362,6 +21389,10 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="res" Type="nvarchar(max)" Mode="In" />
     <Parameter Name="output" Type="varchar" Mode="InOut" />
   </Function>
+  <Function Name="updateprepayCashpickup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="uniqueid" Type="varchar" Mode="In" />
+    <Parameter Name="status" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="updateWhatsapppurchase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="idno" Type="int" Mode="In" />
     <Parameter Name="status" Type="varchar" Mode="In" />
@@ -22704,6 +22735,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="PurchaseOrderCashDepositeChargeDistributor" EntityType="Self.PurchaseOrderCashDepositeChargeDistributor" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PushNotificationStatus" EntityType="Self.PushNotificationStatus" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radiantauth" EntityType="Self.radiantauth" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RadiantCashDeposite" EntityType="Self.RadiantCashDeposite" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RadiantPrepayTransfer" EntityType="Self.RadiantPrepayTransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="radianttoken" EntityType="Self.radianttoken" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RadiantTransfers" EntityType="Self.RadiantTransfers" Schema="dbo" store:Type="Tables" />
