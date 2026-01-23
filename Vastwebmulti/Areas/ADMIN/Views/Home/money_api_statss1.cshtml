@@ -5,6 +5,36 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+
+    /* New css  */
+    .rtyfrtyclass-third {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding:0;
+    }
+    .money_api_s {
+        display: flex;
+        justify-content: space-between;
+        margin: 0;
+    }
+        .money_api_s a {
+            background-color: var(--main-bg-lcolor);
+            border: 1px solid #7b7b7b38 !important;
+        }
+    .padding-top-thirdclass {
+        padding: 5px 4px;
+        float: left;
+    }
+    .updatests button {
+        background: green !important;
+        padding: 6px 16px;
+        border: 1px solid !important;
+    }
+
+    /* New css  */
+
+
     .off {
         width: 30%;
         background: red;
@@ -16,6 +46,30 @@
         background: green;
         color: white;
     }
+
+
+    @@media only screen and (max-width: 480px) {
+        .rtyfrtyclass-third {
+            display: block;
+        }
+
+        .money_api_s a {
+            width: 100%;
+        }
+
+        .row.money_api_s .col.col-md-3 {
+            width: 50%;
+            padding: 0;
+        }
+
+        .money_api_s {
+            margin-top: 6px;
+            width: 100%;
+            float: left;
+            text-align: center;
+        }
+    } 
+
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -55,87 +109,90 @@
 
             </div>
         </div>
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card" style="margin-bottom:15px;">
-                    <div class="col-md-12 rtyfrty rtyfrtyclass-third">
-                        <div style="margin-left:-13px;">
-                            @Html.Partial("_menuapinm")
-                        </div>
-                        <div style="padding-top:10px;" class="col col-md-12">
-                            <div class="col col-md-3">
-                                <a href="@Url.Action("money_api_statss","Home")" class="btn btn-default"> BANK1 </a>
+        
+        <div class="page-header-third">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="card" style="">
+                        <div class="col-md-12 rtyfrty rtyfrtyclass-third">
+                            <div style="">
+                                @Html.Partial("_menuapinm")
                             </div>
-                            <div class="col col-md-3">
-                                <a href="@Url.Action("money_api_statss1","Home")" class="btn btn-danger"> BANK2 </a>
+                            <div style="" class="row money_api_s">
+                                <div class="col col-md-3">
+                                    <a href="@Url.Action("money_api_statss","Home")" class="btn btn-default"> BANK1 </a>
+                                </div>
+                                <div class="col col-md-3">
+                                    <a href="@Url.Action("money_api_statss1","Home")" class="btn " style="color:#fff;"> BANK2 </a>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
 
-        <div class="" style="width: 100%; float: left; margin-top: 8px;">
-            <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
-                <table class="table table-bordered table-striped example-second" style="width:100%;">
-                    <thead style="background-color:whitesmoke;">
-                        <tr>
-                            <th>API&nbsp;Name</th>
-                            <th>API&nbsp;Category</th>
-                            <th>Edit</th>
+            <div class="" style="width: 100%; float: left; margin-top: 8px;">
+                <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
+                    <table class="table table-bordered table-striped example-second" style="width:100%;">
+                        <thead style="background-color:whitesmoke;">
+                            <tr>
+                                <th>API&nbsp;Name</th>
+                                <th>API&nbsp;Category</th>
+                                <th>Edit</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
-                        {
-                            var deta = 0;
-                            foreach (var item in Model)
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
                             {
-                                <tr>
-                                    <td>
-                                        <select id="apis+@item.idno" onchange="updateapi(@item.idno)" class="btn btn-secondary dropdown-toggle">
-                                            @if (item.catagory != "DMT")
-                                            {
-                                                <option>VASTWEB</option>
-                                            }
-                                            <option @(item.api_name == "RADIANT" ? "selected" : "")>RADIANT</option>
+                                var deta = 0;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <select id="apis+@item.idno" onchange="updateapi(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                                @if (item.catagory != "DMT")
+                                                {
+                                                    <option>VASTWEB</option>
+                                                }
+                                                <option @(item.api_name == "RADIANT" ? "selected" : "")>RADIANT</option>
 
-                                          
-                                        </select>
-                                    </td>
-                                    <td>
-                                        @if (item.catagory == "PAYOUT")
-                                        {
-                                            <select id="apis1+@item.idno" onchange="updateapiSlab(@item.idno)" class="btn btn-secondary dropdown-toggle">
-                                                <option>Slab1</option>
-                                                <option @(item.Slabnm == "Slab2" ? "selected" : "")>Slab2</option>
+
                                             </select>
-                                        }
-                                    </td>
-                                    <td>@item.catagory</td>
-                                    <td class="updatests">
-                                        @if (item.status == true)
-                                        {
+                                        </td>
+                                        <td>
+                                            @if (item.catagory == "PAYOUT")
+                                            {
+                                                <select id="apis1+@item.idno" onchange="updateapiSlab(@item.idno)" class="btn btn-secondary dropdown-toggle">
+                                                    <option>Slab1</option>
+                                                    <option @(item.Slabnm == "Slab2" ? "selected" : "")>Slab2</option>
+                                                </select>
+                                            }
+                                        </td>
+                                        <td>@item.catagory</td>
+                                        <td class="updatests">
+                                            @if (item.status == true)
+                                            {
 
 
-                                            <button class="btn btn-primary" onclick="updates(false,@item.idno , @deta )">ON</button>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-primary" onclick="updates(true,@item.idno, @deta )">OFF</button>
-                                        }
+                                                <button class="btn btn-primary" onclick="updates(false,@item.idno , @deta )">ON</button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-primary" onclick="updates(true,@item.idno, @deta )">OFF</button>
+                                            }
 
-                                    </td>
-                                </tr>
-                                deta++;
+                                        </td>
+                                    </tr>
+                                    deta++;
+                                }
                             }
-                        }
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -13,21 +13,40 @@
         padding: 0;
     }
     .rtyfrty .card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        width: 100%;
+        float: left;
         margin-bottom: 4px;
     }
     .modal-body .row.clearfix {
         padding: 2px 0px;
     }
-
+    #ul li {
+        width: 15%;
+    }
+    #ul {
+        display: flex;
+    }
+    .rtyfrtyclass-third {
+        padding: 0;
+        margin-bottom: 4px;
+    }
+    .rtyfrty form {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+    .vacrivet {
+        padding: 0 5px;
+    }
+    .modal-footer {
+        margin-top: 10px;
+    }
 
    /* new css */
 
 
     span.select2.select2-container.select2-container--default {
-        width: fit-content !important;
+
         float: right;
     }
     .col-md-7.col-xs-6.vacrivet {
@@ -139,6 +158,12 @@
     }
 
          @@media only screen and (max-width:480px) {
+            #ul {
+                display: block;
+            }
+            .rtyfrty form {
+                display: block;
+            }
             div#custnav ul li a {
                 font-size: 12px;
             }
@@ -216,18 +241,18 @@
                     <div class="col-md-12 rtyfrty">
                         <div class="card" style="">
 
-                            <div class="col-md-7 rtyfrtyclass-third">
+                            <div class="col-md-12 rtyfrtyclass-third">
                                 <div style="">
                                     @Html.Partial("_menuapinm")
                                 </div>
 
                             </div>
-                            <div class="col-md-5 for-r-width for-r-button" style="width: 29%; float: right;">
+                            <div class="col-md-12 for-r-width for-r-button" style="width: 100%; float: right;">
                                 <div class="row">
                                     @using (Html.BeginForm("Api_Name", "Home", FormMethod.Post))
                                     {
 
-                                        <div class="col-md-7 col-xs-6 vacrivet">
+                                        <div class="col-md-2 vacrivet">
                                             <div class="input-group" style="">
                                                 <div class="">
                                                     @Html.DropDownList("apinm", ViewBag.apinm as SelectList, "Api Name", new { id = "apinm", @class = "form-control for-select2", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;height:38px;", @required = "required" })
@@ -235,7 +260,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-md-2  col-xs-3 vacrivet buttonsearch-second" style="padding:0px;">
+                                        <div class="col-md-1 vacrivet buttonsearch-second" style="padding:0px;">
                                             <center>
                                                 <button type="submit" class=" waves-effect" style="width: 100%; height: 32px; float: left; border: 1px solid #c7c2c2; background: transparent;">
                                                     <i class="fa fa-search" style="top: 1px; font-size: 14px; color: #444;"></i>
@@ -243,9 +268,9 @@
                                                 </button>
                                             </center>
                                         </div>
-                                        <div class="col-md-3  col-xs-3 vacrivet" style="padding-right: 0;">
+                                        <div class="col-md-1  col-xs-3 vacrivet" style="padding-right: 0;">
                                             <center>
-                                                <button type="button" class="btn waves-effect fullbodydycolorbg" style="float:right; height:32px;float:right;border:1px solid #c7c2c2;background:#dedddd;" data-toggle="modal" data-target="#defaultModal">
+                                                <button type="button" class="btn waves-effect fullbodydycolorbg" style="width:100%; float:right; height:32px;float:right;border:1px solid #c7c2c2;background:#dedddd;" data-toggle="modal" data-target="#defaultModal">
                                                     <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;"></i>
                                                     <span style="color:#fff;">Add New</span>
                                                 </button>

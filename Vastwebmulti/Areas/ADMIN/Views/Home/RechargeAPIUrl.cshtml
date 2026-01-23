@@ -10,13 +10,17 @@
         margin: 3px 0px;
     }
     .modal .modal-footer {
-        padding: 10px;
+        padding: 26px 38px;
+        padding-top: 0;
     }
     #ul {
         width: 100%;
     }
+    #custnav1 #ul li {
+        width: 25%;
+    }
     #custnav1 #ul {
-        width:auto;
+        margin-top: 6px;
     }
     .col-md-5.rtyfrty.rtyfrtyclass-third {
         padding: 0;
@@ -30,6 +34,12 @@
     .card.page-header-third .col-md-12 {
         padding: 0;
     }
+    #ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 
    /* new css */
 
@@ -43,6 +53,7 @@
         float: left;
         margin-right: 3px;
         background: #efefef;
+        width: 15%;
     }
 
         #ul li a {
@@ -52,7 +63,7 @@
             text-decoration: none;
             border: 1px solid #b1a6a638;
             position: initial;
-            font-size: 11px;
+            font-size: 12px;
         }
 
     ul#ul {
@@ -166,6 +177,14 @@
     }
 
     @@media only screen and (max-width:480px) {
+        #ul {
+            display: block;
+        }
+        #custnav1 #ul li {
+            width: 50%;
+            display: table;
+        }
+
         .modal-dialog {
             width: 96% !important;
         }
@@ -250,13 +269,13 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card page-header-third">
                     <div class="col-md-12">
-                        <div class="col-md-7 rtyfrty rtyfrtyclass-third" style="width:50%; float:left; ">
+                        <div class="col-md-12 rtyfrty rtyfrtyclass-third" style=" float:left; ">
                             <div style="">
                                 @Html.Partial("_menuapinm")
                             </div>
 
                         </div>
-                        <div class="col-md-5 rtyfrty rtyfrtyclass-third" style="width: 45%; float: right;  ">
+                        <div class="col-md-12 rtyfrty rtyfrtyclass-third" style="float: right;  ">
                             <div style="">
                                 @Html.Partial("_menu_rch_Api")
                             </div>

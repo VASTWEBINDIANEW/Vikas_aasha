@@ -240,7 +240,6 @@
         height: auto;
         background: var(--second-bg-color);
         overflow: hidden;
-        margin-top:6px;
     }
 
     .table-responsive.table-responsive-payugateway {
@@ -347,7 +346,7 @@
 
     @@media only screen and (max-width:992px){
         .ajest {
-            display: block;
+            display: table;
         }
         .ulautopadd-third {
             width: 100% !important;
@@ -518,6 +517,7 @@
 
         .payugateway-admin-respo .three-page-same.upi-charge .unload-item .rightt {
             width: auto !important;
+            margin-top: 4px;
         }
 
         .payment-responsi .unload-item {
@@ -562,11 +562,11 @@
         
         <div class="">
 
-            <div class="col-md-12 col-sm-12 col-xs-12 page-header-third">
+            <div class="col-md-12 col-sm-12 col-xs-12" style=" margin-top: 8px;">
                 
-                <div class="ajest" style="">
+                <div class="ajest  page-header-third" style="">
 
-                    <ul class="ulautopadd-third four-noneclass-admin-only" style="float: left; margin: inherit; width: auto; display: flex;">
+                    <ul class="ulautopadd-third four-noneclass-admin-only" style="float: left; margin: 0; width: auto; display: flex;">
                         <li class="smli" style="margin: 0;">
                             <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 14px;">
                                 Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
@@ -577,7 +577,7 @@
                             Payment Gateway
                         </li>
                     </ul>
-                    <div class="three-page-same upi-charge all-type-third upiclass-respfull-third" style="width: auto; float: right; margin: inherit;">
+                    <div class="three-page-same upi-charge all-type-third upiclass-respfull-third" style="width: auto; float: right; margin: 0;">
                         <div class="un-re-wa-right" style="padding-left: 10px;">
                             @using (Ajax.BeginForm("_Gateway_report", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure", UpdateTargetId = "WAdminSearchList" }))
                             {
@@ -660,22 +660,25 @@
 
                 </div>
 
-                <div class="ca-dipo-right height-auto-second height-auto-third" style="">
-                    <div class="three-page-same">
-                        <div class="row clearfix" id="RetailerSRC">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div id="RetailerSearchList">
-                                    <div class="table-responsive table-responsive-payugateway tableseconddes-admin" style="width:100%;margin:auto;">
-
-                                        <div id="WAdminSearchList">
-                                            @Html.Partial("_Gateway_report")
-                                        </div>
 
 
+                <div class=" page-header-third">
+                    <div class="ca-dipo-right height-auto-second height-auto-third " style="">
+                        <div class="three-page-same">
+                            <div class="row clearfix" id="RetailerSRC">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div id="RetailerSearchList">
+                                        <div class="table-responsive table-responsive-payugateway tableseconddes-admin" style="width:100%;margin:auto;">
+
+                                            <div id="WAdminSearchList">
+                                                @Html.Partial("_Gateway_report")
+                                            </div>
 
 
 
-                                        @*<table class="table table-bordered table-striped table-hover">
+
+
+                                            @*<table class="table table-bordered table-striped table-hover">
                                     <thead style="background-color:whitesmoke;">
                                         <tr>
                                             <th>Role</th>
@@ -742,15 +745,15 @@
                                     </tbody>
                                 </table>*@
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div><!--.row-->
+                            </div><!--.row-->
 
 
-                        <div class="row clearfix" id="WAdminSRC" style="display:none">
-                            <div id="divEmp" class="col-md-12 col-sm-12 col-xs-12">
-                                @*<div class="un-re-wa-right" style="padding-left: 10px;">
+                            <div class="row clearfix" id="WAdminSRC" style="display:none">
+                                <div id="divEmp" class="col-md-12 col-sm-12 col-xs-12">
+                                    @*<div class="un-re-wa-right" style="padding-left: 10px;">
                             @using (Ajax.BeginForm("_Gateway_report", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure", UpdateTargetId = "WAdminSearchList" }))
                             {
                                 <div class="unload-item item-two" style="width:10%">
@@ -814,16 +817,19 @@
 
                             }
                         </div>*@
-                                @*<div id="WAdminSearchList">
+                                    @*<div id="WAdminSearchList">
                             @Html.Partial("_Gateway_report")
                         </div>*@
-                            </div>
-                        </div><!--.row-->
+                                </div>
+                            </div><!--.row-->
 
 
 
-                    </div><!--.three-page-same-->
+                        </div><!--.three-page-same-->
+                    </div>
                 </div>
+
+                
             </div>
         </div>
     </div>
