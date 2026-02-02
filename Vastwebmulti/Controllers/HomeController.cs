@@ -1755,6 +1755,10 @@ namespace Vastwebmulti.Controllers
             return View();
         }
 
+        public ActionResult Help()
+        {
+            return View();
+        }
 
         public void Passcode(string ids)
         {
