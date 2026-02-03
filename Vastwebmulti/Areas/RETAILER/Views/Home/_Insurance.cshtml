@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+<style>
 
     .loader {
         position: fixed;
@@ -155,6 +157,8 @@
     -->
 
 </div>
+<div id="insurmsgBox" style="margin-top:10px;"></div>
+
 <table id="confirminsur" class="for-prepaid" style="width:100%;margin-top:-11px !important;display:none;">
     <tr>
         <th style="width:10%;"></th>
@@ -162,6 +166,10 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">PIN</th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -178,7 +186,25 @@
             <input type="number" class="form-control" id="servicefeeinsurance" placeholder="Enter Fee" />
             <input type="hidden" name="insuranceduedate" id="insuranceduedate" />
         </td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="insurrechargeconfirm()">Procces To Pay</button></td>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="InsurRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="insurpinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+
+        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="insurprocessToPay()">Procces To Pay</button></td>
+
+
+        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="insurrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -195,6 +221,51 @@
     </tr>
 </table>
 <div class="loader loaderwww"></div>
+
+
+
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function insurprocessToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#InsurRechargepin').val();
+
+
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#InsurRechargepin').focus();
+                return;
+            }
+
+            insurrechargeconfirm(pin);
+        }
+        else {
+            insurrechargeconfirm('');
+        }
+    }
+</script>
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#insurmsgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#insurmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
 <script>
     j('#insuranceddltype').select2();
 </script>
@@ -338,7 +409,7 @@
 </script>
 
 <script>
-    function insurrechargeconfirm() {
+    function insurrechargeconfirm(pinValue) {
 
         var e = document.getElementById("insuranceddltype");
         var insuranceddl = e.options[e.selectedIndex].text;
@@ -354,19 +425,36 @@
             var sts = getinsurancecontiunebtn(insuranceddl, txtpolicyno, dob, insuranceamount);
             if (sts == true) {
                   $("#servicefeeinsurance").css("border-color", "#00000");
-                $("#txtpolicyno").val("");
-                $("#insuranceamount").val("");
-                if (txtpolicyno != "" && insuranceamount != "") {
+                //$("#txtpolicyno").val("");
+                //$("#insuranceamount").val("");
+               // if (txtpolicyno != "" && insuranceamount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: insuranceddl, OptCode: insurancevalue, mobileno: txtpolicyno, Amount: insuranceamount, optional1: dob, optional2: email, optional3: "", optional4: "", comm: "", BillRefId: "", servicefee: servicefeeinsurance, billduedate: duedate  },
+                        data: { OperatorName: insuranceddl, OptCode: insurancevalue, mobileno: txtpolicyno, Amount: insuranceamount, optional1: dob, optional2: email, optional3: "", optional4: "", comm: "", BillRefId: "", servicefee: servicefeeinsurance, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#insurpinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#insurpinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
+
                             var status = result.Response;
                             var message = result.Message;
                             if (status == "GATEWAY") {
@@ -377,6 +465,9 @@
                             else {
                                 $('#rchstatuschkinsur').text(status);
                                 $('#rchmsginsur').text(message);
+
+                                $("#txtpolicyno").val("");
+                                $("#insuranceamount").val("");
                             }
 
                             $('#confirminsur').hide();
@@ -403,7 +494,7 @@
                             $('.loader').hide();
                         }
                     })
-                }
+               // }
             }
         }
         else {

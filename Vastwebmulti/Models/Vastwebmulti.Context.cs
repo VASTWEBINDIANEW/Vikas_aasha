@@ -911,6 +911,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<paytm_imps_whitelabel_commUPI> paytm_imps_whitelabel_commUPI { get; set; }
         public virtual DbSet<KotakQRDetail> KotakQRDetails { get; set; }
         public virtual DbSet<RadiantPrepayTransfer> RadiantPrepayTransfers { get; set; }
+        public virtual DbSet<Rechargepin_otp_status> Rechargepin_otp_status { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

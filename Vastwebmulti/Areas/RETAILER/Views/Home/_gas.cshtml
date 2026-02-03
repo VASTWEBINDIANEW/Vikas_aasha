@@ -1,4 +1,7 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+
+<style>
 
     .loader {
         position: fixed;
@@ -215,6 +218,9 @@
     -->
 
 </div>
+
+<div id="gasmsgBox" style="margin-top:10px;"></div>
+<div id="lpggasmsgBox" style="margin-top:10px;"></div>
 <table id="confirmgas" class="for-prepaid" style="width:100%;margin-top:0px;margin-top: -11px !important;display:none;">
     <tr>
         <th style="width:10%;"></th>
@@ -222,6 +228,11 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == null)
+        {
+            <th style="width:15%;">Pin </th>
+        }
+
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -235,7 +246,25 @@
             <input type="number" class="form-control" id="servicefeegas" placeholder="Enter Fee" />
             <input type="hidden" name="gasduedate" id="gasduedate" />
         </td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasrechargeconfirm()">Procces To Pay</button></td>
+
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="gasRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="gaspinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+
+        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasprocessToPay()">Procces To Pay</button></td>
+
+        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="gasrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -260,6 +289,10 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">Pin </th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -273,7 +306,25 @@
             <input type="number" class="form-control" id="servicefeelpggas" placeholder="Enter Fee" style="height: 30px;box-shadow: none;width: 150px;" />
             <input type="hidden" name="lpggasduedate" id="lpggasduedate" />
         </td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasrechargeconfirm()">Procces To Pay</button></td>
+
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="lpggasRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="lpggaspinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasprocessToPay()">Procces To Pay</button></td>
+
+
+        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="lpggasrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -292,6 +343,89 @@
 
 
 <div class="loader loaderwww"></div>
+
+
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function gasprocessToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#gasRechargepin').val();
+
+
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#gasRechargepin').focus();
+                return;
+            }
+
+            gasrechargeconfirm(pin);
+        }
+        else {
+            gasrechargeconfirm('');
+        }
+    }
+</script>
+
+<script>
+    var isPinOn1 = @Model.Ispin.ToString().ToLower();
+
+    function lpggasprocessToPay() {
+
+        if (isPinOn1) {
+
+            var pin1 = $('#lpggasRechargepin').val();
+
+
+            if (!pin1) {
+                alert('Please enter transaction PIN');
+                $('#lpggasRechargepin').focus();
+                return;
+            }
+
+            lpggasrechargeconfirm(pin1);
+        }
+        else {
+            lpggasrechargeconfirm('');
+        }
+    }
+</script>
+
+<script>
+    function gasshowMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#gasmsgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#gasmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+<script>
+    function lpggasshowMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#lpggasmsgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#lpggasmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
 <script>
     j('#gasddltype').select2();
     j('#lpggasddltype').select2();
@@ -426,7 +560,7 @@
 
 
 <script>
-    function gasrechargeconfirm() {
+    function gasrechargeconfirm(pinValue) {
 
                 var e = document.getElementById("gasddltype");
         var gasddl = e.options[e.selectedIndex].text;
@@ -443,19 +577,35 @@
             var sts = getgascontiunebtn(gasddl, txtgasno, gasamount, billgroup, registermobile);
             if (sts == true) {
                            $("#servicefeegas").css("border-color", "#000000");
-                $("#txtgasno").val("");
-                $("#gasamount").val("");
-                if (txtgasno != "" && gasamount != "") {
+                //$("#txtgasno").val("");
+                //$("#gasamount").val("");
+                //if (txtgasno != "" && gasamount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: gasddl, OptCode: eleddlvalue, mobileno: txtgasno, Amount: gasamount, optional1: billgroup, optional2: registermobile, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeegas, billduedate: duedate },
+                        data: { OperatorName: gasddl, OptCode: eleddlvalue, mobileno: txtgasno, Amount: gasamount, optional1: billgroup, optional2: registermobile, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeegas, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#gaspinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#gaspinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
                             var status = result.Response;
                             var message = result.Message;
                             if (status == "GATEWAY") {
@@ -466,6 +616,9 @@
                             else {
                                 $('#rchstatuschkgas').text(status);
                                 $('#rchmsggas').text(message);
+
+                                $("#txtgasno").val("");
+                                $("#gasamount").val("");
                             }
 
                             $('#confirmgas').hide();
@@ -492,7 +645,7 @@
                             $('.loader').hide();
                         }
                     })
-                }
+              //  }
             }
         }
         else {
@@ -662,7 +815,7 @@
 
 
 <script>
-    function lpggasrechargeconfirm() {
+    function lpggasrechargeconfirm(pinValue1) {
                 var e = document.getElementById("lpggasddltype");
         var gasddl = e.options[e.selectedIndex].text;
         var eleddlvalue = e.options[e.selectedIndex].value;
@@ -678,25 +831,44 @@
             var sts = getlpggascontiunebtn(gasddl, txtgasno, gasamount, billgroup, registermobile);
             if (sts == true) {
                            $("#servicefeelpggas").css("border-color", "#000000");
-                $("#txtlpggasno").val("");
-                $("#lpggasamount").val("");
-                if (txtgasno != "" && gasamount != "") {
+                //$("#txtlpggasno").val("");
+                //$("#lpggasamount").val("");
+                //if (txtgasno != "" && gasamount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: gasddl, OptCode: eleddlvalue, mobileno: txtgasno, Amount: gasamount, optional1: billgroup, optional2: registermobile, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeegas, billduedate: duedate },
+                        data: { OperatorName: gasddl, OptCode: eleddlvalue, mobileno: txtgasno, Amount: gasamount, optional1: billgroup, optional2: registermobile, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeegas, billduedate: duedate, Rechargepin: pinValue1 },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#lpggaspinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#lpggaspinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
                             var status = result.Response;
                             var message = result.Message;
                             $('#rchstatuschklpggas').text(status);
                             $('#rchmsglpggas').text(message);
                             $('#confirmlpggas').hide();
                             $('#rechargeconfirmlpggas').show();
+
+                            $("#txtlpggasno").val("");
+                            $("#lpggasamount").val("");
                         },
                         complete: function () {
                             $('.loader').hide();
@@ -706,7 +878,27 @@
                                 dataType: "html",
                                 data: { type: "LPG Gas" },
                                 success: function (data) {
+
+
+                                    //// 🔴 Clear old PIN error every time
+                                    //$('#lpggaspinError').hide().text("");
+
+                                    ///* 🔴 PIN ERROR — SAME PAGE */
+                                    //if (result.status && (
+                                    //    result.status === "PIN_REQUIRED" ||
+                                    //    result.status === "INVALID_PIN" ||
+                                    //    result.status === "PIN_NOT_SET")) {
+
+                                    //    $('#lpggaspinError').text(result.message).show();
+                                    //    $('.loader').hide();
+                                    //    return; // 🚫 STOP ONLY FOR PIN ERROR
+                                    //}
+
                                     $('#reportchk').html(data);
+
+
+                                    //$("#txtlpggasno").val("");
+                                    //$("#lpggasamount").val("");
                                 },
                                 error: function (data) {
 
@@ -717,7 +909,7 @@
                             $('.loader').hide();
                         }
                     })
-                }
+               // }
             }
         }
         else {

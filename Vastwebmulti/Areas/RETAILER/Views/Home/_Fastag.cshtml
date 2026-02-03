@@ -1,4 +1,7 @@
-﻿<style>
+﻿
+@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+<style>
     .loader {
         position: fixed;
         top: -90px;
@@ -142,6 +145,9 @@
 
 </div>
 
+
+<div id="fasttagmsgBox" style="margin-top:10px;"></div>
+
 <table id="confirmfasttag" class="for-prepaid" style="width:100%;margin-top:-18px;display:none;">
     <tr>
         <th style="width:10%;"></th>
@@ -149,6 +155,10 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">Pin </th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -162,16 +172,44 @@
             <input type="number" class="form-control" id="servicefeefasttag" placeholder="Enter Fee" />
             <input type="hidden" name="fasttagduedate" id="fasttagduedate" />
         </td>
+
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="fasttagRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="fasttagpinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+
+
+        }
+
         <td>
             <button style="float: right;
-        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-        border: 0px;
-        color: #fff;
-        padding: 4px 19px;
-        font-size: 20px;" onclick="fasttagrechargeconfirm()">
+  background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
+  border: 0px;
+  color: #fff;
+  padding: 4px 19px;
+  font-size: 20px;" onclick="fasttagprocessToPay()">
                 Procces To Pay
             </button>
         </td>
+        @*<td>
+                <button style="float: right;
+            background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
+            border: 0px;
+            color: #fff;
+            padding: 4px 19px;
+            font-size: 20px;" onclick="fasttagrechargeconfirm()">
+                    Procces To Pay
+                </button>
+            </td>*@
     </tr>
 </table>
 <table id="rechargeconfirmfasttag" class="for-prepaid" style="width:100%;margin-top:-11px !important;display:none;">
@@ -188,6 +226,56 @@
 </table>
 
 <div class="loader loaderwww"></div>
+
+
+
+
+
+<script>
+
+     var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function fasttagprocessToPay() {
+
+     if (isPinOn) {
+
+         var pin = $('#fasttagRechargepin').val();
+
+
+         if (!pin) {
+             alert('Please enter transaction PIN');
+             $('#fasttagRechargepin').focus();
+             return;
+         }
+
+         fasttagrechargeconfirm(pin);
+     }
+     else {
+         fasttagrechargeconfirm('');
+     }
+ }
+
+</script>
+
+
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#fasttagmsgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#fasttagmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
+
 <script>
     j('#fasttagddltype').select2();
 </script>
@@ -353,7 +441,7 @@
 </script>
 
 <script>
-    function fasttagrechargeconfirm() {
+    function fasttagrechargeconfirm(pinValue) {
 
        var e = document.getElementById("fasttagddltype");
         var eleddl = e.options[e.selectedIndex].text;
@@ -369,19 +457,38 @@
             if (sts == true) {
                   $("#servicefeefasttag").css("border-color", "#000000");
                 var optional1 = "";
-                $("#txtvehicle").val("");
-                $("#FastTagAmount").val("");
-                if (txtval != "" && Amount != "") {
+                //$("#txtvehicle").val("");
+                //$("#FastTagAmount").val("");
+            //    if (txtval != "" && Amount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: eleddl, OptCode: eleddlvalue, mobileno: txtval, Amount: Amount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: fasttagRefId, servicefee: servicefeefasttag, billduedate: duedate },
+                        data: { OperatorName: eleddl, OptCode: eleddlvalue, mobileno: txtval, Amount: Amount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: fasttagRefId, servicefee: servicefeefasttag, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#fasttagpinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#fasttagpinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
+
                             var status = result.Response;
                             var message = result.Message;
                             if (status == "GATEWAY") {
@@ -392,6 +499,9 @@
                             else {
                                 $('#rchstatuschkfasttag').text(status);
                                 $('#rchmsgelec').text(message);
+
+                                $("#txtvehicle").val("");
+                                $("#FastTagAmount").val("");
                             }
 
                             $('#confirmfasttag').hide();
@@ -419,7 +529,7 @@
                         }
                     })
 
-                }
+              //  }
             }
         }
         else {

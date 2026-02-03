@@ -1634,12 +1634,12 @@ namespace Vastwebmulti.Controllers
 
                         var getlist = DB.googleconsoles.ToList();
                         ViewBag.getlist = getlist;
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
                 }
+                    else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
                 catch (Exception e)
                 {
                     return RedirectToAction("Index");

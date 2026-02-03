@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+<style>
 
     .loader {
         position: fixed;
@@ -110,12 +112,21 @@
 
 <div class="loader loaderwww"></div>
 
+<div id="DthmsgBox" style="margin-top:10px;"></div>
+
+  
+
 <table id="confirmDTH" class="for-prepaid" style="width:100%;margin-top:-11px;display:none;">
     <tr>
         <th style="width:10%;"></th>
         <th style="width:30%;">Operator</th>
         <th style="width:30%;">Recharge to</th>
         <th style="width:15%;">amount</th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">pin</th>
+        }
+
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -125,7 +136,25 @@
         <td style="font-size: 24px;"><b><span id="showoptdth"></span> </b></td>
         <td class="border-centerbe" style="font-size: 24px;"><b> <span id="shownumberdth"></span> </b></td>
         <td style="font-size: 24px;"><b><span id="showamountdth"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="DTHrechargeconfirm()">Procces To Pay</button></td>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 120px; " type="password"
+                       id="DTHRechargepin"
+                       name="DTHRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="DthpinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="DthprocessToPay()">Procces To Pay</button></td>
+
+        
+        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="DTHrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -142,6 +171,48 @@
     </tr>
 </table>
 
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function DthprocessToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#DTHRechargepin').val();
+         
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#DTHRechargepin').focus();
+                return;
+            }
+
+            DTHrechargeconfirm(pin);
+        }
+        else {
+            DTHrechargeconfirm('');
+        }
+    }
+</script>
+
+
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#msgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#DthmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
 <script src="~/Retailerjavascript/Rechargepaybill/Dth.js"></script>
 <script>
     j('#dthddl').select2();
@@ -157,11 +228,11 @@
 </script>
 <script>
     function backDTH() {
-         $('#showoptdth').text("");
-            $('#shownumberdth').text("");
-             $('#showamountdth').text("");
-                   $('#confirmDTH').hide();
-            $('#dthrchform').show();
+        $('#showoptdth').text("");
+        $('#shownumberdth').text("");
+        $('#showamountdth').text("");
+        $('#confirmDTH').hide();
+        $('#dthrchform').show();
     }
 </script>
 <!--dth contiune button javascript-->
@@ -178,12 +249,12 @@
         if (sts == true) {
             $('#showoptdth').text(ddldth);
             $('#shownumberdth').text(custromerid);
-             $('#showamountdth').text(dthamount);
+            $('#showamountdth').text(dthamount);
             $('#confirmDTH').show();
             $('#dthrchform').hide();
             $('#DTHCustomerInfo').hide();
 
-          //  Recharge(ddldth, optvalue, custromerid, dthamount, "", "", "", "", "0");
+            //  Recharge(ddldth, optvalue, custromerid, dthamount, "", "", "", "", "0");
             event.preventDefault();
             return false;
         }
@@ -196,27 +267,43 @@
 </script>
 
 <script>
-    function DTHrechargeconfirm() {
-      
+    function DTHrechargeconfirm(pinValue) {
+
          var e = document.getElementById("dthddl");
         var ddldth = e.options[e.selectedIndex].text;
         var optvalue = e.options[e.selectedIndex].value;
         var custromerid = $("#txtdthcardno").val();
         var dthamount = $("#txtdthamount").val();
 
-             $("#txtdthcardno").val("");
-        $("#txtdthamount").val("");
-        if (custromerid != "" && dthamount != "") {
+        //     $("#txtdthcardno").val("");
+        //$("#txtdthamount").val("");
+        //if (custromerid != "" && dthamount != "") {
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("Recharge","Home")",
-                data: { OperatorName: ddldth, OptCode: optvalue, mobileno: custromerid, Amount: dthamount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: "" },
+                data: { OperatorName: ddldth, OptCode: optvalue, mobileno: custromerid, Amount: dthamount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: "", Rechargepin: pinValue },
                 cache: false,
                 dataType: 'json',
                 beforeSend: function () {
                     $('.loader').show();
                 },
                 success: function (result) {
+
+
+                    // 🔴 Clear old PIN error every time
+                    $('#DthpinError').hide().text("");
+
+                    /* 🔴 PIN ERROR — SAME PAGE */
+                    if (result.status && (
+                        result.status === "PIN_REQUIRED" ||
+                        result.status === "INVALID_PIN" ||
+                        result.status === "PIN_NOT_SET")) {
+
+                        $('#DthpinError').text(result.message).show();
+                        $('.loader').hide();
+                        return; // 🚫 STOP ONLY FOR PIN ERROR
+                    }
+
                     var status = result.Response;
                     var message = result.Message;
                     if (status == "GATEWAY") {
@@ -227,6 +314,9 @@
                     else {
                         $('#rchstatuschkdth').text(status);
                         $('#rchmsgdth').text(message);
+
+                        $("#txtdthcardno").val("");
+                        $("#txtdthamount").val("");
                     }
 
                     $('#confirmDTH').hide();
@@ -253,19 +343,19 @@
                     $('.loader').hide();
                 }
             })
-        }
+       // }
 
     }
 </script>
 <script>
     function RechargeagainDTH() {
         $('#numbershowmobile').text("");
-       $("#txtdthcardno").val("");
+        $("#txtdthcardno").val("");
         $("#txtdthamount").val("");
-       j('#dthddl').val("");
-       j('#dthddl').select2().trigger('change');
-       $('#rechargeconfirmDTH').hide();
-       $('#dthrchform').show();
+        j('#dthddl').val("");
+        j('#dthddl').select2().trigger('change');
+        $('#rechargeconfirmDTH').hide();
+        $('#dthrchform').show();
     }
 </script>
 
@@ -290,14 +380,14 @@
               type: 'GET',
               dataType: "json",
               data: { optname: optname, mobileno: textvalue },
-              
+
               success: function (response) {
                   $('.loader').hide();
                   $('#DTHCustomerTbl').empty();
                   if (optname == "Dish TV") {
                       var sts = response.status;
 
-                     
+
                       if (sts == "SUCCESS") {
                           var jsonObj = response.Response;
 

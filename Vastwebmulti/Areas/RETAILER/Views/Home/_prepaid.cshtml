@@ -1,4 +1,5 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+<style>
 
 
     .loader {
@@ -62,126 +63,131 @@
 </style>
 
 <div id="Rechargeform" class="row">
-        <div class="col-md-4 Rechargeform-second">
-            <div class="txtmobilemessage2">
-                <p id="txtmobilemessage" class="txtmobilemessage1" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:5px;"></p>
-            </div>
-            <div class="form-group" style="margin-bottom:0px;">
-                <div class="" style="margin-top:-2px; margin-left:4px; height:37px;">
-                    <input type="text" id="txtmobile" name="txtmobile" required class="form-control pp" maxlength="10" placeholder="Mobile Number (+91)" onkeypress="return isNumber(event)" autocomplete="off" />
-
-                    <div style="float:right;margin-top:-30px; margin-right:8px;" id="ddlradio">
-                        <i class="fa fa-circle-o-notch fa-spin" id="rchspinner" style="font-size:14px;display:none;"></i>
-                        <input name="radiogroup" type="radio" id="radio_1" class="with-gap radio-col-blue-grey radioOptType" value="PrePaid">
-                        <label for="radio_1">Prepaid</label>
-                        <input name="radiogroup" type="radio" id="radio_2" class="with-gap radio-col-blue-grey radioOptType" value="PostPaid">
-                        <label id="postionchangebe" for="radio_2">Postpaid</label>
-                    </div>
-                </div>
-            </div>
-
+    <div class="col-md-4 Rechargeform-second">
+        <div class="txtmobilemessage2">
+            <p id="txtmobilemessage" class="txtmobilemessage1" style="margin-top:10px; color:#E91E63; font-size:10px; padding-left:5px;"></p>
         </div>
+        <div class="form-group" style="margin-bottom:0px;">
+            <div class="" style="margin-top:-2px; margin-left:4px; height:37px;">
+                <input type="text" id="txtmobile" name="txtmobile" required class="form-control pp" maxlength="10" placeholder="Mobile Number (+91)" onkeypress="return isNumber(event)" autocomplete="off" />
 
-        <div class="col-md-7" style="margin-bottom:0px;">
-            <div class="row">
-                <div style="visibility:inherit;">
-                    <p id="mobileoptddl" style="color:#E91E63;margin-top:10px; font-size:10px; padding-left:16px;"></p>
+                <div style="float:right;margin-top:-30px; margin-right:8px;" id="ddlradio">
+
+                    <i class="fa fa-circle-o-notch fa-spin" id="rchspinner" style="font-size:14px;display:none;"></i>
+                    <input name="radiogroup" type="radio" id="radio_1" class="with-gap radio-col-blue-grey radioOptType" value="PrePaid">
+                    <label for="radio_1">Prepaid</label>
+                    <input name="radiogroup" type="radio" id="radio_2" class="with-gap radio-col-blue-grey radioOptType" value="PostPaid">
+                    <label id="postionchangebe" for="radio_2">Postpaid</label>
                 </div>
-                <div class="col-md-4" id="Divprepaid" style="margin-bottom:0px;">
-                    <div id="dropprepaid">
-
-                        @Html.DropDownList("mobileoperatorPrepaid", (IEnumerable<SelectListItem>)ViewBag.perpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;", })
-                    </div>
-                    <div id="droppostpaid" style="display:none;">
-
-                        @Html.DropDownList("mobileoperatorPostpaid", (IEnumerable<SelectListItem>)ViewBag.postpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;" })
-                    </div>
-                </div>
-                <div class="col-md-4 dropprepaid-first">
-                    <div style="visibility:inherit;position: absolute;top: 10px;">
-                        <p id="mobileCircleddl" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
-                    </div>
-                    <div>
-
-                        <select id="ddlcircle" name="ddlcircle" class="form-control" style="display: block;">
-                            <option value="">Select Circle</option>
-                            <option value="Andhra Pradesh">Andhra Pradesh</option>
-                            <option value="Assam">Assam</option>
-                            <option value="Bihar Jharkhand">Bihar Jharkhand</option>
-                            <option value="Chennai">Chennai</option>
-                            <option value="Delhi NCR">Delhi NCR</option>
-                            <option value="Gujarat">Gujarat</option>
-                            <option value="Haryana">Haryana</option>
-                            <option value="Himachal Pradesh">Himachal Pradesh</option>
-                            <option value="Jammu Kashmir">Jammu Kashmir</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Kerala">Kerala</option>
-                            <option value="Kolkata">Kolkata</option>
-                            <option value="Madhya Pradesh Chhattisgarh">Madhya Pradesh Chhattisgarh</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                            <option value="Mumbai">Mumbai</option>
-                            <option value="North East">North East</option>
-                            <option value="Orissa">Orissa</option>
-                            <option value="Punjab">Punjab</option>
-                            <option value="Rajasthan">Rajasthan</option>
-                            <option value="Tamil Nadu">Tamil Nadu</option>
-                            <option value="UP East">UP East</option>
-                            <option value="UP West">UP West</option>
-                            <option value="West Bengal">West Bengal</option>
-
-
-                        </select>
-
-                    </div>
-                </div>
-                <div class="col-md-4 full-poporewq">
-                    <div style="height:28px;visibility:inherit;position:absolute;top:-11px;clear:both;">
-                        <p id="txtmobileamtemessage" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
-                    </div>
-                    <div class="form-group" style="margin-bottom:0px;">
-                        <div class="" style="margin-top:-2px;height:37px;">
-                            <input type="text" id="txtmobileamount" name="txtmobileamount" class="form-control" placeholder="Amount" onkeypress="return isNumber(event)" />
-                        </div>
-                        <input type="hidden" id="commvalue" />
-                    </div>
-                    <div id="viewplan" style="display:none;width:10px;">
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="form-line" style="top:11px; border-bottom:none; margin-left:56px;">
-                                <a href="#" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>" class="view-plans-button" style="text-decoration:none; font-size:11px;padding:5px; border:1px solid #ccc !important;border-radius:1px;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-
-        <div class="col-md-1 rechargebutton">
-            <div>
-                @*<div class="col-md-4" id="viewplan" style="display:none;">
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="form-line" style="top:11px; border-bottom:none; margin-left:-23px;">
-                                <a href="#" style="text-decoration:none; font-size:11px;border:1px solid #ffc107;padding:11px 4px 11px 4px; color: #ffc107;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
-                            </div>
-
-                        </div>
-                    </div>*@
-
-                <div>
-                    <div class="form-group" style="margin-bottom:0px;">
-                        <div class="form-line" style=" border-bottom:none;">
-                            <input type="submit" id="btn" class="btn bg-blue-grey greyss" value="Continue" style="margin-left:-21px; height:35px; margin-top:-3px; border:none;border-radius:2px;padding:9px 15px;" onclick="getmobilepreandpostcontinuebtn()" />
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
 
     </div>
+
+    <div class="col-md-7" style="margin-bottom:0px;">
+        <div class="row">
+            <div style="visibility:inherit;">
+                <p id="mobileoptddl" style="color:#E91E63;margin-top:10px; font-size:10px; padding-left:16px;"></p>
+            </div>
+            <div class="col-md-4" id="Divprepaid" style="margin-bottom:0px;">
+                <div id="dropprepaid">
+
+                    @Html.DropDownList("mobileoperatorPrepaid", (IEnumerable<SelectListItem>)ViewBag.perpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;", })
+                </div>
+                <div id="droppostpaid" style="display:none;">
+
+                    @Html.DropDownList("mobileoperatorPostpaid", (IEnumerable<SelectListItem>)ViewBag.postpaid, "Select Operators", new { @class = "form-control", @style = "border-radius:none;display:block;" })
+                </div>
+            </div>
+            <div class="col-md-4 dropprepaid-first">
+                <div style="visibility:inherit;position: absolute;top: 10px;">
+                    <p id="mobileCircleddl" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
+                </div>
+                <div>
+
+                    <select id="ddlcircle" name="ddlcircle" class="form-control" style="display: block;">
+                        <option value="">Select Circle</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar Jharkhand">Bihar Jharkhand</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Delhi NCR">Delhi NCR</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jammu Kashmir">Jammu Kashmir</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Madhya Pradesh Chhattisgarh">Madhya Pradesh Chhattisgarh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="North East">North East</option>
+                        <option value="Orissa">Orissa</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="UP East">UP East</option>
+                        <option value="UP West">UP West</option>
+                        <option value="West Bengal">West Bengal</option>
+
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-4 full-poporewq">
+                <div style="height:28px;visibility:inherit;position:absolute;top:-11px;clear:both;">
+                    <p id="txtmobileamtemessage" style="margin-top:-28px; color:#E91E63; font-size:10px; padding-left:1px;visibility:inherit;"></p>
+                </div>
+                <div class="form-group" style="margin-bottom:0px;">
+                    <div class="" style="margin-top:-2px;height:37px;">
+                        <input type="text" id="txtmobileamount" name="txtmobileamount" class="form-control" placeholder="Amount" onkeypress="return isNumber(event)" />
+                    </div>
+                    <input type="hidden" id="commvalue" />
+                </div>
+                <div id="viewplan" style="display:none;width:10px;">
+                    <div class="form-group" style="margin-bottom:0px;">
+                        <div class="form-line" style="top:11px; border-bottom:none; margin-left:56px;">
+                            <a href="#" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>" class="view-plans-button" style="text-decoration:none; font-size:11px;padding:5px; border:1px solid #ccc !important;border-radius:1px;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-1 rechargebutton">
+        <div>
+            @*<div class="col-md-4" id="viewplan" style="display:none;">
+                    <div class="form-group" style="margin-bottom:0px;">
+                        <div class="form-line" style="top:11px; border-bottom:none; margin-left:-23px;">
+                            <a href="#" style="text-decoration:none; font-size:11px;border:1px solid #ffc107;padding:11px 4px 11px 4px; color: #ffc107;" onclick="getbestViewofferplan()">View&nbsp;Plans</a>
+                        </div>
+
+                    </div>
+                </div>*@
+
+            <div>
+                <div class="form-group" style="margin-bottom:0px;">
+                    <div class="form-line" style=" border-bottom:none;">
+                        <input type="submit" id="btn" class="btn bg-blue-grey greyss" value="Continue" style="margin-left:-21px; height:35px; margin-top:-3px; border:none;border-radius:2px;padding:9px 15px;" onclick="getmobilepreandpostcontinuebtn()" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
 <div class="loader loaderwww"></div>
+
+<div id="msgBox" style="margin-top:10px;"></div>
+
+
 
 <table id="confirmprepaid" class="for-prepaid" style="width:100%;margin-top:-10px;display:none;">
     <tr>
@@ -189,6 +195,10 @@
         <th style="width:30%;">Operator</th>
         <th style="width:30%;">Recharge to</th>
         <th style="width:15%;">amount</th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">PIN</th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -198,10 +208,39 @@
         <td style="font-size: 24px;"><b><span id="showopt"></span> </b></td>
         <td class="border-centerbe" style="font-size: 24px;"><b> <span id="shownumber"></span> </b></td>
         <td style="font-size: 24px;"><b><span id="showamount"></span></b></td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="mobilerechargeconfirm()">Procces To Pay</button></td>
 
-    </tr>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="Rechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="pinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+
+    <td>
+        <button type="button"
+                style="width: 190px; float: right;background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor));border: 0; color: #fff; padding: 4px 19px; font-size: 20px;"
+                onclick="processToPay()"> Procces To Pay
+        </button>
+    </td>
+        @*<td>
+            <button style=" width: 190px; float: right; background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px; color: #fff; padding: 4px 19px; font-size: 20px;"
+            onclick="processToPay()"> Procces To Pay </button>
+        </td>*@
+
+
+
+</tr>
 </table>
+
+
 <table id="rechargeconfirm" class="for-prepaid" style="width:100%;margin-top:-10px;display:none;">
     <tr>
         <th style="width:25%;">Recharge Status</th>
@@ -214,6 +253,51 @@
         <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="Rechargeagain()">Recharge Again</button></td>
     </tr>
 </table>
+
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function processToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#Rechargepin').val();
+        
+
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#Rechargepin').focus();
+                return;
+            }
+
+            mobilerechargeconfirm(pin);
+        }
+        else {
+            mobilerechargeconfirm('');
+        }
+    }
+</script>
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#msgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#msgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
+
+
 
 <script>
     $('#mobileoperatorPrepaid').select2();
@@ -282,7 +366,7 @@
                         dataType: "json",
                         data: { mobileno: mobileno },
                        success: function (response) {
-                           
+
                                      document.getElementById("rchspinner").style.display = "none";
                             var sts = response.status;
                             var circle = response.Response.Circle;
@@ -607,7 +691,7 @@
     }
 </script>
 <script>
-    function mobilerechargeconfirm() {
+    function mobilerechargeconfirm(pinValue) {
 
        var optname = "";
         var optvalue = "";
@@ -628,22 +712,41 @@
         var radiovalue = document.querySelector('input[name="radiogroup"]:checked').value;
         var amout = $("#txtmobileamount").val();
         var comm = $("#commvalue").val();
-        $("#txtmobile").val("");
-        $("#txtmobileamount").val("");
-        if (mobileno != "" && amout != "") {
+        //$("#txtmobile").val("");
+        //$("#txtmobileamount").val("");
+        //if (mobileno != "" && amout != "")
+        //{
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("Recharge","Home")",
-                data: { OperatorName: optname, OptCode: optvalue, mobileno: mobileno, Amount: amout, optional1: "", optional2: "", optional3: "", optional4: "", comm: comm, BillRefId: "", circle: circle },
+                data: { OperatorName: optname, OptCode: optvalue, mobileno: mobileno, Amount: amout, optional1: "", optional2: "", optional3: "", optional4: "", comm: comm, BillRefId: "", circle: circle, Rechargepin: pinValue },
                 cache: false,
                 dataType: 'json',
                 beforeSend: function () {
                     $('.loader').show();
                 },
-                success: function (result) {
-                    window.location.reload();
+                success: function (result)
+                {
+
+                    // 🔴 Clear old PIN error every time
+                    $('#pinError').hide().text("");
+
+                    /* 🔴 PIN ERROR — SAME PAGE */
+                    if (result.status && (
+                        result.status === "PIN_REQUIRED" ||
+                        result.status === "INVALID_PIN" ||
+                        result.status === "PIN_NOT_SET")) {
+
+                        $('#pinError').text(result.message).show();
+                        $('.loader').hide();
+                        return; // 🚫 STOP ONLY FOR PIN ERROR
+                    }
+
+                   // window.location.reload();
                     var status = result.Response;
                     var message = result.Message;
+
+
                     if (status == "GATEWAY") {
                         window.open(message, "_self");
                         $('#rchstatuschkpre').text("Pending");
@@ -652,8 +755,15 @@
                     else {
                         $('#rchstatuschkpre').text(status);
                         $('#rchmsgprepaid').text(message);
+
+
+                        // ✅ CLEAR FIELDS ONLY AFTER SUCCESS
+
+                        $("#txtmobile").val("");
+                        $("#txtmobileamount").val("");
+
                     }
-                      
+
                         $('#confirmprepaid').hide();
                         $('#rechargeconfirm').show();
                 },
@@ -679,7 +789,7 @@
                     $('.loader').hide();
                 }
             })
-        }
+       // }
 
     }
 </script>

@@ -1,4 +1,7 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+
+<style>
 
     /* new css */
 
@@ -7,12 +10,13 @@
         align-items: center;
         justify-content: right;
     }
+
     #btnnn2 {
         padding: 0 10px !important;
         margin-top: 1.5px !important;
     }
-    
-    
+
+
     /* new css */
 
 
@@ -163,6 +167,8 @@
     </div>
 </div>
 
+<div id="landlinemsgBox" style="margin-top:10px;"></div>
+
 <table id="confirmlandline" class="for-prepaid" style="        width: 100%;
         margin-top: 5px;
         display: none;">
@@ -172,6 +178,10 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">Pin</th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -185,7 +195,26 @@
             <input type="number" class="form-control" id="servicefeelandline" placeholder="Enter Fee" />
             <input type="hidden" name="landlineduedate" id="landlineduedate" />
         </td>
-        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlinerechargeconfirm()">Procces To Pay</button></td>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 120px; " type="password"
+                       id="landlineRechargepin"
+                       name="landlineRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="landlinepinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+
+        <td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlineprocessToPay()">Procces To Pay</button></td>
+
+
+        @*<td><button style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="landlinerechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -204,6 +233,53 @@
 
 
 <div class="loader loaderwww"></div>
+landline
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function landlineprocessToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#landlineRechargepin').val();
+
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#landlineRechargepin').focus();
+                return;
+            }
+
+            landlinerechargeconfirm(pin);
+        }
+        else {
+            landlinerechargeconfirm('');
+        }
+    }
+</script>
+
+
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#msgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#DthmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
+
+
+
 <script>
     j('#landlineddl').select2();
 </script>
@@ -433,7 +509,7 @@
     }
 </script>
 <script>
-    function landlinerechargeconfirm() {
+    function landlinerechargeconfirm(pinValue) {
 
         var optional1 = ""; var optional2 = ""; var optional3 = "";
         var e = document.getElementById("landlineddl");
@@ -477,19 +553,36 @@
 
                 }
 
-                $("#txtlandline").val("");
-                $("#landamount").val("");
-                if (landlineno != "" && amountno != "") {
+              //  $("#txtlandline").val("");
+              //  $("#landamount").val("");
+              //  if (landlineno != "" && amountno != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: ddllandline, OptCode: optvalue, mobileno: landlineno, Amount: amountno, optional1: optional1, optional2: optional2, optional3: optional3, optional4: "", comm: "", BillRefId: "", servicefee: servicefeelandline, billduedate: duedate},
+                        data: { OperatorName: ddllandline, OptCode: optvalue, mobileno: landlineno, Amount: amountno, optional1: optional1, optional2: optional2, optional3: optional3, optional4: "", comm: "", BillRefId: "", servicefee: servicefeelandline, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#landlinepinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#landlinepinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
                             var status = result.Response;
                             var message = result.Message;
                             if (status == "GATEWAY") {
@@ -500,6 +593,10 @@
                             else {
                                 $('#rchstatuschklandline').text(status);
                                 $('#rchmsglandline').text(message);
+
+                                  $("#txtlandline").val("");
+                                 $("#landamount").val("");
+
                             }
 
                             $('#confirmlandline').hide();
@@ -527,7 +624,7 @@
                         }
                     })
 
-                }
+               // }
 
             }
         }
