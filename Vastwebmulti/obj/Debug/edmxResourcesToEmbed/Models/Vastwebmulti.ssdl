@@ -4409,6 +4409,34 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.LapuDetails' does not have a
     <Property Name="Date" Type="datetime" />
     <Property Name="Status" Type="char" MaxLength="1" />
   </EntityType>
+  <EntityType Name="LoiList">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Refnumber" Type="varchar" MaxLength="50" />
+    <Property Name="Insertdate" Type="datetime" />
+    <Property Name="Customername" Type="varchar" MaxLength="50" />
+    <Property Name="pickupaddress" Type="nvarchar(max)" />
+    <Property Name="Pincode" Type="int" />
+    <Property Name="WorkMode" Type="varchar" MaxLength="50" />
+    <Property Name="Cashlimit" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Depositionmode" Type="varchar" MaxLength="50" />
+    <Property Name="AdditionalRequirement" Type="nvarchar(max)" />
+    <Property Name="Stateid" Type="int" />
+    <Property Name="Districtid" Type="int" />
+    <Property Name="CityName" Type="varchar" MaxLength="50" />
+    <Property Name="ClientName" Type="varchar" MaxLength="50" />
+    <Property Name="PointMobile" Type="varchar" MaxLength="50" />
+    <Property Name="PointName" Type="varchar" MaxLength="50" />
+    <Property Name="DCCode" Type="varchar" MaxLength="50" />
+    <Property Name="SubDescrtion" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Retailerid" Type="varchar" MaxLength="50" />
+    <Property Name="Requestid" Type="varchar" MaxLength="100" />
+    <Property Name="Latitude" Type="varchar" MaxLength="50" />
+    <Property Name="Longitude" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Low_balance_schedule">
     <Key>
       <PropertyRef Name="idno" />
@@ -9234,29 +9262,31 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
   </EntityType>
   <EntityType Name="RadiantCashDeposite">
     <Key>
-      <PropertyRef Name="idno" />
+      <PropertyRef Name="Idno" />
     </Key>
-    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Userid" Type="varchar" MaxLength="50" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="AdminRemainPre" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="AdminRemainPost" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="InsertDate" Type="datetime" />
-    <Property Name="UpdateDate" Type="datetime" />
-    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="Remainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="datetime" />
+    <Property Name="Updatedate" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
     <Property Name="BankName" Type="varchar" MaxLength="50" />
     <Property Name="Ifsccode" Type="varchar" MaxLength="50" />
-    <Property Name="SlipName" Type="nvarchar(max)" />
+    <Property Name="Accountnumber" Type="varchar" MaxLength="50" />
     <Property Name="Charge" Type="decimal" Precision="18" Scale="2" />
     <Property Name="FinalCharge" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Mode" Type="varchar" MaxLength="50" />
-    <Property Name="SlipID" Type="varchar" MaxLength="50" />
-    <Property Name="RejectReason" Type="varchar" MaxLength="50" />
-    <Property Name="ResponseBy" Type="varchar" MaxLength="50" />
     <Property Name="Gst" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="tds" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Tds" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Mode" Type="varchar" MaxLength="50" />
+    <Property Name="Slipid" Type="varchar" MaxLength="50" />
+    <Property Name="Slipname" Type="varchar" MaxLength="100" />
+    <Property Name="RejectedReson" Type="nvarchar(max)" />
+    <Property Name="ResponseBy" Type="nvarchar(max)" />
+    <Property Name="Requestid" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="RadiantPrepayTransfer">
     <Key>
@@ -17090,6 +17120,9 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="userid" Type="varchar" Mode="In" />
     <Parameter Name="role" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="Loilistreport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="retailerid" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="main_rch_total" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="from" Type="datetime" Mode="In" />
     <Parameter Name="to" Type="datetime" Mode="In" />
@@ -21393,6 +21426,12 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <Parameter Name="uniqueid" Type="varchar" Mode="In" />
     <Parameter Name="status" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="UpdateRadiantCashDeposite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="uniqueid" Type="varchar" Mode="In" />
+    <Parameter Name="status" Type="varchar" Mode="In" />
+    <Parameter Name="rejectedReson" Type="varchar" Mode="In" />
+    <Parameter Name="Responseby" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="updateWhatsapppurchase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="idno" Type="int" Mode="In" />
     <Parameter Name="status" Type="varchar" Mode="In" />
@@ -22549,6 +22588,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="Login_setting_email_phone" EntityType="Self.Login_setting_email_phone" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Login_to_sim" EntityType="Self.Login_to_sim" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoginSilder" EntityType="Self.LoginSilder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoiList" EntityType="Self.LoiList" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Low_balance_schedule" EntityType="Self.Low_balance_schedule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="lowbalance" EntityType="Self.lowbalance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="lowbalancemsg" EntityType="Self.lowbalancemsg" Schema="dbo" store:Type="Tables" />

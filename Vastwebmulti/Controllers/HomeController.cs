@@ -2671,75 +2671,8 @@ namespace Vastwebmulti.Controllers
                             DB.SaveChanges();
                         }
                         catch { }
-                     //   merchatinfo.AepsMerchandId = "";
-                      //  merchatinfo.AepsMPIN = "";
-                      //  DB.SaveChanges();
-                    }
-
-                }
-                else
-                {
-                    var whitelabel_merchatinfo = DB.Whitelabel_Retailer_Details.Where(aa => aa.AepsMerchandId.ToUpper() == merchantid.ToUpper()).SingleOrDefault();
-                    if (whitelabel_merchatinfo != null)
-                    {
-                        var whitelabel_chkekyc = DB.whitelabel_ekycCheck.Where(x => x.mobilenumber == whitelabel_merchatinfo.Mobile && x.isvalid == false).FirstOrDefault();
-                        if (whitelabel_chkekyc != null)
-                        {
-                            try
-                            {
-                                DB.whitelabel_ekycCheck.Remove(whitelabel_chkekyc);
-                                DB.SaveChanges();
-                            }
-                            catch { }
-                           // whitelabel_merchatinfo.AepsMerchandId = "";
-                           // whitelabel_merchatinfo.AepsMPIN = "";
-                           // DB.SaveChanges();
-                        }
-
-                    }
-                }
-
-
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var dict = new Dictionary<string, string>
-                {
-                   {"resp","DONE"}
-                };
-                Response.Clear();
-                Response.ContentType = "application/json";
-                return serializer.Serialize(dict);
-            }
-            catch
-            {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var dict = new Dictionary<string, string>
-                {
-                  {"resp","ERROR"}
-                };
-                Response.Clear();
-                Response.ContentType = "application/json";
-                return serializer.Serialize(dict);
-            }
-        }
-        [Route("Home/RemoveAepsMerchantALL")]
-        public string RemoveAepsMerchantALL(string merchantid)
-        {
-            try
-            {
-                var merchatinfo = DB.Retailer_Details.Where(aa => aa.AepsMerchandId.ToUpper() == merchantid.ToUpper()).SingleOrDefault();
-                if (merchatinfo != null)
-                {
-                    var ekycchkss = DB.ekycChecks.Where(x => x.mobilenumber == merchatinfo.Mobile).FirstOrDefault();
-                    if (ekycchkss != null)
-                    {
-                        try
-                        {
-                            DB.ekycChecks.Remove(ekycchkss);
-                            DB.SaveChanges();
-                        }
-                        catch { }
-                       // merchatinfo.AepsMerchandId = "";
-                       // merchatinfo.AepsMPIN = "";
+                        //    merchatinfo.AepsMerchandId = "";
+                        //  merchatinfo.AepsMPIN = "";
                         DB.SaveChanges();
                     }
 
@@ -2788,6 +2721,74 @@ namespace Vastwebmulti.Controllers
                 return serializer.Serialize(dict);
             }
         }
+        [Route("Home/RemoveAepsMerchantALL")]
+        public string RemoveAepsMerchantALL(string merchantid)
+        {
+            try
+            {
+                var merchatinfo = DB.Retailer_Details.Where(aa => aa.AepsMerchandId.ToUpper() == merchantid.ToUpper()).SingleOrDefault();
+                if (merchatinfo != null)
+                {
+                    var ekycchkss = DB.ekycChecks.Where(x => x.mobilenumber == merchatinfo.Mobile).FirstOrDefault();
+                    if (ekycchkss != null)
+                    {
+                        try
+                        {
+                            DB.ekycChecks.Remove(ekycchkss);
+                            DB.SaveChanges();
+                        }
+                        catch { }
+                        // merchatinfo.AepsMerchandId = "";
+                        // merchatinfo.AepsMPIN = "";
+                        DB.SaveChanges();
+                    }
+
+                }
+                else
+                {
+                    var whitelabel_merchatinfo = DB.Whitelabel_Retailer_Details.Where(aa => aa.AepsMerchandId.ToUpper() == merchantid.ToUpper()).SingleOrDefault();
+                    if (whitelabel_merchatinfo != null)
+                    {
+                        var whitelabel_chkekyc = DB.whitelabel_ekycCheck.Where(x => x.mobilenumber == whitelabel_merchatinfo.Mobile && x.isvalid == false).FirstOrDefault();
+                        if (whitelabel_chkekyc != null)
+                        {
+                            try
+                            {
+                                DB.whitelabel_ekycCheck.Remove(whitelabel_chkekyc);
+                                DB.SaveChanges();
+                            }
+                            catch { }
+                            whitelabel_merchatinfo.AepsMerchandId = "";
+                            whitelabel_merchatinfo.AepsMPIN = "";
+                            DB.SaveChanges();
+                        }
+
+                    }
+                }
+
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                var dict = new Dictionary<string, string>
+                {
+                   {"resp","DONE"}
+                };
+                Response.Clear();
+                Response.ContentType = "application/json";
+                return serializer.Serialize(dict);
+            }
+            catch
+            {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                var dict = new Dictionary<string, string>
+                {
+                  {"resp","ERROR"}
+                };
+                Response.Clear();
+                Response.ContentType = "application/json";
+                return serializer.Serialize(dict);
+            }
+        }
+
 
         [Route("Home/ResetAepsMerchant")]
         public string ResetAepsMerchant(string oldmerchantid, string newmerchantid)

@@ -35,5 +35,19 @@ namespace Vastwebmulti.Models
         public string ResponseBy { get; set; }
         public Nullable<decimal> Gst { get; set; }
         public Nullable<decimal> tds { get; set; }
+        public int Idno { get; set; }
+        public Nullable<decimal> Remainpre { get; set; }
+        public Nullable<decimal> Remainpost { get; set; }
+        public Nullable<decimal> Adminremainpre { get; set; }
+        public Nullable<decimal> Adminremainpost { get; set; }
+        public Nullable<System.DateTime> Insertdate { get; set; }
+        public System.DateTime Updatedate { get; set; }
+        public string Status { get; set; }
+        public string Accountnumber { get; set; }
+        public Nullable<decimal> Tds { get; set; }
+        public string Slipid { get; set; }
+        public string Slipname { get; set; }
+        public string RejectedReson { get; set; }
+        public string Requestid { get; set; }
     }
 }

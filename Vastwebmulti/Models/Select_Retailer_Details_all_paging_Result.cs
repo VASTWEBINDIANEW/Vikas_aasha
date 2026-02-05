@@ -37,7 +37,7 @@ namespace Vastwebmulti.Models
         public string AadhaarStatus { get; set; }
         public string AepsMposstatus { get; set; }
         public string Frm_Name { get; set; }
-        public decimal? Remainamount { get; set; }
+        public decimal Remainamount { get; set; }
         public string Dist_Desc { get; set; }
         public string State_name { get; set; }
         public Nullable<bool> moneysts { get; set; }

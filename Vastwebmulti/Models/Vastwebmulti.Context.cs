@@ -912,6 +912,7 @@ namespace Vastwebmulti.Models
         public virtual DbSet<KotakQRDetail> KotakQRDetails { get; set; }
         public virtual DbSet<RadiantPrepayTransfer> RadiantPrepayTransfers { get; set; }
         public virtual DbSet<RadiantCashDeposite> RadiantCashDeposites { get; set; }
+        public virtual DbSet<LoiList> LoiLists { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -24034,6 +24035,36 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("status", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateprepayCashpickup", uniqueidParameter, statusParameter);
+        }
+    
+        public virtual int UpdateRadiantCashDeposite(string uniqueid, string status, string rejectedReson, string responseby)
+        {
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var rejectedResonParameter = rejectedReson != null ?
+                new ObjectParameter("rejectedReson", rejectedReson) :
+                new ObjectParameter("rejectedReson", typeof(string));
+    
+            var responsebyParameter = responseby != null ?
+                new ObjectParameter("Responseby", responseby) :
+                new ObjectParameter("Responseby", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateRadiantCashDeposite", uniqueidParameter, statusParameter, rejectedResonParameter, responsebyParameter);
+        }
+    
+        public virtual ObjectResult<Loilistreport_Result> Loilistreport(string retailerid)
+        {
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("retailerid", retailerid) :
+                new ObjectParameter("retailerid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Loilistreport_Result>("Loilistreport", retaileridParameter);
         }
     }
 }
