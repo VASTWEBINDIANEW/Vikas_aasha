@@ -7666,6 +7666,22 @@
     </FunctionImport>
     <EntitySet Name="KotakQRDetails" EntityType="VastwebmultiModel.KotakQRDetail" />
     <EntitySet Name="RadiantPrepayTransfers" EntityType="VastwebmultiModel.RadiantPrepayTransfer" />
+    <EntitySet Name="LoiLists" EntityType="VastwebmultiModel.LoiList" />
+    <FunctionImport Name="Loilistreport" ReturnType="Collection(VastwebmultiModel.Loilistreport_Result)">
+      <Parameter Name="retailerid" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateRadiantCashDeposite">
+      <Parameter Name="uniqueid" Mode="In" Type="String" />
+      <Parameter Name="status" Mode="In" Type="String" />
+      <Parameter Name="rejectedReson" Mode="In" Type="String" />
+      <Parameter Name="Responseby" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="RadiantCashDeposites" EntityType="VastwebmultiModel.RadiantCashDeposite" />
+    <EntitySet Name="Rechargepin_otp_status" EntityType="VastwebmultiModel.Rechargepin_otp_status" />
+    <FunctionImport Name="updateprepayCashpickup">
+      <Parameter Name="uniqueid" Mode="In" Type="String" />
+      <Parameter Name="status" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -34038,5 +34054,96 @@
     <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="RequestID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Clientname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Shop_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="transid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="LoiList">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Refnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Customername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pickupaddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Pincode" Type="Int32" />
+    <Property Name="WorkMode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Cashlimit" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Depositionmode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AdditionalRequirement" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Stateid" Type="Int32" />
+    <Property Name="Districtid" Type="Int32" />
+    <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ClientName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PointMobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PointName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SubDescrtion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Retailerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Requestid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="Loilistreport_Result">
+    <Property Type="String" Name="Refnumber" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="Insertdate" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Customername" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="pickupaddress" Nullable="true" />
+    <Property Type="Int32" Name="Pincode" Nullable="true" />
+    <Property Type="String" Name="WorkMode" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="Cashlimit" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="String" Name="Depositionmode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="AdditionalRequirement" Nullable="true" />
+    <Property Type="String" Name="CityName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="ClientName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PointMobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PointName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DCCode" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SubDescrtion" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Requestid" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Latitude" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Longitude" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="State_name" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Dist_Desc" Nullable="true" MaxLength="150" />
+    <Property Type="String" Name="RetailerName" Nullable="true" MaxLength="150" />
+  </ComplexType>
+  <EntityType Name="RadiantCashDeposite">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Updatedate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Ifsccode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Accountnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Charge" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FinalCharge" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Gst" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tds" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Slipid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Slipname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="RejectedReson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ResponseBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Requestid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Rechargepin_otp_status">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="modifieddate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

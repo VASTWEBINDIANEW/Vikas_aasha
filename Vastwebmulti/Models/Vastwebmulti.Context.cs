@@ -911,6 +911,9 @@ namespace Vastwebmulti.Models
         public virtual DbSet<paytm_imps_whitelabel_commUPI> paytm_imps_whitelabel_commUPI { get; set; }
         public virtual DbSet<KotakQRDetail> KotakQRDetails { get; set; }
         public virtual DbSet<RadiantPrepayTransfer> RadiantPrepayTransfers { get; set; }
+        public virtual DbSet<LoiList> LoiLists { get; set; }
+        public virtual DbSet<RadiantCashDeposite> RadiantCashDeposites { get; set; }
+        public virtual DbSet<Rechargepin_otp_status> Rechargepin_otp_status { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -24020,6 +24023,36 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("apiname", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UPI_TXN_KOTAK_Result>("UPI_TXN_KOTAK", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
+        }
+    
+        public virtual ObjectResult<Loilistreport_Result> Loilistreport(string retailerid)
+        {
+            var retaileridParameter = retailerid != null ?
+                new ObjectParameter("retailerid", retailerid) :
+                new ObjectParameter("retailerid", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Loilistreport_Result>("Loilistreport", retaileridParameter);
+        }
+    
+        public virtual int UpdateRadiantCashDeposite(string uniqueid, string status, string rejectedReson, string responseby)
+        {
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var rejectedResonParameter = rejectedReson != null ?
+                new ObjectParameter("rejectedReson", rejectedReson) :
+                new ObjectParameter("rejectedReson", typeof(string));
+    
+            var responsebyParameter = responseby != null ?
+                new ObjectParameter("Responseby", responseby) :
+                new ObjectParameter("Responseby", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateRadiantCashDeposite", uniqueidParameter, statusParameter, rejectedResonParameter, responsebyParameter);
         }
     
         public virtual int updateprepayCashpickup(string uniqueid, string status)

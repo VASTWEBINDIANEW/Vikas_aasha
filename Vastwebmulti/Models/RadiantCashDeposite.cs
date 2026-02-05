@@ -14,28 +14,9 @@ namespace Vastwebmulti.Models
     
     public partial class RadiantCashDeposite
     {
-        public int idno { get; set; }
+        public int Idno { get; set; }
         public string Userid { get; set; }
         public Nullable<decimal> Amount { get; set; }
-        public Nullable<decimal> RemainPre { get; set; }
-        public Nullable<decimal> RemainPost { get; set; }
-        public Nullable<decimal> AdminRemainPre { get; set; }
-        public Nullable<decimal> AdminRemainPost { get; set; }
-        public Nullable<System.DateTime> InsertDate { get; set; }
-        public Nullable<System.DateTime> UpdateDate { get; set; }
-        public string status { get; set; }
-        public string BankName { get; set; }
-        public string Ifsccode { get; set; }
-        public string SlipName { get; set; }
-        public Nullable<decimal> Charge { get; set; }
-        public Nullable<decimal> FinalCharge { get; set; }
-        public string Mode { get; set; }
-        public string SlipID { get; set; }
-        public string RejectReason { get; set; }
-        public string ResponseBy { get; set; }
-        public Nullable<decimal> Gst { get; set; }
-        public Nullable<decimal> tds { get; set; }
-        public int Idno { get; set; }
         public Nullable<decimal> Remainpre { get; set; }
         public Nullable<decimal> Remainpost { get; set; }
         public Nullable<decimal> Adminremainpre { get; set; }
@@ -43,11 +24,18 @@ namespace Vastwebmulti.Models
         public Nullable<System.DateTime> Insertdate { get; set; }
         public System.DateTime Updatedate { get; set; }
         public string Status { get; set; }
+        public string BankName { get; set; }
+        public string Ifsccode { get; set; }
         public string Accountnumber { get; set; }
+        public Nullable<decimal> Charge { get; set; }
+        public Nullable<decimal> FinalCharge { get; set; }
+        public Nullable<decimal> Gst { get; set; }
         public Nullable<decimal> Tds { get; set; }
+        public string Mode { get; set; }
         public string Slipid { get; set; }
         public string Slipname { get; set; }
         public string RejectedReson { get; set; }
+        public string ResponseBy { get; set; }
         public string Requestid { get; set; }
     }
 }
