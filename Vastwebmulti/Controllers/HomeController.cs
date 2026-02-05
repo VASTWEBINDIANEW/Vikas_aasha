@@ -2667,9 +2667,9 @@ namespace Vastwebmulti.Controllers
                             DB.SaveChanges();
                         }
                         catch { }
-                        merchatinfo.AepsMerchandId = "";
-                        merchatinfo.AepsMPIN = "";
-                        DB.SaveChanges();
+                     //   merchatinfo.AepsMerchandId = "";
+                      //  merchatinfo.AepsMPIN = "";
+                      //  DB.SaveChanges();
                     }
 
                 }
@@ -2687,9 +2687,9 @@ namespace Vastwebmulti.Controllers
                                 DB.SaveChanges();
                             }
                             catch { }
-                            whitelabel_merchatinfo.AepsMerchandId = "";
-                            whitelabel_merchatinfo.AepsMPIN = "";
-                            DB.SaveChanges();
+                           // whitelabel_merchatinfo.AepsMerchandId = "";
+                           // whitelabel_merchatinfo.AepsMPIN = "";
+                           // DB.SaveChanges();
                         }
 
                     }
@@ -2734,8 +2734,8 @@ namespace Vastwebmulti.Controllers
                             DB.SaveChanges();
                         }
                         catch { }
-                        merchatinfo.AepsMerchandId = "";
-                        merchatinfo.AepsMPIN = "";
+                       // merchatinfo.AepsMerchandId = "";
+                       // merchatinfo.AepsMPIN = "";
                         DB.SaveChanges();
                     }
 

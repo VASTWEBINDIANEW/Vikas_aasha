@@ -312,6 +312,7 @@
                     }
                     else {
                         $('#otperror123').text(msg);
+
                     }
                 },
                 complete: function () {
@@ -423,6 +424,12 @@
                             var url = '@Url.Action("Money_transfer2", "Home")';
                             window.location.href = url;
                         }
+                        else if (status == "ERROR")
+                        {
+                            alert(msg)
+                            var url = '@Url.Action("Money_transfer2", "Home")';
+                            window.location.href = url;
+                        }
                         else {
                             if (msg.includes("NAME NOT MATCHING")) {
                                 $('#namechnage').show();
@@ -439,7 +446,7 @@
                 })
             }
     }
-    </script>
+</script>
 <script>
     $(document).ready(function () {
         var info = '@ViewBag.req';
