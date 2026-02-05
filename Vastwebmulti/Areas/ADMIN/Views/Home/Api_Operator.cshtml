@@ -6,22 +6,37 @@
 <style>
 
    /* new css  */
+    #ul li {
+        width: 15%;
+    }
+    .vacrivet {
+        padding: 0 5px;
+    }
     .col-md-5.rtyfrty.rtyfrtyclass-third {
         padding: 0;
         width: 100%;
     }
+    .rtyfrtyclass-third {
+        padding: 0;
+    }
     .res_div {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        justify-content: end;
     }
         .res_div form {
-            width: 41%;
+            width: 100%;
         }
 
     .table-responsive button {
         border: none;
     }
+    #ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
    
    /* new css  */
 
@@ -376,22 +391,31 @@
 
 
         @@media screen and (max-width: 480px) {
+            .responsive-button-third, .responsive-button-third#btnGetSkills {
+                width: 100% !important;
+                margin-bottom: 5px;
+            }
+
+            #ul {
+                display: block;
+            }
+
             .api-operator {
                 clear: both;
             }
             .vacrivet {
-                width: 22%;
+                width: 100%;
                 float: left;
                 padding: 0px 2px !important;
-                margin-top: -4px;
+                margin-top: 0px;
             }
 
             .col-md-2.api-operator.vacrivet.respon-vacrivet-third {
-                width: 50% !important;
+                width: 100% !important;
             }
 
             .col-md-1.vacrivet.buttonsearch-second {
-                width: 50% !important;
+                width: 100% !important;
             }
 
             button#btnGetSkills {
@@ -450,24 +474,24 @@
                 <div class="card page-header-third">
 
                     <div class="col-md-12" style="width: 100%;float: left;padding: 0px;">
-                        <div class="card res_div" style="">
-                            <div class="col-md-7 rtyfrty rtyfrtyclass-third">
-                                <div style="margin-left:-13px;">
+                        <div class="card" style="">
+                            <div class="col-md-12 rtyfrty rtyfrtyclass-third">
+                                <div style="">
                                     @Html.Partial("_menuapinm")
                                 </div>
 
                             </div>
                             @using (Html.BeginForm("Api_Operator", "Home", FormMethod.Post))
                             {
-                                <div class="col-md-5 rtyfrty rtyfrtyclass-third">
-                                    <div class="col-md-5 vacrivet respon-vacrivet-third" style="padding: 4px; margin: auto;">
+                                <div class="col-md-12 rtyfrty rtyfrtyclass-third  res_div">
+                                    <div class="col-md-2 vacrivet respon-vacrivet-third" style="padding: 4px;">
                                         <div class="input-group" style="">
                                             <div class="">
                                                 @Html.DropDownList("apinm", ViewBag.apinm as SelectList, "Select Api Name", new { id = "apinm", @class = "for-select2 form-control border-0", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;height:38px;", @required = "required" })
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-5 api-operator api-operator-left vacrivet vacrivet-second vacrivet-third respon-vacrivet-third api-operatoradmin-new" style="padding: 0px;">
+                                    <div class="col-md-2 api-operator api-operator-left vacrivet vacrivet-second vacrivet-third respon-vacrivet-third api-operatoradmin-new" style="padding: 0px;">
                                         <i class="fa fa-caret-down" aria-hidden="true"></i>
                                         <select id="myCategories" multiple="multiple" name="myCategories">
                                             @if (ViewBag.OptCategories != null)
@@ -484,9 +508,9 @@
                                             }
                                         </select>
                                     </div>
-                                    <div class=" col-md-2 vacrivet buttonsearch-second" style="padding: 0px;">
+                                    <div class=" col-md-2 vacrivet buttonsearch-second" style="padding-right: 0px;">
                                         <center>
-                                            <button type="submit" id="btnGetSkills" class="btn btnssl222  waves-effect button-thirdclass responsive-button-third" data-loading-text="<i class='fa fa-spinner fa-spin' style='margin-top:-10px;'></i>" style="margin-top: 4px; border: 1px solid #c7c2c2;">
+                                            <button type="submit" id="btnGetSkills" class="btn btnssl222  waves-effect button-thirdclass responsive-button-third" data-loading-text="<i class='fa fa-spinner fa-spin' style='margin-top:-10px;'></i>" style="margin-top: 4px; border: 1px solid #c7c2c2; width: 100%;">
                                                 <i class="fa fa-search" style="top:-1px;font-size:12px;color:black;"></i>
                                                 <span style="color:black;">Search</span>
                                             </button>

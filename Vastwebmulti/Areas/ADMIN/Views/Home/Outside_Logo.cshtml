@@ -736,6 +736,12 @@
         max-width: 500px;
         max-height: 500px;
     }
+    .zooma-mainR_theme {
+        overflow: hidden;
+        position: relative;
+        max-width: 500px;
+        max-height: 500px;
+    }
 
     .zooma-main8 {
         overflow: hidden;
@@ -838,6 +844,16 @@
         top: 0;
         left: 0;
     }
+    .zooma-mainR_theme img {
+        pointer-events: none;
+        display: block;
+        width: 100%;
+        height: auto;
+        cursor: zoom-in;
+        opacity: 0;
+        top: 0;
+        left: 0;
+    }
 
     .zooma-main8 img {
         pointer-events: none;
@@ -892,6 +908,9 @@
     .zooma-main7 img.is-loaded {
         position: absolute;
     }
+    .zooma-mainR_theme img.is-loaded {
+        position: absolute;
+    }
 
     .zooma-main8 img.is-loaded {
         position: absolute;
@@ -937,6 +956,15 @@
     }
 
     .zooma-main7 img.is-active {
+        opacity: 1;
+        pointer-events: initial;
+    }
+    .zooma-mainR_theme img.is-active {
+        opacity: 1;
+        pointer-events: initial;
+    }
+
+    .zooma-main8 img.is-active {
         opacity: 1;
         pointer-events: initial;
     }
@@ -987,6 +1015,10 @@
     }
 
     .zooma-main7 img.is-zoomed-in {
+        cursor: zoom-out;
+        width: initial;
+    }
+    .zooma-mainR_theme img.is-zoomed-in {
         cursor: zoom-out;
         width: initial;
     }
@@ -2773,6 +2805,21 @@ text-align: center;">
                         </div>
                     </div>
 
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                        <div class="container11">
+                            <img src="~/images/Recharge_Theme1.png" alt="Avatar" class="image" style="width:100%">
+                            <div class="middle">
+                                <div><button class="text5" id="myButtonR">View <i class="fa fa-eye"></i></button></div>
+                            </div>
+                            <div class="designch">
+                                <p style="margin:0px;">Recharge-Theme</p>
+                                <span><del>₹5000</del> Free</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div id="myPopup" class="popup">
@@ -2923,6 +2970,28 @@ text-align: center;">
                     </div>
                 </div>
 
+                <div id="myPopupR" class="popup">
+                    <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
+                        <div class="product__description">
+
+                            <h1 class="zoom111" style="text-transform:uppercase;">Recharge Theme</h1>
+                            <h2 class="zoom111"><p>Just buy the theme</p><span><del>₹5000/-</del> pro</span></h2>
+                            <a href="#" class="zoom111">Buy Now</a>
+                            <button id="closePopupR">❌</button>
+                        </div>
+                        <div class="product wrapper" style=" display: flex;">
+
+                            <div class="product__thumbnails zooma-thumbnailR_theme"></div>
+
+                            <div class="product__focus zooma-mainR_theme" style=" min-height: 569px; min-width: 92%; display: block; border: 1px solid rgb(204, 204, 204); overflow: auto; float: right; margin: 0px; width: 96%; margin-left: 12px;">
+                                <img src="~/images/Recharge_Theme.png" />
+                                <img src="~/images/Design7-login.png" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
         </div>
@@ -3005,6 +3074,9 @@ text-align: center;">
                         </div>
                     </div>
                 </div>
+
+
+                
 
                 <div id="myPopup8" class="popup">
                     <div class="popup-content" style="height: auto; display: flow-root; background: rgb(255 255 255 / 95%);  box-shadow: 0px 0px 5px -2px; border-radius: 4px; border: none; ">
@@ -3753,6 +3825,85 @@ text-align: center;">
     });
 </script>
 @*DESIGN-7/*@
+
+
+@*Recharge_Theme*@
+<script>
+    $(document).ready(function () {
+        // Store initial image size
+        function setImageSize() {
+            var imageSize = Math.floor($('.zooma-mainR_theme img:first-child').height());
+            if (imageSize <= 0) {
+                requestAnimationFrame(setImageSize);
+            }
+            else {
+                $('.zooma-mainR_theme').css({ width: imageSize, height: imageSize });
+                $('.zooma-mainR_theme img').addClass('is-loaded');
+            }
+        }
+
+        requestAnimationFrame(setImageSize);
+
+
+
+        // Populate thumbnails
+        $('.zooma-mainR_theme').children().clone().appendTo('.zooma-thumbnailR_theme');
+
+        // Set state for first image
+        $('.product img:first-child').addClass('is-active');
+
+        // Thumbnail hover event listener
+        $('.zooma-thumbnailR_theme img').on('mouseenter', function () {
+            $('.product img').removeClass('is-active is-zoomed-in').prop('style', '').off('mousemove');
+            $('.product img:nth-child(' + ($(this).index() + 1) + ')').addClass('is-active');
+        });
+
+        // Main image click to zoom event listener
+        $('.zooma-mainR_theme img').on('click', function (e) {
+            // Toggle zoom-out cursor and unset max-width
+            $(this).toggleClass('is-zoomed-in');
+
+            // Zoom in
+            if ($(this).hasClass('is-zoomed-in')) {
+                // Variables for calculating relative position
+                var scale = e.target.naturalWidth / $(e.target).parent().width();
+                var max = -(1 - 1 / scale);
+
+                // Adjust mouse scale to the full-size image, then redraw
+                e.offsetX *= scale;
+                e.offsetY *= scale;
+                calculateZoom(e);
+
+                // Mouse event listener
+                $(this).on('mousemove', calculateZoom);
+
+                function calculateZoom(e) {
+                    var x = e.offsetX * max + 'px';
+                    var y = e.offsetY * max + 'px';
+                    $(e.target).css({ left: x, top: y });
+                }
+            }
+            // Zoom out
+            else {
+                $(this).off('mousemove').prop('style', '');
+            }
+        });
+    });
+</script>
+<script>
+    myButtonR.addEventListener("click", function () {
+        myPopupR.classList.add("show");
+    });
+    closePopupR.addEventListener("click", function () {
+        myPopupR.classList.remove("show");
+    });
+    window.addEventListener("click", function (event) {
+        if (event.target == myPopupR) {
+            myPopupR.classList.remove("show");
+        }
+    });
+</script>
+@*Recharge_Theme/*@
 
 @*DESIGN-8*@
 <script>
