@@ -5,6 +5,21 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+
+    /*new css*/
+    .form-group div {
+        margin-bottom: 5px;
+    }
+
+
+
+
+
+
+    /*new css end*/
+
+
+
     .dropdown-menu {
         margin-top: 81px !important;
     }
@@ -62,7 +77,12 @@
     }
 
     .bread-same-all-page li {
-        margin-bottom: 6px;
+        margin-bottom: 0px;
+    }
+    .padding-top-thirdclass {
+        padding: 4px 3px;
+        float: left;
+        width: 100%;
     }
 
     @@media screen and (max-width: 992px) {
@@ -102,6 +122,14 @@
         #defaultModal .modal-dialog {
             width: 95% !important;
         }
+        .vacrivet-third-design {
+            width: 100% !important;
+        }
+        .vast-bazar-api {
+            padding-right: 15px;
+        }
+
+
     }
 </style>
 <section class="content">
@@ -142,20 +170,23 @@
 
             </div>
         </div>
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card" style="margin-bottom:15px;">
-                    <div class="col-md-7 rtyfrty rtyfrtyclass-third">
-                        <div style="margin-left:-13px;">
-                            @Html.Partial("_menuapinm")
-                        </div>
 
-                    </div>
-                    <div class="col-md-5 vast-bazar-api respon-fullwidth-third">
-                        @using (Html.BeginForm("MoneyApiUrls", "Home", FormMethod.Post))
-                        {
-                            <div class="row">
-                                @*<div class="col-md-6 vacrivet">
+
+        <div class="page-header-third">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="card" style="margin-bottom:15px;">
+                        <div class="col-md-9 rtyfrty rtyfrtyclass-third">
+                            <div style="margin-left:-13px;">
+                                @Html.Partial("_menuapinm")
+                            </div>
+
+                        </div>
+                        <div class="col-md-3 vast-bazar-api respon-fullwidth-third">
+                            @using (Html.BeginForm("MoneyApiUrls", "Home", FormMethod.Post))
+                            {
+                                <div class="row" style="float: right; display: flex; ">
+                                    @*<div class="col-md-6 vacrivet">
                                     <div class="input-group" style="margin-top:4px;">
                                         <div class="">
                                             @Html.DropDownList("apinm", ViewBag.apinm as SelectList, "Api Name", new { id = "apinm", @class = "for-select2 form-control", data_live_search = "true", @style = "border:1px solid #8e7f7f4d;height:38px;", @required = "required" })
@@ -171,96 +202,99 @@
                                         </button>
                                     </center>
                                 </div>*@
-                                <div class="col-md-3 vacrivet vacrivet-third-design">
-                                    <center>
-                                        <button type="button" class="fullbodydycolorbg waves-effect" style="margin-top: 4px;padding: 0px 10px; float:right; height:32px;float:right;border:1px solid #c7c2c2;" data-toggle="modal" data-target="#defaultModal">
-                                            <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;"></i>
-                                            <span style="color:#fff;">Add New</span>
+                                    <div class="col-md-6 vacrivet vacrivet-third-design" style=" padding: 0;">
+                                        <center>
+                                            <button type="button" class="fullbodydycolorbg waves-effect" style="padding: 0px 10px; float:right; height:32px;float:right;border:1px solid #c7c2c2;" data-toggle="modal" data-target="#defaultModal">
+                                                <i class="fa fa-plus" style="top:1px;font-size:16px;color:#fff;"></i>
+                                                <span style="color:#fff;">Add New</span>
+                                            </button>
+                                        </center>
+
+                                    </div>
+                                    <div class="col-xs vacrivet" style=" padding: 0;">
+                                        <button type="button" class="btn fullbodydycolorbg  waves-effect" style="float: right; border: 1px solid #c7c2c2; padding-right: 23px;" data-toggle="modal" data-target="#defaultModalPlan">
+                                            <i class="fa fa-plus" style="top:1px;font-size:15px;color:#fff;"></i>
+
                                         </button>
-                                    </center>
+                                    </div>
 
                                 </div>
-                                <div class="col-xs-1 vacrivet">
-                                    <button type="button" class="btn fullbodydycolorbg  waves-effect" style="float: right; margin-top: 4px; border: 1px solid #c7c2c2; padding-right: 23px;" data-toggle="modal" data-target="#defaultModalPlan">
-                                        <i class="fa fa-plus" style="top:1px;font-size:15px;color:#fff;"></i>
-
-                                    </button>
-                                </div>
-
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="" style="width: 100%; float: left; margin-top: 8px;">
+                <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
+                    <table class="table table-bordered table-striped example-second" style="width:100%;">
+                        <thead style="background-color:whitesmoke;">
+                            <tr>
+                                <th>API&nbsp;Name</th>
+                                <th>API&nbsp;ID</th>
+                                <th>API&nbsp;Token1</th>
+                                <th>API&nbsp;Token2</th>
+                                <th>API&nbsp;Token3</th>
+                                <th>Token&nbsp;Priority</th>
+
+                                <th><center>Edit</center></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.API_Name</td>
+                                        <td>@item.API_ID</td>
+                                        <td>@item.Token</td>
+                                        <td>@item.token1</td>
+                                        <td>@item.token2</td>
+                                        <td>@item.tokenpriority</td>
+                                        @*<td>
+                                        @if (item.MoneyApiStatus == "Y")
+                                        {
+                                            <center>
+                                                <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
+                                                    <div class="onoffswitch">
+                                                        <span class="costom-on">on</span>
+                                                    </div>
+                                                </a>
+                                            </center>
+
+                                        }
+                                        else
+                                        {
+                                            <center>
+                                                <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
+                                                    <div class="onoffswitch">
+                                                        <span class="custom-off">off</span>
+                                                    </div>
+                                                </a>
+                                            </center>
+
+                                        }
+                                    </td>*@
+                                        <td>
+                                            <center>
+                                                @* <button id="but" onclick="animation('@item.Idno', '@item.API_Name', '@item.API_ID', '@item.Api_pwd', '@item.Token', '@item.money_purchase', '@item.money_verify_purchase', '@item.token1', '@item.token2', '@item.tokenpriority')" style="background-color:transparent; border:none;line-height:19px;height:25px;" data-toggle="modal" data-target="#defaultModal1">  *@
+                                                <button id="but" onclick="animation('@item.Idno', '@item.API_Name', '@item.API_ID', '@item.Api_pwd', '@item.Token',  '@item.token1', '@item.token2', '@item.tokenpriority')" style="background-color:transparent; border:none;line-height:19px;height:25px;" data-toggle="modal" data-target="#defaultModal1">
+                                                    <p style="padding:2px 11px 2px 11px;border:1px solid #dddddd;color:black;margin:0px;">Edit</p>
+                                                </button>
+                                            </center>
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-                    <div class="" style="width: 100%; float: left; margin-top: 8px;">
-                        <div class=" table-responsive tablefourdesign-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped example-second" style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>API&nbsp;Name</th>
-                                        <th>API&nbsp;ID</th>
-                                        <th>API&nbsp;Token1</th>
-                                        <th>API&nbsp;Token2</th>
-                                        <th>API&nbsp;Token3</th>
-                                        <th>Token&nbsp;Priority</th>
-                                        
-                                        <th><center>Edit</center></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@item.API_Name</td>
-                                                <td>@item.API_ID</td>
-                                                <td>@item.Token</td>
-                                                <td>@item.token1</td>
-                                                <td>@item.token2</td>
-                                                <td>@item.tokenpriority</td>
-                                                @*<td>
-                                                    @if (item.MoneyApiStatus == "Y")
-                                                    {
-                                                        <center>
-                                                            <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
-                                                                <div class="onoffswitch">
-                                                                    <span class="costom-on">on</span>
-                                                                </div>
-                                                            </a>
-                                                        </center>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <center>
-                                                            <a href="@Url.Action("Update_money_api_status", new { id = item.API_NAME, sts = item.MoneyApiStatus })" style="text-decoration:none;">
-                                                                <div class="onoffswitch">
-                                                                    <span class="custom-off">off</span>
-                                                                </div>
-                                                            </a>
-                                                        </center>
-
-                                                    }
-                                                </td>*@
-                                                <td>
-                                                    <center>
-                                                        @* <button id="but" onclick="animation('@item.Idno', '@item.API_Name', '@item.API_ID', '@item.Api_pwd', '@item.Token', '@item.money_purchase', '@item.money_verify_purchase', '@item.token1', '@item.token2', '@item.tokenpriority')" style="background-color:transparent; border:none;line-height:19px;height:25px;" data-toggle="modal" data-target="#defaultModal1">  *@
-                                                        <button id="but" onclick="animation('@item.Idno', '@item.API_Name', '@item.API_ID', '@item.Api_pwd', '@item.Token',  '@item.token1', '@item.token2', '@item.tokenpriority')" style="background-color:transparent; border:none;line-height:19px;height:25px;" data-toggle="modal" data-target="#defaultModal1">
-                                                            <p style="padding:2px 11px 2px 11px;border:1px solid #dddddd;color:black;margin:0px;">Edit</p>
-                                                        </button>
-                                                    </center>
-
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        
                 </div>
            
 
@@ -730,12 +764,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-xs-3 for-save-one">
-                                    <button type="submit" class="btn register fullbodydycolorbg waves-effect" disabled style=" height:34px;">
+                                    <button type="submit" class="btn register fullbodydycolorbg waves-effect" disabled style=" width: auto; height: 34px;">
                                         <span style="color:#fff;">Save Change</span>
                                     </button>
                                 </div>
                                 <div class="col-md-1 for-save-two">
-                                    <button type="button" class="btn bg-grey waves-effect" style="height:34px;color:#000;" data-dismiss="modal">
+                                    <button type="button" class="btn bg-grey waves-effect" style=" width: auto; height: 34px; color: #000;" data-dismiss="modal">
                                         &#10005;
                                     </button>
                                 </div>

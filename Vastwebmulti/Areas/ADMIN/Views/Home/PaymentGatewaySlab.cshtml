@@ -8,7 +8,29 @@
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <style>
-    .table.dataTable thead th, table.dataTable thead td {
+
+    /*new css */
+    .slab-edit-table #btnsubmitusercommon {
+        background: #16b316;
+        color: #fff;
+        border-radius: 4px;
+        border: 1px solid #fff;
+    }
+    .slab-edit-table #btnsubmituser {
+        background: #dfdf00;
+        border-radius: 4px;
+        border: 1px solid #fff;
+    }
+
+
+
+
+
+
+    /*new css */
+
+
+        .table.dataTable thead th, table.dataTable thead td {
         padding: 8px 4px 6px 4px;
     }
 
@@ -130,6 +152,21 @@
             transform: rotate(45deg)
         }
     }
+
+
+    @@media only screen and (max-width:480px){
+
+        .all-slab-header a, .all-slab-header button {
+            width: 49% !important;
+            margin: 0 !important;
+        }
+        .smli {
+            display: block ruby;
+        }
+
+    }
+
+
 </style>
 <section class="content">
     <div class="container-fluid">
@@ -143,39 +180,62 @@
                 <li><a href="javascript:void(0);">PaymentGateway Slab Setting</a></li>
             </ul>
         </div>
+
+        <!--Four-Design-Admin-page-Header-Section-Start-->
+        <div class="page-header-third" style=" margin-top: 7px;">
+            <div class="col-md-6" style="padding: 0px;">
+                <ul style="display: flex; margin: 0; padding: 6px 8px;">
+                    <li class="smli">
+                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
+                        </a>
+                    </li>
+                    <li class="smli">
+                        <a href="@Url.Action("UPIAndGatewaySetting","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                            Payment Gateway API Setting &nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
+                        </a>
+                    </li>
+                    <li class="fullbodydycolorbg tmw-total-color-one">
+                        Slab Setting
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <!--Four-Design-Admin-page-Header-Section-End-->
         @*<div class="row clearfix">
-                <div class="col-md-12">
-                    <div class="card" style="margin-bottom:2px;">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.Partial("_ApislabSetting")
-                            </div>
+            <div class="col-md-12">
+                <div class="card" style="margin-bottom:2px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.Partial("_ApislabSetting")
                         </div>
                     </div>
                 </div>
-            </div>*@
+            </div>
+        </div>*@
         <div class="row">
             <div class="col-md-12">
- 
+
                 <div class="col-md-12 slab-first-tab-content">
                     <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
 
                             <div class="card">
-                                <div class="">
+                                <div class="page-header-third">
                                     <div class="row">
                                         <div class="col-md-12 all-slab-header slab-buttonadminch all-slab-header-second slab-btn-second">
                                             <a href="@Url.Action("PaymentGatewaySlab","Home")" id="Comm" class="btn bg-blue-grey waves-effect fullbodydycolorbg">Common Slab<p>For New Users</p></a>
-                                            <button type="button" id="Mdbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Master', 'EditFormUserWise')">MD Slab<p>Exsiting Users</p>
+                                            <button type="button" id="Mdbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Master', 'EditFormUserWise')">
+                                                MD Slab<p>Exsiting Users</p>
                                             </button><button type="button" id="Dlmbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Dealer', 'EditFormUserWise')">Distributor Slab<p>Exsiting Users</p></button>
                                             <button type="button" id="Rembtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Retailer', 'EditFormUserWise')">Retailer Slab<p>Exsiting Users</p></button>
                                             <button type="button" id="Apibtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('API', 'EditFormUserWise')">API Slab<p>Exsiting Users</p></button>
-                                            <button id="btnEdit" type="button" class="btn  waves-effect btn-first" style="margin-left:22px;" onclick="funcEdit(this, 'EditFormComm')"><img src="~/AdminDesign/images/edit.svg" style="width:13px;" />&nbsp;<span style="color:#3c3c3c;">Edit Slab</span></button>
+                                            <button id="btnEdit" type="button" class="btn  waves-effect btn-first" style="margin-left: 22px; padding: 0 10px !important; border-radius: 4px;" onclick="funcEdit(this, 'EditFormComm')"><img src="~/AdminDesign/images/edit.svg" style="width:13px;" />&nbsp;<span style="color:#3c3c3c;">Edit Slab</span></button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class=" table-responsive">
+                                <div class="page-header-third table-responsive">
                                     <div id="divEditFormComm" class="table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;">
                                         @Html.Partial("_common_PaymentGatewaySlab", Model)
                                     </div>

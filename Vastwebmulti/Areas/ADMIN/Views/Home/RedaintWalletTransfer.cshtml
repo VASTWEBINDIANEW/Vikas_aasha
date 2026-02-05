@@ -6,6 +6,84 @@
     string role = Session["role"]?.ToString();
 }
 
+<style>
+    /* New css*/
+
+    .loader {
+        display: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #fff;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-left: 8px;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    option:nth-child(odd) {
+        background-color: #f1f1f1;
+    }
+    option:nth-child(even) {
+        background-color: #fff;
+    }
+
+    /* New css*/
+
+
+    .bread-same-all-page {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .align-items-end {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        margin: 0;
+    }
+
+    .form-control {
+        height: 32px;
+    }
+
+    .align-items-end div {
+        padding: 0px;
+    }
+
+    .res_set {
+        padding: 0px 3px !important;
+    }
+
+    @@media only screen and (max-width: 767px) {
+        .bread-same-all-page {
+            display: block;
+        }
+
+            .bread-same-all-page form {
+                width: 100%;
+                float: left;
+            }
+
+        .padding-top-third {
+            padding: 8px 4px;
+            float: left;
+        }
+
+        .align-items-end {
+            display: block;
+        }
+
+        .res_set {
+            margin-bottom: 5px;
+        }
+    }
+</style>
 
 
 <section class="content">
@@ -21,58 +99,97 @@
 
         <div class="row clearfix">
             @*<div class="col-lg-12 gift-card-top all-type-third">*@
-            <div class="col-lg-12 gift-card-top all-type-third" style="margin-top: 5px;">
-                <div class="card margin-bottom-third" style="margin-top: 10px;">
-                    @using (Html.BeginForm("RedaintWalletTransfer", "Home", FormMethod.Post))
-                    {
+            <div class="col-lg-12 gift-card-top all-type-third" style="">
+                <div class="card margin-bottom-third page-header-third" style="margin-top: 10px;">
+                    <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
+                        <ul class="padding-top-third" style=" margin: 0;">
+                            <li class="smli">
+                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
+                                </a>
+                            </li>
+
+                            <li class="fullbodydycolorbg tmw-total-color-one">
+                                <a href="@Url.Action("RedaintWalletTransfer","Home")" class="fullbodydycolorbg tmw-total-color-one">
+                                    Redaint Wallet Transfer
+                                </a>
+
+                            </li>
+                        </ul>
 
 
-                        <div class="row mb-3 align-items-end">
+                        @using (Html.BeginForm("RedaintWalletTransfer", "Home", FormMethod.Post))
+                        {
 
 
-                            <div class="col-md-2">
-                                @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { @class = "form-control", @id = "allretailer" })
-
-                                @*@Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { @class = "form-control" })*@
-                            </div>
-
-                            <div class="col-md-2">
-                                @Html.DropDownList("ddl_status", ViewBag.StatusList as SelectList, "Status", new { @class = "form-control" })
-                            </div>
+                            <div class="row mb-3 align-items-end">
 
 
-                            <div class="col-md-4 respo-upup" style="margin-top: 1px;padding: 0px;padding-left:3px;">
-                                <div class="">
+                                <div class="col-md-2 res_set">
+                                    @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { @class = "form-control", @id = "allretailer" })
+
+                                    @*@{
+                                        var retailers = ViewBag.allretailer as IEnumerable<SelectListItem>;
+                                    }
+
+                                    <select id="allretailer" class="form-control" name="allretailer">
+                                        <option class="" value="">All Retailer</option>
+                                        @foreach (var retailer in retailers)
+                                        {
+                                            <option class="" value="@retailer.Value">@retailer.Text</option>
+                                        }
+                                    </select>*@
+
+
+
+                                    @*@Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { @class = "form-control" })*@
+                                </div>
+
+                                <div class="col-md-2 res_set">
+                                    @Html.DropDownList("ddl_status", ViewBag.StatusList as SelectList, "Status", new { @class = "form-control" })
+                                
+                                </div>
+
+
+                                <div class="col-md-4 respo-upup res_set" style="margin-top: 1px;padding: 0px;padding-left:3px;">
                                     <div class="">
-                                        <div class="form-group" style="margin-bottom:0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="custom-date-icon ner" style="border-color: #ddd !important;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;", autocomplete = "off" })
-                                                <span class="input-group-addon" style="padding:0px;min-width:3px;">
-
-                                                </span>
-                                                <div style="position:relative;">
+                                        <div class="">
+                                            <div class="form-group" style="margin-bottom:0px;">
+                                                <div class="input-daterange input-group">
                                                     <div class="custom-date-icon ner" style="border-color: #ddd !important;">
                                                         <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
                                                     </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ;height:32px;", autocomplete = "off" })
+                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;", autocomplete = "off" })
+                                                    <span class="input-group-addon" style="padding:0px;min-width:3px;">
+
+                                                    </span>
+                                                    <div style="position:relative;">
+                                                        <div class="custom-date-icon ner" style="border-color: #ddd !important;">
+                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                                        </div>
+                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ;height:32px;", autocomplete = "off" })
+                                                    </div>
                                                 </div>
+                                                <!-- /.input group -->
                                             </div>
-                                            <!-- /.input group -->
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-2 res_set">
+                                    <button type="submit" class="btn btn-block" id="searchBtn">
+                                        <span class="btn-text">Search</span>
+                                        <span class="loader"></span>
+                                    </button>
+                                </div>
+
                             </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary btn-block">Search</button>
-                            </div>
-                        </div>
-                    }
+                        }
+
+                    </div>
                 </div>
 
-                <div class="card mt-3">
+                <div class="card mt-3  page-header-third">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -169,7 +286,7 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-       
+
         $('.input-daterange').datepicker({
             format: "yyyy-mm-dd",
             todayHighlight: true,
@@ -216,5 +333,12 @@
 url,
   '_blank' // <- This is what makes it open in a new window.
 );
+    });
+</script>
+
+<script>
+    document.getElementById("searchBtn").addEventListener("click", function () {
+        this.querySelector(".btn-text").style.display = "none";
+        this.querySelector(".loader").style.display = "inline-block";
     });
 </script>

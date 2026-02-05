@@ -4,6 +4,23 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 <style>
+   /* new css  */
+    #ul li {
+        width: 15%;
+    }
+    #ul {
+        display: flex;
+        justify-content: space-between;
+    }
+    .vacrivet {
+        padding: 0px 4px;
+    }
+
+
+
+   /* new css  */
+
+
     .col-md-5 for-r-width {
         width: 30.666667%;
     }
@@ -15,7 +32,9 @@
     }
 
     .for-r-width .row {
-        margin: 0;
+        display: flex;
+        padding: 0;
+        justify-content: end;
     }
 
     .rtyfrty.rtyfrtyclass-third {
@@ -134,7 +153,13 @@
     }
 
     @@media only screen and (max-width:480px) {
-
+        #ul {
+            display: block;
+        }
+        .for-r-width .row {
+            display: block;
+            margin: 0;
+        }
         .rtyfrty ul li {
             margin-bottom: 6px;
         }
@@ -218,35 +243,35 @@
 
                     <div class="col-md-12" style="padding:0px;">
                         <div class="card">
-                            <div class="col-md-7 rtyfrty rtyfrtyclass-third">
+                            <div class="col-md-12 rtyfrty rtyfrtyclass-third">
                                 <div>
                                     @Html.Partial("_menuapinm")
                                 </div>
                             </div>
                             @using (Html.BeginForm("FailedMove", "Home", FormMethod.Post))
                             {
-                                <div class="col-md-5 for-r-width">
+                                <div class="col-md-12 for-r-width">
                                     <div class="row clearfix">
-                                        <div class="col-md-5 col-xs-5 vacrivet" style="padding-right:0px;">
+                                        <div class="col-md-2 vacrivet" style="padding-right:0px;">
                                             <div class="form-group" style="margin-top:4px; margin-bottom:0px;">
                                                 <div class="form-line" style="padding-bottom:3px;">
                                                     @Html.DropDownList("Operator", ViewBag.operatorcode as SelectList, "Select OPerator", new { @class = "for-select2 form-control border-0", data_live_search = "true", required = "required" })
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-5 col-xs-5 vacrivet">
+                                        <div class="col-md-2 vacrivet">
                                             <div class="form-group" style="margin-top:4px; margin-bottom:0px;">
                                                 <div class="form-line" style="padding-bottom:3px;">
                                                     @Html.DropDownList("Apinm", ViewBag.Apinm as SelectList, "Select Api", new { @class = "for-select2 form-control border-0", data_live_search = "true", required = "required" })
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 col-xs-2 vacrivet" style="padding-right:0px;">
+                                        <div class="col-md-1 vacrivet" style="padding-right:0px;">
                                             <center>
-                                                <button type="button" class="btn first-button  waves-effect" style="margin-top: 4px; margin-left: -22px; height: 34px; border: 1px solid #c7c2c2; background: transparent;">
+                                                <button type="button" class="btn first-button  waves-effect" style="margin-top: 4px; height: 34px; border: 1px solid #c7c2c2; background: transparent; width: 100%;">
                                                     <span style="color:black;">Set&nbsp;Operator</span>
                                                 </button>
-                                                <button type="submit" class="btn fullbodydycolorbg second-button  waves-effect" style="margin-top:4px; margin-left:-22px; height:34px;border:1px solid #c7c2c2;display:none;width:100px;">
+                                                <button type="submit" class="btn fullbodydycolorbg second-button  waves-effect" style="margin-top:4px; height:34px;border:1px solid #c7c2c2;display:none;width:100%;">
                                                     <span style="color:#fff;">Sure ?</span>
                                                 </button>
                                             </center>
@@ -340,9 +365,9 @@
                     <div class="body">
                         <form>
 
-                            <div class="row clearfix">
+                            <div class="row clearfix" style="margin:0;">
                                 <input type="text" id="txtSSID" name="txtSSID" style="display:none;" />
-                                <div class="col-md-4" style="padding-right:0px;">
+                                <div class="col-md-4" style="">
                                     <div class="row">
                                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 form-control-label" style="padding-right:0px;">
                                             <label for="email_address_2">Operator </label>

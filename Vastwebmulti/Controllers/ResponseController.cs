@@ -4238,6 +4238,7 @@ namespace Vastwebmulti.Controllers
                             app_version app = new app_version();
                             app.androidversion = Status;
                             app.iosversion = Reqid;
+                            app.Packagename = Transid;
                             dbsrs.app_version.Add(app);
                             dbsrs.SaveChanges();
                         }
@@ -4245,6 +4246,7 @@ namespace Vastwebmulti.Controllers
                         {
                             chk.androidversion = Status;
                             chk.iosversion = Reqid;
+                            chk.Packagename = Transid;
                             dbsrs.SaveChanges();
                         }
                     }
@@ -5383,6 +5385,25 @@ namespace Vastwebmulti.Controllers
                             };
                             return Json(resp, JsonRequestBehavior.AllowGet);
                         }
+                    }
+                    else if (Type == "PREPAY")
+                    {
+                        var checkprepayinfo = dbsrs.RadiantPrepayTransfers.Where(aa => aa.RequestID == Reqid && aa.sts.ToUpper() == "PENDING").SingleOrDefault();
+                        if (checkprepayinfo != null)
+                        {
+                            string Status1 = Status.ToString();
+                            string Reqid1 = Reqid.ToString();
+                            if (Status == "Success")
+                            {
+                                dbsrs.updateprepayCashpickup(Reqid1, "Success");
+                            }
+                            else if (Status == "Failed")
+                            {
+                                dbsrs.updateprepayCashpickup(Reqid1, "Failed");
+                            }
+                        }
+                        // Status
+                        // Reqid
                     }
                 }
                 catch

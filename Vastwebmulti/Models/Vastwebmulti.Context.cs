@@ -911,7 +911,6 @@ namespace Vastwebmulti.Models
         public virtual DbSet<paytm_imps_whitelabel_commUPI> paytm_imps_whitelabel_commUPI { get; set; }
         public virtual DbSet<KotakQRDetail> KotakQRDetails { get; set; }
         public virtual DbSet<RadiantPrepayTransfer> RadiantPrepayTransfers { get; set; }
-        public virtual DbSet<Rechargepin_otp_status> Rechargepin_otp_status { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {
@@ -24021,6 +24020,19 @@ namespace Vastwebmulti.Models
                 new ObjectParameter("apiname", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<UPI_TXN_KOTAK_Result>("UPI_TXN_KOTAK", roleParameter, useridParameter, txnidParameter, amountParameter, statusParameter, payernameParameter, payvpnParameter, bankrrnParameter, responseParameter, apinameParameter, output);
+        }
+    
+        public virtual int updateprepayCashpickup(string uniqueid, string status)
+        {
+            var uniqueidParameter = uniqueid != null ?
+                new ObjectParameter("uniqueid", uniqueid) :
+                new ObjectParameter("uniqueid", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("updateprepayCashpickup", uniqueidParameter, statusParameter);
         }
     }
 }
