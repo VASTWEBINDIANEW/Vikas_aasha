@@ -5405,6 +5405,37 @@ namespace Vastwebmulti.Controllers
                         // Status
                         // Reqid
                     }
+                    else if (Type == "CMSCASHDEPOSIT")
+                    {
+                        dbsrs.UpdateRadiantCashDeposite(Reqid, Status, Transid, MSG);
+                    }
+                    else if (Type == "LOILIST")
+                    {
+                        var checkloi = dbsrs.LoiLists.Where(aa => aa.Requestid == Reqid).SingleOrDefault();
+                        if (checkloi != null)
+                        {
+                            if (Status == "Approved")
+                            {
+                                checkloi.Status = "Open";
+                                checkloi.Refnumber = Transid;
+                                dbsrs.SaveChanges();
+                            }
+                            else if (Status == "Reject")
+                            {
+                                dbsrs.LoiLists.Remove(checkloi);
+                                dbsrs.SaveChanges();
+                            }
+                        }
+                    }
+                    else if (Type == "LOILISTUPDATE")
+                    {
+                        var checkloi = dbsrs.LoiLists.Where(aa => aa.Refnumber == Reqid).SingleOrDefault();
+                        if (checkloi != null)
+                        {
+                            checkloi.Status = Status;
+                            dbsrs.SaveChanges();
+                        }
+                    }
                 }
                 catch
                 {

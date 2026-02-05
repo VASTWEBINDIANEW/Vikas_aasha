@@ -10,31 +10,39 @@
         height: 100vw;
         width: 100vw;
     }
+
     .minitransaction tr td {
         padding: 10px !important;
     }
+
     .select2-container--open .select2-dropdown--below {
         width: 314px !important;
     }
+
     .select2-results__option[aria-selected] {
         border-bottom: 1px dotted;
     }
+
     @@-webkit-keyframes spin {
         from {
             -webkit-transform: rotate(0deg);
         }
+
         to {
             -webkit-transform: rotate(360deg);
         }
     }
+
     @@keyframes spin {
         from {
             transform: rotate(0deg);
         }
+
         to {
             transform: rotate(360deg);
         }
     }
+
     .loader::before {
         content: '';
         display: none;
@@ -51,6 +59,7 @@
         -webkit-animation: spin .8s linear infinite;
         animation: spin .8s linear infinite;
     }
+
     .loader::after {
         content: '';
         display: block;
@@ -67,6 +76,7 @@
         -webkit-animation: spin .8s linear infinite;
         animation: spin .8s linear infinite;
     }
+
     .radiobuttonimps.radiobuttonimps-addnew-aadh label {
         float: left;
         margin: 0 !important;
@@ -75,15 +85,18 @@
         padding-top: 7px;
         padding-left: 22px;
     }
+
     .radiobuttonimps.radiobuttonimps-addnew-aadh .aadharnewpayclass {
         animation: blinks 2s linear infinite;
         left: -16px;
         top: -10px;
         font-size: 8px;
     }
+
     .select2-container--open .select2-dropdown--below {
         width: 314px !important;
     }
+
     .diveotpclass button {
         text-align: center;
         background: var(--main-bg-lcolor) !important;
@@ -94,8 +107,10 @@
         font-weight: 400;
         letter-spacing: 1px;
         border: 1px solid var(--main-bg-rcolor) !important;
-        font-size: 14px !important;transition: all .4s linear;
+        font-size: 14px !important;
+        transition: all .4s linear;
     }
+
     .diveotpclass span {
         position: relative;
         top: 4px;
@@ -103,6 +118,7 @@
         text-transform: capitalize;
         color: red;
     }
+
     .diveotpclass {
         width: 100%;
         float: left;
@@ -111,18 +127,22 @@
         display: flex;
         align-items: center;
     }
+
         .diveotpclass .form-group {
             margin: 0;
         }
+
     .verifyotpclass input {
         width: 100% !important;
     }
+
     .verifyotpclass .verifybuttonotp input {
         background: var(--main-bg-rcolor) !important;
         color: #fff;
         font-size: 14px !important;
         border: 1px solid #555 !important;
     }
+
     .devicefindclass .col-md-12 {
         padding: 0;
         margin-bottom: 15px;
@@ -130,9 +150,11 @@
         justify-content: center;
         align-items: center;
     }
+
         .devicefindclass .col-md-12 .col-md-7 {
             padding-left: 0;
         }
+
             .devicefindclass .col-md-12 .col-md-7 input {
                 width: 100% !important;
             }
@@ -153,19 +175,23 @@
                 float: left !important;
             }
     }
+
     @@media screen and (max-width:1300px) {
         .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container:nth-child(3) {
             width: 21% !important;
         }
+
         .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container:first-child {
             width: 32% !important;
         }
     }
+
     @@media screen and (max-width:420px) {
         .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container, .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container:first-child, .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container:nth-child(3), .radiobuttonimps.radiobuttonimps-addnew-aadh label.col-md-4.container:last-child {
             width: 50% !important;
             float: left;
         }
+
         .newpagecustom.newpagecustomertyui .tabspage ul li span {
             font-size: 10px;
         }
@@ -183,7 +209,7 @@
         <input type="hidden" id="cap" />
         <input type="hidden" id="capxml" />
     </div>
-    </div>
+</div>
 <div id="verifyotp" class="verifyotpclass" style="display:none;">
     <div class="form-group" style="margin:0;">
         <div class="col-md-5 col-sm-5 col-xs-5" style="padding-left:0;">
@@ -198,7 +224,7 @@
         </div>
         <span id="verifyotperr" style="color:red;font-weight:400;text-transform:capitalize;"></span>
     </div>
-    </div>
+</div>
 
 <div id="scancheck" class="gotoscan-changecss" style="display:none;text-align:center;">
     <button onclick="gotoscanekyc()" class="display-nonescanp2" id="scanrecoveer"><strong>GO</strong> To Scan</button>
@@ -265,8 +291,8 @@
                     <div class="" style="width:100%;float:left;">
                         <input type="button" value="Update Name" onclick="updatename()" style="margin:0px;width:auto;background: var(--main-bg-rcolor);color: #fff;float:right;" />
                     </div>
-                </div>   
-             </div>
+                </div>
+            </div>
         </div>
         <span id="errdevicefind" style="color:red;font-weight:400;text-transform:capitalize;"></span>
     </div>
@@ -296,11 +322,11 @@
                 },
                 success: function (data) {
 
-                  
+
                     var output = data; //JSON.parse(data);
                     var status = output.Status;
                     var msg = output.Message;
-                  
+
                     if (status == "Success") {
                         var primarykey = output.primarykey;
                         var encodetxnid = output.encodetxnid;
@@ -322,7 +348,7 @@
                 }
             })
         }
-    </script>
+</script>
 <script>
         function VerifyotpEkyc() {
             var otp = $('#txtotp').val();
@@ -363,7 +389,7 @@
                 })
             }
         }
-    </script>
+</script>
 <script>
     function gotoscanekyc() {
             $('#cap').val("");
@@ -387,7 +413,7 @@
             }
         })
     }
-    </script>
+</script>
 <script>
         function ValidateDevice() {
             var cap = $('#cap').val();
@@ -423,6 +449,12 @@
                             var url = '@Url.Action("Money_transfer2", "Home")';
                             window.location.href = url;
                         }
+                         else if (status == "ERROR")
+                        {
+                            alert(msg)
+                            var url = '@Url.Action("Money_transfer2", "Home")';
+                            window.location.href = url;
+                        }
                         else {
                             if (msg.includes("NAME NOT MATCHING")) {
                                 $('#namechnage').show();
@@ -439,7 +471,7 @@
                 })
             }
     }
-    </script>
+</script>
 <script>
     $(document).ready(function () {
         var info = '@ViewBag.req';
@@ -500,22 +532,22 @@
     }
 </script>
 @*<script>
-    $(document).ready(function () {
-             $.ajax({
-    url: '@Url.Action("AEPSreportnew","Home")',
-    cache: false,
-         type: "GET",
-         cache: false,
-       dataType:"html",
-    success: function (data) {
-         $('#reportallinone').html(data);
-    }
-})
-    });
-</script>*@
+        $(document).ready(function () {
+                 $.ajax({
+        url: '@Url.Action("AEPSreportnew","Home")',
+        cache: false,
+             type: "GET",
+             cache: false,
+           dataType:"html",
+        success: function (data) {
+             $('#reportallinone').html(data);
+        }
+    })
+        });
+    </script>*@
 <script>
     function AEPSEKYC() {
         $(".loader").show();
-              location.reload();
-        }
+        location.reload();
+    }
 </script>

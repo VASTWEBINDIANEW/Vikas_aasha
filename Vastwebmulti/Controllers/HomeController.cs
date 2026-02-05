@@ -2671,8 +2671,8 @@ namespace Vastwebmulti.Controllers
                             DB.SaveChanges();
                         }
                         catch { }
-                        merchatinfo.AepsMerchandId = "";
-                        merchatinfo.AepsMPIN = "";
+                        //    merchatinfo.AepsMerchandId = "";
+                        //  merchatinfo.AepsMPIN = "";
                         DB.SaveChanges();
                     }
 
@@ -2738,8 +2738,8 @@ namespace Vastwebmulti.Controllers
                             DB.SaveChanges();
                         }
                         catch { }
-                        merchatinfo.AepsMerchandId = "";
-                        merchatinfo.AepsMPIN = "";
+                        // merchatinfo.AepsMerchandId = "";
+                        // merchatinfo.AepsMPIN = "";
                         DB.SaveChanges();
                     }
 
@@ -2788,6 +2788,7 @@ namespace Vastwebmulti.Controllers
                 return serializer.Serialize(dict);
             }
         }
+
 
         [Route("Home/ResetAepsMerchant")]
         public string ResetAepsMerchant(string oldmerchantid, string newmerchantid)
