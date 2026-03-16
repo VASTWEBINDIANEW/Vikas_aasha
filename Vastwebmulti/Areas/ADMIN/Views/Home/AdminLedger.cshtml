@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>
+﻿@model List<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>
 @{
     ViewBag.Title = "RetailerLedger";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -383,9 +383,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-1 responcive-fifty date-respon-third" style="margin-left:5px;padding-right:0px;width:19%;">
-                                            <div class="row">
-                                                <div class="col-md-5 responcive-fifty" style="padding: 0px; margin-right: 5px;">
+                                        <div class="col-md-2 responcive-fifty date-respon-third" style="margin-left:5px;padding-right:0px;width:19%;">
+                                            <div class="row" style=" display: flex;">
+                                                <div class="col-md-4 responcive-fifty" style="padding: 0px; margin-right: 5px;">
                                                     <i class="fa fa-sort-desc" aria-hidden="true" style="position: absolute; z-index: 999; right: 12px; top: 5px; color: #958f8f; "></i>
                                                     <div class="form-line">
                                                         @Html.DropDownList("prev_numberOfDays", new List<SelectListItem>
@@ -400,14 +400,24 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                                    <div class="custom-date-icon ner">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", id = "txt_frm_date", required = "required", style = "border:1px solid #b1a6a638; height:32px; width:132px; padding-left: 20px;" })
-                                                    <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
 
-                                                    </span>
+
+                                                <div class="col-md-8 clk responcive-full" style="padding-right:0px;">
+                                                    <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
+                                                        <div class="custom-date-icon ner">
+                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                                        </div>
+                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px;" })
+                                                        <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
+
+                                                        </span>
+                                                        <div class="nrr3">
+                                                            <div class="custom-date-icon ner2">
+                                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                                            </div>
+                                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; " })
+                                                        </div>
+                                                    </div>
                                                 </div>
 
 
@@ -417,7 +427,7 @@
                                                 <!-- /.input group -->
                                             </div>
                                         </div>
-                                        <div class="col-md-1 admin-ledger-page-btn responcive-fifty widthauto-search-thi" style="padding-left:2px;padding-right:0px;">
+                                        <div class="col-md-1 admin-ledger-page-btn responcive-fifty widthauto-search-thi" style="padding-left:2px;padding-right:0px;text-align:center;">
 
                                             <button type="submit" class="btn input-back-second" style=" height:32px;border:1px solid #c7c2c2;background:transparent;">
                                                 <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
@@ -473,38 +483,124 @@
                                         <th id="whitelabelpre"></th>
                                         <th id="whitelabelbalance"></th>
                                         <th>Date&nbsp;&&nbsp;Time</th>
+                                        <th>Diff</th>
                                     </tr>
                                 </thead>
+
                                 <tbody id="mytable">
-                                    @{int i = 1;}
-                                    @foreach (var item in Model)
+                                    @{
+                                        int t = 1;
+                                        int total = Model.Count;
+
+                                    }
+                                    @for (int i = 0; i < total; i++)
                                     {
+                                        decimal? nextvalue = 0;
+                                        decimal? diff = 0;
+                                        var color = ""; var backcolor = "";
+                                        if (i != total - 1)
+                                        {
+                                            nextvalue = Model[i + 1].Balance - Model[i + 1].credit + Model[i + 1].debit;
+                                        }
+                                        else
+                                        {
+                                            nextvalue = Model[i].Balance;
+                                        }
 
-                                        <tr>
-                                            <td>@i</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RequestId)</td>
+                                        diff = Model[i].Balance - nextvalue;
+                                        if (diff != 0)
+                                        {
+                                            color = "white";
+                                            backcolor = "red";
+                                        }
+                                        <tr style="background-color:@backcolor;color:@color;">
+                                            <td>@t</td>
+                                            <td>@Model[i].RequestId</td>
+                                            <td>@Model[i].Particulars</td>
+                                            <td>@Model[i].Amount</td>
+                                            <td>@Model[i].credit</td>
+                                            <td>@Model[i].debit</td>
+                                         
 
-
-                                            <td>@Html.DisplayFor(modelItem => item.Particulars)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.credit)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.debit)</td>
-
-                                            @if (item.Role == "Whitelabel")
+                                            @if (Model[i].Role == "Whitelabel")
                                             {
-                                                <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.UserActualRemainAmount)</td>
+                                                <td>@Model[i].Balance</td>
+                                                <td>@Model[i].UserActualRemainAmount</td>
                                             }
                                             else
                                             {
-                                                <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                                                <td>@Model[i].Balance</td>
                                                 <td style="display:none;"></td>
                                             }
-                                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+
+                                            <td>@Model[i].Date</td>
+                                            <td>@diff</td>
                                         </tr>
-                                        i++;
+                                        t++;
                                     }
                                 </tbody>
+
+
+                                @*<tbody id="mytable">
+            @{
+                int i = 1;
+                decimal previousBalance = 0;
+                bool isFirstRow = true;
+            }
+
+            @foreach (var item in Model)
+            {
+                decimal credit = Convert.ToDecimal(item.credit);
+                decimal debit = Convert.ToDecimal(item.debit);
+                decimal currentBalance = Convert.ToDecimal(item.Balance);
+
+                var backcolor = "";
+                var color = "";
+
+                if (isFirstRow)
+                {
+                    // First row = Opening balance, no validation
+                    previousBalance = currentBalance;
+                    isFirstRow = false;
+                }
+                else
+                {
+                    decimal expectedBalance = previousBalance + credit - debit;
+
+                    if (expectedBalance != currentBalance)
+                    {
+                        backcolor = "red";
+                        color = "white";
+                    }
+
+                    previousBalance = currentBalance;
+                }
+
+                <tr style="background-color:@backcolor; color:@color;">
+                    <td>@i</td>
+                    <td>@item.RequestId</td>
+                    <td>@item.Particulars</td>
+                    <td>@item.Amount</td>
+                    <td>@item.credit</td>
+                    <td>@item.debit</td>
+
+                    @if (item.Role == "Whitelabel")
+                    {
+                        <td>@item.Balance</td>
+                        <td>@item.UserActualRemainAmount</td>
+                    }
+                    else
+                    {
+                        <td>@item.Balance</td>
+                        <td style="display:none;"></td>
+                    }
+
+                    <td>@item.Date</td>
+                </tr>
+
+                i++;
+            }
+        </tbody>*@
                             </table>
                         </div>
                     </div>
