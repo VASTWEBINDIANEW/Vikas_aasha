@@ -1,4 +1,7 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+
+<style>
 
     .loader {
         position: fixed;
@@ -47,11 +50,13 @@
         -webkit-animation: spin .8s linear infinite;
         animation: spin .8s linear infinite;
     }
+
     @@media screen and (max-width:1440px) {
         .Recharg11 {
             font-size: 17px;
         }
     }
+
     @@media screen and (max-width:1080px) {
         .Recharg11 {
             font-size: 14px;
@@ -132,6 +137,8 @@
 
 </div>
 
+<div id="broadmsgBox" style="margin-top:10px;"></div>
+
 <table id="confirmbroad" class="for-prepaid" style="width:100%;margin-top:-11px;display:none;">
     <tr>
         <th style="width:10%;"></th>
@@ -139,6 +146,10 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;">Service Fee </th>
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">Pin </th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -152,7 +163,26 @@
             <input type="number" class="form-control" id="servicefeebroad" placeholder="Enter Fee" />
             <input type="hidden" name="broadbandduedate" id="broadbandduedate" />
         </td>
-        <td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadrechargeconfirm()">Procces To Pay</button></td>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 160px; " type="password"
+                       id="broadRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="broadpinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+
+
+        }
+
+        <td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadprocessToPay()">Procces To Pay</button></td>
+
+        @*<td><button class="Recharg11" style="float: right;background: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;border: 0px;color: #fff;padding: 4px 19px;font-size: 20px;" onclick="broadrechargeconfirm()">Procces To Pay</button></td>*@
 
     </tr>
 </table>
@@ -170,6 +200,55 @@
 </table>
 
 <div class="loader loaderwww"></div>
+
+
+
+
+
+<script>
+
+     var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function broadprocessToPay() {
+
+     if (isPinOn) {
+
+         var pin = $('#broadRechargepin').val();
+
+
+         if (!pin) {
+             alert('Please enter transaction PIN');
+             $('#broadRechargepin').focus();
+             return;
+         }
+
+         broadrechargeconfirm(pin);
+     }
+     else {
+         broadrechargeconfirm('');
+     }
+ }
+
+</script>
+
+
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#broadmsgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#broadmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
 <script>
     j('#broadbandddltype').select2();
 </script>
@@ -284,7 +363,7 @@
     }
 </script>
 <script>
-    function broadrechargeconfirm() {
+    function broadrechargeconfirm(pinValue) {
 
         var e = document.getElementById("broadbandddltype");
         var broadbandddltext = e.options[e.selectedIndex].text;
@@ -298,19 +377,36 @@
             var sts = getbroadbandcontiunebtn(broadbandddltext, broadbandno, broadbandamount);
             if (sts == true) {
                 $("#servicefeebroad").css("border-color", "#000000");
-                $("#txtbroadbandno").val("");
-                $("#broadbandamount").val("");
-                if (broadbandno != "" && broadbandamount != "") {
+                //$("#txtbroadbandno").val("");
+                //$("#broadbandamount").val("");
+              //  if (broadbandno != "" && broadbandamount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: broadbandddltext, OptCode: broadbandddlvalue, mobileno: broadbandno, Amount: broadbandamount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: "", servicefee: servicefeebroad, billduedate: duedate },
+                        data: { OperatorName: broadbandddltext, OptCode: broadbandddlvalue, mobileno: broadbandno, Amount: broadbandamount, optional1: "", optional2: "", optional3: "", optional4: "", comm: "", BillRefId: "", servicefee: servicefeebroad, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
                             $('.loader').show();
                         },
                         success: function (result) {
+
+
+
+                            // 🔴 Clear old PIN error every time
+                            $('#broadpinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#broadpinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
                             var status = result.Response;
                             var message = result.Message;
                             if (status == "GATEWAY") {
@@ -321,6 +417,10 @@
                             else {
                                 $('#rchstatuschkbroad').text(status);
                                 $('#rchmsgbroad').text(message);
+
+                                $("#txtbroadbandno").val("");
+                                $("#broadbandamount").val("");
+
                             }
 
                             $('#confirmbroad').hide();
@@ -345,7 +445,7 @@
                             $('.loader').hide();
                         }
                     })
-                }
+                //}
             }
         }
         else {

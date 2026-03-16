@@ -1,4 +1,6 @@
-﻿<style>
+﻿@model Vastwebmulti.Areas.RETAILER.Models.remmulti
+
+<style>
     .loader {
         position: fixed;
         top: -90px;
@@ -201,6 +203,8 @@
 
 </div>
 
+<div id="elecmsgBox" style="margin-top:10px;"></div>
+
 <table id="confirmelec" class="for-prepaid" style="width:100%;display:none;">
     <tr>
         <th style="width:10%;"></th>
@@ -208,6 +212,11 @@
         <th style="width:25%;">Recharge to</th>
         <th style="width:10%;">amount</th>
         <th style="width:15%;display:none;">Service Fee </th>
+
+        @if (Model.Ispin == true)
+        {
+            <th style="width:15%;">Pin</th>
+        }
         <th style="width:15%;">Action</th>
     </tr>
     <tr>
@@ -221,16 +230,35 @@
             <input type="number" class="form-control" id="servicefeelectricty" placeholder="Enter Fee" value="0" style="display:none;" />
             <input type="hidden" name="electricityduedate" id="electricityduedate" />
         </td>
+        @if (Model.Ispin == true)
+        {
+            <td style="font-size: 24px;">
+                <input style=" width: 120px; " type="password"
+                       id="elecRechargepin"
+                       name="elecRechargepin"
+                       class="form-control text-center"
+                       placeholder="Enter PIN"
+                       maxlength="6"
+                       autocomplete="off" />
+                <span id="elecpinError"
+                      style="color:red; font-size:13px; display:none; margin-top:5px;">
+                </span>
+            </td>
+        }
+
+
         <td>
             <button style="        float: right;
-        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-        border: 0px;
-        color: #fff;
-        padding: 4px 19px;
-        font-size: 20px;" onclick="elecrechargeconfirm()">
+        background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecprocessToPay()">
                 Procces To Pay
             </button>
         </td>
+        @*<td>
+                <button style="        float: right;
+            background: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; border: 0px;color: #fff; padding: 4px 19px;font-size: 20px;" onclick="elecrechargeconfirm()">
+                    Procces To Pay
+                </button>
+            </td>*@
 
     </tr>
 </table>
@@ -248,6 +276,53 @@
 </table>
 
 <div class="loader loaderwww"></div>
+
+
+
+<script>
+    var isPinOn = @Model.Ispin.ToString().ToLower();
+
+    function elecprocessToPay() {
+
+        if (isPinOn) {
+
+            var pin = $('#elecRechargepin').val();
+
+            if (!pin) {
+                alert('Please enter transaction PIN');
+                $('#elecRechargepin').focus();
+                return;
+            }
+
+            elecrechargeconfirm(pin);
+        }
+        else {
+            elecrechargeconfirm('');
+        }
+    }
+</script>
+
+
+
+<script>
+    function showMsg(msg, type) {
+
+        var color = (type === "success") ? "green" : "red";
+
+        $('#msgBox').html(
+            '<div style="color:' + color + '; font-weight:bold;">' + msg + '</div>'
+        );
+
+        setTimeout(function () {
+            $('#elecmsgBox').html('');
+        }, 5000);
+    }
+</script>
+
+
+
+
+
 <script>
     j('#eddltype').select2();
 </script>
@@ -319,7 +394,7 @@
                            displayValues = displayValues + val.label + ' : ' + val.value + "</br>";
                        }
                    });
-      
+
                    var newrow = "<table class='col-sm-4 table-responsive table-bordered'><tr>";
                    newrow += "<td>" + displayValues +"</td></tr>";
                    newrow += "<tr><td> Bill Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp; ::  " + result.Price + "</td></tr>";
@@ -443,7 +518,7 @@
 </script>
 
 <script>
-    function elecrechargeconfirm() {
+    function elecrechargeconfirm(pinValue) {
 
             var e = document.getElementById("eddltype");
         var eleddl = e.options[e.selectedIndex].text;
@@ -472,13 +547,13 @@
                     optional1 = ddlcity;
                 }
 
-                $("#txtelectricity").val("");
-                $("#electricityAmount").val("");
-                if (txtval != "" && Amount != "") {
+                //$("#txtelectricity").val("");
+                //$("#electricityAmount").val("");
+                //if (txtval != "" && Amount != "") {
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("Recharge","Home")",
-                        data: { OperatorName: eleddl, OptCode: eleddlvalue, mobileno: txtval, Amount: Amount, optional1: optional1, optional2: cycleno, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeelectricty, billduedate: duedate },
+                        data: { OperatorName: eleddl, OptCode: eleddlvalue, mobileno: txtval, Amount: Amount, optional1: optional1, optional2: cycleno, optional3: "", optional4: "", comm: "", BillRefId: BillRefId, servicefee: servicefeelectricty, billduedate: duedate, Rechargepin: pinValue },
                         cache: false,
                         dataType: 'json',
                         beforeSend: function () {
@@ -486,6 +561,21 @@
                         },
                         success: function (result) {
                             console.log(result);
+
+                            // 🔴 Clear old PIN error every time
+                            $('#elecpinError').hide().text("");
+
+                            /* 🔴 PIN ERROR — SAME PAGE */
+                            if (result.status && (
+                                result.status === "PIN_REQUIRED" ||
+                                result.status === "INVALID_PIN" ||
+                                result.status === "PIN_NOT_SET")) {
+
+                                $('#elecpinError').text(result.message).show();
+                                $('.loader').hide();
+                                return; // 🚫 STOP ONLY FOR PIN ERROR
+                            }
+
 
                             var status = result.Response;
                             var message = result.Message;
@@ -501,6 +591,9 @@
                             else {
                                 $('#rchstatuschkelec').text(status);
                                 $('#rchmsgelec').text(message);
+
+                                $("#txtelectricity").val("");
+                                $("#electricityAmount").val("");
 
                                 if (status === "SUCCESS") {
                                     // ✅ Fill popup form fields
@@ -528,7 +621,7 @@
 
                         /*success: function (result) {
                             console.log(result)
-                          
+
                             var status = result.Response;
                             var message = result.Message;
                             console.log(status)
@@ -544,7 +637,7 @@
                             }
                             $('#confirmelec').hide();
                             $('#rechargeconfirmelec').show();
-                  
+
                         },*/
                         complete: function () {
                             $("#remainretailer").load(location.href + " #remainretailer");
@@ -568,7 +661,7 @@
                         }
                     })
 
-                }
+               // }
             }
         }
         else {

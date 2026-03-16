@@ -26,5 +26,8 @@ namespace Vastwebmulti.Models
         public Nullable<decimal> Adminremainpre { get; set; }
         public Nullable<decimal> Adminremainpost { get; set; }
         public string RequestID { get; set; }
+        public string Clientname { get; set; }
+        public string Shop_id { get; set; }
+        public string transid { get; set; }
     }
 }

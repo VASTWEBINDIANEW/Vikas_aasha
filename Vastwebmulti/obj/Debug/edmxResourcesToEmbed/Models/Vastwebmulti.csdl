@@ -7666,20 +7666,21 @@
     </FunctionImport>
     <EntitySet Name="KotakQRDetails" EntityType="VastwebmultiModel.KotakQRDetail" />
     <EntitySet Name="RadiantPrepayTransfers" EntityType="VastwebmultiModel.RadiantPrepayTransfer" />
-    <EntitySet Name="RadiantCashDeposites" EntityType="VastwebmultiModel.RadiantCashDeposite" />
-    <FunctionImport Name="updateprepayCashpickup">
-      <Parameter Name="uniqueid" Mode="In" Type="String" />
-      <Parameter Name="status" Mode="In" Type="String" />
-    </FunctionImport>
     <EntitySet Name="LoiLists" EntityType="VastwebmultiModel.LoiList" />
+    <FunctionImport Name="Loilistreport" ReturnType="Collection(VastwebmultiModel.Loilistreport_Result)">
+      <Parameter Name="retailerid" Mode="In" Type="String" />
+    </FunctionImport>
     <FunctionImport Name="UpdateRadiantCashDeposite">
       <Parameter Name="uniqueid" Mode="In" Type="String" />
       <Parameter Name="status" Mode="In" Type="String" />
       <Parameter Name="rejectedReson" Mode="In" Type="String" />
       <Parameter Name="Responseby" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="Loilistreport" ReturnType="Collection(VastwebmultiModel.Loilistreport_Result)">
-      <Parameter Name="retailerid" Mode="In" Type="String" />
+    <EntitySet Name="RadiantCashDeposites" EntityType="VastwebmultiModel.RadiantCashDeposite" />
+    <EntitySet Name="Rechargepin_otp_status" EntityType="VastwebmultiModel.Rechargepin_otp_status" />
+    <FunctionImport Name="updateprepayCashpickup">
+      <Parameter Name="uniqueid" Mode="In" Type="String" />
+      <Parameter Name="status" Mode="In" Type="String" />
     </FunctionImport>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
@@ -34053,47 +34054,9 @@
     <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="RequestID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="RadiantCashDeposite">
-    <Key>
-      <PropertyRef Name="idno" />
-      <PropertyRef Name="Idno" />
-    </Key>
-    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="RemainPre" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="RemainPost" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="AdminRemainPre" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="AdminRemainPost" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="InsertDate" Type="DateTime" Precision="3" />
-    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Ifsccode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="SlipName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Charge" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="FinalCharge" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="SlipID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="RejectReason" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ResponseBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Gst" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="tds" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Remainpre" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Remainpost" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Insertdate" Type="DateTime" Precision="3" />
-    <Property Name="Updatedate" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Accountnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Tds" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Slipid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Slipname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="RejectedReson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Requestid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Clientname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Shop_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="transid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="LoiList">
     <Key>
@@ -34147,4 +34110,40 @@
     <Property Type="String" Name="Dist_Desc" Nullable="true" MaxLength="150" />
     <Property Type="String" Name="RetailerName" Nullable="true" MaxLength="150" />
   </ComplexType>
+  <EntityType Name="RadiantCashDeposite">
+    <Key>
+      <PropertyRef Name="Idno" />
+    </Key>
+    <Property Name="Idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Adminremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Updatedate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BankName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Ifsccode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Accountnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Charge" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FinalCharge" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Gst" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tds" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Slipid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Slipname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="RejectedReson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ResponseBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Requestid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Rechargepin_otp_status">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="status" Type="Boolean" />
+    <Property Name="modifieddate" Type="DateTime" Precision="3" />
+  </EntityType>
 </Schema>

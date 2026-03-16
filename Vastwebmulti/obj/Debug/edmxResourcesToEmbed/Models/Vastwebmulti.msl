@@ -29498,6 +29498,9 @@
     <EntitySetMapping Name="RadiantPrepayTransfers">
       <EntityTypeMapping TypeName="VastwebmultiModel.RadiantPrepayTransfer">
         <MappingFragment StoreEntitySet="RadiantPrepayTransfer">
+          <ScalarProperty Name="transid" ColumnName="transid" />
+          <ScalarProperty Name="Shop_id" ColumnName="Shop_id" />
+          <ScalarProperty Name="Clientname" ColumnName="Clientname" />
           <ScalarProperty Name="RequestID" ColumnName="RequestID" />
           <ScalarProperty Name="Adminremainpost" ColumnName="Adminremainpost" />
           <ScalarProperty Name="Adminremainpre" ColumnName="Adminremainpre" />
@@ -29513,36 +29516,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="RadiantCashDeposites">
-      <EntityTypeMapping TypeName="VastwebmultiModel.RadiantCashDeposite">
-        <MappingFragment StoreEntitySet="RadiantCashDeposite">
-          <ScalarProperty Name="Requestid" ColumnName="Requestid" />
-          <ScalarProperty Name="RejectedReson" ColumnName="RejectedReson" />
-          <ScalarProperty Name="Slipname" ColumnName="Slipname" />
-          <ScalarProperty Name="Slipid" ColumnName="Slipid" />
-          <ScalarProperty Name="Tds" ColumnName="Tds" />
-          <ScalarProperty Name="Accountnumber" ColumnName="Accountnumber" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Updatedate" ColumnName="Updatedate" />
-          <ScalarProperty Name="Insertdate" ColumnName="Insertdate" />
-          <ScalarProperty Name="Adminremainpost" ColumnName="Adminremainpost" />
-          <ScalarProperty Name="Adminremainpre" ColumnName="Adminremainpre" />
-          <ScalarProperty Name="Remainpost" ColumnName="Remainpost" />
-          <ScalarProperty Name="Remainpre" ColumnName="Remainpre" />
-          <ScalarProperty Name="Idno" ColumnName="Idno" />
-          <ScalarProperty Name="Gst" ColumnName="Gst" />
-          <ScalarProperty Name="ResponseBy" ColumnName="ResponseBy" />
-          <ScalarProperty Name="Mode" ColumnName="Mode" />
-          <ScalarProperty Name="FinalCharge" ColumnName="FinalCharge" />
-          <ScalarProperty Name="Charge" ColumnName="Charge" />
-          <ScalarProperty Name="Ifsccode" ColumnName="Ifsccode" />
-          <ScalarProperty Name="BankName" ColumnName="BankName" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="Userid" ColumnName="Userid" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="updateprepayCashpickup" FunctionName="VastwebmultiModel.Store.updateprepayCashpickup" />
     <EntitySetMapping Name="LoiLists">
       <EntityTypeMapping TypeName="VastwebmultiModel.LoiList">
         <MappingFragment StoreEntitySet="LoiList">
@@ -29572,7 +29545,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="UpdateRadiantCashDeposite" FunctionName="VastwebmultiModel.Store.UpdateRadiantCashDeposite" />
     <FunctionImportMapping FunctionImportName="Loilistreport" FunctionName="VastwebmultiModel.Store.Loilistreport">
       <ResultMapping>
         <ComplexTypeMapping TypeName="VastwebmultiModel.Loilistreport_Result">
@@ -29601,5 +29573,45 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="UpdateRadiantCashDeposite" FunctionName="VastwebmultiModel.Store.UpdateRadiantCashDeposite" />
+    <EntitySetMapping Name="RadiantCashDeposites">
+      <EntityTypeMapping TypeName="VastwebmultiModel.RadiantCashDeposite">
+        <MappingFragment StoreEntitySet="RadiantCashDeposite">
+          <ScalarProperty Name="Requestid" ColumnName="Requestid" />
+          <ScalarProperty Name="ResponseBy" ColumnName="ResponseBy" />
+          <ScalarProperty Name="RejectedReson" ColumnName="RejectedReson" />
+          <ScalarProperty Name="Slipname" ColumnName="Slipname" />
+          <ScalarProperty Name="Slipid" ColumnName="Slipid" />
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="Tds" ColumnName="Tds" />
+          <ScalarProperty Name="Gst" ColumnName="Gst" />
+          <ScalarProperty Name="FinalCharge" ColumnName="FinalCharge" />
+          <ScalarProperty Name="Charge" ColumnName="Charge" />
+          <ScalarProperty Name="Accountnumber" ColumnName="Accountnumber" />
+          <ScalarProperty Name="Ifsccode" ColumnName="Ifsccode" />
+          <ScalarProperty Name="BankName" ColumnName="BankName" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Updatedate" ColumnName="Updatedate" />
+          <ScalarProperty Name="Insertdate" ColumnName="Insertdate" />
+          <ScalarProperty Name="Adminremainpost" ColumnName="Adminremainpost" />
+          <ScalarProperty Name="Adminremainpre" ColumnName="Adminremainpre" />
+          <ScalarProperty Name="Remainpost" ColumnName="Remainpost" />
+          <ScalarProperty Name="Remainpre" ColumnName="Remainpre" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="Idno" ColumnName="Idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rechargepin_otp_status">
+      <EntityTypeMapping TypeName="VastwebmultiModel.Rechargepin_otp_status">
+        <MappingFragment StoreEntitySet="Rechargepin_otp_status">
+          <ScalarProperty Name="modifieddate" ColumnName="modifieddate" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="updateprepayCashpickup" FunctionName="VastwebmultiModel.Store.updateprepayCashpickup" />
   </EntityContainerMapping>
 </Mapping>

@@ -9304,6 +9304,9 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Adminremainpre" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Adminremainpost" Type="decimal" Precision="18" Scale="2" />
     <Property Name="RequestID" Type="varchar" MaxLength="50" />
+    <Property Name="Clientname" Type="varchar" MaxLength="100" />
+    <Property Name="Shop_id" Type="varchar" MaxLength="100" />
+    <Property Name="transid" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="radianttoken">
     <Key>
@@ -9780,6 +9783,14 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userid" Type="varchar" MaxLength="50" />
     <Property Name="Sts" Type="bit" />
+  </EntityType>
+  <EntityType Name="Rechargepin_otp_status">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="status" Type="bit" />
+    <Property Name="modifieddate" Type="datetime" />
   </EntityType>
   <EntityType Name="RechargeStatusCheck">
     <Key>
@@ -22800,6 +22811,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="RechargeapiInfoes" EntityType="Self.RechargeapiInfoes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="rechargeapiresponses" EntityType="Self.rechargeapiresponses" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RechargeB2CStatus" EntityType="Self.RechargeB2CStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rechargepin_otp_status" EntityType="Self.Rechargepin_otp_status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RechargeStatusCheck" EntityType="Self.RechargeStatusCheck" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="rediant_dist" EntityType="Self.rediant_dist" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="rediant_state" EntityType="Self.rediant_state" Schema="dbo" store:Type="Tables" />

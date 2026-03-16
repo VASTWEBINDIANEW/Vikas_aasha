@@ -9,6 +9,7 @@ namespace Vastwebmulti.Areas.RETAILER.Models
     {
         //public IEnumerable<Vastwebmulti.Models.Select_admin_report_history_Result> retailer_recharge { get; set; }
         //public IEnumerable<Vastwebmulti.Models.Select_admin_report_history_old_Result> retailer_recharge_old { get; set; }
+        public bool Ispin { get; set; }
         public IEnumerable<Vastwebmulti.Models.Message_top> messagetop { get; set; }
         public IEnumerable<Vastwebmulti.Models.Apps_opt_all_Result> allopt { get; set; }
         public IEnumerable<Vastwebmulti.Models.Operator_Code> optcode { get; set; }
