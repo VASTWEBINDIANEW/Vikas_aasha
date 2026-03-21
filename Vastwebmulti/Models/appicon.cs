@@ -26,5 +26,6 @@ namespace Vastwebmulti.Models
         public Nullable<bool> isFinancialtrue { get; set; }
         public Nullable<bool> isTraveltrue { get; set; }
         public Nullable<bool> isOtherstrue { get; set; }
+        public Nullable<bool> isCmstrue { get; set; }
     }
 }
