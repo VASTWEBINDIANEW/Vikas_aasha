@@ -1930,150 +1930,351 @@ namespace Vastwebmulti.Controllers
 
 
         // Login From
+        //public ActionResult Login(string id)
+        //{
+
+
+        //    var userid = User.Identity.GetUserId();
+        //    ViewBag.signin_signup = id;
+        //    try
+        //    {
+
+        //        using (VastwebmultiEntities db = new VastwebmultiEntities())
+        //        {
+
+        //            var chk1 = db.Email_show_passcode.SingleOrDefault();
+        //            if (chk1.forgetotp == true)
+        //            {
+        //                Session["chk1"] = "1";
+        //            }
+        //            else
+        //            {
+        //                Session["chk1"] = "";
+        //            }
+
+
+        //            if (User.IsInRole("Admin"))
+        //            {
+        //                return RedirectToAction("Dashboard", "Home", new { area = "ADMIN" });
+        //            }
+        //            else if (User.IsInRole("master"))
+        //            {
+        //                var stschk = db.Superstokist_details.Where(aa => aa.SSId == userid).SingleOrDefault().Status;
+        //                if (stschk == "Y")
+        //                {
+        //                    return RedirectToAction("Dashboard", "Home", new { area = "master" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "YOUR MASTER ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+        //            }
+        //            else if (User.IsInRole("Dealer"))
+        //            {
+        //                var stschk = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault().Status;
+        //                if (stschk == "Y")
+        //                {
+        //                    return RedirectToAction("Dashboard", "Home", new { area = "Dealer" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "Your Account is Currently Blocked with Distributor, Contact to Administrator.";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+
+        //            }
+        //            else if (User.IsInRole("Retailer"))
+        //            {
+        //                var RetailerDetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
+        //                //var DlmStsChk = db.Dealer_Details.Where(aa => aa.DealerId == RetailerDetails.DealerId).SingleOrDefault().Status;
+
+        //                if (RetailerDetails.Status == "Y")
+        //                {
+        //                    return RedirectToAction("Dashboard", "Home", new { area = "Retailer" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "Your Account is Currently Blocked, Contact to Administrator.";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+
+        //            }
+        //            else if (User.IsInRole("API"))
+        //            {
+        //                var stschk = db.api_user_details.Where(aa => aa.apiid == userid).SingleOrDefault().status;
+        //                if (stschk == "Y")
+        //                {
+        //                    return RedirectToAction("Dashboard", "Home", new { area = "API" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "YOUR API ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+        //            }
+        //            else if (User.IsInRole("RCH"))
+        //            {
+        //                return RedirectToAction("Index", "Home", new { area = "RCH" });
+        //            }
+        //            else if (User.IsInRole("Vendor"))
+        //            {
+        //                var stschk = db.Vendor_details.Where(aa => aa.userid == userid).SingleOrDefault().status;
+        //                if (stschk == true)
+        //                {
+        //                    return RedirectToAction("Index", "Home", new { area = "VENDOR" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "YOUR VENDOR ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+
+        //            }
+        //            else if (User.IsInRole("FeeCollector"))
+        //            {
+        //                var stschk = db.FeeCollector_details.Where(aa => aa.FCId == userid).SingleOrDefault().Status;
+        //                if (stschk == "Y")
+        //                {
+        //                    return RedirectToAction("Index", "Home", new { area = "FeeCollector" });
+        //                }
+        //                else
+        //                {
+        //                    TempData.Remove("data");
+        //                    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //                    TempData["userblocked"] = "YOUR FEECOLLECTOR ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
+        //                    return RedirectToAction("Login", "Home", null);
+        //                }
+        //            }
+        //            else if (User.IsInRole("Employee"))
+        //            {
+        //                return RedirectToAction("Dashboard", "Home", new { area = "Employee" });
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    var x = DB.Admin_details.SingleOrDefault().RenivalDate >= DateTime.Now;
+
+        //    ViewBag.messagechkk = TempData["newmessage"];
+        //    TempData.Remove("newmessage");
+        //    if (x)
+        //    {
+        //        // show all state 
+        //        ViewBag.Sate = DB.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
+        //        ViewData["email"] = TempData["emailconfrim"];
+        //        ViewData["mobilecon"] = TempData["mobileno"];
+        //        ViewData["wrongpass"] = TempData["msg"];
+        //        ViewData["confrim"] = TempData["Confrim"];
+        //        ViewData["success"] = TempData["success"];
+        //        ViewData["slaberror"] = TempData["slaberror"];
+        //        ViewData["existuser"] = TempData["errorretailer"];
+        //        ViewData["userblock"] = TempData["userblocked"];
+        //    }
+        //    else
+        //    {
+        //        // show all state 
+        //        ViewBag.Sate = DB.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
+        //        ViewData["msg"] = "websiteblock";
+        //    }
+
+
+
+        //    var lg = DB.tblWhiteLabelLoginBackImages.Where(a => a.Role == "ADMIN" && a.StatusCheck == "Y").ToList();
+        //    if (lg.Count > 0)
+        //    {
+        //        //ViewBag.img = lg.FirstOrDefault().ImageUrl;
+        //        ViewBag.showimg = lg.FirstOrDefault().otherimage;
+        //    }
+        //    else
+        //    {
+        //        //ViewBag.showimg = lg.FirstOrDefault().otherimage;
+        //    }
+        //    var loginSlider = DB.LoginSilders.Where(a => a.Status == "Y").ToList();
+        //    if (loginSlider.Count > 0)
+        //    {
+        //        ViewBag.Loginsilder = loginSlider;
+        //    }
+        //    else
+        //    {
+        //        string currenturl = HttpContext.Request.Url.Authority;
+        //        currenturl = currenturl.Replace("www.", "").Replace("https://", "").Replace("http://", "");
+
+        //        string AdminId = HttpContext.Request.IsLocal ? DB.Admin_details.Where(aa => aa.localhost.ToUpper() == currenturl.ToUpper()).SingleOrDefault().userid : DB.Admin_details.Where(aa => aa.WebsiteUrl.ToUpper() == currenturl.ToUpper()).SingleOrDefault().userid;
+
+        //        var LogoPath = DB.tblLoginContents.ToList();
+        //        try
+        //        {
+        //            if (LogoPath.Count() > 0)
+        //            {
+        //                ViewBag.Logo = DB.tblLoginContents.Where(a => a.UserId == AdminId).SingleOrDefault().Image;
+        //            }
+        //            else
+        //            {
+        //                ViewBag.Logo = null;
+        //            }
+        //        }
+        //        catch (Exception e)
+        //        {
+
+        //            ViewBag.Logo = null;
+        //        }
+
+        //    }
+        //    RegisterViewModel mo = new RegisterViewModel();
+
+        //    // 🔑 Captcha generate karna zaroori hai yaha
+        //    string captcha = GenerateCaptchaCode(6);
+        //    Session["CaptchaCode"] = captcha;
+        //    ViewBag.CaptchaCode = captcha;
+
+        //    return View(mo);
+        //}
+
+
         public ActionResult Login(string id)
         {
-
-
             var userid = User.Identity.GetUserId();
             ViewBag.signin_signup = id;
+
             try
             {
-
                 using (VastwebmultiEntities db = new VastwebmultiEntities())
                 {
+                    var chk1 = db.Email_show_passcode.Select(a => a.forgetotp).FirstOrDefault();
 
-                    var chk1 = db.Email_show_passcode.SingleOrDefault();
-                    if (chk1.forgetotp == true)
-                    {
-                        Session["chk1"] = "1";
-                    }
-                    else
-                    {
-                        Session["chk1"] = "";
-                    }
+                    Session["chk1"] = chk1 == true ? "1" : "";
 
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                            return RedirectToAction("Dashboard", "Home", new { area = "ADMIN" });
 
-                    if (User.IsInRole("Admin"))
-                    {
-                        return RedirectToAction("Dashboard", "Home", new { area = "ADMIN" });
-                    }
-                    else if (User.IsInRole("master"))
-                    {
-                        var stschk = db.Superstokist_details.Where(aa => aa.SSId == userid).SingleOrDefault().Status;
-                        if (stschk == "Y")
+                        
+                        if (User.IsInRole("master"))
                         {
-                            return RedirectToAction("Dashboard", "Home", new { area = "master" });
-                        }
-                        else
-                        {
+                            var data = db.Superstokist_details.FirstOrDefault(a => a.SSId == userid);
+
+                            if (data != null && data.Status == "Y")
+                                return RedirectToAction("Dashboard", "Home", new { area = "master" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "YOUR MASTER ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
-                    }
-                    else if (User.IsInRole("Dealer"))
-                    {
-                        var stschk = db.Dealer_Details.Where(aa => aa.DealerId == userid).SingleOrDefault().Status;
-                        if (stschk == "Y")
+
+                        
+                        if (User.IsInRole("Dealer"))
                         {
-                            return RedirectToAction("Dashboard", "Home", new { area = "Dealer" });
-                        }
-                        else
-                        {
+                            var data = db.Dealer_Details.FirstOrDefault(a => a.DealerId == userid);
+
+                            if (data != null && data.Status == "Y")
+                                return RedirectToAction("Dashboard", "Home", new { area = "Dealer" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "Your Account is Currently Blocked with Distributor, Contact to Administrator.";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
 
-                    }
-                    else if (User.IsInRole("Retailer"))
-                    {
-                        var RetailerDetails = db.Retailer_Details.Where(aa => aa.RetailerId == userid).SingleOrDefault();
-                        //var DlmStsChk = db.Dealer_Details.Where(aa => aa.DealerId == RetailerDetails.DealerId).SingleOrDefault().Status;
+                        
+                        if (User.IsInRole("Retailer"))
+                        {
+                            var data = db.Retailer_Details.FirstOrDefault(a => a.RetailerId == userid);
 
-                        if (RetailerDetails.Status == "Y")
-                        {
-                            return RedirectToAction("Dashboard", "Home", new { area = "Retailer" });
-                        }
-                        else
-                        {
+                            if (data != null && data.Status == "Y")
+                                return RedirectToAction("Dashboard", "Home", new { area = "Retailer" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "Your Account is Currently Blocked, Contact to Administrator.";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
 
-                    }
-                    else if (User.IsInRole("API"))
-                    {
-                        var stschk = db.api_user_details.Where(aa => aa.apiid == userid).SingleOrDefault().status;
-                        if (stschk == "Y")
+                        
+                        if (User.IsInRole("API"))
                         {
-                            return RedirectToAction("Dashboard", "Home", new { area = "API" });
-                        }
-                        else
-                        {
+                            var data = db.api_user_details.FirstOrDefault(a => a.apiid == userid);
+
+                            if (data != null && data.status == "Y")
+                                return RedirectToAction("Dashboard", "Home", new { area = "API" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "YOUR API ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
-                    }
-                    else if (User.IsInRole("RCH"))
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "RCH" });
-                    }
-                    else if (User.IsInRole("Vendor"))
-                    {
-                        var stschk = db.Vendor_details.Where(aa => aa.userid == userid).SingleOrDefault().status;
-                        if (stschk == true)
+
+                     
+                        if (User.IsInRole("RCH"))
+                            return RedirectToAction("Index", "Home", new { area = "RCH" });
+
+                        
+                        if (User.IsInRole("Vendor"))
                         {
-                            return RedirectToAction("Index", "Home", new { area = "VENDOR" });
-                        }
-                        else
-                        {
+                            var data = db.Vendor_details.FirstOrDefault(a => a.userid == userid);
+
+                            if (data != null && data.status == true)
+                                return RedirectToAction("Index", "Home", new { area = "VENDOR" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "YOUR VENDOR ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
 
-                    }
-                    else if (User.IsInRole("FeeCollector"))
-                    {
-                        var stschk = db.FeeCollector_details.Where(aa => aa.FCId == userid).SingleOrDefault().Status;
-                        if (stschk == "Y")
+                       
+                        if (User.IsInRole("FeeCollector"))
                         {
-                            return RedirectToAction("Index", "Home", new { area = "FeeCollector" });
-                        }
-                        else
-                        {
+                            var data = db.FeeCollector_details.FirstOrDefault(a => a.FCId == userid);
+
+                            if (data != null && data.Status == "Y")
+                                return RedirectToAction("Index", "Home", new { area = "FeeCollector" });
+
                             TempData.Remove("data");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             TempData["userblocked"] = "YOUR FEECOLLECTOR ID IS BLOCKED. PLEASE CONTACT TO ADMIN";
-                            return RedirectToAction("Login", "Home", null);
+                            return RedirectToAction("Login", "Home");
                         }
-                    }
-                    else if (User.IsInRole("Employee"))
-                    {
-                        return RedirectToAction("Dashboard", "Home", new { area = "Employee" });
+
+                    
+                        if (User.IsInRole("Employee"))
+                            return RedirectToAction("Dashboard", "Home", new { area = "Employee" });
                     }
                 }
             }
             catch (Exception ex)
             {
-
+                
             }
-            var x = DB.Admin_details.SingleOrDefault().RenivalDate >= DateTime.Now;
+
+            var admin = DB.Admin_details.FirstOrDefault();
+            var x = admin != null && admin.RenivalDate >= DateTime.Now;
 
             ViewBag.messagechkk = TempData["newmessage"];
             TempData.Remove("newmessage");
+
+            ViewBag.Sate = DB.State_Desc.Select(a => new SelectListItem
+            {
+                Text = a.State_name,
+                Value = a.State_id.ToString()
+            }).ToList();
+
             if (x)
             {
-                // show all state 
-                ViewBag.Sate = DB.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
                 ViewData["email"] = TempData["emailconfrim"];
                 ViewData["mobilecon"] = TempData["mobileno"];
                 ViewData["wrongpass"] = TempData["msg"];
@@ -2085,24 +2286,17 @@ namespace Vastwebmulti.Controllers
             }
             else
             {
-                // show all state 
-                ViewBag.Sate = DB.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
                 ViewData["msg"] = "websiteblock";
             }
 
+            var lg = DB.tblWhiteLabelLoginBackImages
+                       .FirstOrDefault(a => a.Role == "ADMIN" && a.StatusCheck == "Y");
 
+            if (lg != null)
+                ViewBag.showimg = lg.otherimage;
 
-            var lg = DB.tblWhiteLabelLoginBackImages.Where(a => a.Role == "ADMIN" && a.StatusCheck == "Y").ToList();
-            if (lg.Count > 0)
-            {
-                //ViewBag.img = lg.FirstOrDefault().ImageUrl;
-                ViewBag.showimg = lg.FirstOrDefault().otherimage;
-            }
-            else
-            {
-                //ViewBag.showimg = lg.FirstOrDefault().otherimage;
-            }
             var loginSlider = DB.LoginSilders.Where(a => a.Status == "Y").ToList();
+
             if (loginSlider.Count > 0)
             {
                 ViewBag.Loginsilder = loginSlider;
@@ -2112,35 +2306,21 @@ namespace Vastwebmulti.Controllers
                 string currenturl = HttpContext.Request.Url.Authority;
                 currenturl = currenturl.Replace("www.", "").Replace("https://", "").Replace("http://", "");
 
-                string AdminId = HttpContext.Request.IsLocal ? DB.Admin_details.Where(aa => aa.localhost.ToUpper() == currenturl.ToUpper()).SingleOrDefault().userid : DB.Admin_details.Where(aa => aa.WebsiteUrl.ToUpper() == currenturl.ToUpper()).SingleOrDefault().userid;
+                var adminData = HttpContext.Request.IsLocal
+                    ? DB.Admin_details.FirstOrDefault(aa => aa.localhost.ToUpper() == currenturl.ToUpper())
+                    : DB.Admin_details.FirstOrDefault(aa => aa.WebsiteUrl.ToUpper() == currenturl.ToUpper());
 
-                var LogoPath = DB.tblLoginContents.ToList();
-                try
-                {
-                    if (LogoPath.Count() > 0)
-                    {
-                        ViewBag.Logo = DB.tblLoginContents.Where(a => a.UserId == AdminId).SingleOrDefault().Image;
-                    }
-                    else
-                    {
-                        ViewBag.Logo = null;
-                    }
-                }
-                catch (Exception e)
-                {
+                string AdminId = adminData?.userid;
 
-                    ViewBag.Logo = null;
-                }
-
+                var logo = DB.tblLoginContents.FirstOrDefault(a => a.UserId == AdminId);
+                ViewBag.Logo = logo?.Image;
             }
-            RegisterViewModel mo = new RegisterViewModel();
 
-            // 🔑 Captcha generate karna zaroori hai yaha
             string captcha = GenerateCaptchaCode(6);
             Session["CaptchaCode"] = captcha;
             ViewBag.CaptchaCode = captcha;
 
-            return View(mo);
+            return View(new RegisterViewModel());
         }
 
         [HttpGet]
