@@ -246,6 +246,7 @@
         .second-design-tab {
             padding-right: 15px !important;
         }
+
         .sevent_box3 {
             padding-left: 15px !important;
         }
@@ -271,7 +272,7 @@
             margin-top: 7px;
         }
 
-        
+
 
         .list-group p {
             font-size: 8px !important;
@@ -286,8 +287,6 @@
             font-weight: 700;
             top: -3px;
         }
-
-        
     }
 
     @@media only screen and (max-width:767px) {
@@ -334,12 +333,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
                             <a href="@Url.Action("Master_account_detail", "Home")" style="text-decoration:none;cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:0px;margin-right:3px;cursor:pointer;">
-                                    <div class="icon" style="top:7px;">
-                                        <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
-                                    </div>
+                                    @*<div class="icon" style="top:7px;">
+                                            <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
+                                        </div>*@
 
                                     <div class="content">
                                         <div class="text">@ViewData["super"]</div>
@@ -351,12 +350,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
                             <a href="@Url.Action("Distributor_account_detail", "Home")" style="text-decoration:none;cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow: none; margin-top: 3px; margin-bottom: 3px; margin-left: 3px; margin-right: 3px;">
-                                    <div class="icon" style="top: 7px;">
-                                        <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
-                                    </div>
+                                    @*<div class="icon" style="top: 7px;">
+                                            <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
+                                        </div>*@
                                     <div class="content">
                                         <div class="text" style="margin-left:6px;">@ViewData["Dlm"]</div>
                                         <div class="number" style="font-size: 18px; margin-left: 6px;">Distributor's</div>
@@ -365,41 +364,57 @@
                             </a>
                         </div>
 
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 dash-top-second" style="padding: 0;">
+                            <a href="@Url.Action("Retailer_accoumt_detail","Home")" style="text-decoration:none; cursor:pointer;">
+                                <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow:none; margin: 3px;">
 
-                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
-                            <a href="@Url.Action("Retailer_accoumt_detail", "Home")" style="text-decoration:none;cursor:pointer;">
-                                <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow: none; margin-top: 3px; margin-bottom: 3px; margin-left: 3px; margin-right: 3px;">
-                                    <div class="icon" style="top: 7px;">
-                                        <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
+                                    <div class="content" style="padding: 0;">
+                                        <!-- Replace col-* divs with flexbox -->
+                                        <div style="display:flex; width:100%;">
+
+                                            <div style="flex:1; padding: 4px 6px;">
+                                                <span style="font-size:12px;">@ViewData["Rem"]</span><br>
+                                                <span style="font-size:12px; font-weight:800;">Retailer&nbsp;Main</span>
+                                            </div>
+
+                                            <div style="flex:1; padding: 4px 6px; border-left:1px solid black;">
+                                                <span style="font-size:12px;">@ViewData["posbal"]</span><br>
+                                                <span style="font-size:12px; font-weight:800;">POS</span>
+                                            </div>
+
+                                            <div style="flex:1; padding: 4px 6px; border-left:1px solid black;">
+                                                <span style="font-size:12px;">@ViewData["cms"]</span><br>
+                                                <span style="font-size:12px; font-weight:800;">CMS</span>
+                                            </div>
+
+                                            <div style="flex:1; padding: 4px 6px; border-left:1px solid black;">
+                                                <span style="font-size:12px;">@ViewData["hold"]</span><br>
+                                                <span style="font-size:12px; font-weight:800;">Hold&nbsp;&amp;&nbsp;Loan</span>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="content">
-                                        <div class="text" style="margin-left:6px;"> @ViewData["Rem"]</div>
-                                        <div class="number" style="font-size: 18px; margin-left: 6px;">Retailer</div>
-                                    </div>
+
                                 </div>
                             </a>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
-                            <a href="@Url.Action("Retailer_accoumt_detail", "Home")" style="text-decoration:none;cursor:pointer;">
-                                <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow: none; margin-top: 3px; margin-bottom: 3px; margin-left: 3px; margin-right: 3px;">
-                                    <div class="icon" style="top: 7px;">
-                                        <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="content">
-                                        <div class="text" style="margin-left:6px;"> @ViewData["posbal"]</div>
+
+                        <!--<div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
+                        <a href="@@Url.Action("Retailer_accoumt_detail", "Home")" style="text-decoration:none;cursor:pointer;">
+                            <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow: none; margin-top: 3px; margin-bottom: 3px; margin-left: 3px; margin-right: 3px;">-->
+                        @*<div class="icon" style="top: 7px;">
+                                <img src="~/AdminDesign/images/md-d.svg" style="width:32px;" />
+                            </div>
+                            <div class="icon-third" style="top:7px;">
+                                <img src="~/AdminDesign/images/md-d-third.svg" style="width:32px;" />
+                            </div>*@
+                        <!--<div class="content">
+                                        <div class="text" style="margin-left:6px;"> @@ViewData["posbal"]</div>
                                         <div class="number" style="font-size: 18px; margin-left: 6px;">Retailer-Poss</div>
                                     </div>
                                 </div>
                             </a>
-                        </div>
-
-
+                        </div>-->
                         @* <div class="width19remset">
                                 <a href="@Url.Action("Retailer_accoumt_detail", "Home")" style="text-decoration:none; cursor:pointer;">
                                     <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">
@@ -434,12 +449,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second  sd-n">
                             <a href="@Url.Action("Retailer_accoumt_detail", "Home")" style="text-decoration:none; cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="cursor:pointer; box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">
-                                    <div class="icon" style="top:7px;">
-                                        <img src="~/AdminDesign/images/retailer-d.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/retailer-d-third.svg" style="width: 32px; padding-left: 5px;" />
-                                    </div>
+                                    @*<div class="icon" style="top:7px;">
+                                            <img src="~/AdminDesign/images/retailer-d.svg" style="width:32px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/retailer-d-third.svg" style="width: 32px; padding-left: 5px;" />
+                                        </div>*@
                                     <div class="content">
                                         <div class="text number1" style="margin-left:5px;">
 
@@ -455,12 +470,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
                             <a href="@Url.Action("Apiuser_account_detail", "Home")" style=" text-decoration:none;cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="cursor:pointer;box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">
-                                    <div class="icon" style="top:7px;">
-                                        <img src="~/AdminDesign/images/api-d.svg" style="width:34px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/api-d-third.svg" style="width:32px;" />
-                                    </div>
+                                    @*<div class="icon" style="top:7px;">
+                                            <img src="~/AdminDesign/images/api-d.svg" style="width:34px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/api-d-third.svg" style="width:32px;" />
+                                        </div>*@
                                     <div class="content">
                                         <div class="text">@ViewData["API"]</div>
                                         <div class="number" style="font-size:18px;">API User's</div>
@@ -472,12 +487,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
                             <a href="@Url.Action("Whitelabel_account_detail", "Home")" style=" text-decoration:none;cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="cursor:pointer;box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">
-                                    <div class="icon" style="top:7px;">
-                                        <img src="~/AdminDesign/images/white-lable.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/white-lable-third.svg" style="width:32px;" />
-                                    </div>
+                                    @*<div class="icon" style="top:7px;">
+                                            <img src="~/AdminDesign/images/white-lable.svg" style="width:32px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/white-lable-third.svg" style="width:32px;" />
+                                        </div>*@
                                     <div class="content">
                                         <div class="text">@ViewData["whitelabel"]</div>
                                         <div class="number" style="font-size:18px;">White&nbsp;label's</div>
@@ -488,12 +503,12 @@
                         <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6 dash-top-second">
                             <a href="@Url.Action("Admintotal", "Home")" style=" text-decoration:none;cursor:pointer;">
                                 <div class="info-box-4 hover-zoom-effect" style="cursor:pointer;box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">
-                                    <div class="icon" style="top:7px;">
-                                        <img src="~/AdminDesign/images/adminstr.svg" style="width:32px;" />
-                                    </div>
-                                    <div class="icon-third" style="top:7px;">
-                                        <img src="~/AdminDesign/images/adminstr-third.svg" style="width:32px;" />
-                                    </div>
+                                    @*<div class="icon" style="top:7px;">
+                                            <img src="~/AdminDesign/images/adminstr.svg" style="width:32px;" />
+                                        </div>
+                                        <div class="icon-third" style="top:7px;">
+                                            <img src="~/AdminDesign/images/adminstr-third.svg" style="width:32px;" />
+                                        </div>*@
                                     <div class="content">
                                         <div class="text">@ViewData["admin"]</div>
                                         <div class="number" style="font-size:18px;">Administrator</div>
@@ -513,8 +528,8 @@
                                     <button type="button" style="background-color:transparent;border-color:transparent; " onclick="fillval()" title="Add New Virtural Value">
                                         <i class="material-icons " style="font-size: 36px;top: -4px;position: relative;color: var(--main-bg-lcolor);">add_circle_outline</i>
                                     </button>
-                                </div> 
-                                
+                                </div>
+
                                 <div class="content" style="width:70%;">
                                     <a href="@Url.Action("AllDetails", "Home")" style=" text-decoration:none;cursor:pointer;">
                                         <div class="text">@ViewData["total"]</div>
@@ -638,17 +653,17 @@
                                     <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Other&nbsp;User's</a>
                                 </div>
                                 @*<div class="col-md-4 col-sm-4 col-xs-4 col text-center">
-                        <a href="@Url.Action("new_Employee","Home")">
-                            <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
-                                <center>
-                                    <div class="slds">
-                                        <img src="~/AdminDesign/images/share.svg" />
-                                    </div>
-                                </center>
-                            </button>
-                        </a>
-                        <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Employee&nbsp;</a>
-                    </div>*@
+                                        <a href="@Url.Action("new_Employee","Home")">
+                                            <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
+                                                <center>
+                                                    <div class="slds">
+                                                        <img src="~/AdminDesign/images/share.svg" />
+                                                    </div>
+                                                </center>
+                                            </button>
+                                        </a>
+                                        <a href="@Url.Action("new_Employee","Home")" style="cursor:pointer;font-size:11px;font-weight:700;">Employee&nbsp;</a>
+                                    </div>*@
 
 
                             </div><!--.row-->
@@ -911,7 +926,7 @@
 
 
                                                     <div class="row">
-                                                        
+
 
 
                                                     </div><!--.row-->
@@ -934,10 +949,10 @@
                                         <div class="tab-content">
                                             <div role="tabpanel" class="tab-pane fade in active" id="basicsetting">
                                                 <div class="icon-button-demo" style="min-height:606px;">
-                                                    
+
                                                     <div class="row">
 
-                                                        
+
                                                         <div class="col-md-4 col-sm-4 col-xs-4 col text-center">
                                                             <a href="@Url.Action("businessbyOperator","Home")">
                                                                 <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
@@ -956,7 +971,7 @@
                                                                 <button type="button" class="btn btn-grey btn-circle-lg waves-effect waves-circle waves-float">
                                                                     <center>
                                                                         <div class="slds">
-                                                                              <img src="~/AdminDesign/images/api-b.svg" />
+                                                                            <img src="~/AdminDesign/images/api-b.svg" />
                                                                         </div>
                                                                     </center>
                                                                 </button>
@@ -1066,7 +1081,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
             @*  seven theme design start  *@
             <div class="col-md-4 second-design-tab sevent_box1" style="padding-right:inherit;">

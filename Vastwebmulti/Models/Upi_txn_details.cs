@@ -54,5 +54,8 @@ namespace Vastwebmulti.Models
         public string From_users { get; set; }
         public Nullable<decimal> Dealerpre { get; set; }
         public Nullable<decimal> Dealerpost { get; set; }
+        public string Balancecreditfrom { get; set; }
+        public Nullable<decimal> cmsremainpre { get; set; }
+        public Nullable<decimal> cmsremainpost { get; set; }
     }
 }

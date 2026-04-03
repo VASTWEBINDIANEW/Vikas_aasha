@@ -47,7 +47,7 @@
                 DB1.SaveChanges();
             }
         }
-
+        var cmsremain = DB1.CMSRemainBalances.Where(aa => aa.Userid == Userid).SingleOrDefault().RemainBalance;
         var remainpos = (from nm in DB1.Pos_remain where nm.userid == Userid select nm).Single().Remain;
         var RetailerName = (from nm in DB1.Retailer_Details where nm.RetailerId == Userid select nm).Single().RetailerName;
         var retailerimg1 = (from nm in DB1.Retailer_Details where nm.RetailerId == Userid select nm).SingleOrDefault();
@@ -1033,7 +1033,15 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">Manage Passwo
                                 </a>
                             </li>
                         }
+                        <li>
+                            <a href="@Url.Action("HoldAndLeanAmountReport", "Home")">
+                                <i class="fa fa-id-card-o" aria-hidden="true"></i>
 
+                                <span>
+                                    Hold Amount Report
+                                </span>
+                            </a>
+                        </li>
 
                         @*<li>
             <a href="javascript:void(0);" class="menu-toggle">
@@ -1201,7 +1209,7 @@ background:#fff;color:#000;font-size: 12px;text-decoration: none;">Manage Passwo
                                 <a href="@Url.Action("RedaintWalletTransfer", "Home")">
                                     <i class="fa fa-exchange" aria-hidden="true"></i>
 
-                                 
+
                                     <span>Redaint Wallet History </span>
                                 </a>
 
@@ -2092,11 +2100,11 @@ text-transform: uppercase;font-weight:700;">Support</a>
 
                                                     <ul class="bal-nav amount-top-nav-re topnavbar-retailer-first" style="width:100%; float:left;">
                                                         @* <li class="search-btn3" style="padding:0px;border:none !important;display:none;">
-            <form id="content">
-                <input type="text" name="input" class="nputs-input" id="search-input">
-                <button type="reset" class="search" id="search-btn"></button>
-            </form>
-            </li>*@
+        <form id="content">
+            <input type="text" name="input" class="nputs-input" id="search-input">
+            <button type="reset" class="search" id="search-btn"></button>
+        </form>
+        </li>*@
 
 
 
@@ -2263,6 +2271,15 @@ text-transform: uppercase;font-weight:700;">Support</a>
 
 
                                                             </li>
+                                                            <li class="bkp india-rupeyy  seventd">
+                                                                <a href="javascript:void(0);" class="pull-right dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" style="margin-right:6px;">
+                                                                    <span class="nav-header-topin">CMS Balance</span>
+                                                                    <i class="blance-headerclass">
+                                                                        <img src="~/AdminDesign/images/main-rupee.png" style="width:12px !important;height:auto !important;margin-top:0px !important;" />
+                                                                        <span id="remainretailer1" style="color:#000 !important;font-size: 16px;font-weight: 600;">@cmsremain</span>
+                                                                    </i>
+                                                                </a>
+                                                            </li>
                                                         }
                                                         <li class="bkp logout-bkp bkp india-rupeyy seventd" style="border: 1px solid #f44336 !important;">
                                                             @using (Html.BeginForm("LogOff", "Account", new { Area = "", id = "logoutForm" }))
@@ -2277,24 +2294,24 @@ text-transform: uppercase;font-weight:700;">Support</a>
                                                         </li>
                                                         <li class="bkp logout-bkp bkp india-rupeyy rdesign seventd" style="width: 13%; float: left; right: 29px; padding: 0px 0px 0px 3px; display:none; ">
                                                             @* @using (Html.BeginForm("LogOff", "Account", new { Area = "", id = "logoutForm" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="pull-right">
-                        <p>renu</p>
-                        <span>Retailer</span>
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="pull-right">
+                    <p>renu</p>
+                    <span>Retailer</span>
 
-                        <span class="newimgspan"><i><img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User"></i><p style="font-size:16px; margin-top:0px;">Logout</p></span>
+                    <span class="newimgspan"><i><img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User"></i><p style="font-size:16px; margin-top:0px;">Logout</p></span>
 
-                    </button>*@
+                </button>*@
 
 
                                                             @*<div class="info-box-4 hover-zoom-effect" style="cursor:pointer;box-shadow:none;margin-top:3px;margin-bottom:3px;margin-left:3px;margin-right:3px;">*@
                                                             @* <div class="icon" style="top:7px;">
-                    <img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User">
-                </div>*@
+                <img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User">
+            </div>*@
                                                             @*<div class="icon-third" style="top:15px;">
-                    <img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User">
-                </div>*@
+                <img src="/AashaDigitalIndia24Testing/AdminDesign/images/user.png" width="52" height="51" alt="User">
+            </div>*@
                                                             <div class="content">
                                                                 <div class="text">Retailer</div>
                                                                 <div class="icon">

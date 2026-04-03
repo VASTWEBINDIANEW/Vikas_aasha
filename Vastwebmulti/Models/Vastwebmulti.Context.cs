@@ -914,6 +914,10 @@ namespace Vastwebmulti.Models
         public virtual DbSet<LoiList> LoiLists { get; set; }
         public virtual DbSet<RadiantCashDeposite> RadiantCashDeposites { get; set; }
         public virtual DbSet<Rechargepin_otp_status> Rechargepin_otp_status { get; set; }
+        public virtual DbSet<CMS_Ledger> CMS_Ledger { get; set; }
+        public virtual DbSet<CMSRemainBalance> CMSRemainBalances { get; set; }
+        public virtual DbSet<HoldBalanceReport> HoldBalanceReports { get; set; }
+        public virtual DbSet<HoldRemainbalance> HoldRemainbalances { get; set; }
     
         public virtual ObjectResult<show_all_account_Result> show_all_account(Nullable<System.DateTime> from, Nullable<System.DateTime> to, Nullable<int> pageIndex, Nullable<int> pageSize)
         {

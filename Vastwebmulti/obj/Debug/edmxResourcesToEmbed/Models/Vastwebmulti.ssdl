@@ -1016,6 +1016,7 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="isFinancialtrue" Type="bit" />
     <Property Name="isTraveltrue" Type="bit" />
     <Property Name="isOtherstrue" Type="bit" />
+    <Property Name="isCmstrue" Type="bit" />
   </EntityType>
   <EntityType Name="appimei">
     <Key>
@@ -1706,6 +1707,28 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.AEPS_Merchants' does not hav
     <Property Name="userid" Type="varchar" MaxLength="100" />
     <Property Name="closingbalance" Type="decimal" Precision="18" Scale="4" />
     <Property Name="date" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CMS_Ledger">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Credit" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Debit" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CMSRemainBalance">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="RemainBalance" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="comm_daywiseslab">
     <Key>
@@ -3238,6 +3261,31 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.District_Desc' does not have
     <Property Name="RetailerID" Type="varchar" MaxLength="100" />
     <Property Name="CardcategoryTypes" Type="varchar" MaxLength="50" />
     <Property Name="MaxLimits" Type="decimal" Precision="18" Scale="4" />
+  </EntityType>
+  <EntityType Name="HoldBalanceReports">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="50" />
+    <Property Name="insertdate" Type="datetime" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="remainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Type" Type="varchar" MaxLength="50" />
+    <Property Name="Requestid" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="holdremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="holdremainpost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="HoldRemainbalances">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="varchar" MaxLength="50" />
+    <Property Name="Remainbal" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="Hotel_info">
     <Key>
@@ -9307,6 +9355,10 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.offerdetails' does not have 
     <Property Name="Clientname" Type="varchar" MaxLength="100" />
     <Property Name="Shop_id" Type="varchar" MaxLength="100" />
     <Property Name="transid" Type="varchar" MaxLength="100" />
+    <Property Name="cmsused" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="mainbalused" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpost" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="radianttoken">
     <Key>
@@ -12141,6 +12193,9 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Uniquetxnid' does not have a
     <Property Name="From_users" Type="nvarchar" MaxLength="100" />
     <Property Name="Dealerpre" Type="decimal" Precision="18" Scale="4" />
     <Property Name="Dealerpost" Type="decimal" Precision="18" Scale="4" />
+    <Property Name="Balancecreditfrom" Type="varchar" MaxLength="50" />
+    <Property Name="cmsremainpre" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpost" Type="decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="UPIandGatewayStatus">
     <Key>
@@ -22418,6 +22473,8 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="chargeswhitelabeltoDLM" EntityType="Self.chargeswhitelabeltoDLM" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="checklogout" EntityType="Self.checklogout" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="closingbalance" EntityType="Self.closingbalance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CMS_Ledger" EntityType="Self.CMS_Ledger" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CMSRemainBalance" EntityType="Self.CMSRemainBalance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="comm_daywiseslab" EntityType="Self.comm_daywiseslab" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Commision_status_master_dlm" EntityType="Self.Commision_status_master_dlm" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Common_AEPS_comm" EntityType="Self.Common_AEPS_comm" Schema="dbo" store:Type="Tables" />
@@ -22532,6 +22589,8 @@ warning 6002: The table/view 'AashaDigitalIndia.dbo.Whitelabel_Superstokist_deta
     <EntitySet Name="GSTSettingStatusWhitelabel" EntityType="Self.GSTSettingStatusWhitelabel" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Hidw_Show" EntityType="Self.Hidw_Show" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="hold_microATM_Purchase" EntityType="Self.hold_microATM_Purchase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HoldBalanceReports" EntityType="Self.HoldBalanceReports" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HoldRemainbalances" EntityType="Self.HoldRemainbalances" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Hotel_info" EntityType="Self.Hotel_info" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HotelCancellation" EntityType="Self.HotelCancellation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HotelPassenger" EntityType="Self.HotelPassenger" Schema="dbo" store:Type="Tables" />

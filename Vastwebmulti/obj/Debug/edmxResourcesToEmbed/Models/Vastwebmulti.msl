@@ -15725,6 +15725,9 @@
     <EntitySetMapping Name="Upi_txn_details">
       <EntityTypeMapping TypeName="VastwebmultiModel.Upi_txn_details">
         <MappingFragment StoreEntitySet="Upi_txn_details">
+          <ScalarProperty Name="cmsremainpost" ColumnName="cmsremainpost" />
+          <ScalarProperty Name="cmsremainpre" ColumnName="cmsremainpre" />
+          <ScalarProperty Name="Balancecreditfrom" ColumnName="Balancecreditfrom" />
           <ScalarProperty Name="Dealerpost" ColumnName="Dealerpost" />
           <ScalarProperty Name="Dealerpre" ColumnName="Dealerpre" />
           <ScalarProperty Name="From_users" ColumnName="From_users" />
@@ -26543,6 +26546,7 @@
     <EntitySetMapping Name="appicons">
       <EntityTypeMapping TypeName="VastwebmultiModel.appicon">
         <MappingFragment StoreEntitySet="appicon">
+          <ScalarProperty Name="isCmstrue" ColumnName="isCmstrue" />
           <ScalarProperty Name="isOtherstrue" ColumnName="isOtherstrue" />
           <ScalarProperty Name="isTraveltrue" ColumnName="isTraveltrue" />
           <ScalarProperty Name="isFinancialtrue" ColumnName="isFinancialtrue" />
@@ -29498,6 +29502,10 @@
     <EntitySetMapping Name="RadiantPrepayTransfers">
       <EntityTypeMapping TypeName="VastwebmultiModel.RadiantPrepayTransfer">
         <MappingFragment StoreEntitySet="RadiantPrepayTransfer">
+          <ScalarProperty Name="cmsremainpost" ColumnName="cmsremainpost" />
+          <ScalarProperty Name="cmsremainpre" ColumnName="cmsremainpre" />
+          <ScalarProperty Name="mainbalused" ColumnName="mainbalused" />
+          <ScalarProperty Name="cmsused" ColumnName="cmsused" />
           <ScalarProperty Name="transid" ColumnName="transid" />
           <ScalarProperty Name="Shop_id" ColumnName="Shop_id" />
           <ScalarProperty Name="Clientname" ColumnName="Clientname" />
@@ -29613,5 +29621,56 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="updateprepayCashpickup" FunctionName="VastwebmultiModel.Store.updateprepayCashpickup" />
+    <EntitySetMapping Name="CMS_Ledger">
+      <EntityTypeMapping TypeName="VastwebmultiModel.CMS_Ledger">
+        <MappingFragment StoreEntitySet="CMS_Ledger">
+          <ScalarProperty Name="Insertdate" ColumnName="Insertdate" />
+          <ScalarProperty Name="RemainPost" ColumnName="RemainPost" />
+          <ScalarProperty Name="RemainPre" ColumnName="RemainPre" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CMSRemainBalances">
+      <EntityTypeMapping TypeName="VastwebmultiModel.CMSRemainBalance">
+        <MappingFragment StoreEntitySet="CMSRemainBalance">
+          <ScalarProperty Name="RemainBalance" ColumnName="RemainBalance" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HoldBalanceReports">
+      <EntityTypeMapping TypeName="VastwebmultiModel.HoldBalanceReport">
+        <MappingFragment StoreEntitySet="HoldBalanceReports">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="holdremainpost" ColumnName="holdremainpost" />
+          <ScalarProperty Name="holdremainpre" ColumnName="holdremainpre" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Requestid" ColumnName="Requestid" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Remainpost" ColumnName="Remainpost" />
+          <ScalarProperty Name="remainpre" ColumnName="remainpre" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="insertdate" ColumnName="insertdate" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HoldRemainbalances">
+      <EntityTypeMapping TypeName="VastwebmultiModel.HoldRemainbalance">
+        <MappingFragment StoreEntitySet="HoldRemainbalances">
+          <ScalarProperty Name="Remainbal" ColumnName="Remainbal" />
+          <ScalarProperty Name="Userid" ColumnName="Userid" />
+          <ScalarProperty Name="idno" ColumnName="idno" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

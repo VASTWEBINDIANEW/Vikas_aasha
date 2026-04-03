@@ -29,5 +29,9 @@ namespace Vastwebmulti.Models
         public string Clientname { get; set; }
         public string Shop_id { get; set; }
         public string transid { get; set; }
+        public Nullable<decimal> cmsused { get; set; }
+        public Nullable<decimal> mainbalused { get; set; }
+        public Nullable<decimal> cmsremainpre { get; set; }
+        public Nullable<decimal> cmsremainpost { get; set; }
     }
 }

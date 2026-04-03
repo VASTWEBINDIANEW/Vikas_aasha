@@ -7682,6 +7682,10 @@
       <Parameter Name="uniqueid" Mode="In" Type="String" />
       <Parameter Name="status" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="CMS_Ledger" EntityType="VastwebmultiModel.CMS_Ledger" />
+    <EntitySet Name="CMSRemainBalances" EntityType="VastwebmultiModel.CMSRemainBalance" />
+    <EntitySet Name="HoldBalanceReports" EntityType="VastwebmultiModel.HoldBalanceReport" />
+    <EntitySet Name="HoldRemainbalances" EntityType="VastwebmultiModel.HoldRemainbalance" />
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -20825,6 +20829,9 @@
     <Property Name="From_users" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Dealerpre" Type="Decimal" Precision="18" Scale="4" />
     <Property Name="Dealerpost" Type="Decimal" Precision="18" Scale="4" />
+    <Property Name="Balancecreditfrom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cmsremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpost" Type="Decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="EmailSendAll">
     <Key>
@@ -31276,6 +31283,7 @@
     <Property Name="isFinancialtrue" Type="Boolean" />
     <Property Name="isTraveltrue" Type="Boolean" />
     <Property Name="isOtherstrue" Type="Boolean" />
+    <Property Name="isCmstrue" Type="Boolean" />
   </EntityType>
   <EntityType Name="application_color">
     <Key>
@@ -34057,6 +34065,10 @@
     <Property Name="Clientname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Shop_id" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="transid" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="cmsused" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="mainbalused" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="cmsremainpost" Type="Decimal" Precision="18" Scale="2" />
   </EntityType>
   <EntityType Name="LoiList">
     <Key>
@@ -34145,5 +34157,52 @@
     <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="status" Type="Boolean" />
     <Property Name="modifieddate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="CMS_Ledger">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Credit" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Debit" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="RemainPost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Insertdate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="CMSRemainBalance">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RemainBalance" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="HoldBalanceReport">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="insertdate" Type="DateTime" Precision="3" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="remainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Remainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Requestid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="holdremainpre" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="holdremainpost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="HoldRemainbalance">
+    <Key>
+      <PropertyRef Name="idno" />
+    </Key>
+    <Property Name="idno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Userid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Remainbal" Type="Decimal" Precision="18" Scale="2" />
   </EntityType>
 </Schema>
