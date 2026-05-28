@@ -1781,3 +1781,88 @@ body.saas-dashboard-clean .dash-board-top[style] {
         white-space: normal !important;
     }
 }
+
+/* ADMIN-specific minimal navigation policy */
+body.saas-admin-ui .saas-admin-hidden-menu-item,
+body.saas-admin-ui .saas-admin-hidden-topbar-item,
+body.saas-admin-ui .saas-admin-duplicate-logout {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-admin-primary-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 14px 12px 80px !important;
+}
+
+body.saas-admin-ui .saas-admin-kept-menu-item {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-kept-menu-item > a,
+body.saas-admin-ui .saas-admin-kept-menu-item > span > a {
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-admin-kept-menu-item > ul,
+body.saas-admin-ui .saas-admin-kept-menu-item .ml-menu {
+    margin: 8px 0 10px 20px !important;
+    padding: 8px 0 8px 10px !important;
+    max-height: 48vh !important;
+    overflow-y: auto !important;
+    border-left: 1px solid rgba(148, 163, 184, .2) !important;
+}
+
+body.saas-admin-ui .saas-admin-kept-menu-item > ul::-webkit-scrollbar,
+body.saas-admin-ui .saas-admin-kept-menu-item .ml-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+body.saas-admin-ui .saas-admin-kept-menu-item > ul::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-admin-kept-menu-item .ml-menu::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, .34);
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-clean-topbar .navbar-nav,
+body.saas-admin-ui .saas-clean-topbar .four-top-nav,
+body.saas-admin-ui .saas-clean-topbar .sevenmenu_set1 {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-clean-topbar li,
+body.saas-admin-ui .saas-clean-topbar .list-group {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-clean-topbar .btn-circle,
+body.saas-admin-ui .saas-clean-topbar .btn-circle-four {
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-clean-topbar img,
+body.saas-admin-ui .saas-clean-topbar center,
+body.saas-admin-ui .saas-clean-topbar p {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-clean-topbar .saas-admin-hidden-topbar-item + li,
+body.saas-admin-ui .saas-clean-topbar .saas-admin-hidden-topbar-item + .list-group {
+    margin-left: 0 !important;
+}
+
+body.saas-admin-ui .saas-clean-topbar::after {
+    content: "";
+    display: block;
+    clear: both;
+}
