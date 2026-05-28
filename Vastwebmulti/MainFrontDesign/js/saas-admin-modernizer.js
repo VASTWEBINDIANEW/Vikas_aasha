@@ -128,6 +128,147 @@
         });
     }
 
+
+
+    var iconMap = [
+        { match: /dashboard|home|deshboard/i, icon: "bi-speedometer2" },
+        { match: /profile|user|retailer|dealer|master|employee|customer|kyc/i, icon: "bi-person-badge" },
+        { match: /wallet|balance|fund|amount|purchase|ledger|credit|debit|settlement|bank/i, icon: "bi-wallet2" },
+        { match: /report|history|statement|daybook|invoice|gst|tds/i, icon: "bi-clipboard-data" },
+        { match: /recharge|mobile|dth|operator|utility|electricity|water|gas|bill/i, icon: "bi-lightning-charge" },
+        { match: /travel|flight|bus|hotel|air/i, icon: "bi-airplane" },
+        { match: /setting|security|password|theme|logo|api|switch|commission|slab/i, icon: "bi-gear" },
+        { match: /complaint|support|ticket|message|notification|alert/i, icon: "bi-chat-dots" },
+        { match: /product|e-?commerce|cart|vendor|order/i, icon: "bi-bag" },
+        { match: /pan|aadhaar|aadhar|card|certificate|document/i, icon: "bi-credit-card-2-front" },
+        { match: /logout|sign out/i, icon: "bi-box-arrow-right" }
+    ];
+
+    function iconForText(text) {
+        var value = (text || "").replace(/\s+/g, " ").trim();
+        for (var index = 0; index < iconMap.length; index += 1) {
+            if (iconMap[index].match.test(value)) {
+                return iconMap[index].icon;
+            }
+        }
+        return "bi-circle";
+    }
+
+    function normalizeText(value) {
+        return (value || "").replace(/[-–—]+/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+    }
+
+    function normalizeHref(value) {
+        return (value || "").replace(/^https?:\/\/[^/]+/i, "").replace(/\?.*$/, "").replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
+    }
+
+    function sidebarRoots(root) {
+        var scope = root && root.querySelectorAll ? root : document;
+        return Array.prototype.slice.call(scope.querySelectorAll("#leftsidebar, aside.sidebar, .sidebar, .leftside-menu-retailer, .wretailer-leftsidebar, .whitel-label-manu"));
+    }
+
+    function ensureIcon(anchor) {
+        if (!anchor || anchor.dataset.saasIconReady === "true") {
+            return;
+        }
+
+        var text = normalizeText(anchor.textContent);
+        var icon = document.createElement("i");
+        icon.className = "bi " + iconForText(text) + " saas-nav-icon";
+        icon.setAttribute("aria-hidden", "true");
+
+        var firstContent = Array.prototype.find.call(anchor.childNodes, function (node) {
+            return node.nodeType === 1 || (node.nodeType === 3 && node.textContent.trim());
+        });
+
+        anchor.insertBefore(icon, firstContent || anchor.firstChild);
+        anchor.dataset.saasIconReady = "true";
+    }
+
+    function removeBrokenMenuImages(root) {
+        var scope = root && root.querySelectorAll ? root : document;
+        Array.prototype.forEach.call(scope.querySelectorAll("#leftsidebar a img, aside.sidebar a img, .leftside-menu-retailer a img, .wretailer-leftsidebar a img, .whitel-label-manu a img"), function (img) {
+            img.setAttribute("aria-hidden", "true");
+            img.classList.add("saas-legacy-menu-image");
+            img.style.setProperty("display", "none", "important");
+        });
+    }
+
+    function dedupeMenuItems(root) {
+        sidebarRoots(root).forEach(function (sidebar) {
+            Array.prototype.forEach.call(sidebar.querySelectorAll("ul"), function (list) {
+                var seen = Object.create(null);
+                Array.prototype.forEach.call(list.children, function (item) {
+                    if (!item || item.tagName !== "LI") {
+                        return;
+                    }
+
+                    var anchor = item.querySelector(":scope > a, :scope > span > a");
+                    if (!anchor) {
+                        return;
+                    }
+
+                    var text = normalizeText(anchor.textContent);
+                    var href = normalizeHref(anchor.getAttribute("href"));
+                    var key = (href && href !== "javascript:void(0)" && href !== "#" ? href : text);
+                    if (!key || item.querySelector("ul")) {
+                        return;
+                    }
+
+                    if (seen[key]) {
+                        item.classList.add("saas-duplicate-menu-item");
+                        item.style.setProperty("display", "none", "important");
+                    } else {
+                        seen[key] = true;
+                    }
+                });
+            });
+        });
+    }
+
+    function normalizeSidebarMenus(root) {
+        sidebarRoots(root).forEach(function (sidebar) {
+            sidebar.classList.add("saas-clean-sidebar");
+            Array.prototype.forEach.call(sidebar.querySelectorAll("a"), function (anchor) {
+                var href = anchor.getAttribute("href") || "";
+                var childMenu = anchor.parentElement && anchor.parentElement.querySelector(":scope > ul");
+                if (childMenu || anchor.classList.contains("menu-toggle") || href === "javascript:void(0);" || href === "javascript:void(0)" || href === "#") {
+                    anchor.classList.add("saas-menu-parent");
+                    if (!anchor.querySelector(".saas-menu-caret")) {
+                        var caret = document.createElement("i");
+                        caret.className = "bi bi-chevron-down saas-menu-caret";
+                        caret.setAttribute("aria-hidden", "true");
+                        anchor.appendChild(caret);
+                    }
+                }
+                ensureIcon(anchor);
+            });
+        });
+
+        removeBrokenMenuImages(root);
+        dedupeMenuItems(root);
+    }
+
+    function simplifyDashboard(root) {
+        var scope = root && root.querySelectorAll ? root : document;
+        var dashboard = scope.querySelector(".tmw-dashaboard, .dash-board-top, .sevent_box") || document.querySelector(".tmw-dashaboard, .dash-board-top, .sevent_box");
+        if (!dashboard) {
+            return;
+        }
+
+        document.body.classList.add("saas-dashboard-clean");
+        Array.prototype.forEach.call(document.querySelectorAll(".dash-board-top, .sevent_box .row, .tmw-dashaboard .row"), function (row) {
+            row.classList.add("saas-dashboard-grid");
+        });
+
+        Array.prototype.forEach.call(document.querySelectorAll(".dash-board-top .info-box-4, .tmw-dashaboard .info-box-4, .info-box, .info-box-2, .info-box-3"), function (card, index) {
+            card.classList.add("saas-stat-card");
+            if (index > 11) {
+                card.classList.add("saas-secondary-widget");
+            }
+        });
+    }
+
     function normalizeComponents(root) {
         var scope = root && root.querySelectorAll ? root : document;
 
@@ -158,6 +299,8 @@
         });
 
         normalizeInlineVisuals(scope);
+        normalizeSidebarMenus(scope);
+        simplifyDashboard(scope);
     }
 
     function observeDynamicContent() {
