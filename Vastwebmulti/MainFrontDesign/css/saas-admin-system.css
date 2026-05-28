@@ -1307,3 +1307,174 @@ ul.tab-seconddesign li.current,
         font-size: 20px !important;
     }
 }
+
+/* Runtime modernizer state */
+.saas-admin-ui body,
+body.saas-admin-ui {
+    --modernizer-active: 1;
+}
+
+html.saas-admin-ui .saas-surface {
+    background: var(--saas-surface) !important;
+    border: 1px solid rgba(226, 232, 240, .92) !important;
+    border-radius: var(--saas-radius-lg) !important;
+    box-shadow: var(--saas-shadow-md) !important;
+}
+
+html.saas-admin-ui .saas-table {
+    width: 100% !important;
+}
+
+/* Compatibility for Bootstrap 3-era grid names after Bootstrap 5 is loaded. */
+.col-xs-1 { width: 8.33333333%; }
+.col-xs-2 { width: 16.66666667%; }
+.col-xs-3 { width: 25%; }
+.col-xs-4 { width: 33.33333333%; }
+.col-xs-5 { width: 41.66666667%; }
+.col-xs-6 { width: 50%; }
+.col-xs-7 { width: 58.33333333%; }
+.col-xs-8 { width: 66.66666667%; }
+.col-xs-9 { width: 75%; }
+.col-xs-10 { width: 83.33333333%; }
+.col-xs-11 { width: 91.66666667%; }
+.col-xs-12 { width: 100%; }
+
+.col-xs-1,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12 {
+    float: left;
+    min-height: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+}
+
+/* Modern replacements for common legacy Bootstrap/AdminBSB structures. */
+.panel-default > .panel-heading,
+.panel-primary > .panel-heading,
+.panel-success > .panel-heading,
+.panel-info > .panel-heading,
+.panel-warning > .panel-heading,
+.panel-danger > .panel-heading {
+    background: var(--saas-surface) !important;
+    border-color: var(--saas-border) !important;
+    color: var(--saas-text) !important;
+}
+
+.label,
+.badge {
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    letter-spacing: .02em;
+    padding: 5px 8px !important;
+}
+
+.label-primary,
+.badge-primary {
+    background: var(--saas-primary) !important;
+}
+
+.label-success,
+.badge-success {
+    background: var(--saas-success) !important;
+}
+
+.label-danger,
+.badge-danger {
+    background: var(--saas-danger) !important;
+}
+
+.label-warning,
+.badge-warning {
+    background: var(--saas-warning) !important;
+    color: #111827 !important;
+}
+
+.onoffswitch,
+.switch,
+.custom-control,
+.checkbox,
+.radio {
+    color: var(--saas-text-soft) !important;
+}
+
+.dropdown-menu > li > a {
+    color: var(--saas-text-soft) !important;
+    font-weight: 650 !important;
+    padding: 9px 14px !important;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    background: var(--saas-primary-soft) !important;
+    color: var(--saas-primary) !important;
+}
+
+.list-group-item {
+    border-color: var(--saas-border) !important;
+    color: var(--saas-text-soft) !important;
+}
+
+.progress {
+    height: 10px !important;
+    background: #e5edf6 !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, var(--saas-primary), #38bdf8) !important;
+    border-radius: inherit;
+}
+
+.sweet-alert,
+.swal-modal {
+    border-radius: var(--saas-radius-lg) !important;
+    box-shadow: var(--saas-shadow-lg) !important;
+}
+
+.sweet-alert button,
+.swal-button {
+    border-radius: var(--saas-radius-sm) !important;
+}
+
+.dtp,
+.datepicker,
+.daterangepicker {
+    border-radius: var(--saas-radius-md) !important;
+    box-shadow: var(--saas-shadow-lg) !important;
+}
+
+/* Aggressively remove old glossy color skins on known legacy theme classes. */
+[class*="theme-"] .bg-red,
+[class*="theme-"] .bg-pink,
+[class*="theme-"] .bg-purple,
+[class*="theme-"] .bg-deep-purple,
+[class*="theme-"] .bg-indigo,
+[class*="theme-"] .bg-blue,
+[class*="theme-"] .bg-light-blue,
+[class*="theme-"] .bg-cyan,
+[class*="theme-"] .bg-teal,
+[class*="theme-"] .bg-green,
+[class*="theme-"] .bg-light-green,
+[class*="theme-"] .bg-lime,
+[class*="theme-"] .bg-yellow,
+[class*="theme-"] .bg-amber,
+[class*="theme-"] .bg-orange,
+[class*="theme-"] .bg-deep-orange,
+[class*="theme-"] .bg-brown,
+[class*="theme-"] .bg-grey,
+[class*="theme-"] .bg-blue-grey,
+[class*="theme-"] .bg-black {
+    background-image: none !important;
+}
