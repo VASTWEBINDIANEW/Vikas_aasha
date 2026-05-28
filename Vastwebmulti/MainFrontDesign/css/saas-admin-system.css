@@ -1478,3 +1478,93 @@ html.saas-admin-ui .saas-table {
 [class*="theme-"] .bg-black {
     background-image: none !important;
 }
+
+/* Standalone auth/error utility screens */
+.section.secondary-section,
+.passcodeSection,
+.container-fluid.fullbodydycolorbg.passcodeSection {
+    min-height: 100vh !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: clamp(24px, 6vw, 72px) 16px !important;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, .18), transparent 24rem),
+        linear-gradient(135deg, #eef5ff 0%, #f8fbff 48%, #ffffff 100%) !important;
+    border: 0 !important;
+    color: var(--saas-text) !important;
+}
+
+.section.secondary-section::before,
+.passcodeSection::before {
+    display: none !important;
+}
+
+.section.secondary-section .container,
+.section.secondary-section .container-fluid,
+.passcodeSection .container,
+.passcodeSection .container-fluid,
+.otp-form {
+    max-width: 720px !important;
+    width: min(100%, 720px) !important;
+    margin: 0 auto !important;
+    padding: clamp(24px, 5vw, 48px) !important;
+    background: rgba(255, 255, 255, .94) !important;
+    border: 1px solid rgba(226, 232, 240, .9) !important;
+    border-radius: var(--saas-radius-lg) !important;
+    box-shadow: var(--saas-shadow-lg) !important;
+    text-align: center !important;
+}
+
+.section.secondary-section img,
+.passcodeSection img {
+    max-width: 180px !important;
+    margin-bottom: 20px !important;
+}
+
+.section.secondary-section p,
+.passcodeSection p,
+.otp-form p,
+.otp-form label,
+.otp-form h1,
+.otp-form h2,
+.otp-form h3 {
+    color: var(--saas-text) !important;
+}
+
+.section.secondary-section .large-text,
+.passcodeSection .large-text {
+    margin: 0 0 16px !important;
+    padding: 0 !important;
+    font-size: clamp(28px, 4vw, 44px) !important;
+    line-height: 1.1 !important;
+    color: var(--saas-text) !important;
+}
+
+.row-fluid,
+.span1,
+.span2,
+.span3,
+.span8,
+.span-12 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    float: none !important;
+}
+
+.otp-form input,
+.otp-form select,
+.otp-form textarea {
+    width: 100% !important;
+    margin-bottom: 14px !important;
+}
+
+.submit-button-one input,
+.otp-form input[type="submit"],
+.otp-form button {
+    width: auto !important;
+    min-width: 160px !important;
+    background: var(--saas-primary) !important;
+    color: #ffffff !important;
+}
