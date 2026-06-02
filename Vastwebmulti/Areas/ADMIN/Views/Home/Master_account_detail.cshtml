@@ -1,173 +1,81 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Master_Reamin_Cr_report_Result>
+@using System.Linq
 @{
     ViewBag.Title = "Master_account_detail";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Master_Reamin_Cr_report_Result>();
+    var sumBalance = rows.Sum(aa => aa.remainbal ?? 0m);
+    var sumCredit = rows.Sum(aa => aa.cr);
+    var rowCount = rows.Count;
+    Func<decimal, string> fmt = v => v.ToString("N2");
 }
-    <style>
-        .table-bordered tbody tr td {
-            padding: 8px 10px;
-        }
 
-        .master-account-detail {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-            .master-account-detail .res_div {
-                padding: 0;
-            }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-        @@media only screen and (max-width:1280px) {
-
-            section.content {
-                margin: 75px 0px 0 160px;
-            }
-        }
-
-        @@media only screen and (max-width:1169px) {
-
-            .ls-closed section.content {
-                margin-left: 0px;
-            }
-        }
-
-        @@media only screen and (max-width:1024px) {
-
-            #sidebar-open {
-                top: 29px;
-                left: -147px;
-            }
-        }
-
-        @@media only screen and (max-width:991px){
-            .master-account-detail .res_div {
-                width: 33%;
-            }
-        }
-
-        @@media only screen and (max-width:767px) {
-            #sidebar-open {
-                top: -1px;
-                left: -4px;
-            }
-            .master-account-detail {
-                display: block;
-            }
-                .master-account-detail .res_div {
-                    width: 50%;
-                }
-        }
-        
-        @@media only screen and (max-width:767px) {
-            .ff-fild {
-                float: left;padding-left: 15px !important;
-            }
-        }
-        @@media only screen and (max-width:480px) {
-            .master-account-detail .res_div {
-                width: 100%;
-                padding: 0 !important;
-                margin: 5px 0;
-            }
- .table-responsive > .table-bordered > thead > tr > th:first-child,.table-responsive > .table-bordered > tbody > tr > td:first-child{border-left:1px solid var(--border-color);
-
-            }
-        }
-    </style>
-<section class="content fourdesign-section-admin">
+<section class="content fourdesign-section-admin saas-admin-account-page">
     <div class="container-fluid">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Master Account Detail</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-
-                <li><a href="javascript:void(0);">Master Account Detail</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row master-account-detail page-header-third" style="">
-            <div class="col-md-7 res_div">
-                <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                    <ul>
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                            </a>
-                        </li>
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            M/D Account's Balance
-                        </li>
-
-                    </ul>
+        
+        <div class="saas-acc-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>M/D Account's Balance</li>
+            </ol>
+            <div class="saas-acc-toolbar-right">
+                <div class="saas-acc-search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input class="form-control" id="myInput" type="text" placeholder="Search firm, name, mobile..." autocomplete="off" />
                 </div>
-            </div>
-            <div class="col-md-3 ff-fild tablesearch-second  res_div" style="padding:0px;">
-                <div class="search-after-third">
-                    <input class="form-control" id="myInput" type="text" placeholder="Search.." style="height:32px;border-color: #ccc !important;">
-                </div>
-
-            </div>
-            <div class="col-md-2 res_div">
-
-                <div class="white-l-search-nine pdfexpoer-second">
-
-                    <div class="web-white-filter fil pdf-third-design" style="float: right;margin-right: 5px;">
-                        <input onclick="excel()" type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;" />
-                        <input onclick="PDF()" type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;" />
-                    </div>
-
+                <div class="saas-acc-export-group">
+                    <button type="button" class="saas-acc-btn saas-acc-btn--excel" id="btnExport" onclick="excel()">
+                        <i class="fas fa-file-excel" aria-hidden="true"></i> Export
+                    </button>
+                    <button type="button" class="saas-acc-btn saas-acc-btn--pdf" id="btnPDF" onclick="PDF()">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row clearfix" style="margin-top:10px;">
 
-            <div class="col-md-12">
-                <div class="table-responsive tableseconddes-admin tablefourdesign-admin page-header-third">
-                    <table id="dtBasicExample" class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;background:#f5f5f5;">
-                        <thead style="background:#f5f5f5;">
+        
+        <div class="saas-acc-table-card" id="masterAccountExport">
+            <div class="saas-acc-table-card-head">
+                <h3>M/D balance report</h3>
+                <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @rowCount records</span>
+            </div>
+            <div class="saas-acc-table-wrap table-responsive">
+                <table id="dtBasicExample" class="table saas-acc-table example-second third-design-table">
+                    <thead>
+                        <tr>
+                            <th class="col-text">M/D Firm</th>
+                            <th class="col-text">M/D Name</th>
+                            <th>Registered No.</th>
+                            <th>Account Balance</th>
+                            <th>Admin Credit</th>
+                        </tr>
+                        <tr class="saas-acc-subtotal-row third-tr-color">
+                            <th class="col-text" colspan="3">Sub Total</th>
+                            <th class="col-balance">₹@fmt(sumBalance)</th>
+                            <th class="col-credit">₹@fmt(sumCredit)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body">
+                        @foreach (var item in rows)
+                        {
                             <tr>
-                                <th>M/D Firm</th>
-                                <th>M/D Name</th>
-                                <th>Registred No.</th>
-                                <th>Account Balance</th>
-                                <th>Admin Credit</th>
-
+                                <td class="col-text" data-label="M/D Firm">@item.FarmName</td>
+                                <td class="col-text" data-label="M/D Name">@item.SuperstokistName</td>
+                                <td data-label="Registered No.">@item.Mobile</td>
+                                <td class="col-balance" data-label="Account Balance">@((item.remainbal ?? 0m).ToString("N2"))</td>
+                                <td class="col-credit" data-label="Admin Credit">@item.cr.ToString("N2")</td>
                             </tr>
-                            <tr class="third-tr-color" style="color:#fff;background-color:#a4a0a0 !important;">
-                                <th colspan="3">Sub Total</th>
-
-                                <th> @Model.Sum(aa => aa.remainbal)</th>
-                                <th> @Model.Sum(aa => aa.cr)</th>
-
-                            </tr>
-                        </thead>
-
-                        <tbody id="body">
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@item.FarmName </td>
-                                    <td>@item.SuperstokistName </td>
-                                    <td>@item.Mobile </td>
-                                    <td>@item.remainbal </td>
-                                    <td>@item.cr </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
-
         </div>
+
     </div>
 </section>
 
@@ -178,57 +86,36 @@
         var url = '@Url.Action("ExportToExcel_to_Master", "Home")';
         location.href = url;
     }
+
     function PDF() {
-            html2canvas(document.getElementById('dtBasicExample'), {
-                onrendered: function (canvas) {
-                    var data = canvas.toDataURL();
-                    var docDefinition = {
-                        content: [{
-                            image: data,
-                            width: 500
-                        }]
-                    };
-                    pdfMake.createPdf(docDefinition).download("Master_remain_balance.pdf");
-                }
-            });
+        var el = document.getElementById('masterAccountExport');
+        if (!el || typeof html2canvas === 'undefined') return;
+        html2canvas(el, {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var docDefinition = {
+                    content: [{ image: data, width: 500 }]
+                };
+                pdfMake.createPdf(docDefinition).download('Master_remain_balance.pdf');
+            }
+        });
     }
-</script>
-<script>
+
     $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
+        if ($.fn.DataTable && $('#dtBasicExample').length) {
+            $('#dtBasicExample').DataTable({
+                orderCellsTop: true,
+                paging: false,
+                searching: false,
+                info: false
+            });
+        }
+
+        $('#myInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
-            $("#body tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            $('#body tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-            bSortCellsTop: true,
-            paging: false
-        });
-    });
-
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
     });
 </script>

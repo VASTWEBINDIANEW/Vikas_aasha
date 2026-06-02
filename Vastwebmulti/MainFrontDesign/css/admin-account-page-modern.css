@@ -1,0 +1,915 @@
+/* ADMIN account detail pages (Admintotal, Master account, etc.) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+body.saas-admin-ui .saas-admin-account-page {
+    --acc-bg: #f0f4fa;
+    --acc-surface: #ffffff;
+    --acc-surface-2: #f8fafc;
+    --acc-border: #e2e8f0;
+    --acc-text: #0f172a;
+    --acc-muted: #64748b;
+    --acc-primary: #2563eb;
+    --acc-primary-soft: #dbeafe;
+    --acc-success: #059669;
+    --acc-danger: #dc2626;
+    --acc-warn: #d97706;
+    --acc-radius: 16px;
+    --acc-radius-sm: 12px;
+    --acc-shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+    --acc-shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.1);
+    font-family: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+    background-color: var(--acc-bg) !important;
+    background-image:
+        radial-gradient(ellipse 70% 45% at 0% -5%, rgba(37, 99, 235, 0.1), transparent 50%),
+        radial-gradient(ellipse 50% 35% at 100% 0%, rgba(100, 116, 139, 0.08), transparent 45%);
+    padding: 22px 26px 32px !important;
+    min-height: calc(100vh - var(--admin-header-height, 58px));
+    -webkit-font-smoothing: antialiased;
+}
+
+body.saas-admin-ui .saas-admin-account-page .container-fluid {
+    padding: 0;
+    max-width: 100%;
+}
+
+/* Hero */
+body.saas-admin-ui .saas-acc-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 22px 26px;
+    border-radius: var(--acc-radius);
+    background: linear-gradient(125deg, #1e293b 0%, #334155 42%, #475569 100%);
+    box-shadow: var(--acc-shadow-lg);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-acc-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.14), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(37, 99, 235, 0.2), transparent 40%);
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-acc-hero-main {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-acc-hero-kicker {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.8;
+}
+
+body.saas-admin-ui .saas-acc-hero-title {
+    margin: 0 0 8px;
+    font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-acc-hero-desc {
+    margin: 0;
+    font-size: 0.88rem;
+    opacity: 0.88;
+    max-width: 520px;
+    line-height: 1.5;
+}
+
+body.saas-admin-ui .saas-acc-hero-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-acc-hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: var(--acc-radius-sm);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+}
+
+body.saas-admin-ui .saas-acc-hero-chip strong {
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+/* Toolbar */
+body.saas-admin-ui .saas-acc-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 14px 18px;
+    background: var(--acc-surface);
+    border: 1px solid var(--acc-border);
+    border-radius: var(--acc-radius);
+    box-shadow: var(--acc-shadow);
+}
+
+body.saas-admin-ui .saas-acc-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-acc-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--acc-primary);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+body.saas-admin-ui .saas-acc-breadcrumb a:hover {
+    color: #1d4ed8;
+}
+
+body.saas-admin-ui .saas-acc-breadcrumb li + li::before {
+    content: "/";
+    margin-right: 6px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+body.saas-admin-ui .saas-acc-breadcrumb li:last-child {
+    color: var(--acc-muted);
+}
+
+body.saas-admin-ui .saas-acc-toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-acc-search {
+    position: relative;
+}
+
+.form-control, .input-group .form-control, input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="tel"], input[type="date"], input[type="search"], select, textarea, .bootstrap-select > .dropdown-toggle, .name_userinput {
+    padding: 0 14px 0 40px !important;
+}
+
+body.saas-admin-ui .saas-acc-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-acc-search input {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 14px 0 40px;
+    border: 2px solid var(--acc-border);
+    border-radius: var(--acc-radius-pill, 999px);
+    background: var(--acc-surface-2);
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--acc-text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-acc-search input:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-acc-export-group {
+    display: flex;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-acc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 2px solid var(--acc-border);
+    border-radius: var(--acc-radius-sm);
+    background: #fff;
+    color: var(--acc-text);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+body.saas-admin-ui .saas-acc-btn:hover {
+    border-color: #93c5fd;
+    background: var(--acc-primary-soft);
+    color: var(--acc-primary);
+}
+
+body.saas-admin-ui .saas-acc-btn--excel {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #047857;
+}
+
+body.saas-admin-ui .saas-acc-btn--pdf {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+/* Metrics grid */
+body.saas-admin-ui .saas-acc-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+body.saas-admin-ui .saas-acc-metric {
+    padding: 16px 18px;
+    background: var(--acc-surface);
+    border: 1px solid var(--acc-border);
+    border-radius: var(--acc-radius);
+    box-shadow: var(--acc-shadow);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-acc-metric:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--acc-shadow-lg);
+}
+
+body.saas-admin-ui .saas-acc-metric-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-acc-metric-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-slate .saas-acc-metric-icon {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-blue .saas-acc-metric-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-indigo .saas-acc-metric-icon {
+    background: #e0e7ff;
+    color: #4f46e5;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-violet .saas-acc-metric-icon {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-amber .saas-acc-metric-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-rose .saas-acc-metric-icon {
+    background: #ffe4e6;
+    color: #e11d48;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-emerald .saas-acc-metric-icon {
+    background: #d1fae5;
+    color: #059669;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-cyan .saas-acc-metric-icon {
+    background: #cffafe;
+    color: #0891b2;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-amber .saas-acc-metric-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+body.saas-admin-ui .saas-acc-metric.accent-danger .saas-acc-metric-icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-acc-metric-label {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--acc-muted);
+    line-height: 1.25;
+}
+
+body.saas-admin-ui .saas-acc-metric-value {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--acc-text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+body.saas-admin-ui .saas-acc-metric-value.is-negative {
+    color: var(--acc-danger);
+}
+
+body.saas-admin-ui .saas-acc-metric-value.is-positive {
+    color: var(--acc-success);
+}
+
+body.saas-admin-ui .saas-acc-metric--highlight {
+    border-color: #93c5fd;
+    background: linear-gradient(180deg, #eff6ff 0%, #fff 55%);
+}
+
+/* Table card */
+body.saas-admin-ui .saas-acc-table-card {
+    background: var(--acc-surface);
+    border: 1px solid var(--acc-border);
+    border-radius: var(--acc-radius);
+    box-shadow: var(--acc-shadow);
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-acc-table-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--acc-border);
+    background: var(--acc-surface-2);
+}
+
+body.saas-admin-ui .saas-acc-table-card-head h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--acc-text);
+}
+
+body.saas-admin-ui .saas-acc-table-card-head span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--acc-muted);
+}
+
+body.saas-admin-ui .saas-acc-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-acc-table {
+    width: 100%;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    font-size: 0.84rem !important;
+}
+
+body.saas-admin-ui .saas-acc-table thead th {
+    padding: 14px 16px !important;
+    border: none !important;
+    border-bottom: 2px solid var(--acc-border) !important;
+    background: #f8fafc !important;
+    color: var(--acc-muted) !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td {
+    padding: 16px !important;
+    border: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    color: var(--acc-text) !important;
+    font-weight: 700 !important;
+    font-variant-numeric: tabular-nums !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    transition: background 0.12s, color 0.12s !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody tr:hover td {
+    background: #f0f9ff !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-loss {
+    color: var(--acc-danger) !important;
+    background: #fef2f2 !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-loss.is-zero {
+    color: var(--acc-success) !important;
+    background: #f0fdf4 !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-virtual {
+    color: var(--acc-primary) !important;
+    font-weight: 800 !important;
+}
+
+/* Hide legacy chrome inside modern page */
+body.saas-admin-ui .saas-admin-account-page .page-title-box-fourde-admin,
+body.saas-admin-ui .saas-admin-account-page .master-account-detail.page-header-third,
+body.saas-admin-ui .saas-admin-account-page .bread-same-all-page {
+    display: none !important;
+}
+
+/* Hero variant — Master / M-D */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--master {
+    background: linear-gradient(125deg, #1e3a8a 0%, #2563eb 42%, #4f46e5 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--master::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.16), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(129, 140, 248, 0.25), transparent 40%);
+}
+
+/* Hero variant — Distributor */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--distributor {
+    background: linear-gradient(125deg, #3730a3 0%, #4f46e5 42%, #6366f1 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--distributor::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.14), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(165, 180, 252, 0.22), transparent 40%);
+}
+
+/* Hero variant — Retailer */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--retailer {
+    background: linear-gradient(125deg, #5b21b6 0%, #7c3aed 45%, #a855f7 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--retailer::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.14), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(216, 180, 254, 0.22), transparent 40%);
+}
+
+body.saas-admin-ui .saas-acc-metrics--four {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 900px) {
+    body.saas-admin-ui .saas-acc-metrics--four {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-mdcredit,
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th.col-mdcredit {
+    color: #7c3aed !important;
+}
+
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th.col-mdcredit {
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-pos {
+    color: #0891b2 !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-sr {
+    color: var(--acc-muted) !important;
+    font-weight: 600 !important;
+    width: 48px;
+}
+
+/* Hero — API user */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--api {
+    background: linear-gradient(125deg, #0c4a6e 0%, #0891b2 45%, #22d3ee 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--api::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.14), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(34, 211, 238, 0.2), transparent 40%);
+}
+
+/* Hero — White label */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--whitelabel {
+    background: linear-gradient(125deg, #78350f 0%, #d97706 45%, #fbbf24 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--whitelabel::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.16), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(251, 191, 36, 0.22), transparent 40%);
+}
+
+/* Hero — All account details / ledger */
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--ledger {
+    background: linear-gradient(125deg, #0f172a 0%, #1e40af 48%, #3b82f6 100%);
+}
+
+body.saas-admin-ui .saas-acc-hero.saas-acc-hero--ledger::before {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.12), transparent 42%),
+        radial-gradient(circle at 8% 90%, rgba(59, 130, 246, 0.22), transparent 40%);
+}
+
+/* Date filter bar */
+body.saas-admin-ui .saas-acc-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-acc-date-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-acc-date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+body.saas-admin-ui .saas-acc-date-field label {
+    margin: 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--acc-muted);
+}
+
+    body.saas-admin-ui .saas-acc-date-field input.form-control {
+        min-height: 42px !important;
+        min-width: 100%;
+        padding: 0 12px !important;
+        border: 2px solid var(--acc-border) !important;
+        border-radius: var(--acc-radius-sm) !important;
+        font-family: inherit !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        background: #fff !important;
+        width: 175px;
+    }
+
+body.saas-admin-ui .saas-acc-date-sep {
+    color: var(--acc-muted);
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-acc-btn--search {
+    border: none !important;
+    background: linear-gradient(135deg, var(--acc-primary), #4f46e5) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3) !important;
+}
+
+body.saas-admin-ui .saas-acc-btn--search:hover {
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+/* Report date toolbar (AllDetails + PAN/Aadhar report) */
+body.saas-admin-ui .saas-acc-report-date-controls,
+body.saas-admin-ui .tmw-Alldetails .saas-alldetails-date-controls {
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-acc-report-date-controls .saas-acc-date-wrap,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-date-wrap {
+    position: relative;
+    height: 40px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-acc-report-date-controls .saas-acc-date-icon,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-date-icon {
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    pointer-events: auto;
+    cursor: pointer;
+    line-height: 1;
+}
+
+body.saas-admin-ui .saas-acc-report-date-input,
+body.saas-admin-ui .tmw-Alldetails .saas-alldetails-date-input {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    width: 152px !important;
+    min-width: 152px !important;
+    padding: 0 10px 0 34px !important;
+    border: 2px solid var(--acc-border) !important;
+    border-radius: 10px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    float: none !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-acc-report-search-btn,
+body.saas-admin-ui .tmw-Alldetails .saas-alldetails-search-btn {
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-acc-report-date-controls .saas-acc-date-field,
+body.saas-admin-ui .tmw-Alldetails .saas-acc-date-field {
+    min-width: 152px;
+}
+
+body.saas-admin-ui .saas-pan-toolbar-unified,
+body.saas-admin-ui .saas-pan-toolbar-dates,
+body.saas-admin-ui .saas-acc-toolbar {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .tmw-Alldetails .datepicker,
+body.saas-admin-ui .saas-pan-report-page .datepicker,
+body.saas-admin-ui .datepicker.dropdown-menu {
+    z-index: 11150 !important;
+}
+
+body.saas-admin-ui .saas-acc-toolbar--stacked {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+body.saas-admin-ui .saas-acc-toolbar--stacked .saas-acc-toolbar-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-acc-toolbar--stacked .saas-acc-filter-bar {
+    width: 100%;
+    margin-left: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--acc-border);
+}
+
+/* Wide ledger table */
+body.saas-admin-ui .saas-acc-table--ledger {
+    font-size: 0.78rem !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger thead th {
+    padding: 12px 10px !important;
+    font-size: 0.62rem !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody td {
+    padding: 10px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody td.col-details {
+    text-align: left !important;
+    max-width: 280px;
+    white-space: normal !important;
+    line-height: 1.4;
+    font-weight: 500 !important;
+    color: var(--acc-text) !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody td.col-order {
+    font-weight: 700 !important;
+    color: var(--acc-primary) !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody td.col-total {
+    font-weight: 800 !important;
+    color: var(--acc-primary) !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody tr.saas-acc-row-mismatch td {
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .saas-acc-table--ledger tbody tr.saas-acc-row-mismatch td.col-total {
+    background: #dc2626 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-acc-infinite-loader {
+    text-align: center;
+    padding: 24px;
+}
+
+body.saas-admin-ui .saas-acc-infinite-loader img {
+    max-height: 40px;
+    opacity: 0.7;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-acc-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-acc-date-range {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-acc-date-field input.form-control {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-acc-date-sep {
+        display: none;
+    }
+}
+
+/* List table — text columns left-aligned */
+body.saas-admin-ui .saas-acc-table tbody td.col-text,
+body.saas-admin-ui .saas-acc-table thead th.col-text {
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-balance {
+    color: var(--acc-primary) !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody td.col-credit {
+    color: var(--acc-success) !important;
+    font-weight: 800 !important;
+}
+
+/* Subtotal row (in thead) */
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th {
+    background: linear-gradient(135deg, #334155, #475569) !important;
+    color: #fff !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    text-transform: none !important;
+    letter-spacing: 0.02em !important;
+    border-bottom: none !important;
+    padding: 12px 16px !important;
+}
+
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th:first-child {
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th.col-balance,
+body.saas-admin-ui .saas-acc-table thead tr.saas-acc-subtotal-row th.col-credit {
+    font-size: 0.95rem !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-acc-table-card-head .saas-acc-row-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--acc-radius-pill, 999px);
+    background: var(--acc-primary-soft);
+    color: var(--acc-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-acc-table tbody tr:nth-child(even) td {
+    background: #fafbfc !important;
+}
+
+body.saas-admin-ui .saas-acc-table tbody tr:hover td {
+    background: #eff6ff !important;
+}
+
+/* DataTables overrides */
+body.saas-admin-ui .saas-admin-account-page .dataTables_wrapper .dataTables_filter,
+body.saas-admin-ui .saas-admin-account-page .dataTables_wrapper .dataTables_length,
+body.saas-admin-ui .saas-admin-account-page .dataTables_wrapper .dataTables_info,
+body.saas-admin-ui .saas-admin-account-page .dataTables_wrapper .dataTables_paginate {
+    padding: 12px 16px;
+    font-size: 0.8rem;
+    color: var(--acc-muted);
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-account-page {
+        padding: 14px 14px 24px !important;
+    }
+
+    body.saas-admin-ui .saas-acc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-acc-toolbar-right {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-acc-search {
+        min-width: 0;
+        flex: 1 1 100%;
+    }
+
+    body.saas-admin-ui .saas-acc-export-group {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-acc-export-group .saas-acc-btn {
+        flex: 1 1 auto;
+    }
+
+    body.saas-admin-ui .saas-acc-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-acc-metrics {
+        grid-template-columns: 1fr;
+    }
+}

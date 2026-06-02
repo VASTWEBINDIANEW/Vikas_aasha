@@ -1,0 +1,74 @@
+@model IEnumerable<Vastwebmulti.Models.DashBoard_Report_top_Result>
+@{
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.DashBoard_Report_top_Result>();
+    var tableId = (ViewData["TxnTableId"] as string) ?? "adminDashTxnTable";
+    var showToolbar = ViewData["TxnShowToolbar"] as bool? ?? true;
+}
+
+<div class="saas-dash-txn-card">
+    @if (showToolbar)
+    {
+        <div class="saas-dash-txn-card-head">
+            <span class="saas-dash-txn-card-title"><i class="fas fa-receipt" aria-hidden="true"></i> Transaction log</span>
+            <span class="saas-dash-txn-count">@rows.Count records</span>
+        </div>
+    }
+    <div class="saas-dash-table-scroll">
+        <table id="@tableId" class="saas-dash-txn-table" width="100%">
+            <thead>
+                <tr>
+                    <th class="col-role">Role</th>
+                    <th class="col-firm">Firm / User</th>
+                    <th class="col-type">Type</th>
+                    <th class="col-desc">Description</th>
+                    <th class="col-date">Date &amp; Time</th>
+                    <th class="col-amount">Amount</th>
+                    <th class="col-balance">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (rows.Count == 0)
+                {
+                    <tr class="saas-dt-empty-row">
+                        <td colspan="7">
+                            <div class="saas-dt-empty">
+                                <i class="fas fa-inbox" aria-hidden="true"></i>
+                                <p>No transactions to show</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in rows)
+                    {
+                        DateTime date = Convert.ToDateTime(item.Date);
+                        var frmname = item.Firmname;
+                        if (string.IsNullOrWhiteSpace(frmname))
+                        {
+                            frmname = item.username;
+                        }
+                        var isCredit = (item.Cr ?? 0) != 0;
+                        decimal val = isCredit ? (item.Cr ?? 0) : -(item.Dr ?? 0);
+                        <tr>
+                            <td class="col-role" data-label="Role"><span class="role-pill">@item.Role</span></td>
+                            <td class="col-firm" data-label="Firm">
+                                <span class="saas-dt-firm-name">@frmname</span>
+                                <span class="saas-dt-firm-mobile">@item.Mobile</span>
+                            </td>
+                            <td class="col-type" data-label="Type"><span class="type-pill">@item.Operator_type</span></td>
+                            <td class="col-desc" data-label="Description" title="@item.Description">@item.Description</td>
+                            <td class="col-date" data-label="Date"><span class="saas-dt-date-text">@date.ToString("dd MMM yyyy")</span><span class="saas-dt-time-text">@date.ToString("HH:mm:ss")</span></td>
+                            <td class="col-amount" data-label="Amount">
+                                <span class="saas-dash-amount @(isCredit ? "credit" : "debit")">
+                                    @(isCredit ? "+" : "")@val.ToString("N2")
+                                </span>
+                            </td>
+                            <td class="col-balance" data-label="Balance"><span class="saas-dt-balance-val">@(item.UserPost.HasValue ? item.UserPost.Value.ToString("N2") : "—")</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

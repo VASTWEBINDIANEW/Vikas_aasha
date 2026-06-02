@@ -1,91 +1,60 @@
-﻿
-@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
-<style>
-    .wallet-bank-input input[readonly="readonly"] {
-        background: transparent;
-        border: 0px;
-    }
+﻿@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
 
-    input#FormName1 {
-        height: 20px;
-        padding: 2px;
-    }
-</style>
-
-
-<div class="tabl-efgdf " style=" margin:auto;">
-
-
-
+<div class="saas-mo-service-grid">
     @foreach (var item in Model.Formservice)
     {
-
         if (item.idno == Model.FormserviceByID.idno)
         {
-
             @Html.Hidden("idno", Model.FormserviceByID.idno)
-
-
-            <div class="col-md-3" style="border: 1px solid; padding: 4px; text-align: center; width: 23.30%; margin: 3px; ">
-
-                <tr><img src="data:image/png;base64,@item.images" alt="" class="img-responsive" style="width: 50px; height: 50px; margin: auto;" /> </tr>
-                <tr>@Html.TextBox("FormName1", Model.FormserviceByID.servicename, new { @class = "form-control" })</tr>
-
-                <tr>
-                    <button type="button" id="formbtnSave" onclick="formbtnSave(@item.idno)" value="Save" class="btn waves-effect btnssl1 switch-edit-button" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="padding: 0px !important; height: auto; margin: 0px; width: 100% !important; float: left;">Save</button>
-
-
-                </tr>
-            </div>
+            <article class="saas-mo-service-card saas-mo-service-card--editing">
+                <div class="saas-mo-service-card-media">
+                    <img src="data:image/png;base64,@item.images" alt="@item.servicename" />
+                </div>
+                @Html.TextBox("FormName1", Model.FormserviceByID.servicename, new { @class = "form-control saas-mo-input saas-mo-service-edit-input", placeholder = "Service name" })
+                <button type="button" id="formbtnSave" onclick="formbtnSave(@item.idno)" class="btn saas-mo-btn-primary saas-mo-btn-block btnssl1" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving">
+                    <i class="fa fa-check" aria-hidden="true"></i> Save
+                </button>
+            </article>
         }
         else
         {
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.Role)
-                </td>*@
-            <div class="col-md-3" style="border: 1px solid; padding: 4px; text-align: center; width: 23.30%; margin: 3px;">
-                <tr><img src="data:image/png;base64,@item.images" alt="" class="img-responsive" style="width:50px;height:50px;margin:auto;" /> </tr>
-                <tr>@Html.DisplayFor(modelItem => item.servicename)</tr>
-
-                <tr class="last-td">
-                    <button type="button" onclick="formEditmode1('@item.idno')" id="formEditmode1" class="btn waves-effect shownextrow switch-edit-button" value="Edit" style="padding: 0px !important; height: auto; margin: 0px; width: 100% !important; float: left;">
-                        <p style=" margin: auto;">Edit</p>
+            <article class="saas-mo-service-card">
+                <div class="saas-mo-service-card-media">
+                    <img src="data:image/png;base64,@item.images" alt="@item.servicename" />
+                </div>
+                <p class="saas-mo-service-card-name">@item.servicename</p>
+                <div class="saas-mo-service-card-actions">
+                    <button type="button" onclick="formEditmode1('@item.idno')" class="btn saas-mo-service-btn saas-mo-service-btn-edit">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                     </button>
-                </tr>
-            </div>
+                </div>
+            </article>
         }
-
     }
-
 </div>
 
-
-
-
-
-    <script>
-        function formbtnSave(idno) {
-         $.ajax({
-             url: '@Url.Action("EditManual_FormName", "Home")',
-             type:'POST',
-             data: { idno: idno, Name: $('#FormName1').val() },
-
-             success: function (data) {
-
-                 setTimeout(function () { $('#formmanual12').html(data); }, 500);
-
+<script>
+    function formbtnSave(idno) {
+        $.ajax({
+            url: '@Url.Action("EditManual_FormName", "Home")',
+            type: 'POST',
+            data: { idno: idno, Name: $('#FormName1').val() },
+            success: function () {
+                if (typeof moSaveSuccess === 'function') {
+                    moSaveSuccess('Manual form service saved successfully.');
+                }
+            },
+            error: function () {
+                if (typeof moSaveError === 'function') {
+                    moSaveError('Could not save manual form service.');
+                }
             }
         });
-
-
     }
 
-     $('.btnssl1').on('click', function () {
-                    var $this = $(this);
-                    $this.button('loading');
-                    setTimeout(function () {
-                        $this.button('reset');
-                    }, 500);
-                });
-    </script>
-
+    $('.btnssl1').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        setTimeout(function () { $this.button('reset'); }, 500);
+    });
+</script>

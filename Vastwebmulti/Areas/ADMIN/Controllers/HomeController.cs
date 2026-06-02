@@ -6853,6 +6853,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         public ActionResult AllDetails(string txt_frm_date, string txt_to_date)
         {
             ViewBag.chk = "post";
+            ViewBag.frmDate = txt_frm_date;
+            ViewBag.toDate = txt_to_date;
             return View();
 
         }
@@ -18614,15 +18616,18 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult Rch_Failed_success_Reports()
         {
-            DateTime fromdate = DateTime.Now;
-            DateTime todate = DateTime.Now.AddDays(1);
-            var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(fromdate, todate, "").ToList();
+            var today = DateTime.Today;
+            ViewBag.frmDate = today.ToString("yyyy-MM-dd");
+            ViewBag.toDate = today.ToString("yyyy-MM-dd");
+            var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(today, today.AddDays(1), "").ToList();
             return View(result);
         }
         [HttpPost]
         public ActionResult Rch_Failed_success_Reports(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
+            ViewBag.frmDate = txt_frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = txt_to_date.ToString("yyyy-MM-dd");
             var result = db.Proc_Recharge_info_Failed_TO_Success_Reports(txt_frm_date, txt_to_date.AddDays(1), "").ToList();
             return View(result);
         }
@@ -30189,7 +30194,8 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             }
 
-            return View();
+            TempData["MoSaveSuccess"] = "Outer link name saved successfully.";
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -30231,14 +30237,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                 }
                                 else
                                 {
-                                    TempData["Errormsgtype"] = "PNGIMG";
+                                    TempData["MoSaveError"] = "Only PNG images are allowed.";
                                     return RedirectToAction("More_Option");
                                 }
 
                             }
                             else
                             {
-                                TempData["Errormsgtype"] = "IMGSIZE";
+                                TempData["MoSaveError"] = "Image size must be 50x50 pixels or smaller.";
                                 return RedirectToAction("More_Option");
                             }
 
@@ -30256,6 +30262,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 db.SaveChanges();
             }
+            TempData["MoSaveSuccess"] = "Manual form service saved successfully.";
             return RedirectToAction("More_Option");
         }
 
@@ -30306,7 +30313,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             catch (Exception ex)
             { }
 
-
+            TempData["MoSaveSuccess"] = "Form field information saved successfully.";
             return RedirectToAction("More_Option");
         }
 
@@ -114251,13 +114258,18 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         public ActionResult MicroATM_Unhold_History()
         {
-            var result = db.Show_MicroAtM_UnholdHistory(DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).ToList();
+            var today = DateTime.Today;
+            ViewBag.frmDate = today.ToString("yyyy-MM-dd");
+            ViewBag.toDate = today.ToString("yyyy-MM-dd");
+            var result = db.Show_MicroAtM_UnholdHistory(today, today.AddDays(1)).ToList();
             return View(result);
         }
         [HttpPost]
         public ActionResult MicroATM_Unhold_History(DateTime txt_frm_date, DateTime txt_to_date)
         {
             ViewBag.chk = "post";
+            ViewBag.frmDate = txt_frm_date.ToString("yyyy-MM-dd");
+            ViewBag.toDate = txt_to_date.ToString("yyyy-MM-dd");
             var result = db.Show_MicroAtM_UnholdHistory(txt_frm_date, txt_to_date.AddDays(1)).ToList();
             return View(result);
         }
@@ -124120,49 +124132,151 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         }
         public ActionResult PANAadharVerificationReport()
         {
-            DateTime fromdate = DateTime.Today;
-            DateTime todate = DateTime.Today.AddDays(1);
-            List<PanAadharReportViewModel> result = (from a in db.PANAADHARVERIFICATIONREPORTs
-                                         join b in db.Retailer_Details
-                                         on a.RetailerId equals b.RetailerId
-                                         where a.CreatedAt >= fromdate && a.CreatedAt <= todate
-                                         select new PanAadharReportViewModel
-                                         {
-                                             RetailerId = a.RetailerId,  
-                                             TransactionId = a.TransactionId,
-                                             PanCharge = (decimal)a.PanCharge,
-                                             AadharCharge = (decimal)a.AadharCharge, 
-                                             ChargeType = a.ChargeType,
-                                             CreatedAt = a.CreatedAt.ToString(),
-                                             RetailerName = b.RetailerName,
-                                             Email = b.Email,
-                                             Mobile = b.Mobile,
-                                             Frm_Name = b.Frm_Name
-                                         }).ToList();
-            return View(result);
+            var today = DateTime.Today;
+            return PANAadharVerificationReportCore(today, today, today, today.AddDays(1));
         }
 
         [HttpPost]
-        public ActionResult PANAadharVerificationReport(DateTime txt_frm_date, DateTime txt_to_date)
+        public ActionResult PANAadharVerificationReport(string txt_frm_date, string txt_to_date)
         {
-            txt_to_date = txt_to_date.AddDays(1);
-            List<PanAadharReportViewModel> result = (from a in db.PANAADHARVERIFICATIONREPORTs
-                                                     join b in db.Retailer_Details
-                                                     on a.RetailerId equals b.RetailerId
-                                                     where a.CreatedAt >= txt_frm_date && a.CreatedAt <= txt_to_date
-                                                     select new PanAadharReportViewModel
-                                                     {
-                                                         RetailerId = a.RetailerId,
-                                                         TransactionId = a.TransactionId,
-                                                         PanCharge = (decimal)a.PanCharge,
-                                                         AadharCharge = (decimal)a.AadharCharge,
-                                                         ChargeType = a.ChargeType,
-                                                         CreatedAt = a.CreatedAt.ToString(),
-                                                         RetailerName = b.RetailerName,
-                                                         Email = b.Email,
-                                                         Mobile = b.Mobile,
-                                                         Frm_Name = b.Frm_Name
-                                                     }).ToList();
+            DateTime fromdate;
+            DateTime todateDisplay;
+            DateTime queryFrom;
+            DateTime queryToExclusive;
+            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
+            return PANAadharVerificationReportCore(fromdate, todateDisplay, queryFrom, queryToExclusive);
+        }
+
+        public ActionResult pdfPANAadharVerificationReport(string txt_frm_date, string txt_to_date)
+        {
+            DateTime fromdate;
+            DateTime todateDisplay;
+            DateTime queryFrom;
+            DateTime queryToExclusive;
+            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
+            ViewBag.frmDate = fromdate.ToString("yyyy-MM-dd");
+            ViewBag.toDate = todateDisplay.ToString("yyyy-MM-dd");
+            var result = GetPanAadharReportList(queryFrom, queryToExclusive);
+            return new ViewAsPdf(result);
+        }
+
+        public ActionResult ExcelPANAadharVerificationReport(string txt_frm_date, string txt_to_date)
+        {
+            DateTime fromdate;
+            DateTime todateDisplay;
+            DateTime queryFrom;
+            DateTime queryToExclusive;
+            ParsePanAadharReportDateRange(txt_frm_date, txt_to_date, out fromdate, out todateDisplay, out queryFrom, out queryToExclusive);
+            var entries = GetPanAadharReportList(queryFrom, queryToExclusive);
+
+            var dataTbl = new DataTable();
+            dataTbl.Columns.Add("SR NO", typeof(string));
+            dataTbl.Columns.Add("Retailer Name", typeof(string));
+            dataTbl.Columns.Add("Firm Name", typeof(string));
+            dataTbl.Columns.Add("Email", typeof(string));
+            dataTbl.Columns.Add("Mobile", typeof(string));
+            dataTbl.Columns.Add("Txn ID", typeof(string));
+            dataTbl.Columns.Add("Pan Charge", typeof(string));
+            dataTbl.Columns.Add("Aadhar Charge", typeof(string));
+            dataTbl.Columns.Add("Charge Type", typeof(string));
+            dataTbl.Columns.Add("Date", typeof(string));
+
+            decimal totalPan = 0;
+            decimal totalAadhar = 0;
+            var sr = 0;
+            foreach (var item in entries)
+            {
+                sr++;
+                totalPan += item.PanCharge;
+                totalAadhar += item.AadharCharge;
+                dataTbl.Rows.Add(
+                    sr.ToString(),
+                    item.RetailerName,
+                    item.Frm_Name,
+                    item.Email,
+                    item.Mobile,
+                    item.TransactionId,
+                    item.PanCharge.ToString("N2"),
+                    item.AadharCharge.ToString("N2"),
+                    item.ChargeType,
+                    item.CreatedAt);
+            }
+            dataTbl.Rows.Add("Total", "", "", "", "", "", totalPan.ToString("N2"), totalAadhar.ToString("N2"), "", fromdate.ToString("yyyy-MM-dd") + " to " + todateDisplay.ToString("yyyy-MM-dd"));
+
+            var grid = new GridView();
+            grid.DataSource = dataTbl;
+            grid.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=PAN_Aadhar_Verification_Report.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            var sw = new StringWriter();
+            var htw = new HtmlTextWriter(sw);
+            grid.RenderControl(htw);
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+            return View();
+        }
+
+        private static void ParsePanAadharReportDateRange(
+            string txt_frm_date,
+            string txt_to_date,
+            out DateTime fromdate,
+            out DateTime todateDisplay,
+            out DateTime queryFrom,
+            out DateTime queryToExclusive)
+        {
+            if (!DateTime.TryParse(txt_frm_date, out fromdate))
+            {
+                fromdate = DateTime.Today;
+            }
+            if (!DateTime.TryParse(txt_to_date, out todateDisplay))
+            {
+                todateDisplay = DateTime.Today;
+            }
+            if (todateDisplay < fromdate)
+            {
+                todateDisplay = fromdate;
+            }
+            queryFrom = fromdate;
+            queryToExclusive = todateDisplay.AddDays(1);
+        }
+
+        private List<PanAadharReportViewModel> GetPanAadharReportList(DateTime queryFrom, DateTime queryToExclusive)
+        {
+            return (from a in db.PANAADHARVERIFICATIONREPORTs
+                    join b in db.Retailer_Details
+                    on a.RetailerId equals b.RetailerId
+                    where a.CreatedAt >= queryFrom && a.CreatedAt < queryToExclusive
+                    orderby a.CreatedAt descending
+                    select new PanAadharReportViewModel
+                    {
+                        RetailerId = a.RetailerId,
+                        TransactionId = a.TransactionId,
+                        PanCharge = (decimal)a.PanCharge,
+                        AadharCharge = (decimal)a.AadharCharge,
+                        ChargeType = a.ChargeType,
+                        CreatedAt = a.CreatedAt.HasValue
+                            ? a.CreatedAt.Value.ToString("dd-MM-yyyy HH:mm")
+                            : "",
+                        RetailerName = b.RetailerName,
+                        Email = b.Email,
+                        Mobile = b.Mobile,
+                        Frm_Name = b.Frm_Name
+                    }).ToList();
+        }
+
+        private ActionResult PANAadharVerificationReportCore(
+            DateTime displayFrom,
+            DateTime displayTo,
+            DateTime queryFrom,
+            DateTime queryToExclusive)
+        {
+            ViewBag.frmDate = displayFrom.ToString("yyyy-MM-dd");
+            ViewBag.toDate = displayTo.ToString("yyyy-MM-dd");
+            var result = GetPanAadharReportList(queryFrom, queryToExclusive);
             return View(result);
         }
         public ActionResult APP_Option()

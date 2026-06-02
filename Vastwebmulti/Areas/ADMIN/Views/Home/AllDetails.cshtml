@@ -1,357 +1,123 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_all_account_Result>
-@using Vastwebmulti.Models;
+@using System.Linq
+@using Vastwebmulti.Models
 @{
     ViewBag.Title = "AllDetails";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 
+    var rows = Model != null ? Model.ToList() : new List<show_all_account_Result>();
+    var rowCount = rows.Count;
+    var db = new VastwebmultiEntities();
+    var virtualAmount = db.Remain_Admin_balance.FirstOrDefault()?.VirtualAmount ?? 0m;
+    var mismatchCount = rows.Count(r => r.total != virtualAmount);
+    var frmDate = (ViewBag.frmDate as string) ?? "";
+    var toDate = (ViewBag.toDate as string) ?? "";
 }
-<style>
-       /*   new css */
 
-    .res_div1 {
-        width: auto !important;
-        float: left !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
-    .col-md-12 .bread-same-all-page.breadsameall-second.four-noneclass-admin-only {
-        display: block;
-    }
-    .responsive-third-design {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-        .responsive-third-design .res_div {
-            padding: 0;
-        }
-
-    .res_div1 .date-all-third input {
-        width: 127px !important;
-        text-align: end;
-    }
-    .input-group-addon {
-        width: 4px !important;
-        min-width: 2px !important;
-        padding: 0 !important;
-    }
-
-        /*  new css      */
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {margin-top: 81px !important;}
-
-    table.dataTable tbody th, table.dataTable tbody td {padding: 4px 5px;}
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 26px;
-    }
-
-    #example_length {margin-left: 20px;}
-    .pagination {margin-top: 0px;}
-    .custom-loader-color {color: #fff !important;font-size: 50px !important;}
-    .custom-loader-background {background-color: crimson !important;}
-    .custom-middle-align {vertical-align: middle !important;}
-    ._1pcQ {margin-right: 12px;margin-top: 4px;}
-    ._1IeO {transition: all .2s ease;}
-    span._1IeO._1pcQ {display: flex;flex-wrap: wrap;justify-content: center;align-items: center;}
-    span.CheckBal {display: flex;flex-wrap: wrap;align-items: center;}
-    .CheckBal .fa-circle:before {
-       content: "B";background: #000;color: #fff;width: 24px;height: 24px;display: inline-block;border: 1px solid #fff;
-       float: left;border-radius: 50%;display: flex;flex-wrap: wrap;justify-content: center;
-       align-items: center;font-size: 18px;font-weight: 600;float: left;
-    }
-    .table-bordered tbody tr td, .table-bordered tbody tr th {padding: 10px;}
-    .dropdown-menu {margin-top: 81px !important;}
-    .alldetails-report table thead tr th {border-bottom: 0px;border-top: 0px;}
-
-    .newfourdesign-admin .col-md-3.clender-dearch-two.ff-fild {
-        padding-right: 0px;
-        float: right;
-    }
-    .newfourdesign-admin .btn:not(.btn-link):not(.btn-circle), .newfourdesign-admin .form-group .form-control {
-        border: 1px solid #ddd !important;
-    }
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:992px){
-
-        .responsive-third-design {
-            display: block;
-        }
-            .responsive-third-design .res_div {
-                width: 100%;
-                padding: 2px 0;
-            }
-
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .res_div1 {
-            width: 50% !important;
-            margin: 2px 0;
-        }
-        .responsive-third-design .res_div form .row {
-            width: 100%;
-        }
-        .res_div1 .date-all-third input {
-            width: 100% !important;
-            text-align: end;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:480px) {
-        .res_div1 {
-            width: 100% !important;
-            padding: 0 !important;
-        }
-    }
-      .table-responsive > .table-bordered > thead > tr > th:first-child,.table-responsive > .table-bordered > tbody > tr > td:first-child{border-left:1px solid var(--border-color); }
-</style>
-<section class="content tmw-Alldetails fourdesign-section-admin">
+<section class="content tmw-Alldetails fourdesign-section-admin saas-admin-account-page">
     <div class="container-fluid">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>All Account Detail</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
+        
 
-                <li><a href="javascript:void(0);">All Account Detail</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked">
+            <div class="saas-acc-toolbar-top">
+                <ol class="saas-acc-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>All Transaction Virtual Info</li>
+                </ol>
+                <div class="saas-acc-export-group">
 
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card backtrans-admin-four" style="">
-                    <div class="row page-header-third responsive-third-design">
-                        <div class="col-md-6 widthauto-third res_div">
-                            <div>
-                                <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                                    <ul>
-                                        <li class="smli">
-                                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                            </a>
-                                        </li>
-                                        <li class="fullbodydycolorbg tmw-total-color-one">
-                                            All Transcation Virtual Info
-                                        </li>
-                                    </ul>
-                                </div>
+                    @using (Html.BeginForm("AllDetails", "Home", FormMethod.Post, new { @class = "saas-acc-filter-bar saas-alldetails-filter", id = "allDetailsForm", data_date_mode = (ViewBag.chk as string) == "post" ? "post" : "get", data_frm_date = frmDate, data_to_date = toDate, @style = "padding-top: 0;border-top: none;" }))
+                    {
+                        <div class="saas-acc-date-range input-daterange saas-acc-report-date-controls">
+                            <div class="saas-acc-dp-field">
+                                <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
                             </div>
+                            <div class="saas-acc-dp-field">
+                                <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn saas-alldetails-search-btn">
+                                <i class="fas fa-search" aria-hidden="true"></i> Search
+                            </button>
                         </div>
-                        <div class="col-md-6 floatright-third widthauto-third padding-left-fou-admin res_div" >
-                            @using (Html.BeginForm("AllDetails", "Home", FormMethod.Post))
-                            {
-                                <div class="row" style="margin: 0; float: right; ">
+                    }
 
-                                    
-                                    <div class="col-md-6 clender-dearch-three res_div1" style="padding:0px;">
-                                        <div class="form-group" style="margin-bottom:0px;">
-                                            <div class="input-daterange input-group date-all-third">
-                                                <div class="custom-date-icon" style="border-color:#ddd !important;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ddd;", autocomplete = "off" })
+                    <button type="button" class="saas-acc-btn saas-acc-btn--excel" id="btnExport">
+                        <i class="fas fa-file-excel" aria-hidden="true"></i> Export
+                    </button>
+                    <button type="button" class="saas-acc-btn saas-acc-btn--pdf" id="btnPDF">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
+                </div>
+            </div>
+            
+        </div>
 
-                                                <span class="input-group-addon" style="width:5px;">
+        
 
-                                                </span>
-                                                <div style="position:relative;">
-                                                    <div class="custom-date-icon" style="border-color:#ddd !important;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd;", autocomplete = "off" })
-                                                </div>
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 clender-dearch ff-fild buttonsearch-second res_div1" style="padding-right: 0px; padding: 0 4px;">
-                                        <center>
-                                            <button type="submit" class="btn btnssl search-thrid-button" data-loading-text="<i class='fa fa-spinner fa-spin '></i>" style="background:transparent;width:100%;border-color:#ddd;">
-                                                <i class="fa fa-search" style="font-size:14px;color:#555;"></i>
-                                                <span style="color:black;">Search</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                    <div class="col-md-3 clender-dearch-two ff-fild res_div1" style="width: auto; float: right; padding: 0;">
-                                        <div class="web-white-filter fil pdfexpoer-second pdf-third-design" style="float: right;">
-                                            <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;">
-                                            <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;">
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            }
-                        </div>
-                    </div>
+        <div class="saas-acc-table-card" id="allDetailsExport">
+            <div class="saas-acc-table-card-head">
+                <h3>Virtual transaction ledger</h3>
+                <span>Red rows = total ≠ virtual balance</span>
+            </div>
+            <div class="saas-acc-table-wrap table-responsive alldetails-report" id="showreport">
+                <table id="example" class="table saas-acc-table saas-acc-table--ledger example-second third-design-table">
+                    <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th class="col-text">Transaction Details</th>
+                            <th>Admin Bal</th>
+                            <th>M/D Bal</th>
+                            <th>Distributor Bal</th>
+                            <th>Retailer Bal</th>
+                            <th>POS Bal</th>
+                            <th>API Bal</th>
+                            <th>W/L Bal</th>
+                            <th>Total</th>
+                            <th>Date &amp; Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trow" class="alin">
+                        @{ Html.RenderAction("AllDetails_paging", "Home", new { Model = Model }); }
+                    </tbody>
+                </table>
+                <div id="loadingdiv" class="saas-acc-infinite-loader" style="display:none;">
+                    <img src="~/img/ajax-loader.gif" alt="Loading" />
+                    <p style="margin:8px 0 0;font-size:0.8rem;color:#64748b;">Loading more records…</p>
                 </div>
             </div>
         </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third" style="">
 
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                            <div class="" id="showreport" style="margin-top:24px;">
-                                <div class="table-responsive alldetails-report tablefourdesign-admin" style="margin-top:-22px;overflow: hidden;">
-                                    <table class="table-bordered table-striped example-second third-design-table" style="width:100%;font-size:12px;background:#f5f5f5;">
-                                        <thead class="navbar" style="background-color:whitesmoke;position:inherit;">
-                                            <tr>
-                                                <th>Order&nbsp;Id</th>
-                                                <th>Transation&nbsp;Full&nbsp;Details</th>
-                                                <th>Admin&nbsp;Bal</th>
-                                                <th>M/D&nbsp;Bal</th>
-                                                <th>Distributor&nbsp;Bal</th>
-                                                <th>Retailer&nbsp;Bal</th>
-                                                <th>Retailer&nbsp;PosBal</th>
-                                                <th>Api&nbsp;Bal</th>
-                                                <th>W/L&nbsp;Bal</th>
-                                                <th>Total</th>
-                                                <th>Date&nbsp;&&nbsp;Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="trow" class="alin">
-
-                                            @{
-                                                Html.RenderAction("AllDetails_paging", "Home", new { Model = Model });
-                                            }
-                                        </tbody>
-                                    </table>
-                                    <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
-                                        <img src="~/img/ajax-loader.gif" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @*<div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="">
-
-                    <div class="">
-                        <div class="table-responsive" style="position:inherit;">
-                            <table id="example" class="table-bordered" cellspacing="0" style="width:100%;font-size:12px;">
-                                <thead class="navbar" style="background-color:whitesmoke;position:inherit;">
-                                    <tr>
-                                        <th>Order&nbsp;Id</th>
-                                        <th>Transation&nbsp;Full&nbsp;Details</th>
-                                        <th>Admin&nbsp;Bal</th>
-                                        <th>M/D&nbsp;Bal</th>
-                                        <th>D&nbsp;Bal</th>
-                                        <th>R&nbsp;Bal</th>
-                                        <th>Api&nbsp;Bal</th>
-                                        <th>Total</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="trow" class="alin">
-
-                                    @{
-                                        Html.RenderAction("AllDetails_paging", "Home", new { Model = Model });
-                                    }
-                                </tbody>
-                            </table>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <img src="~/img/ajax-loader.gif" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
+
 <script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-
-
-
-
+<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 
 <script>
-
     function cancel(e) {
-          $('#disp-'+e).show();
-        $('#confirm-'+e).hide();
-        $('#close-'+e).hide();
+        $('#disp-' + e).show();
+        $('#confirm-' + e).hide();
+        $('#close-' + e).hide();
     }
+
     function disputedata(e) {
-         var txt_frm_date = $('#txt_frm_date').val();
-         var txt_to_date = $('#txt_to_date').val();
-             $.post("@Url.Action("dispute","Home")",
-             {"id": e, "txtregion": ""},
-                 function (data) {
-                     $.post("@Url.Action("InfiniteScroll2", "Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
-                    function (data) {
-                        $("#trow").html(data.HTMLString);
-                    });
-           });
+        var txt_frm_date = $('#txt_frm_date').val();
+        var txt_to_date = $('#txt_to_date').val();
+        $.post("@Url.Action("dispute", "Home")", { "id": e, "txtregion": "" }, function () {
+            $.post("@Url.Action("InfiniteScroll2", "Home")",
+                { pageindex: pageindex, txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+                function (data) {
+                    $("#trow").html(data.HTMLString);
+                });
+        });
     }
 </script>
 
@@ -359,81 +125,46 @@
     var txt_frm_date = $('#txt_frm_date').val();
     var txt_to_date = $('#txt_to_date').val();
     var pageindex = 1;
-        var NoMoredata = false;
-        var inProgress = false;
-        $(window).scroll(function () {
+    var NoMoredata = false;
+    var inProgress = false;
 
-            if ($(window).scrollTop() > Number($("#example").height()) / 4 && !NoMoredata && !inProgress) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll2", "Home")",
-             { "pageindex": pageindex, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
-            }
-        });
-</script>
-
-
-<script>
-    $(document).ready(function () {
-
-     $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
-
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
-            $('#example').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-
-                    'excelHtml5',
-
-                    'pdfHtml5',
-
-                ]
-            });
-        });
-</script>
-
-
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
+    $(window).scroll(function () {
+        var $table = $('#example');
+        if (!$table.length) return;
+        if ($(window).scrollTop() > $table.height() / 4 && !NoMoredata && !inProgress) {
+            inProgress = true;
+            $("#loadingdiv").show();
+            txt_frm_date = $('#txt_frm_date').val();
+            txt_to_date = $('#txt_to_date').val();
+            $.post("@Url.Action("InfiniteScroll2", "Home")",
+                { pageindex: pageindex, txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+                function (data) {
+                    pageindex = pageindex + 1;
+                    NoMoredata = data.NoMoredata;
+                    $("#trow").append(data.HTMLString);
+                    $("#loadingdiv").hide();
+                    inProgress = false;
+                });
+        }
     });
 </script>
 
 <script>
     $("#btnExport").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("Excel_AllDetails_paging", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date;
-        location.href = url;
-});
+        var from = $('#txt_frm_date').val();
+        var to = $('#txt_to_date').val();
+        location.href = '@Url.Action("Excel_AllDetails_paging", "Home")?txt_frm_date=' + from + '&txt_to_date=' + to;
+    });
+
+    $("#btnPDF").click(function () {
+        var el = document.getElementById('allDetailsExport');
+        if (!el || typeof html2canvas === 'undefined') return;
+        html2canvas(el, {
+            onrendered: function (canvas) {
+                pdfMake.createPdf({
+                    content: [{ image: canvas.toDataURL(), width: 500 }]
+                }).download('All_Account_Detail.pdf');
+            }
+        });
+    });
 </script>

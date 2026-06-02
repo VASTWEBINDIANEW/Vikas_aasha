@@ -1,0 +1,233 @@
+@using Microsoft.AspNet.Identity
+@{
+    var logoImage = ViewBag.AdminLogoImage as string ?? "";
+    var logoBgColor = ViewBag.AdminLogoBgColor as string ?? "";
+    var rchReportCount = ViewBag.RchReportCount ?? 0;
+    var totalHoldAmount = ViewBag.TotalHoldAmount ?? 0;
+    var complant = ViewBag.ComplantCount ?? 0;
+    var disputeCount = ViewBag.DisputeCount ?? 0;
+    var renewalDate = ViewBag.RenewalDate as string ?? "";
+    var ipAddress = ViewBag.IpAddress as string ?? "";
+    var expireDate = ViewBag.ExpireDate as string ?? "";
+    var hasValidExpire = ViewBag.HasValidExpire as bool? ?? false;
+    var masterUser = ViewBag.MasterUser ?? 0;
+    var dealerUser = ViewBag.DealerUser ?? 0;
+    var retailerUser = ViewBag.RetailerUser ?? 0;
+    var apiUser = ViewBag.ApiUser ?? 0;
+    var whitelabelUser = ViewBag.WhitelabelUser ?? 0;
+}
+
+<header class="admin-top-header tmw-layoutht naw-none-fourdesign" id="admin-top-header">
+    <div class="admin-header-v2 saas-admin-topbar admin-header-row saas-admin-topbar-inner">
+        <div class="admin-header-brand saas-admin-brand">
+            <a href="#" id="sidebar-open" class="admin-header-toggle" title="Navigation menu" aria-label="Navigation menu">
+                <i class="fas fa-bars admin-topbar-icon" aria-hidden="true"></i>
+            </a>
+            <button type="button" id="admin-topmenu-open" class="admin-topmenu-toggle admin-header-toggle" title="Quick menu" aria-label="Open quick menu" aria-controls="navbar-collapse" aria-expanded="false">
+                <i class="fas fa-th admin-topbar-icon" aria-hidden="true"></i>
+            </button>
+            <a href="~/ADMIN/Home/Dashboard" class="admin-header-logo-link saas-admin-logo-link">
+                @if (string.IsNullOrEmpty(logoImage))
+                {
+                    <img src="~/Default_Img_Logo/Default_Header_Logo.svg" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/" + logoImage)" class="admin-header-logo saas-admin-logo img-responsive" alt="Logo" style="background-color:@logoBgColor;" />
+                }
+            </a>
+        </div>
+
+        <div class="admin-topmenu-panel admin-header-menu" id="navbar-collapse" role="navigation" aria-label="Admin quick menu" aria-hidden="true">
+            <div class="admin-mobile-topmenu-head">
+                <span class="admin-mobile-topmenu-title"><i class="fas fa-th" aria-hidden="true"></i> Quick Menu</span>
+                <button type="button" class="admin-topmenu-close" id="admin-topmenu-close" aria-label="Close quick menu">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="admin-topmenu-scroll">
+            <ul class="admin-header-actions four-top-nav intro1 saas-admin-topnav">
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("More_Option", "Home")" class="admin-topbar-btn" title="More Option">
+                        <i class="fas fa-ellipsis admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">More Option</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("APP_Option", "Home")" class="admin-topbar-btn" title="App Setting">
+                        <i class="fas fa-mobile-screen admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">App Setting</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("PANAadharVerificationReport", "Home")" class="admin-topbar-btn" title="PAN/Aadhar">
+                        <i class="fas fa-id-card admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">PAN/Aadhar</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                <li class="admin-topbar-item saas-topbar-item dropdown">
+                    <a href="javascript:void(0);" id="vasbazaarofferalerts" class="admin-topbar-btn dropdown-toggle" title="VB Alerts" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="fas fa-triangle-exclamation admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">VB Alerts</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end vastbazar-offers admin-header-dropdown">
+                        <li class="header-vastbazaar admin-header-dropdown-title"><h2>Vastbazaar Alerts &amp; Offers</h2></li>
+                        <li class="offers-show-vb">
+                            <div class="vast-offer-no">
+                                <strong>Sorry !</strong>
+                                <span>No Offers &amp; Alerts</span>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("Rch_Failed_success_Reports", "Home")" class="admin-topbar-btn" title="Fail/Succ Reports">
+                        <i class="fas fa-file-circle-check admin-topbar-icon" aria-hidden="true"></i>
+                        @if (Convert.ToDecimal(rchReportCount) != 0)
+                        {
+                            <span class="admin-topbar-badge">@rchReportCount</span>
+                        }
+                        <span class="admin-topbar-label">FailSucc</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="#" class="admin-topbar-btn" title="Search User Info." data-toggle="modal" data-target="#ALLUSERSSHOW">
+                        <i class="fas fa-magnifying-glass admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">Search User</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("Micro_Atm_Unhold_Report", "Home")" class="admin-topbar-btn" title="@totalHoldAmount">
+                        <i class="fas fa-circle-pause admin-topbar-icon" aria-hidden="true"></i>
+                        @if (Convert.ToDecimal(totalHoldAmount) != 0)
+                        {
+                            <span class="admin-topbar-badge">@totalHoldAmount</span>
+                        }
+                        <span class="admin-topbar-label">Hold Amt</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="#" class="admin-topbar-btn" title="Api Remain balance" data-toggle="modal" data-target="#Api-bal">
+                        <i class="fas fa-indian-rupee-sign admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">API Balance</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="#" class="admin-topbar-btn" title="Clear All Push Notification" data-toggle="modal" data-target="#show-notifaction" onclick="ReadAllNoticationdata()">
+                        <i class="fas fa-bell admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">Notification</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                <li class="admin-topbar-item saas-topbar-item dropdown">
+                    <a href="javascript:void(0);" class="admin-topbar-btn dropdown-toggle" title="Wallet Request's" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="fas fa-wallet admin-topbar-icon" aria-hidden="true"></i>
+                        @if (ViewBag.purchasereq != null && Convert.ToDecimal(ViewBag.purchasereq) != 0)
+                        {
+                            <span class="admin-topbar-badge">@ViewBag.purchasereq</span>
+                        }
+                        <span class="admin-topbar-label">Wallet-Q</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-secondclass admin-header-dropdown admin-header-wallet-dropdown">
+                        <li class="header admin-header-dropdown-title">WALLET REQUEST'S DETAILS</li>
+                        <li class="body">
+                            <ul class="menu custom-bank-name admin-header-wallet-list" style="background:#fff;">
+                                <li style="background:#fff;">
+                                    <a href="@Url.Action("ShowPurchase_master", "Home")" class="admin-header-wallet-link waves-effect waves-block">
+                                        <span class="admin-header-wallet-count">@masterUser</span>
+                                        <span class="admin-header-wallet-text"><strong>M/D Wallet Request</strong><small>Go to Details</small></span>
+                                    </a>
+                                </li>
+                                <li style="background:#fff;">
+                                    <a href="@Url.Action("Dealer_showpurchase", "Home")" class="admin-header-wallet-link waves-effect waves-block">
+                                        <span class="admin-header-wallet-count">@dealerUser</span>
+                                        <span class="admin-header-wallet-text"><strong>Distributor Wallet Request</strong><small>Go to Details</small></span>
+                                    </a>
+                                </li>
+                                <li style="background:#fff;">
+                                    <a href="@Url.Action("Retailer_showpurchase", "Home")" class="admin-header-wallet-link waves-effect waves-block">
+                                        <span class="admin-header-wallet-count">@retailerUser</span>
+                                        <span class="admin-header-wallet-text"><strong>Retailer Wallet Request</strong><small>Go to Details</small></span>
+                                    </a>
+                                </li>
+                                <li style="background:#fff;">
+                                    <a href="@Url.Action("Api_showpurchase", "Home")" class="admin-header-wallet-link waves-effect waves-block">
+                                        <span class="admin-header-wallet-count">@apiUser</span>
+                                        <span class="admin-header-wallet-text"><strong>API User Wallet Request</strong><small>Go to Details</small></span>
+                                    </a>
+                                </li>
+                                <li style="background:#fff;">
+                                    <a href="@Url.Action("Show_Whitelabelpurchase", "Home")" class="admin-header-wallet-link waves-effect waves-block">
+                                        <span class="admin-header-wallet-count">@whitelabelUser</span>
+                                        <span class="admin-header-wallet-text"><strong>Whitelabel Wallet Request</strong><small>Go to Details</small></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("sellrechargeoptList", "Home")" class="admin-topbar-btn" title="Sell Comm">
+                        <i class="fas fa-percent admin-topbar-icon" aria-hidden="true"></i>
+                        @if (ViewBag.Sellercomm != null && Convert.ToDecimal(ViewBag.Sellercomm) != 0)
+                        {
+                            <span class="admin-topbar-badge">@ViewBag.Sellercomm</span>
+                        }
+                        <span class="admin-topbar-label">Sell Comm</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("RetailerBnk", "Home")" class="admin-topbar-btn" title="User A/C Q">
+                        <i class="fas fa-building-columns admin-topbar-icon" aria-hidden="true"></i>
+                        @if (ViewBag.RetailerAddBank != null && Convert.ToDecimal(ViewBag.RetailerAddBank) != 0)
+                        {
+                            <span class="admin-topbar-badge">@ViewBag.RetailerAddBank</span>
+                        }
+                        <span class="admin-topbar-label">User A/C Q</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("Complaint", "Home")" class="admin-topbar-btn" title="All Complain's Request">
+                        <i class="fas fa-comments admin-topbar-icon" aria-hidden="true"></i>
+                        @if (Convert.ToDecimal(complant) != 0)
+                        {
+                            <span class="admin-topbar-badge">@complant</span>
+                        }
+                        <span class="admin-topbar-label">Chat's</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-item saas-topbar-item">
+                    <a href="@Url.Action("Dispute_list", "Home")" class="admin-topbar-btn" title="Dispute">
+                        <i class="fas fa-flag admin-topbar-icon" aria-hidden="true"></i>
+                        @if (Convert.ToDecimal(disputeCount) != 0)
+                        {
+                            <span class="admin-topbar-badge">@disputeCount</span>
+                        }
+                        <span class="admin-topbar-label">Dispute's</span>
+                    </a>
+                </li>
+                <li class="admin-topbar-sep" role="separator" aria-hidden="true"></li>
+                <li class="admin-topbar-item saas-topbar-item admin-topbar-renewal" id="round_buttone">
+                    <button style=" min-width: 70px !important;" type="button" class="admin-topbar-btn admin-topbar-renewal-btn" data-toggle="modal" data-target="#dayleft" title="Renewal Date &amp; Web Info">
+                        <i class="fas fa-circle-info admin-topbar-icon" aria-hidden="true"></i>
+                        <span class="admin-topbar-label">@renewalDate</span>
+                    </button>
+                    
+                </li>
+                <li class="admin-topbar-item saas-topbar-item admin-topbar-logout logout-four">
+                    @using (Html.BeginForm("LogOff", "Account", new { Area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "admin-logout-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="admin-topbar-btn admin-topbar-logout-btn" title="Logout">
+                            <i class="fas fa-right-from-bracket admin-topbar-icon" aria-hidden="true"></i>
+                            <span class="admin-topbar-label">Logout</span>
+                        </button>
+                    }
+                </li>
+            </ul>
+            </div>
+        </div>
+    </div>
+</header>

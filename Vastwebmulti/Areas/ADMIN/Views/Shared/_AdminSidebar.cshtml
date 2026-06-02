@@ -1,0 +1,84 @@
+@{
+    var companyName = ViewBag.companyname as string ?? "";
+    var themeColor = ViewBag.AdminThemeColor as string ?? "";
+}
+
+<div class="menu saas-admin-sidebar" id="custnav">
+    <ul class="list saas-admin-primary-menu">
+        <li class="saas-admin-kept-menu-item">
+            <a href="~/ADMIN/Home/Dashboard">
+                <i class="bi bi-speedometer2 saas-nav-icon" aria-hidden="true"></i>
+                <span class="on_off">Dashboard</span>
+            </a>
+        </li>
+        <li class="saas-admin-kept-menu-item">
+            <a href="~/ADMIN/Home/Profile">
+                <i class="bi bi-person-badge saas-nav-icon" aria-hidden="true"></i>
+                <span class="on_off">My Profile</span>
+            </a>
+        </li>
+
+        <li class="my-class celik0 saas-admin-kept-menu-item saas-accordion-item">
+            <a href="javascript:void(0);" class="llkj saas-menu-parent" aria-expanded="false">
+                <i class="bi bi-clipboard-data saas-nav-icon" aria-hidden="true"></i>
+                <span class="on_off">Important Trans. Reports</span>
+                <i class="bi bi-chevron-down saas-menu-caret" aria-hidden="true"></i>
+            </a>
+            <ul class="account-menu hhu kkli celik saas-submenu">
+                <li><a class="pin-ped" href="@Url.Action("Operator_report_new", "Home")"><i class="bi bi-lightning-charge saas-nav-icon" aria-hidden="true"></i><span class="on_off">Prepaid &amp; Utility</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("Money_transfer_Report", "Home")"><i class="bi bi-graph-up saas-nav-icon" aria-hidden="true"></i><span class="on_off">Financial Services</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("TicketReport", "Air")"><i class="bi bi-airplane saas-nav-icon" aria-hidden="true"></i><span class="on_off">Travel &amp; Hotels</span></a></li>
+                <li><a class="pin-ped" href="~/ADMIN/Home/RadiantPrepay"><i class="bi bi-cart-check saas-nav-icon" aria-hidden="true"></i><span class="on_off">Radiant Prepay</span></a></li>
+                <li><a class="pin-ped" href="~/ADMIN/Home/RadiantCMSDeposit"><i class="bi bi-cash-stack saas-nav-icon" aria-hidden="true"></i><span class="on_off">CMS Cash Deposit</span></a></li>
+                <li><a class="pin-ped" href="~/ADMIN/Home/RadiantReferenceLocation"><i class="bi bi-geo-alt saas-nav-icon" aria-hidden="true"></i><span class="on_off">Reference Location</span></a></li>
+                <li><a class="pin-ped" href="~/ADMIN/Home/EcommerceHistory"><i class="bi bi-bag saas-nav-icon" aria-hidden="true"></i><span class="on_off">Ecommerce</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("SecurityReport", "Home")"><i class="bi bi-shield-lock saas-nav-icon" aria-hidden="true"></i><span class="on_off">Security Services</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("WhatsappPurchase", "Home")"><i class="bi bi-whatsapp saas-nav-icon" aria-hidden="true"></i><span class="on_off">WhatsApp Sell</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("Giftcard_Report", "Home")"><i class="bi bi-gift saas-nav-icon" aria-hidden="true"></i><span class="on_off">Gift Card</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("Prepaid_Card_report", "Home")"><i class="bi bi-credit-card-2-front saas-nav-icon" aria-hidden="true"></i><span class="on_off">Prepaid Card</span></a></li>
+            </ul>
+        </li>
+
+        <li class="my-class celik10 saas-admin-kept-menu-item saas-accordion-item">
+            <a href="javascript:void(0);" class="llkj saas-menu-parent" aria-expanded="false">
+                <i class="bi bi-wallet2 saas-nav-icon" aria-hidden="true"></i>
+                <span class="on_off">Wallet &amp; Accounts Activity</span>
+                <i class="bi bi-chevron-down saas-menu-caret" aria-hidden="true"></i>
+            </a>
+            <ul class="account-menu hhu kklii2 celik1 saas-submenu">
+                <li><a class="pin-ped" href="@Url.Action("Fund_transfer", "Home")"><i class="bi bi-bank saas-nav-icon" aria-hidden="true"></i><span class="on_off">Fund Transfer</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("Fund_User", "Home")"><i class="bi bi-people saas-nav-icon" aria-hidden="true"></i><span class="on_off">Fund User2 User</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("AutoFundtransferStatus", "Home")"><i class="bi bi-arrow-repeat saas-nav-icon" aria-hidden="true"></i><span class="on_off">Auto Fundtransfer</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("RedaintWalletTransfer", "Home")"><i class="bi bi-arrow-left-right saas-nav-icon" aria-hidden="true"></i><span class="on_off">Redaint Wallet Transfer</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("WalletUnloadReport", "Home")"><i class="bi bi-box-arrow-up saas-nav-icon" aria-hidden="true"></i><span class="on_off">Wallet Unload Report</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("retailersellgst", "Home")"><i class="bi bi-receipt saas-nav-icon" aria-hidden="true"></i><span class="on_off">Invoices</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("AccountOpeningReport", "Home")"><i class="bi bi-person-vcard saas-nav-icon" aria-hidden="true"></i><span class="on_off">Account Opening Report</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("FinoCMSReport", "Home")"><i class="bi bi-file-earmark-text saas-nav-icon" aria-hidden="true"></i><span class="on_off">Fino CMS Report</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("airtelCMSReport", "Home")"><i class="bi bi-file-earmark-text saas-nav-icon" aria-hidden="true"></i><span class="on_off">Airtel CMS Report</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("Gst_Report", "Home")"><i class="bi bi-percent saas-nav-icon" aria-hidden="true"></i><span class="on_off">GST Report</span></a></li>
+            </ul>
+        </li>
+
+        <li class="my-class celik20 saas-admin-kept-menu-item saas-accordion-item"  style="padding-bottom:100px;">
+            <a href="javascript:void(0);" class="llkj saas-menu-parent" aria-expanded="false">
+                <i class="bi bi-qr-code saas-nav-icon" aria-hidden="true"></i>
+                <span class="on_off">UPI (QR) &amp; Gateway Activity</span>
+                <i class="bi bi-chevron-down saas-menu-caret" aria-hidden="true"></i>
+            </a>
+            <ul class="account-menu hhu kklii2 celik2 saas-submenu">
+                <li><a class="pin-ped" href="@Url.Action("UPIAndGatewaySetting", "Home")"><i class="bi bi-gear saas-nav-icon" aria-hidden="true"></i><span class="on_off">UPI/Gateway Setting</span></a></li>
+                <li><a class="pin-ped" href="@Url.Action("UPICharges", "Home")"><i class="bi bi-qr-code-scan saas-nav-icon" aria-hidden="true"></i><span class="on_off">UPI Report</span></a></li>
+                <li><a    class="pin-ped" href="@Url.Action("Pay_U_Gateway", "Home")"><i class="bi bi-credit-card saas-nav-icon" aria-hidden="true"></i><span class="on_off">Payment Gateway Report</span></a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="legal">
+        <div class="copyright" >
+            Copyright 2019 - <span>@DateTime.Now.Year</span>
+        </div>
+        <div class="copyright">
+            <a href="javascript:void(0);" class="tmw-total-color-one" style="background:@themeColor;">@companyName</a>
+        </div>
+    </div>
+</div>

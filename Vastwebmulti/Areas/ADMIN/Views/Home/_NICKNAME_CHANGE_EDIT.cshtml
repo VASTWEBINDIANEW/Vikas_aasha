@@ -98,10 +98,15 @@
              type:'POST',
              data: { idno: idno, NickName: $('#NickName1').val() },
 
-             success: function (data) {
-
-                 setTimeout(function () { $('#NICKNAMEOPTION').html(data); }, 500);
-
+             success: function () {
+                 if (typeof moSaveSuccess === 'function') {
+                     moSaveSuccess('Nickname saved successfully.');
+                 }
+            },
+            error: function () {
+                if (typeof moSaveError === 'function') {
+                    moSaveError('Could not save nickname.');
+                }
             }
         });
 

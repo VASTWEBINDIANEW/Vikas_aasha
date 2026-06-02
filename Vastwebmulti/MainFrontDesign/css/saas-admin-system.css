@@ -254,6 +254,7 @@ body .navbar:not(.sidebar) img,
 .bars,
 .navbar-toggle,
 #sidebar-open,
+#admin-topmenu-open,
 .four-toggle,
 .res_menuseven {
     min-width: 42px !important;
@@ -274,6 +275,7 @@ body .navbar:not(.sidebar) img,
 .bars:hover,
 .navbar-toggle:hover,
 #sidebar-open:hover,
+#admin-topmenu-open:hover,
 .four-toggle:hover,
 .res_menuseven:hover {
     background: var(--saas-primary-soft) !important;
@@ -1865,4 +1867,274 @@ body.saas-admin-ui .saas-clean-topbar::after {
     content: "";
     display: block;
     clear: both;
+}
+
+/* ADMIN panel — modern sidebar + topbar (2026 refresh) */
+body.saas-admin-ui .third-footer,
+body.saas-admin-ui .dongle_design,
+body.saas-admin-ui .seven_menu,
+body.saas-admin-ui .four-toggle,
+body.saas-admin-ui .menu_bar,
+body.saas-admin-ui .boder-clip,
+body.saas-admin-ui .sevend_logoset,
+body.saas-admin-ui .seven_themelicon,
+body.saas-admin-ui .left-day1,
+body.saas-admin-ui .search-bar {
+    display: none !important;
+}
+
+body.saas-admin-ui #leftsidebar.saas-clean-sidebar {
+    width: var(--admin-sidebar-width, 200px) !important;
+    position: fixed !important;
+    top: 72px !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 1040 !important;
+    overflow: hidden auto !important;
+    border-right: 1px solid rgba(148, 163, 184, .12) !important;
+    box-shadow: 12px 0 40px rgba(2, 6, 23, .28) !important;
+}
+
+body.saas-admin-ui section.content,
+body.saas-admin-ui section > .content {
+    margin-left: var(--admin-sidebar-width, 200px) !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .legal {
+    position: sticky !important;
+    bottom: 0 !important;
+    padding: 14px 16px !important;
+    background: linear-gradient(180deg, transparent, rgba(8, 13, 24, .92) 28%) !important;
+    border-top: 1px solid rgba(148, 163, 184, .14) !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .legal .copyright {
+    color: var(--saas-sidebar-muted) !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .saas-submenu {
+    display: none;
+    margin: 6px 0 8px 14px !important;
+    padding: 6px 0 8px 10px !important;
+    list-style: none !important;
+    border-left: 1px solid rgba(148, 163, 184, .22) !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .saas-accordion-item.saas-open > .saas-submenu {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .saas-submenu a {
+    min-height: 38px !important;
+    padding: 8px 10px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .saas-submenu .saas-nav-icon {
+    min-width: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-admin-sidebar .saas-submenu a.activee,
+body.saas-admin-ui .saas-admin-sidebar .saas-submenu a:hover {
+    background: rgba(37, 99, 235, .16) !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .saas-admin-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1050 !important;
+    min-height: 72px !important;
+    background: rgba(255, 255, 255, .96) !important;
+    border-bottom: 1px solid var(--saas-border) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08) !important;
+    backdrop-filter: blur(16px);
+}
+
+body.saas-admin-ui .saas-admin-topbar-inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    min-height: 72px !important;
+    padding: 0 18px !important;
+}
+
+body.saas-admin-ui .saas-admin-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-logo-link {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .saas-admin-logo {
+    max-height: 44px !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-admin-topnav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-topbar-item {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui .saas-topbar-btn {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    min-width: 68px !important;
+    max-width: 92px !important;
+    min-height: 58px !important;
+    padding: 8px 6px !important;
+    border: 1px solid transparent !important;
+    border-radius: 14px !important;
+    background: transparent !important;
+    color: var(--saas-text-soft) !important;
+    text-decoration: none !important;
+    transition: background-color .18s var(--saas-ease), border-color .18s var(--saas-ease), color .18s var(--saas-ease), transform .18s var(--saas-ease) !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-topbar-btn:hover,
+body.saas-admin-ui .saas-topbar-btn:focus {
+    background: var(--saas-primary-soft) !important;
+    border-color: rgba(37, 99, 235, .18) !important;
+    color: var(--saas-primary) !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-topbar-icon {
+    font-size: 18px !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui .saas-topbar-label {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-topbar-badge {
+    position: absolute !important;
+    top: 4px !important;
+    right: 8px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 5px !important;
+    border-radius: 999px !important;
+    background: var(--saas-danger) !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 18px !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-topbar-renewal .card_web_renewal {
+    z-index: 1200 !important;
+}
+
+body.saas-admin-ui .saas-topbar-renewal:hover .card_web_renewal {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+body.saas-admin-ui .saas-logout-form {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-logout-form button {
+    width: 100% !important;
+}
+
+body.saas-admin-ui #sidebar-open {
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui #sidebar-open .bi {
+    font-size: 22px !important;
+}
+
+@media (min-width: 1200px) {
+    body.saas-admin-ui #leftsidebar.me-left {
+        transform: translateX(-100%) !important;
+    }
+
+    body.saas-admin-ui.saas-sidebar-collapsed section.content,
+    body.saas-admin-ui.saas-sidebar-collapsed section > .content {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui section.content,
+    body.saas-admin-ui section > .content {
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui #leftsidebar.saas-clean-sidebar {
+        transform: translateX(-100%);
+        transition: transform .22s var(--saas-ease);
+    }
+
+    body.saas-admin-ui #leftsidebar.saas-clean-sidebar.me-left,
+    body.saas-admin-ui #leftsidebar.saas-clean-sidebar.sidebar-open {
+        transform: translateX(0) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-topnav {
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        padding-bottom: 6px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-topbar-btn {
+        min-width: 62px !important;
+    }
 }

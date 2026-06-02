@@ -1,246 +1,176 @@
-﻿
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/globalallcss.css" rel="stylesheet" />
+﻿@model IEnumerable<Vastwebmulti.Models.PanAadharReportViewModel>
+@using Vastwebmulti.Models
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "PAN & Aadhar Verification Charge Report";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var rows = Model != null ? Model.ToList() : new List<PanAadharReportViewModel>();
+    var totalPan = rows.Sum(r => r.PanCharge);
+    var totalAadhar = rows.Sum(r => r.AadharCharge);
+    var panCount = rows.Count(r => r.PanCharge > 0);
+    var aadharCount = rows.Count(r => r.AadharCharge > 0);
+    var frmDate = (ViewBag.frmDate as string) ?? DateTime.Today.ToString("yyyy-MM-dd");
+    var toDate = (ViewBag.toDate as string) ?? DateTime.Today.ToString("yyyy-MM-dd");
+    var panExcelExportUrl = Url.Action("ExcelPANAadharVerificationReport", "Home");
+    var panPdfExportUrl = Url.Action("pdfPANAadharVerificationReport", "Home");
+}
 
-<style>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
-
-    /*   New css    */
-
-    .cardretailerlager {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .res_div {
-        width: 50% !important;
-        float: left !important;
-    }
-
-    .res_div1 {
-        width: auto !important;
-    }
-
-        .res_div1 .input-daterange input {
-            max-width: 110px;
-        }
-
-    /*   New css    */
-
-    table #trow {
-        counter-reset: rowNumber;
-    }
-
-        table #trow tr::before {
-            display: table-cell;
-            counter-increment: rowNumber;
-            content: counter(rowNumber) ".";
-            text-align: right;
-        }
-
-    @@media only screen and (max-width: 1367px) {
-        .res_div1 {
-            width: auto !important;
-        }
-
-        .clk {
-            width: auto !important;
-        }
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:991px) {
-
-        .cardretailerlager {
-            display: block !important;
-            width: 100%;
-            float: left;
-        }
-
-        .res_div {
-            width: 100% !important;
-            float: left !important;
-            padding: 5px 0;
-        }
-
-            .res_div form .row {
-                width: 100%;
-            }
-
-        .res_div1 {
-            float: left;
-            padding: 0;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .res_div1 .input-daterange input {
-            max-width: 100%;
-        }
-
-        .nrr3 {
-            width: 100%;
-        }
-
-        .res_div1 {
-            margin: 2px 0;
-        }
-    }
-</style>
-<section class="content">
+<section class="content saas-admin-account-page saas-admin-settings-page saas-pan-report-page">
     <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card page-header-third cardretailerlager legar-responshivewidth cardaddclass-res class-back-tra-fourdesign fix-bootmmarg-fourdesign" style="margin:0px;">
-                    <div class="bread-same-all-page res_div" style="width:auto;float:left;">
-                        <div class="col-md-6" style="width: auto; float: left; padding: 0;">
-                            <ul>
-                                <li class="smli">
-                                    <a href="~/RETAILER/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                        Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width: 12px;margin-top: -2px;">
-                                    </a>
-                                </li>
 
-                                <li class="fullbodydycolorbg tmw-total-color-one">
-                                    PAN & Aadhar Verification Charge Report
-                                </li>
-                            </ul>
+        
+        @using (Html.BeginForm("PANAadharVerificationReport", "Home", FormMethod.Post, new { @class = "saas-pan-report-form saas-pan-toolbar-form", id = "panReportForm", data_date_mode = "set", data_frm_date = frmDate, data_to_date = toDate }))
+        {
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified">
+                <ol class="saas-acc-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>PAN &amp; Aadhar Verification Report</li>
+                </ol>
+
+                <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
+                    <div class="saas-acc-date-range input-daterange saas-acc-report-date-controls saas-pan-date-controls">
+                        <div class="saas-acc-dp-field">
+                            <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+                        </div>
+                        <div class="saas-acc-dp-field">
+                            <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+                        </div>
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
+                            <i class="fas fa-search" aria-hidden="true"></i> Search
+                        </button>
+                        <div class="saas-acc-export-group saas-pan-export-group">
+                            <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="panBtnExcel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="panBtnPdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
                     </div>
-                    <div class="res_div">
-                        @using (Html.BeginForm("PANAadharVerificationReport", "Home", FormMethod.Post))
+                </div>
+            </div>
+        }
+
+        <div class="saas-acc-table-card">
+            <div class="saas-acc-table-card-head">
+                <h3>Charge report</h3>
+                <span class="saas-acc-row-count">
+                    <i class="fas fa-receipt" aria-hidden="true"></i> @rows.Count entries
+                    <span class="saas-pan-report-meta"> · @frmDate to @toDate</span>
+                </span>
+            </div>
+            <div class="saas-acc-table-wrap table-responsive">
+                <table class="table saas-acc-table table-bordered" id="panAadharReportTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Retailer</th>
+                            <th>Firm name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Txn ID</th>
+                            <th class="text-right">PAN charge</th>
+                            <th class="text-right">Aadhar charge</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (rows.Count == 0)
                         {
-                            <div class="col-md-4 rtrt responcive-full" style="float: right;padding: 0px;width:100%;">
-                                <div class="row" style="float: right; margin: 0;">
-                                    <div class="col-md-7 responcive-full res_div1" style="padding-right:0px;">
-                                        <div class="input-daterange input-group focused" style="margin-left:0px;width:100%;">
-                                            <div class="custom-date-icon ner">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width:100% !important;" })
-                                            <span class="input-group-addon datepicker" style="padding: 0px !important;min-width: 3px;">
-
-                                            </span>
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner2">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width:100% !important;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 sre res_div1" style="padding:0 3px;">
-                                        <center>
-                                            <div class="">
-                                                <i class="fa fa-search color-white-second" style="margin-left: 3px;position: absolute;top: 9px;left: 5px;color: #333;" aria-hidden="true"></i>
-                                                <input id="btntype_OLD" name="btntype" type="submit" value="SEARCH" class="btn input-back-second" style="padding-left: 20px;margin-top:0px; height:32px;border:1px solid #b1a6a638;background:#fff ;">
-                                            </div>
-                                        </center>
-                                    </div>
-                                </div>
-                            </div>
+                            <tr>
+                                <td colspan="10" class="saas-pan-empty-cell">No records found between @frmDate and @toDate.</td>
+                            </tr>
                         }
-                    </div>
-                </div>
+                        else
+                        {
+                            var sr = 0;
+                            foreach (var item in rows)
+                            {
+                                sr++;
+                                var typeKey = (item.ChargeType ?? "").Trim().ToUpperInvariant();
+                                <tr>
+                                    <td data-label="#">@sr</td>
+                                    <td data-label="Retailer">@(string.IsNullOrWhiteSpace(item.RetailerName) ? "—" : item.RetailerName)</td>
+                                    <td data-label="Firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "—" : item.Frm_Name)</td>
+                                    <td data-label="Email">@(string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email)</td>
+                                    <td data-label="Mobile">@(string.IsNullOrWhiteSpace(item.Mobile) ? "—" : item.Mobile)</td>
+                                    <td data-label="Txn ID" class="saas-pan-txn-id">@(string.IsNullOrWhiteSpace(item.TransactionId) ? "—" : item.TransactionId)</td>
+                                    <td data-label="PAN charge" class="text-right saas-pan-amount">₹@item.PanCharge.ToString("N2")</td>
+                                    <td data-label="Aadhar charge" class="text-right saas-pan-amount">₹@item.AadharCharge.ToString("N2")</td>
+                                    <td data-label="Type">
+                                        @if (typeKey.Contains("PAN") && typeKey.Contains("AADHAR"))
+                                        {
+                                            <span class="saas-set-badge-pending">Both</span>
+                                        }
+                                        else if (typeKey.Contains("PAN"))
+                                        {
+                                            <span class="saas-set-badge-done">PAN</span>
+                                        }
+                                        else if (typeKey.Contains("AADHAR") || typeKey.Contains("ADHAR"))
+                                        {
+                                            <span class="saas-set-badge-done">Aadhar</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="saas-set-badge-pending">@(string.IsNullOrWhiteSpace(item.ChargeType) ? "—" : item.ChargeType)</span>
+                                        }
+                                    </td>
+                                    <td data-label="Date">@(string.IsNullOrWhiteSpace(item.CreatedAt) ? "—" : item.CreatedAt)</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    @if (rows.Count > 0)
+                    {
+                        <tfoot>
+                            <tr class="saas-pan-tfoot-row">
+                                <td colspan="6" class="text-right"><strong>Total</strong></td>
+                                <td class="text-right saas-pan-amount"><strong>₹@totalPan.ToString("N2")</strong></td>
+                                <td class="text-right saas-pan-amount"><strong>₹@totalAadhar.ToString("N2")</strong></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    }
+                </table>
             </div>
         </div>
 
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                            <div class="showreport-class page-header-third" id="showreport" style="margin-top:18px;">
-                                <div class="table-responsive" style="">
-                                    <table id="example" class="table table-bordered table-striped table-hover table-background-second third-design-table" style="width:100%;font-size:13px;">
-                                        <thead style="color:black;font-size: 13px;">
-                                            <tr>
-                                                <td>SR NO</td>
-                                                <td>Retailer Name</td>
-                                                <td>Email</td>
-                                                <td>Mobile</td>
-                                                <td>Frm Name</td>
-                                                <td>Pan Charge</td>
-                                                <td>Aadhar Charge</td>
-                                                <td>Charge Type</td>
-                                                <td>Date</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="trow" class="alin chnj">
-                                            @foreach (var item in Model)
-                                            {
-                                                <tr>
-                                                    <td>@item.RetailerName</td>
-                                                    <td>@item.Email</td>
-                                                    <td>@item.Mobile</td>
-                                                    <td>@item.Frm_Name</td>
-                                                    <td>@item.PanCharge</td>
-                                                    <td>@item.AadharCharge</td>
-                                                    <td>@item.ChargeType</td>
-                                                    <td>@item.CreatedAt</td> <!-- Format DateTime -->
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
 </section>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+<script>
+    (function initPanReportExport() {
+        function run() {
+            if (!window.jQuery) {
+                window.setTimeout(run, 40);
+                return;
+            }
+            var excelBase = '@panExcelExportUrl';
+            var pdfBase = '@panPdfExportUrl';
 
-        });
+            function buildUrl(base) {
+                var frm = encodeURIComponent(jQuery('#txt_frm_date').val() || '');
+                var to = encodeURIComponent(jQuery('#txt_to_date').val() || '');
+                return base + '?txt_frm_date=' + frm + '&txt_to_date=' + to;
+            }
 
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date,.txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date,.txt_to_date").datepicker("setDate", new Date());
+            jQuery(function ($) {
+                $('#panBtnExcel').on('click', function () {
+                    window.location.href = buildUrl(excelBase);
+                });
+                $('#panBtnPdf').on('click', function () {
+                    window.open(buildUrl(pdfBase), '_blank');
+                });
+            });
         }
-    });
+        run();
+    })();
 </script>
-

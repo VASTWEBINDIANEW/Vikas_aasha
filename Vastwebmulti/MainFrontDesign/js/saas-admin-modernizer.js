@@ -168,7 +168,7 @@
     }
 
     function ensureIcon(anchor) {
-        if (!anchor || anchor.dataset.saasIconReady === "true") {
+        if (!anchor || anchor.dataset.saasIconReady === "true" || anchor.querySelector(".saas-nav-icon")) {
             return;
         }
 
@@ -227,6 +227,13 @@
     }
 
     function normalizeSidebarMenus(root) {
+        if (document.querySelector(".saas-admin-sidebar")) {
+            sidebarRoots(root).forEach(function (sidebar) {
+                sidebar.classList.add("saas-clean-sidebar");
+            });
+            return;
+        }
+
         sidebarRoots(root).forEach(function (sidebar) {
             sidebar.classList.add("saas-clean-sidebar");
             Array.prototype.forEach.call(sidebar.querySelectorAll("a"), function (anchor) {
@@ -279,7 +286,7 @@
         /upi\s*\(?qr\)?\s*&\s*gateway\s+activity|upi.*gateway/i
     ];
 
-    var clutterTopbarLabels = [
+    var adminTopbarKeepLabels = [
         /more option/i,
         /app setting/i,
         /pan\/?aadhar|pan\/?aadhaar/i,
@@ -294,7 +301,8 @@
         /user\s*a\/c\s*q|user a c q/i,
         /chat'?s/i,
         /dispute'?s/i,
-        /renewal\s+date.*web\s+info|renewal date/i
+        /renewal\s+date.*web\s+info|renewal date/i,
+        /logout/i
     ];
 
     function isAdminPanel() {
@@ -322,6 +330,14 @@
 
     function cleanAdminSidebar() {
         if (!isAdminPanel()) {
+            return;
+        }
+
+        if (document.querySelector(".saas-admin-sidebar")) {
+            var sidebar = document.querySelector("#leftsidebar");
+            if (sidebar) {
+                sidebar.classList.add("saas-clean-sidebar");
+            }
             return;
         }
 
@@ -356,6 +372,10 @@
             return;
         }
 
+        if (document.querySelector(".saas-admin-topbar")) {
+            return;
+        }
+
         var topbar = document.querySelector(".tmw-layoutht, .navbar:not(.sidebar)");
         if (!topbar) {
             return;
@@ -366,7 +386,8 @@
             var text = visibleText(node);
             var title = normalizeText((node.querySelector("a") || node).getAttribute ? ((node.querySelector("a") || node).getAttribute("title") || "") : "");
             var href = normalizeText((node.querySelector("a") || node).getAttribute ? ((node.querySelector("a") || node).getAttribute("href") || "") : "");
-            if (matchesAny(text + " " + title + " " + href, clutterTopbarLabels)) {
+            var keep = matchesAny(text + " " + title + " " + href, adminTopbarKeepLabels);
+            if (!keep) {
                 hideElement(node, "saas-admin-hidden-topbar-item");
             }
         });
@@ -379,9 +400,87 @@
         });
     }
 
+    function initAdminAccordion() {
+        if (!isAdminPanel()) {
+            return;
+        }
+
+        var items = document.querySelectorAll(".saas-admin-sidebar .saas-accordion-item");
+        if (!items.length) {
+            return;
+        }
+
+        Array.prototype.forEach.call(items, function (item) {
+            if (item.dataset.saasAccordionReady === "true") {
+                return;
+            }
+
+            var trigger = item.querySelector(":scope > a.llkj, :scope > a.saas-menu-parent");
+            var submenu = item.querySelector(":scope > ul");
+            if (!trigger || !submenu) {
+                return;
+            }
+
+            item.dataset.saasAccordionReady = "true";
+            submenu.style.display = "none";
+            trigger.setAttribute("aria-expanded", "false");
+
+            trigger.addEventListener("click", function (event) {
+                event.preventDefault();
+                var isOpen = item.classList.contains("saas-open");
+
+                Array.prototype.forEach.call(items, function (otherItem) {
+                    if (otherItem === item) {
+                        return;
+                    }
+                    otherItem.classList.remove("saas-open");
+                    var otherTrigger = otherItem.querySelector(":scope > a.llkj, :scope > a.saas-menu-parent");
+                    var otherSubmenu = otherItem.querySelector(":scope > ul");
+                    if (otherSubmenu) {
+                        otherSubmenu.style.display = "none";
+                    }
+                    if (otherTrigger) {
+                        otherTrigger.setAttribute("aria-expanded", "false");
+                    }
+                });
+
+                if (isOpen) {
+                    item.classList.remove("saas-open");
+                    submenu.style.display = "none";
+                    trigger.setAttribute("aria-expanded", "false");
+                } else {
+                    item.classList.add("saas-open");
+                    submenu.style.display = "block";
+                    trigger.setAttribute("aria-expanded", "true");
+                }
+            });
+        });
+
+        var currentPath = window.location.pathname.replace(/\/+$/, "").toLowerCase();
+        Array.prototype.forEach.call(document.querySelectorAll("#leftsidebar .saas-submenu a[href]"), function (link) {
+            var href = (link.getAttribute("href") || "").replace(/^https?:\/\/[^/]+/i, "").replace(/\?.*$/, "").replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
+            if (href && currentPath.indexOf(href) !== -1) {
+                link.classList.add("activee");
+                var parentItem = link.closest(".saas-accordion-item");
+                if (parentItem) {
+                    parentItem.classList.add("saas-open");
+                    var parentSubmenu = parentItem.querySelector(":scope > ul");
+                    var parentTrigger = parentItem.querySelector(":scope > a.llkj, :scope > a.saas-menu-parent");
+                    if (parentSubmenu) {
+                        parentSubmenu.style.display = "block";
+                    }
+                    if (parentTrigger) {
+                        parentTrigger.setAttribute("aria-expanded", "true");
+                    }
+                }
+            }
+        });
+    }
+
     function applyPanelSpecificCleanup() {
         cleanAdminSidebar();
         cleanAdminTopbar();
+        initAdminAccordion();
     }
 
     function normalizeComponents(root) {

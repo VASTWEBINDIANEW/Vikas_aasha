@@ -4,43 +4,23 @@
 }
 
 @{
-    Vastwebmulti.Models.VastwebmultiEntities db = new Vastwebmulti.Models.VastwebmultiEntities();
-    var amount1 = db.Remain_Admin_balance.SingleOrDefault().VirtualAmount;
+    var db = new Vastwebmulti.Models.VastwebmultiEntities();
+    var virtualAmount = db.Remain_Admin_balance.FirstOrDefault()?.VirtualAmount;
 }
 @foreach (var item in Model)
 {
-    var bgcolor = "";
-    var color = "";
-    var total = item.total;
-    var amount = amount1;
-    if (total != amount)
-    {
-        bgcolor = "red";
-        color = "white";
-    }
-    <tr style="background-color: @bgcolor;color:@color">
-        <td>@item.id</td>
-        <td >@Html.DisplayFor(modelItem => item.details)</td>
+    var isMismatch = item.total != virtualAmount;
+    <tr class="@(isMismatch ? "saas-acc-row-mismatch" : "")">
+        <td class="col-order">@item.id</td>
+        <td class="col-details">@Html.DisplayFor(modelItem => item.details)</td>
         <td>@Html.DisplayFor(modelItem => item.totaladmin)</td>
         <td>@Html.DisplayFor(modelItem => item.totalsuper)</td>
         <td>@Html.DisplayFor(modelItem => item.totaldlm)</td>
         <td>@Html.DisplayFor(modelItem => item.totalrem)</td>
-        <td>@Html.DisplayFor(modelItem => item.posremain)</td>
+        <td>@item.posremain</td>
         <td>@Html.DisplayFor(modelItem => item.totalapi)</td>
         <td>@Html.DisplayFor(modelItem => item.totalwhitelabel)</td>
-        <td>@Html.DisplayFor(modelItem => item.total)</td>
-        <td>@String.Format("{0:dd-MM-yyyy}", item.tdate)</td>
+        <td class="col-total">@Html.DisplayFor(modelItem => item.total)</td>
+        <td>@String.Format("{0:dd-MM-yyyy HH:mm}", item.tdate)</td>
     </tr>
 }
-
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-            paging: false
-        });
-    });
-
-</script>

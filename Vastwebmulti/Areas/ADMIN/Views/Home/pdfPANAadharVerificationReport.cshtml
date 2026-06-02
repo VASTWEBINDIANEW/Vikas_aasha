@@ -1,0 +1,80 @@
+@model IEnumerable<Vastwebmulti.Models.PanAadharReportViewModel>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.PanAadharReportViewModel>();
+    var totalPan = rows.Sum(r => r.PanCharge);
+    var totalAadhar = rows.Sum(r => r.AadharCharge);
+    var frmDate = ViewBag.frmDate as string ?? "";
+    var toDate = ViewBag.toDate as string ?? "";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PAN &amp; Aadhar Verification Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 11px; }
+        h2 { margin: 0 0 4px; font-size: 16px; }
+        p { margin: 0 0 12px; color: #444; }
+        table { border-collapse: collapse; width: 100%; }
+        table, td, th { border: 1px solid #333; }
+        th { background: #f1f5f9; padding: 6px 4px; text-align: left; }
+        td { padding: 5px 4px; }
+        tfoot td { font-weight: bold; background: #f8fafc; }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+    </style>
+</head>
+<body>
+    <h2>PAN &amp; Aadhar Verification Charge Report</h2>
+    <p>Period: @frmDate to @toDate &nbsp;|&nbsp; Records: @rows.Count</p>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Retailer</th>
+                <th>Firm</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Txn ID</th>
+                <th>PAN</th>
+                <th>Aadhar</th>
+                <th>Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var sr = 0; }
+            @foreach (var item in rows)
+            {
+                sr++;
+                <tr>
+                    <td>@sr</td>
+                    <td>@item.RetailerName</td>
+                    <td>@item.Frm_Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Mobile</td>
+                    <td>@item.TransactionId</td>
+                    <td>@item.PanCharge.ToString("N2")</td>
+                    <td>@item.AadharCharge.ToString("N2")</td>
+                    <td>@item.ChargeType</td>
+                    <td>@item.CreatedAt</td>
+                </tr>
+            }
+        </tbody>
+        @if (rows.Count > 0)
+        {
+            <tfoot>
+                <tr>
+                    <td colspan="6">Total</td>
+                    <td>@totalPan.ToString("N2")</td>
+                    <td>@totalAadhar.ToString("N2")</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        }
+    </table>
+</body>
+</html>

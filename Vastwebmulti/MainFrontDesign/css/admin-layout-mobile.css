@@ -1,0 +1,720 @@
+/* ADMIN — Mobile layout + enhanced left sidebar */
+
+body.saas-admin-ui {
+    --admin-sidebar-width: 190px;
+    --admin-header-height: 73px;
+}
+
+/* ========== Sidebar shell (desktop + mobile) ========== */
+#leftsidebar.admin-sidebar-shell {
+    width: var(--admin-sidebar-width, 252px) !important;
+    top: var(--admin-header-height, 58px) !important;
+    background: linear-gradient(180deg, #0a1020 0%, #111827 48%, #070b14 100%) !important;
+    border-right: 1px solid rgba(148, 163, 184, 0.14) !important;
+    box-shadow: 8px 0 32px rgba(2, 6, 23, 0.22) !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-head {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.12), transparent);
+    flex-shrink: 0;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-brand i {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-brand span {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-close {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.5);
+    color: #e2e8f0;
+    font-size: 1rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fecaca;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-list {
+    padding: 10px 8px 8px !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-item > a,
+#leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj {
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+    border-radius: 11px !important;
+    font-size: 12.5px !important;
+    gap: 10px !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-icon {
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 30px !important;
+    border-radius: 9px !important;
+    font-size: 13px !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-group {
+    margin-top: 6px !important;
+    padding-top: 6px !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-item + .admin-sidebar-group {
+    margin-top: 8px !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub {
+    margin: 6px 0 10px 12px !important;
+    padding: 4px 0 6px 5px !important;
+    border-left: 2px solid rgba(56, 189, 248, 0.35) !important;
+    border-radius: 0 0 0 4px;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+    min-height: 34px !important;
+    padding: 7px 10px 7px 14px !important;
+    border-radius: 9px !important;
+    font-size: 11.5px !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped,
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+    display: flex !important;
+    align-items: center !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 5px !important;
+    height: 5px !important;
+    border-radius: 50% !important;
+    background: rgba(148, 163, 184, 0.45) !important;
+    margin-right: 2px !important;
+    flex-shrink: 0 !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped.activee::before,
+#leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.pin-ped:hover::before {
+    background: #38bdf8 !important;
+}
+
+#leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee,
+#leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj {
+    box-shadow: inset 3px 0 0 #38bdf8;
+}
+
+    #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
+        padding: 12px 14px 14px !important;
+        background: #000 !important;
+        text-align:center;
+    }
+
+/* Main content area */
+body.saas-admin-ui section.content {
+    margin-left: var(--admin-sidebar-width, 252px) !important;
+    margin-top: var(--admin-header-height, 58px) !important;
+    padding: 16px 18px 24px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    transition: margin-left 0.24s ease;
+}
+
+body.saas-admin-ui .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1055;
+    background: rgba(15, 23, 42, 0.55) !important;
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+body.saas-admin-ui.overlay-open .overlay,
+body.saas-admin-ui.admin-sidebar-open .overlay {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Hamburger + quick menu toggle */
+body.saas-admin-ui #sidebar-open,
+body.saas-admin-ui #admin-topmenu-open {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .admin-topmenu-toggle {
+    display: none !important;
+}
+
+body.saas-admin-ui .admin-mobile-topmenu-head {
+    display: none;
+}
+
+/* Global loader */
+body.saas-admin-ui .admin-global-loader,
+body.saas-admin-ui #loader.admin-global-loader {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 20050 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(3px);
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    width: auto !important;
+    height: auto !important;
+    right: auto !important;
+    top: auto !important;
+}
+
+body.saas-admin-ui .admin-global-loader.is-active,
+body.saas-admin-ui #loader.admin-global-loader.is-active,
+body.saas-admin-ui .admin-global-loader[style*="display: flex"],
+body.saas-admin-ui #loader[style*="display: flex"] {
+    display: flex !important;
+}
+
+body.saas-admin-ui .admin-global-loader-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 28px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+    min-width: 140px;
+}
+
+body.saas-admin-ui .admin-global-loader-box i {
+    font-size: 2rem;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .admin-global-loader-box span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+/* Modals — above sidebar & header menus */
+/* Modal z-index — see admin-modal-fix.css (BS3 + BS5 bridge) */
+
+body.saas-admin-ui .saas-dash-txn-modal.in,
+body.saas-admin-ui .saas-dash-txn-modal.show {
+    display: block !important;
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-dash-txn-modal .modal-dialog {
+    margin: 20px auto !important;
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-dash-txn-modal .modal-content {
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-dash-txn-modal .modal-body {
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui body.modal-open {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}
+
+/* Header row — desktop inline menu */
+body.saas-admin-ui .admin-header-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-height: 73px !important;
+    padding: 4px 10px 4px 12px !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .admin-top-header,
+body.saas-admin-ui .admin-header-v2,
+body.saas-admin-ui .admin-header-row {
+    overflow: visible !important;
+}
+
+#admin-topmenu-open {
+    display: none !important;
+    padding: 0 !important;
+}
+
+
+/* Desktop — top menu stays in header bar */
+@media (min-width: 1200px) {
+    body.saas-admin-ui .admin-topmenu-panel,
+    body.saas-admin-ui .admin-header-menu,
+    body.saas-admin-ui #navbar-collapse {
+        position: static !important;
+        transform: none !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border: none !important;
+        overflow: visible !important;
+        display: flex !important;
+        flex: 1 1 auto !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        z-index: auto !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-panel[aria-hidden="true"] {
+        visibility: visible !important;
+    }
+
+    body.saas-admin-ui .admin-mobile-topmenu-head {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-toggle {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow: visible !important;
+        padding: 0 4px !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+        max-height: none !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+    }
+}
+
+/* ========== Tablet & mobile ========== */
+@media (max-width: 1199px) {
+
+    
+        #admin-topmenu-open {
+            display: block !important;
+        }
+    
+    #leftsidebar.admin-sidebar-shell {
+        top: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        max-width: min(86vw, 260px) !important;
+        width: min(86vw, 260px) !important;
+        z-index: 1060 !important;
+        transform: translateX(-105%);
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 16px 0 48px rgba(2, 6, 23, 0.45) !important;
+    }
+
+    #leftsidebar.admin-sidebar-shell .admin-sidebar-mobile-head {
+        display: flex;
+    }
+
+    #leftsidebar.admin-sidebar-shell.me-left,
+    #leftsidebar.admin-sidebar-shell.admin-sidebar-visible {
+        transform: translateX(0);
+    }
+
+    body.saas-admin-ui section.content,
+    body.saas-admin-ui.saas-sidebar-collapsed section.content {
+        margin-left: 0 !important;
+        padding: 12px 12px 20px !important;
+    }
+
+    body.saas-admin-ui.admin-sidebar-open,
+    body.saas-admin-ui.overlay-open {
+        overflow: hidden !important;
+        touch-action: none;
+    }
+
+    body.saas-admin-ui .admin-header-row,
+    body.saas-admin-ui .admin-header-shell {
+        flex-wrap: nowrap !important;
+        padding: 6px 8px 6px 10px !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .admin-header-brand {
+        flex: 1 1 auto !important;
+        border-right: none !important;
+        padding-right: 4px !important;
+        margin-right: 0 !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-toggle {
+        display: inline-flex !important;
+    }
+
+    /* Mobile quick-menu drawer (no Bootstrap navbar-collapse) */
+    body.saas-admin-ui .admin-topmenu-panel,
+    body.saas-admin-ui .admin-header-menu,
+    body.saas-admin-ui #navbar-collapse {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: auto !important;
+        width: min(92vw, 340px) !important;
+        max-width: min(92vw, 340px) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        z-index: 1070 !important;
+        overflow: hidden !important;
+        display: none !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        transform: translateX(0) !important;
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        pointer-events: auto !important;
+        box-shadow: -12px 0 40px rgba(15, 23, 42, 0.2) !important;
+        border-left: 1px solid #e2e8f0 !important;
+        flex: none !important;
+    }
+
+    body.saas-admin-ui:not(.admin-topmenu-open) .admin-topmenu-panel,
+    body.saas-admin-ui:not(.admin-topmenu-open) .admin-header-menu,
+    body.saas-admin-ui:not(.admin-topmenu-open) #navbar-collapse {
+        display: none !important;
+        pointer-events: none !important;
+        transform: translateX(105%) !important;
+    }
+
+    body.saas-admin-ui.admin-topmenu-open .admin-topmenu-panel,
+    body.saas-admin-ui.admin-topmenu-open .admin-header-menu,
+    body.saas-admin-ui.admin-topmenu-open #navbar-collapse {
+        display: flex !important;
+        pointer-events: auto !important;
+        transform: translateX(0) !important;
+    }
+
+    body.saas-admin-ui.admin-topmenu-open .admin-topmenu-panel[aria-hidden="false"],
+    body.saas-admin-ui.admin-topmenu-open #navbar-collapse[aria-hidden="false"] {
+        display: flex !important;
+    }
+
+    body.saas-admin-ui .admin-mobile-topmenu-head {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-shrink: 0;
+        padding: 14px 16px;
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: #fff;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: calc(100vh - 58px) !important;
+        max-height: calc(100dvh - 58px) !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 999px;
+    }
+
+    body.saas-admin-ui .admin-mobile-topmenu-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 800;
+    }
+
+    body.saas-admin-ui .admin-topmenu-close {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+    }
+
+    body.saas-admin-ui .admin-topmenu-scroll .admin-header-actions {
+        flex: none !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px 12px 24px !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        list-style: none !important;
+        display: flex !important;
+        min-height: min-content !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions > .admin-topbar-item,
+    body.saas-admin-ui .admin-header-actions > li,
+    body.saas-admin-ui .admin-header-actions > .admin-topbar-sep {
+        width: 100% !important;
+        margin: 0 0 6px !important;
+        display: block !important;
+        float: none !important;
+        position: relative !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions .admin-topbar-sep {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions .admin-topbar-btn,
+    body.saas-admin-ui .admin-header-actions .admin-topbar-logout-btn,
+    body.saas-admin-ui .admin-topmenu-panel .admin-topbar-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+        border-radius: 10px !important;
+        justify-content: flex-start !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+        background: #f8fafc !important;
+        display: flex !important;
+        font-size: 0.82rem !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-panel .admin-topbar-label {
+        display: inline !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        white-space: normal !important;
+        text-align: left !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-panel .admin-topbar-renewal .admin-header-renewal-card,
+    body.saas-admin-ui .admin-topmenu-panel #round_buttone .card_web_renewal {
+        position: static !important;
+        display: none !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+        box-shadow: none !important;
+    }
+
+    body.saas-admin-ui .admin-topmenu-panel .admin-topbar-renewal.is-renewal-open .admin-header-renewal-card,
+    body.saas-admin-ui .admin-topmenu-panel .admin-topbar-renewal.is-renewal-open .card_web_renewal {
+        display: block !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions .admin-topbar-icon {
+        flex-shrink: 0;
+    }
+
+    body.saas-admin-ui .admin-header-actions .admin-topbar-badge {
+        position: static !important;
+        margin-left: auto !important;
+    }
+
+    body.saas-admin-ui .admin-header-actions .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: 100% !important;
+        margin: 6px 0 0 !important;
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+    }
+
+    body.saas-admin-ui.admin-topmenu-open,
+    body.saas-admin-ui.admin-sidebar-open {
+        overflow: hidden !important;
+        touch-action: none;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui {
+        --admin-header-height: 56px;
+    }
+
+    body.saas-admin-ui .admin-header-v2 {
+        min-height: 56px !important;
+    }
+
+    body.saas-admin-ui .admin-header-logo-link {
+        margin-left: auto;
+    }
+
+    body.saas-admin-ui section.content {
+        margin-top: 56px !important;
+        padding: 10px 10px 18px !important;
+    }
+
+    body.saas-admin-ui .saas-dash-modern {
+        padding: 12px 10px 18px !important;
+    }
+
+    body.saas-admin-ui .saas-dash-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px 16px;
+    }
+
+    body.saas-admin-ui .saas-dash-top-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.saas-admin-ui .saas-dash-modern .saas-dash-body-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-dash-txn-quick {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-dash-txn-modal .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        height: 100%;
+    }
+
+    body.saas-admin-ui .saas-dash-txn-modal .modal-content {
+        min-height: 100vh;
+        min-height: 100dvh;
+        border-radius: 0 !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-dash-top-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-dash-modern ul.tabs2,
+    body.saas-admin-ui .saas-dash-modern ul.tabs3,
+    body.saas-admin-ui .saas-dash-modern .saas-dash-txn-tabs {
+        flex-direction: column;
+        width: calc(100% - 16px) !important;
+    }
+
+    body.saas-admin-ui .admin-header-logo {
+        max-height: 32px !important;
+        max-width: 120px !important;
+    }
+
+    #leftsidebar.admin-sidebar-shell {
+        width: 100vw !important;
+        max-width: 100vw !important;
+    }
+}
+
+/* Kill legacy broken sidebar-open offsets */
+@media only screen and (max-width: 1169px),
+       only screen and (max-width: 1150px),
+       only screen and (max-width: 1024px) {
+    body.saas-admin-ui #sidebar-open {
+        top: auto !important;
+        left: auto !important;
+        position: relative !important;
+    }
+}

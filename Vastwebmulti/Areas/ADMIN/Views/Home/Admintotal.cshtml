@@ -1,190 +1,156 @@
-﻿
+﻿@using Vastwebmulti.Models
 @{
     ViewBag.Title = "Admintotal";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var db = new VastwebmultiEntities();
+    var adminBal = db.Remain_Admin_balance.FirstOrDefault();
+    var totals = db.Total_account().FirstOrDefault();
+
+    decimal virtualAmt = adminBal?.VirtualAmount ?? 0m;
+    decimal adminRemain = adminBal?.RemainAmount ?? 0m;
+    decimal adminTotal = totals?.totaladmin ?? 0m;
+    decimal networkTotal = totals?.total ?? 0m;
+
+    decimal adminOpening = 0m;
+    decimal transaction = 0m;
+    decimal fundTransfer = 0m;
+    decimal sharing = 0m;
+    decimal oldRefund = 0m;
+    decimal oldSuccess = 0m;
+    decimal adminClosing = adminRemain;
+    decimal lossDiff = networkTotal - virtualAmt;
+
+    Func<decimal, string> fmt = v => v.ToString("N2");
 }
-<style>
-    .master-account-detail {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-        .master-account-detail .res_div {
-            padding: 0;
-        }
 
-    @@media only screen and (max-width:1280px) {
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
+<section class="content fourdesign-section-admin saas-admin-account-page">
+    <div class="container-fluid">
 
-    @@media only screen and (max-width:1169px) {
+        
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:991px){
-        .master-account-detail .res_div {
-            width: 33%;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-        .master-account-detail .res_div {
-            width: 50%;
-        }
-        .master-account-detail {
-            display: block;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .ff-fild {
-            float: left;
-            padding-left: 15px !important;
-        }
-    }
-    @@media only screen and (max-width:480px) {
-        .master-account-detail .res_div {
-            width: 100%;
-            margin:5px 0;
-            padding:0 !important;
-        }
-        .table-responsive > .table-bordered > thead > tr > th:first-child,.table-responsive > .table-bordered > tbody > tr > td:first-child{border-left:1px solid var(--border-color); }
-    }
-</style>
-    <section class="content fourdesign-section-admin">
-        <div class="container-fluid">
-
-            <!--Four-Design-Admin-page-Header-Section-Start-->
-            <div class="page-title-box-fourde-admin">
-                <h3>Admintotal Account Detail</h3>
-                <ul>
-                    <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-
-                    <li><a href="javascript:void(0);">Admintotal Account Detail</a></li>
-                </ul>
-            </div>
-            <!--Four-Design-Admin-page-Header-Section-End-->
-
-            <div class="row clearfix master-account-detail page-header-third">
-                <div class="col-md-7 res_div">
-                    <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                        <ul>
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                </a>
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Admin Business
-                            </li>
-                        </ul>
-                    </div>
+        <div class="saas-acc-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>Admin Business</li>
+            </ol>
+            <div class="saas-acc-toolbar-right">
+                <div class="saas-acc-search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input class="form-control" id="myInput" type="text" placeholder="Filter table values..." autocomplete="off" />
                 </div>
-                <div class="col-md-3 ff-fild tablesearch-second res_div" style="padding:0px;">
-                    <div class="search-after-third">
-                        <input class="form-control" id="myInput" type="text" placeholder="Search.." style="height:32px;border-color:#ccc !important;">
-                    </div>
-                </div>
-                <div class="col-md-2 res_div">
-
-                    <div class="white-l-search-nine">
-
-                        <div class="web-white-filter fil pdfexpoer-second pdf-third-design" style="float: right;margin-right: 5px;">
-                            <input type="button" onclick="excel()" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;" />
-                            <input type="button" onclick="PDF()" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;" />
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-md-12">
-                    <div class="table-responsive tableseconddes-admin page-header-third" style="">
-                        <table class="table table-bordered table-striped table-hover example-second third-design-table" style="background:#f5f5f5;">
-                            <thead>
-                                <tr>
-                                    <th>Total&nbsp;Virtual</th>
-                                    <th>Admin&nbsp;Opening</th>
-                                    <th>Transaction</th>
-                                    <th>Fund&nbsp;Transfer</th>
-                                    <th>Sharing</th>
-                                    <th>Old&nbsp;Refund</th>
-                                    <th>Old&nbsp;Success</th>
-                                    <th>Admin&nbsp;Closing</th>
-                                    <th>Loss&nbsp;(Diff.)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                    <td>0.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="saas-acc-export-group">
+                    <button type="button" class="saas-acc-btn saas-acc-btn--excel" id="btnExport" onclick="exportAdminTotalExcel()">
+                        <i class="fas fa-file-excel" aria-hidden="true"></i> Export
+                    </button>
+                    <button type="button" class="saas-acc-btn saas-acc-btn--pdf" id="btnPDF" onclick="exportAdminTotalPdf()">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
                 </div>
             </div>
         </div>
+
+        
+        <div class="saas-acc-table-card">
+            <div class="saas-acc-table-card-head">
+                <h3>Ledger breakdown</h3>
+                <span>All amounts in ₹ (INR)</span>
+            </div>
+            <div class="saas-acc-table-wrap table-responsive">
+                <table id="adminTotalTable" class="table saas-acc-table example-second third-design-table">
+                    <thead>
+                        <tr>
+                            <th>Total Virtual</th>
+                            <th>Admin Opening</th>
+                            <th>Transaction</th>
+                            <th>Fund Transfer</th>
+                            <th>Sharing</th>
+                            <th>Old Refund</th>
+                            <th>Old Success</th>
+                            <th>Admin Closing</th>
+                            <th>Loss (Diff.)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTotalBody">
+                        <tr>
+                            <td class="col-virtual" data-label="Total Virtual">@fmt(virtualAmt)</td>
+                            <td data-label="Admin Opening">@fmt(adminOpening)</td>
+                            <td data-label="Transaction">@fmt(transaction)</td>
+                            <td data-label="Fund Transfer">@fmt(fundTransfer)</td>
+                            <td data-label="Sharing">@fmt(sharing)</td>
+                            <td data-label="Old Refund">@fmt(oldRefund)</td>
+                            <td data-label="Old Success">@fmt(oldSuccess)</td>
+                            <td data-label="Admin Closing">@fmt(adminClosing)</td>
+                            <td class="col-loss @(lossDiff == 0 ? "is-zero" : "")" data-label="Loss">@fmt(lossDiff)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 </section>
 
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+        if ($.fn.DataTable && $('#adminTotalTable').length) {
+            $('#adminTotalTable').DataTable({
+                bSort: false,
+                paging: false,
+                searching: false,
+                info: false
+            });
+        }
 
-            bSortCellsTop: true,
-            paging: false
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            var match = false;
+            $("#adminTotalBody tr").each(function () {
+                var rowText = $(this).text().toLowerCase();
+                var show = rowText.indexOf(value) > -1;
+                $(this).toggle(show);
+                if (show) match = true;
+            });
+            $(".saas-acc-metric").each(function () {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+            });
         });
     });
 
-</script>
+    function exportAdminTotalExcel() {
+        var table = document.getElementById('adminTotalTable');
+        if (!table) return;
+        var csv = [];
+        table.querySelectorAll('tr').forEach(function (row) {
+            var cols = [];
+            row.querySelectorAll('th, td').forEach(function (cell) {
+                cols.push('"' + (cell.innerText || '').replace(/"/g, '""') + '"');
+            });
+            csv.push(cols.join(','));
+        });
+        var blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Admin_Account_Detail.csv';
+        link.click();
+    }
 
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
+    function exportAdminTotalPdf() {
+        var el = document.querySelector('.saas-acc-table-card');
+        if (!el || typeof html2canvas === 'undefined') return;
+        html2canvas(el, {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var docDefinition = {
+                    content: [{ image: data, width: 500 }]
+                };
+                pdfMake.createPdf(docDefinition).download('Admin_Account_Detail.pdf');
+            }
+        });
+    }
 </script>

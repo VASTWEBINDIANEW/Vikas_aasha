@@ -79,10 +79,15 @@
              type:'POST',
              data: { idno: idno, amount: $('#amount').val() },
 
-             success: function (data) {
-
-                 setTimeout(function () { $('#LOWBALRANGE').html(data); }, 500);
-
+             success: function () {
+                 if (typeof moSaveSuccess === 'function') {
+                     moSaveSuccess('Low balance alert range saved successfully.');
+                 }
+            },
+            error: function () {
+                if (typeof moSaveError === 'function') {
+                    moSaveError('Could not save low balance range.');
+                }
             }
         });
 

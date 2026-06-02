@@ -1,36 +1,28 @@
-﻿
-@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
-<style>
-    .wallet-bank-input input[readonly="readonly"] {
-        background: transparent;
-        border: 0px;
-    }
-</style>
+﻿@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
 
-
-<div class="tabl-efgdf " style=" margin:auto;">
-
-
-    @foreach (var item in Model.Formservice)
+<div class="saas-mo-service-grid">
+    @if (Model.Formservice == null || Model.Formservice.Count == 0)
     {
-        <div class="col-md-3" style="border: 1px solid; padding: 4px; text-align: center; width: 23.30%; margin: 3px; ">
-
-            <tr><img src="data:image/png;base64,@item.images" alt="" class="img-responsive" style="width: 50px; height: 50px; margin: auto;" /> </tr>
-            <tr><p style="margin: auto; font-size: 11px; text-transform: uppercase; line-height: 1.0; padding: 3px 0px; " type="text" id="formnameid" name="formnameid">@item.servicename</p>@* value="@item.servicename" readonly="readonly" />*@</tr>
-
-            <tr class="last-td">
-                <button type="button" onclick="formEditmode1('@item.idno')" id="formbtnEdit1" class="btn waves-effect shownextrow switch-edit-button swichedit-second" value="Edit" style="padding: 0px !important; height: auto; margin: 0px; width: 35px !important; float: left;">
-                    <p style=" margin: auto;">Edit</p>
-                </button>
-                <button type="button"onclick="setItemId('@item.idno')" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal55" style="padding: 0px !important; height: auto; margin: 0px; width: 35px !important; float:right;">
-                    <p style=" margin: auto;">Add</p>
-                </button>
-            </tr>
-        </div>
-
+        <p class="saas-mo-empty-msg">No services added yet. Use the form above to add one.</p>
+    }
+    else
+    {
+        foreach (var item in Model.Formservice)
+        {
+            <article class="saas-mo-service-card">
+                <div class="saas-mo-service-card-media">
+                    <img src="data:image/png;base64,@item.images" alt="@item.servicename" />
+                </div>
+                <p class="saas-mo-service-card-name">@item.servicename</p>
+                <div class="saas-mo-service-card-actions">
+                    <button type="button" onclick="formEditmode1('@item.idno')" class="btn saas-mo-service-btn saas-mo-service-btn-edit" title="Edit">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                    </button>
+                    <button type="button" onclick="setItemId('@item.idno')" class="btn saas-mo-service-btn saas-mo-service-btn-add" data-target="#myModal55" title="Add field">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Add
+                    </button>
+                </div>
+            </article>
+        }
     }
 </div>
-    <!-- Modal -->
-   
-
-

@@ -74,7 +74,8 @@
     <link href="~/AdminDesign/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     @* legacy visual stylesheet disabled; replaced by Bootstrap 5 + saas-admin-system.css: <link href="~/AdminDesign/css/themes/all-themes.css" rel="stylesheet" /> *@
-    <link href="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-datatables-sort-fix.css" rel="stylesheet" />
 
     <link href="~/AdminDesign/jquery.timepicker.css" rel="stylesheet" />
     <link href="~/AdminDesign/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
@@ -123,6 +124,10 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        
+
+
 
         .card_web_renewal {
             background: #fff;
@@ -240,29 +245,7 @@
 
     <style>
 
-        @*.animated-box {
-            position: relative;
-        }
-
-            .animated-box:after {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                right: 0;
-                bottom: 0;
-                border-radius: 5px;
-                background: linear-gradient(120deg, #d91414, #FBFFFC, #067536);
-                background-size: 300% 300%;
-                clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
-                width: 136px;
-                height: 51px;
-            }
-
-            .animated-box.in:after {
-                animation: frame-enter 1s forwards ease-in-out reverse, gradient-animation 1s ease-in-out infinite;
-            }*@
-
+       
 
         @@keyframes gradient-animation {
             0% {
@@ -1176,6 +1159,666 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <link href="~/MainFrontDesign/css/saas-admin-system.css" rel="stylesheet" />
+
+    <style>
+        body.saas-admin-ui {
+            --admin-sidebar-width: 200px;
+        }
+
+        /* ADMIN left sidebar — layout-scoped premium navigation */
+        #leftsidebar.admin-sidebar-shell {
+            width: var(--admin-sidebar-width, 200px);
+            position: fixed;
+            top: 72px;
+            left: 0;
+            bottom: 0;
+            z-index: 1040;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #0b1220 0%, #111827 55%, #080d18 100%) !important;
+            border-right: 1px solid rgba(148, 163, 184, 0.12);
+            box-shadow: 12px 0 36px rgba(2, 6, 23, 0.25);
+            overflow: hidden;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-nav {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-list {
+            flex: 1 1 auto;
+            margin: 0;
+            padding: 10px 8px 10px;
+            list-style: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-list::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 999px;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item {
+            margin: 0 0 6px;
+            padding: 0;
+            list-style: none;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 40px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: #dbe4f0 !important;
+            text-decoration: none !important;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            transition: background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-icon {
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(148, 163, 184, 0.12);
+            color: #94a3b8;
+            font-size: 12px;
+            transition: background-color 0.22s ease, color 0.22s ease;
+        }
+
+        #leftsidebar.admin-sidebar-shell .bac,
+        #leftsidebar.admin-sidebar-shell .my-img,
+        #leftsidebar.admin-sidebar-shell .my-img1,
+        #leftsidebar.admin-sidebar-shell .arrow-left,
+        #leftsidebar.admin-sidebar-shell img,
+        #leftsidebar.admin-sidebar-shell .material-icons,
+        #leftsidebar.admin-sidebar-shell .saas-nav-icon,
+        #leftsidebar.admin-sidebar-shell .saas-menu-caret,
+        #leftsidebar.admin-sidebar-shell .bi:not(.admin-sidebar-icon):not(.admin-sidebar-caret),
+        #leftsidebar.admin-sidebar-shell a > i:not(.admin-sidebar-icon):not(.admin-sidebar-caret) {
+            display: none !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-icon,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-caret {
+            display: inline-flex !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a::after,
+        #leftsidebar.admin-sidebar-shell .hhu li a::before,
+        #leftsidebar.admin-sidebar-shell .hhu li a::after,
+        #leftsidebar.admin-sidebar-shell .pin-ped::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-caret {
+            margin-left: auto;
+            font-size: 11px;
+            color: #94a3b8;
+            width: 18px;
+            min-width: 18px;
+            height: 18px;
+            align-items: center;
+            justify-content: center;
+            background: transparent !important;
+            border-radius: 0;
+            transition: transform 0.22s ease, color 0.22s ease;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj .admin-sidebar-caret {
+            transform: rotate(180deg);
+            color: #ffffff;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a:hover,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj:hover {
+            background: rgba(37, 99, 235, 0.14);
+            color: #ffffff !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a:hover .admin-sidebar-icon,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group > .llkj:hover .admin-sidebar-icon,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee .admin-sidebar-icon,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee .admin-sidebar-icon {
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            color: #ffffff;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-item > a.activee,
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee {
+            background: rgba(37, 99, 235, 0.2) !important;
+            color: #ffffff !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .llkj {
+            background: rgba(37, 99, 235, 0.18);
+            color: #ffffff !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group.admin-sidebar-open > .admin-sidebar-sub {
+            display: block;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub {
+            display: none;
+            margin: 4px 0 8px 8px;
+            padding: 4px 0 6px 10px;
+            list-style: none;
+            border-left: 2px solid rgba(56, 189, 248, 0.28);
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group {
+            margin-bottom: 4px;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-group + .admin-sidebar-group {
+            margin-top: 2px;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub li {
+            margin: 0 0 4px;
+            padding: 0;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a {
+            display: flex;
+            align-items: center;
+            min-height: 32px;
+            padding: 6px 10px 6px 12px;
+            border-radius: 8px;
+            color: #cbd5e1 !important;
+            text-decoration: none !important;
+            font-size: 11.5px;
+            font-weight: 600;
+            line-height: 1.35;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a:hover {
+            background: rgba(37, 99, 235, 0.14);
+            color: #ffffff !important;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a.activee {
+            background: rgba(37, 99, 235, 0.26) !important;
+            color: #ffffff !important;
+            box-shadow: inset 3px 0 0 #38bdf8;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-sub a .on_off {
+            line-height: 1.35;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal {
+            flex-shrink: 0;
+            padding: 10px 12px 12px;
+            border-top: 1px solid rgba(148, 163, 184, 0.14);
+            background: linear-gradient(180deg, transparent, rgba(8, 13, 24, 0.92) 30%);
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .copyright {
+            color: #94a3b8 !important;
+            font-size: 11px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        #leftsidebar.admin-sidebar-shell .admin-sidebar-legal .tmw-total-color-one {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            color: #fff !important;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        body.saas-admin-ui section.content {
+            margin-left: var(--admin-sidebar-width, 200px) !important;
+        }
+
+        body.saas-admin-ui.saas-sidebar-collapsed section.content {
+            margin-left: 0 !important;
+        }
+
+        @@media (min-width: 1200px) {
+            body.saas-admin-ui.saas-sidebar-collapsed #leftsidebar.admin-sidebar-shell {
+                transform: translateX(-100%);
+            }
+        }
+
+        @@media (max-width: 1199px) {
+            #leftsidebar.admin-sidebar-shell {
+                transform: translateX(-100%);
+                transition: transform 0.24s ease;
+            }
+
+            #leftsidebar.admin-sidebar-shell.me-left {
+                transform: translateX(0);
+            }
+
+            body.saas-admin-ui section.content {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* ADMIN top header — premium pill toolbar */
+        body.saas-admin-ui .search-bar {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
+        body.saas-admin-ui .admin-top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+            background: #ffffff;
+        }
+
+        body.saas-admin-ui .admin-header-v2 {
+            min-height: 58px !important;
+            background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        body.saas-admin-ui .admin-header-shell,
+        body.saas-admin-ui .admin-header-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 8px !important;
+            width: 100% !important;
+            min-height: 58px !important;
+            padding: 4px 10px 4px 12px !important;
+        }
+
+        body.saas-admin-ui .admin-header-brand {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            flex: 0 0 auto !important;
+            padding-right: 10px !important;
+            border-right: 1px solid #e8edf3 !important;
+            margin-right: 2px !important;
+        }
+
+        @@media (min-width: 1200px) {
+            body.saas-admin-ui .admin-topmenu-panel,
+            body.saas-admin-ui .admin-header-menu,
+            body.saas-admin-ui .admin-header-v2 #navbar-collapse,
+            body.saas-admin-ui #navbar-collapse {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                height: auto !important;
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
+                overflow: visible !important;
+                justify-content: flex-end !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: 0 !important;
+                box-shadow: none !important;
+                position: static !important;
+                transform: none !important;
+                pointer-events: auto !important;
+            }
+        }
+
+        body.saas-admin-ui .design-one .admin-header-v2 .intro1,
+        body.saas-admin-ui .second-design .admin-header-v2 .intro1,
+        body.saas-admin-ui .seven_design .admin-header-v2 .intro1 {
+            position: static !important;
+            right: auto !important;
+            top: auto !important;
+            float: none !important;
+            width: auto !important;
+            display: flex !important;
+        }
+
+        body.saas-admin-ui .design-one .admin-header-v2 .intro1 i.admin-topbar-icon,
+        body.saas-admin-ui .admin-header-v2 .intro1 i.admin-topbar-icon {
+            display: inline-flex !important;
+        }
+
+        body.saas-admin-ui .admin-header-actions {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: stretch !important;
+            justify-content: flex-end !important;
+            gap: 3px !important;
+            margin: 0 !important;
+            padding: 0 4px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            list-style: none !important;
+            float: none !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-sep {
+            display: block !important;
+            width: 1px !important;
+            height: 34px !important;
+            margin: 0 1px !important;
+            padding: 0 !important;
+            background: #e2e8f0 !important;
+            align-self: center !important;
+            flex-shrink: 0 !important;
+            list-style: none !important;
+        }
+
+        body.saas-admin-ui .admin-header-actions .nav-item,
+        body.saas-admin-ui .admin-header-actions .admin-topbar-item,
+        body.saas-admin-ui .admin-header-actions .saas-topbar-item {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            float: none !important;
+            position: relative !important;
+            flex: 0 0 auto !important;
+            list-style: none !important;
+        }
+
+        body.saas-admin-ui .admin-header-actions .nav-link.admin-topbar-btn,
+        body.saas-admin-ui .admin-header-actions .admin-topbar-btn {
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 3px !important;
+            width: 58px !important;
+            min-width: 58px !important;
+            max-width: 58px !important;
+            min-height: 46px !important;
+            height: auto !important;
+            padding: 4px 2px !important;
+            border: 1px solid transparent !important;
+            border-radius: 8px !important;
+            background: transparent !important;
+            color: #475569 !important;
+            text-decoration: none !important;
+            font-family: "Inter", "Nunito", "Segoe UI", Arial, sans-serif !important;
+            font-size: 9px !important;
+            font-weight: 600 !important;
+            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease !important;
+            position: relative !important;
+            cursor: pointer !important;
+            box-shadow: none !important;
+            float: none !important;
+            line-height: 1.1 !important;
+            white-space: normal !important;
+        }
+
+        body.saas-admin-ui .admin-header-toggle {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 10px !important;
+            border: 1px solid #e2e8f0 !important;
+            background: #f1f5f9 !important;
+            color: #334155 !important;
+            text-decoration: none !important;
+            flex-shrink: 0 !important;
+        }
+
+        body.saas-admin-ui .admin-header-toggle:hover {
+            background: #e0e7ff !important;
+            border-color: #c7d2fe !important;
+            color: #2563eb !important;
+        }
+
+        body.saas-admin-ui .admin-header-logo {
+            max-height: 36px !important;
+            height: auto !important;
+            width: auto !important;
+            border-radius: 8px !important;
+            display: block !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-btn:hover,
+        body.saas-admin-ui .admin-topbar-btn:focus {
+            background: #eff6ff !important;
+            border-color: #dbeafe !important;
+            color: #1d4ed8 !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-icon {
+            display: inline-flex !important;
+            visibility: visible !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 26px !important;
+            height: 26px !important;
+            min-width: 26px !important;
+            font-size: 12px !important;
+            line-height: 1 !important;
+            color: #475569 !important;
+            background: #f1f5f9 !important;
+            border-radius: 7px !important;
+            border: none !important;
+            flex-shrink: 0 !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-btn:hover .admin-topbar-icon {
+            background: #dbeafe !important;
+            color: #2563eb !important;
+            border-color: #bfdbfe !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-label {
+            display: block !important;
+            visibility: visible !important;
+            font-size: 9px !important;
+            font-weight: 600 !important;
+            line-height: 1.1 !important;
+            text-align: center !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            max-width: 100% !important;
+            color: inherit !important;
+            word-break: break-word !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-badge {
+            position: absolute !important;
+            top: 0 !important;
+            right: 2px !important;
+            min-width: 18px !important;
+            height: 18px !important;
+            padding: 0 5px !important;
+            border-radius: 999px !important;
+            background: #ef4444 !important;
+            color: #fff !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            line-height: 18px !important;
+            text-align: center !important;
+            border: 2px solid #fff !important;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35) !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-logout-btn {
+            color: #b91c1c !important;
+            border-color: transparent !important;
+            background: transparent !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-logout-btn .admin-topbar-icon {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-logout-btn:hover,
+        body.saas-admin-ui .admin-topbar-logout-btn:focus {
+            background: #fef2f2 !important;
+            border-color: #fecaca !important;
+            color: #dc2626 !important;
+        }
+
+        body.saas-admin-ui .admin-logout-form {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.saas-admin-ui .admin-header-v2 img.four-image-nav,
+        body.saas-admin-ui .admin-header-v2 img.four-image-nav-second,
+        body.saas-admin-ui .admin-header-v2 img.secend1-image-nav,
+        body.saas-admin-ui .admin-header-v2 .fab1,
+        body.saas-admin-ui .admin-header-v2 .material-icons.four-image-nav,
+        body.saas-admin-ui .admin-header-v2 center,
+        body.saas-admin-ui .admin-header-v2 .btn-circle-four,
+        body.saas-admin-ui .admin-header-v2 .waves-circle {
+            display: none !important;
+        }
+
+        body.saas-admin-ui .admin-header-dropdown {
+            min-width: 280px !important;
+            padding: 8px !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+            margin-top: 8px !important;
+            display: none;
+        }
+
+        body.saas-admin-ui .admin-header-dropdown.open,
+        body.saas-admin-ui .dropdown.open > .admin-header-dropdown {
+            display: block !important;
+        }
+
+        body.saas-admin-ui .admin-header-dropdown-title,
+        body.saas-admin-ui .admin-header-dropdown .header {
+            padding: 10px 12px !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            margin-bottom: 6px !important;
+        }
+
+        body.saas-admin-ui .admin-header-wallet-list {
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.saas-admin-ui .admin-header-wallet-link {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            padding: 10px 12px !important;
+            border-radius: 10px !important;
+            color: #334155 !important;
+            text-decoration: none !important;
+        }
+
+        body.saas-admin-ui .admin-header-wallet-count {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 32px !important;
+            height: 32px !important;
+            padding: 0 8px !important;
+            border-radius: 999px !important;
+            background: #2563eb !important;
+            color: #fff !important;
+            font-size: 12px !important;
+            font-weight: 800 !important;
+        }
+
+        body.saas-admin-ui .admin-header-wallet-text {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 2px !important;
+        }
+
+        body.saas-admin-ui .admin-topbar-renewal .admin-header-renewal-card,
+        body.saas-admin-ui #round_buttone .card_web_renewal {
+            right: 0 !important;
+            top: calc(100% + 8px) !important;
+            width: 280px !important;
+            padding: 18px 20px !important;
+            border-radius: 16px !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+            z-index: 1200 !important;
+        }
+
+        body.saas-admin-ui #leftsidebar.admin-sidebar-shell {
+            top: var(--admin-header-height, 58px) !important;
+        }
+
+        body.saas-admin-ui section.content {
+            margin-top: var(--admin-header-height, 58px) !important;
+        }
+
+        @@media (min-width: 1200px) and (max-width: 1280px) {
+            body.saas-admin-ui .admin-header-actions {
+                flex-wrap: wrap !important;
+                row-gap: 2px !important;
+            }
+
+            body.saas-admin-ui .admin-header-v2 {
+                min-height: auto !important;
+            }
+        }
+
+        @@media (min-width: 1200px) and (max-width: 1280px) {
+            body.saas-admin-ui .admin-topbar-label {
+                font-size: 8px !important;
+            }
+
+            body.saas-admin-ui .admin-header-actions .admin-topbar-btn {
+                width: 54px !important;
+                min-width: 54px !important;
+                max-width: 54px !important;
+            }
+        }
+    </style>
+    <link href="~/MainFrontDesign/css/admin-layout-mobile.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-modal-fix.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+
 </head>
 @{
     VastwebmultiEntities DB = new VastwebmultiEntities();
@@ -1282,6 +1925,25 @@
     ViewData["whitelabel"] = ch.Single().totalwhitelabel;
     ViewData["posbal"] = ch.Single().totalposremain;
     ViewData["total"] = ch.Single().total;
+
+    ViewBag.AdminThemeColor = col;
+    ViewBag.AdminLogoImage = logoimage;
+    ViewBag.AdminLogoBgColor = logoBgColor;
+    ViewBag.RchReportCount = rchreportcount;
+    ViewBag.TotalHoldAmount = totalholdamount;
+    ViewBag.ComplantCount = complant;
+    ViewBag.DisputeCount = cont;
+    ViewBag.RenewalDate = renewaldate;
+    ViewBag.IpAddress = ipaddress;
+    ViewBag.MasterUser = masteruser;
+    ViewBag.DealerUser = dealeruser;
+    ViewBag.RetailerUser = retaileruser;
+    ViewBag.ApiUser = apiuser;
+    ViewBag.WhitelabelUser = whitelabeluser;
+    ViewBag.HasValidExpire = expire != null && DateTime.Now < expire.ExpireDate;
+    ViewBag.ExpireDate = (expire != null && DateTime.Now < expire.ExpireDate)
+        ? DB.Domain_Expiration.FirstOrDefault().ExpireDate.ToString("dd MMM yyy")
+        : "";
 }
 
 @{
@@ -1309,21 +1971,11 @@
 
 
 
-@*second-design*@ @*third-design*@ @*four-design*@ @*newfourdesign-admin*@ @*new-design*@ @*design-one*@ @* seven_design*@
-<body class="theme @activetheme">
-
-    <!-- Page Loader -->
-    <div class="page-loader-wrapper">
-        <div class="loader">
-            <center><img src="~/images/serachimg.gif" class="img-responsive" style="height:200px;width:200px;" /></center>
-
-        </div>
-    </div>
+<body class="theme saas-admin-ui @activetheme">
 
 
-    <!-- #END# Page Loader -->
-    <!-- Overlay For Sidebars -->
-    <div class="overlay"></div>
+
+    
     <!-- #END# Overlay For Sidebars -->
     <!-- Search Bar -->
     <div class="search-bar">
@@ -1337,1014 +1989,97 @@
     </div>
     <!-- #END# Search Bar -->
     <!----- top header-->
-    <!-- Top Bar -->
-    <nav class="navbar tmw-layoutht fullbodydycolorbg naw-none-fourdesign">
-
-        <header>
-            <div class="dongle_design">
-
-                <p>Website renewl  date is <h6> 08 Jul 2023 </h6> </p>
-                <p> web ip is 103.182.218.6  <h6>domin exp date 06 Jun 2026 </h6> </p>
-
-            </div>
-
-        </header>
-
-        <div class="container-fluid sevends_set">
-
-            <div class="navbar-header" style="padding:0px 0px;">
-                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
-                <a href="#" id="sidebar-open" class="bars"></a>
-
-                <span class="seven_themelicon">×</span>
-
-                <div class="four-toggle for-four-m">&#x2630;&nbsp;Our Menu</div>
-                <a href="~/ADMIN/Home/Dashboard">
-                    <center>
-                        @if (@logoimage == "")
-                        {
-                            <img src="~/Default_Img_Logo/Default_Header_Logo.svg" class="img-responsive" style="background-color:@logoBgColor;" />
-                        }
-                        else
-                        {
-
-                            <img src="@Url.Content("~/" + @logoimage)" class="img-responsive" style="background-color:@logoBgColor;" />
-                        }
-                    </center>
-                </a>
-
-                <div class="menu_bar">
-
-                    <div class="container1" onclick="myFunctionlayout(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="boder-clip">
-                <div class="pro">
-                    <a>
-                        <div class="bac">
-                            <img src="~/images/user-2.png" alt="My Profile" title="My Profile" style="width:15px;" />
-                        </div>
-                        <span style="color:white;">My Profile</span>
-                    </a>
-
-                </div>
-
-
-                <div class="profile_home">
-
-                    <div class="logout2">
-                        <a href="~/ADMIN/Home/Profile">
-                            <span>My Profile</span>
-                            <img src="~/images/310818.png" style="width: 20px; margin-left: 21px;" />
-                        </a>
-                    </div>
-                    <div class="logout2">
-                        @using (Html.BeginForm("LogOff", "Account", new { Area = "", id = "logoutForm" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="" title="Logout">
-
-
-                                <span style="margin: 0;">Logout</span>
-                                <img src="~/images/5665417.png" style="width: 20px; margin-left: 44px;" />
-                            </button>
-                        }
-
-                    </div>
-                </div>
-
-
-
-            </div>
-            
-
-
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-
-                <div class="seven_menu">
-                    <i class="fa fa-list-ul m_on-off" aria-hidden="true"></i>
-
-                    <div class="sevend_box">
-
-                        <input type="text" name="name" value="" placeholder="search..." />
-
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </div>
-
-                </div>
-                <div class="four-toggle for-four-l">&#x2630;&nbsp;Our Menu</div>
-
-                <ul class="nav navbar-nav navbar-right four-top-nav intro1" style="margin-left:-15px;width:auto;">
-
-                    <li class="list-group" style="margin-top:-11px;padding-left:11px; margin-bottom:-10px;">
-                        <a href="@Url.Action("More_Option", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Rch Failed success Report">
-                            <img src="~/images/more-1.png" class="stop" style="height: 27px;  position: relative;  width: 26px;" />
-                            <img src="~/images/9233368.png" class="four-image-nav-second secend1-image-nav" style="width: 30px; position: relative; top: 0px; left: 3px;" />
-                            <i class='fas fa-outdent fab1'></i>
-
-                        </a>
-
-                        <center><p style="color:white;font-size:11px;margin-right:-10px;">More Option</p></center>
-
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:11px; margin-bottom:-10px;">
-                        <a href="@Url.Action("APP_Option", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Rch Failed success Report">
-
-                            <img src="~/android.png" class="stop" style="height:27px;  position: relative;  width: 26px;" />
-                            <img src="~/android.png" class="four-image-nav-second secend1-image-nav" style="width: 30px; position: relative; top: 0px; left: 3px;" />
-                            <i class='fa fa-android fab1'></i>
-
-                        </a>
-
-                        <center><p style="color:white;font-size:11px;margin-right:-10px;">App Setting</p></center>
-
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:11px; margin-bottom:-10px;">
-                        <a href="@Url.Action("PANAadharVerificationReport", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Rch Failed success Report">
-
-                            <img src="~/AdminDesign/images/daybook-b.svg" class="stop" style="height:27px;  position: relative;  width: 26px;" />
-                            <img src="~/AdminDesign//images/daybook-b.svg" class="four-image-nav-second secend1-image-nav" style="width: 30px; position: relative; top: 0px; left: 3px;" />
-                            <i class='fa fa-android fab1'></i>
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:-10px;">PAN/Aadhar</p></center>
-
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="javascript:void(0);" id="vasbazaarofferalerts" class="btn btn-default btn-circle waves-effect waves-circle btn-circle-four waves-float pull-right dropdown-toggle">
-                            <img src="~/images/8005878.png" class="four-image-nav-second secend1-image-nav" style="width: 36px; position: relative; top: 0px; left: -4px; height: 28px;" />
-                            <img src="~/AdminDesign/images/vb-alert.svg" class="stop" style="height: 18px; margin-top: 4px; position: relative; left: -5px; width: 36px;" />
-                            <i class="fas fa-exclamation-triangle fab1"></i>
-
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:0px;">VB Alerts</p></center>
-
-                        <ul class="vastbazar-offers" style="margin:2px -175px 0px;">
-                            <li class="header-vastbazaar"><h2>Vastbazaar Alerts & Offers</h2></li>
-
-                            <li class="offers-show-vb">
-                                <div class="vastbazzar-content-offers">
-
-                                    <span class="date-vasbazzar">22-04-2021</span>
-
-                                    <div class="vasbazaar-important">
-                                        <strong>Important Offers</strong>
-                                    </div>
-
-                                    <div class="offersimage">
-                                        <img src="~/ashok-images/VB.png" />
-                                    </div>
-                                </div>
-
-                                <div class="vastbazzar-content-offers">
-
-                                    <span class="date-vasbazzar">22-04-2021</span>
-
-                                    <div class="vasbazaar-important">
-                                        <strong>Important Offers</strong>
-                                    </div>
-
-                                    <div class="offersimage">
-                                        <img src="~/ashok-images/VB.png" />
-                                    </div>
-                                </div>
-                                <div class="vastbazzar-content-offers">
-
-                                    <span class="date-vasbazzar">22-04-2021</span>
-
-                                    <div class="vasbazaar-important">
-                                        <strong>Important Offers</strong>
-                                    </div>
-
-                                    <div class="offersimage">
-                                        <img src="~/ashok-images/VB.png" />
-                                    </div>
-                                </div>
-
-                                @*______No-Offers_______*@
-
-                                <div class="vast-offer-no">
-                                    <strong>Sorry !</strong>
-                                    <span>No Offers & Alerts</span>
-
-                                </div>
-
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:10px; margin-bottom:-10px;">
-                        <a href="@Url.Action("Rch_Failed_success_Reports", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Rch Failed success Report">
-
-                            <i style="color: black; font-size: 20px; left: -1px; top: 3px; font-weight: 500; font-style: normal;">
-
-
-                                @if (Convert.ToDecimal(rchreportcount) != 0)
-                                {
-                                    <i style="font-style:normal;font-size:13px;">@rchreportcount</i>
-                                }
-                                else
-                                {
-
-                                    <i style="font-style:normal;">0</i>
-                                }
-
-                            </i>
-
-                            <i class="fab1" style="top: -3px; font-weight: 800; font-style: revert; ">
-
-
-                                @if (Convert.ToDecimal(rchreportcount) != 0)
-                                {
-                                    <i class="fab1" style="font-style:normal;font-size:13px;">@rchreportcount</i>
-                                }
-                                else
-                                {
-
-                                    <i class="fab1" style="font-style:normal;">0</i>
-                                }
-
-                            </i>
-                            <img src="~/images/file-save.png" class="four-image-nav-second four-image-ani secend1-image-nav" style="position: relative; top: 1px; left: -1px; width: 36px; margin: auto;" />
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:-6px;">Fail<i class="fas fa-play class-upianimation" style="font-size:9px;margin:2px;margin-top: 0px;" aria-hidden="true"></i>Succ</p></center>
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:11px; margin-bottom:-10px;">
-                        <a href="#" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Search User Info." data-toggle="modal" data-target="#ALLUSERSSHOW">
-
-                            <img src="~/images/find-user-male.png" class="four-image-nav-second secend1-image-nav" style="filter: invert(100%); width: 39px; top: -4px; position: relative; left: -4px; " />
-                            <img src="~/AdminDesign/images/search-users.svg" class="four-image-nav" style="height:20px;margin-top:4px;" />
-                            <i class="fa fa-search fab1"></i>
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:-10px;">Search User</p></center>
-                    </li>
-
-
-                    <li class="list-group" style="margin-top:-11px;padding-left:18px; margin-bottom:-10px;">
-                        <a href="@Url.Action("Micro_Atm_Unhold_Report", "Home")" class="btn btn-default btn-circle btn-circle-four waves-effect waves-circle waves-float pull-right" title="@totalholdamount">
-                            <i style="color: black; font-size: 20px; left: 1px; top: 0px; font-weight: 500; font-style: normal;">
-
-
-                                @if (Convert.ToDecimal(totalholdamount) != 0)
-                                {
-                                    <i style="font-style:normal;font-size:13px;"><img src="~/images/Hold Amount1.png" style="width:20px;" /></i>
-                                }
-
-                                else
-                                {
-                                    <i style="font-style:normal;">0</i>
-
-                                }
-
-
-
-
-                            </i>
-                            <i class="fab1" style="top: -3px; font-weight: 800; font-style: revert; ">
-
-
-                                @if (Convert.ToDecimal(totalholdamount) != 0)
-                                {
-                                    <i class="fab1" style="font-style:normal;font-size:13px;">@totalholdamount</i>
-                                }
-                                else
-                                {
-                                    <i class="fab1" style="font-style:normal;">0</i>
-
-                                }
-
-
-
-
-                            </i>
-
-
-                            <img src="~/AdminDesign/images/messengernav-four.svg" class="four-image-nav-second four-image-ani" />
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right: -3px;">Hold Amt</p></center>
-
-                    </li>
-
-
-
-                    <!--<li class="list-group" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-    <a href="javascript:void(0);" class="btn btn-default btn-circle waves-effect waves-circle btn-circle-four waves-float pull-right dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" title="Wallet Request's'">
-
-        <img src="~/AdminDesign/images/hold-adminimage.svg" class="four-image-nav" style="height:20px;margin-top:4px;" />
-
-    </a>
-
-    <center><p style="color:white;font-size:11px;margin-right:0px;">Unhold</p></center>
-
-    <ul class="dropdown-menu dropdown-menu-secondclass unhold-dropdownad" style="top:143%;margin:2px -175px 0px;">
-        <li class="header">WALLET REQUEST'S DETAILS</li>
-        <li class="body">
-            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
-                <ul class="menu custom-bank-name" style="overflow: hidden; width: auto; height: auto;">
-
-                    <li>
-                        <a href="@Url.Action("Micro_Atm_Unhold_Report", "Home")" class="waves-effect waves-block">
-                            <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                if (totalholdamount != 0)
-                                {
-                                    <i style="font-style:normal;font-size:13px;">@totalholdamount</i>
-                                }
-                                else
-                                {
-                                    <i style="font-style:normal;">0</i>
-                                }
-
-                            </div>
-                            <div class="menu-info" style="top:0px;">
-                                <h4>MicroATM hold Amount</h4>
-
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("MicroATM_Unhold_History", "Home")" class="waves-effect waves-block">
-                            <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                if (retaileruser != 0)
-                                {
-                                    <i style="font-style:normal;">0</i>
-                                }
-                                else
-                                {
-                                    <i style="font-style:normal;">0</i>
-                                }
-
-                            </div>
-                            <div class="menu-info" style="top:0px;">
-                                <h4>MicroATM Unhold Amount</h4>
-
-                            </div>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="@Url.Action("MicroATM_Purchase_MaxLimit", "Home")" class="waves-effect waves-block">
-                            <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                if (retaileruser != 0)
-                                {
-                                    <i style="font-style:normal;">0</i>
-                                }
-                                else
-                                {
-                                    <i style="font-style:normal;">0</i>
-                                }
-
-                            </div>
-                            <div class="menu-info" style="top:0px;">
-                                <h4>Set MicroATM Max Amount Limit</h4>
-
-                            </div>
-                        </a>
-                    </li>-->
-                    @*<li>
-            <a href="@Url.Action("Api_showpurchase","Home")" class="waves-effect waves-block">
-                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                    @if (apiuser != 0)
-                    {
-                        <i style="font-style:normal;">@apiuser</i>
-                    }
-                    else
-                    {
-                        <i style="font-style:normal;">0</i>
-                    }
-
-                </div>
-                <div class="menu-info" style="top:0px;">
-                    <h4>API User Wallet Request</h4>
-
-                </div>
-            </a>
-        </li>*@
-
-                    <!--</ul>
-                </div>
-            </li>
-        </ul>
-    </li>-->
-
-
-
-                    <li class="list-group" style="margin-top:-11px;padding-left:10px; margin-bottom:-10px;">
-                        <a href="#" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Api Remain balance" data-toggle="modal" data-target="#Api-bal">
-
-                            <img src="~/AdminDesign/images/api.svg" class="four-image-nav" style="height:20px;margin-top:4px;" />
-                            <img src="~/AdminDesign/images/api-nav-four.svg" class="four-image-nav-second" />
-                            <i class="fas fa-rupee-sign fab1"></i>
-
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:-7px;">API Balance</p></center>
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="#" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right btn-circle-four" title="Clear All Push Notification" data-toggle="modal" data-target="#show-notifaction" onclick="ReadAllNoticationdata()">
-                            <img src="~/images/reportimage/broom.svg" class="four-image-nav" style="height:20px;margin-top:4px;" />
-                            <i class="far fa-bell fab1"></i>
-                            <img src="~/AdminDesign/images/bell-nav-four.svg" class="four-image-nav-second four-image-ani" />
-                        </a>
-                        <center><p style="color:white;font-size:11px;margin-right:-7px;">Notification</p></center>
-                    </li>
-                    <li class="list-group" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="javascript:void(0);" class="btn btn-default btn-circle waves-effect waves-circle btn-circle-four waves-float pull-right dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true" title="Wallet Request's'">
-                            <i class="" style="color:black;font-size:20px;left:-1px;top:3px; font-weight:500; font-style:normal;">@ViewBag.purchasereq</i>
-                            <img src="~/AdminDesign/images/request-wallet-four.svg" class="four-image-nav-second" />
-                            <i class="fab fa-google-wallet fab1"></i>
-
-                        </a>
-                        <center><p style="color:white;font-size:11px;">Wallet-Q</p></center>
-
-
-                        <ul class="dropdown-menu dropdown-menu-secondclass" style="top:143%;margin:2px -175px 0px;">
-                            <li class="header">WALLET REQUEST'S DETAILS</li>
-                            <li class="body">
-                                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 254px;">
-                                    <ul class="menu custom-bank-name" style="overflow: hidden; width: auto; height: 254px;">
-                                        <li>
-                                            <a href="@Url.Action("ShowPurchase_master", "Home")" class="waves-effect waves-block">
-                                                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                                    @if (masteruser != 0)
-                                                    {
-                                                        <i style="font-style:normal;">@masteruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i style="font-style:normal;">0</i>
-                                                    }
-
-
-                                                    @if (masteruser != 0)
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">@masteruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">0</i>
-                                                    }
-
-                                                </div>
-                                                <div class="menu-info" style="top:6px;">
-                                                    <h4>M/D Wallet Request</h4>
-                                                    <p>
-                                                        Go to Details
-                                                    </p>
-                                                </div>
-                                            </a>
-
-
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("Dealer_showpurchase", "Home")" class="waves-effect waves-block">
-                                                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                                    @if (dealeruser != 0)
-                                                    {
-                                                        <i style="font-style:normal;">@dealeruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i style="font-style:normal;">0</i>
-                                                    }
-
-                                                    @if (dealeruser != 0)
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">@dealeruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">0</i>
-                                                    }
-                                                </div>
-                                                <div class="menu-info" style="top:6px;">
-                                                    <h4>Distributor Wallet Request</h4>
-                                                    <p>
-                                                        Go to Details
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("Retailer_showpurchase", "Home")" class="waves-effect waves-block">
-                                                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                                    @if (retaileruser != 0)
-                                                    {
-                                                        <i style="font-style:normal;">@retaileruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i style="font-style:normal;">0</i>
-                                                    }
-
-                                                    @if (retaileruser != 0)
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">@retaileruser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">0</i>
-                                                    }
-
-                                                </div>
-                                                <div class="menu-info" style="top:6px;">
-                                                    <h4>Retailer Wallet Request</h4>
-                                                    <p>
-                                                        Go to Details
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("Api_showpurchase", "Home")" class="waves-effect waves-block">
-                                                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                                    @if (apiuser != 0)
-                                                    {
-                                                        <i style="font-style:normal;">@apiuser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i style="font-style:normal;">0</i>
-                                                    }
-
-                                                    @if (apiuser != 0)
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">@apiuser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;">0</i>
-                                                    }
-                                                </div>
-                                                <div class="menu-info" style="top:6px;">
-                                                    <h4>API User Wallet Request</h4>
-                                                    <p>
-                                                        Go to Details
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("Show_Whitelabelpurchase", "Home")" class="waves-effect waves-block">
-                                                <div class="icon-circle " style="background:var(--main-bg-lcolor);">
-                                                    @if (whitelabeluser != 0)
-                                                    {
-                                                        <i style="font-style:normal;line-height:normal;position: relative;top: 3px;">@whitelabeluser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i style="font-style:normal;line-height:normal;position: relative;top: 3px;">0</i>
-                                                    }
-
-                                                    @if (whitelabeluser != 0)
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;line-height:normal;position: relative;top: 3px;">@whitelabeluser</i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fab1" style="font-style:normal;line-height:normal;position: relative;top: 3px;">0</i>
-                                                    }
-
-                                                </div>
-                                                <div class="menu-info" style="top:6px;">
-                                                    <h4>Whitelabel Wallet Request</h4>
-                                                    <p>
-                                                        Go to Details
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li class="list-group seven_dmenu" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="@Url.Action("sellrechargeoptList", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right" role="button" aria-expanded="true" title="Bank Wallet Transfer Req.">
-                            <i class="" style="color:black;font-size:20px;left:-1px;top:3px; font-weight:500; font-style:normal;">@ViewBag.Sellercomm</i>
-                            <img src="~/AdminDesign/images/user-acc-q-four.svg" class="four-image-nav-second" />
-                            <i class="fas fa-user-shield fab1"></i>
-                        </a>
-                        <center style="margin-right: -6px;"><p style="color:white;font-size:11px;">Sell Comm</p></center>
-
-
-                    </li>
-                    <li class="list-group seven_dmenu" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="@Url.Action("RetailerBnk", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right" role="button" aria-expanded="true" title="Bank Wallet Transfer Req.">
-                            <i class="" style="color:black;font-size:20px;left:-1px;top:3px; font-weight:500; font-style:normal;">@ViewBag.RetailerAddBank</i>
-                            <img src="~/AdminDesign/images/user-acc-q-four.svg" class="four-image-nav-second" />
-                            <i class="fab fa-facebook-messenger fab1"></i>
-
-
-                        </a>
-                        <center style="margin-right: -6px;"><p style="color:white;font-size:11px;">User A/C Q</p></center>
-
-
-                    </li>
-                    <li class="list-group seven_dmenu" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="@Url.Action("Complaint", "Home")" class="btn btn-default btn-circle btn-circle-four waves-effect waves-circle waves-float pull-right" title="All Complain's Request">
-                            <i class="" style="color: black; font-size: 20px; left: -1px; top: 3px; font-weight: 500; font-style: normal;">@complant</i>
-                            <img src="~/AdminDesign/images/messengernav-four.svg" class="four-image-nav-second four-image-ani" />
-                            <i class="far fa-comments fab1"></i>
-
-
-                        </a>
-                        <center><p style="color:white;font-size:11px;">Chat's</p></center>
-
-                    </li>
-                    <li class="list-group seven_dmenu" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                        <a href="@Url.Action("Dispute_list", "Home")" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right" title="Dispute" style="">
-                            <i style="color:black;font-size:20px;left:-1px;top:3px; font-weight:500; font-style:normal;">@cont</i>
-                            <i class="fab1" style="top: -3px; font-weight: 800; font-style: inherit; ">@cont</i>
-
-                            @*<i class="fa fa-circle-o-notch fa-spin" style="font-size:44px; color:#b4262b;position: absolute;top: -2px;left: -2px;"></i>*@
-                            <img src="~/AdminDesign/images/dispute-nav-four.svg" class="four-image-nav-second" />
-                        </a>
-                        <center><p style="color:white;font-size:11px;">Dispute's</p></center>
-
-                    </li>
-                    <div id="round_buttone" class="tow-round1">
-                        <div class="tooltip_1" style="display:none !important;">
-                            <h2>Website renewl  date is</h2>
-                            <h2 style="letter-spacing: 1px; font-size: 18px; font-weight: 900; animation: backgrounder 2s linear infinite !important; text-transform:uppercase;"> @renewaldate </h2>
-                            <h2> web ip is @ipaddress </h2>
-                            @if (expire != null && DateTime.Now < expire.ExpireDate)
-                            {
-                                expiredate = DB.Domain_Expiration.FirstOrDefault().ExpireDate.ToString("dd MMM yyy");
-                                <h2>domin exp date @expiredate </h2>
-                            }
-                            else
-                            {
-                                <h2>domin exp date <a style="letter-spacing: 1px; font-size: 18px; font-weight: 500; animation: backgrounder 2s linear infinite !important;" id="Domainexpiredate1"> </a>  </h2>
-                            }
-                        </div>
-
-                        <div class="card_web_renewal">
-                            <div class="section">
-                                <i class="fa-solid fa-calendar icon"></i>
-                                <div>
-                                    <span class="label">Renewal Date</span>
-                                    <span class="value green"> @renewaldate </span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="section">
-                                <i class="fa-solid fa-globe icon"></i>
-                                <div>
-                                    <span class="label">Web IP</span>
-                                    <span class="value"> @ipaddress </span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="section">
-                                <i class="fa-solid fa-lock icon"></i>
-                                <div>
-                                    <span class="label">Domain Expiry</span>
-                                    @if (expire != null && DateTime.Now < expire.ExpireDate)
-                                    {
-                                        expiredate = DB.Domain_Expiration.FirstOrDefault().ExpireDate.ToString("dd MMM yyy");
-                                        <span class="value"> @expiredate </span>
-                                    }
-                                    else
-                                    {
-                                        <span>domin exp date <a style="letter-spacing: 1px; font-size: 18px; font-weight: 500; animation: backgrounder 2s linear infinite !important;" id="Domainexpiredate1"> </a>  </span>
-                                    }
-
-                                </div>
-                            </div>
-                        </div>
-
-                      <li class="list-group" style=" margin: -7px 0px 0px 17px; width: 120px; position: relative;">
-                        @if (shoreneval != 0)
-                        {
-
-                            <button type="button" data-toggle="modal" data-target="#dayleft" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right four-day-left four-day-left-first rol-round teble animated-box in" style="padding: 0px; position:relative;">
-                                <table style="margin: 0px 4px 2px 4px; height: 44px;">
-                                    <tr style="border-bottom: 1px solid #fff;">
-                                        @*<td><p class="webd">Renewal <i class="far fa-clock" style="font-size: 8.5px; left: 0px;"></i>&nbsp;.</p></td>*@
-                                        <td style="float:left;"><a href="#" class="add-1" style="font-size: 15px !important; padding-left: 22px !important; font-weight: 600; " @*title="Renewal Date"*@ title="Click to Renewal">@renewaldate</a></td>
-                                    </tr>
-                                    <tr style="border-bottom: 1px solid #fff;">
-                                        <td><p class="webd" style="position: absolute; bottom: 16px; padding-left: 7px;">Web IP IS</p></td>
-                                        <td style="float:left;"><a href="#" style="position: absolute; top: 15px; right: 1.4rem;" class="add-1" title="Website IP">@ipaddress &</a></td>
-                                    </tr>
-                                    @if (expire != null && DateTime.Now < expire.ExpireDate)
-                                    {
-                                        expiredate = DB.Domain_Expiration.FirstOrDefault().ExpireDate.ToString("dd MMM yyy");
-                                        <tr>
-                                            <td><p class="webd" style="position: absolute; top: 35px;">Domain Exp At@*<i class="far fa-clock" style="font-size: 8.5px; left: 0px;"></i>*@@*&nbsp;...*@</p></td>
-                                            <td style="float:left;"><a href="#" class="add-1" style="padding-left: 0px !important; position: absolute; z-index: 999999; bottom: 6px; right: 1.5rem;" title="Domain">@expiredate</a></td>
-                                        </tr>
-                                    }
-                                    else
-                                    {
-                                        <tr>
-                                            <td><p class="webd">Domain <i class="far fa-clock" style="font-size: 8.5px; left: 0px;"></i>&nbsp;...</p></td>
-                                            <td style="float:left;"><a href="#" style="padding-left: 0px !important; position: absolute; z-index: 999999; bottom: 6px; right: 1.5rem;" id="Domainexpiredate" class="add-1" title="Domain"></a></td>
-                                        </tr>
-                                    }
-                                </table>
-                            </button>
-                            <center><p style="color: white; font-size: 11px; position: absolute; z-index: 9999999; top: 46px; right: 11px;">Renewal&nbsp;Date&nbsp;&&nbsp;Web&nbsp;Info</p></center>
-
-
-                            @*<button type="button" data-toggle="modal" data-target="#dayleft" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right four-day-left four-day-left-first rol-round" title="Renewal Date" style="padding: 0px;background-color: var(--main-bg-lcolor) !important;">
-                    <i class="day-left" style="color:white;font-size:20px;position:static;margin-left:-4px; font-weight:500; font-style:normal;">@shoreneval</i>
-                    <i class="material-icons" style="position: absolute;height: 41px; width:41px;top: 6px;left:12px;border: 2px solid #fff;border-radius: 50%;border-top: 2px solid var(--main-bg-lcolor);-webkit-animation: spin 2s linear infinite;animation: spin 2s linear infinite;"></i>
-                </button>
-                        <button type="button" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right" title="Renewal Date">
-                    <i class="day-left" style="color:black;font-size:20px;left:-3px;top:0px; font-weight:500; font-style:normal;">@shoreneval</i>
-                </button>
-                        <center><p style="color:white;font-size:11px;">Day-Left</p></center>*@
-                        }
-                        else
-                        {
-                            <button type="button" data-toggle="modal" data-target="#dayleft" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right four-day-left " title="Renewal Date">
-                                <i class="day-left" style="color:black;font-size:20px;left:0px;top:0px; font-weight:500; font-style:normal;">0</i>
-                            </button>
-                            @*<button type="button" class="btn btn-default btn-circle waves-effect waves-circle waves-float pull-right" title="Renewal Date">
-                    <i class="day-left" style="color:black;font-size:20px;left:-3px;top:-3px; font-weight:500; font-style:normal;">0</i>
-                </button>
-                        <center><p style="color:white;font-size:11px;">DayLeft</p></center>*@
-                        }
-                    </li>
-</div>
-
-            <li class="list-group left-day1" style="margin-top:-11px;padding-left:14px; margin-bottom:-10px;">
-                <a href="Javascript:void(0);" data-toggle="modal" data-target="#dayleft" class="btn btn-default btn-circle btn-circle-four waves-effect waves-circle waves-float pull-right" title="Day-Left">
-
-
-                    <strong><i class="fab1" style="top: -3px;">@shoreneval</i></strong>
-                    <strong><i class="sd-1" style="top: 4px; font-size: 14px;">@shoreneval</i></strong>
-
-                </a>
-                <center><p style="color:white;font-size:11px;">Day-Left</p></center>
-
-            </li>
-
-            <li class="list-group logout-four" style="padding-top:6px;padding-left:14px; margin-bottom:-10px;">
-                @using (Html.BeginForm("LogOff", "Account", new { Area = "", id = "logoutForm" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-default btn-circle tlc waves-effect waves-circle waves-float pull-right" title="Logout">
-                        <i class="material-icons four-image-nav" style="color:#fff;font-size:22px;left:-6px;font-weight:700;">power_settings_new</i>
-                        <img src="~/AdminDesign/images/logout-nav-four.svg" class="four-image-nav-second" />
-                        <i class="fas fa-power-off fab1"></i>
-
-                    </button>
-                }
-                <p style="color:white;font-size:11px;">Logout</p>
-            </li>
-
-
-
-
-
-
-            </ul>
-
-            
-
-
-
-
-        </div>
-        </div>
-    </nav>
+    @Html.Partial("_AdminTopbar")
    
 
 
     <section>
         <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar navbar fullbodydycolorbg">
+        <aside id="leftsidebar" class="sidebar admin-sidebar-shell" aria-label="Admin navigation">
 
-            @* seven design  *@
-            <div class="sevend_logoset">
-                <a href="~/ADMIN/Home/Dashboard">
-                    <center>
-                        @if (@logoimage == "")
-                        {
-                            <img src="~/Default_Img_Logo/Default_Header_Logo.svg" class="img-responsive" style="background-color:@logoBgColor;" />
-                        }
-                        else
-                        {
-
-                            <img src="@Url.Content("~/" + @logoimage)" class="img-responsive" style="background-color:@logoBgColor;" />
-
-                        }
-                    </center>
-                </a>
-            </div>
-            @* seven design end *@
-
-
-            <!-- #User Info -->
-            <!-- Menu -->
-            <div class="menu" id="custnav">
-                <ul class="list">
-                    <li class="active my-class my-class1" style="padding:8px 10px;">
+            <div class="menu admin-sidebar-nav saas-admin-sidebar" id="custnav">
+                <div class="admin-sidebar-mobile-head">
+                    <div class="admin-sidebar-mobile-brand">
+                        <i style="width: 61px;" class="fas fa-shield-halved" aria-hidden="true"></i>
+                        <span>@ViewBag.companyname</span>
+                    </div>
+                    <button type="button" class="admin-sidebar-close" id="admin-sidebar-close" aria-label="Close menu">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <ul class="list admin-sidebar-list">
+                    <li class="admin-sidebar-item">
                         <a href="~/ADMIN/Home/Dashboard">
-                            <div class="bac">
-                                <img src="~/AdminDesign/images/dashboard.svg" class="my-img1" style="width:21px;" />
-                                <img src="~/images/1991103.png" class="my-img" style="width: 24px;" />
-                                <i class="fa fa-th" aria-hidden="true"></i>
-
-
-                            </div>
-                            <span class="on_off" style="color:white;margin-left:10px;font-size:16px;">Dashboard</span>
+                            <i class="fas fa-gauge-high admin-sidebar-icon" aria-hidden="true"></i>
+                            <span class="on_off">Dashboard</span>
                         </a>
                     </li>
-                    <li class="active my-pro" style="padding: 8px 10px; border-top: 3px solid #fff;">
+                    <li class="admin-sidebar-item">
                         <a href="~/ADMIN/Home/Profile">
-                            <div class="bac">
-                                <img src="~/AdminDesign/images/files-and-folders.svg" style="width:22px;" />
-                            </div>
-                            <span style="color:white;margin-left:10px;">My Profile</span>
+                            <i class="fas fa-user admin-sidebar-icon" aria-hidden="true"></i>
+                            <span class="on_off">My Profile</span>
                         </a>
                     </li>
 
-                    <li class="my-class celik0">
-                        <a href="javascript:void(0);" class="llkj">
-                            <span class="on_off" style="margin-left:2px;">Important Trans. Reports</span>
+                    <li class="my-class celik0 admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+                        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+                            <i class="fas fa-chart-line admin-sidebar-icon" aria-hidden="true"></i>
+                            <span class="on_off">Trans. Reports</span>
                         </a>
-                        <ul class="account-menu hhu kkli celik">
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Operator_report_new", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-home" aria-hidden="true"></i> <img src="~/images/All_Utilities-1.png" class="my-img" style="width: 24px;" /><span class="on_off"> Prepaid&nbsp;&&nbsp;Utility</span> </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Money_transfer_Report", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-line-chart" aria-hidden="true"></i> <img src="~/images/financial-service.png" class="my-img" style="width: 30px;" /><span class="on_off"> Financial&nbsp;Services</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("TicketReport", "Air")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-plane" aria-hidden="true"></i> <img src="~/images/images.png" class="my-img" style="width: 23px;" /><span class="on_off"> Travel&nbsp;&&nbsp;Hotels </span>
-                                </a>
-                            </li>
-
-
-                            <li>
-                                <a class="pin-ped" href="~/ADMIN/Home/RadiantPrepay">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-shopping-cart" aria-hidden="true"></i> <img src="~/images/commerce-icon.png" class="my-img" style="width: 25px;" /><span class="on_off"> Radiant Prepay </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="~/ADMIN/Home/HoldAndLeanAmountReport">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-shopping-cart" aria-hidden="true"></i> <img src="~/images/commerce-icon.png" class="my-img" style="width: 25px;" /><span class="on_off"> Hold Amount Report </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="~/ADMIN/Home/RadiantCMSDeposit">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-shopping-cart" aria-hidden="true"></i> <img src="~/images/commerce-icon.png" class="my-img" style="width: 25px;" /><span class="on_off"> CMS Cash Deposit </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="~/ADMIN/Home/RadiantReferenceLocation">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-shopping-cart" aria-hidden="true"></i> <img src="~/images/commerce-icon.png" class="my-img" style="width: 25px;" /><span class="on_off"> Reference Location </span>
-                                </a>
-                            </li>
-
-
-
-                            <li>
-                                <a class="pin-ped" href="~/ADMIN/Home/EcommerceHistory">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-shopping-cart" aria-hidden="true"></i> <img src="~/images/commerce-icon.png" class="my-img" style="width: 25px;" /><span class="on_off"> Ecommerce </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("SecurityReport", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-lock" aria-hidden="true"></i> <img src="~/images/security-servicesic.png" class="my-img" style="width: 22px;" /><span class="on_off"> Security&nbsp;Services </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("WhatsappPurchase", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-whatsapp"></i><span class="on_off"> WhatsApp&nbsp;Sell </span> </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Giftcard_Report", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-gift" aria-hidden="true"></i> <img src="~/images/blue-gift-box.png" class="my-img" style="width: 21px;" /><span class="on_off"> Gift&nbsp;Card</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Prepaid_Card_report", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-credit-card-alt" aria-hidden="true"></i> <img src="~/images/blue-gift-box.png" class="my-img" style="width: 21px;" /><span class="on_off"> Prepaid&nbsp;Card</span>
-                                </a>
-                            </li>
-                        </ul>
-
-                    </li>
-                    <li class="my-class celik10">
-                        <a href="javascript:void(0);" class="llkj">
-                            <span class="on_off" style="margin-left:2px;">Wallet&nbsp;&&nbsp;Accounts Activity</span>
-                        </a>
-                        <ul class="account-menu hhu kklii2 celik1">
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Fund_transfer", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-university" aria-hidden="true"></i> <img src="~/images/1771213.png" class="my-img" style="width: 22px;" /><span class="on_off"> Fund Transfer</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Fund_User", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-users" aria-hidden="true"></i> <img src="~/images/5216520.png" class="my-img" style="width: 20px;" /> <span class="on_off"> Fund User<sup style="top: -5px;left: 2px;">2</sup>&nbsp;User</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("AutoFundtransferStatus", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-handshake-o" aria-hidden="true"></i> <img src="~/images/4041774.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Auto Fundtransfer<sup style="top: 8px;left: 2px;"></sup>&nbsp;</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("RedaintWalletTransfer", "Home")" style="font-size:12px;">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i>
-                                    <img src="~/images/9181081.png" class="my-img" style="width: 21px;" /> <span class="on_off">Redaint Wallet Transfer</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("WalletUnloadReport", "Home")" style="font-size:12px;">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-file-invoice-dollar" aria-hidden="true"></i> <img src="~/images/9181081.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Wallet Unload Report</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("retailersellgst", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i>  <i class="fa fa-money" aria-hidden="true"></i> <img src="~/images/7176657.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Invoices</span>
-                                </a>
-                            </li>
-
-                            
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("AccountOpeningReport", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-address-card-o" aria-hidden="true"></i> <img src="~/images/4751564.png" class="my-img" style="width: 21px;" /> <span class="on_off seventu1"> Account Opening Report</span> <span title=" Account Opening Report" class="on_off seventu2"> Ac. Opening Report</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("FinoCMSReport", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-id-card" aria-hidden="true"></i> <img src="~/images/2956537.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Fino CMS Report</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("airtelCMSReport", "Home")">
-                                    <i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-id-card" aria-hidden="true"></i> <img src="~/images/2956537.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Airtel CMS Report</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Gst_Report", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-signal" aria-hidden="true"></i> <img src="~/images/3257597.png" class="my-img" style="width: 21px;" /> <span class="on_off"> GST Report</span> </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="my-class celik20">
-                        <a href="javascript:void(0);" class="llkj">
-                            <span class="on_off" style="margin-left:2px;">UPI&nbsp;(QR)&nbsp;&&nbsp;Gateway&nbsp;Activity</span>
-                        </a>
-                        <ul class="account-menu hhu kklii2 celik2">
-                             <li>
-     <a class="pin-ped" href="@Url.Action("UPIAndGatewaySetting", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-qrcode" aria-hidden="true"></i> <img src="~/images/2043319.png" class="my-img" style="width: 21px;" /> <span class="on_off"> UPI/Gateway Setting</span> </a>
- </li>
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("UPICharges", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-qrcode" aria-hidden="true"></i> <img src="~/images/2043319.png" class="my-img" style="width: 21px;" /> <span class="on_off"> UPI&nbsp;Report</span> </a>
-                            </li>
-
-                            @*<li>
-                                    <a href="@Url.Action("Show_ManualUPI_REQ","Home")">ShowI&nbsp;UPI&nbsp;Request</a>
-                                </li>*@
-                            <li>
-                                <a class="pin-ped" href="@Url.Action("Pay_U_Gateway", "Home")"><i class="arrow-left fas fa-angle-right"></i> <i class="fa fa-unlock-alt" aria-hidden="true"></i> <img src="~/images/3051133.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Payment&nbsp;Gateway Report</span> </a>
-                            </li>
-
-
-                            @*<li>
-                                <a class="pin-ped" href="@Url.Action("PrintQr", "Home")"> <i class="fa fa-qrcode" aria-hidden="true"></i> <i class="arrow-left fas fa-angle-right"></i> <img src="~/images/3287203.png" class="my-img" style="width: 21px;" /> <span class="on_off"> Print&nbsp;QR&nbsp;Code</span> </a>
-                            </li>*@
-
-
+                        <ul class="account-menu hhu kkli celik admin-sidebar-sub">
+                            <li><a class="pin-ped" href="@Url.Action("Operator_report_new", "Home")"><span class="on_off">Prepaid &amp; Utility</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Money_transfer_Report", "Home")"><span class="on_off">Financial Services</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("TicketReport", "Air")"><span class="on_off">Travel &amp; Hotels</span></a></li>
+                            <li><a class="pin-ped" href="~/ADMIN/Home/RadiantPrepay"><span class="on_off">Radiant Prepay</span></a></li>
+                            <li><a class="pin-ped" href="~/ADMIN/Home/RadiantCMSDeposit"><span class="on_off">CMS Cash Deposit</span></a></li>
+                            <li><a class="pin-ped" href="~/ADMIN/Home/RadiantReferenceLocation"><span class="on_off">Reference Location</span></a></li>
+                            <li><a class="pin-ped" href="~/ADMIN/Home/EcommerceHistory"><span class="on_off">Ecommerce</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("SecurityReport", "Home")"><span class="on_off">Security Services</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("WhatsappPurchase", "Home")"><span class="on_off">WhatsApp Sell</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Giftcard_Report", "Home")"><span class="on_off">Gift Card</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Prepaid_Card_report", "Home")"><span class="on_off">Prepaid Card</span></a></li>
                         </ul>
                     </li>
 
+                    <li class="my-class celik10 admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+                        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+                            <i class="fas fa-wallet admin-sidebar-icon" aria-hidden="true"></i>
+                            <span class="on_off">Wallet &amp; Accounts Activity</span>
+                        </a>
+                        <ul class="account-menu hhu kklii2 celik1 admin-sidebar-sub">
+                            <li><a class="pin-ped" href="@Url.Action("Fund_transfer", "Home")"><span class="on_off">Fund Transfer</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Fund_User", "Home")"><span class="on_off">Fund User2 User</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("AutoFundtransferStatus", "Home")"><span class="on_off">Auto Fundtransfer</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("RedaintWalletTransfer", "Home")"><span class="on_off">Redaint Wallet Transfer</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("WalletUnloadReport", "Home")"><span class="on_off">Wallet Unload Report</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("retailersellgst", "Home")"><span class="on_off">Invoices</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("AccountOpeningReport", "Home")"><span class="on_off">Account Opening Report</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("FinoCMSReport", "Home")"><span class="on_off">Fino CMS Report</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("airtelCMSReport", "Home")"><span class="on_off">Airtel CMS Report</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("Gst_Report", "Home")"><span class="on_off">GST Report</span></a></li>
+                        </ul>
+                    </li>
 
-
-
-
+                    <li class="my-class celik20 admin-sidebar-item admin-sidebar-group admin-sidebar-open">
+                        <a href="javascript:void(0);" class="llkj" aria-expanded="true">
+                            <i class="fas fa-qrcode admin-sidebar-icon" aria-hidden="true"></i>
+                            <span class="on_off">UPI (QR) &amp; Gateway Activity</span>
+                        </a>
+                        <ul class="account-menu hhu kklii2 celik2 admin-sidebar-sub">
+                            <li><a class="pin-ped" href="@Url.Action("UPIAndGatewaySetting", "Home")"><span class="on_off">UPI/Gateway Setting</span></a></li>
+                            <li><a class="pin-ped" href="@Url.Action("UPICharges", "Home")"><span class="on_off">UPI Report</span></a></li>
+                            <li><a style="margin-bottom:100px;" class="pin-ped" href="@Url.Action("Pay_U_Gateway", "Home")"><span class="on_off">Payment Gateway Report</span></a></li>
+                        </ul>
+                    </li>
                 </ul>
-                <div class="legal">
-                    <div class="copyright" style="margin-top:-4px;color: #fff;">
-                        Copyright&nbsp;&nbsp;2019 - <span style="color: #fff;">@DateTime.Now.Year.ToString()</span>
+
+                <div class="legal admin-sidebar-legal">
+                    <div class="copyright">
+                        Copyright 2019 - <span>@DateTime.Now.Year</span>
                     </div>
                     <div class="copyright">
-                        <a href="javascript:void(0);" class="tmw-total-color-one" style="background:@col;">@comnyname1</a>
+                        <a href="javascript:void(0);" class="tmw-total-color-one" style="background: #1a1a1a;">@comnyname1</a>
                     </div>
-
                 </div>
             </div>
             <!-- #Menu -->
@@ -2362,8 +2097,8 @@
             <!-- Footer -->
             <!-- #Footer -->
         </aside>
-        <div class="third-footer fullbodydycolorbg">
-            <div class="copyrigh-third" style="color : #fff;">
+        <div class="third-footer fullbodydycolorbg" >
+            <div class="copyrigh-third" style="color : #fff;" >
                 Copyright&nbsp;&nbsp;2019 - <span style="color: #fff;">@DateTime.Now.Year.ToString()</span>
                 <span style="color: #fff;margin-left: 10px;">@comnyname1</span>
             </div>
@@ -2375,38 +2110,53 @@
 
     </section>
 
-    <div class="modal fund-tr-history  in" id="show-notifaction" tabindex="-1" role="dialog" style="display: none;">
-        <div class="modal-dialog" role="document" style="margin:0px;float:right;background: #f5f5f5;text-align:center;height:100vh;">
-            <h3 style="font-size:28px;">Do You Want Auto Read All The... </h3>
-            <h2 style="font-size:55px;">Web Notifaction</h2>
-            <img src="~/AdminDesign/images/notifaction.svg" />
-            <button class="fullbodydycolorbg" data-dismiss="modal" style="margin-top:20px;margin-right: 30px;padding:7px 15px;color:#fff;border:1px solid #bbb;margin-bottom:30px;" onclick="ReadAllNoticationdata()">Yes I Want</button>
-            <button data-dismiss="modal" style="margin-top:20px;padding:7px 15px;border:1px solid #bbb;margin-bottom:30px;">Cancel</button>
+    <div class="modal fade saas-admin-modal saas-admin-modal-drawer fund-tr-history" id="show-notifaction" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="saas-admin-modal-header accent-amber">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-bell" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title">Web Notification</h4>
+                            <span class="saas-admin-modal-subtitle">Mark all push notifications as read?</span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body">
+                    <div class="saas-admin-notify-hero">
+                        <h3>Do you want to auto-read all notifications?</h3>
+                        <h2>Web Notification</h2>
+                        <img src="~/AdminDesign/images/notifaction.svg" alt="Notification" />
+                    </div>
+                </div>
+                <div class="saas-admin-modal-footer">
+                    <button type="button" class="saas-admin-btn saas-admin-btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="saas-admin-btn saas-admin-btn-success" data-dismiss="modal" onclick="ReadAllNoticationdata()">Yes, mark all read</button>
+                </div>
+            </div>
         </div>
-
     </div>
 
 
 
 
 
-    <div id="ALLUSERSSHOW" class="modal fade  in allusershow-admin-modal" tabindex="-1" role="dialog" style="display: none; padding-right: 17px;">
-        <div class="modal-dialog" role="document" style="float: right;margin: 0px;width:622px;background: #fff;">
-            <div class="modal-content" style="box-shadow: none !important;">
-                <div class="modal-header" style="background:#eae9e9;padding: 10px 15px;margin: 15px 15px 0 15px;border: 0 !important;">
-                    <button type="button" class="btn waves-effect" id="closebtn" data-dismiss="modal" style="float: right; line-height: 18px; margin-top: 5px; border: 2px solid var(--main-bg-lcolor); color: var(--main-bg-lcolor); background: #fff; font-size: 30px; padding: 14px 7px; margin-bottom: 4px;">
-                        <span style="color: var(--main-bg-lcolor);font-size: 30px;margin: 0;position: relative;top: -11px;">x</span>
-                    </button>
-                    <h4 class="modal-title" id="defaultModalLabel" style="float:left;font-size:24px;">
-                        @*<img src="/AdminDesign/images/workflow.svg" style="width:40px;margin-right:10px;float:left;">*@
-                        <strong style="font-size:25px;float: left;margin-top: -2px;line-height: normal;">
-                            Search Particular Users Information
-                            <span style="font-size:13px;display:block;">You can filter by Email id and mobile number</span>
-                        </strong>
-                    </h4>
+    <div id="ALLUSERSSHOW" class="modal fade saas-admin-modal saas-admin-modal-drawer allusershow-admin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="saas-admin-modal-header">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title" id="defaultModalLabel">Search User Information</h4>
+                            <span class="saas-admin-modal-subtitle">Filter by registered email or mobile number</span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" id="closebtn" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <div class="modal-body" style="margin-top:0px;background:#f5f5f5;float: left;width: 100%;padding: 15px;">
-                    <div class="col-md-12 user-info-header" style="">
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
+                    <div class="user-info-header">
                         @using (Ajax.BeginForm("FinALLEMailidandmobile", "Home",
 new AjaxOptions
 {
@@ -2414,31 +2164,15 @@ InsertionMode = InsertionMode.Replace,
 LoadingElementId = "outer-loader",
 UpdateTargetId = "tbllayoutpage",
 OnSuccess = "ONSUCCESSGETDATA"
-
-
-                // LoadingElementId = "progress"
 }))
                         {
-                            <input type="text" required class="form-control" id="txtmobileemail" name="txtmobileemail" placeholder="Please Enter Registered Email And Mobile No." />
-                            <input type="submit" id="btnemailfind" class="btn btn-success" Search />
+                            <div class="saas-admin-modal-search-row">
+                                <input type="text" required class="form-control" id="txtmobileemail" name="txtmobileemail" placeholder="Enter email or mobile number" />
+                                <button type="submit" id="btnemailfind" class="saas-admin-btn saas-admin-btn-primary">Search</button>
+                            </div>
                         }
                     </div>
-                    @*<table class="table table-responsive table-bordered user-info-detial" style="">
-                            <thead>
-                                <tr>
-                                    <th>rolename</th>
-
-                                    <th>FarmName</th>
-                                    <th>Names</th>
-                                    <th>Mobile</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                </tr>
-
-                            </thead>
-                            <tbody id="tbllayoutpage">
-                            </tbody>
-                        </table>*@
+                    
 
 
 
@@ -2479,185 +2213,167 @@ OnSuccess = "ONSUCCESSGETDATA"
 
 
 
-    <div class="modal fund-tr-history-one  in" id="Api-bal" tabindex="-1" role="dialog" style="display: none;">
-        <div class="modal-dialog" role="document" style="margin:0px;float:right;background: #f5f5f5;text-align:center;height:100vh;">
-            <div class="modal-header" style="background:#fff;">
-                <img class="apiblanceshow-image-res" src="~/AdminDesign/images/api.svg" style="width:35px;float:left;margin-right:30px;" />
-                <h4 class="modal-title apiblance-title-text" id="defaultModalLabel" style="float: left;font-size: 26px;letter-spacing: 2px;">API's Live Balance</h4>
-                <button type="button" class="btn waves-effect apiblance-close-bitton" id="closebtn" data-dismiss="modal" style="width:auto;float:right;padding: 0px;background: transparent;font-size: 14px;line-height: 18px;margin-top: -5px;margin-right: 10px;border:1px solid var(--border-color);padding: 0px 20px;position: relative;top: 7px;">
-                    ⛌
-                </button>
-            </div>
-            @{
-                var list = DB.api_name.Where(aa => aa.viewbill != null && aa.viewbill != "").ToList();
-                int sr = 1;
-                foreach (var item in list)
-                {
-                    <div class="modal-body" style="width:100%;float:left;">
-                        <div class="api-model-top">
-                            <div class="api-model-top-one">
-                                <span>@sr</span>
-                            </div>
-                            <div class="api-model-top-two">
-                                <p>API NAME</p>
-                                <p style="font-size: 18px; font-weight: 800;">@item.apiname</p>
-                            </div>
-                            <div class="api-model-top-three">
-                                <button id="@item.apiname" onclick="getbalance('@item.apiname')" class="btnssl">
-                                    Get Balance
-                                </button>
-                            </div>
+    <div class="modal fade saas-admin-modal saas-admin-modal-drawer fund-tr-history-one" id="Api-bal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="saas-admin-modal-header accent-violet">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><img class="apiblanceshow-image-res" src="~/AdminDesign/images/api.svg" alt="" style="width:22px;height:22px;filter:brightness(0) invert(1);" /></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title apiblance-title-text" id="defaultModalLabel">API Live Balance</h4>
+                            <span class="saas-admin-modal-subtitle">Fetch remaining balance per API</span>
                         </div>
                     </div>
-                    sr = sr + 1;
-                }
-            }
+                    <button type="button" class="saas-admin-modal-close apiblance-close-bitton" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
+                    @{
+                        var list = DB.api_name.Where(aa => aa.viewbill != null && aa.viewbill != "").ToList();
+                        int sr = 1;
+                        foreach (var item in list)
+                        {
+                            <div class="api-model-top">
+                                <div class="api-model-top-one">
+                                    <span>@sr</span>
+                                </div>
+                                <div class="api-model-top-two">
+                                    <p>API Name</p>
+                                    <p>@item.apiname</p>
+                                </div>
+                                <div class="api-model-top-three">
+                                    <button type="button" id="@item.apiname" onclick="getbalance('@item.apiname')" class="btnssl">Get Balance</button>
+                                </div>
+                            </div>
+                            sr = sr + 1;
+                        }
+                    }
+                </div>
+            </div>
         </div>
     </div>
     @*Day left model*@
-    <div id="dayleft" class="modal fade " tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document" style="float: right;margin: 0px;width:900px;">
+    <div id="dayleft" class="modal fade saas-admin-modal saas-admin-modal-drawer saas-renewal-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header" style="background:#bbb;padding: 10px 15px;">
-                    <h4 class="modal-title" id="defaultModalLabel" style="float:left;font-size:24px;">
-                        <img src="~/AdminDesign/images/workflow.svg" style="width:40px;margin-right:10px;float:left;" /><strong style="font-size:25px;float: left;margin-top: -2px;line-height: normal;">Website&nbsp;Renewal<span style="font-size:13px;display:block;">Supporting&nbsp;Service&nbsp;Management</span></strong>
-                    </h4>
-                    @*<div class="website-qrcodeclass" style="background:#fff;float: left;padding: 5px 10px;margin-left: 115px;border: 1px solid #000;">
-                            <img src="~/AdminDesign/images/qr-code-scan.svg" style="width:29px;" />
-                            <strong style="font-size: 22px;position: relative;top: 2px;margin-left: 5px;">
-                                <button onclick="scannpay()" style="background-color:transparent;border-color:transparent;"> Scan&nbsp;&&nbsp;Pay</button>
-
-                            </strong>
-                        </div>*@
-
-                    <button type="button" class="btn waves-effect" id="closebtn" data-dismiss="modal" style="width:auto;float:right;padding: 0px;background: transparent;font-size: 14px;line-height: 18px;margin-top: -5px;margin-right: 10px;border:2px solid var(--main-bg-lcolor);padding: 0px 20px;color: var(--main-bg-lcolor);background:#fff;
-padding: 19px 15px;font-size: 30px;margin-top: 1px;">
-                        <span style="color: var(--main-bg-lcolor);font-size: 30px;margin: 0;position: relative;top: -11px;">x</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="margin-top:0px;background:#f5f5f5;min-height: 325px;">
-                    <div class="col-md-12" style="padding:0;">
-                        <div class="col-md-12 modalbutton-show modalbutton-show-second modalnewclass-fourdesi" style="padding:0;">
-                            <button onclick="showdayleftinfo()" class="btn btn-default">WEBSITE&nbsp;RENEWAL</button>
-                            <button onclick="ssldatashow('SSL')" class="btn btn-default">SSL&nbsp;Web</button>
-                            <button onclick="ssldatashow('APPSSL')" class="btn btn-default">SSL&nbsp;App</button>
-                            <button onclick="emailShow()" class="btn btn-default">BUSINESS&nbsp;EMAIL</button>
-                            <button onclick="smsShow()" class="btn btn-default">SMS&nbsp;PACK</button>
-                            <button onclick="whatsappShow()" class="btn btn-default">WHATSAPP&nbsp;PACK</button>
-                            <button onclick="upiShow()" class="btn btn-default">UPI&nbsp;PACK</button>
-                            <button onclick="whiteShow()" class="btn btn-default">WHITE&nbsp;LABEL</button>
-                            <button onclick="mposShow()" class="btn btn-default" style="position: relative; padding-top: 10px; padding-left: 2px; font-size: 11px;">
-                                <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="width: 19px; position: relative; top: -1px;" />Token<span class="upmicroatm">IRCTC AGENT</span>
-                            </button>
-                            <button onclick="microatmShow()" class="btn btn-default" style="position: relative; padding-top: 13px; font-size: 11px;">MICRO&nbsp;ATM<span class="upmicroatm">VM 30</span></button>
+                <div class="saas-admin-modal-header saas-renewal-header accent-renewal">
+                    <div class="saas-admin-modal-head-main">
+                        <span class="saas-admin-modal-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></span>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title" id="defaultModalLabel">Website Renewal</h4>
+                            <span class="saas-admin-modal-subtitle">Manage renewal, SSL, messaging packs &amp; add-on services</span>
                         </div>
-
                     </div>
-                    <div id="scan_show">
-                        <div class="first-form" style="padding-right:2px;">
+                    <button type="button" class="saas-admin-modal-close" id="closebtn" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
+                    <div class="saas-renewal-tabs-wrap">
+                    <nav class="saas-renewal-tabs modalbutton-show modalbutton-show-second modalnewclass-fourdesi" role="tablist" aria-label="Renewal services">
+                        <button type="button" class="saas-renewal-tab btn btn-default active" onclick="scannpay()"><i class="fas fa-barcode" aria-hidden="true"></i><span class="saas-renewal-tab-label">Scan &amp; Pay</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="showdayleftinfo()"><i class="fas fa-globe-americas" aria-hidden="true"></i><span class="saas-renewal-tab-label">Website Renewal</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="ssldatashow('SSL')"><i class="fas fa-lock" aria-hidden="true"></i><span class="saas-renewal-tab-label">SSL Web</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="ssldatashow('APPSSL')"><i class="fas fa-mobile-alt" aria-hidden="true"></i><span class="saas-renewal-tab-label">SSL App</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="emailShow()"><i class="fas fa-envelope" aria-hidden="true"></i><span class="saas-renewal-tab-label">Business Email</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="smsShow()"><i class="fas fa-comment-sms" aria-hidden="true"></i><span class="saas-renewal-tab-label">SMS Pack</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="whatsappShow()"><i class="fab fa-whatsapp" aria-hidden="true"></i><span class="saas-renewal-tab-label">WhatsApp Pack</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="upiShow()"><i class="fas fa-qrcode" aria-hidden="true"></i><span class="saas-renewal-tab-label">UPI Pack</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default" onclick="whiteShow()"><i class="fas fa-tags" aria-hidden="true"></i><span class="saas-renewal-tab-label">White Label</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default saas-renewal-tab--badge" onclick="mposShow()"><img src="~/MainFrontDesign/images/irctclogo-admin.png" alt="" class="saas-renewal-tab-img" /><span class="saas-renewal-tab-label">IRCTC Token</span><span class="upmicroatm saas-renewal-badge">IRCTC AGENT</span></button>
+                        <button type="button" class="saas-renewal-tab btn btn-default saas-renewal-tab--badge" onclick="microatmShow()"><i class="fas fa-credit-card" aria-hidden="true"></i><span class="saas-renewal-tab-label">Micro ATM</span><span class="upmicroatm saas-renewal-badge">VM 30</span></button>
+                    </nav>
+                    </div>
+                    <div class="saas-renewal-panels">
+                    <div id="scan_show" class="saas-renewal-pane">
+                        <div class="saas-renewal-scan-card">
+                            <p class="saas-renewal-scan-notice"><i class="fas fa-info-circle" aria-hidden="true"></i> This QR code is only for balance update in your vastbazaar.com API account.</p>
                             <div class="first-form-bot">
-                                <div id="genrateupi" class="form-bot-inner" style="width: 100%;float: left;text-align: left;">
-                                    <div class="genrateupi-left" style="width:45%;float:left;">
-                                        <h2 style="font-size: 13px;font-weight: 500;color: #000;text-align: justify;padding: 8px 8px;text-transform: uppercase;line-height: 26px;margin-top: 10px;">"This QR code will only be used for balance update in the vastbazaar.com API Account."</h2>
-                                        <div class="genrateupi-left-in" style=" border: 1px solid #ccc;padding: 0px 15px;padding-bottom: 25px;background: #fff;margin-top: 28px;">
-                                            <label style="margin-top: 20px;color: 000;font-weight: 400;">Enter Purchse Amount<span style="color: red;">*</span></label>
-                                            <input id="genrateamt" type="number" class="form-control" placeholder="" required style="width: 100%;background: #ffff95;border-color: #ccc !important; -moz-appearance: textfield !important;" />
-                                            <small id="scan-input-required" class="text-danger" style="margin-top: 11px;display: block;"></small>
+                                <div id="genrateupi" class="form-bot-inner">
+                                    <div class="genrateupi-left">
+                                        <div class="genrateupi-left-in">
+                                            <label class="saas-renewal-field-label" for="genrateamt">Enter purchase amount <span class="required">*</span></label>
+                                            <input id="genrateamt" type="number" class="form-control" placeholder="e.g. 5000" required />
+                                            <small id="scan-input-required" class="text-danger"></small>
                                         </div>
                                     </div>
-                                    <div class="genrateupi-right" style="width: 30%; float: right; height: 225px; width: 225px; background: #fff; text-align: center; display: flex; flex-wrap: wrap; align-items: center;">
-                                        <div class="" style="border: 5px solid; width: 80%; margin: auto">
-                                            <input type="button" class="btn btn-default" value="Genrate" onclick="genrateQR()" style="font-size: 30px;width: 100%;height: auto;font-weight: 700;text-transform: uppercase;border: 0px; margin-bottom: -15px;padding-top: 15px;" />
-                                            <input type="button" class="btn btn-default" value="QR" onclick="genrateQR()" style="font-size: 85px;width: 100%;height: auto;font-weight: 700;text-transform: uppercase;border: 0px;padding: 0;" />
-                                        </div>
+                                    <div class="genrateupi-right saas-renewal-qr-btn">
+                                        <button type="button" class="saas-renewal-qr-trigger" onclick="genrateQR()">
+                                            <i class="fas fa-qrcode" aria-hidden="true"></i>
+                                            <span>Generate QR</span>
+                                        </button>
                                     </div>
                                 </div>
-                                <div id="showqr" class="form-bot-inner" style="display:none;width: auto;float: right;position: absolute;bottom: 35px;right: 25px;">
-                                    <img id="qrcode" src="" style="height: 225px;width: 225px;" />
+                                <div id="showqr" class="saas-renewal-qr-result" style="display:none;">
+                                    <img id="qrcode" src="" alt="Payment QR code" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="website_show" style="display:none;">
-                        <div class="first-form" style="padding-right:2px;">
-                            <div class="first-form-head" style="border: 1px solid #bbb;margin-top: 13px;padding:5px 8px;">
-
-                                <div class="due-date" style="margin-left:0;">
+                    <div id="website_show" class="saas-renewal-pane" style="display:none;">
+                        <div class="first-form">
+                            <div class="saas-renewal-toolbar first-form-head">
+                                <div class="due-date">
                                     <span>
-                                        <p style="font-size:10px;">Due</p>
+                                        <p>Due</p>
                                         <p>Date</p>
                                     </span>
-                                    <input id="duedatetxt" type="text" readonly style="width:80% !important" />
+                                    <input id="duedatetxt" type="text" readonly />
                                 </div>
                                 <div class="form-head-button">
-                                    <div class="onoffswitch onoffswitch-scan" style="float:left;margin-right: 5px;border: 0px;width: 110px;" id="masterref">
-                                        <button id="autowebcheck" class="custom-off" onclick="autostscheck()"
-                                                style="border: 1px solid var(--border-color); padding: 0px 10px; margin-right: 5px;
-                                             height: 30px;color: #555;">
-                                            Auto Renew
-                                        </button>
+                                    <div class="onoffswitch onoffswitch-scan" id="masterref">
+                                        <button type="button" id="autowebcheck" class="custom-off" onclick="autostscheck()">Auto Renew</button>
                                     </div>
-                                    @*<div class="onoffswitch" style="float:left;margin-right: 5px;border: 0px;border-left: 1px solid var(--border-color); width: 110px;" id="masterref">
-                            <button class="change-class costom-on" id="masterotpoff" onclick="RoleWiseOTP('master','Y')" style="border: 1px solid var(--border-color); padding: 0px 10px; margin-right: 5px; height: 30px;color: #555;border-left: 0px;">Auto Renew</button>
-                        </div>*@
-
-                                    <button class="form-head-check">
+                                    <button type="button" class="form-head-check">
                                         <input type="checkbox" id="websitecheck" checked="checked" />
                                         <label for="websitecheck">GST Invoice</label>
                                     </button>
-                                    <button class="more-info-one">
-                                        more info
-                                    </button>
+                                    <button type="button" class="more-info-one">More info</button>
                                 </div>
                             </div>
-                            <div id="webpaymentnotallow" class="first-form-bot">
-                                <label style="display: block; font-size: 72px; font-weight: 700; color: #f09d3a;">Sorry !</label>
-                                <label id="txtwebmsg" style="color:#333;"></label>
-
+                            <div id="webpaymentnotallow" class="saas-renewal-empty first-form-bot">
+                                <span class="saas-renewal-empty-icon" aria-hidden="true">⚠</span>
+                                <label>Sorry!</label>
+                                <label id="txtwebmsg"></label>
                             </div>
-                            <div id="webpayment" class="first-form-bot">
-                                <div class="form-bot-inner" style="text-align:left;">
-                                    <button onclick="onclickweb1()">
-                                        <img src="~/AdminDesign/images/server.svg" style="height: 60px;" />
-                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                            <span style="color: #000;line-height: 20px;font-size: 26px;">1-Month Plan</span>
-                                        </p>
-                                        @*<p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;">Website Server Payment</p>*@
-                                        <span style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;">Data BackUp</span>
+                            <div id="webpayment" class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner">
+                                    <button type="button" onclick="onclickweb1()">
+                                        <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
+                                        <p class="saas-renewal-plan-title">1-Month Plan</p>
+                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
                                         <span id="ndays" style="display:none;"></span>
-                                        <span class="noofdays" style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;font-weight:bold"></span>
-                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="website1"></label>/-</p>
+                                        <span class="noofdays"></span>
+                                        <div class="saas-renewal-plan-price first-month">
+                                            <span class="saas-renewal-plan-price-label">Net Amount</span>
+                                            <span class="saas-renewal-plan-amount">Rs <label id="website1"></label>/-</span>
+                                        </div>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner">
-                                    <button onclick="onclickweb2()">
-                                        <img src="~/AdminDesign/images/server.svg" style="height: 60px;" />
-                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                            <span style="color: #000;line-height: 20px;font-size: 26px;">2-Months Plan</span>
-                                        </p>
-                                        @*<p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;">Website Server Payment</p>*@
-                                        <span style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;">Data BackUp</span>
-                                        <span class="noofdays" style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;font-weight:bold;"></span>
-                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="website2"></label>/-</p>
-
+                                <div class="saas-renewal-plan-card saas-renewal-plan-card--featured form-bot-inner">
+                                    <button type="button" onclick="onclickweb2()">
+                                        <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
+                                        <p class="saas-renewal-plan-title">2-Months Plan</p>
+                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
+                                        <span class="noofdays"></span>
+                                        <div class="saas-renewal-plan-price first-month">
+                                            <span class="saas-renewal-plan-price-label">Net Amount</span>
+                                            <span class="saas-renewal-plan-amount">Rs <label id="website2"></label>/-</span>
+                                        </div>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner" style="text-align:right;">
-                                    <button onclick="onclickweb3()">
-                                        <img src="~/AdminDesign/images/server.svg" style="height: 60px;" />
-                                        <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                            <span style="color: #000;line-height: 20px;font-size: 26px;">3-Months Plan</span>
-                                        </p>
-                                        @*<p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;">Website Server Payment</p>*@
-                                        <span style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;">Data BackUp</span>
-                                        <span class="noofdays" style="color: var(--main-bg-rcolor);font-size: 14px;margin-top: 10px;font-weight:bold;"></span>
-                                        <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="website3"></label>/-</p>
-
+                                <div class="saas-renewal-plan-card form-bot-inner">
+                                    <button type="button" onclick="onclickweb3()">
+                                        <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
+                                        <p class="saas-renewal-plan-title">3-Months Plan</p>
+                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
+                                        <span class="noofdays"></span>
+                                        <div class="saas-renewal-plan-price first-month">
+                                            <span class="saas-renewal-plan-price-label">Net Amount</span>
+                                            <span class="saas-renewal-plan-amount">Rs <label id="website3"></label>/-</span>
+                                        </div>
                                     </button>
                                 </div>
                             </div>
-                            <div>
-                                <button class="btn btn-default" onclick="ShowPlaninfo()"> Show Other Plan </button>
+                            <div class="saas-renewal-footer-actions">
+                                <button type="button" class="saas-renewal-btn-outline btn btn-default" onclick="ShowPlaninfo()"><i class="fas fa-th-list" aria-hidden="true"></i> Show other plans</button>
                             </div>
                         </div>
                         <div id="otherdays1" style="display:none;">
@@ -2706,7 +2422,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                 <li>If your website does not pay the server fee on time, the website will go into sleep mode and if the website is on sleep mode for more than 5 days, it will be removed on a permanent basis.</li>
                             </ul>
                         </div>
-                        <div id="website1qr" class="first-form-button" style="display:none;margin-bottom:13px;">
+                        <div id="website1qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
                             <div class="first-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="qramt1"></label>/-</p>
@@ -2728,7 +2444,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                 </div>
                             </div>
                         </div>
-                        <div id="website2qr" class="first-form-button" style="display:none;margin-bottom:13px;">
+                        <div id="website2qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
                             <div class="first-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="qramt2"></label>/-</p>
@@ -2750,7 +2466,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                 </div>
                             </div>
                         </div>
-                        <div id="website3qr" class="first-form-button" style="display:none;margin-bottom:13px;">
+                        <div id="website3qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
                             <div class="first-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="qramt3"></label>/-</p>
@@ -3564,13 +3280,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                             <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
                                 <h3>IRCTC Agent Token</h3>
 
-                                @*<div class="due-date" style="margin-left: 0px;">
-                        <span>
-                            <p style="font-size:10px;">Remain</p>
-                            <p>SMS</p>
-                        </span>
-                        <input type="text" />
-                    </div>*@
+                               
                                 <div class="form-head-button">
                                     <button class="form-head-check">
                                         <input type="checkbox" id="mposcheck" checked readonly="readonly" disabled />
@@ -3586,79 +3296,11 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                             </div>
 
                             <div id="irctcshowdatatable" class="first-form-bot">
-                                @*<div class="form-bot-inner-second" style="text-align:left;">
-                        <button onclick="irctc1()">
-
-                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">10</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc1"></label> Rupees Per Token</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
-
-                        </button>
-                    </div>*@
-                                @*<div class="form-bot-inner-second">
-                        <button onclick="irctc1()">
-                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="irctc12" style="color: #000;line-height: 20px;font-size: 26px;">50</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc2"></label> Rupees Per Token</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
-
-                        </button>
-                    </div>*@
-                                @*<div class="form-bot-inner-second" style="text-align:right;">
-                        <button onclick="irctc1()">
-                            <img src="~/MainFrontDesign/images/irctclogo-admin.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="irctc11" style="color: #000;line-height: 20px;font-size: 26px;">100</span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stirctc3"></label> Rupees Per Token</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
-
-                        </button>
-                    </div>*@
+                                
 
                             </div>
 
-                            @*<div class="first-form-bot">
-                    <div class="form-bot-inner-second" style="text-align:left;">
-                        <button onclick="onclickmpos1()">
-                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="mpost1" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Token</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="1stmposprice"></label> Rupees Per Device</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stmpospricet1"></label>/-</p>
-
-                        </button>
-                    </div>
-                    <div class="form-bot-inner-second">
-                        <button onclick="onclickmpos2()">
-                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="mpost2" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="2ndmposprice"></label> Rupees Per Device</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndmpospricet2"></label>/-</p>
-
-                        </button>
-                    </div>
-                    <div class="form-bot-inner-second" style="text-align:right;">
-                        <button onclick="onclickmpos3()">
-                            <img src="~/AdminDesign/images/Mposs.png" style="height: 60px;" />
-                            <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
-                                <span id="mpost3" style="color: #000;line-height: 20px;font-size: 26px;"></span><span style="color: #000;line-height: 20px;font-size: 26px;">-Devices</span>
-                            </p>
-                            <p style="color: var(--main-bg-rcolor);text-transform:uppercase;font-size: 14px;margin-top: 10px;"><label id="3rdmposprice"></label> Rupees Per Device</p>
-                            <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="3rdmpospricet3"></label>/-</p>
-
-                        </button>
-                    </div>
-
-                </div>*@
+                           
                         </div>
                         <div class="second-form-on" style="display:none;">
                             <div class="second-form-close">&#10006;</div>
@@ -3682,59 +3324,17 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                                     <button onclick="otherpayment('IRCTC','dfds')">GO</button>
                                     <button onclick="otherpayment('IRCTC','sdfsd')">To Pay</button>
                                 </div>
-                                @*<div class="comfirsmclasscss" id="irctc20" style="width:41%;float:right;height:149px;background:#fff;">
-                        <button onclick="otherpayment('IRCTC','20')">GO</button>
-                        <button onclick="otherpayment('IRCTC','20')">To Pay</button>
-                    </div>
-                    <div class="comfirsmclasscss"  id="irctc50"  style="width:41%;float:right;height:149px;background:#fff;">
-                        <button onclick="otherpayment('IRCTC','50')">GO</button>
-                        <button onclick="otherpayment('IRCTC','50')">To Pay</button>
-                    </div>*@
+                              
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        @*<div id="mpos2qr" class="second-form-button" style="display:none;">
-                <div class="second-form-close-button">&#10006;</div>
-                <div class="first-form-button-left">
-                    <p>Net Amount - <label id="mposamt2"></label>/-</p>
-                    <p>Gst IN - <label id="mposgstamt2"></label>/-</p>
-                    <p>Total Amount - <label id="mpostotalamt2"></label>/-</p>
-                </div>
-                <div class="first-form-button-right">
-                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                        <button onclick="otherpayment('MPOS','2')">GO</button>
-                        <button onclick="otherpayment('MPOS','2')">To Pay</button>
-                    </div>
-                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
-                </div>
-            </div>
-            <div id="mpos3qr" class="second-form-button" style="display:none;">
-                <div class="second-form-close-button">&#10006;</div>
-                <div class="first-form-button-left">
-                    <p>Net Amount - <label id="mposamt3"></label>/-</p>
-                    <p>Gst IN - <label id="mposgstamt3"></label>/-</p>
-                    <p>Total Amount - <label id="mpostotalamt3"></label>/-</p>
-                </div>
-                <div class="first-form-button-right">
-                    <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                        <button onclick="otherpayment('MPOS','3')">GO</button>
-                        <button onclick="otherpayment('MPOS','3')">To Pay</button>
-                    </div>
-                    <label class="lblotherpayment" style=" margin-top: 59px;"></label>
-                </div>
-            </div>*@
+                        
                     </div>
                     <div id="Microatm_show" style="display:none;">
                         <div class="second-form">
                             <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
                                 <h3>Micro ATM Price</h3>
-                                @*<div class="due-date" style="margin-left: 0px;">
-                        <span>
-                            <p style="font-size:10px;">Remain</p>
-                            <p>SMS</p>
-                        </span>
-                        <input type="text" />
-                    </div>*@
+                                
                                 <div class="form-head-button form-head-button-mictoatm">
 
                                     <button class="form-head-check addclassmicroatm">
@@ -3867,6 +3467,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3883,7 +3484,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
              url: '@Url.Action("getapibal","Home")',
                  data: { apinm: apinm},
                  success: function (data) {
-                     $('#' + apinm).text("₹ "+ data);
+                     $('#' + apinm).text("? "+ data);
                 }
             });
         }
@@ -4205,7 +3806,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
                 var value1 = $('#qramt2').text();
                 var gst = parseFloat(value1) * 18 / 100;
                 var total = parseFloat(value1) + parseFloat(gst);
-                $('#`').text(gst);
+                $('#qrgst2').text(gst);
                 $('#qrtotal2').text(total);
             }
 
@@ -5854,7 +5455,10 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
     <script src="~/Swalalert/datatablejquery.js"></script>
     <!-- Bootstrap Core Js -->
     <script src="~/AdminDesign/plugins/bootstrap/js/bootstrap.js"></script>
-
+    <script src="~/MainFrontDesign/js/admin-modal-fix.js"></script>
+    <script src="~/MainFrontDesign/js/admin-more-option-modal.js"></script>
+    <script src="~/MainFrontDesign/js/admin-settings-otp-modal.js"></script>
+    <script src="~/MainFrontDesign/js/admin-renewal-modal.js"></script>
 
     <!-- Autosize Plugin Js -->
     <script src="~/AdminDesign/plugins/autosize/autosize.js"></script>
@@ -5900,6 +5504,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
     <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
     <script src="~/ClanderCss/bootstrap-datepicker.min.js"></script>
+    <script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
     <script src="~/ClanderCss/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
@@ -6023,9 +5628,69 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
     <script>
         var currentRelUrl = window.location.pathname;
-        var navNode = $("#leftsidebar .hhu li a[href$='" + currentRelUrl + "']").addClass("activee");
+        $("#leftsidebar .admin-sidebar-list > li > a[href$='" + currentRelUrl + "'], #leftsidebar .hhu li a[href$='" + currentRelUrl + "']").addClass("activee");
+    </script>
 
+    <script>
+        (function ($) {
+            function normalizeAdminHref(href) {
+                return (href || "")
+                    .replace(/^~\//, "/")
+                    .replace(/^https?:\/\/[^/]+/i, "")
+                    .replace(/\?.*$/, "")
+                    .replace(/#.*$/, "")
+                    .replace(/\/+$/, "")
+                    .toLowerCase();
+            }
 
+            function initAdminSidebarAccordion() {
+                var $sidebar = $("#leftsidebar.admin-sidebar-shell");
+                if (!$sidebar.length) {
+                    return;
+                }
+
+                var $groups = $sidebar.find(".admin-sidebar-group");
+                var currentPath = normalizeAdminHref(window.location.pathname);
+
+                $groups.each(function () {
+                    var $group = $(this);
+                    var $trigger = $group.children(".llkj");
+                    var $submenu = $group.children(".admin-sidebar-sub");
+
+                    $group.addClass("admin-sidebar-open");
+                    $submenu.show();
+                    $trigger.attr("aria-expanded", "true");
+
+                    $submenu.find("a[href]").each(function () {
+                        var linkPath = normalizeAdminHref($(this).attr("href"));
+                        if (linkPath && (currentPath === linkPath || currentPath.indexOf(linkPath) !== -1)) {
+                            $(this).addClass("activee");
+                        }
+                    });
+                });
+
+                $groups.children(".llkj").off("click.adminSidebar").on("click.adminSidebar", function (event) {
+                    event.preventDefault();
+
+                    var $trigger = $(this);
+                    var $group = $trigger.closest(".admin-sidebar-group");
+                    var $submenu = $group.children(".admin-sidebar-sub");
+                    var isOpen = $group.hasClass("admin-sidebar-open");
+
+                    if (isOpen) {
+                        $group.removeClass("admin-sidebar-open");
+                        $submenu.slideUp(260);
+                        $trigger.attr("aria-expanded", "false");
+                    } else {
+                        $group.addClass("admin-sidebar-open");
+                        $submenu.slideDown(260);
+                        $trigger.attr("aria-expanded", "true");
+                    }
+                });
+            }
+
+            $(initAdminSidebarAccordion);
+        })(jQuery);
     </script>
 
     <script>
@@ -6199,7 +5864,7 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
 
     <script>
-        $('.modalbutton-show button').on('click', function () {
+        $('#dayleft .modalbutton-show button, #dayleft .saas-renewal-tab').on('click', function () {
             $(this).addClass('active').siblings().removeClass('active');
         });
     </script>
@@ -6228,11 +5893,201 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
 
     <script>
-        $("#sidebar-open").click(function () {
-            $("#leftsidebar").toggleClass('me-left');
-        });
+        (function () {
+            var $body = $("body");
+            var $sidebar = $("#leftsidebar");
+            var $overlay = $(".overlay");
+            var $topMenu = $("#navbar-collapse");
+            var $topMenuHost = $("#admin-top-header");
+            var $topMenuBtn = $("#admin-topmenu-open");
+            var topMenuMoved = false;
 
+            function isMobileLayout() {
+                return window.matchMedia("(max-width: 1199px)").matches;
+            }
 
+            function mountMobileTopMenu() {
+                if (!$topMenu.length) {
+                    return;
+                }
+
+                if (isMobileLayout()) {
+                    if (!topMenuMoved) {
+                        $topMenu.appendTo($body);
+                        topMenuMoved = true;
+                    }
+                } else if (topMenuMoved && $topMenuHost.length) {
+                    $topMenu.appendTo($topMenuHost.find(".admin-header-row").first());
+                    topMenuMoved = false;
+                }
+            }
+
+            function syncTopMenuPanelState() {
+                mountMobileTopMenu();
+
+                if (!$topMenu.length) {
+                    return;
+                }
+
+                $topMenu.removeClass("collapse collapsing navbar-collapse show");
+
+                if (isMobileLayout()) {
+                    $topMenu.removeAttr("style");
+                    if ($body.hasClass("admin-topmenu-open")) {
+                        $topMenu.attr("aria-hidden", "false");
+                        $topMenuBtn.attr("aria-expanded", "true");
+                    } else {
+                        $topMenu.attr("aria-hidden", "true");
+                        $topMenuBtn.attr("aria-expanded", "false");
+                    }
+                } else {
+                    $body.removeClass("admin-topmenu-open");
+                    $topMenu.attr("aria-hidden", "false");
+                    $topMenuBtn.attr("aria-expanded", "false");
+                    $topMenu.css({
+                        display: "flex",
+                        visibility: "visible",
+                        height: "auto",
+                        opacity: 1
+                    });
+                }
+            }
+
+            window.closeAdminSidebar = function () {
+                $sidebar.removeClass("me-left admin-sidebar-visible");
+                $body.removeClass("saas-sidebar-collapsed admin-sidebar-open");
+                if (!$body.hasClass("admin-topmenu-open")) {
+                    $body.removeClass("overlay-open");
+                }
+            };
+
+            window.openAdminSidebar = function () {
+                closeAdminTopMenu();
+                $sidebar.addClass("me-left admin-sidebar-visible");
+                $body.addClass("saas-sidebar-collapsed admin-sidebar-open overlay-open");
+            };
+
+            function toggleAdminSidebar() {
+                if ($sidebar.hasClass("me-left")) closeAdminSidebar();
+                else openAdminSidebar();
+            }
+
+            window.closeAdminTopMenu = function () {
+                $body.removeClass("admin-topmenu-open");
+                $topMenuBtn.attr("aria-expanded", "false");
+                if ($topMenu.length) {
+                    $topMenu.attr("aria-hidden", "true");
+                }
+                if (!$body.hasClass("admin-sidebar-open")) {
+                    $body.removeClass("overlay-open");
+                }
+                syncTopMenuPanelState();
+            };
+
+            window.openAdminTopMenu = function () {
+                closeAdminSidebar();
+                mountMobileTopMenu();
+                $body.addClass("admin-topmenu-open overlay-open");
+                $topMenuBtn.attr("aria-expanded", "true");
+                if ($topMenu.length) {
+                    $topMenu.attr("aria-hidden", "false");
+                }
+                syncTopMenuPanelState();
+            };
+
+            function toggleAdminTopMenu() {
+                if ($body.hasClass("admin-topmenu-open")) closeAdminTopMenu();
+                else openAdminTopMenu();
+            }
+
+            window.showAdminLoader = function () {
+                $("#admin-global-loader, #loader").addClass("is-active").css("display", "flex").attr("aria-hidden", "false");
+            };
+
+            window.hideAdminLoader = function () {
+                $("#admin-global-loader, #loader").removeClass("is-active").css("display", "none").attr("aria-hidden", "true");
+            };
+
+            $(document).on("click", "#sidebar-open", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (isMobileLayout()) toggleAdminSidebar();
+                else $body.toggleClass("saas-sidebar-collapsed");
+            });
+
+            $(document).on("click", "#admin-topmenu-open", function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!isMobileLayout()) {
+                    return;
+                }
+                toggleAdminTopMenu();
+            });
+
+            $(document).on("click", "#admin-sidebar-close", function (e) {
+                e.preventDefault();
+                closeAdminSidebar();
+            });
+
+            $(document).on("click", "#admin-topmenu-close", function (e) {
+                e.preventDefault();
+                closeAdminTopMenu();
+            });
+
+            $overlay.on("click", function () {
+                if (isMobileLayout()) {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+            });
+
+            $sidebar.on("click", ".admin-sidebar-item > a, .admin-sidebar-sub a", function () {
+                if (isMobileLayout() && $(this).attr("href") && $(this).attr("href").indexOf("javascript") !== 0) {
+                    closeAdminSidebar();
+                }
+            });
+
+            $(document).on("click", "#navbar-collapse .admin-header-actions a[href], #navbar-collapse .admin-header-actions button[type='submit']", function () {
+                var href = $(this).attr("href");
+                var dataToggle = $(this).attr("data-toggle");
+                if (isMobileLayout() && href && href.indexOf("javascript") !== 0 && !$(this).hasClass("dropdown-toggle") && dataToggle !== "dropdown") {
+                    closeAdminTopMenu();
+                }
+            });
+
+            $(document).on("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+            });
+
+            $(window).on("resize", function () {
+                if (!isMobileLayout()) {
+                    closeAdminSidebar();
+                    closeAdminTopMenu();
+                }
+                syncTopMenuPanelState();
+            });
+
+            window.syncAdminTopMenuPanel = syncTopMenuPanelState;
+
+            $(function () {
+                if (!$body.hasClass("saas-admin-ui")) {
+                    return;
+                }
+
+                $(".bars").off("click");
+
+                if ($.AdminBSB && $.AdminBSB.leftSideBar) {
+                    $.AdminBSB.leftSideBar.isOpen = function () {
+                        return $body.hasClass("admin-sidebar-open");
+                    };
+                }
+
+                syncTopMenuPanelState();
+            });
+        })();
     </script>
     <script>
 
@@ -6345,13 +6200,13 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
 
     <script>
         $('.four-toggle').click(function () {
-            $(this).text($(this).text() == '✕ Back To Page' ? '☰ Our Menu' : '✕ Back To Page');
+            $(this).text($(this).text() == '? Back To Page' ? '? Our Menu' : '? Back To Page');
             $('section.content').toggleClass('section-active');
             $('.four-design-nav').toggleClass('four-nav-active');
         });
 
         $('.nav-mobile-four').click(function () {
-            $(this).find('span').text($(this).find('span').text() == '−' ? '+' : '−');
+            $(this).find('span').text($(this).find('span').text() == '-' ? '+' : '-');
             $(this).next('.nav-mobile-four-or').toggle();
         });
     </script>
@@ -6613,5 +6468,86 @@ padding: 19px 15px;font-size: 30px;margin-top: 1px;">
     </script>
     @*   seven design  menubar   *@
     <script src="~/MainFrontDesign/js/saas-admin-modernizer.js"></script>
+    <script>
+        (function ($) {
+            function cleanupAdminSidebarIcons() {
+                var $sidebar = $("#leftsidebar.admin-sidebar-shell");
+                if (!$sidebar.length) {
+                    return;
+                }
+
+                $sidebar.find(".saas-nav-icon, .saas-menu-caret").remove();
+                $sidebar.find("a").each(function () {
+                    this.setAttribute("data-saas-icon-ready", "true");
+                });
+
+                $sidebar.find(".llkj").each(function () {
+                    var $link = $(this);
+                    var $carets = $link.find(".admin-sidebar-caret");
+                    if ($carets.length > 1) {
+                        $carets.slice(1).remove();
+                    }
+                });
+            }
+
+            function syncAdminHeaderHeight() {
+                var header = document.getElementById("admin-top-header");
+                if (!header) {
+                    return;
+                }
+
+                var height = Math.ceil(header.getBoundingClientRect().height);
+                document.documentElement.style.setProperty("--admin-header-height", height + "px");
+            }
+
+            function cleanupAdminTopbarIcons() {
+                var $topbar = $(".admin-header-v2, .admin-top-header");
+                if (!$topbar.length) {
+                    return;
+                }
+
+                var $navCollapse = $("#navbar-collapse");
+                $navCollapse.removeClass("collapse collapsing navbar-collapse show");
+                if (window.syncAdminTopMenuPanel) {
+                    window.syncAdminTopMenuPanel();
+                } else if (window.matchMedia("(min-width: 1200px)").matches) {
+                    $navCollapse.css({
+                        display: "flex",
+                        visibility: "visible",
+                        height: "auto",
+                        opacity: 1
+                    });
+                } else {
+                    $navCollapse.removeAttr("style");
+                }
+
+                $topbar.find("img.four-image-nav, img.four-image-nav-second, img.secend1-image-nav, .fab1, .material-icons.four-image-nav").remove();
+                $topbar.find(".admin-topbar-btn").each(function () {
+                    var $btn = $(this);
+                    var $icons = $btn.find(".admin-topbar-icon");
+                    if ($icons.length > 1) {
+                        $icons.slice(1).remove();
+                    }
+                    $btn.find(".admin-topbar-label").show();
+                });
+            }
+
+            $(function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            });
+            $(window).on("load resize", function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            });
+            setTimeout(function () {
+                cleanupAdminSidebarIcons();
+                cleanupAdminTopbarIcons();
+                syncAdminHeaderHeight();
+            }, 150);
+        })(jQuery);
+    </script>
 </body>
 </html>

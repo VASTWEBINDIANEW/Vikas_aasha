@@ -1,275 +1,151 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.MicroATMPurchase_Max_Purchase_Limit
-
+@using Vastwebmulti.Areas.ADMIN.Models
+@using System.Linq
 @{
-    ViewBag.Title = "MicroATM_Purchase_MaxLimit";
+    ViewBag.Title = "Micro ATM Purchase Max Limit";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var chargeList = Model != null && Model.microchargelist != null ? Model.microchargelist : new List<RetailerMicroATMPurchaseamountlist>();
 }
 
-<style>
-    .table-responsive {
-        width: 100%;float: left;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    section.content {
-        background-color: white;margin: 75px 0px 0 175px;-moz-transition: 0.5s;
-        -o-transition: 0.5s;-webkit-transition: 0.5s;transition: 0.5s;
-    }
-    .retailerList-Pagenwead .col-md-12 {width: auto;float: left;}
-    .retailerList-Pagenwead .col-md-12 .col-md-3 {width: auto;float: left;padding: 0;}
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;height: 200px;display: inline-block;overflow: hidden;background: transparent;
-    }
-    .ldio-zdyd6mf6t5 {
-        width: 100%;height: 100%;position: relative;transform: translateZ(0) scale(1);
-        backface-visibility: hidden;transform-origin: 0 0;
-    }
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;border-width: 4px;border-style: solid;opacity: 1;
-        border-radius: 50%;animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-    .ldio-zdyd6mf6t5 div:nth-child(1) {border-color: #e90c59}
-    .ldio-zdyd6mf6t5 div:nth-child(2) {border-color: #46dff0;animation-delay: -0.5s;}
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;height: 200px;display: inline-block;overflow: hidden;background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;height: 100%;position: relative;transform: translateZ(0) scale(1);backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {box-sizing: content-box;}
-
-    .microatm-maxlimttable table tbody tr td {
-        padding: 8px 5px;
-    }
-    * {
-        outline: none !important;
-    }
-    .microatmmaxlimt-select .select2 .select2-selection__arrow {
-        display: block !important;
-    }
-
-    @@media screen and (max-width:1366px){
-        .microatm-maxlimt-btnedit, .microatm-maxlimt-btnsave {
-            right: 26% !important;
-            padding-left: 0;
-        }
-        .microatm-maxlimt-btnsave {
-            padding-right:15px;
-        }
-    }
-
-    @@media screen and (max-width:766px){
-        .microatmmaxlimt-select, .microatm-maxlimt-btnsearch, .microatm-maxlimt-btnedit {
-            position: static !important;float: left;width: auto !important;padding-right: 5px;margin-bottom: 15px;
-        }
-    }
-
-</style>
-
-<section class="content retailerList_Page retailerList-Pagenwead maxlimitmicropage-third">
-
-    <div id="mictiatmsave-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 0px;left: 15px;bottom: 0px;top: 0px;display:none;z-index: 9999;width: 100%;">
-        <div id="loader" style="position: absolute; right: 41%; top: 50%; transform: translate(0%, -50%);">
-            <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-                <div class="ldio-zdyd6mf6t5">
-                    <div></div><div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="pageheader-admin-microthird pageheader-unhold-third" style="width:100%;float:left;">
-
-        <div class="page-header-third page-header-third-microatm maxlimitmicro-third" style="width:100%;float:left;">
-
-            <div class="bread-same-all-page" style="padding-left:15px;">
-                <ul style="float:left;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Micro_Atm_hold Amount set
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-
+<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-micro-maxlimit-page">
     <div class="container-fluid">
-        <div class="col-md-12 microatm-maxlimt-btnedit" style="position: absolute; right: 24%; top: 75px;">
-            @*<select id="sadasdds" name="sadasdds" class="custom-select">
-                    <option>sfdsdfd</option>
-                    <option>asdsdfsd</option>
-                </select>*@ 
 
-
-            <div class="col-md-3">
-                <div class="btneditclassshow">
-                    <input type="button" id="btnedit" value="EDIT" class="btn btn-warning" style="background: #f0f0f0 !important; color: #555;" />
-                </div>
-                @*<div class="btnsaveshow" style="display:none;">
-                        <input type="button" id="btnsave" value="Save" class="btn btn-success" />
-                    </div>*@
-            </div>
-        </div>
-        <div style="display:none;">
-            @using (Html.BeginForm("MicroATM_Purchase_MaxLimit", "Home", FormMethod.Post))
-
-            {
-                <input type="hidden" id="hdRetailer_ID" name="hdRetailer_ID" value="" />
-                <input type="submit" id="btnsubmitsearch" name="btnsubmitsearch" />
-            }
-
-
-
-
+        <div id="mictiatmsave-loader" class="saas-micro-loader" style="display:none;" aria-hidden="true">
+            <div class="saas-micro-loader-inner"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
         </div>
 
-        @using (Ajax.BeginForm("Update_MicroATM_Limit", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "success1", OnFailure = "failed1", UpdateTargetId = "remcash" }))
+        @using (Html.BeginForm("MicroATM_Purchase_MaxLimit", "Home", FormMethod.Post, new { id = "microMaxLimitSearchForm", style = "display:none;" }))
         {
-            <div class="col-md-6 microatmmaxlimt-select" style=" width: 20%; padding-left: 0;position: absolute;right: 70px;">
-                @Html.DropDownListFor(m => m.Retailer_ID, Model.retailer_lists, "Please select", new { @class = "for-select2" })
-            </div>
-            <div class="col-md-3 microatm-maxlimt-btnsearch" style="width: auto; float: left; padding-left: 0; padding-right: 0;    position: absolute;right: 15px;">
-                <input type="button" id="btnsearch" name="btnsearch" value="Search" style=" border: 1px solid #ddd; padding: 5px 10px;" />
-            </div>
-            <div class="btnsaveshowclass microatm-maxlimt-btnsave" style="display:none;width: auto;position: absolute;right: 25%;">
-                <input type="submit" id="btnsave" value="Save" class="btn btn-success" style="background: #f0f0f0 !important; color: #555;" />
-            </div>
-            <div id="remcash" class="table-responsive microatm-maxlimttable">
-                <table class="table table-bordered" style="background:#f5f5f5;">
-                    <tr>
-                        <th>
-                            Users
-                        </th>
-                        <th>
-                            Card Type
-                        </th>
-                        <th>
-                            Max Amount limit
-                        </th>
+            <input type="hidden" id="hdRetailer_ID" name="hdRetailer_ID" value="" />
+            <input type="submit" id="btnsubmitsearch" name="btnsubmitsearch" />
+        }
 
-                    </tr>
+        @using (Ajax.BeginForm("Update_MicroATM_Limit", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "microMaxLimitSaveSuccess", OnFailure = "microMaxLimitSaveFailed", UpdateTargetId = "remcash" }))
+        {
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-micro-toolbar-unified" style=" margin: 0 0 20px !important;">
+                <ol class="saas-acc-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li><a href="@Url.Action("Micro_Atm_Unhold_Report", "Home")">Micro ATM Unhold</a></li>
+                    <li>Max purchase limit</li>
+                </ol>
+                <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
+                    <div class="saas-acc-report-date-controls saas-pan-date-controls saas-micro-toolbar-actions">
+                        <div class="saas-micro-maxlimit-select">
+                            @Html.DropDownListFor(m => m.Retailer_ID, Model.retailer_lists, "Select retailer", new { @class = "for-select2 form-control", id = "Retailer_ID" })
+                        </div>
+                        <button type="button" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn" id="btnsearch">
+                            <i class="fas fa-search" aria-hidden="true"></i> Search
+                        </button>
+                        <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnedit">
+                            <i class="fas fa-edit" aria-hidden="true"></i> Edit
+                        </button>
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn btnsaveshowclass" id="btnsave" style="display:none;">
+                            <i class="fas fa-save" aria-hidden="true"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                    @if (Model.microchargelist != null)
-                    {
-                        <tbody id="tbodyshowretailer" style="border-top:0px;">
-                            @foreach (var item in Model.microchargelist)
+            <div class="saas-acc-table-card" id="remcash">
+                <div class="saas-acc-table-card-head">
+                    <h3>Max amount limits</h3>
+                    <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @chargeList.Count card types</span>
+                </div>
+                <div class="saas-acc-table-wrap table-responsive">
+                    <table class="table saas-acc-table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Card type</th>
+                                <th class="text-right">Max amount limit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyshowretailer">
+                            @if (chargeList.Count == 0)
                             {
                                 <tr>
-                                    <td>@item.userid</td>
-                                    <td>@item.Card_type</td>
-                                    <td>@item.maxamount</td>
+                                    <td colspan="3" class="saas-pan-empty-cell">Select a retailer and search.</td>
                                 </tr>
                             }
-                        </tbody>
-                        <tbody id="tbodyeditretailer" style="display:none;border-top:0px;">
-                            @for (int i = 0; i < Model.microchargelist.Count; i++)
+                            else
                             {
-
-                                <tr>
-                                    @*//   @Html.HiddenFor(a => a.holdlist[i].id)*@
-                                    @Html.HiddenFor(a => a.microchargelist[i].idno)
-                                    @Html.HiddenFor(a => a.microchargelist[i].userinfo)
-                                    <td>
-
-                                        @Html.DisplayFor(a => a.microchargelist[i].userid)
-                                    </td>
-                                    <td>
-
+                                foreach (var item in chargeList)
+                                {
+                                    <tr>
+                                        <td data-label="User">@item.userid</td>
+                                        <td data-label="Card">@item.Card_type</td>
+                                        <td data-label="Limit" class="text-right saas-pan-amount">@item.maxamount</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                        @if (chargeList.Count > 0)
+                        {
+                            <tbody id="tbodyeditretailer" style="display:none;">
+                                @for (int i = 0; i < chargeList.Count; i++)
+                                {
+                                    <tr>
+                                        @Html.HiddenFor(a => a.microchargelist[i].idno)
+                                        @Html.HiddenFor(a => a.microchargelist[i].userinfo)
                                         @Html.HiddenFor(a => a.microchargelist[i].Card_type)
-                                        @Html.DisplayFor(a => a.microchargelist[i].Card_type)
-                                    </td>
-                                    <td>
-                                        @Html.EditorFor(a => a.microchargelist[i].maxamount, new { htmlAttributes = new { @style = "width:100%;width: auto;float: left;padding: 5px 5px;border: 1px solid #aaa4a4; " } })
-                                        @Html.ValidationMessageFor(a => a.microchargelist[i].maxamount)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    }
-
-
-                </table>
-
+                                        <td data-label="User">@Html.DisplayFor(a => a.microchargelist[i].userid)</td>
+                                        <td data-label="Card">@Html.DisplayFor(a => a.microchargelist[i].Card_type)</td>
+                                        <td data-label="Limit">
+                                            @Html.EditorFor(a => a.microchargelist[i].maxamount, new { htmlAttributes = new { @class = "form-control saas-micro-limit-input" } })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+                </div>
             </div>
         }
     </div>
 </section>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script>
-
-        $('.for-select2').select2();
-
-</script>
-
-
-<script>
-    $('#btnsave').click(function () {
-        $('#mictiatmsave-loader').show();
+    $(function () {
+        if ($.fn.select2) {
+            $('.for-select2').select2({ width: '180px', minimumResultsForSearch: 5 });
+        }
     });
-</script>
 
-<script>
-    $('#btnedit').click(function () {
-        
+    $('#btnsearch').on('click', function () {
+        $('#hdRetailer_ID').val($('#Retailer_ID').val() || '');
+        $('#btnsubmitsearch').click();
+    });
+
+    $('#btnedit').on('click', function () {
         $('#tbodyeditretailer').show();
         $('#tbodyshowretailer').hide();
-     
-        $('.btnsaveshowclass').show();
-        $('.btneditclassshow').hide();
+        $('#btnsave').show();
+        $('#btnedit').hide();
+    });
 
+    $('#btnsave').on('click', function () {
+        $('#mictiatmsave-loader').show();
+    });
 
-    })
-
-    $('#btnsearch').click(function () {
-        
-        $('#hdRetailer_ID').val($('#Retailer_ID').val())
-        $('#btnsubmitsearch').click();
-    })
-
-    function success1(data) {
-        debugger
-        if (data.status = "Success") {
-           
-            //$('input[type=text]').attr('readonly', true);
-            //$('input[type=text]').addClass('input-disabled');
-            $('.btnsaveshowclass').hide();
-            $('#mictiatmsave-loader').hide();
-            $('.btneditclassshow').show();
-            $("#remcash").load(window.location.href + " #remcash");
-
-           
+    function microMaxLimitSaveSuccess(data) {
+        $('#mictiatmsave-loader').hide();
+        $('#btnsave').hide();
+        $('#btnedit').show();
+        if (typeof swal === 'function') {
+            swal('Saved', 'Limits updated successfully.', 'success');
         }
-      
+        window.location.reload();
     }
 
-  
-
+    function microMaxLimitSaveFailed() {
+        $('#mictiatmsave-loader').hide();
+        if (typeof swal === 'function') {
+            swal('Error', 'Could not save limits.', 'error');
+        }
+    }
 </script>

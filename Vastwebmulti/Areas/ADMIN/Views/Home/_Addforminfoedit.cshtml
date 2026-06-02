@@ -87,10 +87,15 @@
              type:'POST',
              data: { idno: idno, Name: $('#Name').val() },
 
-             success: function (data) {
-
-                 setTimeout(function () { $('#manualaddinfomatin').html(data); }, 500);
-
+             success: function () {
+                 if (typeof moSaveSuccess === 'function') {
+                     moSaveSuccess('Form field information updated successfully.');
+                 }
+            },
+            error: function () {
+                if (typeof moSaveError === 'function') {
+                    moSaveError('Could not update form field information.');
+                }
             }
         });
 

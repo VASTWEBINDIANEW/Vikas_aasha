@@ -1,0 +1,1157 @@
+/* Website Renewal (#dayleft) — Premium modern UI v2 */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+body.saas-admin-ui #dayleft.saas-renewal-modal {
+    --rn-font: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+    --rn-primary: #0d9488;
+    --rn-primary-dark: #0f766e;
+    --rn-primary-light: #14b8a6;
+    --rn-primary-glow: rgba(13, 148, 136, 0.35);
+    --rn-accent: #6366f1;
+    --rn-accent-soft: #eef2ff;
+    --rn-surface: #f1f5f9;
+    --rn-surface-2: #e2e8f0;
+    --rn-card: #ffffff;
+    --rn-border: rgba(148, 163, 184, 0.35);
+    --rn-text: #0f172a;
+    --rn-muted: #64748b;
+    --rn-danger: #ef4444;
+    --rn-warn: #f59e0b;
+    --rn-success: #10b981;
+    --rn-radius: 16px;
+    --rn-radius-sm: 12px;
+    --rn-radius-xs: 8px;
+    --rn-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    --rn-shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+    font-family: var(--rn-font);
+}
+
+/* ── Shell ── */
+body.saas-admin-ui #dayleft.saas-renewal-modal.in .modal-dialog,
+body.saas-admin-ui #dayleft.saas-renewal-modal.show .modal-dialog {
+    width: min(1060px, 98vw) !important;
+    max-width: min(1060px, 98vw) !important;
+}
+
+body.saas-admin-ui #dayleft.saas-renewal-modal .modal-content {
+    border: none !important;
+    box-shadow: -12px 0 48px rgba(15, 23, 42, 0.18) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header {
+    position: relative !important;
+    overflow: hidden !important;
+    padding: 22px 24px !important;
+    background: linear-gradient(125deg, #042f2e 0%, #0f766e 38%, #14b8a6 72%, #2dd4bf 100%) !important;
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 90% 20%, rgba(255, 255, 255, 0.18), transparent 42%),
+        radial-gradient(circle at 10% 80%, rgba(99, 102, 241, 0.25), transparent 40%);
+    pointer-events: none;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-head-main,
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-close {
+    position: relative;
+    z-index: 1;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-icon i {
+    font-size: 1.35rem !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-title {
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-subtitle {
+    font-size: 0.82rem !important;
+    opacity: 0.92 !important;
+    font-weight: 500 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-close {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: background 0.15s, transform 0.12s !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-header .saas-admin-modal-close:hover {
+    background: rgba(255, 255, 255, 0.28) !important;
+    transform: scale(1.05);
+}
+
+body.saas-admin-ui #dayleft .saas-admin-modal-body {
+    padding: 0 !important;
+    background: var(--rn-surface) !important;
+}
+
+/* ── Tabs rail ── */
+body.saas-admin-ui #dayleft .saas-renewal-tabs-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--rn-card);
+    border-bottom: 1px solid var(--rn-border);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tabs-wrap::before,
+body.saas-admin-ui #dayleft .saas-renewal-tabs-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 28px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tabs-wrap::before {
+    left: 0;
+    background: linear-gradient(90deg, #fff, transparent);
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tabs-wrap::after {
+    right: 0;
+    background: linear-gradient(270deg, #fff, transparent);
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding: 12px 16px !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    float: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    background: var(--rn-surface) !important;
+    color: var(--rn-muted) !important;
+    font-family: var(--rn-font) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+    float: none !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab i {
+    font-size: 0.95rem !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: var(--rn-muted) !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab .saas-renewal-tab-label {
+    text-align: left;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab:hover {
+    background: #fff !important;
+    border-color: var(--rn-border) !important;
+    color: var(--rn-text) !important;
+    box-shadow: var(--rn-shadow) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab:hover i {
+    color: var(--rn-primary) !important;
+    background: #ccfbf1 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab.active,
+body.saas-admin-ui #dayleft .modalbutton-show button.active {
+    background: linear-gradient(135deg, var(--rn-primary-dark), var(--rn-primary-light)) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 6px 20px var(--rn-primary-glow) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab.active i,
+body.saas-admin-ui #dayleft .modalbutton-show button.active i {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab .saas-renewal-tab-img {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 6px !important;
+    object-fit: contain !important;
+    background: #fff !important;
+    padding: 2px !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab.active .saas-renewal-tab-img {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab .saas-renewal-badge,
+body.saas-admin-ui #dayleft .saas-renewal-tab span.upmicroatm {
+    position: static !important;
+    transform: none !important;
+    display: inline-block !important;
+    margin-left: 4px !important;
+    padding: 2px 6px !important;
+    font-size: 0.5rem !important;
+    font-weight: 800 !important;
+    border-radius: 4px !important;
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #b45309 !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab.active .saas-renewal-badge,
+body.saas-admin-ui #dayleft .saas-renewal-tab.active span.upmicroatm {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-tab--badge {
+    padding-top: 0 14px !important;
+}
+
+/* ── Panels ── */
+body.saas-admin-ui #dayleft .saas-renewal-panels {
+    padding: 20px !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-pane {
+    animation: rnPaneIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes rnPaneIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scan & Pay ── */
+body.saas-admin-ui #dayleft .saas-renewal-scan-card {
+    background: var(--rn-card);
+    border: 1px solid var(--rn-border);
+    border-radius: var(--rn-radius);
+    box-shadow: var(--rn-shadow);
+    overflow: hidden;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-scan-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(90deg, #eff6ff, #f0fdfa);
+    border-bottom: 1px solid var(--rn-border);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--rn-muted);
+    line-height: 1.5;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-scan-notice i {
+    color: var(--rn-accent);
+    font-size: 1.1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui #dayleft #genrateupi.form-bot-inner {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 20px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    float: none !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #dayleft .genrateupi-left {
+    width: auto !important;
+    float: none !important;
+}
+
+body.saas-admin-ui #dayleft .genrateupi-left h2 {
+    display: none !important;
+}
+
+body.saas-admin-ui #dayleft .genrateupi-left-in {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-field-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--rn-text);
+    margin-bottom: 8px;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-field-label .required {
+    color: var(--rn-danger);
+}
+
+body.saas-admin-ui #dayleft #genrateamt {
+    min-height: 52px !important;
+    padding: 0 16px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    border: 2px solid #fde68a !important;
+    border-radius: var(--rn-radius-sm) !important;
+    background: linear-gradient(180deg, #fffbeb, #fff) !important;
+    box-shadow: inset 0 2px 4px rgba(245, 158, 11, 0.08) !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+
+body.saas-admin-ui #dayleft #genrateamt:focus {
+    border-color: var(--rn-primary) !important;
+    box-shadow: 0 0 0 4px var(--rn-primary-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui #dayleft #scan-input-required {
+    margin-top: 8px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-btn.genrateupi-right {
+    width: auto !important;
+    min-width: 160px !important;
+    height: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    display: flex !important;
+    align-items: stretch !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-trigger {
+    width: 100% !important;
+    min-height: 120px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    padding: 24px 20px !important;
+    border: 2px dashed var(--rn-primary) !important;
+    border-radius: var(--rn-radius) !important;
+    background: linear-gradient(160deg, #f0fdfa, #ecfdf5) !important;
+    cursor: pointer !important;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s !important;
+    font-family: var(--rn-font) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-trigger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px var(--rn-primary-glow);
+    border-color: var(--rn-primary-light) !important;
+    border-style: solid !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-trigger i {
+    font-size: 2.5rem !important;
+    color: var(--rn-primary) !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-trigger span {
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: var(--rn-primary-dark) !important;
+}
+
+body.saas-admin-ui #dayleft .genrateupi-right input[type="button"] {
+    display: none !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-result#showqr {
+    position: static !important;
+    float: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    text-align: center !important;
+    background: #f8fafc !important;
+    border-top: 1px solid var(--rn-border) !important;
+    border-radius: 0 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-qr-result img,
+body.saas-admin-ui #dayleft #qrcode {
+    max-width: 240px !important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: var(--rn-radius-sm) !important;
+    box-shadow: var(--rn-shadow-lg) !important;
+    border: 4px solid #fff !important;
+}
+
+/* ── Toolbar ── */
+body.saas-admin-ui #dayleft .first-form,
+body.saas-admin-ui #dayleft .second-form,
+body.saas-admin-ui #dayleft .third-form {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-toolbar.first-form-head,
+body.saas-admin-ui #dayleft .second-form .first-form-head {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 14px !important;
+    margin: 0 0 20px !important;
+    padding: 16px 18px !important;
+    border: 1px solid var(--rn-border) !important;
+    border-radius: var(--rn-radius) !important;
+    background: var(--rn-card) !important;
+    box-shadow: var(--rn-shadow) !important;
+}
+
+body.saas-admin-ui #dayleft .due-date {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    flex: 1 1 220px !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui #dayleft .due-date > span {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 52px !important;
+    height: 52px !important;
+    padding: 0 !important;
+    border-radius: var(--rn-radius-sm) !important;
+    background: linear-gradient(135deg, #fef3c7, #fde047) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+body.saas-admin-ui #dayleft .due-date > span p {
+    margin: 0 !important;
+    font-size: 0.58rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #78350f !important;
+    line-height: 1.1 !important;
+}
+
+body.saas-admin-ui #dayleft .due-date input[type="text"] {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-height: 52px !important;
+    padding: 0 16px !important;
+    border: 2px solid var(--rn-surface-2) !important;
+    border-radius: var(--rn-radius-sm) !important;
+    background: var(--rn-surface) !important;
+    font-family: var(--rn-font) !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-text) !important;
+}
+
+body.saas-admin-ui #dayleft .form-head-button {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui #dayleft #autowebcheck.custom-off,
+body.saas-admin-ui #dayleft #autowebcheck.costom-on {
+    min-height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    font-family: var(--rn-font) !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    width: auto !important;
+    border-width: 2px !important;
+}
+
+body.saas-admin-ui #dayleft #autowebcheck.costom-on {
+    border-color: var(--rn-success) !important;
+    background: #ecfdf5 !important;
+    color: #047857 !important;
+}
+
+body.saas-admin-ui #dayleft #autowebcheck.custom-off {
+    border-color: #fecaca !important;
+    background: #fef2f2 !important;
+    color: var(--rn-danger) !important;
+}
+
+body.saas-admin-ui #dayleft .form-head-check {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    border: 2px solid var(--rn-surface-2) !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    background: #fff !important;
+    margin: 0 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui #dayleft .more-info-one,
+body.saas-admin-ui #dayleft .more-info-second,
+body.saas-admin-ui #dayleft .more-info-third {
+    min-height: 44px !important;
+    padding: 0 18px !important;
+    border: none !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    background: linear-gradient(135deg, var(--rn-accent), #818cf8) !important;
+    color: #fff !important;
+    font-family: var(--rn-font) !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35) !important;
+    transition: transform 0.12s, box-shadow 0.12s !important;
+}
+
+body.saas-admin-ui #dayleft .more-info-one:hover,
+body.saas-admin-ui #dayleft .more-info-second:hover,
+body.saas-admin-ui #dayleft .more-info-third:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.45) !important;
+}
+
+/* ── Plan cards ── */
+body.saas-admin-ui #dayleft .saas-renewal-plans-grid.first-form-bot,
+body.saas-admin-ui #dayleft .second-form .first-form-bot {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+    padding: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.form-bot-inner,
+body.saas-admin-ui #dayleft .form-bot-inner-second,
+body.saas-admin-ui #dayleft .form-bot-inner-third {
+    width: auto !important;
+    float: none !important;
+    text-align: center !important;
+    position: static !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card--featured::before {
+    content: "Popular";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    padding: 4px 10px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--rn-accent), #a78bfa);
+    border-radius: var(--rn-radius-pill, 999px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card {
+    position: relative !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.form-bot-inner button,
+body.saas-admin-ui #dayleft .form-bot-inner button,
+body.saas-admin-ui #dayleft .form-bot-inner-second button,
+body.saas-admin-ui #dayleft .form-bot-inner-third button {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 240px !important;
+    padding: 22px 18px 18px !important;
+    border: 2px solid var(--rn-border) !important;
+    border-radius: var(--rn-radius) !important;
+    background: var(--rn-card) !important;
+    box-shadow: var(--rn-shadow) !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    font-family: var(--rn-font) !important;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.form-bot-inner button::before,
+body.saas-admin-ui #dayleft .form-bot-inner button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--rn-primary), var(--rn-primary-light));
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card--featured button::before {
+    opacity: 1;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.form-bot-inner button:hover,
+body.saas-admin-ui #dayleft .form-bot-inner button:hover,
+body.saas-admin-ui #dayleft .form-bot-inner-second button:hover,
+body.saas-admin-ui #dayleft .form-bot-inner-third button:hover {
+    border-color: var(--rn-primary-light) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: 0 16px 40px var(--rn-primary-glow) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.is-selected button,
+body.saas-admin-ui #dayleft .form-bot-inner.is-selected button {
+    border-color: var(--rn-primary) !important;
+    background: linear-gradient(180deg, #f0fdfa 0%, #fff 40%) !important;
+    box-shadow: 0 0 0 4px var(--rn-primary-glow), var(--rn-shadow-lg) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-card.is-selected button::before,
+body.saas-admin-ui #dayleft .form-bot-inner.is-selected button::before {
+    opacity: 1;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-icon img,
+body.saas-admin-ui #dayleft .form-bot-inner button img {
+    height: 40px !important;
+    width: auto !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-title,
+body.saas-admin-ui #dayleft .form-bot-inner button p {
+    font-size: 1.1rem !important;
+    line-height: 1.3 !important;
+    font-weight: 800 !important;
+    margin: 0 0 6px !important;
+    color: var(--rn-text) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-title span,
+body.saas-admin-ui #dayleft .form-bot-inner button p span {
+    font-size: inherit !important;
+    color: inherit !important;
+    line-height: inherit !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-meta,
+body.saas-admin-ui #dayleft .form-bot-inner button > span:not(.first-month):not(.noofdays) {
+    display: block !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: var(--rn-muted) !important;
+    margin-top: 2px !important;
+}
+
+body.saas-admin-ui #dayleft .noofdays {
+    display: inline-block !important;
+    margin-top: 6px !important;
+    padding: 4px 10px !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    color: var(--rn-primary-dark) !important;
+    background: #ccfbf1 !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-price,
+body.saas-admin-ui #dayleft .first-month {
+    margin-top: 14px !important;
+    padding: 12px 14px !important;
+    border-radius: var(--rn-radius-sm) !important;
+    background: linear-gradient(135deg, #fef2f2, #fff5f5) !important;
+    border: 1px solid #fecaca !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: var(--rn-danger) !important;
+    animation: none !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-amount,
+body.saas-admin-ui #dayleft .first-month label {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-danger) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-plan-price-label,
+body.saas-admin-ui #dayleft .first-month span[style*="blink"] {
+    display: block !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    color: var(--rn-muted) !important;
+    animation: none !important;
+    margin-bottom: 4px !important;
+}
+
+/* Empty / blocked payment */
+body.saas-admin-ui #dayleft .saas-renewal-empty#webpaymentnotallow {
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+    padding: 48px 24px !important;
+    background: var(--rn-card) !important;
+    border: 2px dashed #fcd34d !important;
+    border-radius: var(--rn-radius) !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-empty-icon {
+    display: block !important;
+    font-size: 3rem !important;
+    margin-bottom: 12px !important;
+}
+
+body.saas-admin-ui #dayleft #webpaymentnotallow label:first-of-type {
+    font-size: 1.75rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-warn) !important;
+}
+
+body.saas-admin-ui #dayleft #txtwebmsg {
+    font-size: 0.95rem !important;
+    color: var(--rn-muted) !important;
+    max-width: 420px;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+/* Footer actions */
+body.saas-admin-ui #dayleft .saas-renewal-footer-actions {
+    margin-top: 16px !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-btn-outline {
+    min-height: 44px !important;
+    padding: 0 24px !important;
+    border: 2px solid var(--rn-surface-2) !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    background: #fff !important;
+    color: var(--rn-accent) !important;
+    font-family: var(--rn-font) !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    transition: all 0.15s !important;
+}
+
+body.saas-admin-ui #dayleft .saas-renewal-btn-outline:hover {
+    border-color: var(--rn-accent) !important;
+    background: var(--rn-accent-soft) !important;
+    transform: translateY(-1px);
+}
+
+/* Other plans grid */
+body.saas-admin-ui #dayleft #otherdays1 {
+    margin-top: 20px !important;
+    padding: 20px !important;
+    background: var(--rn-card) !important;
+    border: 1px solid var(--rn-border) !important;
+    border-radius: var(--rn-radius) !important;
+    box-shadow: var(--rn-shadow) !important;
+}
+
+body.saas-admin-ui #dayleft #otherdays1 .col-md-12 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui #dayleft #otherdays1 .col-md-4 {
+    width: 100% !important;
+    float: none !important;
+    padding: 16px !important;
+    border: 2px solid var(--rn-surface-2) !important;
+    border-radius: var(--rn-radius-sm) !important;
+    background: var(--rn-surface) !important;
+    text-align: center !important;
+    transition: border-color 0.15s, transform 0.12s !important;
+}
+
+body.saas-admin-ui #dayleft #otherdays1 .col-md-4:hover {
+    border-color: var(--rn-primary-light) !important;
+    transform: translateY(-2px);
+}
+
+body.saas-admin-ui #dayleft #otherdays1 .col-md-4 span {
+    display: block !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: var(--rn-muted) !important;
+    margin-bottom: 6px !important;
+}
+
+body.saas-admin-ui #dayleft #otherdays1 .col-md-4 span[id^="days"] {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-primary) !important;
+    margin-bottom: 12px !important;
+}
+
+body.saas-admin-ui #dayleft #otherdays1 button {
+    width: 100% !important;
+    min-height: 40px !important;
+    border: none !important;
+    border-radius: var(--rn-radius-pill, 999px) !important;
+    background: linear-gradient(135deg, var(--rn-primary-dark), var(--rn-primary-light)) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-family: var(--rn-font) !important;
+    box-shadow: 0 4px 14px var(--rn-primary-glow) !important;
+}
+
+/* Info panels */
+body.saas-admin-ui #dayleft .first-form-on,
+body.saas-admin-ui #dayleft .second-form-on,
+body.saas-admin-ui #dayleft .third-form-on {
+    margin: 20px 0 0 !important;
+    padding: 20px 20px 12px 32px !important;
+    border: 1px solid #c7d2fe !important;
+    border-radius: var(--rn-radius) !important;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc) !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-close,
+body.saas-admin-ui #dayleft .second-form-close,
+body.saas-admin-ui #dayleft .first-form-close-button,
+body.saas-admin-ui #dayleft .second-form-close-button {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    background: var(--rn-danger) !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    transition: transform 0.12s !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-close:hover,
+body.saas-admin-ui #dayleft .first-form-close-button:hover {
+    transform: scale(1.08);
+}
+
+body.saas-admin-ui #dayleft .first-form-on ul li,
+body.saas-admin-ui #dayleft .second-form-on ul li {
+    font-size: 0.84rem !important;
+    line-height: 1.5 !important;
+    color: #3730a3 !important;
+}
+
+/* Checkout / payment bar */
+body.saas-admin-ui #dayleft .saas-renewal-checkout.first-form-button,
+body.saas-admin-ui #dayleft .first-form-button,
+body.saas-admin-ui #dayleft .second-form-button,
+body.saas-admin-ui #dayleft .third-form-button {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 16px !important;
+    align-items: stretch !important;
+    height: auto !important;
+    margin: 20px 0 0 !important;
+    padding: 20px !important;
+    border: 2px solid var(--rn-primary) !important;
+    border-radius: var(--rn-radius) !important;
+    background: linear-gradient(180deg, #f0fdfa, #fff) !important;
+    box-shadow: var(--rn-shadow-lg) !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-left {
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-left p {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin: 0 0 10px !important;
+    padding: 0 0 10px !important;
+    border-bottom: 1px dashed var(--rn-border) !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-left p:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-primary-dark) !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-left label {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: var(--rn-text) !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right {
+    float: none !important;
+    width: auto !important;
+    min-width: 160px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right .comfirsmclasscss {
+    width: 100% !important;
+    float: none !important;
+    height: auto !important;
+    min-height: 140px !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    border: none !important;
+    border-radius: var(--rn-radius) !important;
+    background: linear-gradient(135deg, var(--rn-primary-dark), var(--rn-primary-light)) !important;
+    box-shadow: 0 8px 28px var(--rn-primary-glow) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    cursor: pointer !important;
+    transition: transform 0.15s !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right .comfirsmclasscss:hover {
+    transform: scale(1.03);
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right button {
+    background: transparent !important;
+    color: #fff !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right button:first-child {
+    font-size: 2.25rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui #dayleft .first-form-button-right button:last-child {
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    opacity: 0.9 !important;
+}
+
+body.saas-admin-ui #dayleft .for-succes-payment {
+    width: 100% !important;
+    float: none !important;
+    min-height: 140px !important;
+    margin: 0 !important;
+    padding: 24px !important;
+    border-radius: var(--rn-radius) !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.saas-admin-ui #dayleft .payment-sucess {
+    border: 2px solid #86efac !important;
+    background: #f0fdf4 !important;
+}
+
+body.saas-admin-ui #dayleft .payment-faild {
+    border: 2px solid #fca5a5 !important;
+    background: #fef2f2 !important;
+}
+
+body.saas-admin-ui #dayleft .for-succes-payment img {
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 50% !important;
+    padding: 12px !important;
+}
+
+body.saas-admin-ui #dayleft .payment-sucess img {
+    background: var(--rn-success) !important;
+}
+
+body.saas-admin-ui #dayleft .payment-faild img {
+    background: var(--rn-danger) !important;
+}
+
+body.saas-admin-ui #dayleft .lblotherpayment {
+    margin-top: 8px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    color: var(--rn-danger) !important;
+}
+
+/* Kill legacy inline overrides inside modal */
+body.saas-admin-ui #dayleft [style*="font-size: 60px"],
+body.saas-admin-ui #dayleft [style*="font-size:60px"],
+body.saas-admin-ui #dayleft [style*="font-size: 72px"],
+body.saas-admin-ui #dayleft [style*="font-size: 85px"],
+body.saas-admin-ui #dayleft [style*="font-size: 30px"] {
+    font-size: inherit !important;
+}
+
+body.saas-admin-ui #dayleft [style*="float: left"],
+body.saas-admin-ui #dayleft [style*="float:left"],
+body.saas-admin-ui #dayleft [style*="float: right"],
+body.saas-admin-ui #dayleft [style*="float:right"] {
+    float: none !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    body.saas-admin-ui #dayleft .saas-renewal-plans-grid.first-form-bot,
+    body.saas-admin-ui #dayleft .second-form .first-form-bot {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    body.saas-admin-ui #dayleft #otherdays1 .col-md-12 {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    body.saas-admin-ui #dayleft #genrateupi.form-bot-inner {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body.saas-admin-ui #dayleft .saas-renewal-panels {
+        padding: 14px !important;
+    }
+
+    body.saas-admin-ui #dayleft .saas-renewal-tab {
+        padding: 0 12px !important;
+        min-height: 40px !important;
+    }
+
+    body.saas-admin-ui #dayleft .saas-renewal-tab .saas-renewal-tab-label {
+        display: none;
+    }
+
+    body.saas-admin-ui #dayleft .saas-renewal-plans-grid.first-form-bot,
+    body.saas-admin-ui #dayleft .second-form .first-form-bot,
+    body.saas-admin-ui #dayleft #otherdays1 .col-md-12 {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui #dayleft .saas-renewal-checkout.first-form-button,
+    body.saas-admin-ui #dayleft .first-form-button {
+        grid-template-columns: 1fr !important;
+    }
+}
