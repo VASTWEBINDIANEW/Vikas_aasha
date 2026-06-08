@@ -1,0 +1,87 @@
+@model IEnumerable<Vastwebmulti.Models.Show_MicroAtM_UnholdHistory_Result>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.Show_MicroAtM_UnholdHistory_Result>();
+    var totalAmount = rows.Sum(r => r.amount ?? 0);
+    var frmDate = ViewBag.frmDate as string ?? "";
+    var toDate = ViewBag.toDate as string ?? "";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Micro ATM Unhold History</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 8px; }
+        h2 { margin: 0 0 4px; font-size: 14px; }
+        p { margin: 0 0 10px; color: #444; font-size: 9px; }
+        table { border-collapse: collapse; width: 100%; }
+        table, td, th { border: 1px solid #333; }
+        th { background: #f1f5f9; padding: 4px 3px; text-align: left; }
+        td { padding: 3px 2px; word-break: break-word; }
+        tfoot td { font-weight: bold; background: #f8fafc; }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+        .text-right { text-align: right; }
+    </style>
+</head>
+<body>
+    <h2>Micro ATM Unhold History</h2>
+    <p>Period: @frmDate to @toDate &nbsp;|&nbsp; Records: @rows.Count &nbsp;|&nbsp; Total: @totalAmount.ToString("N2")</p>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Firm</th>
+                <th>Unhold by</th>
+                <th>RRN</th>
+                <th>Txn type</th>
+                <th>Payment</th>
+                <th class="text-right">Amount</th>
+                <th>Card pay</th>
+                <th>PAN</th>
+                <th>Ret. pre</th>
+                <th>Ret. post</th>
+                <th>Network</th>
+                <th>Usage</th>
+                <th>Unhold time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var sr = 0; }
+            @foreach (var item in rows)
+            {
+                sr++;
+                <tr>
+                    <td>@sr</td>
+                    <td>@item.frmname</td>
+                    <td>@item.Person_name</td>
+                    <td>@item.rrn</td>
+                    <td>@item.transaction_type</td>
+                    <td>@item.payment_method</td>
+                    <td class="text-right">@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "0.00")</td>
+                    <td>@item.card_payment_type</td>
+                    <td>@item.masked_pan</td>
+                    <td>@item.retailer_remain_pre</td>
+                    <td>@item.retailer_remain_post</td>
+                    <td>@item.network</td>
+                    <td>@item.card_usage_type</td>
+                    <td>@item.unhold_transection_time</td>
+                </tr>
+            }
+        </tbody>
+        @if (rows.Count > 0)
+        {
+            <tfoot>
+                <tr>
+                    <td colspan="6">Total</td>
+                    <td class="text-right">@totalAmount.ToString("N2")</td>
+                    <td colspan="7"></td>
+                </tr>
+            </tfoot>
+        }
+    </table>
+</body>
+</html>

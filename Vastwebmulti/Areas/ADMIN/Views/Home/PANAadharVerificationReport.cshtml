@@ -19,8 +19,9 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-<section class="content saas-admin-account-page saas-admin-settings-page saas-pan-report-page">
+<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-pan-report-page">
     <div class="container-fluid">
 
         
@@ -33,25 +34,31 @@
                 </ol>
 
                 <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
-                    <div class="saas-acc-date-range input-daterange saas-acc-report-date-controls saas-pan-date-controls">
-                        <div class="saas-acc-dp-field">
-                            <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
-                            @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+                    <div class="saas-acc-report-date-controls saas-pan-date-controls">
+                        <div class="saas-report-date-fields">
+                            <div class="saas-acc-dp-field">
+                                <label class="saas-acc-dp-label" for="txt_frm_date">From date</label>
+                                <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+                            </div>
+                            <div class="saas-acc-dp-field">
+                                <label class="saas-acc-dp-label" for="txt_to_date">To date</label>
+                                <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+                            </div>
                         </div>
-                        <div class="saas-acc-dp-field">
-                            <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
-                            @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
-                        </div>
-                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
-                            <i class="fas fa-search" aria-hidden="true"></i> Search
-                        </button>
-                        <div class="saas-acc-export-group saas-pan-export-group">
-                            <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="panBtnExcel" title="Export Excel">
-                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                        <div class="saas-report-toolbar-actions">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
+                                <i class="fas fa-search" aria-hidden="true"></i> Search
                             </button>
-                            <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="panBtnPdf" title="Export PDF">
-                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
-                            </button>
+                            <div class="saas-acc-export-group saas-pan-export-group">
+                                <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="panBtnExcel" title="Export Excel">
+                                    <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                                </button>
+                                <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="panBtnPdf" title="Export PDF">
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

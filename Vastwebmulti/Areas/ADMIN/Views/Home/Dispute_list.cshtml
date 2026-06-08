@@ -1,416 +1,392 @@
-﻿@model IEnumerable<Vastwebmulti.Models.all_dispute_list_Result>
+﻿@model List<Vastwebmulti.Models.all_dispute_list_Result>
+
+@using System.Linq
+
 @{
-    ViewBag.Title = "Dispute_list";
+
+    ViewBag.Title = "Dispute List";
+
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var rows = Model ?? new List<Vastwebmulti.Models.all_dispute_list_Result>();
+
+    var ddlStatus = (ViewBag.ddl_status as string) ?? "";
+
+    var frmDate = (ViewBag.txt_frm_date as string) ?? "";
+
+    var toDate = (ViewBag.txt_to_date as string) ?? "";
+
+    if (string.IsNullOrWhiteSpace(frmDate)) { frmDate = DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd"); }
+
+    if (string.IsNullOrWhiteSpace(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = (ViewBag.chk as string) == "post" ? "set" : "get";
+
+    var statusItems = new List<SelectListItem>
+
+    {
+
+        new SelectListItem { Text = "ALL", Value = "" },
+
+        new SelectListItem { Text = "Pending", Value = "Pending" },
+
+        new SelectListItem { Text = "Approved", Value = "Approved" },
+
+        new SelectListItem { Text = "Rejected", Value = "Rejected" }
+
+    };
+
 }
 
-<style>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-    /* new css  */
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 
-    .res_div {
-        padding: 0;
-    }
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
-    .dispute-list-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-    .res_div {
-        width: 50% !important;
-        float: left !important;
-    }
+<link href="~/MainFrontDesign/css/admin-support-pages-modern.css" rel="stylesheet" />
 
-    /* new css  */
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .table-bordered tbody tr td, .table-bordered tbody tr th {
-        padding: 4px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .select2-selection.select2-selection--single {
-        border-color: #bfbebe !important;
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-
-        .res_div {
-            width: auto !important;
-        }
-    }
-
-    @@media screen and (max-width: 992px) {
-        .responcive-left {
-            width: 50%;
-            float: left;
-        }
-
-            .responcive-left button {
-                width: 100%;
-                text-align: left;
-                margin-bottom: 0px;
-            }
-    }
-
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-
-        .dispute-list-page {
-            display: block;
-        }
-
-        .res_div {
-            width: 100% !important;
-            padding: 2px 0;
-        }
-    }
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 
 
-    @@media screen and (max-width:580px) {
+<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-dispute-report-page saas-dispute-page">
 
-        .res_w {
-            width: 100%;
-        }
-
-        .all-type-third {
-            width: 100% !important;
-            float: left !important;
-            margin-top: 5px;
-        }
-
-        .col-md-2.responcive-left {
-            width: 100% !important;
-            margin: 4px 0px;
-            padding: 0px !important;
-        }
-
-        .web-white-filter {
-            width: 100%;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .for-search.tablesearch-second {
-            width: 100% !important;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
-            padding: 0px !important;
-        }
-
-        .search-after-third {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .for-search.tablesearch-second input {
-            width: 80%;
-        }
-
-        .search-after-third {
-            width: 100%;
-        }
-
-        .dispute-list-page .col-md-2 {
-            width: 47%;
-            float: left;
-        }
-
-        .dispute-list-page .dispute-list-page-in {
-            width: 30%;
-            float: left;
-            padding: 0px 5px;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-    }
-</style>
-<section class="content">
     <div class="container-fluid">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Dispute's</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right" style="margin:0px;"></i></a></li>
-                @*<li><a href="javascript:void(0);">User A/C Q&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Dispute's</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+        @using (Html.BeginForm("Dispute_list", "Home", FormMethod.Post, new { @class = "saas-dispute-report-form saas-pan-toolbar-form", id = "disputeReportForm", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate }))
 
-        <div class="row clearfix margin-bottom-third cardbackg-thirdclass onlymargin-third" style="margin: 0;">
-
-            <div class="page-header-third">
-                @using (Html.BeginForm("Dispute_list", "Home", FormMethod.Post))
-                {
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 onlypadding-right-admin-four">
-                        <div class="margin-top-thirdo" style="margin-top:2px;">
-                            <div class="row dispute-list-page">
-                                <div class="col-md-8 four-noneclass-admin-only res_div" style="width:auto;float:left;">
-                                    <div class="bread-same-all-page breadsameall-second">
-                                        <ul>
-                                            <li class="smli">
-                                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                                </a>
-                                            </li>
-
-                                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                                Dispute List
-                                            </li>
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-                                <div class="col-md-1 responcive-left pdfexpoer-second pdf-third-design onlypadding-right-admin-four res_div" style="width: auto; float: right; width: 70% !important;">
-                                    <div class="res_w" style="float: right;">
-
-
-                                        <div class="all-type-third" style="width:auto;float:left;">
-                                            <div class="col-md-2 responcive-left" style="padding: 0px 3px; width: auto;">
-                                                <div class="form-group margin-bottomo-third" style="">
-                                                    <div class="">
-                                                        <div class="custom-date-icon ner">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 112px;padding-left: 23px;" })
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="all-type-third" style="width:auto;float:left;">
-                                            <div class="col-md-2 responcive-left" style="padding: 0px 3px; width: auto;">
-                                                <div class="form-group margin-bottomo-third" style="">
-                                                    <div class="">
-                                                        <div class="custom-date-icon ner2">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 112px;padding-left: 23px;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="all-type-third" style="width:auto;float:left;">
-                                            <div class="col-md-2 responcive-left" style="padding: 0px 3px; width: auto;">
-                                                <div class="form-group margin-bottomo-third" style="">
-                                                    <div class="">
-                                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                        {
-                                                             new SelectListItem{ Text="ALL",Value="",},
-                                                             new SelectListItem{ Text="Pending",Value="Pending",},
-                                                             new SelectListItem{Text="Approved",Value="Approved"},
-                                                             new SelectListItem{Text="Rejected",Value="Rejected"}
-                                                        }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div style="float:left; padding-right:0px;" class="web-white-filter">
-
-                                            <div class="for-search tablesearch-second" style="position:static;float:left;width:auto;padding-right: 4px;">
-                                                <div class="search-after-third">
-                                                    <input id="myInput" type="text" name="myInput" placeholder="Search..." onkeyup="myFunction()" style="height: 32px; border: 1px solid #ccc; padding: 5px 8px;" />
-
-                                                    <div class="col-md-1 dispute-list-page-in responcive-left" style="width: auto; float: right; padding: 0px;">
-                                                        <center>
-                                                            <button type="submit" class="btn bg-grey waves-effect input-back-second" style="  height:32px;background:transparent;">
-                                                                <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                                <span style="top:-2px;color:black;">Search</span>
-                                                            </button>
-                                                        </center>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <input type="button" id="btnExport" value="Export" style="padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; background-image: url(../../images/reportimage/xls.png); background-repeat: no-repeat; background-position: 4px center; padding-left: 20px; float: right; margin-left: 4px;" />
-                                            <input type="button" id="btnExport" value="PDF" style="padding: 0px 4px;   height: 32px;border: 1px solid #b1a6a638;background: #b1a6a638;   background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;float:right;" />
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    <div>
-                        <div class=" table-responsive" style="position:inherit;">
-                            <table id="hhhh" class="table table-bordered example-second third-design-table" style="width:100%;background:#f5f5f5;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>User's &nbsp; Information</th>
-                                        <th>Consumer&nbsp;No.</th>
-                                        <th>Amount</th>
-                                        <th>Operator</th>
-                                        <th>Port/API</th>
-                                        <th>Dispute&nbsp;Time</th>
-                                        <th>Dispute&nbsp;Description</th>
-                                        <th>Transition&nbsp;ID</th>
-                                        <th>Response</th>
-                                        <th>Rch&nbsp;Time</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="trow" class="alin">
-                                    @{
-
-                                        Html.RenderAction("_Dispute_list", "Home", new { Model = Model });
-
-                                    }
-                                </tbody>
-                            </table>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <img src="~/img/ajax-loader.gif" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<!--Calendar Javascript-->
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-    });
-</script>
-<script>
-    $(document).ready(function()
-    {
-        var succ = '@ViewData["success"]';
-        var error = '@ViewData["error"]';
-        if(succ !="")
         {
-            swal("Response!", succ, "success");
+
+            <div class="saas-acc-toolbar saas-pan-toolbar-unified">
+
+                <ol class="saas-acc-breadcrumb">
+
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                    <li>Dispute List</li>
+
+                </ol>
+
+                <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
+
+                    <div class="saas-acc-report-date-controls saas-pan-date-controls">
+
+                        <div class="saas-report-date-fields">
+
+                            <div class="saas-acc-dp-field">
+
+                                <label class="saas-acc-dp-label" for="txt_frm_date">From date</label>
+
+                                <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+
+                            </div>
+
+                            <div class="saas-acc-dp-field">
+
+                                <label class="saas-acc-dp-label" for="txt_to_date">To date</label>
+
+                                <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+
+                            </div>
+
+                        </div>
+
+                        <div class="saas-dispute-filter-fields">
+
+                            <div class="saas-dispute-status-field saas-dispute-filter-field">
+
+                                <label class="saas-acc-dp-label" for="ddl_status">Status</label>
+
+                                <div class="saas-dispute-status-input-wrap">
+
+                                    <i class="fas fa-filter saas-dispute-field-icon" aria-hidden="true"></i>
+
+                                    @Html.DropDownList("ddl_status", new SelectList(statusItems, "Value", "Text", ddlStatus), new { @class = "form-control saas-dispute-status-select" })
+
+                                </div>
+
+                            </div>
+
+                            <div class="saas-dispute-search-wrap saas-dispute-filter-field">
+
+                                <label class="saas-acc-dp-label" for="myInput">Quick filter</label>
+
+                                <div class="saas-dispute-search-inner">
+
+                                    <i class="fas fa-search saas-dispute-field-icon" aria-hidden="true"></i>
+
+                                    <input id="myInput" type="text" class="form-control saas-dispute-search-input" placeholder="Search in table..." autocomplete="off" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="saas-report-toolbar-actions">
+
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
+
+                                <i class="fas fa-search" aria-hidden="true"></i> Search
+
+                            </button>
+
+                            <div class="saas-acc-export-group saas-pan-export-group">
+
+                                <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnDisputeExport" title="Export Excel">
+
+                                    <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+
+                                </button>
+
+                                <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnDisputePDF" title="Download PDF">
+
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         }
-        if (error != "") {
-            swal("Failed!", error, "error");
-        }
-    })
-</script>
+
+
+
+        <div class="saas-acc-table-card">
+
+            <div class="saas-acc-table-card-head">
+
+                <h3>Dispute transactions</h3>
+
+                <span class="saas-acc-row-count">
+
+                    <i class="fas fa-gavel" aria-hidden="true"></i> @rows.Count loaded · scroll for more
+
+                </span>
+
+            </div>
+
+            <div class="saas-acc-table-wrap table-responsive">
+
+                <table class="table saas-acc-table saas-acc-table--dispute table-bordered" id="disputeTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>User's Information</th>
+
+                            <th>Consumer No.</th>
+
+                            <th>Amount</th>
+
+                            <th>Operator</th>
+
+                            <th>Port/API</th>
+
+                            <th>Dispute Time</th>
+
+                            <th>Dispute Description</th>
+
+                            <th>Transition ID</th>
+
+                            <th>Response</th>
+
+                            <th>Rch Time</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="trow">
+
+                        @Html.Partial("_Dispute_list", rows)
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div id="loadingdiv" class="text-center" style="display:none;padding:12px;">
+
+                <img src="~/img/ajax-loader.gif" alt="Loading" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
+
 <script>
-    var pageindex = 2;
-        var NoMoredata = false;
-    var inProgress = false;
-    $(window).scroll(function () {
-        var ddl_status = $('#ddl_status').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        if ($(window).scrollTop() > Number($("#hhhh").height()) / 4 && !NoMoredata && !inProgress) {
-                   inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScrollDispute", "Home")",
-                       {"pageindex":pageindex,"ddl_status": ddl_status, "txt_frm_date": txt_frm_date, "txt_to_date": txt_to_date},
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#loadingdiv").load("content.html");
-                        $("#trow").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
+
+    $(function () {
+
+        function syncDisputeStatusControl() {
+
+            var $ddl = $("#ddl_status");
+
+            if (!$ddl.length) { return; }
+
+            var isMobile = window.matchMedia("(max-width: 991px)").matches;
+
+            if ($.fn.select2 && $ddl.hasClass("select2-hidden-accessible")) {
+
+                $ddl.select2("destroy");
+
             }
+
+            if (!isMobile && $.fn.select2) {
+
+                $ddl.select2({ width: "118px", minimumResultsForSearch: 10 });
+
+            }
+
+        }
+
+        syncDisputeStatusControl();
+
+        var resizeTimer;
+
+        $(window).on("resize", function () {
+
+            clearTimeout(resizeTimer);
+
+            resizeTimer = setTimeout(syncDisputeStatusControl, 150);
+
         });
-</script>
-<script>
-    $('select').select2();
-</script>
 
-<script>
-    $("#btnExport").click(function () {
-        var ddl_status = $('#ddl_status').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelRechargereport_Dispute", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + "&ddl_status=" + ddl_status;
-        location.href = url;
-});
-</script>
 
-<script>
-    $(document).ready(function () {
+
+        var succ = '@ViewData["success"]';
+
+        var error = '@ViewData["error"]';
+
+        if (succ && typeof swal === "function") { swal("Response!", succ, "success"); }
+
+        if (error && typeof swal === "function") { swal("Failed!", error, "error"); }
+
+
+
         $("#myInput").on("keyup", function () {
 
             var value = $(this).val().toLowerCase();
-            $("#trow tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+
+            $("#trow tr.saas-dispute-data-row").filter(function () {
+
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+
             });
+
         });
+
+
+
+        function disputeExportQuery() {
+
+            return '?txt_frm_date=' + encodeURIComponent($("#txt_frm_date").val()) +
+
+                '&txt_to_date=' + encodeURIComponent($("#txt_to_date").val()) +
+
+                '&ddl_status=' + encodeURIComponent($("#ddl_status").val() || "");
+
+        }
+
+
+
+        $("#btnDisputeExport").on("click", function () {
+
+            location.href = '@Url.Action("ExcelRechargereport_Dispute", "Home")' + disputeExportQuery();
+
+        });
+
+
+
+        $("#btnDisputePDF").on("click", function () {
+
+            window.open('@Url.Action("PDFRechargereport_Dispute", "Home")' + disputeExportQuery(), "_blank");
+
+        });
+
+
+
+        var pageindex = 2;
+
+        var NoMoredata = @(rows.Count < 50 ? "true" : "false");
+
+        var inProgress = false;
+
+        $(window).on("scroll", function () {
+
+            if (NoMoredata || inProgress) { return; }
+
+            var ddl_status = $("#ddl_status").val();
+
+            var txt_frm_date = $("#txt_frm_date").val();
+
+            var txt_to_date = $("#txt_to_date").val();
+
+            if ($(window).scrollTop() + $(window).height() < $(document).height() - 120) { return; }
+
+            if ($(window).scrollTop() > Number($("#disputeTable").height()) / 4) {
+
+                inProgress = true;
+
+                $("#loadingdiv").show();
+
+                $.post("@Url.Action("InfiniteScrollDispute", "Home")",
+
+                    { pageindex: pageindex, ddl_status: ddl_status, txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+
+                    function (data) {
+
+                        pageindex = pageindex + 1;
+
+                        NoMoredata = data.NoMoredata;
+
+                        if (data.HTMLString) { $("#trow").append(data.HTMLString); }
+
+                        $("#loadingdiv").hide();
+
+                        inProgress = false;
+
+                    }).fail(function () {
+
+                        $("#loadingdiv").hide();
+
+                        inProgress = false;
+
+                    });
+
+            }
+
+        });
+
     });
+
 </script>
+

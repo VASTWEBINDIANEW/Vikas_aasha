@@ -1,74 +1,156 @@
 ﻿@model List<Vastwebmulti.Models.all_dispute_list_Result>
+
 @{
+
     Layout = null;
+
+    var rows = Model ?? new List<Vastwebmulti.Models.all_dispute_list_Result>();
+
 }
 
-@foreach (var item in Model)
+
+
+@if (rows.Count == 0)
+
 {
-    var color = "";
-  
-<tr onclick="@Url.Action("ShowAll", "Home", new { idno = item.rch_id, disput = item.dispute_region })">
 
-    <td>
+    <tr class="saas-dispute-empty-row">
 
-        @if (item.sts.Contains("Pending"))
-        {
-            <i style='color: antiquewhite;'><button id='but' class='view' href='#' style='background: none;border: none;' data-toggle='tooltip' data-placement='bottom' title='View Status'><img src="~/ashok-images/clock.svg" style="width: 20px;"></button></i>
-            ;
-        }
-        @if (item.sts.Contains("Rejected"))
-        {
-            <img src="~/ashok-images/closes.svg" style="width: 19px;background:red;border-radius: 50%;padding: 3px;">
-            ;
+        <td colspan="11" class="saas-pan-empty-cell">No dispute records for selected dates/status. Widen the date range and click <strong>Search</strong>.</td>
 
-        }
-        @if (item.sts.Contains("Approved"))
-        {
-            <img src="~/ashok-images/correct.svg" style="width: 19px;background:green;border-radius: 50%;padding: 3px;">
-            ;
+    </tr>
 
-        }
+}
 
+@foreach (var item in rows)
 
-        <i></i>&nbsp;<span>@item.Roles</span>&nbsp;⇒&nbsp;<span>@item.Frm_Name</span>
-        @*<p style="color:@color; font-weight:700;">@item.Roles </p>*@
-    </td>
+{
 
-    <td>@item.rch_number</td>
-    <td>@item.rch_amount</td>
-    <td>@item.opt</td>
-    <td>@item.portno</td>
+    var sts = (item.sts ?? "").Trim();
 
+    var pending = sts.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0;
 
-    <td>@item.dis_time</td>
-    <td>@item.dispute_region</td>
-    <td>@item.opt_id</td>
-    <td>@item.comment</td>
-    <td>@item.rch_time</td>
-    @*<td>@item.comment</td>*@
-    <td>
-        @if (item.sts == "Pending")
-        {
-            <center>
-                <a href="@Url.Action("ShowAll", "Home", new { idno = item.rch_id, disput = item.dispute_region })" style=" padding:1px 4px 1px 4px;margin-top:4px;cursor:pointer;background: #f0f0f0;border: 1px solid #bbb;padding: 3px 10px;" title="Show Dispute">
-                    <img src="~/ashok-images/rightaeps.svg" style="width:13px;margin-top:2px;">
+    var rejected = sts.IndexOf("Rejected", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    var approved = sts.IndexOf("Approved", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    var rowClass = pending ? "saas-dispute-row--pending" : rejected ? "saas-dispute-row--rejected" : approved ? "saas-dispute-row--approved" : "saas-dispute-row--neutral";
+
+    var statusLabel = !string.IsNullOrWhiteSpace(sts) ? sts : "Unknown";
+
+    <tr class="saas-dispute-data-row @rowClass">
+
+        <td class="saas-dispute-col-user" data-label="User's Information">
+
+            <div class="saas-dispute-user-card">
+
+                @if (pending)
+
+                {
+
+                    <span class="saas-dispute-status-pill saas-dispute-status-pill--pending">
+
+                        <i class="fas fa-clock" aria-hidden="true"></i><span>Pending</span>
+
+                    </span>
+
+                }
+
+                else if (approved)
+
+                {
+
+                    <span class="saas-dispute-status-pill saas-dispute-status-pill--approved">
+
+                        <i class="fas fa-check-circle" aria-hidden="true"></i><span>Approved</span>
+
+                    </span>
+
+                }
+
+                else if (rejected)
+
+                {
+
+                    <span class="saas-dispute-status-pill saas-dispute-status-pill--rejected">
+
+                        <i class="fas fa-times-circle" aria-hidden="true"></i><span>Rejected</span>
+
+                    </span>
+
+                }
+
+                else
+
+                {
+
+                    <span class="saas-dispute-status-pill saas-dispute-status-pill--neutral">
+
+                        <i class="fas fa-info-circle" aria-hidden="true"></i><span>@statusLabel</span>
+
+                    </span>
+
+                }
+
+                <div class="saas-dispute-user-meta">
+
+                    <span class="saas-dispute-user-role">@(string.IsNullOrWhiteSpace(item.Roles) ? "—" : item.Roles)</span>
+
+                    <i class="fas fa-long-arrow-alt-right saas-dispute-user-sep" aria-hidden="true"></i>
+
+                    <span class="saas-dispute-user-firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "—" : item.Frm_Name)</span>
+
+                </div>
+
+            </div>
+
+        </td>
+
+        <td data-label="Consumer No."><span class="saas-dispute-cell-text">@item.rch_number</span></td>
+
+        <td data-label="Amount"><span class="saas-dispute-amount">@item.rch_amount</span></td>
+
+        <td data-label="Operator"><span class="saas-dispute-cell-text">@item.opt</span></td>
+
+        <td data-label="Port/API"><span class="saas-dispute-cell-text">@item.portno</span></td>
+
+        <td data-label="Dispute Time"><span class="saas-dispute-cell-text saas-dispute-datetime">@(item.dis_time.HasValue ? item.dis_time.Value.ToString("dd-MM-yyyy HH:mm:ss") : "—")</span></td>
+
+        <td data-label="Dispute Description" class="col-details"><span class="saas-dispute-cell-text">@item.dispute_region</span></td>
+
+        <td data-label="Transition ID"><span class="saas-dispute-txn-id">@item.opt_id</span></td>
+
+        <td data-label="Response" class="col-details"><span class="saas-dispute-cell-text">@item.comment</span></td>
+
+        <td data-label="Rch Time"><span class="saas-dispute-cell-text saas-dispute-datetime">@(item.rch_time.HasValue ? item.rch_time.Value.ToString("dd-MM-yyyy HH:mm:ss") : "—")</span></td>
+
+        <td data-label="Action" class="saas-dispute-col-action text-center">
+
+            @if (pending)
+
+            {
+
+                <a href="@Url.Action("ShowAll", "Home", new { idno = item.rch_id, disput = item.dispute_region })"
+
+                   class="saas-dispute-action-btn" title="View dispute">
+
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i><span>View</span>
+
                 </a>
 
-            </center>
+            }
 
-        }
-    </td>
-</tr>
+            else
+
+            {
+
+                <span class="saas-dispute-action-muted">—</span>
+
+            }
+
+        </td>
+
+    </tr>
+
 }
 
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>

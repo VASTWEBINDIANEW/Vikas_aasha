@@ -4908,15 +4908,24 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
             var userid = User.Identity.GetUserId();
             var userDetails = db.Users.Where(a => a.UserId == userid).SingleOrDefault();
-            var admindetails = db.Admin_details.SingleOrDefault();
+            if (userDetails == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            var admindetails = db.Admin_details.SingleOrDefault() ?? new Admin_details();
             ViewBag.admin = admindetails;
             ViewBag.image = admindetails.Photo;
-            //state
 
-            int state = Convert.ToInt32(admindetails.State);
-            int district = Convert.ToInt32(admindetails.District);
-            ViewBag.ddlstate = db.State_Desc.Where(a => a.State_id == state).SingleOrDefault().State_name;
-            ViewBag.dddistrict = db.District_Desc.Where(a => a.Dist_id == district && a.State_id == state).SingleOrDefault().Dist_Desc;
+            int state = 0;
+            int district = 0;
+            int.TryParse(Convert.ToString(admindetails.State), out state);
+            int.TryParse(Convert.ToString(admindetails.District), out district);
+
+            var stateRow = db.State_Desc.FirstOrDefault(a => a.State_id == state);
+            var districtRow = db.District_Desc.FirstOrDefault(a => a.Dist_id == district && a.State_id == state);
+            ViewBag.ddlstate = stateRow != null ? stateRow.State_name : "—";
+            ViewBag.dddistrict = districtRow != null ? districtRow.Dist_Desc : "—";
             ViewBag.Sate = db.State_Desc.Select(a => new SelectListItem { Text = a.State_name, Value = a.State_id.ToString() }).ToList();
             ViewBag.District = db.District_Desc.Where(a => a.State_id == state).Select(a => new SelectListItem { Text = a.Dist_Desc, Value = a.Dist_id.ToString() }).ToList();
 
@@ -4928,109 +4937,64 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             if (twowaysec == false)
             {
-                ViewBag.passcodesetings = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault().passcodetype;
-
+                var passRow = db.passcodesettings.FirstOrDefault(x => x.userid == userid);
+                ViewBag.passcodesetings = passRow != null ? passRow.passcodetype : "OFF";
             }
             else
             {
                 ViewBag.passcodesetings = "OTP";
             }
             var userroles = db.AdminProfileAllUserOTPs.ToList();
-            var twowaysecformaster = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master" && x.Status == "N").FirstOrDefault();
+            var twowaysecformaster = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "master" && x.Status == "N");
             if (twowaysecformaster != null)
             {
-
-                var passcodemoster = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master").SingleOrDefault().passcodetype;
-                if (passcodemoster != null)
-                {
-
-
-                    ViewBag.masterpasscodesetings = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "master").SingleOrDefault().passcodetype;
-                }
-                else
-                {
-                    ViewBag.masterpasscodesetings = "OFF";
-                }
-
-
+                var masterOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "master");
+                ViewBag.masterpasscodesetings = masterOtpRow != null && !string.IsNullOrEmpty(masterOtpRow.passcodetype)
+                    ? masterOtpRow.passcodetype
+                    : "OFF";
             }
-            else if (twowaysecformaster == null)
+            else
             {
                 ViewBag.masterpasscodesetings = "OTP";
-
             }
 
-
-            var twowaysecfordealer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer" && x.Status == "N").FirstOrDefault();
+            var twowaysecfordealer = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Dealer" && x.Status == "N");
             if (twowaysecfordealer != null)
             {
-
-                var passcodedealer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer").SingleOrDefault().passcodetype;
-                if (passcodedealer != null)
-                {
-
-
-                    ViewBag.dealerpasscodesetings = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Dealer").SingleOrDefault().passcodetype;
-                }
-                else
-                {
-                    ViewBag.dealerpasscodesetings = "OFF";
-                }
-
-
+                var dealerOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Dealer");
+                ViewBag.dealerpasscodesetings = dealerOtpRow != null && !string.IsNullOrEmpty(dealerOtpRow.passcodetype)
+                    ? dealerOtpRow.passcodetype
+                    : "OFF";
             }
-            else if (twowaysecfordealer == null)
+            else
             {
                 ViewBag.dealerpasscodesetings = "OTP";
-
             }
 
-            var twowaysecforretailer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Retailer" && x.Status == "N").FirstOrDefault();
+            var twowaysecforretailer = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Retailer" && x.Status == "N");
             if (twowaysecforretailer != null)
             {
-
-                var passcoderetailer = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Retailer").SingleOrDefault().passcodetype;
-                if (passcoderetailer != null)
-                {
-
-
-                    ViewBag.Retailerpasscodesetings = passcoderetailer;
-                }
-                else
-                {
-                    ViewBag.Retailerpasscodesetings = "OFF";
-                }
-
-
+                var retailerOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Retailer");
+                ViewBag.Retailerpasscodesetings = retailerOtpRow != null && !string.IsNullOrEmpty(retailerOtpRow.passcodetype)
+                    ? retailerOtpRow.passcodetype
+                    : "OFF";
             }
-            else if (twowaysecforretailer == null)
+            else
             {
                 ViewBag.Retailerpasscodesetings = "OTP";
-
             }
 
-            var twowaysecforAPI = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "API" && x.Status == "N").FirstOrDefault();
+            var twowaysecforAPI = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "API" && x.Status == "N");
             if (twowaysecforAPI != null)
             {
-
-                var passcodeAPI = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "API").SingleOrDefault().passcodetype;
-                if (passcodeAPI != null)
-                {
-
-
-                    ViewBag.APIpasscodesetings = passcodeAPI;
-                }
-                else
-                {
-                    ViewBag.APIpasscodesetings = "OFF";
-                }
-
-
+                var apiOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "API");
+                ViewBag.APIpasscodesetings = apiOtpRow != null && !string.IsNullOrEmpty(apiOtpRow.passcodetype)
+                    ? apiOtpRow.passcodetype
+                    : "OFF";
             }
-            else if (twowaysecforAPI == null)
+            else
             {
                 ViewBag.APIpasscodesetings = "OTP";
-
             }
             bool? sts = false;
             var servicenm = db.Serviceallows.Where(aa => aa.ServiceName == "InstantPayAccountVerify").SingleOrDefault();
@@ -5042,30 +5006,18 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             ViewBag.serviceallow = sts;
 
 
-            var twowaysecforWhitelabel = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Whitelabel" && x.Status == "N").FirstOrDefault();
+            var twowaysecforWhitelabel = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Whitelabel" && x.Status == "N");
             if (twowaysecforWhitelabel != null)
             {
-
-                var passcodeWhitelabel = db.AdminProfileAllUserOTPs.Where(x => x.RoleName == "Whitelabel").SingleOrDefault().passcodetype;
-                if (passcodeWhitelabel != null)
-                {
-
-
-                    ViewBag.Whitelabelpasscodesetings = passcodeWhitelabel;
-                }
-                else
-                {
-                    ViewBag.Whitelabelpasscodesetings = "OFF";
-                }
-
-
+                var whitelabelOtpRow = db.AdminProfileAllUserOTPs.FirstOrDefault(x => x.RoleName == "Whitelabel");
+                ViewBag.Whitelabelpasscodesetings = whitelabelOtpRow != null && !string.IsNullOrEmpty(whitelabelOtpRow.passcodetype)
+                    ? whitelabelOtpRow.passcodetype
+                    : "OFF";
             }
-            else if (twowaysecforWhitelabel == null)
+            else
             {
                 ViewBag.Whitelabelpasscodesetings = "OTP";
-
             }
-
 
             return View(userDetails);
         }
@@ -5123,7 +5075,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 ad.mobile = string.IsNullOrWhiteSpace(txtmobile) ? ad.mobile : txtmobile;
                 ad.Aadhar = txtaadhaarcard;
                 ad.pencardno = txtpancard;
-                //  ad.Gstno = txtgst;
+                if (!string.IsNullOrWhiteSpace(txtgst))
+                {
+                    ad.Gstno = txtgst;
+                }
                 ad.tanno = txtTAN;
                 ad.registrationno = txtregistration;
                 db.SaveChanges();
@@ -5455,21 +5410,29 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             return Json(ch.ToArray(), JsonRequestBehavior.AllowGet);
 
         }
+        [HttpPost]
         public JsonResult UpdateSupportData(int ID, string Email, string Mobile)
         {
             if (ID > 0)
             {
-                var admUpdate = db.Admin_details.Single(a => a.ID == ID);
-                admUpdate.email1 = string.IsNullOrWhiteSpace(Email) ? admUpdate.email1 : Email;
-                admUpdate.mobile1 = string.IsNullOrWhiteSpace(Mobile) ? admUpdate.mobile1 : Mobile;
+                var admUpdate = db.Admin_details.SingleOrDefault(a => a.ID == ID);
+                if (admUpdate == null)
+                {
+                    return Json("Failed", JsonRequestBehavior.AllowGet);
+                }
+                if (Email != null)
+                {
+                    admUpdate.email1 = Email.Trim();
+                }
+                if (Mobile != null)
+                {
+                    admUpdate.mobile1 = Mobile.Trim();
+                }
                 db.SaveChanges();
                 return Json("Success", JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                return Json("Failed", JsonRequestBehavior.AllowGet);
-            }
 
+            return Json("Failed", JsonRequestBehavior.AllowGet);
         }
         //Change Password 
         
@@ -5927,15 +5890,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         }
 
+        [HttpPost]
         public async Task<ActionResult> DisablePassCodeBYUserID(string userid, string btnval)
         {
             if (!string.IsNullOrEmpty(userid) && !string.IsNullOrEmpty(btnval))
             {
                 if (btnval == "Y")
                 {
-                    if (userid != null || userid != "")
+                    if (!string.IsNullOrEmpty(userid))
                     {
-
                         var servid = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault();
                         if (servid != null)
                         {
@@ -5943,34 +5906,27 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             servid.passcodetype = "OFF";
                             servid.expiretime = null;
                             db.SaveChanges();
-                            try
-                            {
-                                await UserManager.SetTwoFactorEnabledAsync(userid, true);
-                            }
-                            catch { }
-
-                            //demo user
-                            var chkdemo = db.Demo_User_Chk.SingleOrDefault();
-                            if (chkdemo != null)
-                            {
-                                if (chkdemo.userid == userid)
-                                {
-                                    try
-                                    {
-                                        await UserManager.SetTwoFactorEnabledAsync(userid, false);
-                                    }
-                                    catch { }
-                                }
-
-                            }
                         }
 
+                        try
+                        {
+                            await UserManager.SetTwoFactorEnabledAsync(userid, true);
+                        }
+                        catch { }
 
-                        var RoleName = UserManager.GetRoles(userid);
-                        return Json(RoleName, JsonRequestBehavior.AllowGet);
+                        var chkdemo = db.Demo_User_Chk.SingleOrDefault();
+                        if (chkdemo != null && chkdemo.userid == userid)
+                        {
+                            try
+                            {
+                                await UserManager.SetTwoFactorEnabledAsync(userid, false);
+                            }
+                            catch { }
+                        }
+
+                        var roleNamesY = UserManager.GetRoles(userid);
+                        return Json(roleNamesY.ToArray(), JsonRequestBehavior.AllowGet);
                     }
-
-
                 }
                 else if (btnval == "PERDAY" || btnval == "WEAKS" || btnval == "MONTHS")
                 {
@@ -6044,15 +6000,20 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                     }
                     db.SaveChanges();
-                    var RoleName = UserManager.GetRoles(userid);
-                    return Json(RoleName, JsonRequestBehavior.AllowGet);
+                    var roleNamesPc = UserManager.GetRoles(userid);
+                    return Json(roleNamesPc.ToArray(), JsonRequestBehavior.AllowGet);
 
                 }
                 else
                 {
-                    if (userid != null || userid != "")
+                    if (!string.IsNullOrEmpty(userid))
                     {
-                        await UserManager.SetTwoFactorEnabledAsync(userid, false);
+                        try
+                        {
+                            await UserManager.SetTwoFactorEnabledAsync(userid, false);
+                        }
+                        catch { }
+
                         var passcodes = db.passcodesettings.Where(x => x.userid == userid).SingleOrDefault();
                         if (passcodes != null)
                         {
@@ -6060,15 +6021,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                             passcodes.expiretime = null;
                             passcodes.passcode = null;
                             db.SaveChanges();
-
                         }
-                        var RoleName = UserManager.GetRoles(userid);
-                        return Json(RoleName, JsonRequestBehavior.AllowGet);
+
+                        var roleNamesOff = UserManager.GetRoles(userid);
+                        return Json(roleNamesOff.ToArray(), JsonRequestBehavior.AllowGet);
                     }
                 }
 
             }
-            return RedirectToAction("Profile");
+            return Json(new string[0], JsonRequestBehavior.AllowGet);
         }
 
 
@@ -16678,10 +16639,94 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
         public ActionResult ShowAll(int idno, string disput)
         {
+            ViewData["success"] = TempData["success"];
+            ViewData["error"] = TempData["error"];
+            TempData.Remove("success");
+            TempData.Remove("error");
             var ch = db.clear_dispute_list(idno);
             ViewBag.dis = disput == null ? "Not Region Found" : disput;
             return View(ch);
         }
+        private static DateTime ParseDisputeInputDate(string dateStr)
+        {
+            if (string.IsNullOrWhiteSpace(dateStr))
+            {
+                return DateTime.Today.Date;
+            }
+            var s = dateStr.Trim();
+            string[] formats =
+            {
+                "yyyy-MM-dd", "yyyy/MM/dd", "yyyyMMdd",
+                "MM/dd/yyyy", "M/d/yyyy", "MM-dd-yyyy",
+                "dd/MM/yyyy", "d/M/yyyy", "dd-MM-yyyy",
+                "dd-MMM-yyyy", "MMM dd, yyyy"
+            };
+            DateTime dt;
+            if (DateTime.TryParseExact(s, formats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
+            {
+                return dt.Date;
+            }
+            if (DateTime.TryParse(s, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
+            {
+                return dt.Date;
+            }
+            if (DateTime.TryParse(s, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out dt))
+            {
+                return dt.Date;
+            }
+            return DateTime.Today.Date;
+        }
+
+        private static void GetDisputeSqlDateRange(string txt_frm_date, string txt_to_date, out string frm_date, out string to_date)
+        {
+            if (string.IsNullOrWhiteSpace(txt_frm_date) || string.IsNullOrWhiteSpace(txt_to_date))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+            }
+            else
+            {
+                txt_frm_date = ParseDisputeInputDate(txt_frm_date).ToString(System.Globalization.CultureInfo.CurrentCulture);
+                txt_to_date = ParseDisputeInputDate(txt_to_date).ToString(System.Globalization.CultureInfo.CurrentCulture);
+            }
+
+            var frm = Convert.ToDateTime(txt_frm_date).Date;
+            var to = Convert.ToDateTime(txt_to_date).Date;
+            if (to < frm)
+            {
+                var swap = frm;
+                frm = to;
+                to = swap;
+            }
+            frm_date = frm.ToString("yyyy-MM-dd");
+            to_date = to.AddDays(1).ToString("yyyy-MM-dd");
+        }
+
+        private List<all_dispute_list_Result> LoadDisputeListPage(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            if (HttpContext != null && HttpContext.Request != null)
+            {
+                if (string.IsNullOrWhiteSpace(ddl_status))
+                {
+                    ddl_status = HttpContext.Request["ddl_status"];
+                }
+                if (string.IsNullOrWhiteSpace(txt_frm_date))
+                {
+                    txt_frm_date = HttpContext.Request["txt_frm_date"];
+                }
+                if (string.IsNullOrWhiteSpace(txt_to_date))
+                {
+                    txt_to_date = HttpContext.Request["txt_to_date"];
+                }
+            }
+
+            string frm_date;
+            string to_date;
+            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
+            var status = ddl_status ?? "";
+            return db.all_dispute_list(1, 50, status, frm_date, to_date).ToList();
+        }
+
         public ActionResult Dispute_list()
         {
             ViewData["success"] = TempData["success"];
@@ -16689,47 +16734,35 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             TempData.Remove("success");
             TempData.Remove("error");
 
+            var defaultFrom = DateTime.Today.AddYears(-1);
+            var defaultTo = DateTime.Today;
+            ViewBag.txt_frm_date = defaultFrom.ToString("yyyy-MM-dd");
+            ViewBag.txt_to_date = defaultTo.ToString("yyyy-MM-dd");
+            ViewBag.ddl_status = "";
 
-            return View();
+            return View(LoadDisputeListPage("", ViewBag.txt_frm_date as string, ViewBag.txt_to_date as string));
         }
         [HttpPost]
         public ActionResult Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
         {
             ViewBag.chk = "post";
+            ViewBag.ddl_status = ddl_status;
+            ViewBag.txt_frm_date = txt_frm_date;
+            ViewBag.txt_to_date = txt_to_date;
 
-            return View();
+            return View(LoadDisputeListPage(ddl_status, txt_frm_date, txt_to_date));
         }
         [ChildActionOnly]
         public ActionResult _Dispute_list(string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            if (string.IsNullOrEmpty(txt_frm_date) || string.IsNullOrEmpty(txt_to_date))
-            {
-                txt_frm_date = DateTime.Now.ToString();
-                txt_to_date = DateTime.Now.ToString();
-                string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
-                string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
-                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
-                return View(ch);
-            }
-            else
-            {
-                DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                to = to.AddDays(1);
-                string frm_date = frm.ToString("yyyy-MM-dd");
-                string to_date = to.ToString("yyyy-MM-dd");
-                var ch = db.all_dispute_list(1, 20, ddl_status, frm_date, to_date).ToList();
-                return View(ch);
-            }
+            return View(LoadDisputeListPage(ddl_status, txt_frm_date, txt_to_date));
         }
         public ActionResult InfiniteScrollDispute(int pageindex, string ddl_status, string txt_frm_date, string txt_to_date)
         {
             int pagesize = 20;
-            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            to = to.AddDays(1);
-            string frm_date = frm.ToString("yyyy-MM-dd");
-            string to_date = to.ToString("yyyy-MM-dd");
+            string frm_date;
+            string to_date;
+            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
             var tbrow = db.all_dispute_list(pageindex, pagesize, ddl_status, frm_date, to_date).ToList();
             JsonModel jsonmodel = new JsonModel();
             jsonmodel.NoMoredata = tbrow.Count < pagesize;
@@ -16753,11 +16786,9 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             dt2.Columns.Add("Transition ID", typeof(string));
             dt2.Columns.Add("Response", typeof(string));
 
-            DateTime frm = DateTime.ParseExact(txt_frm_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            DateTime to = DateTime.ParseExact(txt_to_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            to = to.AddDays(1);
-            string frm_date = frm.ToString("yyyy-MM-dd");
-            string to_date = to.ToString("yyyy-MM-dd");
+            string frm_date;
+            string to_date;
+            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
             var respo = db.all_dispute_list(1, 1000000, ddl_status, frm_date, to_date).ToList();
             if (respo.Count > 0)
             {
@@ -16788,6 +16819,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             Response.Flush();
             Response.End();
             return View();
+        }
+
+        public ActionResult PDFRechargereport_Dispute(string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            string frm_date;
+            string to_date;
+            GetDisputeSqlDateRange(txt_frm_date, txt_to_date, out frm_date, out to_date);
+            var respo = db.all_dispute_list(1, 1000000, ddl_status ?? "", frm_date, to_date).ToList();
+            return new ViewAsPdf("PDFRechargereport_Dispute", respo);
         }
 
 
@@ -114498,6 +114538,29 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             return View();
         }
 
+        public ActionResult PDFMicroATMUnholdHistoryReport(string txt_frm_date, string txt_to_date)
+        {
+            DateTime fromdate;
+            DateTime todateDisplay;
+            if (!DateTime.TryParse(txt_frm_date, out fromdate))
+            {
+                fromdate = DateTime.Today;
+            }
+            if (!DateTime.TryParse(txt_to_date, out todateDisplay))
+            {
+                todateDisplay = DateTime.Today;
+            }
+            if (todateDisplay < fromdate)
+            {
+                todateDisplay = fromdate;
+            }
+
+            ViewBag.frmDate = fromdate.ToString("yyyy-MM-dd");
+            ViewBag.toDate = todateDisplay.ToString("yyyy-MM-dd");
+            var result = db.Show_MicroAtM_UnholdHistory(fromdate, todateDisplay.AddDays(1)).ToList();
+            return new ViewAsPdf("PDFMicroATMUnholdHistoryReport", result);
+        }
+
         public ActionResult Show_ManualUPI_REQ()
         {
             DateTime txt_frm_date = DateTime.Now.Date;
@@ -124246,26 +124309,43 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
 
         private List<PanAadharReportViewModel> GetPanAadharReportList(DateTime queryFrom, DateTime queryToExclusive)
         {
-            return (from a in db.PANAADHARVERIFICATIONREPORTs
-                    join b in db.Retailer_Details
-                    on a.RetailerId equals b.RetailerId
-                    where a.CreatedAt >= queryFrom && a.CreatedAt < queryToExclusive
-                    orderby a.CreatedAt descending
-                    select new PanAadharReportViewModel
-                    {
-                        RetailerId = a.RetailerId,
-                        TransactionId = a.TransactionId,
-                        PanCharge = (decimal)a.PanCharge,
-                        AadharCharge = (decimal)a.AadharCharge,
-                        ChargeType = a.ChargeType,
-                        CreatedAt = a.CreatedAt.HasValue
-                            ? a.CreatedAt.Value.ToString("dd-MM-yyyy HH:mm")
-                            : "",
-                        RetailerName = b.RetailerName,
-                        Email = b.Email,
-                        Mobile = b.Mobile,
-                        Frm_Name = b.Frm_Name
-                    }).ToList();
+            const string sql = @"
+SELECT
+    a.RetailerId,
+    a.TransactionId,
+    a.PanCharge,
+    a.AadharCharge,
+    a.ChargeType,
+    a.CreatedAt,
+    b.RetailerName,
+    b.Email,
+    b.Mobile,
+    b.Frm_Name
+FROM dbo.PANAADHARVERIFICATIONREPORT AS a
+LEFT JOIN dbo.Retailer_Details AS b ON a.RetailerId = b.RetailerId
+WHERE a.CreatedAt >= @p0 AND a.CreatedAt < @p1
+ORDER BY a.CreatedAt DESC";
+
+            var rows = db.Database.SqlQuery<PanAadharReportSqlRow>(
+                sql,
+                new SqlParameter("@p0", SqlDbType.DateTime) { Value = queryFrom },
+                new SqlParameter("@p1", SqlDbType.DateTime) { Value = queryToExclusive }).ToList();
+
+            return rows.Select(x => new PanAadharReportViewModel
+            {
+                RetailerId = x.RetailerId,
+                TransactionId = x.TransactionId,
+                PanCharge = x.PanCharge ?? 0m,
+                AadharCharge = x.AadharCharge ?? 0m,
+                ChargeType = x.ChargeType,
+                CreatedAt = x.CreatedAt.HasValue
+                    ? x.CreatedAt.Value.ToString("dd-MM-yyyy HH:mm")
+                    : string.Empty,
+                RetailerName = x.RetailerName ?? string.Empty,
+                Email = x.Email ?? string.Empty,
+                Mobile = x.Mobile ?? string.Empty,
+                Frm_Name = x.Frm_Name ?? string.Empty
+            }).ToList();
         }
 
         private ActionResult PANAadharVerificationReportCore(
@@ -124279,10 +124359,41 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             var result = GetPanAadharReportList(queryFrom, queryToExclusive);
             return View(result);
         }
+        // VM — App Option page
         public ActionResult APP_Option()
         {
             var Image = db.sliderimages.ToList();
+            try
+            {
+                ViewBag.AppMessages = db.AppMessages.OrderByDescending(x => x.InsertDate).ToList();
+            }
+            catch
+            {
+                ViewBag.AppMessages = new List<AppMessage>();
+            }
             return View(Image);
+        }
+
+        [HttpPost]
+        public ActionResult GetAppMessages()
+        {
+            try
+            {
+                var list = db.AppMessages
+                    .OrderByDescending(x => x.InsertDate)
+                    .Select(x => new
+                    {
+                        id = x.id,
+                        App_Message = x.App_Message,
+                        InsertDate = x.InsertDate
+                    })
+                    .ToList();
+                return Json(new { status = true, message = "", data = list }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpPost]
         public ActionResult ChangeIconTheam(string theam)
@@ -124290,6 +124401,10 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
             try
             {
                 var data = db.appicons.FirstOrDefault();
+                if (data == null)
+                {
+                    return Json(new { status = false, theam = theam, message = "App icon settings not found." });
+                }
                 data.theam = theam;
                 data.istrue = true;
                 data.updatedate = DateTime.Now;
@@ -124304,69 +124419,133 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                 return Json(new { status = false, theam = theam, message = ex.Message });
             }
         }
+
+        [HttpPost]
+        public ActionResult ChangeIconTheamWithOtp(string theam, string otp)
+        {
+            try
+            {
+                var row = db.appicons.FirstOrDefault();
+                if (row == null)
+                {
+                    return Json(new { status = false, theam = theam, message = "App icon settings not found." });
+                }
+                if (string.IsNullOrEmpty(row.users) || row.users.Trim() != (otp ?? "").Trim())
+                {
+                    return Json(new { status = false, theam = theam, message = "Otp not matched" });
+                }
+                row.theam = theam;
+                row.istrue = true;
+                row.updatedate = DateTime.Now;
+                row.isFinancialtrue = true;
+                row.isTraveltrue = true;
+                row.isOtherstrue = true;
+                row.users = null;
+                db.SaveChanges();
+                return Json(new { status = true, theam = theam, updatedate = row.updatedate, message = "Update successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, theam = theam, message = ex.Message });
+            }
+        }
+
         public ActionResult CheckTheamactive()
         {
             try
             {
-                var theam = db.appicons.FirstOrDefault().theam;
-                return Json(new {success = true, theam = theam });
+                var row = db.appicons.FirstOrDefault();
+                var theam = row != null && !string.IsNullOrEmpty(row.theam) ? row.theam : "1";
+                return Json(new { success = true, theam = theam, message = "" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Json(new { success = false, theam = "1" });
+                return Json(new { success = false, theam = "1", message = ex.Message });
             }
         }
         [HttpPost]
         public ActionResult InsertAppMessage(string Message)
         {
-            var MsgCount = db.AppMessages.ToList();
-            if (!string.IsNullOrEmpty(Message))
+            try
             {
-                if (MsgCount.Count < 4)
-                {
-                    var data = new AppMessage()
+                var msgList = db.AppMessages
+                    .OrderByDescending(x => x.InsertDate)
+                    .Select(x => new
                     {
-                        App_Message = Message,
-                        InsertDate = DateTime.Now
-                    };
-                    db.AppMessages.Add(data);
-                    db.SaveChanges();
-                    var InsertData = db.AppMessages.ToList();
-                    return Json(new { status = true, message = "Insert Successfully.", data = InsertData });
-                }
-                else
+                        id = x.id,
+                        App_Message = x.App_Message,
+                        InsertDate = x.InsertDate
+                    })
+                    .ToList();
+
+                if (!string.IsNullOrEmpty(Message))
                 {
-                    return Json(new { status = false, message = "Alredy insert 4 notifications. To add a new notification, please delete an existing one.", data = MsgCount }); 
+                    if (msgList.Count < 4)
+                    {
+                        var data = new AppMessage()
+                        {
+                            App_Message = Message,
+                            InsertDate = DateTime.Now
+                        };
+                        db.AppMessages.Add(data);
+                        db.SaveChanges();
+                        msgList = db.AppMessages
+                            .OrderByDescending(x => x.InsertDate)
+                            .Select(x => new
+                            {
+                                id = x.id,
+                                App_Message = x.App_Message,
+                                InsertDate = x.InsertDate
+                            })
+                            .ToList();
+                        return Json(new { status = true, message = "Insert Successfully.", data = msgList }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    return Json(new
+                    {
+                        status = false,
+                        message = "Alredy insert 4 notifications. To add a new notification, please delete an existing one.",
+                        data = msgList
+                    }, JsonRequestBehavior.AllowGet);
                 }
+
+                return Json(new { status = true, message = "", data = msgList }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { status = true, message = "", data = MsgCount });
+                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
         public ActionResult DeleteAppMessage(int id)
         {
-            var InsertData = db.AppMessages.ToList();
             try
             {
                 var data = db.AppMessages.Where(x => x.id == id).FirstOrDefault();
-                if (!string.IsNullOrEmpty(data.ToString()))
+                if (data != null)
                 {
                     db.AppMessages.Remove(data);
                     db.SaveChanges();
-                    InsertData = db.AppMessages.ToList();
-                    return Json(new { status = true, message = "Delete SuccessFully.", data = InsertData });
                 }
-                else
+                var msgList = db.AppMessages
+                    .OrderByDescending(x => x.InsertDate)
+                    .Select(x => new
+                    {
+                        id = x.id,
+                        App_Message = x.App_Message,
+                        InsertDate = x.InsertDate
+                    })
+                    .ToList();
+                if (data != null)
                 {
-                    return Json(new { status = false, message = "Getting some issue. Plese Try after Some time.", data = InsertData });
+                    return Json(new { status = true, message = "Delete SuccessFully.", data = msgList }, JsonRequestBehavior.AllowGet);
                 }
+                return Json(new { status = false, message = "Getting some issue. Plese Try after Some time.", data = msgList }, JsonRequestBehavior.AllowGet);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Json(new { status = false, message = ex.Message, data = InsertData });
+                return Json(new { status = false, message = ex.Message, data = new object[0] }, JsonRequestBehavior.AllowGet);
             }
         }
         public async Task<ActionResult> sliderimages() 

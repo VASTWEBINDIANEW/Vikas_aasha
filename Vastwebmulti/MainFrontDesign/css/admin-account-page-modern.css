@@ -184,6 +184,11 @@ body.saas-admin-ui .saas-acc-search {
     padding: 0 14px 0 40px !important;
 }
 
+body.saas-admin-ui .saas-acc-dp-field .form-control.saas-acc-dp-input,
+body.saas-admin-ui .saas-acc-dp-field input.saas-acc-dp-input {
+    padding: 8px 12px 8px 34px !important;
+}
+
 body.saas-admin-ui .saas-acc-search i {
     position: absolute;
     left: 14px;
@@ -385,7 +390,79 @@ body.saas-admin-ui .saas-acc-table-card {
     border: 1px solid var(--acc-border);
     border-radius: var(--acc-radius);
     box-shadow: var(--acc-shadow);
-    overflow: hidden;
+    overflow: visible !important;
+    max-width: 100%;
+}
+
+/* ========== Universal horizontal table scroll (all modern admin pages) ========== */
+body.saas-admin-ui section.content.saas-admin-account-page,
+body.saas-admin-ui section.content.saas-admin-settings-page,
+body.saas-admin-ui section.content.saas-admin-report-page,
+body.saas-admin-ui section.content.saas-support-page,
+body.saas-admin-ui section.content.saas-dispute-page,
+body.saas-admin-ui section.content.saas-purchase-report-page,
+body.saas-admin-ui section.content.saas-pan-report-page,
+body.saas-admin-ui section.content.saas-alldetails-page,
+body.saas-admin-ui section.content.saas-admin-profile-page,
+body.saas-admin-ui section.content.saas-prof-page,
+body.saas-admin-ui section.content.saas-showall-page,
+body.saas-admin-ui section.content.tmw-Alldetails {
+    overflow-x: visible !important;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-acc-table-card-head {
+    border-radius: var(--acc-radius) var(--acc-radius) 0 0;
+}
+
+body.saas-admin-ui .saas-acc-table-scroll,
+body.saas-admin-ui .saas-acc-table-wrap,
+body.saas-admin-ui .saas-acc-table-card > .table-responsive,
+body.saas-admin-ui .saas-acc-table-card > [id$="TableHost"],
+body.saas-admin-ui .saas-acc-table-card > #showreport,
+body.saas-admin-ui .saas-acc-table-card > .dataTables_wrapper,
+body.saas-admin-ui .saas-admin-account-page .table-responsive,
+body.saas-admin-ui .saas-admin-settings-page .table-responsive,
+body.saas-admin-ui .saas-admin-report-page .table-responsive,
+body.saas-admin-ui .saas-support-page .table-responsive,
+body.saas-admin-ui .saas-dispute-page .table-responsive,
+body.saas-admin-ui .saas-purchase-report-page .table-responsive,
+body.saas-admin-ui .saas-pan-report-page .table-responsive,
+body.saas-admin-ui .saas-alldetails-page #showreport,
+body.saas-admin-ui .saas-alldetails-page .dataTables_wrapper,
+body.saas-admin-ui .saas-prof-page .table-responsive {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+    padding-bottom: 8px;
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui .saas-acc-table-scroll::-webkit-scrollbar,
+body.saas-admin-ui .saas-acc-table-wrap::-webkit-scrollbar,
+body.saas-admin-ui .saas-acc-table-card > .table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-acc-table-scroll::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-acc-table-wrap::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-acc-table-card > .table-responsive::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-acc-table-card [id$="TableHost"] .saas-acc-table-wrap,
+body.saas-admin-ui .saas-acc-table-card [id$="TableHost"] .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
 body.saas-admin-ui .saas-acc-table-card-head {
@@ -413,12 +490,24 @@ body.saas-admin-ui .saas-acc-table-card-head span {
 }
 
 body.saas-admin-ui .saas-acc-table-wrap {
-    overflow-x: auto;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-acc-table-scroll .saas-acc-table,
+body.saas-admin-ui .saas-acc-table-wrap > table,
+body.saas-admin-ui .saas-acc-table-wrap .saas-acc-table,
+body.saas-admin-ui .table-responsive > table.saas-acc-table,
+body.saas-admin-ui .table-responsive > table.table {
+    width: max-content;
+    min-width: 100%;
+    margin: 0 !important;
 }
 
 body.saas-admin-ui .saas-acc-table {
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
     margin: 0 !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
@@ -911,5 +1000,35 @@ body.saas-admin-ui .saas-admin-account-page .dataTables_wrapper .dataTables_pagi
 @media (max-width: 480px) {
     body.saas-admin-ui .saas-acc-metrics {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Min widths so wide tables always scroll (all breakpoints) */
+body.saas-admin-ui .saas-acc-table--ledger {
+    min-width: 980px;
+}
+
+body.saas-admin-ui .saas-acc-table--bank,
+body.saas-admin-ui .saas-acc-table--dispute,
+body.saas-admin-ui .saas-acc-table--purchase,
+body.saas-admin-ui .saas-acc-table--showall {
+    min-width: 900px;
+}
+
+body.saas-admin-ui .saas-acc-table:not([class*="--"]) {
+    min-width: 640px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-acc-table thead th,
+    body.saas-admin-ui .saas-acc-table tbody td {
+        white-space: nowrap;
+    }
+
+    body.saas-admin-ui .saas-acc-table tbody td.col-details {
+        white-space: normal;
+        min-width: 140px;
+        max-width: 280px;
+        word-break: break-word;
     }
 }

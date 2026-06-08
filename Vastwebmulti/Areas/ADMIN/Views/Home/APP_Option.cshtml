@@ -1,14 +1,17 @@
-﻿@using Vastwebmulti.Models;
+﻿@* VM — App Option view *@
+@using Vastwebmulti.Models;
 @{
-    ViewBag.Title = "Outside_Logo";
+    ViewBag.Title = "App Option";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-<link rel="stylesheet" href="/path/to/dist/css/image-zoom.css" />
-<script src="/path/to/cdn/jquery.min.js"></script>
-<script src="/path/to/dist/js/image-zoom.min.js"></script>
 <style>
 
    /* new css */
+
+    .appc_autol img {
+        width: 20px;
+    }
+
     .filllinecolor {
         background: var(--main-bg-lcolor) !important;
         color: white !important;
@@ -17,9 +20,9 @@
         background: var(--main-bg-lcolor);
     }
 
-    .ClassBtnActive span {
-        color: #fff;
-    }
+        .ClassBtnActive span {
+            color: #006815;
+        }
 
     .appc_autol1 .ClassBtnActive span i {
         display: block;
@@ -59,12 +62,12 @@
     #loginSliders .app_set {
         padding-top: 5px;
     }
-    #AppIconImages .appc_autol1 button {
+    #vmPanelIconImg .appc_autol1 button {
         width: 100%;
         float: left;
         height:56px;
     }
-    #AppIconImages .appc_autol1 {
+    #vmPanelIconImg .appc_autol1 {
         display: block;
     }
     .img_box {
@@ -85,7 +88,7 @@
 
         .img_box h6 {
             text-align: left;
-            color: #fff;
+            color: #fff !important;
             font-weight: 800;
             margin: 0;
             margin-bottom: 10px;
@@ -103,9 +106,10 @@
         top: 0;
         width: 100%;
         float: left;
-        transform: translate(0%,12%);
-        height: 390px;
+        height: 360px;
         overflow: hidden;
+        background: #000;
+        border-radius: 10px;
     }
         .group_img svg {
             width: 100%;
@@ -211,32 +215,8 @@
             top: 40%;
         }
 
-    .box_otp {
-        width: 30%;
-        margin: auto;
-        position: relative;
-        top: 35%;
-        float: initial !important;
-        display: table !important;
-        background: #fff;
-        padding: 20px;
-        border-radius: 4px;
-    }
-
-        .box_otp input {
-            width: 100%;
-            float: left;
-        }
-
-        .box_otp button {
-            padding: 4px 16px;
-            border: 1px solid #000;
-            margin-top: 20px !important;
-            width: auto;
-            float: right;
-            border-radius: 3px;
-        }
-    .button-container {
+    /* legacy .box_otp — overridden by vm-app-otp-dialog in admin-app-option-modern.css */
+    .vm-app-tabs-nav {
         display: flex;
         gap: 10px; /* Space between buttons */
     }
@@ -274,7 +254,7 @@
             margin: 0;
             text-align: justify;
         }
-        .button-container button {
+        .vm-app-tabs-nav button {
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
@@ -285,12 +265,12 @@
             transition: background-color 0.3s, color 0.3s; /* Smooth transition */
         }
 
-            .button-container button.active {
+            .vm-app-tabs-nav button.active {
                 background-color: var(--main-bg-lcolor); /* Active background color */
                 color: #fff; /* Active text color */
             }
 
-            .button-container button:hover {
+            .vm-app-tabs-nav button:hover {
                 background-color: var(--main-bg-lcolor); /* Hover background color */
                 color: #fff; /* Hover text color */
             }
@@ -309,15 +289,6 @@
     }
     #otpiconss {
         padding: 8px;
-    }
-    #optshowss button {
-        margin: 0;
-        margin-left: 5px;
-    }
-    #optshowss div{
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
     .center_isetss {
         display: flex;
@@ -338,7 +309,7 @@
     /*  new css   */
 
     .secdiv {
-        width: 25%;
+        width: 24%;
         padding: 5px;
     }
     .secdiv1 {
@@ -363,9 +334,9 @@
     }
     .catagselect span {
         background: var(--main-bg-lcolor);
-        padding: 4px 15px;
+        padding: 4px 0px;
         border-radius: 2px;
-        color: #fff;
+        color: #000;
     }
         .catagselect input {
             margin: 0;
@@ -373,7 +344,7 @@
             background: var(--main-bg-lcolor);
             padding: 4px 15px;
             border-radius: 2px;
-            color: #fff;
+            color: #000;
             border:none;
         }
 
@@ -591,6 +562,8 @@
         float: left;
     }
 
+    
+
     .appc_auto {
         float: left;
         padding: 14px 14px;
@@ -645,15 +618,12 @@
         position: relative;
     }
 
-    #optshow div{
-        float: left;
+    #vmOtpDashboard .vm-app-otp-actions,
+    #vmOtpFront .vm-app-otp-actions {
+        float: none;
         display: flex;
         align-items: center;
     }
-        #optshow button {
-            margin: 0;
-            margin-left: 5px;
-        }
     #otpicon {
         padding: 8px;
     }
@@ -885,10 +855,7 @@
         margin-right: 10px;
     }
 
-    .theam-button {
-        display: flex;
-        align-items: center;
-    }
+    
     .table-container {
         height: 235px; /* Set the desired height */
         overflow-y: auto; /* Enable vertical scrolling */
@@ -1791,11 +1758,11 @@
     }
 
     @@media only screen and (max-width:767px) {
-        .button-container {
+        .vm-app-tabs-nav {
             display: block;
         }
 
-            .button-container button {
+            .vm-app-tabs-nav button {
                 float: left;
                 margin: 5px;
                 width: 48%;
@@ -1848,7 +1815,7 @@
             width: 100%;
         }
 
-        .button-container button {
+        .vm-app-tabs-nav button {
             width: 47%;
         }
 
@@ -1876,7 +1843,7 @@
 
     @@media only screen and (max-width:480px) {
         /* new css */
-        #AppIconImages .appc_autol1 button{
+        #vmPanelIconImg .appc_autol1 button{
             height:70px;
         }
         .app_silder {
@@ -1895,7 +1862,7 @@
             text-align: center;
         }
         /* new css */
-        .button-container button {
+        .vm-app-tabs-nav button {
             margin: 5px 0;
             width: 100%;
         }
@@ -1904,257 +1871,295 @@
             padding: 6px 60px !important;
         }
     }
+
+    /* VM — App Option overrides (last = wins over legacy rules above) */
+
+    
+    .vm-app-option-page .vm-app-tabs-nav {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        background: #f1f5f9 !important;
+        border-radius: 14px !important;
+        padding: 6px !important;
+    }
+    .vm-app-option-page .vm-app-tabs-nav button {
+        width: auto !important;
+        min-width: 100px !important;
+        float: none !important;
+        margin: 0 !important;
+    }
+    .vm-app-option-page .app_set,
+    .vm-app-option-page .ps_setcolor,
+    .vm-app-option-page .ps_setmob,
+    .vm-app-option-page .ps_set {
+        width: 100% !important;
+        float: none !important;
+        height: auto !important;
+    }
+    .vm-app-option-page #valaapcol,
+    .vm-app-option-page .vm-app-btn-preview {
+        position: static !important;
+        transform: none !important;
+        width: 100% !important;
+        top: auto !important;
+        left: auto !important;
+    }
+    .vm-app-option-page .Button_mo {
+        border: none !important;
+        position: relative !important;
+    }
+    .vm-app-option-page .vm-app-panel-scroll {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+    .vm-app-option-page .vm-app-kyc-grid,
+    .vm-app-option-page .vm-app-faq-grid,
+    .vm-app-option-page .vm-app-msg-layout {
+        color: #0f172a;
+    }
+    .vm-app-option-page .vm-app-tab-panel:not(.vm-app-panel-open) {
+        display: none !important;
+    }
+    .vm-app-option-page #vmPanelColor .app_set,
+    .vm-app-option-page #vmPanelColor .app_set2 {
+        width: 100% !important;
+        float: none !important;
+    }
 </style>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-option-modern.css?v=14" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-option-tabs.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-option-color-theme.css?v=5" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<section class="content outside-logo-page" style="position: relative;">
+
+
+<style>
+    #vmPanelMessage p {
+        color: #000;
+    }
+</style>
+
+<section class="content outside-logo-page saas-admin-account-page saas-admin-settings-page vm-app-option-page" style="position: relative;">
     <div class="container-fluid">
 
         @{
             VastwebmultiEntities db = new VastwebmultiEntities();
 
-            var chksd = db.application_color.ToList();
-            var chksd123 = db.appicons.ToList();
+            var chksdList = db.application_color.ToList();
+            var chksd = chksdList.Count > 0
+                ? chksdList
+                : new List<application_color> {
+                    new application_color { background_color = "#2563eb", background_color2 = "#1e3a8a", font_color = "#ffffff" }
+                };
+            var chksd123List = db.appicons.ToList();
+            var chksd123 = chksd123List.Count > 0
+                ? chksd123List
+                : new List<appicon> {
+                    new appicon { color1 = "#2563eb", color2 = "#7c3aed", background_color = "#f1f5f9", icon_design = "1", theam = "1" }
+                };
             var chksd123ss = db.fronticons.ToList();
             var manatoryfilDS = db.manatorypermisions.ToList();
             var backgapp = db.backroundColorofapps.ToList();
             var loginss = db.Login_to_sim.ToList();
         }
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                <div class="card login-back-img page-header-third">
-                    <div class="button-container">
-                        <button id="Button1" onclick="ButtonActive('Button1')" class="active">App Color</button>
-                        <button id="Button2" onclick="ButtonActive('Button2')">App Icon Theme</button>
-                        <button id="Button3" onclick="ButtonActive('Button3')">App Icon Images</button>
-                        <button id="Button4" onclick="ButtonActive('Button4')">App KYC Docs</button>
-                        <button id="Button5" onclick="ButtonActive('Button5')">FQAS</button>
-                        <button id="Button6" onclick="ButtonActive('Button6')">App Sliders</button>
-                        <button id="Button7" onclick="ButtonActive('Button7')">App Message</button>
-                    </div>
-                </div>
+        <div class="vm-app-toolbar">
+            <div>
+                <ol class="vm-app-breadcrumb" style=" margin: 0;">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>App Option</li>
+                </ol>
+                
             </div>
         </div>
 
-        <div id="AppColor">
+        <div class="vm-app-tabs">
+            <div class="vm-app-tabs-nav" role="tablist" aria-label="App settings sections">
+                <button type="button" id="vmTabColor" role="tab" onclick="vmAppTab('vmTabColor')" class="vm-app-tab-active active" aria-selected="true"><i class="fas fa-palette"></i> App Color</button>
+                <button type="button" id="vmTabIconTheme" role="tab" onclick="vmAppTab('vmTabIconTheme')"><i class="fas fa-icons"></i> Icon Theme</button>
+                <button type="button" id="vmTabIconImg" role="tab" onclick="vmAppTab('vmTabIconImg')"><i class="fas fa-image"></i> Icon Images</button>
+                <button type="button" id="vmTabKyc" role="tab" onclick="vmAppTab('vmTabKyc')"><i class="fas fa-id-card"></i> KYC Docs</button>
+                <button type="button" id="vmTabFaq" role="tab" onclick="vmAppTab('vmTabFaq')"><i class="fas fa-question-circle"></i> FAQ</button>
+                <button type="button" id="vmTabSlider" role="tab" onclick="vmAppTab('vmTabSlider')"><i class="fas fa-images"></i> Sliders</button>
+                <button type="button" id="vmTabMessage" role="tab" onclick="vmAppTab('vmTabMessage')"><i class="fas fa-bell"></i> Message</button>
+            </div>
+        </div>
+
+        <div class="vm-app-panels-host">
+
+        <div id="vmPanelColor" class="vm-app-panel vm-app-tab-panel vm-app-panel-open vm-ao-color-panel">
+            <div class="vm-app-panel-scroll">
             <div class="row clearfix" id="loginSliders">
-                @*@Html.Partial("_LoginPagesliderImage")*@
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="login-slider-status">
-                            <h2>APP Background Color & Button Color & Text Color</h2>
-                        </div>
-                        <div class="app_set" style="width:50%; display:block;">
-                            <div class="page-header-third" style=" width: 100%;">
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787;color:white">App Background Color Setting</h2>
-                                </div>
-                                <div class="app_set2">
-                                    @if (backgapp.Count == 0)
-                                    {
-                                        <div class="ps_setcolor">
-                                            <div class="ps_set">
-                                                <h3>
-                                                    Primary Color
-                                                </h3>
-                                                <div class="ps_set2">
-                                                    <input type="color" id="backcolor1" onchange="ShowBackgroundColor()" />
-                                                </div>
-                                            </div>
-                                            <div class="ps_set">
-                                                <h3>
-                                                    Secondary Color
-                                                </h3>
-                                                <div class="ps_set2">
-                                                    <input type="color" id="backcolor2" onchange="ShowBackgroundColor()" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <button onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
-                                            </div>
-                                            <div class="ps_set">
-                                                <div class="danger">
-                                                    <p><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="ps_setcolor">
-                                            <div class="ps_set">
-                                                <div class="danger">
-                                                    <p style="text-align: justify; font-size: 15px;"><strong>Notes !</strong>Please use dark type as background color. Whenever the color changes, open the mobile app and check carefully first.</p>
-                                                </div>
-                                            </div>
-                                            <div class="ps_set">
-                                                <div class="ps_hset">
-                                                    <h3>Primary Color</h3>
-                                                    <span id="bckg1">(@backgapp[0].background_color1)</span>
-                                                </div>
-                                                <div class="ps_set2">
-                                                    <input type="color" id="backcolor1" value="@backgapp[0].background_color1" onchange="ShowBackgroundColor()" />
-                                                </div>
-                                            </div>
-                                            <div class="ps_set">
-                                                <div class="ps_hset">
-                                                    <h3>Secondary Color</h3>
-                                                    <span id="bckg2">(@backgapp[0].background_color2)</span>
-                                                </div>
-                                                <div class="ps_set2">
-                                                    <input type="color" id="backcolor2" value="@backgapp[0].background_color2" onchange="ShowBackgroundColor()" />
-                                                </div>
-                                            </div>
-                                            <div class="ps_set2" style="margin-top: 14px;">
-                                                <button style="width: 100%; float: left; height: 38px; background: var(--main-bg-lcolor); color: #fff; border: 1px solid; border-radius: 21px;" onclick="SentBackgroudOtp('Your Background Color Change OTP is ')">Save Background Color</button>
-                                            </div>
-
-                                        </div>
-                                    }
-                                    <div class="ps_setmob">
-                                        @if (backgapp.Count == 0)
-                                        {
-                                            <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
-                                        }
-                                        else
-                                        {
-                                            <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
-                                        }
-                                    </div>
-                                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card vm-ao-surface vm-app-card">
+                        <div class="vm-ao-surface__hero vm-ao-surface__hero--violet">
+                            <div class="vm-ao-surface__icon"><i class="fas fa-palette" aria-hidden="true"></i></div>
+                            <div>
+                                <h2 class="vm-ao-surface__title">App Color Studio</h2>
+                                <p class="vm-ao-surface__desc">Customize login screen background and button colors. Changes preview instantly on the right.</p>
                             </div>
                         </div>
-
-                        <div class="app_set" style="width:50%">
-                            <div class="page-header-third" style=" width: 100%;">
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787;color:white">App Button Color & Text Color</h2>
-                                </div>
-                                <div class="appc_autol1" style="padding: 2px 15px;">
-                                    <div class="ps_setcolor">
-                                        <div class="appc_autol">
-
-                                            <div class="ps_hset">
-                                                <h3>Primary Color</h3>
-                                                <span id="buttfup1">(@chksd[0].background_color)</span>
+                        <div class="vm-ao-color-layout">
+                            <div class="vm-ao-color-main">
+                                <article class="vm-ao-panel vm-ao-panel--accent-purple">
+                                    <header class="vm-ao-panel__head">
+                                        <i class="fas fa-fill-drip"></i>
+                                        <div>
+                                            <h3>Screen background</h3>
+                                            <p>Gradient applied behind the app login screen</p>
+                                        </div>
+                                    </header>
+                                    <div class="vm-ao-panel__body">
+                                        <div class="vm-ao-tip"><i class="fas fa-lightbulb"></i><span>Use dark shades for better contrast on mobile.</span></div>
+                                        <div class="vm-ao-color-row">
+                                            <div class="vm-ao-field">
+                                                <label for="backcolor1">Primary <code class="vm-ao-hex" id="bckg1">@(backgapp.Count > 0 ? backgapp[0].background_color1 : "#7c137c")</code></label>
+                                                <div class="vm-ao-swatch-input"><input type="color" id="backcolor1" class="vm-ao-color-input" value="@(backgapp.Count > 0 ? backgapp[0].background_color1 : "#7c137c")" onchange="ShowBackgroundColor()" /></div>
                                             </div>
-                                            <div class="ps_set2">
-                                                <input type="color" value="@chksd[0].background_color" id="appcol1" onchange="ShowIconColor()" />
+                                            <div class="vm-ao-field">
+                                                <label for="backcolor2">Secondary <code class="vm-ao-hex" id="bckg2">@(backgapp.Count > 0 ? backgapp[0].background_color2 : "#641579")</code></label>
+                                                <div class="vm-ao-swatch-input"><input type="color" id="backcolor2" class="vm-ao-color-input" value="@(backgapp.Count > 0 ? backgapp[0].background_color2 : "#641579")" onchange="ShowBackgroundColor()" /></div>
                                             </div>
                                         </div>
-                                        <div class="appc_autol">
-                                            <div class="ps_hset">
-                                                <h3>Secondary Color</h3>
-                                                <span id="buttfup2">(@chksd[0].background_color2)</span>
-                                            </div>
-
-                                            <div class="ps_set2">
-                                                <input type="color" value="@chksd[0].background_color2" id="appcol2" onchange="ShowIconColor()" />
-                                            </div>
-                                        </div>
-                                        <div class="appc_autol">
-
-                                            <div class="ps_hset">
-                                                <h3>Text Color</h3>
-                                                <span id="buttfup3">(@chksd[0].font_color)</span>
-                                            </div>
-                                            <div class="ps_set2">
-                                                <input type="color" value="@chksd[0].font_color" id="appcol3" onchange="ShowIconColor()" />
-                                            </div>
-                                        </div>
-                                        <div class="ps_set2">
-                                            <button style="width: 100%; float: left; height: 38px; background: var(--main-bg-lcolor); color: #fff; border: 1px solid; border-radius: 21px;" onclick="SentIconOtp('Your Button & text color change OTP is ')">Save Button & Text Color</button>
-                                        </div>
+                                        <button type="button" class="vm-ao-btn vm-ao-btn--primary" onclick="SentBackgroudOtp('Your Background Color Change OTP is ')"><i class="fas fa-shield-alt"></i> Save with OTP</button>
                                     </div>
-                                    <div class="ps_setmob">
-                                        <div class="Button_mo">
-                                            <div style="padding: 20px; background:linear-gradient(to right,@chksd[0].background_color, @chksd[0].background_color2); color:@chksd[0].font_color;text-align:center" id="valaapcol">FONT COLOR</div>
-                                            <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div>
-
-                                            <div style="position: absolute; top: 26px; padding: 10px; ">
-                                                <div class="danger">
-                                                    <p><strong>Notes !</strong>Please use dark type as button color. Whenever the color changes, open the mobile app and check carefully first. Please don't set the dark color in text color, if possible set only white color.</p>
+                                </article>
+                                <article class="vm-ao-panel vm-ao-panel--accent-blue">
+                                    <header class="vm-ao-panel__head">
+                                        <i class="fas fa-hand-pointer"></i>
+                                        <div>
+                                            <h3>Button &amp; text</h3>
+                                            <p>Gradient button and label color on login</p>
+                                        </div>
+                                    </header>
+                                    <div class="vm-ao-panel__body">
+                                        <div class="vm-ao-tip"><i class="fas fa-lightbulb"></i><span>White or light text works best on dark buttons.</span></div>
+                                        <div class="vm-ao-color-row vm-ao-color-row--triple">
+                                            <div class="vm-ao-field">
+                                                <label for="vmAppCol1">Primary <code class="vm-ao-hex" id="vmAppColLbl1">@chksd[0].background_color</code></label>
+                                                <div class="vm-ao-swatch-input"><input type="color" class="vm-ao-color-input" id="vmAppCol1" value="@chksd[0].background_color" onchange="ShowIconColor()" /></div>
+                                            </div>
+                                            <div class="vm-ao-field">
+                                                <label for="vmAppCol2">Secondary <code class="vm-ao-hex" id="vmAppColLbl2">@chksd[0].background_color2</code></label>
+                                                <div class="vm-ao-swatch-input"><input type="color" class="vm-ao-color-input" id="vmAppCol2" value="@chksd[0].background_color2" onchange="ShowIconColor()" /></div>
+                                            </div>
+                                            <div class="vm-ao-field">
+                                                <label for="vmAppCol3">Text <code class="vm-ao-hex" id="vmAppColLbl3">@chksd[0].font_color</code></label>
+                                                <div class="vm-ao-swatch-input"><input type="color" class="vm-ao-color-input" id="vmAppCol3" value="@chksd[0].font_color" onchange="ShowIconColor()" /></div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="vm-ao-btn vm-ao-btn--primary" onclick="SentIconOtp('Your Button & text color change OTP is ')"><i class="fas fa-shield-alt"></i> Save with OTP</button>
+                                    </div>
+                                </article>
+                            </div>
+                            <aside class="vm-ao-color-aside">
+                                <div class="vm-ao-preview-dock">
+                                    <div class="vm-ao-preview-card">
+                                        <span class="vm-ao-preview-label"><i class="fas fa-mobile-alt"></i> Background preview</span>
+                                        <div class="vm-ao-phone vm-ao-phone--sm">
+                                            <div class="vm-app-phone-shell">
+                                                <div class="vm-app-phone-screen-wrap">
+                                                    <div class="vm-app-phone-island"></div>
+                                                    <div class="vm-app-phone-content" id="vmBgPreview" style="background: linear-gradient(165deg, @(backgapp.Count > 0 ? backgapp[0].background_color1 : "#7c137c") 0%, @(backgapp.Count > 0 ? backgapp[0].background_color2 : "#641579") 100%);">
+                                                        <div class="vm-app-phone-ui-skel"><span></span><span></span><span></span></div>
+                                                    </div>
+                                                    <div class="vm-app-phone-home" aria-hidden="true"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="AppIcon" style="display: none;">
-
-            <div class="row clearfix" id="iconsettingshow" style=" margin: 0px;">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="thame-headding">
-                            <h2 class="but_df">
-                                <span>
-                                    <button style="background: var(--main-bg-lcolor);color:#fff;" onclick="deshbackss()" id="dback">Dashboard Icon</button>
-                                    <button style="margin-left: 5px !important;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
-                                </span>
-                                <span>
-                                    App Dashboard icon Design & Color
-                                </span>
-                            </h2>
-
-                        </div>
-
-                        <div style="height: 510px;">
-                            <div class="br_setb">
-                                <div class="appc_auto0">
-                                    <div class="appc_auto">
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Icon Color & Background Color</h2>
-                                            </div>
-
-                                            <div class="appc_autol1">
-                                                <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(0)" onmouseout="whitemess1(0)" />  Primary Color</div>
-                                                    <div>
-                                                        <input type="color" value="@chksd123[0].color1" id="appcolor11" onchange="appiconcolor(1 ,0)" />
-                                                        <div class="whitemes" style="display:none">
-                                                            Please do not use white color
+                                    <div class="vm-ao-preview-card">
+                                        <span class="vm-ao-preview-label"><i class="fas fa-toggle-on"></i> Button preview</span>
+                                        <div class="vm-ao-phone vm-ao-phone--sm">
+                                            <div class="vm-app-phone-shell">
+                                                <div class="vm-app-phone-screen-wrap">
+                                                    <div class="vm-app-phone-island"></div>
+                                                    <div class="vm-app-phone-content vm-app-phone-content--app">
+                                                        <div class="vm-app-phone-appbar"></div>
+                                                        <div class="vm-app-phone-body">
+                                                            <div class="vm-app-phone-card"></div>
+                                                            <div class="vm-app-phone-card vm-app-phone-card--sm"></div>
+                                                            <button type="button" class="vm-app-btn-preview" style="background:linear-gradient(95deg,@chksd[0].background_color,@chksd[0].background_color2);color:@chksd[0].font_color;" id="vmAppColPreview">Continue</button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(1)" onmouseout="whitemess1(1)" />  Secondary Color</div>
-                                                    <div>
-                                                        <input type="color" value="@chksd123[0].color2" id="appcolor12" onchange="appiconcolor(2 ,0)" />
-
-                                                    </div>
-                                                    <div class="whitemes" style="display:none">
-                                                        Please do not use white color
-                                                    </div>
-                                                </div>
-                                                <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemess(2)" onmouseout="whitemess1(2)" />  Background Color</div>
-                                                    <div>
-                                                        <input type="color" value="@chksd123[0].background_color" id="appBGcolor" onchange="appiconcolor(3 ,0)" />
-
-                                                    </div>
-                                                    <div class="whitemes" style="display:none">
-                                                        Please do not use white color
-                                                    </div>
+                                                    <div class="vm-app-phone-home" aria-hidden="true"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="appc_auto" style="padding-top:0;">
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
 
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style="color: white;">
-                                                <h2 style="background: #878787;">App Icon Themes</h2>
+        <div id="vmPanelIconTheme" class="vm-app-panel vm-app-tab-panel vm-ao-icon-theme-panel" style="display: none;">
+            <div class="vm-app-panel-scroll">
+            <div class="row clearfix" id="iconsettingshow" style="margin:0;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                    <div class="card vm-ao-surface vm-app-card">
+                        <div class="vm-ao-surface__hero vm-ao-surface__hero--indigo">
+                            <div class="vm-ao-surface__icon"><i class="fas fa-icons" aria-hidden="true"></i></div>
+                            <div class="vm-ao-hero-text">
+                                <div class="vm-ao-segment" role="tablist" aria-label="Icon theme mode">
+                                    <button type="button" class="vm-ao-segment__btn vm-ao-segment__btn--active" onclick="deshbackss()" id="dback">Dashboard icon</button>
+                                    <button type="button" class="vm-ao-segment__btn" onclick="frontbackss()" id="fback">Login / SignUp icon</button>
+                                </div>
+                                <h2 class="vm-ao-surface__title" id="vmIconThemePanelTitle">Dashboard icon design</h2>
+                                <p class="vm-ao-surface__desc">Set icon colors, corner radius, then save — OTP required for security.</p>
+                            </div>
+                        </div>
+                        <div class="vm-ao-icon-layout">
+                            <div class="vm-ao-icon-main">
+                                <div class="appc_auto0">
+                                    <div class="appc_auto">
+                                        <article class="vm-ao-panel vm-ao-panel--accent-indigo">
+                                            <header class="vm-ao-panel__head">
+                                                <i class="fas fa-palette"></i>
+                                                <div><h3>Icon colors</h3><p>Primary, secondary and background</p></div>
+                                            </header>
+                                            <div class="vm-ao-panel__body">
+                                            <div class="appc_autol1 vm-ao-picker-grid">
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemess(0)" onmouseout="whitemess1(0)" /> Primary</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].color1" id="appcolor11" onchange="appiconcolor(1 ,0)" />
+                                                        <div class="whitemes" style="display:none">Please do not use white color</div>
+                                                    </div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemess(1)" onmouseout="whitemess1(1)" /> Secondary</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].color2" id="appcolor12" onchange="appiconcolor(2 ,0)" />
+                                                    </div>
+                                                    <div class="whitemes" style="display:none">Please do not use white color</div>
+                                                </div>
+                                                <div class="appc_autol">
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemess(2)" onmouseout="whitemess1(2)" /> Background</div>
+                                                    <div>
+                                                        <input type="color" value="@chksd123[0].background_color" id="appBGcolor" onchange="appiconcolor(3 ,0)" />
+                                                    </div>
+                                                    <div class="whitemes" style="display:none">Please do not use white color</div>
+                                                </div>
                                             </div>
-
-                                            <div class="appc_autol1">
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <div class="appc_auto">
+                                        <article class="vm-ao-panel">
+                                            <header class="vm-ao-panel__head">
+                                                <i class="fas fa-border-style"></i>
+                                                <div><h3>Corner radius themes</h3><p>Select icon shape style (1px – 500px)</p></div>
+                                            </header>
+                                            <div class="vm-ao-panel__body">
+                                            <div class="appc_autol1 vm-ao-theme-grid">
                                                 @if (chksd123[0].icon_design == "1")
                                                 {
                                                     <button id="sef0" onclick="appiconcolor(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
@@ -2232,21 +2237,16 @@
                                             <div style="display:none" id="col3"></div>
                                             <div style="display:none" id="col4"></div>
 
-                                            <div class="app_all_s" style=" padding-top: 7px;">
-                                                <div id="opthide">
-                                                    <button onclick="optsents('Your App Dashboard icon Design change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehidd"><b style="color:#fff;">Update Icon Theme</b></button>
-                                                </div>
+                                            <button type="button" class="vm-ao-btn vm-ao-btn--primary vm-ao-btn--block" id="savehidd" onclick="optsents('Your App Dashboard icon Design change OTP is ')"><i class="fas fa-shield-alt"></i> Save dashboard theme (OTP)</button>
                                             </div>
-
-                                        </div>
-
+                                        </article>
                                     </div>
-
                                 </div>
                             </div>
-
-                            <div class="appi_set" style="float:right">
-                                <div class="page-header-third">
+                            <aside class="vm-ao-icon-aside">
+                                <div class="vm-ao-preview-card vm-ao-preview-card--icon">
+                                    <span class="vm-ao-preview-label"><i class="fas fa-eye"></i> Live icon preview</span>
+                                    <div class="vm-ao-icon-preview-stage">
                                     <div class="center_iset">
                                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
                                         <rect width="512" height="512" rx="@chksd123[0].icon_design" ry="@chksd123[0].icon_design" fill="@chksd123[0].background_color" class="bgcolores"></rect>
@@ -2262,74 +2262,71 @@
                                            </g>
                                         </svg>
                                     </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </aside>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row clearfix" id="iconsettinghide" style="display: none; margin: 0px;">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="thame-headding">
-                            <h2 class="but_df">
-                                <span>
-                                    <button onclick="deshbackss()" id="dback">Dashboard Icon</button>
-                                    <button style="background: var(--main-bg-lcolor); margin-left: 5px !important;color:#fff;" id="fback" onclick="frontbackss()">Login & SignUp Front Icon</button>
-                                </span>
-                                <span>
-                                    App Front icon Design & Color
-                                </span>
-                            </h2>
+            <div class="row clearfix" id="iconsettinghide" style="display: none; margin: 0;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                    <div class="card vm-ao-surface vm-app-card">
+                        <div class="vm-ao-surface__hero vm-ao-surface__hero--indigo">
+                            <div class="vm-ao-surface__icon"><i class="fas fa-icons" aria-hidden="true"></i></div>
+                            <div class="vm-ao-hero-text">
+                                <div class="vm-ao-segment" role="tablist">
+                                    <button type="button" class="vm-ao-segment__btn" onclick="deshbackss()" id="dback">Dashboard icon</button>
+                                    <button type="button" class="vm-ao-segment__btn vm-ao-segment__btn--active" onclick="frontbackss()" id="fback">Login / SignUp icon</button>
+                                </div>
+                                <h2 class="vm-ao-surface__title">Front icon design</h2>
+                                <p class="vm-ao-surface__desc">Colors and corner style for login &amp; signup screens.</p>
+                            </div>
                         </div>
-                        <div style="height: 510px;">
-                            <div class="br_setb">
+                        <div class="vm-ao-icon-layout">
+                            <div class="vm-ao-icon-main">
                                 <div class="appc_auto0">
                                     <div class="appc_auto">
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style=" color: white;">
-                                                <h2 style="background-color: #878787;">App Front Icon Color & Background Color</h2>
-                                            </div>
-                                            <div class="appc_autol1">
+                                        <article class="vm-ao-panel vm-ao-panel--accent-indigo">
+                                            <header class="vm-ao-panel__head">
+                                                <i class="fas fa-palette"></i>
+                                                <div><h3>Icon colors</h3><p>Primary, secondary and background</p></div>
+                                            </header>
+                                            <div class="vm-ao-panel__body">
+                                            <div class="appc_autol1 vm-ao-picker-grid">
                                                 <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(0)" onmouseout="whitemess1ss(0)" />  Primary Color</div>
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemessss(0)" onmouseout="whitemess1ss(0)" /> Primary</div>
                                                     <div>
                                                         <input type="color" value="@chksd123ss[0].color1" id="appcolorssss" onchange="appiconcolorss(1 ,0)" />
-                                                        <div class="whitemesss" style="display:none">
-                                                            Please do not use white color
-                                                        </div>
+                                                        <div class="whitemesss" style="display:none">Please do not use white color</div>
                                                     </div>
                                                 </div>
                                                 <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(1)" onmouseout="whitemess1ss(1)" />  Secondary Color</div>
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemessss(1)" onmouseout="whitemess1ss(1)" /> Secondary</div>
                                                     <div>
                                                         <input type="color" value="@chksd123ss[0].color2" id="appcolor12ss" onchange="appiconcolorss(2 ,0)" />
-
                                                     </div>
-                                                    <div class="whitemesss" style="display:none">
-                                                        Please do not use white color
-                                                    </div>
+                                                    <div class="whitemesss" style="display:none">Please do not use white color</div>
                                                 </div>
                                                 <div class="appc_autol">
-                                                    <div> <img src="~/exclamation.png" style="width: 20px; color: black;" onmouseover="whitemessss(2)" onmouseout="whitemess1ss(2)" />  Background Color</div>
+                                                    <div> <img src="~/exclamation.png" alt="" onmouseover="whitemessss(2)" onmouseout="whitemess1ss(2)" /> Background</div>
                                                     <div>
                                                         <input type="color" value="@chksd123ss[0].background_color" id="appBGcolorss" onchange="appiconcolorss(3 ,0)" />
-
                                                     </div>
-                                                    <div class="whitemesss" style="display:none">
-                                                        Please do not use white color
-                                                    </div>
+                                                    <div class="whitemesss" style="display:none">Please do not use white color</div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="appc_auto" style="padding-top:0;">
-
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style="color: white;">
-                                                <h2 style="background: #878787;">App Front Icon Themes</h2>
                                             </div>
-                                            <div class="appc_autol1">
+                                        </article>
+                                    </div>
+                                    <div class="appc_auto">
+                                        <article class="vm-ao-panel">
+                                            <header class="vm-ao-panel__head">
+                                                <i class="fas fa-border-style"></i>
+                                                <div><h3>Corner radius themes</h3><p>Select icon shape style</p></div>
+                                            </header>
+                                            <div class="vm-ao-panel__body">
+                                            <div class="appc_autol1 vm-ao-theme-grid">
                                                 @if (chksd123ss[0].icon_design == "1")
                                                 {
                                                     <button id="sef0ss" onclick="appiconcolorss(4 ,0)" style="background: var(--main-bg-lcolor);"><span class="s_button1">Theme 1</span> <br /><span class="s_button2">1px</span></button>
@@ -2406,21 +2403,16 @@
                                             <div style="display:none" id="col3ss"></div>
                                             <div style="display:none" id="col4ss"></div>
 
-                                            <div class="app_all_s" style="padding-top: 7px;">
-                                                <div id="opthidess">
-                                                    <button onclick="optsentsss('Your App Icon color change OTP is ')" style="padding: 6px 88px; border-radius: 20px;" id="savehiddss"><b style="color:#fff;">Update Icon Theme</b></button>
-                                                </div>
+                                            <button type="button" class="vm-ao-btn vm-ao-btn--primary vm-ao-btn--block" id="savehiddss" onclick="optsentsss('Your App Icon color change OTP is ')"><i class="fas fa-shield-alt"></i> Save front theme (OTP)</button>
                                             </div>
-                                        </div>
-
+                                        </article>
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="appi_set" style="float:right">
-
-                                <div class="page-header-third">
-
+                            <aside class="vm-ao-icon-aside">
+                                <div class="vm-ao-preview-card vm-ao-preview-card--icon">
+                                    <span class="vm-ao-preview-label"><i class="fas fa-eye"></i> Live icon preview</span>
+                                    <div class="vm-ao-icon-preview-stage">
                                     <div class="center_isetss">
                                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="300" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
                                         <rect width="512" height="512" rx="@chksd123ss[0].icon_design" ry="@chksd123ss[0].icon_design" fill="@chksd123ss[0].background_color" class="bgcoloresss"></rect>
@@ -2436,41 +2428,40 @@
                                          </g>
                                           </svg>
                                     </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </aside>
                         </div>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
 
-        <div id="AppIconImages" style="display: none;">
-
-            <div class="row clearfix" style=" margin: 0px;">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="thame-headding">
-                            <h2 class="but_df">
-                                <span>
-                                    <button id="fill" onclick="ChangeColorIcon('fill')" style="margin-right: 8px !important;">Fill Icon Images</button>
-                                    <button id="line" onclick="ChangeColorIcon('line')">Out Line Icon Images</button>
-                                </span>
-                                <span id="textforicon">
-                                    We have 12 type fill icon groups
-                                </span>
-                            </h2>
-
+        <div id="vmPanelIconImg" class="vm-app-panel vm-app-tab-panel vm-ao-iconimg-panel" style="display: none;">
+            <div class="vm-app-panel-scroll">
+            <div class="row clearfix" style="margin:0;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
+                    <div class="card vm-ao-surface vm-app-card">
+                        <div class="vm-ao-surface__hero vm-ao-surface__hero--teal">
+                            <div class="vm-ao-surface__icon"><i class="fas fa-th-large" aria-hidden="true"></i></div>
+                            <div class="vm-ao-hero-text">
+                                <div class="vm-ao-segment" role="tablist" aria-label="Icon image style">
+                                    <button type="button" id="fill" class="vm-ao-segment__btn vm-ao-segment__btn--active filllinecolor" onclick="ChangeColorIcon('fill')"><i class="fas fa-th-large"></i> Fill icons</button>
+                                    <button type="button" id="line" class="vm-ao-segment__btn" onclick="ChangeColorIcon('line')"><i class="fas fa-border-all"></i> Outline icons</button>
+                                </div>
+                                <h2 class="vm-ao-surface__title">Icon image groups</h2>
+                                <p class="vm-ao-surface__desc" id="textforicon">12 fill-style icon groups — tap a group to apply and preview on the phone.</p>
+                            </div>
                         </div>
-                        <div style="height: 510px;">
-                            <div class="br_setb">
-                                <div class="appc_auto0">
-                                    <div class="appc_auto" id="iconfillshow">
-
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style="color: white;">
-                                                <h2 style="background: #878787;">App Fill Icon Images Groups</h2>
-                                            </div>
-                                            <div class="appc_autol1">
+                        <div class="vm-ao-iconimg-layout">
+                            <div class="vm-ao-iconimg-main">
+                                    <div class="vm-ao-iconimg-groups" id="iconfillshow">
+                                        <div class="vm-ao-panel__head vm-ao-panel__head--inline">
+                                            <i class="fas fa-layer-group"></i>
+                                            <div><h3>Fill groups</h3><p>Groups 1 – 12</p></div>
+                                        </div>
+                                            <div class="appc_autol1 vm-ao-group-grid">
                                                 <div class="icon_btn" id="group1">
                                                     <button onclick="addContent('group1')"><span class="s_button1"><i class="fa fa-check"></i> Group 1</span></button>
                                                 </div>
@@ -2508,16 +2499,13 @@
                                                     <button onclick="addContent('group12')"><span class="s_button1"> <i class="fa fa-check"></i>Group 12</span></button>
                                                 </div>
                                             </div>
-                                        </div>
-
                                     </div>
-                                    <div class="appc_auto" id="iconlineshow" style="display: none;">
-                                        <div class="page-header-third">
-                                            <div class="thame-headding" style="color: white;">
-                                                <h2 style="background: #878787;">App Out Line Icon Images Groups</h2>
-                                            </div>
-
-                                            <div class="appc_autol1">
+                                    <div class="vm-ao-iconimg-groups" id="iconlineshow" style="display: none;">
+                                        <div class="vm-ao-panel__head vm-ao-panel__head--inline">
+                                            <i class="fas fa-border-all"></i>
+                                            <div><h3>Outline groups</h3><p>Groups 1 – 12</p></div>
+                                        </div>
+                                            <div class="appc_autol1 vm-ao-group-grid">
                                                 <div class="icon_btn" id="group13">
                                                     <button onclick="addContent('group13')"><span class="s_button1"><i class="fa fa-check"></i> Group 1</span></button>
                                                 </div>
@@ -2555,36 +2543,33 @@
                                                     <button onclick="addContent('group24')"><span class="s_button1"><i class="fa fa-check"></i>Group 12</span></button>
                                                 </div>
                                             </div>
-                                        </div>
                                     </div>
-
-                                </div>
                             </div>
-                           
-                            <div class="appi_set" style="float:right">
-                                <div class="page-header-third">
-                                    <div class="center_iset" style="height:auto;">
-                                        <div class="ps_setmob" style=" margin: 0;">
+                            <aside class="vm-ao-iconimg-aside">
+                                <div class="vm-ao-preview-card vm-ao-preview-card--phone">
+                                    <span class="vm-ao-preview-label"><i class="fas fa-mobile-alt"></i> Mobile home preview</span>
+                                    <div class="vm-ao-phone-frame">
+                                    <div class="ps_setmob">
                                             @if (backgapp.Count == 0)
                                             {
-                                                <div style="background: linear-gradient(to bottom, red, blue ); width: 100%; height: 100%; border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                                <div class="vm-app-mobile-bg" style="background: linear-gradient(165deg, #7c137c, #641579);" id="prebackground"><div class="bg_set"><span></span><span></span><span></span></div><div class="bg_set2"><span></span></div></div>
                                             }
                                             else
                                             {
-                                                <div style="background: linear-gradient(to bottom, @backgapp[0].background_color1, @backgapp[0].background_color2 ); width: 100%; height: 100%;border-radius: 16px;" id="prebackground"> <div class="bg_set"><span></span> <span></span> <span></span></div> <div class="bg_set2"> <span></span> </div> </div>
+                                                <div class="vm-app-mobile-bg" style="background: linear-gradient(165deg, @backgapp[0].background_color1, @backgapp[0].background_color2);" id="prebackground"><div class="bg_set"><span></span><span></span><span></span></div><div class="bg_set2"><span></span></div></div>
                                             }
-                                            <div class="group_img" id="MobileView"> </div>
-                                        </div>
+                                            <div class="group_img" id="MobileView"></div>
+                                    </div>
                                     </div>
                                 </div>
-                            </div>
+                            </aside>
                         </div>
                     </div>
                 </div>
             </div>
             @*<div class="row clearfix" style="display: none; margin: 0px;">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;padding:0;">
-                    <div class="card login-back-img page-header-third">
+                    <div class="card login-back-img page-header-third vm-app-card">
                         <div class="thame-headding">
                             <h2 class="but_df">
                                 <span>
@@ -2622,160 +2607,164 @@
                     </div>
                 </div>
             </div>*@
+            </div>
         </div>
 
-        <div id="AppKYCDocs" style="display: none;">
+        <div id="vmPanelKyc" class="vm-app-panel vm-app-tab-panel" style="display: none;">
+            <div class="vm-app-panel-scroll">
             <div class="row clearfix" id="loginSliders">
                 @*@Html.Partial("_LoginPagesliderImage")*@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="login-slider-status">
-                            <h2>APP KYC Document Field Setting</h2>
+                    <div class="card login-back-img page-header-third vm-app-card">
+                        <div class="login-slider-status vm-app-section-head">
+                            <h2><i class="fas fa-id-card"></i> APP KYC Document Field Setting</h2>
                         </div>
 
-                        <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 195px;">
-
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787; color: white">App KYC Option(SKIP/MANDATORY)</h2>
+                        <div class="vm-app-kyc-grid">
+                        <div class="vm-app-kyc-card">
+                            <div class="vm-app-inner-head">
+                                    <h2>App KYC Option (Skip / Mandatory)</h2>
                                 </div>
 
-                                <div class="app_set2">
-                                    <p>KYC Option</p>
+                                <div class="vm-app-kyc-row">
+                                    <p style="color:#000;" class="vm-app-kyc-label">KYC Option</p>
                                     @if (manatoryfilDS.Count > 0)
                                     {
                                         if (manatoryfilDS[0].skips == null || manatoryfilDS[0].skips == "N")
                                         {
-                                            <button class="manatory" onclick="manatorypermision('S',1)">Skip</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('S',1)">Skip</button>
                                         }
                                         else
                                         {
-                                            <button class="manatory" onclick="manatorypermision('S',1)">MANDATORY</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('S',1)">MANDATORY</button>
                                         }
                                     }
                                     else
                                     {
-                                        <button class="manatory" onclick="manatorypermision('S',1)">Skip</button>
+                                        <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('S',1)">Skip</button>
                                     }
                                 </div>
-                            </div>
                         </div>
 
-                        <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 195px;">
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787; color: white">App KYC Document Field (OPTIONAL/MANDATORY)</h2>
+                        <div class="vm-app-kyc-card">
+                                <div class="vm-app-inner-head">
+                                    <h2>Document Fields (Optional / Mandatory)</h2>
                                 </div>
 
-                                <div class="app_set2">
-                                    <p>GST Certificate</p>
+                                <div class="vm-app-kyc-row">
+                                    <p class="vm-app-kyc-label">GST Certificate</p>
 
                                     @if (manatoryfilDS.Count > 0)
                                     {
                                         if (manatoryfilDS[0].gst == null || manatoryfilDS[0].gst == "N")
                                         {
-                                            <button class="manatory" onclick="manatorypermision('g',2)">OPTIONAL</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('g',2)">OPTIONAL</button>
                                         }
                                         else
                                         {
-                                            <button class="manatory" onclick="manatorypermision('g',2)">MANDATORY</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('g',2)">MANDATORY</button>
                                         }
                                     }
                                     else
                                     {
-                                        <button class="manatory" onclick="manatorypermision('g',2)">OPTIONAL</button>
+                                        <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('g',2)">OPTIONAL</button>
                                     }
                                 </div>
-                                <div class="app_set2">
-                                    <p>Service Agreement</p>
+                                <div class="vm-app-kyc-row">
+                                    <p class="vm-app-kyc-label">Service Agreement</p>
                                     @if (manatoryfilDS.Count > 0)
                                     {
                                         if (manatoryfilDS[0].agreement == null || manatoryfilDS[0].agreement == "N")
                                         {
-                                            <button class="manatory" onclick="manatorypermision('a',3)">OPTIONAL</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('a',3)">OPTIONAL</button>
                                         }
                                         else
                                         {
-                                            <button class="manatory" onclick="manatorypermision('a',3)">MANDATORY</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('a',3)">MANDATORY</button>
                                         }
                                     }
                                     else
                                     {
-                                        <button class="manatory" onclick="manatorypermision('a',3)">OPTIONAL</button>
+                                        <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('a',3)">OPTIONAL</button>
                                     }
                                 </div>
-                                <div class="app_set2">
-                                    <p>Address Proof</p>
+                                <div class="vm-app-kyc-row">
+                                    <p class="vm-app-kyc-label">Address Proof</p>
                                     @if (manatoryfilDS.Count > 0)
                                     {
                                         if (manatoryfilDS[0].addressproof == null || manatoryfilDS[0].addressproof == "N")
                                         {
-                                            <button class="manatory" onclick="manatorypermision('p',4)">OPTIONAL</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('p',4)">OPTIONAL</button>
                                             @*<span id="statusNULL" class="custom-off1"  onclick="SliderStatus()">Status Off</span>*@
                                         }
                                         else
                                         {
-                                            <button class="manatory" onclick="manatorypermision('p',4)">MANDATORY</button>
+                                            <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('p',4)">MANDATORY</button>
                                         }
                                     }
                                     else
                                     {
-                                        <button class="manatory" onclick="manatorypermision('p',4)">OPTIONAL</button>
+                                        <button class="manatory vm-app-toggle-btn" onclick="manatorypermision('p',4)">OPTIONAL</button>
                                     }
                                 </div>
-                            </div>
+                        </div>
                         </div>
 
                     </div>
                 </div>
             </div>
+            </div>
         </div>
 
-        <div id="FQAS" style="display: none;">
+        <div id="vmPanelFaq" class="vm-app-panel vm-app-tab-panel" style="display: none;">
+            <div class="vm-app-panel-scroll">
             <div class="row clearfix" id="loginSliders">
                 @*@Html.Partial("_LoginPagesliderImage")*@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="login-slider-status">
-                            <h2>FAQ Questions and Answers</h2>
+                    <div class="card login-back-img page-header-third vm-app-card">
+                        <div class="login-slider-status vm-app-section-head">
+                            <h2><i class="fas fa-question-circle"></i> FAQ Questions and Answers</h2>
                         </div>
-                        <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 320px;">
-
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787; color: white">Create FAQ Questions & Answers</h2>
+                        <div class="vm-app-faq-grid">
+                        <div class="vm-app-faq-card">
+                                <div class="vm-app-inner-head">
+                                    <h2>Create FAQ</h2>
                                 </div>
 
-                                <div style="padding: 2px 15px;">
+                                <div class="vm-app-faq-form">
                                     <h4>Question</h4>
-                                    <textarea style="font-size: medium; padding: 3px;" id="faqq"></textarea>
+                                    <textarea id="vmFaqQ" placeholder="Enter FAQ question"></textarea>
                                     <h4>Answer</h4>
-                                    <textarea style="font-size: medium; padding: 3px;" id="faqa"></textarea>
-                                    <button style="width: 200px; margin: 10px 213px; float: left; height: 36px; background: var(--main-bg-lcolor); color: #fff; border: 1px solid; border-radius: 21px; padding: 4px 12px;" onclick="faqsave()">SAVE</button>
+                                    <textarea id="vmFaqA" placeholder="Enter FAQ answer"></textarea>
+                                    <button type="button" class="vm-app-faq-save" onclick="faqsave()"><i class="fas fa-save"></i> Save FAQ</button>
                                 </div>
-                            </div>
                         </div>
-                        <div class="app_set">
-                            <div class="page-header-third" style=" width: 100%; height: 320px;">
-                                <div class="thame-headding">
-                                    <h2 style="background: #878787; color: white">FAQ Questions & Answers List</h2>
+                        <div class="vm-app-faq-card">
+                                <div class="vm-app-inner-head">
+                                    <h2>FAQ List</h2>
                                 </div>
-                                <div class="table-container">
-                                    <table id="faqlist"></table>
+                                <div class="vm-app-table-scroll table-container">
+                                    <table id="vmFaqList"></table>
                                 </div>
-                            </div>
+                        </div>
                         </div>
 
                     </div>
                 </div>
             </div>
+            </div>
         </div>
 
-        <div class="row clearfix" id="AppSlider" style="display: none;">
+        <div id="vmPanelSlider" class="vm-app-panel vm-app-tab-panel" style="display: none;">
+            <div class="vm-app-panel-scroll vm-app-slider-panel">
+            <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-                <div class="card login-back-img page-header-third">
-                    <h2><strong>Your Selected Image</strong> <strong style="float: right;">Note :- You can select maximum 5 images at a time</strong></h2>
-                    <div id="sliderSelectedImage">
+                <div class="card login-back-img page-header-third vm-app-card">
+                    <div class="vm-app-section-head vm-app-section-head--compact">
+                    <h2><i class="fas fa-images"></i> Your Selected Sliders</h2>
+                    <p class="vm-app-head-note">Maximum 5 images at a time</p>
+                    </div>
+                    <div class="vm-app-slider-selected" id="vmSliderSelected">
                         @if (Model.Count > 0)
                         {
                             foreach (var item in Model)
@@ -2798,59 +2787,84 @@
                             <p style="text-align: center; font-size: 25px;">Not selected any image</p>
                         }
                     </div>
-                    <div class="card login-back-img page-header-third">
-                        <h2>Select Aap Slider Images <strong style="float:right;">You can select below images for the App slider</strong></h2>
-                        <div id="sliderImages"></div>
-                    </div>
                 </div>
+                <div class="card login-back-img page-header-third vm-app-card">
+                        <div class="vm-app-inner-head">
+                        <h2>Select App Slider Images</h2>
+                        <p class="vm-app-head-note">Choose images for the app home slider</p>
+                        </div>
+                        <div class="vm-app-slider-pool" id="vmSliderPool"></div>
+                </div>
+            </div>
+            </div>
             </div>
         </div>
 
-        <div id="AppMessage" style="display: none;">
+        <div id="vmPanelMessage" class="vm-app-panel vm-app-tab-panel" style="display: none;">
+            <div class="vm-app-panel-scroll">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 theam-button" style="margin-top:18px;">
-                    <div class="card login-back-img page-header-third">
-                        <div class="login-slider-status">
-                            <h2 style="margin-left: 10px;">App Message </h2>
+                    <div class="card login-back-img page-header-third vm-app-card">
+                        <div class="login-slider-status vm-app-section-head">
+                            <h2><i class="fas fa-bell"></i> App Message &amp; Notifications</h2>
                         </div>
-                        <div class="row">
-                            <div style="width: 100%; padding: 16px; float: left;padding-top:0;">
-                                <div class="col-md-4">
-                                    <div class="form-container">
-                                        <form id="textForm">
-                                            <textarea id="textArea" placeholder="Enter your text here..." oninput="updateCharCount()"></textarea>
-                                            <div style="display: flex; align-items: center; justify-content: space-between; ">
-                                                <button style="padding: 6px 18px;background:#000;color: #fff;border:0;" onclick="clearText(event)">Clear</button>
-                                                <button style="padding: 6px 18px;background:var(--main-bg-lcolor);color: #fff;border:0; " type="submit" onclick="handleSubmit(event)">Submit</button>
+                        <div class="vm-app-msg-layout">
+                                <div class="vm-app-msg-compose">
+                                        <form id="vmMsgForm" class="vm-app-msg-form">
+                                            <label class="vm-app-label" for="vmMsgText">Notification text</label>
+                                            <textarea id="vmMsgText" placeholder="Enter notification message..." oninput="updateCharCount()"></textarea>
+                                            <div class="vm-app-msg-actions">
+                                                <button type="button" class="vm-app-btn-secondary" onclick="clearText(event)">Clear</button>
+                                                <button type="submit" class="vm-app-save-btn" onclick="handleSubmit(event)">Submit</button>
                                             </div>
                                         </form>
-                                        <div class="danger" style=" margin-top: 25px; font-size: 17px;">
-                                            <p id="charCount">Characters Remaining: 500</p>
+                                        <div class="vm-app-note vm-app-msg-count">
+                                            <p id="vmMsgCharCount">Characters Remaining: 500</p>
                                         </div>
-                                        <div class="danger" style=" margin-top: 25px; font-size: 17px;">
-                                            <p><strong>Notes !</strong> "You can insert a maximum of 4 notifications. To add a new notification, please delete an existing one."</p>
+                                        <div class="vm-app-note">
+                                            <p><strong>Note:</strong> Maximum 4 notifications. Delete one to add a new message.</p>
                                         </div>
+                                </div>
+                                <div class="vm-app-msg-list-wrap">
+                                    <div class="vm-app-inner-head"><h2>Active notifications</h2></div>
+                                    <div class="vm-app-msg-list-scroll" id="vmNotifyList">
+                                        @{
+                                            var vmAppMsgs = ViewBag.AppMessages as IList<AppMessage>;
+                                            if (vmAppMsgs != null && vmAppMsgs.Count > 0)
+                                            {
+                                                var vmMsgIdx = 1;
+                                                foreach (var vmMsg in vmAppMsgs)
+                                                {
+                                                    <div class="vm-app-msg-item" data-vm-msg-id="@vmMsg.id">
+                                                        <span class="vm-app-msg-num">@vmMsgIdx</span>
+                                                        <div class="vm-app-msg-body">
+                                                            <p class="vm-app-msg-text">@vmMsg.App_Message</p>
+                                                            <button type="button" class="vm-app-msg-delete" onclick="DeleteAppNotification(@vmMsg.id)">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                    vmMsgIdx++;
+                                                }
+                                            }
+                                        }
                                     </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div id="AppNotifications">
-
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+
+        </div><!-- vm-app-panels-host -->
 
     </div>
 
 </section>
-<div class="show_pop" id="saveshow" style="display:none">
-    @*<img src="~/icegif-1263.gif" />*@
-    <div id="loadredmodel" style="display:block;">
+<script src="~/MainFrontDesign/js/admin-app-option-page.js?v=12"></script>
+
+<div class="vm-app-overlay vm-app-overlay--load" id="vmOverlayLoad" style="display:none" aria-hidden="true">
+    <div id="vmLoaderSpin" style="display:block;">
         <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
             <div class="ldio-zdyd6mf6t5">
                 <div></div><div></div>
@@ -2859,43 +2873,93 @@
     </div>
 </div>
 
-<div class="show_pop" id="optshow" style="display:none">
-    <div class="box_otp">
-        <h3>Submit your Dashboard Icon OTP </h3>
-        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
-        <input type="number" id="otpicon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
-        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateicon()">Submit</button>
-    </div>
-</div>
-<div class="show_pop" id="optshowss" style="display:none">
-    <div class="box_otp">
-        <h3>Submit your Front Icon OTP </h3>
-        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
-        <input type="number" id="otpiconss" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
-        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="savedateiconss()">Submit</button>
-    </div>
-</div>
-
-
-<div class="show_pop" id="BackGroundOtpBox" style="display:none">
-    <div class="box_otp">
-        <h3>Submit your App Background Color OTP </h3>
-        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
-        <input type="number" id="OTPBackground" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
-        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="updbackgr()">Submit</button>
+<div class="vm-app-overlay" id="vmOtpDashboard" style="display:none" aria-hidden="true">
+    <div class="vm-app-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="vmOtpDashTitle">
+        <div class="vm-app-otp-header">
+            <div class="vm-app-otp-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+            <h3 id="vmOtpDashTitle">Dashboard Icon OTP</h3>
+            <p>OTP sent to your registered Email or WhatsApp</p>
+        </div>
+        <div class="vm-app-otp-body">
+            <label class="vm-app-otp-label" for="vmOtpDashInput">4-digit passcode</label>
+            <input type="text" class="vm-app-otp-input" id="vmOtpDashInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="• • • •" autocomplete="one-time-code" />
+            <div class="vm-app-otp-actions">
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--ghost vm-app-otp-close" onclick="HidePoPup()">Back</button>
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--primary" onclick="savedateicon()">Submit</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="show_pop" id="IconOtpBox" style="display:none">
-    <div class="box_otp">
-        <h3>Submit your App Button Color/Text OTP </h3>
-        <span>OTP successfully sent your registered Email ID or Whatsapp Number</span>
-        <input type="number" id="OTPIcon" placeholder="Enter Otp" maxlength="4" />
-        <button onclick="HidePoPup()" style="color: #fff; background: #000; float: left; margin-left: 0;">Back</button>
-        <button style="color: #fff; background: var(--main-bg-lcolor); border: 1px solid var(--main-bg-lcolor); " onclick="colorprint()">Submit</button>
+<div class="vm-app-overlay" id="vmOtpFront" style="display:none" aria-hidden="true">
+    <div class="vm-app-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="vmOtpFrontTitle">
+        <div class="vm-app-otp-header">
+            <div class="vm-app-otp-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+            <h3 id="vmOtpFrontTitle">Front Icon OTP</h3>
+            <p>OTP sent to your registered Email or WhatsApp</p>
+        </div>
+        <div class="vm-app-otp-body">
+            <label class="vm-app-otp-label" for="vmOtpFrontInput">4-digit passcode</label>
+            <input type="text" class="vm-app-otp-input" id="vmOtpFrontInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="• • • •" autocomplete="one-time-code" />
+            <div class="vm-app-otp-actions">
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--ghost vm-app-otp-close" onclick="HidePoPup()">Back</button>
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--primary" onclick="savedateiconss()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="vm-app-overlay" id="vmOtpBackground" style="display:none" aria-hidden="true">
+    <div class="vm-app-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="vmOtpBgTitle">
+        <div class="vm-app-otp-header">
+            <div class="vm-app-otp-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+            <h3 id="vmOtpBgTitle">App Background Color OTP</h3>
+            <p>OTP sent to your registered Email or WhatsApp</p>
+        </div>
+        <div class="vm-app-otp-body">
+            <label class="vm-app-otp-label" for="vmOtpBgInput">4-digit passcode</label>
+            <input type="text" class="vm-app-otp-input" id="vmOtpBgInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="• • • •" autocomplete="one-time-code" />
+            <div class="vm-app-otp-actions">
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--ghost vm-app-otp-close" onclick="HidePoPup()">Back</button>
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--primary" onclick="updbackgr()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="vm-app-overlay" id="vmOtpBtnColor" style="display:none" aria-hidden="true">
+    <div class="vm-app-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="vmOtpBtnTitle">
+        <div class="vm-app-otp-header">
+            <div class="vm-app-otp-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+            <h3 id="vmOtpBtnTitle">Button &amp; Text Color OTP</h3>
+            <p>OTP sent to your registered Email or WhatsApp</p>
+        </div>
+        <div class="vm-app-otp-body">
+            <label class="vm-app-otp-label" for="vmOtpBtnColorInput">4-digit passcode</label>
+            <input type="text" class="vm-app-otp-input" id="vmOtpBtnColorInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="• • • •" autocomplete="one-time-code" />
+            <div class="vm-app-otp-actions">
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--ghost vm-app-otp-close" onclick="HidePoPup()">Back</button>
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--primary" onclick="colorprint()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="vm-app-overlay" id="vmOtpIconTheme" style="display:none" aria-hidden="true">
+    <div class="vm-app-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="vmOtpThemeTitle">
+        <div class="vm-app-otp-header">
+            <div class="vm-app-otp-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
+            <h3 id="vmOtpThemeTitle">Icon Theme Change OTP</h3>
+            <p>OTP sent to your registered Email or WhatsApp</p>
+        </div>
+        <div class="vm-app-otp-body">
+            <label class="vm-app-otp-label" for="vmOtpThemeInput">4-digit passcode</label>
+            <input type="text" class="vm-app-otp-input" id="vmOtpThemeInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="• • • •" autocomplete="one-time-code" />
+            <div class="vm-app-otp-actions">
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--ghost vm-app-otp-close" onclick="HidePoPup()">Back</button>
+                <button type="button" class="vm-app-otp-btn vm-app-otp-btn--primary" onclick="vmSubmitIconThemeOtp()">Submit</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -2904,7 +2968,7 @@
         url: '@Url.Action("faqsave", "Home")',
         data: { q :null , a : null },
         success: function (result) {
-            var faq = document.getElementById('faqlist');
+            var faq = document.getElementById('vmFaqList');
             faq.innerHTML = "";
             for (var i = 0; i < result.length; i++) {
                 var br = document.createElement('tr');
@@ -2933,12 +2997,14 @@
          url: '@Url.Action("CheckTheamactive", "Home")',
          success: function (result) {
              if (result.success) {
-                 inserthtml(result.theam)
+                 inserthtml(result.theam);
                  var groupId = 'group' + result.theam;
-                 const group = document.getElementById(groupId);
-                 const button = group.querySelector('button');
-                 button.classList.add('ClassBtnActive');
-                 ChangeColorIcon(result.theam);
+                 var group = document.getElementById(groupId);
+                 if (group) {
+                     var button = group.querySelector('button');
+                     if (button) { button.classList.add('ClassBtnActive'); }
+                 }
+                 ChangeColorIcon(result.theam <= 12 ? 'fill' : 'line');
              }
              else {
                  ToastrMessage();
@@ -2948,19 +3014,24 @@
      });
      
     function ChangeColorIcon(type) {
-        if (type == 'fill' || type <= 12) {
-            document.getElementById('iconlineshow').style.display = 'none';
-            document.getElementById('iconfillshow').style.display = 'block';
-            document.getElementById('textforicon').innerHTML = 'We have 12 type fill icon groups';
-            document.getElementById('fill').classList.add('filllinecolor');
-            document.getElementById('line').classList.remove('filllinecolor');
-        }
-        else {
-            document.getElementById('iconlineshow').style.display = 'block';
-            document.getElementById('iconfillshow').style.display = 'none';
-            document.getElementById('textforicon').innerHTML = 'We have 12 type out line icon groups';
-            document.getElementById('line').classList.add('filllinecolor');
-            document.getElementById('fill').classList.remove('filllinecolor');
+        var isFill = type === 'fill' || (typeof type === 'number' && type <= 12);
+        var fillBtn = document.getElementById('fill');
+        var lineBtn = document.getElementById('line');
+        var fillPanel = document.getElementById('iconfillshow');
+        var linePanel = document.getElementById('iconlineshow');
+        var desc = document.getElementById('textforicon');
+        if (isFill) {
+            if (linePanel) { linePanel.style.display = 'none'; }
+            if (fillPanel) { fillPanel.style.display = 'block'; }
+            if (desc) { desc.textContent = '12 fill-style icon groups — tap a group to apply and preview.'; }
+            if (fillBtn) { fillBtn.classList.add('vm-ao-segment__btn--active', 'filllinecolor'); }
+            if (lineBtn) { lineBtn.classList.remove('vm-ao-segment__btn--active', 'filllinecolor'); }
+        } else {
+            if (linePanel) { linePanel.style.display = 'block'; }
+            if (fillPanel) { fillPanel.style.display = 'none'; }
+            if (desc) { desc.textContent = '12 outline-style icon groups — tap a group to apply and preview.'; }
+            if (lineBtn) { lineBtn.classList.add('vm-ao-segment__btn--active', 'filllinecolor'); }
+            if (fillBtn) { fillBtn.classList.remove('vm-ao-segment__btn--active', 'filllinecolor'); }
         }
     }
     function inserthtml(theam) {
@@ -3014,60 +3085,125 @@
         `
         document.getElementById("MobileView").innerHTML = ihtml;
     }
+    var vmPendingThemeId = null;
+
     function addContent(groupId) {
-        const group = document.getElementById(groupId);
-        const button = group.querySelector('button');
-        button.classList.add('ClassBtnActive');
-        for (var i = 1; i <= 24; i++) {
-            var id = "group" + i;
+        var group = document.getElementById(groupId);
+        if (!group) { return; }
+        var button = group.querySelector('button');
+        if (button) {
+            button.classList.add('ClassBtnActive');
+        }
+        var i, id, otherGroup, otherButton;
+        for (i = 1; i <= 24; i++) {
+            id = 'group' + i;
             if (groupId !== id) {
-                const otherGroup = document.getElementById(id);
+                otherGroup = document.getElementById(id);
                 if (otherGroup) {
-                    const otherButton = otherGroup.querySelector('button');
+                    otherButton = otherGroup.querySelector('button');
                     if (otherButton) {
                         otherButton.classList.remove('ClassBtnActive');
                     }
                 }
-            }
-            else {
+            } else {
                 $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("ChangeIconTheam","Home")',
+                    type: 'POST',
+                    url: '@Url.Action("ChangeIconTheam", "Home", new { area = "ADMIN" })',
                     data: { theam: i },
                     success: function (result) {
                         if (result.status) {
-                            inserthtml(result.theam)
+                            inserthtml(result.theam);
                             ToastrMessage();
                             toastr.success(result.message);
-                        }
-                        else {
+                        } else {
                             ToastrMessage();
-                            toastr.error(result.message);
+                            toastr.error(result.message || 'Could not update icon group.');
                         }
+                    },
+                    error: function () {
+                        toastr.error('Could not update icon group. Please try again.');
                     }
                 });
             }
         }
     }
+
+    function vmRequestIconThemeOtp() {
+        if (typeof vmShowAppOverlay === 'function') {
+            vmShowAppOverlay('vmOverlayLoad');
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("otpforchangeicon","Home")',
+            data: { TextMessage: 'Your App Icon Theme change OTP is ' },
+            success: function (result) {
+                if (typeof vmHideAppOverlay === 'function') {
+                    vmHideAppOverlay('vmOverlayLoad');
+                }
+                if (result == "Success") {
+                    ToastrMessage();
+                    toastr.success("PASSCODE SENT SUCCESSFULLY");
+                    if (typeof vmShowAppOverlay === 'function') {
+                        vmShowAppOverlay('vmOtpIconTheme');
+                    }
+                } else {
+                    ToastrMessage();
+                    toastr.error(result);
+                }
+            },
+            error: function () {
+                if (typeof vmHideAppOverlay === 'function') {
+                    vmHideAppOverlay('vmOverlayLoad');
+                }
+                toastr.error('Could not send OTP. Please try again.');
+            }
+        });
+    }
+
+    function vmSubmitIconThemeOtp() {
+        var otp = document.getElementById('vmOtpThemeInput').value;
+        if (!(otp > 999 && otp <= 9999)) {
+            ToastrMessage();
+            toastr.error('Enter otp in 4 digit');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeIconTheamWithOtp","Home")',
+            data: { theam: vmPendingThemeId, otp: otp },
+            success: function (result) {
+                if (result.status) {
+                    inserthtml(result.theam);
+                    ToastrMessage();
+                    toastr.success(result.message);
+                    if (typeof vmHideAppOverlay === 'function') {
+                        vmHideAppOverlay('vmOtpIconTheme');
+                    }
+                    document.getElementById('vmOtpThemeInput').value = '';
+                } else {
+                    ToastrMessage();
+                    toastr.error(result.message || 'Update failed.');
+                }
+            },
+            error: function () {
+                toastr.error('Could not update theme. Please try again.');
+            }
+        });
+    }
+
     function isEmptyOrSpaces(str) {
         return str === null || str.match(/^ *$/) !== null;
     }
-    function HidePoPup() {
-        document.getElementById('IconOtpBox').style.display = 'none';
-        document.getElementById('BackGroundOtpBox').style.display = 'none';
-        document.getElementById('optshowss').style.display = 'none';
-        document.getElementById('optshow').style.display = 'none';
-    }
     function faqsave() {
-        var ques = document.getElementById('faqq').value;
-        var ans = document.getElementById('faqa').value;
+        var ques = document.getElementById('vmFaqQ').value;
+        var ans = document.getElementById('vmFaqA').value;
         if (!isEmptyOrSpaces(ques) && !isEmptyOrSpaces(ans)) {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("faqsave", "Home")',
                 data: { q: ques, a: ans },
                 success: function (result) {
-                    var faq = document.getElementById('faqlist');
+                    var faq = document.getElementById('vmFaqList');
                     faq.innerHTML = "";
                     for (var i = 0; i < result.length; i++) {
                         var br = document.createElement('tr');
@@ -3090,8 +3226,8 @@
                         faq.appendChild(hr);
                     }
                     alert('FAQ Saved');
-                    document.getElementById('faqq').value = "";
-                    document.getElementById('faqa').value = "";
+                    document.getElementById('vmFaqQ').value = "";
+                    document.getElementById('vmFaqA').value = "";
                 }
             });
         }
@@ -3107,7 +3243,7 @@
                 url: '@Url.Action("faqdelete", "Home")',
                 data: { id: d },
                 success: function (result) {
-                    var faq = document.getElementById('faqlist');
+                    var faq = document.getElementById('vmFaqList');
                     faq.innerHTML = "";
                     for (var i = 0; i < result.length; i++) {
                         var br = document.createElement('tr');
@@ -3145,9 +3281,10 @@
         type: "POST",
         url: '@Url.Action("sliderimages", "Home")',
         success: function (result) {
+            var ImageDiv = document.getElementById("vmSliderPool");
+            if (!ImageDiv || !result || !result.image) { return; }
             var Ihtml = "";
             for (var i = 0; i < result.image.length; i++) {
-                var ImageDiv = document.getElementById("sliderImages");
                 Ihtml += `<div class="secdiv" style="float: left;">
                     <div class="page-header-third">
                         <img src="${result.image[i]}" />
@@ -3186,7 +3323,7 @@
                 if (data.data.length == 0) {
                     Ihtml += `<p style="text-align: center; font-size: 25px;">Not selected any image</p>`
                 }
-                document.getElementById('sliderSelectedImage').innerHTML = Ihtml;
+                document.getElementById('vmSliderSelected').innerHTML = Ihtml;
                 if (data.Status) {
                     ToastrMessage();
                     toastr.success(data.Message);
@@ -3222,7 +3359,7 @@
                 if (data.data.length == 0) {
                     Ihtml += `<p style="text-align: center; font-size: 25px;">Not selected any image</p>`
                 }
-                document.getElementById('sliderSelectedImage').innerHTML = Ihtml;
+                document.getElementById('vmSliderSelected').innerHTML = Ihtml;
                 if (data.Status) {
                     ToastrMessage();
                     toastr.success(data.Message);
@@ -3236,7 +3373,7 @@
     }
 
     function SentBackgroudOtp(TextMessage) {
-       document.getElementById('saveshow').style.display = 'block';
+       if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOverlayLoad'); }
        $.ajax({
            type: "POST",
            url: '@Url.Action("otpforchangeicon","Home")',
@@ -3245,19 +3382,22 @@
               if (result == "Success") {
                   ToastrMessage();
                   toastr.success("PASSCODE SENT SUCCESSFULLY");
-                  document.getElementById('BackGroundOtpBox').style.display = 'block';
+                  if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOtpBackground'); }
               }
               else {
                   ToastrMessage();
                   toastr.error(result);
                }
-
-               document.getElementById('saveshow').style.display = 'none';
+               if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+           },
+           error: function () {
+               if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+               toastr.error('Could not send OTP. Please try again.');
            }
        });
     }
     function SentIconOtp(TextMessage) {
-        document.getElementById('saveshow').style.display = 'block';
+        if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOverlayLoad'); }
         $.ajax({
             type: "POST",
             url: '@Url.Action("otpforchangeicon","Home")',
@@ -3266,21 +3406,25 @@
                if (result == "Success") {
                    ToastrMessage();
                    toastr.success("PASSCODE SENT SUCCESSFULLY");
-                   document.getElementById('IconOtpBox').style.display = 'block';
+                   if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOtpBtnColor'); }
                }
                else {
                    ToastrMessage();
                    toastr.error(result);
                }
-               document.getElementById('saveshow').style.display = 'none';
+               if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+            },
+            error: function () {
+                if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+                toastr.error('Could not send OTP. Please try again.');
             }
         });
     }
 
     const maxLength = 500;
     function updateCharCount() {
-        const textArea = document.getElementById("textArea");
-        const charCountDiv = document.getElementById("charCount");
+        const textArea = document.getElementById("vmMsgText");
+        const charCountDiv = document.getElementById("vmMsgCharCount");
         const currentLength = textArea.value.length;
 
         if (currentLength > maxLength) {
@@ -3292,128 +3436,173 @@
 
     function clearText(event) {
         event.preventDefault();
-        const textArea = document.getElementById("textArea");
+        const textArea = document.getElementById("vmMsgText");
         textArea.value = "";
         updateCharCount();
     }
 
+    function vmGetJsonList(response) {
+        if (!response) { return []; }
+        var list = response.data || response.Data;
+        return Array.isArray(list) ? list : [];
+    }
+
+    function vmEscapeMsgHtml(text) {
+        if (!text) { return ''; }
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function vmRenderAppMessages(list) {
+        var host = document.getElementById('vmNotifyList');
+        if (!host) { return; }
+        if (!list || !list.length) {
+            host.innerHTML = '<div class="vm-app-msg-empty"><i class="fas fa-bell-slash"></i><p>No notifications yet. Add one using the form on the left.</p></div>';
+            return;
+        }
+        var html = '';
+        var count = 1;
+        list.forEach(function (item) {
+            var msg = item.App_Message || item.app_Message || '';
+            var id = item.id || item.Id;
+            html += '<div class="vm-app-msg-item" data-vm-msg-id="' + id + '">' +
+                '<span class="vm-app-msg-num">' + count + '</span>' +
+                '<div class="vm-app-msg-body">' +
+                '<p class="vm-app-msg-text">' + vmEscapeMsgHtml(msg) + '</p>' +
+                '<button type="button" class="vm-app-msg-delete" onclick="DeleteAppNotification(' + id + ')">Delete</button>' +
+                '</div></div>';
+            count++;
+        });
+        host.innerHTML = html;
+    }
+
+    function vmLoadAppMessages(showErrorOnFail) {
+        var host = document.getElementById('vmNotifyList');
+        var notifyOnFail = showErrorOnFail !== false;
+        $.ajax({
+            url: '@Url.Action("InsertAppMessage", "Home", new { area = "ADMIN" })',
+            type: 'POST',
+            data: { Message: '' },
+            dataType: 'json',
+            cache: false,
+            success: function (response) {
+                if (typeof response === 'string') {
+                    try { response = JSON.parse(response); } catch (e) { response = null; }
+                }
+                vmRenderAppMessages(vmGetJsonList(response));
+            },
+            error: function (xhr) {
+                if (host && host.querySelector('.vm-app-msg-item')) {
+                    return;
+                }
+                vmRenderAppMessages([]);
+                if (!notifyOnFail) {
+                    return;
+                }
+                var errText = 'Could not load notifications.';
+                if (xhr && xhr.status === 404) {
+                    errText = 'Notifications service not found. Rebuild and refresh the page.';
+                } else if (xhr && xhr.responseText && xhr.responseText.indexOf('PassCode') >= 0) {
+                    errText = 'Session expired. Please refresh the page and login again.';
+                }
+                if (typeof vmAppOptionNotify === 'function') {
+                    vmAppOptionNotify('Error', errText, 'error');
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.error(errText);
+                }
+            }
+        });
+    }
+
     function DeleteAppNotification(id) {
         $.ajax({
-            url: '@Url.Action("DeleteAppMessage", "Home")',
+            url: '@Url.Action("DeleteAppMessage", "Home", new { area = "ADMIN" })',
             type: "POST",
-            data: { id : id },
+            dataType: 'json',
+            data: { id: id },
             success: function (response) {
-                var IHtml = '';
-                var Count = 1;
-                response.data.forEach(item => {
-                    IHtml += `<div class="mesg_text">
-                                   <span>${Count}</span> <p>${item.App_Message} <a onclick="DeleteAppNotification(${item.id})" style="text-decoration: underline;  cursor:pointer;">Delete</a></p>
-                              </div>`
-                    Count++;
-                });
-                document.getElementById('AppNotifications').innerHTML = IHtml;
+                vmRenderAppMessages(vmGetJsonList(response));
                 if (response.status) {
                     toastr.success(response.message);
-                }
-                else {
+                } else {
                     toastr.error(response.message);
                 }
             },
-            error: function (error) {
-                toastr.error(error.message);
+            error: function () {
+                if (typeof vmAppOptionNotify === 'function') {
+                    vmAppOptionNotify('Error', 'Could not delete notification.', 'error');
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.error('Could not delete notification.');
+                }
             }
-
-        })
+        });
     }
+
+    (function vmInitNotifyList() {
+        var host = document.getElementById('vmNotifyList');
+        if (!host) { return; }
+        if (!host.querySelector('.vm-app-msg-item')) {
+            vmLoadAppMessages(false);
+        }
+    })();
 
     function handleSubmit(event) {
         event.preventDefault();
-        const text = document.getElementById('textArea').value;
-         $.ajax({
-             url: '@Url.Action("InsertAppMessage", "Home")',
-             type: 'POST',
-             data: { Message: text },
-             success: function (response) {
-                 var IHtml = '';
-                 var Count = 1;
-                 response.data.forEach(item => {
-                     IHtml += `<div class="mesg_text">
-                                  <span>${Count}</span> <p>${item.App_Message} <a onclick="DeleteAppNotification(${item.id})" style="text-decoration: underline;  cursor:pointer;">Delete</a></p>
-                               </div>`
-                     Count++;
-                 });
-                 document.getElementById('AppNotifications').innerHTML = IHtml;
-                 if (!response.status) {
-                     toastr.error(response.message);
-                 }
-             }
-         });
-    }
-
-    function ButtonActive(btn) {
-        console.log(btn)
-        const buttons = document.querySelectorAll('.button-container button');
-        buttons.forEach(button => button.classList.remove('active'));
-
-        const activeButton = document.getElementById(btn);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        } else {
-            console.error(`Button with id ${btn} not found`);
+        var text = (document.getElementById('vmMsgText') || {}).value || '';
+        if (!text.trim()) {
+            vmLoadAppMessages(false);
             return;
         }
-        const sections = {
-            Button1: 'AppColor',
-            Button2: 'AppIcon',
-            Button3: 'AppIconImages',
-            Button4: 'AppKYCDocs',
-            Button5: 'FQAS',
-            Button6: 'AppSlider',
-            Button7: 'AppMessage',
-        };
-        Object.values(sections).forEach(sectionId => {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.style.display = 'none';
-            } else {
-                console.warn(`Section with id ${sectionId} not found`);
+        $.ajax({
+            url: '@Url.Action("InsertAppMessage", "Home", new { area = "ADMIN" })',
+            type: 'POST',
+            dataType: 'json',
+            data: { Message: text },
+            success: function (response) {
+                vmRenderAppMessages(vmGetJsonList(response));
+                if (response.status) {
+                    document.getElementById('vmMsgText').value = '';
+                    updateCharCount();
+                    toastr.success(response.message);
+                } else if (response.message) {
+                    toastr.error(response.message);
+                }
+            },
+            error: function () {
+                if (typeof vmAppOptionNotify === 'function') {
+                    vmAppOptionNotify('Error', 'Could not save notification.', 'error');
+                } else if (typeof toastr !== 'undefined') {
+                    toastr.error('Could not save notification.');
+                }
             }
         });
-
-        const activeSection = document.getElementById(sections[btn]);
-        if (activeSection) {
-            activeSection.style.display = 'block';
-            if (sections[btn] === 'AppMessage') {
-                const event = new Event('submit');
-                handleSubmit(event);
-            }
-        } else {
-            console.error(`Active section for ${btn} not found`);
-        }
     }
 
     function ShowIconColor() {
-        var col = document.getElementById('appcol1').value;
-        var col1 = document.getElementById('appcol2').value;
-        var col3 = document.getElementById('appcol3').value;
-        document.getElementById('valaapcol').style.color = col3;
-        document.getElementById('buttfup3').innerHTML = "(" + col3 + ")";
-        document.getElementById('buttfup1').innerHTML = "(" + col + ")";
-        document.getElementById('buttfup2').innerHTML = "(" + col1 + ")";
-        document.getElementById('valaapcol').style.background = "linear-gradient(to right, " + col + "," + col1 + ")";
+        var col = document.getElementById('vmAppCol1').value;
+        var col1 = document.getElementById('vmAppCol2').value;
+        var col3 = document.getElementById('vmAppCol3').value;
+        document.getElementById('vmAppColPreview').style.color = col3;
+        document.getElementById('vmAppColLbl3').innerHTML = col3;
+        document.getElementById('vmAppColLbl1').innerHTML = col;
+        document.getElementById('vmAppColLbl2').innerHTML = col1;
+        document.getElementById('vmAppColPreview').style.background = "linear-gradient(95deg, " + col + "," + col1 + ")";
     }
 
     function colorprint() {
-        var col = document.getElementById('appcol1').value;
-        var col1 = document.getElementById('appcol2').value;
-        var col3 = document.getElementById('appcol3').value;
-        var otp = document.getElementById('OTPIcon').value;
+        var col = document.getElementById('vmAppCol1').value;
+        var col1 = document.getElementById('vmAppCol2').value;
+        var col3 = document.getElementById('vmAppCol3').value;
+        var otp = document.getElementById('vmOtpBtnColorInput').value;
         $.ajax({
             url: '@Url.Action("app_colors_save", "Home")',
             type: 'GET',
             data: { otp: otp, bg1: col, bg2: col1, fc :col3},
             success: function (response) {
-                document.getElementById('IconOtpBox').style.display = 'none'
+                if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOtpBtnColor'); }
                 if (response === 'Success') {
                    ToastrMessage();
                    toastr.success('APP Background Color Selected.');
@@ -3427,19 +3616,46 @@
 
     }
     //  App Icon Theme
+    function vmSyncIconThemeSwitch(showDashboard) {
+        var dashPanel = document.getElementById('iconsettingshow');
+        var frontPanel = document.getElementById('iconsettinghide');
+        var titleEl = document.getElementById('vmIconThemePanelTitle');
+        var dashBtns = dashPanel ? dashPanel.querySelectorAll('#dback, #fback') : [];
+        var frontBtns = frontPanel ? frontPanel.querySelectorAll('#dback, #fback') : [];
+        var i;
+        if (showDashboard) {
+            if (dashPanel) { dashPanel.style.display = 'block'; }
+            if (frontPanel) { frontPanel.style.display = 'none'; }
+            if (titleEl) { titleEl.textContent = 'Dashboard icon design'; }
+            for (i = 0; i < dashBtns.length; i++) {
+                dashBtns[i].classList.toggle('vm-ao-segment__btn--active', dashBtns[i].id === 'dback');
+            }
+            for (i = 0; i < frontBtns.length; i++) {
+                frontBtns[i].classList.toggle('vm-ao-segment__btn--active', false);
+            }
+        } else {
+            if (dashPanel) { dashPanel.style.display = 'none'; }
+            if (frontPanel) { frontPanel.style.display = 'block'; }
+            for (i = 0; i < dashBtns.length; i++) {
+                dashBtns[i].classList.toggle('vm-ao-segment__btn--active', false);
+            }
+            for (i = 0; i < frontBtns.length; i++) {
+                frontBtns[i].classList.toggle('vm-ao-segment__btn--active', frontBtns[i].id === 'fback');
+            }
+        }
+    }
     function frontbackss() {
-        document.getElementById('dback').style.background = '#F6F5F5';
-        document.getElementById('fback').style.background = 'var(--main-bg-lcolor)';
-        document.getElementById('iconsettingshow').style.display = 'none';
-        document.getElementById('iconsettinghide').style.display = 'contents';
+        vmSyncIconThemeSwitch(false);
     }
     function deshbackss() {
-        document.getElementById('fback').style.background = '#F6F5F5';
-        document.getElementById('dback').style.background = 'var(--main-bg-lcolor)';
-        document.getElementById('iconsettinghide').style.display = 'none';
-        document.getElementById('iconsettingshow').style.display = 'contents';
+        vmSyncIconThemeSwitch(true);
     }
 
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { vmSyncIconThemeSwitch(true); });
+    } else {
+        vmSyncIconThemeSwitch(true);
+    }
 
     function whitemess(W) {
         var der = document.getElementsByClassName('whitemes');
@@ -3452,7 +3668,7 @@
     }
 
     function savedateicon() {
-        var otp = document.getElementById('otpicon').value;
+        var otp = document.getElementById('vmOtpDashInput').value;
         if (otp > 999 && otp <= 9999) {
             var col11 = document.getElementById('col1').innerHTML;
             var col12 = document.getElementById('col2').innerHTML;
@@ -3466,10 +3682,10 @@
                     if (result == "Success") {
                         ToastrMessage();
                         toastr.success("Successfully Updated");
-                        document.getElementById('optshow').style.display = 'none';
+                        if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOtpDashboard'); }
                         document.getElementById('opthide').style.display = 'block';
-                        document.getElementById('savehidd').style.display = 'block';
-                        document.getElementById('saveshow').style.display = 'none';
+                        document.getElementById('savehidd').style.display = 'inline-flex';
+                        if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                     }
                     else {
                         ToastrMessage();
@@ -3485,7 +3701,7 @@
     }
 
     function savedateiconss() {
-         var otp = document.getElementById('otpiconss').value;
+         var otp = document.getElementById('vmOtpFrontInput').value;
          if (otp > 999 && otp <= 9999) {
              var col11 = document.getElementById('col1ss').innerHTML;
              var col12 = document.getElementById('col2ss').innerHTML;
@@ -3499,10 +3715,10 @@
                      if (result == "Success") {
                          ToastrMessage();
                          toastr.success("Successfully Updated");
-                         document.getElementById('optshowss').style.display = 'none';
+                         if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOtpFront'); }
                          document.getElementById('opthidess').style.display = 'contents';
-                         document.getElementById('savehiddss').style.display = 'block';
-                         document.getElementById('saveshowss').style.display = 'none';
+                         document.getElementById('savehiddss').style.display = 'inline-flex';
+                         if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                      }
                      else {
                          ToastrMessage();
@@ -3584,7 +3800,7 @@
 
     function optsents(TextMessage) {
         document.getElementById('savehidd').style.display = 'none';
-        document.getElementById('saveshow').style.display = 'block';
+        if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOverlayLoad'); }
         $.ajax({
             type: "POST",
             url: '@Url.Action("otpforchangeicon","Home")',
@@ -3593,22 +3809,26 @@
                 if (result == "Success") {
                     ToastrMessage();
                     toastr.success("PASSCODE SENT SUCCESSFULLY");
-                    document.getElementById('optshow').style.display = 'block';
+                    if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOtpDashboard'); }
                     document.getElementById('opthide').style.display = 'none';
-                    document.getElementById('saveshow').style.display = 'none';
+                    if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                 }
                 else {
-                    document.getElementById('saveshow').style.display = 'block';
+                    if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                     ToastrMessage();
                     toastr.error(result);
                 }
+            },
+            error: function () {
+                if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+                toastr.error('Could not send OTP. Please try again.');
             }
         });
     }
 
     function optsentsss(TextMessage) {
         document.getElementById('savehiddss').style.display = 'none';
-        document.getElementById('saveshow').style.display = 'block';
+        if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOverlayLoad'); }
         $.ajax({
             type: "POST",
             url: '@Url.Action("otpforchangeicon", "Home")',
@@ -3617,15 +3837,19 @@
                 if (result == "Success") {
                     ToastrMessage();
                     toastr.success("PASSCODE SENT SUCCESSFULLY");
-                    document.getElementById('optshowss').style.display = 'block';
+                    if (typeof vmShowAppOverlay === 'function') { vmShowAppOverlay('vmOtpFront'); }
                     document.getElementById('opthidess').style.display = 'none';
-                    document.getElementById('saveshow').style.display = 'none';
+                    if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                 }
                 else {
                     ToastrMessage();
-                    document.getElementById('saveshow').style.display = 'none';
+                    if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
                     toastr.error(result);
                 }
+            },
+            error: function () {
+                if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOverlayLoad'); }
+                toastr.error('Could not send OTP. Please try again.');
             }
         });
     }
@@ -3699,15 +3923,18 @@
     function ShowBackgroundColor() {
         var col1 = document.getElementById('backcolor1').value;
         var col12 = document.getElementById('backcolor2').value;
-        document.getElementById('bckg1').innerHTML = "(" + col1 + ")";
-        document.getElementById('bckg2').innerHTML = "(" + col12 + ")";
-        document.getElementById('prebackground').style.background = "linear-gradient(to bottom," + col1 + "," + col12 + ")";
+        document.getElementById('bckg1').innerHTML = col1;
+        document.getElementById('bckg2').innerHTML = col12;
+        var vmBgPreview = document.getElementById('vmBgPreview');
+        if (vmBgPreview) {
+            vmBgPreview.style.background = "linear-gradient(165deg," + col1 + " 0%," + col12 + " 100%)";
+        }
     }
 
     function updbackgr() {
         var col1 = document.getElementById('backcolor1').value;
         var col12 = document.getElementById('backcolor2').value;
-        var otp = document.getElementById('OTPBackground').value;
+        var otp = document.getElementById('vmOtpBgInput').value;
         $.ajax({
             type: "POST",
             url: '@Url.Action("backgroundcolorappsave", "Home")',
@@ -3716,11 +3943,22 @@
                if (result == "Success") {
                    ToastrMessage();
                    toastr.success("Successfully Updated");
+                   if (typeof vmAppOptionNotify === 'function') {
+                       vmAppOptionNotify('Success', 'Background colors updated.', 'success');
+                   }
                }
                else {
                    toastr.error(result);
+                   if (typeof vmAppOptionNotify === 'function') {
+                       vmAppOptionNotify('Error', result || 'Update failed.', 'error');
+                   }
                 }
-                document.getElementById('BackGroundOtpBox').style.display = 'none';
+                if (typeof vmHideAppOverlay === 'function') { vmHideAppOverlay('vmOtpBackground'); }
+            },
+            error: function () {
+                if (typeof vmAppOptionNotify === 'function') {
+                    vmAppOptionNotify('Error', 'Network error while saving.', 'error');
+                }
             }
         });
     }

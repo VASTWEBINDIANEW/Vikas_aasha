@@ -1,0 +1,704 @@
+/* ADMIN — User A/C Q (Retailer Bank), Complaint chat, Dispute list */
+
+body.saas-admin-ui .saas-support-page .saas-acc-toolbar {
+    background: var(--acc-surface, #fff);
+    border: 1px solid var(--acc-border, #e2e8f0);
+    border-radius: var(--acc-radius, 14px);
+    box-shadow: var(--acc-shadow, 0 2px 10px rgba(15, 23, 42, 0.05));
+    padding: 14px 16px;
+    margin-bottom: 16px !important;
+}
+
+body.saas-admin-ui .saas-support-page .saas-acc-table-card {
+    margin-bottom: 16px;
+}
+
+/* Retailer bank */
+body.saas-admin-ui .saas-bank-thumb {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-pur-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+body.saas-admin-ui .saas-bank-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-bank-user-cell img {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui #retailerBankApproveModal .modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+body.saas-admin-ui #retailerBankApproveModal .saas-bank-check-preview {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui #retailerBankImageModal .modal-content {
+    border-radius: 14px;
+}
+
+body.saas-admin-ui #retailerBankImageModal img {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+}
+
+/* Dispute toolbar — status + quick filter inputs */
+body.saas-admin-ui .saas-dispute-status-input-wrap,
+body.saas-admin-ui .saas-dispute-search-inner {
+    position: relative;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-dispute-field-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: #64748b;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-dispute-status-input-wrap .saas-dispute-status-select,
+body.saas-admin-ui .saas-dispute-search-inner .saas-dispute-search-input {
+    width: 100% !important;
+    padding-left: 36px !important;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-dispute-status-input-wrap .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-dispute-status-input-wrap .select2-container .select2-selection--single {
+    padding-left: 22px !important;
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    height: 40px !important;
+    min-height: 40px !important;
+}
+
+body.saas-admin-ui .saas-dispute-status-input-wrap .select2-container .select2-selection__rendered {
+    line-height: 38px !important;
+    padding-left: 8px !important;
+}
+
+body.saas-admin-ui .saas-dispute-status-input-wrap .select2-container .select2-selection__arrow {
+    height: 38px !important;
+}
+
+/* Dispute list — extra filters (desktop inline with PAN toolbar) */
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-filter-fields {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 8px;
+    flex: 0 1 auto;
+}
+
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-field {
+    width: 118px;
+    min-width: 108px;
+    flex: 0 0 118px;
+}
+
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-search-wrap {
+    width: 168px;
+    min-width: 140px;
+    max-width: 200px;
+    flex: 1 1 150px;
+}
+
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-select,
+body.saas-admin-ui .saas-dispute-report-page .saas-dispute-search-input {
+    height: 40px !important;
+    min-height: 40px !important;
+    line-height: 1.35 !important;
+    box-sizing: border-box;
+    font-size: 0.85rem;
+}
+
+body.saas-admin-ui .saas-dispute-report-page .saas-pan-export-btn.saas-acc-btn--pdf {
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    border-color: transparent;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table-card {
+    margin-top: 12px;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table-card-head {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute {
+    width: 100%;
+    margin-bottom: 0;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute thead th {
+    background: #f5f5f5 !important;
+    color: #334155;
+    font-size: 0.75rem !important;
+    font-weight: 700;
+    padding: 10px 12px !important;
+    white-space: nowrap;
+    vertical-align: middle !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody td {
+    padding: 12px 14px !important;
+    font-size: 0.8rem !important;
+    line-height: 1.45;
+    vertical-align: middle !important;
+    border-color: #e2e8f0 !important;
+    color: #1e293b;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody td.saas-dispute-col-user {
+    padding: 14px 16px !important;
+    min-width: 220px;
+    vertical-align: top !important;
+    background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--pending td.saas-dispute-col-user {
+    box-shadow: inset 4px 0 0 #f59e0b;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--approved td.saas-dispute-col-user {
+    box-shadow: inset 4px 0 0 #10b981;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--rejected td.saas-dispute-col-user {
+    box-shadow: inset 4px 0 0 #ef4444;
+}
+
+body.saas-admin-ui .saas-dispute-user-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill i {
+    font-size: 0.78rem;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill--pending {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill--approved {
+    background: #d1fae5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill--rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+body.saas-admin-ui .saas-dispute-status-pill--neutral {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-dispute-user-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .saas-dispute-user-role {
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: #1e40af;
+}
+
+body.saas-admin-ui .saas-dispute-user-sep {
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+body.saas-admin-ui .saas-dispute-user-firm {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #334155;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-dispute-amount {
+    display: inline-block;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    padding: 4px 10px;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dispute-txn-id {
+    display: inline-block;
+    font-size: 0.76rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    word-break: break-all;
+    color: #475569;
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+body.saas-admin-ui .saas-dispute-datetime {
+    font-size: 0.76rem;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-dispute-cell-text {
+    display: inline-block;
+    max-width: 100%;
+}
+
+body.saas-admin-ui .saas-dispute-col-action {
+    min-width: 88px;
+}
+
+body.saas-admin-ui .saas-dispute-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    color: #fff !important;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.saas-admin-ui .saas-dispute-action-btn:hover {
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+body.saas-admin-ui .saas-dispute-action-muted {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody td.col-details {
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-width: 160px;
+    max-width: 300px;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr:hover {
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--pending:hover {
+    background: #fffbeb;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--approved:hover {
+    background: #ecfdf5;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table--dispute tbody tr.saas-dispute-row--rejected:hover {
+    background: #fef2f2;
+}
+
+body.saas-admin-ui .saas-dispute-page .saas-acc-table-wrap,
+body.saas-admin-ui .saas-support-page .saas-acc-table-wrap,
+body.saas-admin-ui .saas-bank-page .saas-acc-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    touch-action: pan-x pan-y;
+}
+
+/* Complaint chat */
+body.saas-admin-ui .saas-complaint-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+
+body.saas-admin-ui .saas-complaint-users-card,
+body.saas-admin-ui .saas-complaint-chat-card {
+    background: #fff;
+    border: 1px solid var(--acc-border, #e2e8f0);
+    border-radius: var(--acc-radius, 14px);
+    box-shadow: var(--acc-shadow, 0 2px 10px rgba(15, 23, 42, 0.05));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 520px;
+    max-height: calc(100vh - 200px);
+}
+
+body.saas-admin-ui .saas-complaint-card-head {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-complaint-users-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-complaint-user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+body.saas-admin-ui .saas-complaint-user-item:hover,
+body.saas-admin-ui .saas-complaint-user-item.is-active {
+    background: #eff6ff;
+}
+
+body.saas-admin-ui .saas-complaint-user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-complaint-user-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-complaint-user-meta strong {
+    display: block;
+    font-size: 0.8rem;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.saas-admin-ui .saas-complaint-user-meta span {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-complaint-badge {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-complaint-badge.is-zero {
+    background: #e2e8f0;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-complaint-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    background: #f8fafc;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-chat-bubble {
+    max-width: 85%;
+    margin-bottom: 14px;
+    clear: both;
+}
+
+body.saas-admin-ui .saas-chat-bubble--in {
+    float: right;
+    text-align: right;
+}
+
+body.saas-admin-ui .saas-chat-bubble--out {
+    float: left;
+}
+
+body.saas-admin-ui .saas-chat-bubble-head {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-chat-bubble-body {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-chat-bubble--in .saas-chat-bubble-body {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-top-right-radius: 4px;
+}
+
+body.saas-admin-ui .saas-chat-bubble--out .saas-chat-bubble-body {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    border-top-left-radius: 4px;
+}
+
+body.saas-admin-ui .saas-chat-reply-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px;
+    border-top: 1px solid #e2e8f0;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-chat-reply-bar .form-control {
+    min-height: 44px;
+    border-radius: 10px;
+}
+
+body.saas-admin-ui .saas-chat-reply-btn {
+    min-width: 48px;
+    min-height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-complaint-mobile-toggle {
+    display: none;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-support-page .saas-pan-toolbar-dates,
+    body.saas-admin-ui .saas-support-page .saas-acc-toolbar-right {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-support-page .saas-pan-date-controls,
+    body.saas-admin-ui .saas-support-page .saas-acc-report-date-controls {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-support-page .saas-report-date-fields {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-support-page .saas-report-toolbar-actions {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-support-page .saas-report-toolbar-actions .saas-acc-report-search-btn {
+        grid-column: 1 / -1;
+    }
+
+    body.saas-admin-ui .saas-support-page .saas-report-toolbar-actions .saas-acc-export-group {
+        grid-column: 1 / -1;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-filter-fields {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-field,
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-search-wrap {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        flex: none !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-select,
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-search-input,
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-input-wrap .select2-container .select2-selection--single {
+        height: 44px !important;
+        min-height: 44px !important;
+        max-height: 44px !important;
+        font-size: 16px !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-input-wrap .select2-container .select2-selection__rendered {
+        line-height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-status-input-wrap .select2-container .select2-selection__arrow {
+        height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-dispute-field-icon {
+        font-size: 0.95rem;
+    }
+
+    body.saas-admin-ui .saas-dispute-page .saas-acc-table-card {
+        margin-top: 10px;
+    }
+
+    body.saas-admin-ui .saas-complaint-layout {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-complaint-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        font-weight: 700;
+        font-size: 0.8rem;
+        color: #1e40af;
+    }
+
+    body.saas-admin-ui .saas-complaint-users-card {
+        max-height: 320px;
+        min-height: 0;
+    }
+
+    body.saas-admin-ui .saas-complaint-users-card.is-collapsed {
+        display: none;
+    }
+
+    body.saas-admin-ui .saas-complaint-chat-card {
+        min-height: 420px;
+        max-height: none;
+    }
+
+    body.saas-admin-ui .saas-complaint-messages {
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-support-page .saas-report-date-fields {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-dispute-report-page .saas-acc-table--dispute,
+    body.saas-admin-ui .saas-support-page .saas-acc-table--dispute,
+    body.saas-admin-ui .saas-support-page .saas-acc-table--bank {
+        min-width: 960px;
+    }
+
+    body.saas-admin-ui .saas-chat-bubble {
+        max-width: 95%;
+    }
+}

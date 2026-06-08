@@ -7,11 +7,14 @@
     var frmDate = (ViewBag.frmDate as string) ?? DateTime.Today.ToString("yyyy-MM-dd");
     var toDate = (ViewBag.toDate as string) ?? DateTime.Today.ToString("yyyy-MM-dd");
     var totalAmount = rows.Sum(r => r.amount ?? 0);
+    var historyExcelUrl = Url.Action("ExcelMicroATMUnholdHistoryReport", "Home");
+    var historyPdfUrl = Url.Action("PDFMicroATMUnholdHistoryReport", "Home");
 }
 
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-micro-history-page">
     <div class="container-fluid">
@@ -25,24 +28,35 @@
                     <li>Hold history</li>
                 </ol>
                 <div class="saas-acc-toolbar-right saas-pan-toolbar-dates">
-                    <div class="saas-acc-date-range input-daterange saas-acc-report-date-controls saas-pan-date-controls saas-micro-toolbar-actions">
-                        <div class="saas-acc-dp-field">
-                            <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
-                            @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+                    <div class="saas-acc-report-date-controls saas-pan-date-controls">
+                        <div class="saas-report-date-fields">
+                            <div class="saas-acc-dp-field">
+                                <label class="saas-acc-dp-label" for="txt_frm_date">From date</label>
+                                <span class="saas-acc-dp-icon" title="From date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "yyyy-mm-dd" })
+                            </div>
+                            <div class="saas-acc-dp-field">
+                                <label class="saas-acc-dp-label" for="txt_to_date">To date</label>
+                                <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+                            </div>
                         </div>
-                        <div class="saas-acc-dp-field">
-                            <span class="saas-acc-dp-icon" title="To date"><i class="fa fa-calendar"></i></span>
-                            @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "yyyy-mm-dd" })
+                        <div class="saas-report-toolbar-actions">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
+                                <i class="fas fa-search" aria-hidden="true"></i> Search
+                            </button>
+                            <button type="button" class="saas-acc-btn saas-acc-btn--search saas-report-total-btn" id="btnMicroHistoryTotal" title="Total amount">
+                                <i class="fas fa-calculator" aria-hidden="true"></i> Total
+                            </button>
+                            <div class="saas-acc-export-group saas-pan-export-group">
+                                <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport" title="Export Excel">
+                                    <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                                </button>
+                                <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnMicroHistoryPdf" title="Export PDF">
+                                    <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                                </button>
+                            </div>
                         </div>
-                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn">
-                            <i class="fas fa-search" aria-hidden="true"></i> Search
-                        </button>
-                        <button type="button" class="saas-acc-btn saas-acc-btn--search" id="btnMicroHistoryTotal" title="Total amount">
-                            <i class="fas fa-calculator" aria-hidden="true"></i> Total
-                        </button>
-                        <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport">
-                            <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
-                        </button>
                     </div>
                 </div>
             </div>
@@ -123,9 +137,17 @@
         }
     });
 
+    function microHistoryExportUrl(base) {
+        var f = $('#txt_frm_date').val() || '';
+        var t = $('#txt_to_date').val() || '';
+        return base + '?txt_frm_date=' + encodeURIComponent(f) + '&txt_to_date=' + encodeURIComponent(t);
+    }
+
     $('#btnExport').on('click', function () {
-        var f = $('#txt_frm_date').val();
-        var t = $('#txt_to_date').val();
-        location.href = '@Url.Action("ExcelMicroATMUnholdHistoryReport", "Home")?txt_frm_date=' + encodeURIComponent(f) + '&txt_to_date=' + encodeURIComponent(t);
+        window.location.href = microHistoryExportUrl('@historyExcelUrl');
+    });
+
+    $('#btnMicroHistoryPdf').on('click', function () {
+        window.open(microHistoryExportUrl('@historyPdfUrl'), '_blank');
     });
 </script>

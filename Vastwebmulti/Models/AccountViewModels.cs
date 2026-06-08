@@ -205,4 +205,19 @@ namespace Vastwebmulti.Models
         public string Mobile { get; set; }
         public string Frm_Name { get; set; }
     }
+
+    /// <summary>EF SqlQuery row for PAN/Aadhar report (avoids LINQ ToString translation).</summary>
+    public class PanAadharReportSqlRow
+    {
+        public string RetailerId { get; set; }
+        public string TransactionId { get; set; }
+        public decimal? PanCharge { get; set; }
+        public decimal? AadharCharge { get; set; }
+        public string ChargeType { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public string RetailerName { get; set; }
+        public string Email { get; set; }
+        public string Mobile { get; set; }
+        public string Frm_Name { get; set; }
+    }
 }

@@ -15,7 +15,6 @@
 @using System.Web.Script.Serialization;
 @using System.Web.UI.WebControls;
 @using Vastwebmulti.Areas.ADMIN.Controllers;
-@using Vastwebmulti.Areas.ADMIN.Models;
 @using Vastwebmulti.Areas.WHITELABEL.Models;
 @using Vastwebmulti.Models;
 
@@ -32,18 +31,9 @@
     var Retailerpasscodesetings = ViewBag.Retailerpasscodesetings;
     var APIpasscodesetings = ViewBag.APIpasscodesetings;
     var Whitelabelpasscodesetings = ViewBag.Whitelabelpasscodesetings;
-    //var twowaysecurity = ViewBag.twowaysecurity;
-    //passcodeset= twowaysecurity==true?"OTP":"";
-    //if (twowaysecurity == false)
-    //{
-    //    passcodeset =
-    //}
-    //   var twowaysecuritypass = twowaysecurity == true ? "selected" : "";
-    //var offpasscode = twowaysecuritypass == "true" ? "selected" : "";
-    //var offpasscode = passcodeset == "OFF" ? "selected" : "";
-    //var perpasscode = passcodeset == "PERDAY" ? "selected" : "";
-    //var Weakpasscode = passcodeset == "WEAKS" ? "selected" : "";
-    //var monthpasscode = passcodeset == "MONTHS" ? "selected" : "";
+    var roleStatusList = ViewBag.RoleStatus as List<Vastwebmulti.Models.AdminProfileAllUserOTP>
+        ?? new List<Vastwebmulti.Models.AdminProfileAllUserOTP>();
+    
 }
 
 
@@ -53,6 +43,9 @@
    /* new css */
     .custmor-support {
         margin: 0px;
+    }
+    label, .control-label, .form-label {
+        color: #fff !important;
     }
    
    
@@ -257,12 +250,13 @@
         background-color: var(--second-bg-color);
     }
 
-    .userwise-off ul li {
-        float: left;
-        padding: 0px 8px;
-        border-left: 1px solid #aeaaaa;
-        width: 20%;
-        height: 50px;
+    /* disabled on saas-prof-page — see admin-profile-modern.css v4 */
+    section.saas-prof-page .userwise-off ul li {
+        float: none;
+        width: 100%;
+        height: auto;
+        border-left: 0;
+        padding: 0;
     }
 
     .userwise-off ul {
@@ -503,16 +497,17 @@
             margin-top: 8px;
         }
 
-        .useroftime-third-respon ul li {
-            width: 50%;
-            float: left;
-            padding-right: 5px;
+        section.saas-prof-page .useroftime-third-respon ul li {
+            width: 100%;
+            float: none;
+            padding-right: 0;
         }
     }
 
     @@media only screen and (max-width:480px) {
 
-        .res_p a {
+        section.saas-prof-page .res_p a,
+        section.saas-prof-page .saas-prof-identity__action a {
             font-size: 12px !important;
             padding: 4px 8px !important;
         }
@@ -549,9 +544,9 @@
             margin-bottom: 60px;
         }
 
-        .userwise-off ul li {
-            width: 33%;
-            margin-top: 10px;
+        section.saas-prof-page .userwise-off ul li {
+            width: 100%;
+            margin-top: 0;
         }
 
         .custmor-support.fullbodydycolorbg {
@@ -566,81 +561,85 @@
             margin-top: 0;
         }
 
-        .useroftime-third-respon ul li {
-            width: 50%;
-            float: left;
-            padding-right: 5px;
+        section.saas-prof-page .useroftime-third-respon ul li {
+            width: 100%;
+            float: none;
+            padding-right: 0;
         }
     }
 </style>
-<section class="content fourdesign-section-admin">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-profile-modern.css?v=8" rel="stylesheet" />
 
-    <div class="container-fluid">
+<section class="content fourdesign-section-admin saas-admin-account-page saas-admin-profile-page saas-prof-page"
+         data-update-support-url="@Url.Action("UpdateSupportData", "Home")"
+         data-profile-url="@Url.Action("Profile", "Home")"
+         data-otp-list-url="@Url.Action("GetTwoFactor", "Home")"
+         data-otp-user-url="@Url.Action("DisablePassCodeBYUserID", "Home")"
+         data-otp-role-url="@Url.Action("DisableTwoFactor", "Home")"
+         data-otp-status-url="@Url.Action("AdminOTPStatus", "Home")">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Profile</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
+    <div class="container-fluid saas-profile-container">
 
-                <li><a href="javascript:void(0);">Profile</a></li>
-            </ul>
+        <div class="saas-acc-toolbar saas-profile-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>Profile</li>
+            </ol>
+            <div class="saas-profile-page-head">
+                <h1 class="saas-profile-page-title"><i class="fas fa-user-circle" aria-hidden="true"></i> Admin Profile</h1>
+                <p class="saas-profile-page-desc">Manage company details, security, documents and support settings</p>
+            </div>
         </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
 
-        <div class="row clearfix">
-            <div class="col-md-4 profile-third-design">
-                <div class="card page-header-third" style="">
-                    <div class="ribbon"><span class="fullbodydycolorbg">ADMIN</span></div>
-
-                    <div class="body fullbodydycolorbg">
-                        <center>
+        <div class="row clearfix saas-prof-layout">
+            <div class="col-md-4 col-sm-12 saas-prof-layout__aside">
+                <article class="saas-prof-card saas-prof-card--identity">
+                    <div class="saas-prof-identity__hero">
+                        <div class="saas-prof-identity__avatar-wrap">
                             @if (!string.IsNullOrWhiteSpace(ViewBag.image))
                             {
                                 <div class="image" style="margin-top:24px;">
-                                    <img id="Adminimage" src="@Url.Content("~/" + ViewBag.image)" class="img-circle profileimg-third" alt="User" width="100" height="100" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage(@ViewBag.admin.ID)" />
+                                    <img id="Adminimage" src="@Url.Content("~/" + ViewBag.image)" class="saas-prof-identity__avatar" alt="User" title="Click to upload profile photo" onclick="uploadimage(@ViewBag.admin.ID)" />
                                 </div>
                             }
                             else
                             {
                                 <div class="image" style="margin-top:24px;">
-                                    <img id="Adminimage" src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle profileimg-third" alt="User" title="Click Me Upload Profile Image" style="cursor:pointer;" onclick="uploadimage(@ViewBag.admin.ID)">
+                                    <img id="Adminimage" src="~/AdminDesign/images/user.png" class="saas-prof-identity__avatar" alt="User" title="Click to upload profile photo" onclick="uploadimage(@ViewBag.admin.ID)">
                                 </div>
                             }
 
-                            <div class="msg" style="padding-top:12px; font-size:19px; font-weight:600; color:#fff">@ViewBag.admin.Name</div>
-                            <p style="margin-top:5px;font-size:14px;text-transform:uppercase;color:#fff;">Administrator</p>
-
-                        </center>
+                            <h2 class="saas-prof-identity__name">@ViewBag.admin.Name</h2>
+                            <p class="saas-prof-identity__role">Administrator</p>
+                        </div>
                     </div>
 
-                    <div class="res_p" style="background-color: #c7c7c7; padding: 5px 10px; width: 100%; float: left; display: flex; align-items: center; justify-content: space-between; margin-top: 14px;">
+                    <div class="saas-prof-identity__action">
 
-                        <h2 style="margin: 0; font-size: 20px; text-transform: uppercase;">Auto Credit on/off</h2>
+                        <h3 class="saas-prof-identity__action-title"><i class="fas fa-coins" aria-hidden="true"></i> Auto Credit</h3>
 
                         @{
                             VastwebmultiEntities db = new VastwebmultiEntities();
-                            var set = db.Email_show_passcode.SingleOrDefault().cr_status;
+                            var emailPassRow = db.Email_show_passcode.FirstOrDefault();
+                            var set = emailPassRow != null && emailPassRow.cr_status == true;
                         }
                         @if (set == true)
                         {
-                            @Html.ActionLink("Auto Credit ON", "CreaditSetting", "ADMIN", new { @style = "padding: 6px 12px; font-size: 14px; background: forestgreen; color: aliceblue;float: right;" })
-                            @*<button style=" margin: 10px 10px 10px 10px; padding: 5px 10px 5px 10px; font-size: 16px; background: forestgreen; color: aliceblue;">
-                    Auto Credit ON
-                </button>*@
+                            @Html.ActionLink("ON", "CreaditSetting", "ADMIN", new { @class = "saas-prof-pill saas-prof-pill--success" })
+                            
                         }
                         else
                         {
-                            @Html.ActionLink("Auto Credit OFF", "CreaditSetting", "ADMIN", new { style = "padding: 6px 12px;font-size: 14px; background: red; color: aliceblue; float: right;" })
-                            @*<button style=" margin: 10px 10px 10px 10px; padding: 5px 10px 5px 10px; font-size: 16px; background: red; color: aliceblue;">
-                    Auto Credit OFF
-                </button>*@
+                            @Html.ActionLink("OFF", "CreaditSetting", "ADMIN", new { @class = "saas-prof-pill saas-prof-pill--danger" })
+                            
                         }
                     </div>
 
-                    <div class="res_p" style="background-color: #c7c7c7; padding: 5px 10px; width: 100%; float: left; display: flex; align-items: center; justify-content: space-between; margin-top: 14px;">
+                    <div class="saas-prof-identity__action">
 
-                        <h2 style="margin: 0; font-size: 20px; text-transform: uppercase;">Rediant Status</h2>
+                        <h3 class="saas-prof-identity__action-title"><i class="fas fa-satellite-dish" aria-hidden="true"></i> Rediant Status</h3>
 
                         @{
 
@@ -651,20 +650,20 @@
                         {
                             if (set2.Count == 0)
                             {
-                                <div>Rediant Auth is Required</div>
+                                <span class="saas-prof-pill saas-prof-pill--warn">Auth required</span>
                             }
                             else
                             {
-                            @Html.ActionLink("Create Rediant Distributer", "rediantdisform", "ADMIN", new { @style = "padding: 6px 12px; font-size: 14px; background: forestgreen; color: aliceblue;float: right;" })
+                            @Html.ActionLink("Create Distributor", "rediantdisform", "ADMIN", new { @class = "saas-prof-pill saas-prof-pill--primary" })
                             }
                         }
-                        else if (set1[0].status == "Approved")
+                        else if (set1.Count > 0 && set1[0].status == "Approved")
                         {
-                            <div>APPROVED</div>
+                            <span class="saas-prof-pill saas-prof-pill--success">Approved</span>
                         }
-                        else
+                        else if (set1.Count > 0)
                         {
-                            <div id="redfull">  <div id="redtext">@set1[0].status</div> <div id="redbutton"><button onclick="checkrediantsts();">Check Status</button></div> </div>
+                            <div id="redfull" class="saas-rediant-status">  <div id="redtext" class="saas-prof-pill saas-prof-pill--warn">@set1[0].status</div> <div id="redbutton"><button type="button" class="saas-prof-btn-sm" onclick="checkrediantsts();">Check Status</button></div> </div>
                         }
                         <script>
                            function checkrediantsts() {
@@ -684,318 +683,256 @@
                         }
                         </script>
                     </div>
-                </div>
+                </article>
 
             </div>
 
-            <div id="saveaddressModal" class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                <div class="card page-header-third" style="margin-bottom:0px;">
-                    <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                        @if (ViewBag.admin.Companyname != null)
-                        {
-                            <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                <span id="spncompny">  @ViewBag.admin.Companyname </span>
-                                <a class="editprofile-second" style="float:right;font-size:14px; color:#555; border: 1px solid  #bbb;padding: 5px 15px;text-transform:capitalize; cursor: pointer;" onclick="editeaddress(@ViewBag.admin.ID)">Edit</a>
-                            </h1>
-                        }
-                        else
-                        {
-                            <h1 style="color:#555;font-size:24px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                <span id="spncompny">
-                                    No Data Found !
-                                </span>
-                                <a style="float:right;"><i class="fa fa-pencil-square-o" style="font-size:22px;margin-top:0px;" onclick="editeaddress(@ViewBag.admin.ID)"></i></a>
-                            </h1>
-                        }
-                    </div>
-                    <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background:var(--second-bg-color);padding-top: 0px;padding-bottom: 13px;  ">
-                        <ul class="list-group edit-profilebor-second" style="margin-bottom:4px;">
-                            <li class="list-group-item">
-                                <i class="fa fa-map-marker"></i> <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Registered Business Address</span>
-                            </li>
-                            <li class="list-group-item">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 saas-prof-layout__main saas-prof-layout__main--overview">
 
-                                @if (ViewBag.admin.Address != null && ViewBag.admin.Address != "")
-                                {
-                                    <p style="text-align:justify;margin-top:-12px;"><span id="spnaddress"> @ViewBag.admin.Address </span></p>
-                                }
-                                else
-                                {
-                                    <p style="margin-top:-12px;"><span id="spnaddress"> ADDRESS NOT FOUND !  </span></p>
-                                }
+                <div id="profileOverviewRow" class="saas-prof-overview-row">
 
-                            </li>
-                            <li class="list-group-item" style="margin-top:-19px;">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Zip Code</span>
-                                @if (ViewBag.admin.pincode != null)
-                                {
-                                    <p style="float:right;margin-top:5px;"><span id="spnpincode"> @ViewBag.admin.pincode </span></p>
-                                }
-                                else
-                                {
-                                    <p style="float:right;margin-top:5px;"><span id="spnpincode"> ZIP CODE NOT FOUND ! </span></p>
-                                }
-                            </li>
-                            <li class="list-group-item">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;State</span>
-                                <p style="float:right;text-transform:uppercase;"><span id="spnstate">  @ViewBag.ddlstate </span></p>
-                            </li>
-                            <li class="list-group-item">
-                                <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;District</span>
-                                <p style="float:right;text-transform:uppercase;"><span id="spndistrict"> @ViewBag.dddistrict </span></p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div id="EditaddressModal" class="col-lg-8 col-md-8 col-sm-12 col-xs-12" style="display:none;">
-                <div class="page-header-third" style="background:var(--second-bg-color);width:100%;float:left;">
-                    <div class="card" style="margin-bottom:0px;">
-                        @*@using (Html.BeginForm("UpdateAddressProfile", "Home", FormMethod.Post))*@
-
-                        @using (Ajax.BeginForm("UpdateAddressProfile", "Home", new AjaxOptions
-                        {
-                            InsertionMode = InsertionMode.Replace,
-                            OnSuccess = "OnSuccessEditAddress",
-                            OnFailure = "OnFailure",
-
-                            // LoadingElementId = "progress"
-                        }))
-
-                        {
-                            <input type="hidden" id="hdidadmin" name="hdidadmin" value="" />
-                            <div style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-
-                                <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                    @Html.TextBox("txtcompany", "", new { @class = "form-control", placeholder = "Enter Your Company Name", required = "required", @style = "width:300px;" })
-                                    <button type="submit" class="btn waves-effect editprofile-second" style="margin-top: 4px;background:#c7c7c7; margin-right:12px;position: absolute;right: -2px;top: 5px;height: 32px;padding: 5px 16px;">
-                                        <span class="second-spanclass" style="color:#555;"> Save</span>
-                                    </button>
-                                </h1>
-
+                    <div id="saveaddressModal" class="saas-prof-overview-col saas-prof-overview-col--company">
+                        <article class="saas-prof-card saas-prof-card--company">
+                            <header class="saas-prof-card__head">
+                                <div class="saas-prof-overview-head">
+                                    <span class="saas-prof-overview-icon" aria-hidden="true"><i class="fas fa-building"></i></span>
+                                    <div class="saas-prof-overview-head-text">
+                                        <p class="saas-prof-overview-kicker">Company</p>
+                                        <h2 class="saas-prof-card__title" id="spncompny">@(string.IsNullOrWhiteSpace(ViewBag.admin.Companyname as string) ? "No company name" : ViewBag.admin.Companyname)</h2>
+                                    </div>
+                                    <button type="button" class="editprofile-second" onclick="editeaddress(@ViewBag.admin.ID)"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
+                                </div>
+                            </header>
+                            <div id="saasProfCompanyView" class="saas-prof-card__body saas-prof-company__view">
+                                <h3 class="saas-prof-block-title"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Registered Business Address</h3>
+                                <dl class="saas-prof-info-grid">
+                                    <div class="saas-prof-info-row saas-prof-info-row--full">
+                                        <dt>Address</dt>
+                                        <dd id="spnaddress">@(string.IsNullOrWhiteSpace(ViewBag.admin.Address as string) ? "Address not found" : ViewBag.admin.Address)</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>Zip Code</dt>
+                                        <dd id="spnpincode">@(ViewBag.admin.pincode ?? "—")</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>State</dt>
+                                        <dd id="spnstate">@ViewBag.ddlstate</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>District</dt>
+                                        <dd id="spndistrict">@ViewBag.dddistrict</dd>
+                                    </div>
+                                </dl>
                             </div>
-                            <div class="body profile-register-address" style="background:var(--second-bg-color);padding-top: 0px;padding-bottom: 13px;  ">
-                                <ul class="list-group" style="margin-bottom:0px;padding-bottom:4px;">
-                                    <li>
-                                        <i class="fa fa-map-marker"></i> <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Registered Business Address</span>
-                                    </li>
-                                    <li>
 
-
-                                        <p style="text-align:justify;">   @Html.TextBox("txtaddress", "", new { @class = "form-control", placeholder = "Enter Your Address", required = "required", @style = "width:100%;" })</p>
-
-
-                                    </li>
-                                    <li>
-                                        <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;Zip Code</span>
-
-                                        <p style="float:right;"> @Html.TextBox("txtzipcode", "", new { @required = "required", @class = "form-control", @placeholder = "Enter Zip Code", onkeypress = "return isNumber(event)" })</p>
-
-                                    </li>
-                                    <li class="aapearnce-noneclass">
-                                        <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;State</span>
-                                        <p class="custom-district" style="float:right;text-transform:uppercase;"> @Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.Sate, "-- Select State--", new { @class = "form-control", @required = "required", @onchange = "FillDistict()" })</p>
-                                    </li>
-                                    <li class="aapearnce-noneclass">
-                                        <span style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">&nbsp;District</span>
-                                        <p class="custom-district" style="float:right;text-transform:uppercase;"> @Html.DropDownList("District", (IEnumerable<SelectListItem>)ViewBag.District, "-- Select District--", new { @class = "form-control", @required = "" })</p>
-                                    </li>
-
-                                </ul>
+                            <div id="EditaddressModal" class="saas-prof-card__body saas-prof-company__edit" style="display:none;">
+                                @using (Ajax.BeginForm("UpdateAddressProfile", "Home", new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnSuccess = "OnSuccessEditAddress",
+                                    OnFailure = "OnFailure"
+                                }))
+                                {
+                                    <input type="hidden" id="hdidadmin" name="hdidadmin" value="" />
+                                    <div class="saas-prof-edit-toolbar">
+                                        <button type="submit" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted" onclick="saasProfCancelAddressEdit()">Cancel</button>
+                                    </div>
+                                    <div class="saas-prof-form-grid saas-prof-form-grid--address">
+                                        <div class="saas-prof-form-field saas-prof-form-field--full">
+                                            <label>Company Name</label>
+                                            @Html.TextBox("txtcompany", "", new { @class = "form-control", placeholder = "Enter company name", required = "required" })
+                                        </div>
+                                        <div class="saas-prof-form-field saas-prof-form-field--full">
+                                            <label>Registered Business Address</label>
+                                            @Html.TextBox("txtaddress", "", new { @class = "form-control", placeholder = "Enter full address", required = "required" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>Zip Code</label>
+                                            @Html.TextBox("txtzipcode", "", new { @required = "required", @class = "form-control", @placeholder = "Enter zip code", onkeypress = "return isNumber(event)" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>State</label>
+                                            @Html.DropDownList("State", (IEnumerable<SelectListItem>)ViewBag.Sate, "-- Select State --", new { @class = "form-control", @required = "required", @onchange = "FillDistict()" })
+                                        </div>
+                                        <div class="saas-prof-form-field saas-prof-form-field--full">
+                                            <label>District</label>
+                                            @Html.DropDownList("District", (IEnumerable<SelectListItem>)ViewBag.District, "-- Select District --", new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                }
                             </div>
-                        }
+                        </article>
                     </div>
+
+                    <div class="saas-prof-overview-col saas-prof-overview-col--account">
+                        @{
+                            var launchDateDisplay = "—";
+                            if (ViewBag.admin.Date != null)
+                            {
+                                launchDateDisplay = ((DateTime)ViewBag.admin.Date).ToString("dd-MM-yyyy HH:mm:ss");
+                            }
+                            var aadharDisplay = "Data Not Found !";
+                            if (ViewBag.admin.Aadhar != null && ViewBag.admin.Aadhar != "")
+                            {
+                                var aadharRaw = ViewBag.admin.Aadhar as string;
+                                if (aadharRaw != null && aadharRaw.Length >= 4)
+                                {
+                                    aadharDisplay = new string('X', 8) + aadharRaw.Substring(aadharRaw.Length - 4, 4);
+                                }
+                            }
+                        }
+                        <article class="saas-prof-card saas-prof-card--account">
+                            <header class="saas-prof-card__head saas-prof-card__head--launch">
+                                <div class="saas-prof-overview-head">
+                                    <span class="saas-prof-overview-icon saas-prof-overview-icon--calendar" aria-hidden="true"><i class="fas fa-calendar-check"></i></span>
+                                    <div class="saas-prof-overview-head-text">
+                                        <p class="saas-prof-overview-kicker">Website</p>
+                                        <h2 class="saas-prof-card__title">Launching Date</h2>
+                                    </div>
+                                    <button type="button" class="editprofile-second" onclick="editemobileandpancard(@ViewBag.admin.ID)"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
+                                </div>
+                                <p class="saas-prof-launch-date" id="lblLaunchDateDisplay">@launchDateDisplay</p>
+                                <p class="saas-prof-launch-hint">Website go-live date (read-only)</p>
+                            </header>
+
+                            <div class="saas-prof-card__body saas-prof-details__view">
+                                <dl class="saas-prof-info-grid saas-prof-info-grid--account">
+                                    <div class="saas-prof-info-row">
+                                        <dt>Name</dt>
+                                        <dd id="lbladminname">@(ViewBag.admin.Name ?? "Data Not Found !")</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>Email-ID</dt>
+                                        <dd id="lbladminemail">@(ViewBag.admin.email ?? "Data Not Found !")</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>Mobile</dt>
+                                        <dd id="lbladminmobile">@(ViewBag.admin.mobile ?? "Data Not Found !")</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>Aadharcard</dt>
+                                        <dd id="lbladminaadhar">@aadharDisplay</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>Pancard</dt>
+                                        <dd id="lbladminpencard">@(string.IsNullOrWhiteSpace(ViewBag.admin.pencardno as string) ? "Data Not Found !" : ViewBag.admin.pencardno)</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>GST No</dt>
+                                        <dd id="lbladmingst">@(string.IsNullOrWhiteSpace(ViewBag.admin.Gstno as string) ? "Data Not Found !" : ViewBag.admin.Gstno)</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row">
+                                        <dt>TAN No.</dt>
+                                        <dd id="lbladmintan">@(string.IsNullOrWhiteSpace(ViewBag.admin.tanno as string) ? "Data Not Found !" : ViewBag.admin.tanno)</dd>
+                                    </div>
+                                    <div class="saas-prof-info-row saas-prof-info-row--full">
+                                        <dt>Business Registration No.</dt>
+                                        <dd id="lbladminregistration">@(string.IsNullOrWhiteSpace(ViewBag.admin.registrationno as string) ? "Data Not Found !" : ViewBag.admin.registrationno)</dd>
+                                    </div>
+                                </dl>
+                            </div>
+
+                            <div id="EditnameandpancardModal" class="saas-prof-card__body saas-prof-details__edit" style="display:none;">
+                                @using (Ajax.BeginForm("UpdatePanccardandmobile", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "UpdateProfilesOnsucc", OnBegin = "ajaxValidate()" }))
+                                {
+                                    <div class="saas-prof-edit-toolbar">
+                                        <button type="submit" class="saas-prof-btn saas-prof-btn--primary"><i class="fas fa-check" aria-hidden="true"></i> Save</button>
+                                        <button type="button" class="saas-prof-btn saas-prof-btn--muted" onclick="saasProfCancelDetailsEdit()">Cancel</button>
+                                    </div>
+                                    <input type="hidden" id="hdid1" name="hdid1" value="0" />
+                                    <div class="saas-prof-form-field saas-prof-form-field--full saas-prof-form-field--readonly">
+                                        <label>Website Launching Date</label>
+                                        <input type="text" id="txtLaunchDateReadonly" class="form-control" readonly="readonly" value="@launchDateDisplay" />
+                                    </div>
+                                    <div class="saas-prof-form-grid">
+                                        <div class="saas-prof-form-field">
+                                            <label>Name</label>
+                                            @Html.TextBox("txtname", "", new { @class = "form-control", placeholder = "Enter your name", required = "required" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>Mobile</label>
+                                            @Html.TextBox("txtmobile", "", new { @class = "form-control", placeholder = "Enter mobile number", onkeypress = "return isNumber(event)", maxlength = "10" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>Aadharcard</label>
+                                            @Html.TextBox("txtaadhaarcard", "", new { @class = "form-control", placeholder = "Enter Aadhaar number", onkeypress = "return isNumber(event)", maxlength = "12" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>Pancard</label>
+                                            @Html.TextBox("txtpancard", "", new { @class = "form-control", placeholder = "Enter PAN", maxlength = "10", style = "text-transform:uppercase" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>GST No</label>
+                                            @Html.TextBox("txtgst", "", new { @class = "form-control", placeholder = "Enter GST number", maxlength = "15", style = "text-transform:uppercase" })
+                                        </div>
+                                        <div class="saas-prof-form-field">
+                                            <label>TAN No</label>
+                                            @Html.TextBox("txtTAN", "", new { @class = "form-control", placeholder = "Enter TAN", maxlength = "15", style = "text-transform:uppercase" })
+                                        </div>
+                                        <div class="saas-prof-form-field saas-prof-form-field--full">
+                                            <label>Business Registration No</label>
+                                            @Html.TextBox("txtregistration", "", new { @class = "form-control", placeholder = "Enter registration number", maxlength = "15", style = "text-transform:uppercase" })
+                                        </div>
+                                    </div>
+                                    <label id="lblmsg" class="saas-prof-form-msg"></label>
+                                }
+                            </div>
+                        </article>
+                    </div>
+
                 </div>
+
             </div>
 
         </div>
 
-        <div class="row clearfix">
-            <div class="col-md-4">
-                <div class="card page-header-third">
-                    <div class="" style="background-color:#c7c7c7;padding: 5px 10px;">
-                        <h1 style="color:#555;font-size:14px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                            Website Launching Date
-                            <a class="editprofile-second" style="float: right;border: 1px solid  #bbb;padding: 5px 15px;color:#555; text-transform:capitalize; cursor: pointer;" onclick="editemobileandpancard(@ViewBag.admin.ID)">Edit</a>
-                        </h1>
-                        <p style="text-transform:uppercase;margin-bottom:0px;">@ViewBag.admin.Date</p>
-
-                    </div>
-                    <div class="my-profile-save boxback-allpage-admin" style="background: var(--second-bg-color);padding:10px;">
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Name</p>
-                        <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminname">@ViewBag.admin.Name</label> </p>
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Email-ID</p>
-                        <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminemail">@ViewBag.admin.email </label> </p>
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Mobile</p>
-                        <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminmobile"> @ViewBag.admin.mobile </label></p>
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Aadharcard</p>
-                        @if (ViewBag.admin.Aadhar != null && ViewBag.admin.Aadhar != "")
-                        {
-                            var input = ViewBag.admin.Aadhar;
-                            string firstPart = input.Substring(0, 8);
-                            int len = input.Length;
-                            string middlePart = new String('X', 8);
-                            string lastPart = input.Substring(len - 4, 4);
-                            var aadharcard = middlePart + lastPart;
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminaadhar"> @aadharcard </label></p>
-                        }
-                        else
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;">Data Not Found !</p>
-                        }
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Pancard</p>
-                        @if (ViewBag.admin.pencardno != null && ViewBag.admin.pencardno != "")
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminpencard"> @ViewBag.admin.pencardno </label></p>
-                        }
-                        else
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;">Data Not Found !</p>
-                        }
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">GST No</p>
-                        @if (ViewBag.admin.Gstno != null && ViewBag.admin.Gstno != "")
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladmingst"> @ViewBag.admin.Gstno </label></p>
-                        }
-                        else
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;">Data Not Found !</p>
-                        }
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">TAN No.</p>
-                        @if (ViewBag.admin.tanno != null && ViewBag.admin.tanno != "")
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladmintan"> @ViewBag.admin.tanno </label></p>
-                        }
-                        else
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;">Data Not Found !</p>
-                        }
-                        <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Business Registration No.</p>
-                        @if (ViewBag.admin.registrationno != null && ViewBag.admin.registrationno != "")
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;"><label id="lbladminregistration"> @ViewBag.admin.registrationno </label></p>
-                        }
-                        else
-                        {
-                            <p style="text-transform:uppercase;margin-top:-7px;border-bottom: 1px solid #fff;padding-bottom: 6px;margin-bottom: 6px;">Data Not Found !</p>
-                        }
-
-                        @*<p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">TAN No.</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;">265498468</p>*@
-                    </div>
-                    <div id="EditnameandpancardModal" class="boxback-allpage-admin" style="background: var(--second-bg-color);padding:10px; display:none;">
-                        @*@using (Html.BeginForm("UpdatePanccardandmobile", "Home", FormMethod.Post))*@
-                        @using (Ajax.BeginForm("UpdatePanccardandmobile", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "UpdateProfilesOnsucc", OnBegin = "ajaxValidate()" }))
-                        {
-                            <button type="submit" class="btn waves-effect editprofile-second margin-top-second" style="margin-top: 4px;background:#c7c7c7; margin-right:12px;position: absolute;right: -2px;top: -2px;height: 32px;padding: 5px 16px;">
-                                <span class="second-spanclass" style="color:#555;"> Save</span>
-                            </button>
-                            <input type="hidden" id="hdid1" name="hdid1" value="0" />
-
-                            <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Name</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;">   @Html.TextBox("txtname", "", new { @class = "form-control", placeholder = "Enter Your Name", required = "required" })</p>
-
-                            @*<p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Mobile</p>
-                                <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;"> @Html.TextBox("txtmobile", "", new { @required = "required", @class = "form-control", @placeholder = "Enter Mobile Number", onkeypress = "return isNumber(event)", maxlength = "10" })</p>*@
-                            <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Aadharcard</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;"> @Html.TextBox("txtaadhaarcard", "", new { @class = "form-control", @placeholder = "Enter Aadhaar Number", onkeypress = "return isNumber(event)", maxlength = "12" })</p>
-                            <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Pancard</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;">@Html.TextBox("txtpancard", "", new { @class = "form-control", @placeholder = "Enter Pancard Number", @style = "text-transform:uppercase", maxlength = 10 })</p>
-                            @*<p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">GST No</p>
-                                <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;"> @Html.TextBox("txtgst", "", new { @class = "form-control", @placeholder = "Enter GST Number", maxlength = "15", @style = "text-transform:uppercase" })</p>*@
-                            <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">TAN No</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;"> @Html.TextBox("txtTAN", "", new { @class = "form-control", @placeholder = "Enter TAN Number", maxlength = "15", @style = "text-transform:uppercase" })</p>
-                            <p style="color:#7a7676;font-family:'Open Sans',sans-serif;font-weight:600;">Business Registration No</p>
-                            <p style="text-transform:uppercase;margin-top:-7px;padding-bottom: 6px;margin-bottom: 6px;"> @Html.TextBox("txtregistration", "", new { @class = "form-control", @placeholder = "Enter TAN Number", maxlength = "15", @style = "text-transform:uppercase" })</p>
-                            <label id="lblmsg"></label>
-                        }
-                    </div>
-                </div>
-            </div>
-            <!--Otp security Password -->
-            <div class="col-md-8 otp-security">
-                <div class="card page-header-third" style="margin-bottom: 0px; margin-top: 15px;">
-                    <div style="background-color:#c7c7c7;padding:7px 10px;width:100%;float:left;">
-                        <div class="one-time-otp otponetime-third" style="width:15%;float:left;">
-                            @*<h1 style="font-size:14px;display: inline-block;float:left; font-weight:500;margin:0px;margin-bottom:4px;">
-                                    <i class="fa fa-lock"></i>&nbsp;Admin Security
-
-                                </h1>*@
-                            <p style="margin-bottom:2px;"><i class="fa fa-lock"></i>&nbsp;Admin Security</p>
-                            @*<span style="float:left;color:var(--main-bg-lcolor);float:left;margin-right:10px; font-family:'Open Sans',sans-serif;font-weight:400;margin-bottom: 0px;margin-left: 19px;font-size:12px;margin-top: 4px;">You Want Login (OTP) Security Purpose !</span>*@
-
-
-
-                            @*@Html.DropDownList("Sortby", new SelectListItem[]
-                                {
-                                     new SelectListItem() { Text = "OFF", Value = "OFF" , },
-                                     new SelectListItem() { Text = "Otp-S", Value = "Otp"    },
-                                     new SelectListItem() { Text = "Day-P", Value = "Day"    },
-                                     new SelectListItem() { Text = "Weak-p", Value = "Weak"   },
-                                     new SelectListItem() { Text = "Monthly-P", Value = "Monthly" }},
-                                     new
-                                     {
-                                        @class = "profileseclet form-control"
-                                     });*@
-
-                            <span id="adminoff" class="securtyoff-show" style="height:10px;width:10px;float:left;background:red;position: absolute;left: 15px;display: block;top: 36px;"></span>
-                            <span id="adminon" class="securtyon-show" style="display:none;height:10px;width:10px;float:left;background:#28a745e6;position: absolute;left: 15px;top: 36px;"></span>
-
-                            <select id="Sortby" name="Sortby" class="profileseclet form-control" style="padding-left: 15px;width:100%;">
-                                <option value="OFF">SECURITY OFF</option>
-                                <option value="OTP">LOGIN OTP</option>
-                                <option value="PERDAY">DAY PASSCODE</option>
-                                <option value="WEAKS">WEAKLY PASSCODE</option>
-                                <option value="MONTHS">MONTH PASSCODE</option>
-
-                            </select>
-
-
-                            <div class="onoffswitch onofswicnewaddclass" id="UserWiseOTPbtn" style="float:left;cursor:pointer;width: 60px;border:0px;margin-top: 2px;display: inline-block;    margin-top: 0px;
-    position: relative;left: 3px;display:none">
-
-                                @if (Model.TwoFactorEnabled)
-                                {
-                                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-
-                                        @*<span class="costom-on">on</span>*@
-                                        <button style="border: 1px solid #999;border-radius: 13px;padding: 0px 8px;padding-top: 0px;border-radius: 0;
-    height: 24px;margin-top: 0px;" type="submit" class="costom-on" value="ON" id="btnon" name="btnon">
-                                            ON
-                                        </button>
-
-                                    }
-                                }
-                                else
-                                {
-                                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @*<span class="custom-off">off</span>*@
-                                        <button style="border: 1px solid #999;border-radius: 13px;padding: 0px 8px;padding-top: 0px;border-radius: 0;height: 24px;
-    margin-top: 0px;" type="submit" class="custom-off " value="Off" id="btnff" name="btnff">
-                                            OFF
-                                        </button>
-                                    }
-                                }
-
-                            </div>
-
-                        </div>
-                        <div class="userwise-off one-time-otp-user useroftime-third useroftime-third-respon" style="width:84%;float:right;">
-                            <ul>
-                                <li>
-                                    <p style="margin-bottom:2px;">Master Security</p>
-                                    <div class="select-redgreen" style="width:100%;float:left;position:relative;">
-                                        <span id="masteroff" class="securtyoff-show" style="height:10px;width:10px;background:red;float:left;position: absolute;top: 7px;left: 5px;"></span>
-                                        <span id="masteron" class="securtyon-show" style="display: none; height: 10px; width: 10px; background: #28a745e6; float: left; position: absolute; top: 7px; left: 5px;"></span>
-                                        <select id="Sortbymaster" name="Sortbymaster" class="profileseclet form-control" style="width:82%;float:left;">
+        <div class="row clearfix saas-prof-layout saas-prof-layout--stack">
+            <div class="col-md-8 col-sm-12 col-md-offset-4 saas-prof-layout__wide saas-prof-layout__stack-main">
+                <article class="saas-prof-card saas-prof-card--security">
+                    <header class="saas-prof-card__head saas-prof-card__head--security">
+                        <h2 class="saas-prof-card__title"><i class="fas fa-shield-alt" aria-hidden="true"></i> Security Settings</h2>
+                    </header>
+                    <div class="saas-prof-card__body saas-prof-security-wrap">
+                        <ul class="saas-prof-sec-grid">
+                                <li class="saas-prof-sec-item saas-prof-sec-item--admin">
+                                    <p class="saas-prof-sec-label"><i class="fa fa-lock" aria-hidden="true"></i> Admin Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="adminoff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="adminon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="Sortby" name="Sortby" class="profileseclet form-control">
+                                            <option value="OFF">SECURITY OFF</option>
+                                            <option value="OTP">LOGIN OTP</option>
+                                            <option value="PERDAY">DAY PASSCODE</option>
+                                            <option value="WEAKS">WEAKLY PASSCODE</option>
+                                            <option value="MONTHS">MONTH PASSCODE</option>
+                                        </select>
+                                    </div>
+                                    <div class="onoffswitch onofswicnewaddclass saas-prof-sec-hidden-toggle" id="UserWiseOTPbtn" style="display:none;">
+                                        @if (Model.TwoFactorEnabled)
+                                        {
+                                            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="costom-on" value="ON" id="btnon" name="btnon">ON</button>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", new { area = "" }, FormMethod.Post, new { encType = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="custom-off" value="Off" id="btnff" name="btnff">OFF</button>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+                                <li class="saas-prof-sec-item">
+                                    <p class="saas-prof-sec-label">Master Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="masteroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="masteron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="Sortbymaster" name="Sortbymaster" class="profileseclet form-control">
 
                                             <option value="OFF">SECURITY OFF</option>
                                             <option value="OTP">LOGIN OTP</option>
@@ -1004,14 +941,14 @@
                                             <option value="MONTHS">MONTH PASSCODE</option>
 
                                         </select>
-                                        <span onclick="GetUser('master')" class="for-master-button" style="font-size:10px;cursor: pointer;line-height: 12px;margin-bottom:0px;margin-left:3px;padding: 4px 5px;border:1px solid #999;height: 23px;margin-top:1px;display: inline-block;float: right">H</span>
+                                        <button type="button" onclick="GetUser('master')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
 
-                                    <div class="onoffswitch" style="float: left; width: 80%; top: -24px;border: 0;" id="masterref">
-                                        @if (ViewBag.RoleStatus[0].RoleName == "master")
+                                    <div class="onoffswitch saas-prof-sec-hidden-toggle" id="masterref">
+                                        @if (roleStatusList.Count > 0 && roleStatusList[0].RoleName == "master")
                                         {
 
-                                            if (ViewBag.RoleStatus[0].Status == "N")
+                                            if (roleStatusList[0].Status == "N")
                                             {
                                                 <button class="custom-off change-class" id="masterotpoff" onclick="RoleWiseOTP('master','Y')" style="border:1px solid;display:none;width: 100%;">
                                                     OFF
@@ -1031,12 +968,12 @@
 
 
                                 </li>
-                                <li>
-                                    <p style="margin-bottom:2px;">Distributor Security</p>
-                                    <div class="select-redgreen" style="width:100%;float:left;position:relative;">
-                                        <span id="dealeroff" class="securtyoff-show" style="height:10px;width:10px;background:red;float:left;position: absolute;top: 7px;left: 5px;"></span>
-                                        <span id="dealeron" class="securtyon-show" style="display: none; height: 10px; width: 10px; background: #28a745e6; float: left; position: absolute; top: 7px; left: 5px;"></span>
-                                        <select id="Sortbydealer" name="Sortbydealer" class="profileseclet form-control" style="width:82%;">
+                                <li class="saas-prof-sec-item">
+                                    <p class="saas-prof-sec-label">Distributor Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="dealeroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="dealeron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="Sortbydealer" name="Sortbydealer" class="profileseclet form-control">
                                             <option value="OFF">SECURITY OFF</option>
                                             <option value="OTP">LOGIN OTP</option>
                                             <option value="PERDAY">DAY PASSCODE</option>
@@ -1044,12 +981,12 @@
                                             <option value="MONTHS">MONTH PASSCODE</option>
 
                                         </select>
-                                        <span onclick="GetUser('Dealer')" class="for-distributor-button" style="font-size:10px;cursor: pointer;line-height: 12px;margin-bottom:0px;margin-left:3px;padding: 4px 5px;border: 1px solid #999;height: 23px;margin-top:1px;display: inline-block;float:right;">H</span>
+                                        <button type="button" onclick="GetUser('Dealer')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
-                                    <div class="onoffswitch dealerotpoffclass" style="float: left; width: 80%; top: -24px;border: 0;">
-                                        @if (ViewBag.RoleStatus[1].RoleName == "Dealer")
+                                    <div class="onoffswitch saas-prof-sec-hidden-toggle dealerotpoffclass">
+                                        @if (roleStatusList.Count > 1 && roleStatusList[1].RoleName == "Dealer")
                                         {
-                                            if (ViewBag.RoleStatus[1].Status == "N")
+                                            if (roleStatusList[1].Status == "N")
                                             {
                                                 <button class="custom-off" id="dealerotpoff" onclick="RoleWiseOTP('Dealer','Y')" style="border:1px solid;display:none;width: 100%;">OFF</button>
                                                 <i class="fa fa-circle-o-notch fa-spin onofloaderclass" id="dealeronloader"></i>
@@ -1064,12 +1001,12 @@
                                     </div>
 
                                 </li>
-                                <li>
-                                    <p style="margin-bottom:2px;">Retailer Security</p>
-                                    <div class="select-redgreen" style="width:100%;float:left;position:relative;">
-                                        <span id="retaileroff" class="securtyoff-show" style="height:10px;width:10px;background:red;float:left;position: absolute;top: 7px;left: 5px;"></span>
-                                        <span id="retaileron" class="securtyon-show" style="display: none; height: 10px; width: 10px; background: #28a745e6; float: left; position: absolute; top: 7px; left: 5px;"></span>
-                                        <select id="Sortbyretailer" name="Sortbyretailer" class="profileseclet form-control" style="width:82%;">
+                                <li class="saas-prof-sec-item">
+                                    <p class="saas-prof-sec-label">Retailer Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="retaileroff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="retaileron" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="Sortbyretailer" name="Sortbyretailer" class="profileseclet form-control">
                                             <option value="OFF">SECURITY OFF</option>
                                             <option value="OTP">LOGIN OTP</option>
                                             <option value="PERDAY">DAY PASSCODE</option>
@@ -1078,12 +1015,12 @@
 
                                         </select>
 
-                                        <span onclick="GetUser('Retailer')" class="for-retailer-button" style="font-size:10px;cursor: pointer;line-height: 12px;margin-bottom:0px;margin-left:3px;padding: 4px 5px;border: 1px solid #999;height: 23px;margin-top:1px;display: inline-block;float: right;">H</span>
+                                        <button type="button" onclick="GetUser('Retailer')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
-                                    <div class="onoffswitch retaileroffclass" style="float: left; width: 80%; top: -24px;border:0;">
-                                        @if (ViewBag.RoleStatus[2].RoleName == "Retailer")
+                                    <div class="onoffswitch saas-prof-sec-hidden-toggle retaileroffclass">
+                                        @if (roleStatusList.Count > 2 && roleStatusList[2].RoleName == "Retailer")
                                         {
-                                            if (ViewBag.RoleStatus[2].Status == "N")
+                                            if (roleStatusList[2].Status == "N")
                                             {
                                                 <button class="custom-off" id="retailerotpoff" onclick="RoleWiseOTP('Retailer','Y')" style="border:1px solid;display:none;width: 100%;">OFF</button>
                                                 <i class="fa fa-circle-o-notch fa-spin onofloaderclass" id="dealeronloader1"></i>
@@ -1099,12 +1036,12 @@
                                     </div>
 
                                 </li>
-                                <li>
-                                    <p style="margin-bottom:2px;">API User Security</p>
-                                    <div class="select-redgreen" style="width:100%;float:left;position:relative;">
-                                        <span id="apioff" class="securtyoff-show" style="height:10px;width:10px;background:red;float:left;position: absolute;top: 7px;left: 5px;"></span>
-                                        <span id="apion" class="securtyon-show" style="display: none; height: 10px; width: 10px; background: #28a745e6; float: left; position: absolute; top: 7px; left: 5px;"></span>
-                                        <select id="SortbyAPI" name="SortbyAPI" class="profileseclet form-control" style="width: 82%;">
+                                <li class="saas-prof-sec-item">
+                                    <p class="saas-prof-sec-label">API User Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="apioff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="apion" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="SortbyAPI" name="SortbyAPI" class="profileseclet form-control">
                                             <option value="OFF">SECURITY OFF</option>
                                             <option value="OTP">LOGIN OTP</option>
                                             <option value="PERDAY">DAY PASSCODE</option>
@@ -1112,12 +1049,12 @@
                                             <option value="MONTHS">MONTH PASSCODE</option>
 
                                         </select>
-                                        <span onclick="GetUser('API')" class="for-api-button" style="font-size:10px;cursor: pointer;line-height: 12px;margin-bottom:0px;margin-left:3px;padding: 4px 5px;border: 1px solid #999;height: 23px;margin-top:1px;display: inline-block;float: right;">H</span>
+                                        <button type="button" onclick="GetUser('API')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
-                                    <div class="onoffswitch apioofclass" style="float: left; width: 80%; top: -24px;border:0;">
-                                        @if (ViewBag.RoleStatus[3].RoleName == "API")
+                                    <div class="onoffswitch saas-prof-sec-hidden-toggle apioofclass">
+                                        @if (roleStatusList.Count > 3 && roleStatusList[3].RoleName == "API")
                                         {
-                                            if (ViewBag.RoleStatus[3].Status == "N")
+                                            if (roleStatusList[3].Status == "N")
                                             {
                                                 <button class="custom-off" id="apiotpoff" onclick="RoleWiseOTP('API','Y')" style="border:1px solid;display:none;width: 100%;">OFF</button>
                                                 <i class="fa fa-circle-o-notch fa-spin onofloaderclass" id="dealeronloader2"></i>
@@ -1133,24 +1070,24 @@
                                     </div>
 
                                 </li>
-                                <li style="padding-right: 0;">
-                                    <p style="margin-bottom:2px;">W/L&nbsp;User Security</p>
-                                    <div class="select-redgreen" style="width:100%;float:left;position:relative;">
-                                        <span id="whitelabeloff" class="securtyoff-show" style="height:10px;width:10px;background:red;float:left;position: absolute;top: 7px;left: 5px;"></span>
-                                        <span id="whitelabelon" class="securtyon-show" style="height:10px;width:10px;background:#28a745e6;float:left;position: absolute;top: 7px;left: 5px;display:none;"></span>
-                                        <select id="SortbyWhitelabel" name="SortbyWhitelabel" class="profileseclet form-control" style="width:83%;">
+                                <li class="saas-prof-sec-item">
+                                    <p class="saas-prof-sec-label">W/L User Security</p>
+                                    <div class="saas-prof-sec-control">
+                                        <span id="whitelabeloff" class="saas-prof-sec-dot saas-prof-sec-dot--off securtyoff-show"></span>
+                                        <span id="whitelabelon" class="saas-prof-sec-dot saas-prof-sec-dot--on securtyon-show" style="display:none;"></span>
+                                        <select id="SortbyWhitelabel" name="SortbyWhitelabel" class="profileseclet form-control">
                                             <option value="OFF">SECURITY OFF</option>
                                             <option value="OTP">LOGIN OTP</option>
                                             <option value="PERDAY">DAY PASSCODE</option>
                                             <option value="WEAKS">WEAKLY PASSCODE</option>
                                             <option value="MONTHS">MONTH PASSCODE</option>
                                         </select>
-                                        <span onclick="GetUser('Whitelabel')" class="for-white-button" style="font-size:10px;cursor: pointer;line-height: 12px;margin-bottom:0px;margin-left:3px;padding: 4px 5px;border: 1px solid #999;height: 23px;margin-top:1px; display: inline-block;float: right;">H</span>
+                                        <button type="button" onclick="GetUser('Whitelabel')" class="saas-prof-users-btn" title="View users"><i class="fas fa-users" aria-hidden="true"></i></button>
                                     </div>
-                                    <div class="onoffswitch wwhiteoofclass" style="float: left; width: 80%; top: -24px;border:0;">
-                                        @if (ViewBag.RoleStatus[4].RoleName == "Whitelabel")
+                                    <div class="onoffswitch saas-prof-sec-hidden-toggle wwhiteoofclass">
+                                        @if (roleStatusList.Count > 4 && roleStatusList[4].RoleName == "Whitelabel")
                                         {
-                                            if (ViewBag.RoleStatus[4].Status == "N")
+                                            if (roleStatusList[4].Status == "N")
                                             {
                                                 <button class="costom-on" id="whitelabelotpoff" onclick="RoleWiseOTP('Whitelabel','Y')" style="border:1px solid;display:none;width: 100%;">ON</button>
                                                 <i class="fa fa-circle-o-notch fa-spin onofloaderclass" id="dealeronloader3"></i>
@@ -1165,11 +1102,9 @@
                                     </div>
 
                                 </li>
-                            </ul>
-                        </div>
-
+                        </ul>
                     </div>
-                    <div class="master-user-pop">
+                    <div class="master-user-pop saas-prof-user-panel" data-role-panel="master">
                         <div class="master-close-out-up">
                             <div class="master-close-out">
                                 <div class="for-master-close">&#10006;</div>
@@ -1201,7 +1136,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="Distributor-user-pop">
+                    <div class="Distributor-user-pop saas-prof-user-panel" data-role-panel="Dealer">
                         <div class="master-close-out-up">
                             <div class="master-close-out">
                                 <div class="for-master-close">&#10006;</div>
@@ -1233,7 +1168,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="retailer-user-pop">
+                    <div class="retailer-user-pop saas-prof-user-panel" data-role-panel="Retailer">
                         <div class="master-close-out-up">
                             <div class="master-close-out">
                                 <div class="for-master-close">&#10006;</div>
@@ -1265,7 +1200,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="api-user-pop">
+                    <div class="api-user-pop saas-prof-user-panel" data-role-panel="API">
                         <div class="master-close-out-up">
                             <div class="master-close-out">
                                 <div class="for-master-close">&#10006;</div>
@@ -1297,7 +1232,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="white-user-pop">
+                    <div class="white-user-pop saas-prof-user-panel" data-role-panel="Whitelabel">
                         <div class="master-close-out-up">
                             <div class="master-close-out">
                                 <div class="for-master-close">&#10006;</div>
@@ -1413,11 +1348,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
 
-
-            </div>
-          
             @*<div class="col-md-8 customlisttupe">
                     <div class="retailer-profile-secondclass" style="width:100%;float:left;background:#eae9e9;margin-bottom:20px;">
                         <button type="button" class="btn bg-blue-grey waves-effect valuechangebuttonadmin valuechang-second" style="float:right !important;width:100% !important;background: #eae9e9 !important;">
@@ -1428,54 +1360,47 @@
                 </div>*@
 
 
-            <div class="col-md-8 profile-customer-third">
-                <div class="page-header-third" style="margin-top: 15px;">
-                    <div class=" custmor-support fullbodydycolorbg">
-                        <div class="custmor-support-in ">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <fieldset style="border: 1px solid #fff;padding: 5px 10px;">
-                                        <legend style="font-size: 14px;border: 0px;color: #fff;width: auto;padding: 0px 10px;margin-left: 10px;margin-bottom:0px;">Customer Support Email Id</legend>
-                                        <input type="hidden" id="IDd" value="@ViewBag.admin.ID" />
-                                        @if (ViewBag.admin.email1 != null && ViewBag.admin.email1 != "")
-                                        {
-                                            <input type="text" id="SupportEmail" readonly="readonly" value="@ViewBag.admin.email1" style="width:100%;" maxlength="50" />
-                                        }
-                                    </fieldset>
-                                </div>
-                                <div class="col-md-5">
-                                    <fieldset style="border: 1px solid #fff;padding: 05px 10px;">
-                                        <legend style="font-size: 14px;border: 0px;color: #fff;width: auto;padding: 0px 10px;margin-left: 10px;margin-bottom:0px;">Customer Care No</legend>
-                                        @if (ViewBag.admin.mobile1 != null && ViewBag.admin.mobile1 != "")
-                                        {
-                                            <input type="number" id="SupportMobile" readonly="readonly" value="@ViewBag.admin.mobile1" maxlength="10" />
-                                        }
-                                    </fieldset>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="filed-edit-second" style="border: 1px solid #fff;margin-top: 9px;width:100%;float:left;">
-                                        <button>Edit</button><button id="btnnnSave" style="display:none;" onclick="SavaDataSupport()">Save</button>
-                                    </div>
-                                </div>
-
+                <article class="saas-prof-card saas-prof-card--support">
+                    <header class="saas-prof-card__head">
+                        <h2 class="saas-prof-card__title"><i class="fas fa-headset" aria-hidden="true"></i> Customer Support</h2>
+                    </header>
+                    <div class="saas-prof-support">
+                        <input type="hidden" id="IDd" value="@ViewBag.admin.ID" />
+                        <div class="saas-prof-support__grid">
+                            <div class="saas-prof-support__field">
+                                <label class="saas-prof-support__label" for="SupportEmail">Customer Support Email Id</label>
+                                <input type="email" id="SupportEmail" class="saas-prof-support__input" readonly="readonly"
+                                       value="@(ViewBag.admin.email1 ?? "")" placeholder="Enter support email" maxlength="80" />
+                            </div>
+                            <div class="saas-prof-support__field">
+                                <label class="saas-prof-support__label" for="SupportMobile">Customer Care No</label>
+                                <input type="text" id="SupportMobile" class="saas-prof-support__input" readonly="readonly"
+                                       value="@(ViewBag.admin.mobile1 ?? "")" placeholder="Enter 10-digit mobile" maxlength="10"
+                                       onkeypress="return isNumber(event)" />
+                            </div>
+                            <div class="saas-prof-support__actions">
+                                <button type="button" id="btnSupportEdit" class="saas-prof-btn saas-prof-btn--outline">Edit</button>
+                                <button type="button" id="btnSupportSave" class="saas-prof-btn saas-prof-btn--primary" style="display:none;">Save</button>
+                                <button type="button" id="btnSupportCancel" class="saas-prof-btn saas-prof-btn--muted" style="display:none;">Cancel</button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="page-header-third card">
-                    <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 10px;">
-                        <h1 style="color:#555;font-size:18px;font-weight:bold;margin:0px;text-transform:uppercase;">
-                            <i class="fa fa-file" style="font-size:17px;"></i>&nbsp;Upload Documents
-                        </h1>
+                </article>
 
-                    </div>
-                    <div class="body profile-register-address upload-document boxback-allpage-admin" style="background:var(--second-bg-color);height: 259px;">
-                        <ul class="list-group last-list-second" style="margin-bottom:-19px;">
-                            <li class="list-group-item" style="">
-                                <span style="font-weight:bold;color:#7a7676;font-family:'Open Sans',sans-serif;">Aadhaar Card :-</span>
-                                <span style="color:brown;opacity:0.5;margin-left: 10px;">MANDATORY</span>
+                <article class="saas-prof-card saas-prof-card--documents">
+                    <header class="saas-prof-card__head">
+                        <h2 class="saas-prof-card__title"><i class="fa fa-file" aria-hidden="true"></i> Upload Documents</h2>
+                    </header>
+                    <div class="saas-prof-card__body saas-prof-documents">
+                        <div class="saas-prof-docs-thead" aria-hidden="true">
+                            <span>Document</span>
+                            <span>Status</span>
+                            <span>Actions</span>
+                        </div>
+                        <ul class="list-group last-list-second saas-prof-docs-rows">
+                            <li class="list-group-item saas-prof-doc-row">
+                                <span class="saas-prof-doc-name">Aadhaar Card</span>
+                                <span class="saas-prof-doc-tag">Mandatory</span>
                                 <div class="save-aadhar" id="EditAadhaardocModal" style="display:none;">
                                     @*@using (Html.BeginForm("UploadAadharcarddoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
                                         {*@
@@ -1523,9 +1448,9 @@
                                 }
 
                             </li>
-                            <li class="list-group-item" style="">
-                                <span style="font-weight:bold;color:#7a7676;font-family:'Open Sans',sans-serif;">Pancard :-</span>
-                                <span style="color:brown;opacity:0.5;margin-left: 10px;">MANDATORY</span>
+                            <li class="list-group-item saas-prof-doc-row">
+                                <span class="saas-prof-doc-name">Pancard</span>
+                                <span class="saas-prof-doc-tag">Mandatory</span>
                                 <div class="save-aadhar" id="EditPancarddocModal" style="display:none;">
                                     @*@using (Html.BeginForm("UploadPancardcarddoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
                                         {*@
@@ -1562,9 +1487,9 @@
                                 }
 
                             </li>
-                            <li class="list-group-item" style="">
-                                <span style="font-weight:bold;color:#7a7676;font-family:'Open Sans',sans-serif;">Service Agreement :-</span>
-                                <span style="color:brown;opacity:0.5;margin-left: 10px;">MANDATORY</span>
+                            <li class="list-group-item saas-prof-doc-row">
+                                <span class="saas-prof-doc-name">Service Agreement</span>
+                                <span class="saas-prof-doc-tag">Mandatory</span>
                                 <div class="save-aadhar" id="EditServicedocModal" style="display:none;">
                                     @*@using (Html.BeginForm("UploadServiceAggrementdoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
                                         {*@
@@ -1602,9 +1527,9 @@
                                 }
                             </li>
 
-                            <li class="list-group-item" style="">
-                                <span style="font-weight:bold;color:#7a7676;font-family:'Open Sans',sans-serif;">Signature :-</span>
-                                <span style="color:brown;opacity:0.5;margin-left: 10px;">MANDATORY</span>
+                            <li class="list-group-item saas-prof-doc-row">
+                                <span class="saas-prof-doc-name">Signature</span>
+                                <span class="saas-prof-doc-tag">Mandatory</span>
                                 <div class="save-aadhar" id="EditsignaturdocModal" style="display:none;">
                                     @*@using (Html.BeginForm("UploadServiceAggrementdoc", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
                                         {*@
@@ -1645,16 +1570,8 @@
 
                         </ul>
                     </div>
-
-                </div>
-
-
+                </article>
             </div>
-
-
-
-
-
         </div>
     </div>
 </section>
@@ -1866,15 +1783,15 @@
 </div>
 
 <!--Edit Profile Image Modal Popup-->
-<div class="modal fade" id="EditprofileimageModal" tabindex="-1" role="dialog">
+<div class="modal fade saas-prof-modal" id="EditprofileimageModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:black;">Update Profile Image</h4>
+        <div class="modal-content saas-prof-modal__content">
+            <div class="modal-header saas-prof-modal__header">
+                <h4 class="modal-title saas-prof-modal__title">Update Profile Image</h4>
             </div>
             @using (Html.BeginForm("Uploadprofileimage", "Home", FormMethod.Post, new { encType = "multipart/form-data" }))
             {
-                <div class="modal-body" style="margin-top:0px;background:#f5f5f5;">
+                <div class="modal-body saas-prof-modal__body">
                     <div class="body">
 
                         <div class="row clearfix">
@@ -1885,7 +1802,7 @@
 
                             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-7">
                                 <div class="form-group">
-                                    <div class="" style="border:1px solid #ddd;">
+                                    <div class="" >
                                         <input type="file" class="form-control" id="filess" name="filess" />
                                     </div>
                                 </div>
@@ -2177,7 +2094,6 @@
         // Note `e` argument
 
         var value = $(e.currentTarget).val();  // ...and using it here
-        alert(value)
         if (value == "OTP") {
             $('#btnff').click();
         }
@@ -2452,14 +2368,6 @@
     }
 </script>
 
-<script>
-    $('.custmor-support-in button').click(function () {
-        $(this).hide();
-        $('#btnnnSave').css('display', 'block');
-        $('.custmor-support-in input').removeAttr('readonly');
-    });
-
-</script>
 
 <script>
     function ajaxValidate() {
@@ -2886,21 +2794,22 @@
 <script>
 
     function UpdateProfilesOnsucc(data) {
-
-        $('#hdid1').val(data.ID)
-        $('#lbladminname').text(data.Name)
-        $('#lbladminemail').text(data.email)
-        $('#lbladminmobile').text(data.mobile)
-        $('#lbladminaadhar').text(data.Aadhar)
-        $('#lbladminpencard').text(data.pencardno)
-        $('#lbladmingst').text(data.Gstno)
-        $('#lbladmintan').text(data.tanno)
-        $('#lbladminregistration').text(data.registrationno)
-        $('#EditnameandpancardModal').hide();
-        $('.my-profile-save').show();
-
-
-
+        if (!data) return;
+        $('#hdid1').val(data.ID);
+        $('#lbladminname').text(data.Name || 'Data Not Found !');
+        $('#lbladminemail').text(data.email || 'Data Not Found !');
+        $('#lbladminmobile').text(data.mobile || 'Data Not Found !');
+        $('#lbladminaadhar').text(typeof saasProfMaskAadhar === 'function' ? saasProfMaskAadhar(data.Aadhar) : (data.Aadhar || 'Data Not Found !'));
+        $('#lbladminpencard').text(data.pencardno || 'Data Not Found !');
+        $('#lbladmingst').text(data.Gstno || 'Data Not Found !');
+        $('#lbladmintan').text(data.tanno || 'Data Not Found !');
+        $('#lbladminregistration').text(data.registrationno || 'Data Not Found !');
+        if (data.Date) {
+            var launchText = typeof saasProfFormatLaunchDate === 'function' ? saasProfFormatLaunchDate(data.Date) : data.Date;
+            $('#lblLaunchDateDisplay').text(launchText);
+            $('#txtLaunchDateReadonly').val(launchText);
+        }
+        saasProfCancelDetailsEdit();
     }
 
 
@@ -2908,15 +2817,13 @@
 </script>
 <script>
     function OnSuccessEditAddress(result) {
-
-        $('#spncompny').text(result.admindetails.Companyname)
-        $('#spnaddress').text(result.admindetails.Address)
-        $('#spnpincode').text(result.admindetails.pincode)
-        $('#spnstate').text(result.statename)//(result.State)
-        $('#spndistrict').text(result.district)
-        $('#EditaddressModal').hide();
-        $('#saveaddressModal').show();
-
+        if (!result) return;
+        $('#spncompny').text(result.admindetails.Companyname);
+        $('#spnaddress').text(result.admindetails.Address);
+        $('#spnpincode').text(result.admindetails.pincode);
+        $('#spnstate').text(result.statename);
+        $('#spndistrict').text(result.district);
+        saasProfCancelAddressEdit();
     }
 </script>
 
@@ -2969,8 +2876,8 @@
                 $("#District").val(data[0].District);
 
                 $('#EditaddressModal').show();
-                $('#saveaddressModal').hide();
-                saveaddressModal
+                $('#saasProfCompanyView').hide();
+                $('.saas-prof-overview-col--company .editprofile-second').hide();
             },
             error: function (reponse) {
                 alert("error : " + reponse);
@@ -3001,8 +2908,12 @@
                 $("#txtgst").val(data[0].Gstno);
                 $("#txtTAN").val(data[0].tanno);
                 $("#txtregistration").val(data[0].registrationno);
+                if (data[0].Date) {
+                    var launchEdit = typeof saasProfFormatLaunchDate === 'function' ? saasProfFormatLaunchDate(data[0].Date) : data[0].Date;
+                    $('#txtLaunchDateReadonly').val(launchEdit);
+                }
                 $('#EditnameandpancardModal').show();
-                 $('.my-profile-save').hide();
+                $('.saas-prof-details__view').hide();
 
             },
             error: function (reponse) {
@@ -3024,11 +2935,10 @@
 <script>
     $(document).ready(function()
     {
-        var msg = '@ViewData["msg"]';
-        //if(msg !="")
-        //{
-        //    swal("File Uploaded!", msg, "success");
-        //}
+        var msg = '@Html.Raw(HttpUtility.JavaScriptStringEncode(Convert.ToString(ViewData["msg"])))';
+        if (msg && typeof swal === 'function') {
+            swal("Success", msg, "success");
+        }
     })
 </script>
 
@@ -3134,350 +3044,9 @@ function () {
 
 </script>
 
-<script>
-    function SavaDataSupport() {
-        var ID = $("#IDd").val();
-        var email= $("#SupportEmail").val();
-        var mobile = $('#SupportMobile').val();
-
-        $.ajax({
-            type: "GET", url: '@Url.Action("UpdateSupportData", "Home")', data: { 'ID': ID, 'Email': email, 'Mobile': mobile  }, dataType: 'json', cache: false, success: function (result) {
-            if (result == "Success") {
-
-                //swal("Good Job!", "Successfully Data Updated", "success");
-
-                var url = '@Url.Action("Profile", "Home")';
-                window.location.href = url;
-            }
-            else {
-                //swal("Failed!", "Something went wrong.", "error");
-                var url = '@Url.Action("Profile", "Home")';
-                window.location.href = url;
-            }
-        }
-    });
-
-
-
-    }
-</script>
-<script>
-    $('.for-master-button').click(function () {
-        $('.master-user-pop').show();
-    })
-    $('.for-distributor-button').click(function () {
-        $('.Distributor-user-pop').show();
-    })
-    $('.for-retailer-button').click(function () {
-        $('.retailer-user-pop').show();
-    })
-    $('.for-api-button').click(function () {
-        $('.api-user-pop').show();
-    })
-    $('.for-white-button').click(function () {
-        $('.white-user-pop').show();
-    })
-
-    $('.for-master-close').click(function () {
-        $('.master-user-pop').hide();
-        $('.Distributor-user-pop').hide();
-        $('.retailer-user-pop').hide();
-        $('.api-user-pop').hide();
-        $('.white-user-pop').hide();
-
-
-
-
-    })
-</script>
 
 <script>
-    function RoleWiseOTP(roleName,stsBtn) {
-        $.ajax({
-            type: "POST", url: '@Url.Action("DisableTwoFactor", "Home")',
-            data: { 'UserRole': roleName, 'btnVal': stsBtn, 'UserrId':'' },
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                GetUser(data[0]);
-                WriteOTPStatus(roleName, stsBtn);
-        }
-    });
-    }
-
-    @*function OtpOnOffById(userid, btnsts) {
-
-        $.ajax({
-            type: "POST", url: '@Url.Action("DisableTwoFactor", "Home")',
-            data: { 'UserRole': '', 'btnVal': btnsts, 'UserrId': userid },
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                GetUser(data[0]);
-            }
-        });
-    }*@
-
-    function OtpOnOffByIdALL(userid, btnsts) {
-        if (btnsts == 'OTP') {
-            btnsts = 'Y';
-        }
-        $.ajax({
-            type: "POST", url: '@Url.Action("DisablePassCodeBYUserID", "Home")',
-            data: { 'UserRole': '', 'btnVal': btnsts, 'userid': userid },
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                GetUser(data[0]);
-            }
-        });
-    }
-
-    function GetUser(roleName) {
-       var passcodetypeselected= $('#Sortbymaster').val()
-        var passcodetypedealer = $('#Sortbydealer').val()
-        var passcodetyperetailer = $('#Sortbyretailer').val()
-        var passcodetypeAPI = $('#SortbyAPI').val()
-        var passcodetypeWhitelabel = $('#SortbyWhitelabel').val()
-        $.ajax({
-            type: "GET", url: '@Url.Action("GetTwoFactor", "Home")',
-            data: { 'UserRole': roleName },
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-
-                if (roleName == "master") {
-
-                    var row = "";
-                    var Id = 1;
-                    var otptypes = "";
-                    $.each(data, function (index, item) {
-                        otptype = '';
-                        var OnOff = item.TwoFactorEnable;
-                        var passcodetype = item.passcodetype;
-
-                        var btnOnOff = "";
-                        if (OnOff == true) {
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        if (passcodetype == "PERDAY" || passcodetype == "WEAKS" || passcodetype == "MONTHS") {
-
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','OFF') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                      else  if (OnOff == false) {
-                            if (passcodetype == "OFF") {
-                                if (passcodetypeselected == 'OTP') {
-                                    otptype = "Y";
-                                }
-                               else{
-                                    otptype = passcodetypeselected;
-                                }
-                                btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffByIdALL('" + item.UserId + "','" + otptype + "') style = 'border:1px solid;'> OFF</button ></div>";
-
-                            }
-
-                        }
-
-                        row += "<tr><td>" + Id + "</td><td>" + item.Email + "</td><td>" + item.Mobile + "</td><td>" + btnOnOff + "</td></tr>";
-                        Id++;
-                    });
-                    $("#masterlist").html(row);
-                }
-                else if (roleName == "Dealer") {
-                    var row = "";
-                    var Id = 1;
-                    $.each(data, function (index, item) {
-                        var OnOff = item.TwoFactorEnable;
-                        var passcodetype = item.passcodetype;
-                        var btnOnOff = "";
-
-                        var btnOnOff = "";
-                        if (OnOff == true) {
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        if (passcodetype == "PERDAY" || passcodetype == "WEAKS" || passcodetype == "MONTHS") {
-
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','OFF') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        else if (OnOff == false) {
-                            if (passcodetype == "OFF") {
-                                if (passcodetypedealer == 'OTP') {
-                                    otptype = "Y";
-                                }
-                                else {
-                                    otptype = passcodetypedealer;
-                                }
-                                btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffByIdALL('" + item.UserId + "','" + otptype + "') style = 'border:1px solid;'> OFF</button ></div>";
-
-                            }
-
-                        }
-
-
-
-                        //if (OnOff == true) {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffById('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        //}
-                        //else {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffById('" + item.UserId + "','Y') style = 'border:1px solid;'> OFF</button ></div>";
-                        //}
-                        row += "<tr><td>" + Id + "</td><td>" + item.Email + "</td><td>" + item.Mobile + "</td><td>" + btnOnOff + "</td></tr>";
-                        Id++;
-                    });
-                    $("#dealerlist").html(row);
-                }
-                else if (roleName == "Retailer") {
-                    var row = "";
-                    var Id = 1;
-                    $.each(data, function (index, item) {
-                        var OnOff = item.TwoFactorEnable;
-                        var passcodetype = item.passcodetype;
-                        var btnOnOff = "";
-
-                        var btnOnOff = "";
-                        if (OnOff == true) {
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        if (passcodetype == "PERDAY" || passcodetype == "WEAKS" || passcodetype == "MONTHS") {
-
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','OFF') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        else if (OnOff == false) {
-                            if (passcodetype == "OFF") {
-                                if (passcodetyperetailer == 'OTP') {
-                                    otptype = "Y";
-                                }
-                                else {
-                                    otptype = passcodetyperetailer;
-                                }
-                                btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffByIdALL('" + item.UserId + "','" + otptype + "') style = 'border:1px solid;'> OFF</button ></div>";
-
-                            }
-
-                        }
-
-
-                        //if (OnOff == true) {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffById('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        //}
-                        //else {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffById('" + item.UserId + "','Y') style = 'border:1px solid;'> OFF</button ></div>";
-                        //}
-                        row += "<tr><td>" + Id + "</td><td>" + item.Email + "</td><td>" + item.Mobile + "</td><td>" + btnOnOff + "</td></tr>";
-                        Id++;
-                    });
-                    $("#retailerlist").html(row);
-                }
-                else if (roleName == "API") {
-                    var row = "";
-                    var Id = 1;
-                    $.each(data, function (index, item) {
-
-                        var OnOff = item.TwoFactorEnable;
-                        var passcodetype = item.passcodetype;
-                        var btnOnOff = "";
-
-                        var btnOnOff = "";
-                        if (OnOff == true) {
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        if (passcodetype == "PERDAY" || passcodetype == "WEAKS" || passcodetype == "MONTHS") {
-
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','OFF') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        else if (OnOff == false) {
-                            if (passcodetype == "OFF") {
-                                if (passcodetypeAPI == 'OTP') {
-                                    otptype = "Y";
-                                }
-                                else {
-                                    otptype = passcodetypeAPI;
-                                }
-                                btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffByIdALL('" + item.UserId + "','" + otptype + "') style = 'border:1px solid;'> OFF</button ></div>";
-
-                            }
-
-                        }
-
-
-
-                        //var OnOff = item.TwoFactorEnable;
-                        //var btnOnOff = "";
-                        //if (OnOff == true) {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffById('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        //}
-                        //else {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffById('" + item.UserId + "','Y') style = 'border:1px solid;'> OFF</button ></div>";
-                        //}
-                        row += "<tr><td>" + Id + "</td><td>" + item.Email + "</td><td>" + item.Mobile + "</td><td>" + btnOnOff + "</td></tr>";
-                        Id++;
-                    });
-                    $("#apilist").html(row);
-                }
-                else if (roleName == "Whitelabel") {
-                    var row = "";
-                    var Id = 1;
-                    $.each(data, function (index, item) {
-
-                        var OnOff = item.TwoFactorEnable;
-                        var passcodetype = item.passcodetype;
-                        var btnOnOff = "";
-
-                        var btnOnOff = "";
-                        if (OnOff == true) {
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        if (passcodetype == "PERDAY" || passcodetype == "WEAKS" || passcodetype == "MONTHS") {
-
-
-                            btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffByIdALL('" + item.UserId + "','OFF') style = 'border:1px solid;'> ON</button ></div>";
-                        }
-                        else if (OnOff == false) {
-                            if (passcodetype == "OFF") {
-                                if (passcodetypeWhitelabel == 'OTP') {
-                                    otptype = "Y";
-                                }
-                                else {
-                                    otptype = passcodetypeWhitelabel;
-                                }
-                                btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffByIdALL('" + item.UserId + "','" + otptype + "') style = 'border:1px solid;'> OFF</button ></div>";
-
-                            }
-
-                        }
-
-
-
-
-                        //var OnOff = item.TwoFactorEnable;
-                        //var btnOnOff = "";
-                        //if (OnOff == true) {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='costom-on' onclick = OtpOnOffById('" + item.UserId + "','N') style = 'border:1px solid;'> ON</button ></div>";
-                        //}
-                        //else {
-                        //    btnOnOff = "<div class='onoffswitch' style='float: left;'><button class='custom-off' onclick = OtpOnOffById('" + item.UserId + "','Y') style = 'border:1px solid;'> OFF</button ></div>";
-                        //}
-                        row += "<tr><td>" + Id + "</td><td>" + item.Email + "</td><td>" + item.Mobile + "</td><td>" + btnOnOff + "</td></tr>";
-                        Id++;
-                    });
-                    $("#whitelabellist").html(row);
-                }
-                else {
-
-                }
-            }
-        });
-    }
-
+    /* GetUser, OtpOnOffByIdALL, RoleWiseOTP — admin-profile-page.js */
 </script>
 
 <script>
@@ -3542,8 +3111,15 @@ function WriteOTPStatus(roleName, stsBtn) {
                     $('#whitelabelon').text('OFF');
                 }
 
-                window.location.href = "@Url.Action("Profile","Home")";
+                if (typeof swal === 'function') {
+                    swal('Updated', 'Role security status saved.', 'success');
+                }
             },
+            error: function () {
+                if (typeof swal === 'function') {
+                    swal('Error', 'Could not update role security status.', 'error');
+                }
+            }
         });
 
     }
@@ -3586,3 +3162,5 @@ function WriteOTPStatus(roleName, stsBtn) {
             $(this).addClass('activeupto').siblings().removeClass('activeupto');
         });
     </script>*@
+
+<script src="~/MainFrontDesign/js/admin-profile-page.js?v=8"></script>

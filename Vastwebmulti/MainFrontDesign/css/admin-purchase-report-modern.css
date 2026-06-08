@@ -1,0 +1,355 @@
+/* ADMIN — Wallet-Q purchase reports (Master, Dealer, Retailer, API, Whitelabel) */
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav-card {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--acc-border, #e2e8f0);
+    border-radius: var(--acc-radius, 14px);
+    box-shadow: var(--acc-shadow, 0 2px 10px rgba(15, 23, 42, 0.05));
+}
+
+body.saas-admin-ui .saas-pur-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+body.saas-admin-ui .saas-pur-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.saas-admin-ui .saas-pur-nav a:hover {
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+body.saas-admin-ui .saas-pur-nav a.is-active {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+body.saas-admin-ui .saas-pur-nav-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #fff;
+    color: #1e40af;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+body.saas-admin-ui .saas-pur-nav a.is-active .saas-pur-nav-count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-purchase-toolbar-unified {
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+body.saas-admin-ui .saas-purchase-toolbar-unified .saas-acc-breadcrumb {
+    flex: 1 1 220px;
+}
+
+body.saas-admin-ui .saas-pur-retailer-search {
+    flex: 0 1 200px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-pur-retailer-search .form-control {
+    min-height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--acc-border, #e2e8f0);
+}
+
+body.saas-admin-ui .saas-pur-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-pur-badge--pending {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+}
+
+body.saas-admin-ui .saas-pur-badge--approved {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+body.saas-admin-ui .saas-pur-badge--rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+body.saas-admin-ui .saas-pur-badge--muted {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-pur-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+body.saas-admin-ui .saas-pur-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+body.saas-admin-ui .saas-pur-btn--approve {
+    color: #059669;
+    border-color: #a7f3d0;
+}
+
+body.saas-admin-ui .saas-pur-btn--approve:hover {
+    background: #ecfdf5;
+}
+
+body.saas-admin-ui .saas-pur-btn--reject {
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+body.saas-admin-ui .saas-pur-btn--reject:hover {
+    background: #fef2f2;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table tbody tr.saas-pur-row-total td {
+    font-weight: 800;
+    background: #f1f5f9 !important;
+    border-top: 2px solid #cbd5e1;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-acc-table .text-right {
+    text-align: right !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-order-type {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-order-type--cash {
+    color: #047857;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-order-type--credit {
+    color: #b91c1c;
+}
+
+body.saas-admin-ui #purchaseApproveModal .modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* Toolbar card (single block on mobile) */
+body.saas-admin-ui .saas-purchase-report-page .saas-purchase-toolbar-unified {
+    background: var(--acc-surface, #fff);
+    border: 1px solid var(--acc-border, #e2e8f0);
+    border-radius: var(--acc-radius, 14px);
+    box-shadow: var(--acc-shadow, 0 2px 10px rgba(15, 23, 42, 0.05));
+    padding: 14px 16px;
+    margin-bottom: 16px !important;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav-card {
+    padding: 10px 12px;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding-bottom: 6px;
+    margin: 0 -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav::-webkit-scrollbar {
+    height: 4px;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav a {
+    white-space: nowrap;
+    flex: none;
+    min-height: 40px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-purchase-report-page .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    body.saas-admin-ui .saas-purchase-toolbar-unified {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px 14px;
+    }
+
+    body.saas-admin-ui .saas-purchase-toolbar-unified .saas-acc-breadcrumb {
+        width: 100%;
+        flex: 1 1 100%;
+        font-size: 0.78rem;
+        line-height: 1.45;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    body.saas-admin-ui .saas-purchase-toolbar-unified .saas-pan-toolbar-dates,
+    body.saas-admin-ui .saas-purchase-toolbar-unified .saas-acc-toolbar-right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        max-width: 100%;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-pan-date-controls,
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-report-date-controls {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-date-fields {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+        order: 1;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-toolbar-actions {
+        order: 2;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-toolbar-actions .saas-acc-report-search-btn {
+        grid-column: 1 / -1;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-toolbar-actions .saas-acc-export-group {
+        grid-column: 1 / -1;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-toolbar-actions .saas-acc-export-group .saas-acc-btn {
+        width: 100% !important;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-pur-retailer-search {
+        order: 0;
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        max-width: 100%;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-pur-retailer-search .form-control {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-dp-field {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-dp-label {
+        display: block;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-table-card {
+        margin-bottom: 12px;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-table-card-head::after {
+        content: "Swipe table left/right";
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #64748b;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-purchase-report-page .saas-report-date-fields {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-acc-table--purchase {
+        min-width: 1000px;
+    }
+
+    body.saas-admin-ui .saas-purchase-report-page .saas-pur-nav a {
+        font-size: 0.72rem;
+        padding: 8px 12px;
+    }
+}

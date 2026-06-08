@@ -1,5 +1,26 @@
 /* ADMIN — Modern modal design (all pages under saas-admin-ui) */
 
+/* FA 4.7 loads after FA 6 in layout — force solid icons in admin modals */
+body.saas-admin-ui .saas-admin-modal .fas,
+body.saas-admin-ui .saas-admin-modal .fa-solid,
+body.saas-admin-ui #ALLUSERSSHOW .fas,
+body.saas-admin-ui #Api-bal .fas {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.saas-admin-ui .saas-admin-modal .far,
+body.saas-admin-ui #ALLUSERSSHOW .far,
+body.saas-admin-ui #Api-bal .far {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 400 !important;
+}
+
 body.saas-admin-ui {
     --adm-modal-radius: 16px;
     --adm-modal-radius-lg: 20px;
@@ -66,6 +87,10 @@ body.saas-admin-ui .saas-admin-modal-header.accent-violet {
 
 body.saas-admin-ui .saas-admin-modal-header.accent-slate {
     background: linear-gradient(135deg, #334155, #475569 50%, #64748b) !important;
+}
+
+body.saas-admin-ui .saas-admin-modal-header.accent-sky {
+    background: linear-gradient(135deg, #0369a1 0%, #0284c7 48%, #0ea5e9 100%) !important;
 }
 
 body.saas-admin-ui .saas-admin-modal-head-main {
@@ -281,8 +306,8 @@ body.saas-admin-ui #show-notifaction.in .modal-dialog,
 body.saas-admin-ui #show-notifaction.show .modal-dialog,
 body.saas-admin-ui #Api-bal.in .modal-dialog,
 body.saas-admin-ui #Api-bal.show .modal-dialog {
-    width: min(440px, 92vw) !important;
-    max-width: min(440px, 92vw) !important;
+    width: min(560px, 96vw) !important;
+    max-width: min(560px, 96vw) !important;
 }
 
 body.saas-admin-ui #dayleft.in .modal-dialog,
@@ -325,67 +350,201 @@ body.saas-admin-ui #show-notifaction .saas-admin-notify-hero img {
     margin: 0 auto 8px;
 }
 
-/* Search user — result cards */
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial,
-body.saas-admin-ui #ALLUSERSSHOW .userinfors {
-    display: none;
-    margin-top: 16px;
+/* —— Search User modal —— */
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-form {
     padding: 16px;
     background: #fff;
     border: 1px solid var(--adm-modal-border);
     border-radius: 14px;
-    gap: 16px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial[style*="display: block"],
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--adm-modal-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-input-wrap {
+    position: relative;
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-input-wrap > i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-input-wrap .form-control {
+    padding-left: 40px !important;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-search-row {
+    align-items: stretch;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW #btnemailfind,
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-submit {
+    min-height: 44px;
+    min-width: 108px;
+    border-radius: 10px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #0284c7, #0ea5e9) !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-ajax-target:empty {
+    display: none;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-result,
+body.saas-admin-ui #ALLUSERSSHOW .user-info-detial.userinfors {
+    display: none;
+    margin-top: 16px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid var(--adm-modal-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-result[style*="display: block"],
 body.saas-admin-ui #ALLUSERSSHOW .userinfors:not([style*="display: none"]) {
-    display: grid !important;
-    grid-template-columns: 1fr;
+    display: block !important;
 }
 
-@media (min-width: 520px) {
-    body.saas-admin-ui #ALLUSERSSHOW .user-info-detial.userinfors {
-        grid-template-columns: auto 1fr;
-    }
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 55%, #fff 100%);
+    border-bottom: 1px solid #e0f2fe;
 }
 
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial .left,
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial .right {
-    float: none !important;
-    width: 100% !important;
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-avatar {
+    width: 88px !important;
+    height: 88px !important;
+    object-fit: cover;
+    border-radius: 16px !important;
+    border: 3px solid #fff !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.2);
+    flex-shrink: 0;
 }
 
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial img {
-    border-radius: 14px;
-    border: 3px solid #e0e7ff;
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-kicker {
+    margin: 0 0 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0369a1;
 }
 
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial span {
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-name {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--adm-modal-text);
+    line-height: 1.25;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-firm {
+    margin: 4px 0 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--adm-modal-muted);
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-role-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0369a1, #0ea5e9);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 4px 0 8px;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-detail {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: 8px 0;
-    font-size: 0.8rem;
-    color: var(--adm-modal-muted);
+    gap: 4px;
+    padding: 12px 16px;
     border-bottom: 1px solid #f1f5f9;
 }
 
-body.saas-admin-ui #ALLUSERSSHOW .user-info-detial label {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--adm-modal-text);
-    margin: 0 !important;
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-detail--full {
+    grid-column: 1 / -1;
 }
 
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-detail-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--adm-modal-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-detail-label i {
+    margin-right: 6px;
+    color: #0ea5e9;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-detail-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--adm-modal-text);
+    word-break: break-word;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-empty,
 body.saas-admin-ui #ALLUSERSSHOW .userinfo-nodata {
     margin-top: 16px;
-    padding: 32px 20px;
+    padding: 36px 22px;
     text-align: center;
     background: #fff;
     border: 1px dashed #cbd5e1;
-    border-radius: 14px;
+    border-radius: 16px;
 }
 
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-empty-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-empty h2,
 body.saas-admin-ui #ALLUSERSSHOW .userinfo-nodata h2 {
     margin: 0 0 8px;
     font-size: 1.1rem;
@@ -393,85 +552,470 @@ body.saas-admin-ui #ALLUSERSSHOW .userinfo-nodata h2 {
     color: var(--adm-modal-text);
 }
 
-body.saas-admin-ui #ALLUSERSSHOW #btnemailfind {
-    min-height: 44px;
-    border-radius: 10px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--adm-modal-primary), #4f46e5) !important;
-    border: none !important;
-}
-
-/* API balance list */
-body.saas-admin-ui #Api-bal .api-model-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    background: #fff;
-    border: 1px solid var(--adm-modal-border);
-    border-radius: 12px;
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
-}
-
-body.saas-admin-ui #Api-bal .api-model-top:hover {
-    border-color: #bfdbfe;
-    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
-}
-
-body.saas-admin-ui #Api-bal .api-model-top-one span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #dbeafe, #eff6ff);
-    color: var(--adm-modal-primary);
-    font-weight: 800;
-    font-size: 0.9rem;
-}
-
-body.saas-admin-ui #Api-bal .api-model-top-two {
-    flex: 1 1 auto;
-    min-width: 0;
-    text-align: left;
-}
-
-body.saas-admin-ui #Api-bal .api-model-top-two p {
+body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-empty p,
+body.saas-admin-ui #ALLUSERSSHOW .userinfo-nodata p {
     margin: 0;
-    font-size: 0.72rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 0.85rem;
     color: var(--adm-modal-muted);
 }
 
-body.saas-admin-ui #Api-bal .api-model-top-two p + p {
+@media (max-width: 520px) {
+    body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-details {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui #ALLUSERSSHOW .saas-search-user-submit {
+        width: 100%;
+    }
+}
+
+/* —— API Live Balance modal (premium) —— */
+/* Kill legacy layout floats from _Layout inline styles */
+body.saas-admin-ui #Api-bal .saas-api-balance-item,
+body.saas-admin-ui #Api-bal .saas-api-balance-card,
+body.saas-admin-ui #Api-bal .saas-api-balance-aside,
+body.saas-admin-ui #Api-bal .saas-api-balance-content,
+body.saas-admin-ui #Api-bal .saas-api-balance-action,
+body.saas-admin-ui #Api-bal .saas-api-balance-btn {
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-header {
+    position: relative;
+    overflow: hidden;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-header::after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    top: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-header-icon {
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-body {
+    padding: 0 !important;
+    background: linear-gradient(180deg, #f5f3ff 0%, #f8fafc 120px, #f1f5f9 100%) !important;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 18px;
+    padding: 18px 20px;
+    margin: 0;
+    background: #fff;
+    border-bottom: 1px solid #e9d5ff;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #6d28d9, #8b5cf6);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(109, 40, 217, 0.35);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-hero-stat-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-hero-stat-label {
     margin-top: 4px;
-    font-size: 1rem !important;
-    font-weight: 800 !important;
-    color: var(--adm-modal-text) !important;
-    text-transform: none;
-    letter-spacing: 0;
-}
-
-body.saas-admin-ui #Api-bal .btnssl,
-body.saas-admin-ui #Api-bal .api-model-top-three button {
-    min-height: 38px;
-    padding: 0 16px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--adm-modal-primary), #4f46e5) !important;
-    color: #fff !important;
-    font-size: 0.8rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.92;
 }
 
-body.saas-admin-ui #Api-bal .modal-body {
-    padding: 12px 16px 20px !important;
+body.saas-admin-ui #Api-bal .saas-api-balance-hero-text {
+    flex: 1 1 200px;
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #5b21b6;
+    line-height: 1.5;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-hero-text i {
+    margin-right: 6px;
+    color: #7c3aed;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-toolbar {
+    padding: 14px 18px 6px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-search {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0 14px;
+    background: #fff;
+    border: 1px solid #ddd6fe;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(109, 40, 217, 0.08);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-search:focus-within {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-search > i {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 44px;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 10px 10px 10px 12px !important;
+    font-size: 0.88rem !important;
+    font-weight: 600;
+    color: var(--adm-modal-text);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 18px 22px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: block;
+    clear: both;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 14px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #e9d5ff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item:hover .saas-api-balance-card {
+    border-color: #c4b5fd;
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item--loading .saas-api-balance-card {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.18);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item--loaded .saas-api-balance-card {
+    border-color: #86efac;
+    background: #fff;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-aside {
+    flex: 0 0 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-top: 2px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-weight: 800;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+    color: #6d28d9;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-content {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0;
+    background: transparent !important;
+    border: none !important;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-tag {
+    display: inline-block;
+    align-self: flex-start;
+    margin: 0;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #f5f3ff;
+    color: #7c3aed;
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-name {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--adm-modal-text);
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item--loaded .saas-api-balance-value-row {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-value-label {
+    flex: 0 0 auto;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--adm-modal-muted);
+    white-space: nowrap;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-value {
+    flex: 0 1 auto;
+    min-width: 0;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-value[data-empty="true"] {
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-item--loaded .saas-api-balance-value {
+    color: #047857;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-value i {
+    margin-right: 3px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-action {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding: 0;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn,
+body.saas-admin-ui #Api-bal .btnssl {
+    min-height: 42px !important;
+    min-width: 96px !important;
+    max-width: 120px;
+    padding: 0 14px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #6d28d9, #7c3aed) !important;
+    color: #fff !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(109, 40, 217, 0.28);
+    white-space: nowrap;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(109, 40, 217, 0.38);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn:disabled {
+    opacity: 0.9;
+    cursor: wait;
+    min-width: 48px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn--loaded {
+    background: #fff !important;
+    color: #6d28d9 !important;
+    border: 2px solid #c4b5fd !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn--loaded:hover:not(:disabled) {
+    background: #f5f3ff !important;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-btn-loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-no-match {
+    margin: 0 18px 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--adm-modal-muted);
+    background: #fff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-empty {
+    margin: 24px 18px;
+    padding: 40px 24px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #ddd6fe;
+    border-radius: 16px;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ede9fe, #f5f3ff);
+    color: #7c3aed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-empty h5 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--adm-modal-text);
+}
+
+body.saas-admin-ui #Api-bal .saas-api-balance-empty p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--adm-modal-muted);
+}
+
+@media (max-width: 520px) {
+    body.saas-admin-ui #Api-bal .saas-api-balance-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui #Api-bal .saas-api-balance-aside {
+        flex-direction: row;
+        flex: 0 0 auto;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    body.saas-admin-ui #Api-bal .saas-api-balance-action {
+        width: 100%;
+    }
+
+    body.saas-admin-ui #Api-bal .saas-api-balance-btn {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui #Api-bal .saas-api-balance-hero {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
 }
 
 /* Renewal modal tabs */
@@ -588,9 +1132,13 @@ body.saas-admin-ui #Api-bal .saas-admin-modal-header {
     body.saas-admin-ui .saas-admin-modal-drawer.in .modal-dialog,
     body.saas-admin-ui .saas-admin-modal-drawer.show .modal-dialog,
     body.saas-admin-ui #ALLUSERSSHOW.in .modal-dialog,
+    body.saas-admin-ui #ALLUSERSSHOW.show .modal-dialog,
     body.saas-admin-ui #show-notifaction.in .modal-dialog,
+    body.saas-admin-ui #show-notifaction.show .modal-dialog,
     body.saas-admin-ui #Api-bal.in .modal-dialog,
-    body.saas-admin-ui #dayleft.in .modal-dialog {
+    body.saas-admin-ui #Api-bal.show .modal-dialog,
+    body.saas-admin-ui #dayleft.in .modal-dialog,
+    body.saas-admin-ui #dayleft.show .modal-dialog {
         width: 100% !important;
         max-width: 100% !important;
     }

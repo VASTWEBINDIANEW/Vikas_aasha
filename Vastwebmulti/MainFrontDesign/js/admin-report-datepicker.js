@@ -114,6 +114,12 @@
         initReportDateForm("#panReportForm");
         initReportDateForm("#rchFailedReportForm");
         initReportDateForm("#microUnholdHistoryForm");
+        initReportDateForm("#purchaseReportFormMaster");
+        initReportDateForm("#purchaseReportFormDealer");
+        initReportDateForm("#purchaseReportFormRetailer");
+        initReportDateForm("#purchaseReportFormApi");
+        initReportDateForm("#purchaseReportFormWhitelabel");
+        initReportDateForm("#disputeReportForm");
     }
 
     if (document.readyState === "loading") {

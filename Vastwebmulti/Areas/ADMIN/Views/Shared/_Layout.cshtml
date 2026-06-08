@@ -336,24 +336,25 @@
             padding: 6px 0px;
         }
 
-        .api-model-top {
+        /* Legacy api-model-top floats — exclude API Live Balance drawer (modern layout in admin-modal-modern.css) */
+        .api-model-top:not(#Api-bal .saas-api-balance-item) {
             width: 100%;
             float: left;
         }
 
-        .api-model-top-one {
+        .api-model-top-one:not(#Api-bal *) {
             width: 18%;
             float: left;
         }
 
-            .api-model-top-one span {
-                font-size: 50px;
-                border: 1px solid #bbb;
-                padding: 0px 20px;
-                background: #fff;
-            }
+        .api-model-top:not(#Api-bal .saas-api-balance-item) .api-model-top-one span {
+            font-size: 50px;
+            border: 1px solid #bbb;
+            padding: 0px 20px;
+            background: #fff;
+        }
 
-        .api-model-top-two {
+        .api-model-top-two:not(#Api-bal *) {
             width: 50%;
             float: left;
             background: #fff;
@@ -362,20 +363,20 @@
             margin-top: 5px;
         }
 
-        .api-model-top-three {
+        .api-model-top-three:not(#Api-bal *) {
             width: 30%;
             float: right;
         }
 
-            .api-model-top-three button {
-                height: 63px;
-                font-size: 28px;
-                margin-top: 5px;
-                border-radius: 0px;
-                border: 1px solid #bbb;
-                padding: 5px;
-                width: 100%;
-            }
+        .api-model-top:not(#Api-bal .saas-api-balance-item) .api-model-top-three button {
+            height: 63px;
+            font-size: 28px;
+            margin-top: 5px;
+            border-radius: 0px;
+            border: 1px solid #bbb;
+            padding: 5px;
+            width: 100%;
+        }
 
         .col-md-12.modalbutton-show button {
             padding: 6px 8px;
@@ -1815,7 +1816,8 @@
     <link href="~/MainFrontDesign/css/admin-modal-fix.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=scroll1" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-report-page-responsive.css?v=2" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
@@ -2142,21 +2144,21 @@
 
 
 
-    <div id="ALLUSERSSHOW" class="modal fade saas-admin-modal saas-admin-modal-drawer allusershow-admin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="ALLUSERSSHOW" class="modal fade saas-admin-modal saas-admin-modal-drawer saas-search-user-modal allusershow-admin-modal" tabindex="-1" role="dialog" aria-labelledby="searchUserModalTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="saas-admin-modal-header">
+                <div class="saas-admin-modal-header accent-sky">
                     <div class="saas-admin-modal-head-main">
-                        <span class="saas-admin-modal-icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span>
+                        <span class="saas-admin-modal-icon"><i class="fas fa-search" aria-hidden="true"></i></span>
                         <div class="saas-admin-modal-title-wrap">
-                            <h4 class="modal-title saas-admin-modal-title" id="defaultModalLabel">Search User Information</h4>
+                            <h4 class="modal-title saas-admin-modal-title" id="searchUserModalTitle">Search User Information</h4>
                             <span class="saas-admin-modal-subtitle">Filter by registered email or mobile number</span>
                         </div>
                     </div>
                     <button type="button" class="saas-admin-modal-close" id="closebtn" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
                 <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
-                    <div class="user-info-header">
+                    <div class="saas-search-user-form user-info-header">
                         @using (Ajax.BeginForm("FinALLEMailidandmobile", "Home",
 new AjaxOptions
 {
@@ -2166,12 +2168,18 @@ UpdateTargetId = "tbllayoutpage",
 OnSuccess = "ONSUCCESSGETDATA"
 }))
                         {
-                            <div class="saas-admin-modal-search-row">
-                                <input type="text" required class="form-control" id="txtmobileemail" name="txtmobileemail" placeholder="Enter email or mobile number" />
-                                <button type="submit" id="btnemailfind" class="saas-admin-btn saas-admin-btn-primary">Search</button>
+                            <label class="saas-search-user-label" for="txtmobileemail">Email or mobile number</label>
+                            <div class="saas-admin-modal-search-row saas-search-user-search-row">
+                                <div class="saas-search-user-input-wrap">
+                                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                                    <input type="text" required class="form-control" id="txtmobileemail" name="txtmobileemail" placeholder="e.g. user@email.com or 9876543210" autocomplete="off" />
+                                </div>
+                                <button type="submit" id="btnemailfind" class="saas-admin-btn saas-admin-btn-primary saas-search-user-submit"><i class="fas fa-search" aria-hidden="true"></i> Search</button>
                             </div>
                         }
                     </div>
+
+                    <div id="tbllayoutpage" class="saas-search-user-ajax-target" aria-live="polite"></div>
                     
 
 
@@ -2179,28 +2187,36 @@ OnSuccess = "ONSUCCESSGETDATA"
 
 
 
-                    <div class="user-info-detial userinfors" style="display:none;">
-                        <div class="left">
-                            <img id="userimgs" src="../../AdminDesign/images/user.png" class="img-circle" alt="User" width="100" height="100">
-                            <div class="left-to-right">
-                                <span>User Name<label id="lblusername">rtret</label></span>
-                                <span>User Firm Name<label id="lblfrmname">rtrtr</label></span>
-
+                    <div class="saas-search-user-result user-info-detial userinfors" style="display:none;">
+                        <div class="saas-search-user-profile">
+                            <img id="userimgs" src="~/AdminDesign/images/user.png" class="saas-search-user-avatar img-circle" alt="User photo" width="96" height="96" />
+                            <div class="saas-search-user-identity">
+                                <p class="saas-search-user-kicker">Account holder</p>
+                                <h3 class="saas-search-user-name" id="lblusername"></h3>
+                                <p class="saas-search-user-firm" id="lblfrmname"></p>
+                                <span class="saas-search-user-role-badge" id="lbluserrole"></span>
                             </div>
                         </div>
-                        <div class="right">
-                            <span>User Role<label id="lbluserrole">4354545454</label></span>
-                            <span>Mobile No:<label id="lblmobile">4354545454</label></span>
-                            <span>Email ID:<label id="lblemail">rtrt@tyhtryt.yuhy</label></span>
-                            <span>Address:<label id="lbladdress">rtrt@tyhtryt.yuhy</label></span>
-
-
+                        <div class="saas-search-user-details">
+                            <div class="saas-search-user-detail">
+                                <span class="saas-search-user-detail-label"><i class="fas fa-phone" aria-hidden="true"></i> Mobile</span>
+                                <span class="saas-search-user-detail-value" id="lblmobile"></span>
+                            </div>
+                            <div class="saas-search-user-detail">
+                                <span class="saas-search-user-detail-label"><i class="fas fa-envelope" aria-hidden="true"></i> Email</span>
+                                <span class="saas-search-user-detail-value" id="lblemail"></span>
+                            </div>
+                            <div class="saas-search-user-detail saas-search-user-detail--full">
+                                <span class="saas-search-user-detail-label"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Address</span>
+                                <span class="saas-search-user-detail-value" id="lbladdress"></span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="userinfo-nodata" style="display:none;">
-                        <h2>No Data Found</h2>
-                        <p>You can filter by Email id and mobile number</p>
+                    <div class="saas-search-user-empty userinfo-nodata" style="display:none;">
+                        <div class="saas-search-user-empty-icon" aria-hidden="true"><i class="fas fa-user-times"></i></div>
+                        <h2>No user found</h2>
+                        <p>Check the email or mobile number and try again.</p>
                     </div>
 
 
@@ -2213,39 +2229,81 @@ OnSuccess = "ONSUCCESSGETDATA"
 
 
 
-    <div class="modal fade saas-admin-modal saas-admin-modal-drawer fund-tr-history-one" id="Api-bal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade saas-admin-modal saas-admin-modal-drawer saas-api-balance-modal fund-tr-history-one" id="Api-bal" tabindex="-1" role="dialog" aria-labelledby="apiBalanceModalTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-header saas-api-balance-header accent-violet">
                     <div class="saas-admin-modal-head-main">
-                        <span class="saas-admin-modal-icon"><img class="apiblanceshow-image-res" src="~/AdminDesign/images/api.svg" alt="" style="width:22px;height:22px;filter:brightness(0) invert(1);" /></span>
+                        <span class="saas-admin-modal-icon saas-api-balance-header-icon"><i class="fas fa-bolt" aria-hidden="true"></i></span>
                         <div class="saas-admin-modal-title-wrap">
-                            <h4 class="modal-title saas-admin-modal-title apiblance-title-text" id="defaultModalLabel">API Live Balance</h4>
+                            <h4 class="modal-title saas-admin-modal-title apiblance-title-text" id="apiBalanceModalTitle">API Live Balance</h4>
                             <span class="saas-admin-modal-subtitle">Fetch remaining balance per API</span>
                         </div>
                     </div>
                     <button type="button" class="saas-admin-modal-close apiblance-close-bitton" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll saas-api-balance-body">
                     @{
-                        var list = DB.api_name.Where(aa => aa.viewbill != null && aa.viewbill != "").ToList();
-                        int sr = 1;
-                        foreach (var item in list)
-                        {
-                            <div class="api-model-top">
-                                <div class="api-model-top-one">
-                                    <span>@sr</span>
-                                </div>
-                                <div class="api-model-top-two">
-                                    <p>API Name</p>
-                                    <p>@item.apiname</p>
-                                </div>
-                                <div class="api-model-top-three">
-                                    <button type="button" id="@item.apiname" onclick="getbalance('@item.apiname')" class="btnssl">Get Balance</button>
-                                </div>
-                            </div>
-                            sr = sr + 1;
-                        }
+                        var apiBalanceList = DB.api_name.Where(aa => aa.viewbill != null && aa.viewbill != "").ToList();
+                        var apiBalanceCount = apiBalanceList.Count;
+                    }
+                    <div class="saas-api-balance-hero">
+                        <div class="saas-api-balance-hero-stat">
+                            <span class="saas-api-balance-hero-stat-num">@apiBalanceCount</span>
+                            <span class="saas-api-balance-hero-stat-label">Active APIs</span>
+                        </div>
+                        <p class="saas-api-balance-hero-text"><i class="fas fa-info-circle" aria-hidden="true"></i> Select an API and tap <strong>Fetch</strong> to load the live wallet balance.</p>
+                    </div>
+
+                    @if (apiBalanceCount > 0)
+                    {
+                        <div class="saas-api-balance-toolbar">
+                            <label class="saas-api-balance-search" for="apiBalanceFilter">
+                                <i class="fas fa-search" aria-hidden="true"></i>
+                                <input type="search" id="apiBalanceFilter" class="saas-api-balance-search-input" placeholder="Search API name..." autocomplete="off" />
+                            </label>
+                        </div>
+
+                        <div class="saas-api-balance-list" id="apiBalanceList">
+                            @{
+                                int sr = 1;
+                                foreach (var item in apiBalanceList)
+                                {
+                                    var apiKey = (item.apiname ?? "").Trim().ToLowerInvariant();
+                                    <article class="saas-api-balance-item" data-api-name="@apiKey">
+                                        <div class="saas-api-balance-card">
+                                            <div class="saas-api-balance-aside">
+                                                <span class="saas-api-balance-num">@sr</span>
+                                                <span class="saas-api-balance-icon" aria-hidden="true"><i class="fas fa-cloud"></i></span>
+                                            </div>
+                                            <div class="saas-api-balance-content">
+                                                <span class="saas-api-balance-tag">API Provider</span>
+                                                <h5 class="saas-api-balance-name">@item.apiname</h5>
+                                                <div class="saas-api-balance-value-row">
+                                                    <span class="saas-api-balance-value-label">Live balance</span>
+                                                    <span class="saas-api-balance-value" data-empty="true">—</span>
+                                                </div>
+                                            </div>
+                                            <div class="saas-api-balance-action">
+                                                <button type="button" id="@item.apiname" data-api="@item.apiname" onclick="getbalance(this)" class="saas-api-balance-btn btnssl">
+                                                    <span class="saas-api-balance-btn-label"><i class="fas fa-wallet" aria-hidden="true"></i> Fetch</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </article>
+                                    sr = sr + 1;
+                                }
+                            }
+                        </div>
+                        <p class="saas-api-balance-no-match" id="apiBalanceNoMatch" hidden>No API matches your search.</p>
+                    }
+                    else
+                    {
+                        <div class="saas-api-balance-empty">
+                            <div class="saas-api-balance-empty-icon" aria-hidden="true"><i class="fas fa-cloud"></i></div>
+                            <h5>No APIs configured</h5>
+                            <p>Enable view-bill on API settings to show balances here.</p>
+                        </div>
                     }
                 </div>
             </div>
@@ -2267,7 +2325,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                 </div>
                 <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll">
                     <div class="saas-renewal-tabs-wrap">
-                    <nav class="saas-renewal-tabs modalbutton-show modalbutton-show-second modalnewclass-fourdesi" role="tablist" aria-label="Renewal services">
+                    <nav class="saas-renewal-tabs" role="tablist" aria-label="Renewal services">
                         <button type="button" class="saas-renewal-tab btn btn-default active" onclick="scannpay()"><i class="fas fa-barcode" aria-hidden="true"></i><span class="saas-renewal-tab-label">Scan &amp; Pay</span></button>
                         <button type="button" class="saas-renewal-tab btn btn-default" onclick="showdayleftinfo()"><i class="fas fa-globe-americas" aria-hidden="true"></i><span class="saas-renewal-tab-label">Website Renewal</span></button>
                         <button type="button" class="saas-renewal-tab btn btn-default" onclick="ssldatashow('SSL')"><i class="fas fa-lock" aria-hidden="true"></i><span class="saas-renewal-tab-label">SSL Web</span></button>
@@ -2338,9 +2396,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     <button type="button" onclick="onclickweb1()">
                                         <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
                                         <p class="saas-renewal-plan-title">1-Month Plan</p>
-                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
-                                        <span id="ndays" style="display:none;"></span>
-                                        <span class="noofdays"></span>
+                                        <span class="saas-renewal-plan-meta">Server backup</span>
+                                        <span id="ndays" class="saas-renewal-plan-days-hidden" aria-hidden="true"></span>
+                                        <span class="noofdays saas-renewal-plan-days"></span>
                                         <div class="saas-renewal-plan-price first-month">
                                             <span class="saas-renewal-plan-price-label">Net Amount</span>
                                             <span class="saas-renewal-plan-amount">Rs <label id="website1"></label>/-</span>
@@ -2351,8 +2409,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     <button type="button" onclick="onclickweb2()">
                                         <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
                                         <p class="saas-renewal-plan-title">2-Months Plan</p>
-                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
-                                        <span class="noofdays"></span>
+                                        <span class="saas-renewal-plan-meta">Server backup</span>
+                                        <span class="noofdays saas-renewal-plan-days"></span>
                                         <div class="saas-renewal-plan-price first-month">
                                             <span class="saas-renewal-plan-price-label">Net Amount</span>
                                             <span class="saas-renewal-plan-amount">Rs <label id="website2"></label>/-</span>
@@ -2363,8 +2421,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     <button type="button" onclick="onclickweb3()">
                                         <div class="saas-renewal-plan-icon"><img src="~/AdminDesign/images/server.svg" alt="" /></div>
                                         <p class="saas-renewal-plan-title">3-Months Plan</p>
-                                        <span class="saas-renewal-plan-meta">Data BackUp</span>
-                                        <span class="noofdays"></span>
+                                        <span class="saas-renewal-plan-meta">Server backup</span>
+                                        <span class="noofdays saas-renewal-plan-days"></span>
                                         <div class="saas-renewal-plan-price first-month">
                                             <span class="saas-renewal-plan-price-label">Net Amount</span>
                                             <span class="saas-renewal-plan-amount">Rs <label id="website3"></label>/-</span>
@@ -2422,78 +2480,78 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>If your website does not pay the server fee on time, the website will go into sleep mode and if the website is on sleep mode for more than 5 days, it will be removed on a permanent basis.</li>
                             </ul>
                         </div>
-                        <div id="website1qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
-                            <div class="first-form-close-button">&#10006;</div>
+                        <div id="website1qr" class="saas-renewal-checkout first-form-button" style="display:none;">
+                            <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p>Net Amount - <label id="qramt1"></label>/-</p>
-                                <p>Gst IN -  <label id="qrgst1"></label>/-</p>
-                                <p>Total Amount - <label id="qrtotal1"></label>/-</p>
+                                <p><span>Net amount</span><strong>₹ <label id="qramt1"></label></strong></p>
+                                <p><span>GST</span><strong>₹ <label id="qrgst1"></label></strong></p>
+                                <p><span>Total</span><strong>₹ <label id="qrtotal1"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
-                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                                    <button onclick="websitepayment('1')">GO</button>
-                                    <button onclick="websitepayment('1')">To Pay</button>
+                                <div class="comfirsmclasscss">
+                                    <button type="button" onclick="websitepayment('1')">GO</button>
+                                    <button type="button" onclick="websitepayment('1')">Pay now</button>
                                 </div>
-                                <div class="for-succes-payment payment-sucess" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/correct.svg" style="width: 50px;height:50px;margin:0px; background:green;border-radius: 50%;padding: 10px;">
-                                    <p class="sucess" style="font-size: 13px;margin-top: 10px;">Payment Success</p>
+                                <div class="for-succes-payment payment-sucess">
+                                    <img src="~/ashok-images/correct.svg" alt="" />
+                                    <p class="sucess">Payment success</p>
                                 </div>
-                                <div class="for-succes-payment payment-faild" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/closes.svg" style="width: 50px;height:50px;margin:0px; background:red;border-radius: 50%;padding: 10px;">
-                                    <p class="faild" style="font-size: 13px;margin-top: 10px;">Payment Failed</p>
+                                <div class="for-succes-payment payment-faild">
+                                    <img src="~/ashok-images/closes.svg" alt="" />
+                                    <p class="faild">Payment failed</p>
                                 </div>
                             </div>
                         </div>
-                        <div id="website2qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
-                            <div class="first-form-close-button">&#10006;</div>
+                        <div id="website2qr" class="saas-renewal-checkout first-form-button" style="display:none;">
+                            <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p>Net Amount - <label id="qramt2"></label>/-</p>
-                                <p>Gst IN -  <label id="qrgst2"></label>/-</p>
-                                <p>Total Amount - <label id="qrtotal2"></label>/-</p>
+                                <p><span>Net amount</span><strong>₹ <label id="qramt2"></label></strong></p>
+                                <p><span>GST</span><strong>₹ <label id="qrgst2"></label></strong></p>
+                                <p><span>Total</span><strong>₹ <label id="qrtotal2"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
-                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                                    <button onclick="websitepayment('2')">GO</button>
-                                    <button onclick="websitepayment('2')">To Pay</button>
+                                <div class="comfirsmclasscss">
+                                    <button type="button" onclick="websitepayment('2')">GO</button>
+                                    <button type="button" onclick="websitepayment('2')">Pay now</button>
                                 </div>
-                                <div class="for-succes-payment payment-sucess" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/correct.svg" style="width: 50px;height:50px;margin:0px; background:green;border-radius: 50%;padding: 10px;">
-                                    <p class="sucess" style="font-size: 13px;margin-top: 10px;">Payment Success</p>
+                                <div class="for-succes-payment payment-sucess">
+                                    <img src="~/ashok-images/correct.svg" alt="" />
+                                    <p class="sucess">Payment success</p>
                                 </div>
-                                <div class="for-succes-payment payment-faild" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/closes.svg" style="width: 50px;height:50px;margin:0px; background:red;border-radius: 50%;padding: 10px;">
-                                    <p class="faild" style="font-size: 13px;margin-top: 10px;">Payment Failed</p>
+                                <div class="for-succes-payment payment-faild">
+                                    <img src="~/ashok-images/closes.svg" alt="" />
+                                    <p class="faild">Payment failed</p>
                                 </div>
                             </div>
                         </div>
-                        <div id="website3qr" class="saas-renewal-checkout first-form-button" style="display:none;margin-bottom:13px;">
-                            <div class="first-form-close-button">&#10006;</div>
+                        <div id="website3qr" class="saas-renewal-checkout first-form-button" style="display:none;">
+                            <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p>Net Amount - <label id="qramt3"></label>/-</p>
-                                <p>Gst IN -  <label id="qrgst3"></label>/-</p>
-                                <p>Total Amount - <label id="qrtotal3"></label>/-</p>
+                                <p><span>Net amount</span><strong>₹ <label id="qramt3"></label></strong></p>
+                                <p><span>GST</span><strong>₹ <label id="qrgst3"></label></strong></p>
+                                <p><span>Total</span><strong>₹ <label id="qrtotal3"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
-                                <div class="comfirsmclasscss" style="width:41%;float:right;height:149px;background:#fff;">
-                                    <button onclick="websitepayment('3')">GO</button>
-                                    <button onclick="websitepayment('3')">To Pay</button>
+                                <div class="comfirsmclasscss">
+                                    <button type="button" onclick="websitepayment('3')">GO</button>
+                                    <button type="button" onclick="websitepayment('3')">Pay now</button>
                                 </div>
-                                <div class="for-succes-payment payment-sucess" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/correct.svg" style="width: 50px;height:50px;margin:0px; background:green;border-radius: 50%;padding: 10px;">
-                                    <p class="sucess" style="font-size: 13px;margin-top: 10px;">Payment Success</p>
+                                <div class="for-succes-payment payment-sucess">
+                                    <img src="~/ashok-images/correct.svg" alt="" />
+                                    <p class="sucess">Payment success</p>
                                 </div>
-                                <div class="for-succes-payment payment-faild" style="width:41%;float:right;height:160px;background:#fff;display:none;text-align:center;margin: 14px;box-shadow: 0px 0px 0px 14px #fff;border: 5px solid;padding: 10px;">
-                                    <img src="~/ashok-images/closes.svg" style="width: 50px;height:50px;margin:0px; background:red;border-radius: 50%;padding: 10px;">
-                                    <p class="faild" style="font-size: 13px;margin-top: 10px;">Payment Failed</p>
+                                <div class="for-succes-payment payment-faild">
+                                    <img src="~/ashok-images/closes.svg" alt="" />
+                                    <p class="faild">Payment failed</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="ssl_show" style="display:none;">
+                    <div id="ssl_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 @*<h3>SSl Security</h3>*@
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p style="font-size:10px;">Due</p>
                                         <p>Date</p>
@@ -2510,8 +2568,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickssl1()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2522,7 +2580,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickssl2()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2533,7 +2591,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickssl3()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2556,7 +2614,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>SSL Secures applicable with www and without www.</li>
                             </ul>
                         </div>
-                        <div id="ssl1qr" class="second-form-button" style="display:none;">
+                        <div id="ssl1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="sslamt1"></label>/-</p>
@@ -2571,7 +2629,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="ssl2qr" class="second-form-button" style="display:none;">
+                        <div id="ssl2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="sslamt2"></label>/-</p>
@@ -2586,7 +2644,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="ssl3qr" class="second-form-button" style="display:none;">
+                        <div id="ssl3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="sslamt3"></label>/-</p>
@@ -2602,11 +2660,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="Appssl_show" style="display:none;">
+                    <div id="Appssl_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 @*<h3>SSl Security</h3>*@
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p style="font-size:10px;">Due</p>
                                         <p>Date</p>
@@ -2623,8 +2681,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickssl11()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2635,7 +2693,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickssl22()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2646,7 +2704,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickssl33()">
                                         <img src="~/AdminDesign/images/ssl (1).svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2669,7 +2727,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>SSL Secures applicable with www and without www.</li>
                             </ul>
                         </div>
-                        <div id="Appssl1qr" class="second-form-button" style="display:none;">
+                        <div id="Appssl1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="Appsslamt1"></label>/-</p>
@@ -2684,7 +2742,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="Appssl2qr" class="second-form-button" style="display:none;">
+                        <div id="Appssl2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="Appsslamt2"></label>/-</p>
@@ -2699,7 +2757,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="Appssl3qr" class="second-form-button" style="display:none;">
+                        <div id="Appssl3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="Appsslamt3"></label>/-</p>
@@ -2715,11 +2773,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="Email_show" style="display:none;">
+                    <div id="Email_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 @*<h3>Email</h3>*@
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p style="font-size:10px;">Due</p>
                                         <p>Date</p>
@@ -2736,8 +2794,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickemail1()">
                                         <img src="~/AdminDesign/images/email-scaner.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2749,7 +2807,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
 
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickemail2()">
                                         <img src="~/AdminDesign/images/email-scaner.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2760,7 +2818,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickemail3()">
                                         <img src="~/AdminDesign/images/email-scaner.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2784,7 +2842,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>Do not tamper with the email account settings otherwise it will stop working.</li>
                             </ul>
                         </div>
-                        <div id="email1qr" class="second-form-button" style="display:none;">
+                        <div id="email1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="emailamt1"></label>/-</p>
@@ -2799,7 +2857,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="email2qr" class="second-form-button" style="display:none;">
+                        <div id="email2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="emailamt2"></label>/-</p>
@@ -2814,7 +2872,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="email3qr" class="second-form-button" style="display:none;">
+                        <div id="email3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="emailamt3"></label>/-</p>
@@ -2830,11 +2888,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="Sms_show" style="display:none;">
+                    <div id="Sms_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 @*<h3>SMS</h3>*@
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p style="font-size:10px;">Remain</p>
                                         <p>SMS</p>
@@ -2851,8 +2909,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclicksms1()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2862,7 +2920,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stsmspricet1"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclicksms2()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2872,7 +2930,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndsmspricet2"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclicksms3()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2895,7 +2953,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>We will integrate SMS API without any charge.</li>
                             </ul>
                         </div>
-                        <div id="sms1qr" class="second-form-button" style="display:none;">
+                        <div id="sms1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="smsamt1"></label>/-</p>
@@ -2910,7 +2968,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="sms2qr" class="second-form-button" style="display:none;">
+                        <div id="sms2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="smsamt2"></label>/-</p>
@@ -2925,7 +2983,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="sms3qr" class="second-form-button" style="display:none;">
+                        <div id="sms3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="smsamt3"></label>/-</p>
@@ -2941,11 +2999,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="whatsapp_show" style="display:none;">
+                    <div id="whatsapp_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
 
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p>Due Date</p>
                                     </span>
@@ -2961,8 +3019,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickwhatsapp1()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2972,7 +3030,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stwhatsapppricet1"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickwhatsapp2()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -2982,7 +3040,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndwhatsapppricet2"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickwhatsapp3()">
                                         <img src="~/AdminDesign/images/sms.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3005,7 +3063,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>We will integrate SMS API without any charge.</li>
                             </ul>
                         </div>
-                        <div id="whatsapp1qr" class="second-form-button" style="display:none;">
+                        <div id="whatsapp1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whatsappamt1"></label>/-</p>
@@ -3020,7 +3078,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="whatsapp2qr" class="second-form-button" style="display:none;">
+                        <div id="whatsapp2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whatsappamt2"></label>/-</p>
@@ -3035,7 +3093,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="whatsapp3qr" class="second-form-button" style="display:none;">
+                        <div id="whatsapp3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whatsappamt3"></label>/-</p>
@@ -3051,11 +3109,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="Upi_show" style="display:none;">
+                    <div id="Upi_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 @*<h3>UPI</h3>*@
-                                <div class="due-date" style="margin-left: 0px;">
+                                <div class="due-date">
                                     <span>
                                         <p style="font-size:10px;">Due</p>
                                         <p>Date</p>
@@ -3072,8 +3130,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickupi1()">
                                         <img src="~/AdminDesign/images/UPI.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3083,7 +3141,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stupiprice"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickupi2()">
                                         <img src="~/AdminDesign/images/UPI.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3093,7 +3151,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndupiprice"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickupi3()">
                                         <img src="~/AdminDesign/images/UPI.svg" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3117,7 +3175,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>UPI transactions will be settled on API account based on transactions.</li>
                             </ul>
                         </div>
-                        <div id="upi1qr" class="second-form-button" style="display:none;">
+                        <div id="upi1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="upiamt1"></label>/-</p>
@@ -3132,7 +3190,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="upi2qr" class="second-form-button" style="display:none;">
+                        <div id="upi2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="upiamt2"></label>/-</p>
@@ -3147,7 +3205,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="upi3qr" class="second-form-button" style="display:none;">
+                        <div id="upi3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="upiamt3"></label>/-</p>
@@ -3164,11 +3222,11 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="White_show" style="display:none;">
+                    <div id="White_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb;padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 <h3>One Time Registration Fee</h3>
-                                @*<div class="due-date" style="margin-left: 0px;">
+                                @*<div class="due-date">
                         <span>
                             <p style="font-size:10px;">Remain</p>
                             <p>SMS</p>
@@ -3185,8 +3243,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickwhite1()" style="padding-top: 3px;">
                                         <img src="~/AdminDesign/images/WLABEL-scan.png" style="height: 72px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3196,7 +3254,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="1stwhitepricet1"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickwhite2()" style="padding-top: 3px;">
                                         <img src="~/AdminDesign/images/WLABEL-scan.png" style="height: 72px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3206,7 +3264,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                         <p class="first-month" style="font-size: 14px; padding: 0px; padding-top: 4px;"><span style="animation: blink 2s linear infinite;color: #e80909;">Net Amount - </span>Rs <label id="2ndwhitepricet2"></label>/-</p>
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickwhite3()" style="padding-top: 3px;">
                                         <img src="~/AdminDesign/images/WLABEL-scan.png" style="height: 72px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3229,7 +3287,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>White label partners will need domain, business email, SSL security and SMS API.</li>
                             </ul>
                         </div>
-                        <div id="white1qr" class="second-form-button" style="display:none;">
+                        <div id="white1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whiteamt1"></label>/-</p>
@@ -3244,7 +3302,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="white2qr" class="second-form-button" style="display:none;">
+                        <div id="white2qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whiteamt2"></label>/-</p>
@@ -3259,7 +3317,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="white3qr" class="second-form-button" style="display:none;">
+                        <div id="white3qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="whiteamt3"></label>/-</p>
@@ -3275,9 +3333,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                             </div>
                         </div>
                     </div>
-                    <div id="Mpos_show" style="display:none;">
+                    <div id="Mpos_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 <h3>IRCTC Agent Token</h3>
 
                                
@@ -3311,7 +3369,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>mPos devices working on Cash and Sell. His cash limit is 2000 per day per debit card and on credit card sell limit dependent on his card limit.</li>
                             </ul>
                         </div>
-                        <div id="mpos1qr" class="second-form-button" style="display:none;">
+                        <div id="mpos1qr" class="saas-renewal-checkout second-form-button" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>Net Amount - <label id="mposamt1"></label>/-</p>
@@ -3330,9 +3388,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                         </div>
                         
                     </div>
-                    <div id="Microatm_show" style="display:none;">
+                    <div id="Microatm_show" class="saas-renewal-pane" style="display:none;">
                         <div class="second-form">
-                            <div class="first-form-head" style="border: 1px solid #bbb; padding: 5px 8px;">
+                            <div class="saas-renewal-toolbar first-form-head">
                                 <h3>Micro ATM Price</h3>
                                 
                                 <div class="form-head-button form-head-button-mictoatm">
@@ -3353,8 +3411,8 @@ OnSuccess = "ONSUCCESSGETDATA"
                                     </button>
                                 </div>
                             </div>
-                            <div class="first-form-bot">
-                                <div class="form-bot-inner-second" style="text-align:left;">
+                            <div class="saas-renewal-plans-grid first-form-bot">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:left;">
                                     <button onclick="onclickmicroatm1()">
                                         <img src="~/AdminDesign/images/M-ATM.png" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3365,7 +3423,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second">
+                                <div class="saas-renewal-plan-card form-bot-inner-second">
                                     <button onclick="onclickmicroatm2()">
                                         <img src="~/AdminDesign/images/M-ATM.png" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3376,7 +3434,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
                                     </button>
                                 </div>
-                                <div class="form-bot-inner-second" style="text-align:right;">
+                                <div class="saas-renewal-plan-card form-bot-inner-second" style="text-align:right;">
                                     <button onclick="onclickmicroatm3()">
                                         <img src="~/AdminDesign/images/M-ATM.png" style="height: 60px;" />
                                         <p style="font-size:60px;line-height:18px;font-weight:800;margin-bottom:6px;">
@@ -3399,7 +3457,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <li>mPos + Micro ATM devices working on cash withdraw and Sell. His cash limit is 20000 to 40000 per day per debit card and on credit card sell limit dependent on his card limit.</li>
                             </ul>
                         </div>
-                        <div id="microatm1qr" class="second-form-button second-form-button-new" style="display:none;">
+                        <div id="microatm1qr" class="saas-renewal-checkout second-form-button second-form-button-new" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left valuplushaddvalue">
                                 <p>
@@ -3422,7 +3480,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="microatm2qr" class="second-form-button second-form-button-new" style="display:none;">
+                        <div id="microatm2qr" class="saas-renewal-checkout second-form-button second-form-button-new" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>
@@ -3444,7 +3502,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 <label class="lblotherpayment" style=" margin-top: 59px;"></label>
                             </div>
                         </div>
-                        <div id="microatm3qr" class="second-form-button second-form-button-new" style="display:none;">
+                        <div id="microatm3qr" class="saas-renewal-checkout second-form-button second-form-button-new" style="display:none;">
                             <div class="second-form-close-button">&#10006;</div>
                             <div class="first-form-button-left">
                                 <p>
@@ -3476,18 +3534,68 @@ OnSuccess = "ONSUCCESSGETDATA"
     @RenderBody()
 
     <script>
-    function getbalance(apinm) {
-        var loadingText = '<i class="fa fa-circle-o-notch fa-spin"></i>';
-        $('#' + apinm).html(loadingText);
-             $.ajax({
-             type: 'POST',
-             url: '@Url.Action("getapibal","Home")',
-                 data: { apinm: apinm},
-                 success: function (data) {
-                     $('#' + apinm).text("? "+ data);
-                }
+    function getbalance(trigger) {
+        var $btn = $(trigger);
+        var apinm = $btn.attr('data-api') || $btn.attr('id');
+        var $card = $btn.closest('.saas-api-balance-item');
+        var $value = $card.find('.saas-api-balance-value');
+        var loadingHtml = '<span class="saas-api-balance-btn-loading"><i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i></span>';
+        $card.removeClass('saas-api-balance-item--loaded').addClass('saas-api-balance-item--loading');
+        $value.attr('data-empty', 'true').text('Loading…');
+        $btn.prop('disabled', true).removeClass('saas-api-balance-btn--loaded').html(loadingHtml);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("getapibal","Home")',
+            data: { apinm: apinm },
+            success: function (data) {
+                var amt = (data === null || data === undefined) ? '—' : String(data).trim();
+                $card.removeClass('saas-api-balance-item--loading').addClass('saas-api-balance-item--loaded');
+                $value.attr('data-empty', 'false').html('<i class="fas fa-inr" aria-hidden="true"></i> ' + $('<div/>').text(amt).html());
+                $btn.prop('disabled', false)
+                    .addClass('saas-api-balance-btn--loaded')
+                    .html('<span class="saas-api-balance-btn-label"><i class="fas fa-sync" aria-hidden="true"></i> Refresh</span>');
+            },
+            error: function () {
+                $card.removeClass('saas-api-balance-item--loading');
+                $value.attr('data-empty', 'true').text('Failed');
+                $btn.prop('disabled', false)
+                    .removeClass('saas-api-balance-btn--loaded')
+                    .html('<span class="saas-api-balance-btn-label"><i class="fas fa-redo" aria-hidden="true"></i> Retry</span>');
+            }
+        });
+    }
+
+    function resetApiBalanceModal() {
+        $('#Api-bal .saas-api-balance-item').removeClass('saas-api-balance-item--loading saas-api-balance-item--loaded');
+        $('#Api-bal .saas-api-balance-value').attr('data-empty', 'true').text('—');
+        $('#Api-bal .saas-api-balance-btn').each(function () {
+            $(this).prop('disabled', false).removeClass('saas-api-balance-btn--loaded')
+                .html('<span class="saas-api-balance-btn-label"><i class="fas fa-wallet" aria-hidden="true"></i> Fetch</span>');
+        });
+        $('#apiBalanceFilter').val('');
+        $('#apiBalanceList .saas-api-balance-item').show();
+        $('#apiBalanceNoMatch').prop('hidden', true);
+    }
+
+    $(function () {
+        $('#apiBalanceFilter').on('input', function () {
+            var q = ($(this).val() || '').toLowerCase().trim();
+            var visible = 0;
+            $('#apiBalanceList .saas-api-balance-item').each(function () {
+                var name = ($(this).attr('data-api-name') || '');
+                var show = !q || name.indexOf(q) !== -1;
+                $(this).toggle(show);
+                if (show) { visible++; }
             });
-        }
+            $('#apiBalanceNoMatch').prop('hidden', visible > 0);
+        });
+
+        $('#Api-bal').on('hidden.bs.modal', resetApiBalanceModal);
+        $('#ALLUSERSSHOW').on('hidden.bs.modal', function () {
+            $('.userinfors, .userinfo-nodata').hide();
+            $('#txtmobileemail').val('');
+        });
+    });
     </script>
 
     <!--   All Tabs -->
@@ -3508,6 +3616,7 @@ OnSuccess = "ONSUCCESSGETDATA"
     </script>
 
 
+    <script src="~/MainFrontDesign/js/admin-renewal-modal.js"></script>
     <script>
         function scannpay() {
             $('#genrateamt').val("")
@@ -3791,7 +3900,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#website1qr').show();
             $('#website2qr').hide();
             $('#website3qr').hide();
-            $('.first-form').hide();
+            saasRenewalHideFormInPane('website_show');
         }
         function onclickweb2() {
 
@@ -3814,7 +3923,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#website2qr').show();
             $('#website1qr').hide();
             $('#website3qr').hide();
-            $('.first-form').hide();
+            saasRenewalHideFormInPane('website_show');
         }
         function onclickweb3() {
 
@@ -3836,21 +3945,15 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#website3qr').show();
             $('#website1qr').hide();
             $('#website2qr').hide();
-            $('.first-form').hide();
+            saasRenewalHideFormInPane('website_show');
         }
-        $(".first-form-close-button").click(function () {
-            $('.first-form').show();
-            $('#website3qr').hide();
-            $('#website1qr').hide();
-            $('#website2qr').hide();
+        $("#dayleft .first-form-close").click(function () {
+            $(this).closest('.first-form-on').hide();
+            saasRenewalShowFormInPane('website_show');
         })
-        $(".first-form-close").click(function () {
-            $('.first-form-on').hide();
-            $('.first-form').show();
-        })
-        $(".second-form-close").click(function () {
-            $('.second-form-on').hide();
-            $('.second-form').show();
+        $("#dayleft .second-form-close").click(function () {
+            $(this).closest('.second-form-on').hide();
+            saasRenewalShowActiveForm();
         })
     </script>
     <script>
@@ -3916,7 +4019,6 @@ OnSuccess = "ONSUCCESSGETDATA"
                     var total = parseFloat(firstprice) + parseFloat(gst);
                     var total1 = parseFloat(Secondprice) + parseFloat(gst1);
                     var total2 = parseFloat(thirdprice) + parseFloat(gst2);
-                    $('.second-form').show();
                     if (data.SSlTYPE == "SSL") {
                         $('#Appssl1qr').hide();
                         $('#Appssl2qr').hide();
@@ -3944,6 +4046,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                         $('#ssltotalamt3').text(total2);
                         $('#ssl_show').show();
                         $('#Appssl_show').hide();
+                        saasRenewalShowFormInPane('ssl_show');
                     }
                     else {
                         
@@ -3973,6 +4076,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                         $('#Appssltotalamt3').text(total2);
                         $('#ssl_show').hide();
                         $('#Appssl_show').show();
+                        saasRenewalShowFormInPane('Appssl_show');
                     }
                     $('#website_show').hide();
                     $('#Email_show').hide();
@@ -4009,7 +4113,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl1qr').hide();
             $('#Appssl2qr').hide();
             $('#Appssl3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickssl2() {
             var val = $('#sslcheck').is(":checked");
@@ -4032,7 +4136,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl1qr').hide();
             $('#Appssl2qr').hide();
             $('#Appssl3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickssl3() {
             var val = $('#sslcheck').is(":checked");
@@ -4055,7 +4159,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl1qr').hide();
             $('#Appssl2qr').hide();
             $('#Appssl3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickssl11() {
             var val = $('#Appsslcheck').is(":checked");
@@ -4079,7 +4183,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl2qr').hide();
             $('#Appssl3qr').hide();
 
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickssl22() {
             var val = $('#Appsslcheck').is(":checked");
@@ -4102,7 +4206,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl1qr').hide();
             $('#Appssl2qr').show();
             $('#Appssl3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickssl33() {
             var val = $('#Appsslcheck').is(":checked");
@@ -4125,14 +4229,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#Appssl1qr').hide();
             $('#Appssl2qr').hide();
             $('#Appssl3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#Appssl1qr').hide();
-            $('#Appssl2qr').hide();
-            $('#Appssl3qr').hide();
-        })
     </script>
 
     <!----------------SSL--------------------->
@@ -4212,7 +4310,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#email1qr').show();
             $('#email2qr').hide();
             $('#email3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickemail2() {
             var val = $('#emailcheck').is(":checked");
@@ -4232,7 +4330,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#email1qr').hide();
             $('#email2qr').show();
             $('#email3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickemail3() {
             var val = $('#emailcheck').is(":checked");
@@ -4252,14 +4350,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#email1qr').hide();
             $('#email2qr').hide();
             $('#email3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#email1qr').hide();
-            $('#email2qr').hide();
-            $('#email3qr').hide();
-        })
     </script>
 
     <!----------------EMAIL------------------>
@@ -4427,7 +4519,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#sms1qr').show();
             $('#sms2qr').hide();
             $('#sms3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclicksms2() {
             var val = $('#smscheck').is(":checked");
@@ -4447,7 +4539,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#sms1qr').hide();
             $('#sms2qr').show();
             $('#sms3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclicksms3() {
             var val = $('#smscheck').is(":checked");
@@ -4467,14 +4559,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#sms1qr').hide();
             $('#sms2qr').hide();
             $('#sms3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#sms1qr').hide();
-            $('#sms2qr').hide();
-            $('#sms3qr').hide();
-        })
     </script>
 
 
@@ -4500,7 +4586,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#whatsapp1qr').show();
             $('#whatsapp2qr').hide();
             $('#whatsapp3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickwhatsapp2() {
             var val = $('#whatsappcheck').is(":checked");
@@ -4520,7 +4606,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#whatsapp1qr').hide();
             $('#whatsapp2qr').show();
             $('#whatsapp3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickwhatsapp3() {
             var val = $('#whatsappcheck').is(":checked");
@@ -4540,14 +4626,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#whatsapp1qr').hide();
             $('#whatsapp2qr').hide();
             $('#whatsapp3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#whatsapp1qr').hide();
-            $('#whatsapp2qr').hide();
-            $('#whatsapp3qr').hide();
-        })
     </script>
 
     <!----------------UPI------------------->
@@ -4628,7 +4708,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#upi1qr').show();
             $('#upi2qr').hide();
             $('#upi3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickupi2() {
             var val = $('#upicheck').is(":checked");
@@ -4648,7 +4728,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#upi1qr').hide();
             $('#upi2qr').show();
             $('#upi3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickupi3() {
             var val = $('#upicheck').is(":checked");
@@ -4668,14 +4748,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#upi1qr').hide();
             $('#upi2qr').hide();
             $('#upi3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#upi1qr').hide();
-            $('#upi2qr').hide();
-            $('#upi3qr').hide();
-        })
     </script>
 
     <!----------------UPI------------------>
@@ -4768,7 +4842,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#white1qr').show();
             $('#white2qr').hide();
             $('#white3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickwhite2() {
             var val = $('#whitecheck').is(":checked");
@@ -4788,7 +4862,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#white1qr').hide();
             $('#white2qr').show();
             $('#white3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickwhite3() {
             var val = $('#whitecheck').is(":checked");
@@ -4808,14 +4882,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#white1qr').hide();
             $('#white2qr').hide();
             $('#white3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#white1qr').hide();
-            $('#white2qr').hide();
-            $('#white3qr').hide();
-        })
     </script>
 
 
@@ -4985,7 +5053,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').show();
             $('#mpos2qr').hide();
             $('#mpos3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickmpos2() {
             var val = $('#mposcheck').is(":checked");
@@ -5005,7 +5073,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').hide();
             $('#mpos2qr').show();
             $('#mpos3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickmpos3() {
             var val = $('#mposcheck').is(":checked");
@@ -5025,14 +5093,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').hide();
             $('#mpos2qr').hide();
             $('#mpos3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#mpos1qr').hide();
-            $('#mpos2qr').hide();
-            $('#mpos3qr').hide();
-        })
     </script>
 
     <script>
@@ -5083,7 +5145,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').show();
             //$('#mpos2qr').hide();
             //$('#mpos3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function irctc2() {
             var val = $('#mposcheck').is(":checked");
@@ -5103,7 +5165,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').hide();
             $('#mpos2qr').show();
             $('#mpos3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function irctc3() {
             var val = $('#mposcheck').is(":checked");
@@ -5123,14 +5185,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#mpos1qr').hide();
             $('#mpos2qr').hide();
             $('#mpos3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#mpos1qr').hide();
-            $('#mpos2qr').hide();
-            $('#mpos3qr').hide();
-        })
     </script>
 
 
@@ -5224,7 +5280,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#microatm1qr').show();
             $('#microatm2qr').hide();
             $('#microatm3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickmicroatm2() {
             var val = $('#microatmcheck').is(":checked");
@@ -5244,7 +5300,7 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#microatm1qr').hide();
             $('#microatm2qr').show();
             $('#microatm3qr').hide();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
         function onclickmicroatm3() {
             var val = $('#microatmcheck').is(":checked");
@@ -5264,14 +5320,8 @@ OnSuccess = "ONSUCCESSGETDATA"
             $('#microatm1qr').hide();
             $('#microatm2qr').hide();
             $('#microatm3qr').show();
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
         }
-        $(".second-form-close-button").click(function () {
-            $('.second-form').show();
-            $('#microatm1qr').hide();
-            $('#microatm2qr').hide();
-            $('#microatm3qr').hide();
-        })
     </script>
 
 
@@ -5458,7 +5508,6 @@ OnSuccess = "ONSUCCESSGETDATA"
     <script src="~/MainFrontDesign/js/admin-modal-fix.js"></script>
     <script src="~/MainFrontDesign/js/admin-more-option-modal.js"></script>
     <script src="~/MainFrontDesign/js/admin-settings-otp-modal.js"></script>
-    <script src="~/MainFrontDesign/js/admin-renewal-modal.js"></script>
 
     <!-- Autosize Plugin Js -->
     <script src="~/AdminDesign/plugins/autosize/autosize.js"></script>
@@ -5831,12 +5880,12 @@ OnSuccess = "ONSUCCESSGETDATA"
 
     <script>
         $(".more-info-one").click(function () {
-            $('.first-form').hide();
+            saasRenewalHideFormInPane('website_show');
             $('.first-form-on').show();
         })
 
         $(".more-info-second").click(function () {
-            $('.second-form').hide();
+            saasRenewalHideActiveForm();
             $('.second-form-on').show();
         })
 

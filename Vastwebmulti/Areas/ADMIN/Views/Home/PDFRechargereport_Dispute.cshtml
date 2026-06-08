@@ -1,0 +1,54 @@
+@model List<Vastwebmulti.Models.all_dispute_list_Result>
+@{
+    Layout = null;
+    var rows = Model ?? new List<Vastwebmulti.Models.all_dispute_list_Result>();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Dispute List PDF</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 11px; }
+        table, td, th { border: 1px solid #333; }
+        th { background: #f5f5f5; padding: 6px; }
+        td { padding: 5px; }
+    </style>
+</head>
+<body>
+    <h3 style="text-align:center;">Dispute List Report</h3>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>User</th>
+                <th>Consumer No.</th>
+                <th>Amount</th>
+                <th>Operator</th>
+                <th>Port</th>
+                <th>Dispute Time</th>
+                <th>Description</th>
+                <th>Txn ID</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in rows)
+            {
+                <tr>
+                    <td>@item.sts</td>
+                    <td>@item.Roles @item.Frm_Name</td>
+                    <td>@item.rch_number</td>
+                    <td>@item.rch_amount</td>
+                    <td>@item.opt</td>
+                    <td>@item.portno</td>
+                    <td>@(item.dis_time.HasValue ? item.dis_time.Value.ToString("dd-MM-yyyy HH:mm") : "")</td>
+                    <td>@item.dispute_region</td>
+                    <td>@item.opt_id</td>
+                    <td>@item.comment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

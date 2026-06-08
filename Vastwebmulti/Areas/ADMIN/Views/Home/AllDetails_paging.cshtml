@@ -11,16 +11,16 @@
 {
     var isMismatch = item.total != virtualAmount;
     <tr class="@(isMismatch ? "saas-acc-row-mismatch" : "")">
-        <td class="col-order">@item.id</td>
-        <td class="col-details">@Html.DisplayFor(modelItem => item.details)</td>
-        <td>@Html.DisplayFor(modelItem => item.totaladmin)</td>
-        <td>@Html.DisplayFor(modelItem => item.totalsuper)</td>
-        <td>@Html.DisplayFor(modelItem => item.totaldlm)</td>
-        <td>@Html.DisplayFor(modelItem => item.totalrem)</td>
-        <td>@item.posremain</td>
-        <td>@Html.DisplayFor(modelItem => item.totalapi)</td>
-        <td>@Html.DisplayFor(modelItem => item.totalwhitelabel)</td>
-        <td class="col-total">@Html.DisplayFor(modelItem => item.total)</td>
-        <td>@String.Format("{0:dd-MM-yyyy HH:mm}", item.tdate)</td>
+        <td class="col-order" data-label="Order Id">@item.id</td>
+        <td class="col-details" data-label="Transaction">@Html.DisplayFor(modelItem => item.details)</td>
+        <td data-label="Admin Bal">@Html.DisplayFor(modelItem => item.totaladmin)</td>
+        <td data-label="M/D Bal">@Html.DisplayFor(modelItem => item.totalsuper)</td>
+        <td data-label="Distributor Bal">@Html.DisplayFor(modelItem => item.totaldlm)</td>
+        <td data-label="Retailer Bal">@Html.DisplayFor(modelItem => item.totalrem)</td>
+        <td data-label="POS Bal">@item.posremain</td>
+        <td data-label="API Bal">@Html.DisplayFor(modelItem => item.totalapi)</td>
+        <td data-label="W/L Bal">@Html.DisplayFor(modelItem => item.totalwhitelabel)</td>
+        <td class="col-total" data-label="Total">@Html.DisplayFor(modelItem => item.total)</td>
+        <td data-label="Date &amp; Time">@String.Format("{0:dd-MM-yyyy HH:mm}", item.tdate)</td>
     </tr>
 }
