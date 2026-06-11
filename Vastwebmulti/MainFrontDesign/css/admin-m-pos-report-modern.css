@@ -1,0 +1,273 @@
+/* ADMIN — M-POS Report v=2 (extends DMT report shell v=26) */
+
+body.saas-admin-ui .saas-mpos-report-page {
+    --mpos-accent: #7c3aed;
+}
+
+/* Two-card totals (Success + Failed only) */
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-totals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-mpos-report-page .vm-mpos-totals-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Table — mirror DMT #mmm styles for #mpos */
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 1280px;
+    font-size: 0.8rem !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th {
+    padding: 11px 10px !important;
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+    color: #475569 !important;
+    font-size: 0.62rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.85) inset;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-sr-cell {
+    width: 72px;
+    min-width: 72px;
+    max-width: 72px;
+    padding: 8px 6px !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-user-cell {
+    text-align: left !important;
+    min-width: 160px;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table thead th:last-child,
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td.vm-dmt-action-cell {
+    min-width: 72px;
+    width: 72px;
+    padding: 8px 4px !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody td {
+    font-size: 0.78rem !important;
+    padding: 11px 10px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    border-bottom: 1px solid #eef2f7 !important;
+    color: #334155 !important;
+    text-align: center;
+    line-height: 1.45 !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody tr:nth-child(even) {
+    background: #fafbfc;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos.vm-opr-data-table tbody tr:hover {
+    background: #f1f5f9 !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-sr-cell {
+    display: table-cell !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-sr-num {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #94a3b8;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-status {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: none;
+    padding: 0;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-status i.fa {
+    display: inline-block !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-status--success {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-status--failed {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-user-cell {
+    display: table-cell !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-user-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-action-cell {
+    text-align: center !important;
+    vertical-align: middle !important;
+    overflow: visible !important;
+    padding: 8px 4px !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-action-cell .nrch {
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-action-cell .nrch button {
+    float: none !important;
+    display: inline-flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-action-cell .nrch button i.fa {
+    display: inline-block !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    border: 1px solid #c7c2c2 !important;
+    border-radius: 4px !important;
+    padding: 3px 4px !important;
+    color: #334155 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-table-empty,
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-opr-table-empty {
+    text-align: center !important;
+    padding: 42px 20px !important;
+    color: #64748b !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-dmt-table-empty i,
+body.saas-admin-ui .saas-mpos-report-page #mpos .vm-opr-table-empty i {
+    display: block !important;
+    font-size: 1.65rem !important;
+    color: #94a3b8 !important;
+    margin: 0 auto 10px !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #trow > tr.vm-opr-table-empty-row ~ tr.vm-opr-table-empty-row {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-mpos-report-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Legacy .nrch overrides */
+body.saas-admin-ui .saas-mpos-report-page #mpos td.nrch,
+body.saas-admin-ui .saas-mpos-report-page #mpos td.vm-dmt-action-cell {
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .saas-mpos-report-page #mpos td.nrch .fftt,
+body.saas-admin-ui .saas-mpos-report-page #mpos td.vm-dmt-action-cell .fftt {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* M-POS detail modal */
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-detail-grid {
+    display: grid;
+    gap: 14px 16px;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-detail-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-detail-grid--1 {
+    grid-template-columns: 1fr;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-detail-grid--2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-modal-input[readonly],
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal textarea.vm-dmt-modal-input {
+    background: #fff !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    min-height: 38px;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal textarea.vm-dmt-modal-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-mpos-detail-modal .vm-dmt-modal-field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+body.saas-admin-ui .saas-mpos-report-page .vm-opr-table-panel__title i.fa-credit-card {
+    color: #7c3aed;
+}

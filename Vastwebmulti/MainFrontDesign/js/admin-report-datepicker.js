@@ -12,8 +12,51 @@
         orientation: "bottom auto",
         forceParse: false,
         keyboardNavigation: true,
-        enableOnReadonly: true
+        enableOnReadonly: true,
+        container: "body"
     };
+
+    function isMobileViewport() {
+        return window.matchMedia("(max-width: 991px)").matches;
+    }
+
+    function repositionDatepickerForMobile() {
+        if (!isMobileViewport() || !window.jQuery) {
+            return;
+        }
+        var $ = window.jQuery;
+        window.setTimeout(function () {
+            var $dp = $("body > .datepicker.dropdown-menu:visible").last();
+            if (!$dp.length) {
+                $dp = $(".datepicker.dropdown-menu:visible").last();
+            }
+            if (!$dp.length) {
+                return;
+            }
+            $dp.css({
+                position: "fixed",
+                top: "auto",
+                bottom: "16px",
+                left: "50%",
+                right: "auto",
+                transform: "translateX(-50%)",
+                margin: "0",
+                width: "min(320px, calc(100vw - 24px))",
+                maxWidth: "calc(100vw - 24px)"
+            });
+        }, 0);
+    }
+
+    function applyGlobalDatepickerDefaults() {
+        if (!window.jQuery || !window.jQuery.fn.datepicker) {
+            return;
+        }
+        var defaults = window.jQuery.fn.datepicker.defaults;
+        if (defaults) {
+            defaults.container = "body";
+            defaults.orientation = "bottom auto";
+        }
+    }
 
     function setActive($input, on) {
         $input.closest(".saas-acc-dp-field").toggleClass("is-active", !!on);
@@ -29,6 +72,7 @@
 
         $input.on("show", function () {
             setActive($input, true);
+            repositionDatepickerForMobile();
         });
         $input.on("hide", function () {
             setActive($input, false);
@@ -110,6 +154,13 @@
             window.setTimeout(boot, 50);
             return;
         }
+        applyGlobalDatepickerDefaults();
+        window.jQuery(document).on("show", "input, .form-control", function () {
+            if (window.jQuery(this).data("datepicker")) {
+                repositionDatepickerForMobile();
+            }
+        });
+        window.addEventListener("resize", repositionDatepickerForMobile);
         initReportDateForm("#allDetailsForm");
         initReportDateForm("#panReportForm");
         initReportDateForm("#rchFailedReportForm");
@@ -120,6 +171,13 @@
         initReportDateForm("#purchaseReportFormApi");
         initReportDateForm("#purchaseReportFormWhitelabel");
         initReportDateForm("#disputeReportForm");
+        initReportDateForm("#operatorReportForm");
+        initReportDateForm("#incomingReportForm");
+        initReportDateForm("#rofferReportForm");
+    }
+
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.datepicker) {
+        applyGlobalDatepickerDefaults();
     }
 
     if (document.readyState === "loading") {
@@ -129,4 +187,5 @@
     }
 
     window.initAdminReportDateForm = initReportDateForm;
+    window.repositionAdminDatepickerForMobile = repositionDatepickerForMobile;
 })(window, document);

@@ -1,0 +1,112 @@
+@model IEnumerable<Vastwebmulti.Models.roffer_retailer_comm_Result>
+
+@using System.Linq
+
+@using System.Collections.Generic
+
+@using Vastwebmulti.Models
+
+@{
+
+    Layout = null;
+
+    var rows = Model != null ? Model.ToList() : new List<roffer_retailer_comm_Result>();
+
+}
+
+
+
+<div class="table-responsive vm-roffer-comm-table-wrap">
+
+    <table class="table table-bordered vm-roffer-comm-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Operator Name</th>
+
+                <th>Commission</th>
+
+                <th>Edit</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @if (rows.Any())
+
+            {
+
+                var i = 1;
+
+                foreach (var item in rows)
+
+                {
+
+                    var editBtnId = "Opt" + i;
+
+                    <tr class="vm-roffer-comm-view-row">
+
+                        <td>@Html.DisplayFor(modelItem => item.operator_name)</td>
+
+                        <td>@Html.DisplayFor(modelItem => item.basevalue)</td>
+
+                        <td>
+
+                            <button type="button" class="vm-roffer-comm-edit-btn butt" id="@editBtnId" title="Edit">
+
+                                <i class="fas fa-pen" aria-hidden="true"></i>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    <tr class="vm-roffer-comm-edit-row" style="display:none;">
+
+                        <td>@Html.DisplayFor(modelItem => item.operator_name)</td>
+
+                        <td>
+
+                            <input type="text" class="form-control vm-roffer-comm-input" id="@i" value="@item.basevalue" />
+
+                        </td>
+
+                        <td>
+
+                            <input type="hidden" id="@editBtnId" value="@item.optcode" />
+
+                            <button type="button" class="saas-acc-btn saas-acc-btn--search vm-roffer-comm-save-btn" onclick="vmRofferSaveComm(@i)">Save</button>
+
+                        </td>
+
+                    </tr>
+
+                    i++;
+
+                }
+
+            }
+
+            else
+
+            {
+
+                <tr>
+
+                    <td colspan="3" class="vm-opr-table-empty">No commission rows found.</td>
+
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+

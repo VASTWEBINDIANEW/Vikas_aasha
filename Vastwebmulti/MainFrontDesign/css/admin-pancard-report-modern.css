@@ -1,0 +1,612 @@
+/* ADMIN — Pan Card Reports v=6 (extends DMT report shell v=26) */
+
+body.saas-admin-ui .saas-pancard-report-page {
+    --pancard-accent: #7c3aed;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-opr-table-panel__title i.fa-id-card {
+    color: #7c3aed;
+}
+
+/* NEW / OLD / MANUAL tabs — table header (per mockup) */
+body.saas-admin-ui .saas-pancard-new-page .vm-pancard-table-head-right,
+body.saas-admin-ui .saas-pancard-old-page .vm-pancard-table-head-right,
+body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-table-head-right {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px 12px !important;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-pancard-tab-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 3px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    flex-shrink: 0;
+    order: 1;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-pancard-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #64748b;
+    text-decoration: none !important;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    border: 1px solid transparent;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-pancard-tab:hover {
+    color: #334155;
+    background: #e2e8f0;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-pancard-tab.is-active {
+    background: linear-gradient(135deg, #6d28d9, #7c3aed);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(124, 58, 237, 0.32);
+}
+
+body.saas-admin-ui .saas-pancard-report-page .vm-dmt-toolbar-head--one-line .vm-dmt-fin-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* OLD page — extra hierarchy filters wrap cleanly */
+body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--pancard-old {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px 10px !important;
+}
+
+body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--pancard-old > .vm-opr-field,
+body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--pancard-old > .vm-dmt-field {
+    flex: 0 1 160px;
+    min-width: 130px;
+    max-width: 200px;
+}
+
+body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--pancard-old .vm-dmt-filter-search-group {
+    margin-left: auto;
+    flex: 0 0 auto;
+}
+
+/* ── #pancardNew / #hhhh table — mirror Money Transfer #mmm ── */
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 1550px;
+    font-size: 0.8rem !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 2200px;
+    font-size: 0.8rem !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table thead,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table thead,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table thead th {
+    padding: 11px 8px !important;
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+    color: #475569 !important;
+    font-size: 0.6rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody td.vm-dmt-sr-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody td.vm-dmt-sr-cell {
+    width: 72px;
+    min-width: 72px;
+    max-width: 72px;
+    padding: 8px 6px !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody td.vm-dmt-user-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody td.vm-dmt-user-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody td.vm-dmt-user-cell {
+    text-align: left !important;
+    min-width: 220px;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table thead th:last-child,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table thead th:last-child,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table thead th:last-child,
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody td.vm-dmt-action-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody td.vm-dmt-action-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody td.vm-dmt-action-cell {
+    min-width: 100px;
+    width: 100px;
+    padding: 8px 4px !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody td {
+    font-size: 0.78rem !important;
+    padding: 11px 10px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    border-bottom: 1px solid #eef2f7 !important;
+    color: #334155 !important;
+    text-align: center;
+    line-height: 1.45 !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody tr:nth-child(even),
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody tr:nth-child(even),
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody tr:nth-child(even) {
+    background: #fafbfc;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody tr:hover,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody tr:hover,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody tr:hover {
+    background: #f1f5f9 !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew.vm-opr-data-table tbody tr.vm-dmt-row--pending,
+body.saas-admin-ui .saas-pancard-old-page #hhhh.vm-opr-data-table tbody tr.vm-dmt-row--pending,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual.vm-opr-data-table tbody tr.vm-dmt-row--pending {
+    background: #fffbeb !important;
+    box-shadow: inset 3px 0 0 #f59e0b;
+}
+
+/* SR + status icons */
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-sr-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-sr-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-sr-cell {
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-sr-num,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-sr-num,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-sr-num {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #94a3b8;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: none;
+    padding: 0;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status i.fa {
+    font-size: 12px !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status--success,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status--success,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status--success {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status--failed,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status--failed,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status--failed {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status--pending,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status--pending,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status--pending {
+    background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-status--refund,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-status--refund,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-status--refund {
+    background: linear-gradient(135deg, #475569, #64748b) !important;
+}
+
+/* User column stack */
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-stack,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-stack,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-line,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-line,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-role,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-role,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-role {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #7c3aed;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-sep,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-sep,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-sep {
+    color: #cbd5e1;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-name,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-name,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-name {
+    font-weight: 700;
+    color: #1e293b !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-user-meta,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-user-meta,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-user-meta {
+    font-size: 0.68rem;
+    color: #64748b;
+    line-height: 1.3;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-amt-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-amt-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-amt-cell {
+    font-weight: 700;
+    color: #0f172a !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-time-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-time-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-time-cell {
+    font-size: 0.72rem !important;
+    color: #64748b !important;
+    white-space: nowrap;
+}
+
+/* Action column — DMT icon row */
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-pancard-doc-cell {
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .nrch button,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .nrch button,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .nrch button,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-pancard-doc-cell .vm-dmt-act-btn {
+    float: left !important;
+    display: inline-block !important;
+    margin: 0 3px 0 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .nrch button i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .nrch button i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .nrch button i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-pancard-doc-cell .vm-dmt-act-btn i.fa {
+    display: inline-block !important;
+    font-size: 10px !important;
+    border: 1px solid #c7c2c2 !important;
+    border-radius: 4px !important;
+    padding: 3px 4px !important;
+    color: #334155 !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .vm-dmt-act-btn--success i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .vm-dmt-act-btn--success i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .vm-dmt-act-btn--success i.fa {
+    color: #15803d !important;
+    border-color: #bbf7d0 !important;
+    background: #f0fdf4 !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .vm-dmt-act-btn--danger i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .vm-dmt-act-btn--danger i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .vm-dmt-act-btn--danger i.fa {
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+    background: #fef2f2 !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .vm-dmt-act-btn--view i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .vm-dmt-act-btn--view i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .vm-dmt-act-btn--view i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-pancard-doc-cell .vm-dmt-act-btn--view i.fa {
+    color: #2563eb !important;
+    border-color: #bfdbfe !important;
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-action-cell .vm-dmt-act-btn--detail i.fa,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-action-cell .vm-dmt-act-btn--detail i.fa,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-action-cell .vm-dmt-act-btn--detail i.fa {
+    color: #7c3aed !important;
+    border-color: #ddd6fe !important;
+    background: #f5f3ff !important;
+}
+
+/* Empty state — icon + message (DMT parity) */
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-table-empty,
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-opr-table-empty,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-table-empty,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-opr-table-empty,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-table-empty,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-opr-table-empty {
+    text-align: center !important;
+    padding: 42px 20px !important;
+    color: #64748b !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-table-empty i,
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-opr-table-empty i,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-table-empty i,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-opr-table-empty i,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-table-empty i,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-opr-table-empty i {
+    display: block !important;
+    font-size: 1.65rem !important;
+    color: #94a3b8 !important;
+    margin: 0 auto 10px !important;
+    line-height: 1 !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-dmt-table-empty span,
+body.saas-admin-ui .saas-pancard-new-page #pancardNew .vm-opr-table-empty span,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-dmt-table-empty span,
+body.saas-admin-ui .saas-pancard-old-page #hhhh .vm-opr-table-empty span,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-dmt-table-empty span,
+body.saas-admin-ui .saas-pancard-manual-page #pancardManual .vm-opr-table-empty span {
+    display: block;
+}
+
+body.saas-admin-ui .saas-pancard-new-page #trow > tr.vm-opr-table-empty-row ~ tr.vm-opr-table-empty-row,
+body.saas-admin-ui .saas-pancard-old-page #trow > tr.vm-opr-table-empty-row ~ tr.vm-opr-table-empty-row,
+body.saas-admin-ui .saas-pancard-manual-page #trow > tr.vm-opr-table-empty-row ~ tr.vm-opr-table-empty-row {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-pancard-new-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-pancard-new-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before,
+body.saas-admin-ui .saas-pancard-old-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-pancard-old-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before,
+body.saas-admin-ui .saas-pancard-manual-page .vm-opr-data-table #trow > tr::before,
+body.saas-admin-ui .saas-pancard-manual-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Pending modal */
+body.saas-admin-ui .vm-pancard-pending-modal .vm-pancard-pending-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 12px;
+    margin-top: 4px;
+    border-top: 1px solid #e2e8f0;
+}
+
+body.saas-admin-ui .saas-pancard-report-page .toast-top-right1 {
+    top: 65px;
+    left: 81%;
+}
+
+/* Table header actions sit after tabs */
+body.saas-admin-ui .saas-pancard-new-page .vm-pancard-table-head-right .vm-dmt-table-actions,
+body.saas-admin-ui .saas-pancard-old-page .vm-pancard-table-head-right .vm-dmt-table-actions,
+body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-table-head-right .vm-dmt-table-actions {
+    order: 2;
+}
+
+/* ── Mobile: Pancard NEW + OLD (mockup-aligned) ── */
+@media (max-width: 992px) {
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-table-panel__head {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-pancard-table-head-right,
+    body.saas-admin-ui .saas-pancard-old-page .vm-pancard-table-head-right,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-table-head-right {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        gap: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-pancard-tab-nav,
+    body.saas-admin-ui .saas-pancard-old-page .vm-pancard-tab-nav,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-tab-nav {
+        width: 100% !important;
+        justify-content: center !important;
+        order: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-pancard-tab,
+    body.saas-admin-ui .saas-pancard-old-page .vm-pancard-tab,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-tab {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-pancard-table-head-right .vm-dmt-table-actions,
+    body.saas-admin-ui .saas-pancard-old-page .vm-pancard-table-head-right .vm-dmt-table-actions,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-table-head-right .vm-dmt-table-actions {
+        width: 100% !important;
+        justify-content: space-between !important;
+        order: 2 !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-table-actions .vm-opr-icon-btn,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-table-actions .vm-opr-icon-btn,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-table-actions .vm-opr-icon-btn {
+        flex: 0 0 38px !important;
+        width: 38px !important;
+        min-width: 38px !important;
+        height: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-table-actions .saas-acc-btn,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-table-actions .saas-acc-btn,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-table-actions .saas-acc-btn {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        min-height: 38px !important;
+        height: 38px !important;
+        padding: 0 8px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-row--one-line,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--one-line,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-row--one-line {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--pancard-old .vm-dmt-filter-search-group {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-row--one-line .vm-opr-field,
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-row--one-line .vm-dmt-field,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--one-line .vm-opr-field,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-row--one-line .vm-dmt-field,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-row--one-line .vm-opr-field,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-row--one-line .vm-dmt-field {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-search-group {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        justify-content: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-search-group .saas-acc-dp-field {
+        flex: 1 1 calc(50% - 6px) !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-pancard-old-page .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-opr-toolbar-search {
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 40px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-new-page .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-old-page .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-dmt-filter-search-group .saas-acc-dp-field {
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .saas-pancard-new-page .vm-pancard-tab,
+    body.saas-admin-ui .saas-pancard-old-page .vm-pancard-tab,
+    body.saas-admin-ui .saas-pancard-manual-page .vm-pancard-tab {
+        padding: 6px 8px !important;
+        font-size: 0.65rem !important;
+    }
+}

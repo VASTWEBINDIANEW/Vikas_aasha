@@ -857,7 +857,7 @@
 
     
     .table-container {
-        height: 235px; /* Set the desired height */
+        height: 100%; /* Set the desired height */
         overflow-y: auto; /* Enable vertical scrolling */
     }
 </style>
@@ -1941,6 +1941,11 @@
     #vmPanelMessage p {
         color: #000;
     }
+
+    .vm-app-option-page #vmPanelIconImg .icon_btn button {
+        width: 140px !important;
+    }
+
 </style>
 
 <section class="content outside-logo-page saas-admin-account-page saas-admin-settings-page vm-app-option-page" style="position: relative;">
@@ -2973,7 +2978,7 @@
             for (var i = 0; i < result.length; i++) {
                 var br = document.createElement('tr');
                 var bU = document.createElement('button');
-                bU.textContent = "-";
+                bU.textContent = "❌";
                 bU.setAttribute('onclick', 'deletefaq(' + result[i].idno + ',' + i + ')')
                 bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
                 bU.setAttribute('class', 'deletefsw');
@@ -3208,7 +3213,7 @@
                     for (var i = 0; i < result.length; i++) {
                         var br = document.createElement('tr');
                         var bU = document.createElement('button');
-                        bU.textContent = "-";
+                        bU.textContent = "❌";
                         bU.setAttribute('onclick', 'deletefaq(' + result[i].idno +','+i+ ')')
                         bU.setAttribute('style', 'padding: 0px 20px; background: red;color: white;font-size: larger;');
                         bU.setAttribute('class', 'deletefsw');

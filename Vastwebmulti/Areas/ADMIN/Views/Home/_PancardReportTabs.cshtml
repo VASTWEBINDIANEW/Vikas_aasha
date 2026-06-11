@@ -1,0 +1,8 @@
+@{
+    var activeTab = (ViewBag.PancardActiveTab ?? "new").ToString().ToLower();
+}
+<nav class="vm-pancard-tab-nav" aria-label="Pan card report type">
+    <a href="@Url.Action("Pancard_new", "Home")" class="vm-pancard-tab @(activeTab == "new" ? "is-active" : "")">NEW</a>
+    <a href="@Url.Action("TokenPurchaseReport", "Home")" class="vm-pancard-tab @(activeTab == "old" ? "is-active" : "")">OLD</a>
+    <a href="@Url.Action("Pancard_new_manual", "Home")" class="vm-pancard-tab @(activeTab == "manual" ? "is-active" : "")">MANUAL</a>
+</nav>

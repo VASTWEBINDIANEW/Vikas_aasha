@@ -1,124 +1,106 @@
-﻿@model List<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
+﻿@model IEnumerable<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
 @{
     Layout = null;
+    var items = Model == null ? new List<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>() : Model.ToList();
 }
-
-
-@if (Model != null && Model.Count > 0)
+@if (items.Count > 0)
 {
-    foreach (var item in Model)
+    var srIndex = ViewBag.SrOffset != null ? Convert.ToInt32(ViewBag.SrOffset) : 0;
+    foreach (var item in items)
     {
-        var sts = "";
-        var color = "";
-        var icon = "";
-        if (item.Particulars.Contains("Pending"))
+        srIndex++;
+        var particulars = item.Particulars ?? "";
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = "Pending";
+        if (particulars.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#ff9600";
-            sts = "Pending";
-            icon = "../../ashok-images/clock.svg";
+            statusTone = "refund";
+            statusFa = "fa-undo";
+            statusLabel = "Refund";
         }
-        if (item.Particulars.Contains("Success"))
+        else if (particulars.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "green";
-            sts = "Success";
-            icon = "../../ashok-images/correct.svg";
+            statusTone = "success";
+            statusFa = "fa-check";
+            statusLabel = "Success";
         }
-        if (item.Particulars.Contains("Failed"))
+        else if (particulars.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "red";
-            sts = item.Particulars;
-            icon = "../../ashok-images/closes.svg";
+            statusTone = "failed";
+            statusFa = "fa-times";
+            statusLabel = particulars;
         }
-        if (item.Particulars.Contains("Refund"))
+        else if (particulars.IndexOf("Pending", StringComparison.OrdinalIgnoreCase) >= 0)
         {
-            color = "#9C27B0";
-            sts = "Refund";
-            icon = "../../ashok-images/closes.svg";
-
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            statusLabel = "Pending";
         }
-        <tr>
-            <td>
-                @if (item.Particulars.Contains("Pending"))
-                {
-                    <img style="width: 18px;margin-right:8px;float:left;max-width: 100%;padding: 0 !important; background-color:transparent;" src="@icon">
-                }
-                @if (item.Particulars.Contains("Refund"))
-                {
-                    <img src="@icon" style="width: 18px;margin-right:8px;float:left; border-radius: 50%; background-color:#9C27B0;" />
-                }
-                @if (item.Particulars.Contains("Success"))
-                {
-                    <img src="@icon" style="width: 18px;margin-right:8px;float:left; background-color:green;border-radius:50%;" />
-                }
-                @if (item.Particulars.Contains("Failed"))
-                {
-                    <img src="@icon" style="width: 18px;margin-right:8px;float:left; border-radius: 50%; background-color:red;" />
-                }
-                <i></i>&nbsp;<span>@item.UserType</span>&nbsp;⇒&nbsp;@item.Frm_Name
-
-                @*<p style="font-size:12px;"><span>@item.UserType</span>&nbsp;⇒&nbsp;@item.Frm_Name</p>*@
-
+        var userType = !string.IsNullOrWhiteSpace(item.UserType) ? item.UserType : "User";
+        var userName = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : "—";
+        var sd = item.ProcessingFees - item.RetailerIncome;
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-dmt-sr-cell">
+                <span class="vm-dmt-sr-num">@srIndex</span>
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
             </td>
-            @*<td></td>*@
-            <td><p style="font-size:12px;">@item.MerchantTxnId</p></td>
-            <td><p style="font-size:12px;">@item.PhysicalCount</p></td>
-            <td><p style="font-size:12px;">@item.DigitalCount</p></td>
-            <td><p style="font-size:12px;">@item.ProcessingFees</p></td>
-            <td><p style="font-size:12px;">@item.UTI_TXN_ID</p></td>
-            <td><p style="font-size:11px;">@item.RetailerIncome</p></td>
-            <td><p style="font-size:11px;">@item.retailer_remain_post</p></td>
-            <td><p style="font-size:11px;">@item.retailer_remain_pre</p></td>
-
-            @*<td><p style="font-size:12px;">@item.CouponStatus</p></td>*@
-            <td><p style="font-size:11px;">@item.Date</p></td>
-
-            @{
-                var sd = item.ProcessingFees - item.RetailerIncome;
-            }
-            <td>@sd</td>
-
-
-            @if (item.Particulars == "Pending")
-            {
-                <td title="Manually Failed" style="cursor:pointer;"><span onclick="manuallyfailed('@item.idno','Manually Failed')"><i class="fa fa-reply"></i></span></td>
-            }
-            else
-            {
-
-            }
-
-            @*<td><p style="font-size:11px;">@item.RetailerIncome</p></td>
-                <td><p style="font-size:11px;">@item.retailer_remain_post</p></td>
-                <td><p style="font-size:11px;">@item.retailer_dealer_pre</p></td>
-                <td><p style="font-size:11px;">@item.DealerIncome</p></td>
-                <td><p style="font-size:11px;">@item.retailer_dealer_post</p></td>
-                <td><p style="font-size:11px;">@item.retailer_master_pre</p></td>
-                <td><p style="font-size:11px;">@item.MDIncome</p></td>
-                <td><p style="font-size:11px;">@item.retailer_master_post</p></td>
-                <td><p style="font-size:11px;">@item.whitelabel_remain_pre</p></td>
-                <td><p style="font-size:11px;">@item.whitelabelincome</p></td>
-                <td><p style="font-size:11px;">@item.whitelabel_remain_post</p></td>*@
-            <td class="nrch" style="min-width: 70px;">
-                <span id="tokenStatus" onclick="tokenStatus('@item.idno')" class="fftt" style="float: left;cursor: pointer;margin-right: 4px;"><i class="fa fa-eye" style="font-size: 12px;"></i></span>
-                <div class="btn" style="background:#ff9e00;height: 25px;color:#fff; padding: 4px 10px; font-size: 11px; display:none "> due</div>
-                <span data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.idno',this)" class="fftt"> <i class="fa fa-angle-double-right" aria-hidden="true" style="font-size: 12px;"></i> </span>
-
+            <td class="vm-dmt-user-cell">
+                <div class="vm-dmt-user-stack">
+                    <div class="vm-dmt-user-line">
+                        <span class="vm-dmt-user-role">@userType</span>
+                        <span class="vm-dmt-user-sep">&rsaquo;</span>
+                        <span class="vm-dmt-user-name">@userName</span>
+                    </div>
+                </div>
+            </td>
+            <td>@item.MerchantTxnId</td>
+            <td>@item.PhysicalCount</td>
+            <td>@item.DigitalCount</td>
+            <td class="vm-dmt-amt-cell">@item.ProcessingFees</td>
+            <td>@item.UTI_TXN_ID</td>
+            <td class="vm-dmt-amt-cell">@item.RetailerIncome</td>
+            <td>@item.retailer_remain_post</td>
+            <td>@item.retailer_remain_pre</td>
+            <td class="vm-dmt-time-cell">@item.Date</td>
+            <td class="vm-dmt-amt-cell">@sd</td>
+            <td class="vm-dmt-action-cell">
+                <div class="nrch vm-dmt-action-bar">
+                    @if (item.Particulars == "Pending")
+                    {
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--danger" title="Manually failed" onclick="manuallyfailed('@item.idno','Manually Failed')">
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                        </button>
+                    }
+                    <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--view" title="Check token status" onclick="tokenStatus('@item.idno')">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--detail" title="View details" data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.idno')">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    </button>
+                </div>
             </td>
         </tr>
     }
-
 }
-
 else
 {
-    <tr>
-        @if (@ViewBag.checkdata != null)
+    <tr class="vm-opr-table-empty-row">
+        @if (ViewBag.checkdata != null)
         {
-            <td colspan="13"><h3 style="text-align:center;">No Data For Current Search</h3></td>
+            <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <span>No transactions found for current search.</span>
+            </td>
         }
         else
         {
-            <td colspan="13"><h3 style="text-align:center;">Data Not Found</h3></td>
+            <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-id-card" aria-hidden="true"></i>
+                <span>Pan card transaction not found.</span>
+            </td>
         }
     </tr>
 }

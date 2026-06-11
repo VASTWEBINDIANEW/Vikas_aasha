@@ -1,0 +1,54 @@
+@model List<Vastwebmulti.Models.AepsChargeAdminReport_Result>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    var srIndex = ViewBag.SrOffset != null ? Convert.ToInt32(ViewBag.SrOffset) : 0;
+    foreach (var item in Model)
+    {
+        srIndex++;
+        var stsUp = (item.Status ?? "").ToUpper();
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        if (stsUp.Contains("SUCCESS"))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+        }
+        else if (stsUp.Contains("FAIL"))
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+        }
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-dmt-sr-cell">
+                <span class="vm-dmt-sr-num">@srIndex</span>
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@item.Status">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+            </td>
+            <td class="vm-dmt-user-cell">
+                <span class="vm-dmt-user-name">@item.RetailerName</span>
+            </td>
+            <td>@item.Mobile</td>
+            <td><span class="vm-aeps-charge-type-badge">@item.Type</span></td>
+            <td>@item.AepsCharges</td>
+            <td>@item.AadharpayCharges</td>
+            <td>@item.Gst</td>
+            <td>@item.RemainPre</td>
+            <td>@item.RemainPose</td>
+            <td>@String.Format("{0:dd-MMM HH:mm:ss}", item.TransactionTime)</td>
+            <td>@item.Status</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fa fa-file-invoice-dollar fas fa-file-invoice-dollar" aria-hidden="true"></i>
+            <span>No AEPS charge records found for current search.</span>
+        </td>
+    </tr>
+}

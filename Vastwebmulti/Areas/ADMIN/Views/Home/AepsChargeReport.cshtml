@@ -1,520 +1,135 @@
-﻿@{
-    ViewBag.Title = "AepsReport";
-    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
-}
-
-<link href="~/MainFrontDesign/css/financialreportcss-admin.css" rel="stylesheet" />
-
-<style>
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .table > thead > tr > th {
-        font-size: 13px !important;
-        padding: 10px 4px !important;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    table.dataTable thead > tr > th, table.dataTable thead > tr > td {
-        padding-right: 10px;
-    }
-
-    .card {
-        margin-bottom: 0px;
-    }
-
-    .table-bordered tbody tr td span {
-        color: inherit;
-    }
-
-    .table-bordered tbody tr td {
-        font-size: 13px;
-        padding: 10px 4px;
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    .cltu {
-        width: 15%;
-    }
-
-    .money-tab-secondclass {
-        width: 30%;
-    }
-
-    .pdfresponsive-second {
-        width: auto;
-        float: right;
-    }
-
-    .white-successadmin-money span {
-        float: left;
-        line-height: normal;
-    }
-
-    .custom-date-icon.ner {
-        border-color: #e1dcdc !important;
-    }
-
-    .newfourdesign-admin .form-control {
-        background: transparent !important;
-    }
-
-        .newfourdesign-admin .form-control .btn {
-            background: transparent !important;
-        }
-
-    @@media screen and (max-width:1366px) {
-        .firsttimerespon-admin {
-            width: 100%;
-            float: left;
-            margin-bottom: 5px;
-        }
-
-        .marginleft-third-respon {
-            margin-left: 0 !important;
-        }
-
-        .exl-respo-third {
-            width: auto !important;
-        }
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-
-
-    @@media only screen and (min-width:481px) and (max-width:992px) {
-
-        .t_menu {
-            margin: 4px 0;
-            float: left;
-            width: 100%;
-        }
-
-        .fin2 {
-            width: 100% !important;
-            float: left;
-            display: block !important;
-        }
-
-        .left-space-no {
-            margin-left: 0px !important;
-        }
-
-        .responcive-fify button.btn.llpo {
-            width: 100%;
-            text-align: left;
-        }
-
-        .responcive-full input {
-            width: 49% !important;
-        }
-
-        .responcive-full .nrr3 input {
-            width: 100% !important;
-        }
-
-        .responcive-fify .web-white-filter {
-            width: 100%;
-        }
-
-        .fin1.gjut-ruty ul li {
-            width: 24.5%;
-            position: relative;
-        }
-
-            .fin1.gjut-ruty ul li img {
-                position: absolute;
-                left: 30%;
-            }
-
-        .col-md-1.cltu.for-width-r.responcive-full {
-            margin-bottom: 23px;
-        }
-
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            right: 52% !important;
-        }
-
-        .col-md-12.classbottomo-third {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-        .col-md-1.responcive-fify.respon-third-button {
-            width: auto !important;
-        }
-
-        .monalltab-resp-third ul {
-            display: flex;
-        }
-
-        .card.card-rel-third-respo {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-    }
-
-    @@media screen and (max-width:767px) {
-
-
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:520px) {
-
-        .fin3 {
-            position: relative;
-            right: 0;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .d_menu {
-            width: 100% !important;
-        }
-
-        .kklo.money-transfer-admin #custnav ul li a {
-            font-size: 12px;
-        }
-
-        .inputiconsateall {
-            width: 50% !important;
-        }
-
-        .t_menu {
-            margin: 4px 0;
-            float: left;
-            width: 100%;
-        }
-
-        .fin1, .fin2 {
-            width: 100% !important;
-            display: block !important;
-        }
-
-            .fin1 .kklo #custnav ul li a {
-                padding: 5px 15px;
-            }
-
-            .fin2 .col-md-2, .fin2 .cltu.col-md-1 {
-                width: 49% !important;
-                float: left;
-                margin-left: 0px !important;
-            }
-
-            .fin2 .col-md-1.cltu.for-width {
-                width: 49.2% !important;
-            }
-
-            .fin2 .col-md-1.cltu.for-width-r {
-                width: 48% !important;
-            }
-
-            .fin2 .col-md-3 {
-                width: 100% !important;
-                margin-bottom: 5px;
-            }
-
-                .fin2 .col-md-3 input {
-                    width: 49% !important;
-                }
-
-                .fin2 .col-md-3 .nrr3 {
-                    width: 48%;
-                }
-
-                    .fin2 .col-md-3 .nrr3 input {
-                        width: 100% !important;
-                    }
-
-        .cltu {
-            margin-bottom: 15px !important;
-        }
-
-        .llpo span {
-            display: inline-block;
-        }
-
-        .fin2 .col-md-1 {
-            width: 40% !important;
-        }
-
-            .fin2 .col-md-1 .button {
-                width: 100%;
-            }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .col-md-12.classbottomo-third {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-
-
-        .card.card-rel-third-respo {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-        .fin2 .col-md-3 input {
-            width: 100% !important;
-        }
-    }
-
-    .kklo.money-transfer-admin #custnav ul {
-        margin-bottom: 0px;
-    }
-
-    .d_menu .row {
-        margin: 0;
-    }
-
-    .allpagefinincal-report .responcive-fify {
-        width: auto !important;
-    }
-
-    .filter-option.pull-left {
-        margin: 0px 9px;
-    }
-
-    .allpagefinincal-report .reportdate-money-allpage {
-        width: auto;
-    }
-
-    .inputiconsateall {
-        width: 113px;
-    }
-</style>
+﻿@model IEnumerable<Vastwebmulti.Models.AepsChargeAdminReport_Result>
 @{
-    var i = 1;
-    List<SelectListItem> items = new List<SelectListItem>
-{
+    ViewBag.Title = "AepsChargeReport";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var typeItems = new List<SelectListItem>
+    {
         new SelectListItem { Value = "Aeps", Text = "Aeps" },
         new SelectListItem { Value = "Aadharpay", Text = "Aadharpay" }
     };
 }
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-aeps-charge-report-modern.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=7"></script>
+<script src="~/MainFrontDesign/js/admin-aeps-charge-report.js?v=1"></script>
 
-<section class="content">
-    <div class="container-fluid">
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-aeps-charge-report-page">
+    <div class="container-fluid vm-opr-page-shell">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Financial Services</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">AepsCharges</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix margin-bottom-third cardbackg-third onlymargin-third">
-            <div class="col-md-12">
-                <div class="card card-rel-third-respo">
-                    <div class="col-md-12" style="padding:0px;">
-
-                        <div class="page-header-third" style="width: auto; float: left;">
-                            @Html.Partial("_finicalmenureport")
-                        </div>
-
-
-
+        @using (Html.BeginForm("AepsChargeReport", "Home", FormMethod.Post, new { id = "aepsChargeReportForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Financial Services</li>
+                        <li>AEPS Charges Report</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row">
+                        @Html.Partial("_finicalmenureport")
                     </div>
+                </div>
 
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-rpt-filters-panel__bar">
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+                        </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("Type", typeItems, "Select type", new { id = "Type", @class = "vm-opr-select vm-dmt-select form-control", @title = "Type" })
+                        </div>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row clearfix">
+        }
 
-                <div class="col-md-12" style="margin-top: 10px;">
-                    <div class="card page-header-third">
-                        <div class="col-md-12 fin2 all-type-third allpagefinincal-report" style="padding: 0px; margin-top: 0px; position: relative; display: flex; align-items: center; justify-content: space-between;">
-
-                            <div class="t_menu">
-                                <div class="bread-same-all-page breadsameall-second">
-                                    <ul>
-                                        <li class="smli">
-                                            <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                            </a>
-                                        </li>
-
-                                        <li class="fullbodydycolorbg tmw-total-color-one">
-                                            AepsChargesReport
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                            <div class="t_menu">
-                                @using (Html.BeginForm("AepsChargeReport", "Home", FormMethod.Post))
-                                {
-
-                                    <div class="col-md-2 responcive-fify" style="padding: 0px; margin-right: 3px;">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { @class = "form-control" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 cltu responcive-fify" style="padding: 0px; margin-right: 3px;">
-                                        <div class="form-line">
-                                            @Html.DropDownList("Type", items, "Select type", new { @class = "form-control" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 responcive-full reportdate-money-allpage" style="padding: 0px;float: left;">
-                                        <div class="form-group" style="margin-bottom: 0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="inputiconsateall" style="padding-right:2px;">
-                                                    <div class="custom-date-icon ner">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width: 105px;margin-right: 3px;" })
-                                                </div>
-                                                <div class="nrr3 inputiconsateall" style="padding-left:2px;">
-                                                    <div class="custom-date-icon ner2">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width: 105px;" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 responcive-fify respon-third-button responcive-fify-search" style="padding: 0px;float: left;width: 10px;">
-
-                                        <center>
-                                            <button type="submit" value="Old" name="submit" class="btn llpo input-back-second" style=" border:1px solid #b1a6a638;background: transparent;">
-                                                <i class="fa fa-search" style="top:0px;font-size:16px;color:black;"></i>
-                                                <span style="top:0px;color:black;">SEARCH</span>
-                                            </button>
-                                        </center>
-
-                                    </div>
-
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
+                        <span>AEPS charge transactions</span>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="aepsCharge" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>S.R.</th>
+                                    <th>Retailer&nbsp;Name</th>
+                                    <th>Mobile</th>
+                                    <th>Type</th>
+                                    <th>Aeps&nbsp;Charges</th>
+                                    <th>Aadharpay&nbsp;Charges</th>
+                                    <th>GST</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Remain&nbsp;Post</th>
+                                    <th>Transaction&nbsp;Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @{
+                                    var chargeList = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.AepsChargeAdminReport_Result>();
+                                    Html.RenderPartial("_AepsChargeReport", chargeList);
                                 }
-
-                            </div>
-                        </div>
-                        <div class="body" style="padding: 0px; float: left; width: 100%; margin-top: 6px;">
-                            <div class="table-responsive tableseconddes-admin" style="position:inherit;margin-top:0px;">
-                                <table id="Aeps" class="table table-bordered table-striped table-hover example-second thpadding-second whitetable-second" cellspacing="0" style="width:100%;background:#f5f5f5;">
-                                    <thead style="background-color:whitesmoke;">
-                                        <tr style="color: black;font-size: 13px;">
-                                            <td>Idno</td>
-                                            <td>RetailerName</td>
-                                            <td>Mobile</td>
-                                            <td>Type</td>
-                                            <td>AepsCharges</td>
-                                            <td>AadharpayCharges</td>
-                                            <td>Gst</td>
-                                            <td>RemainPre</td>
-                                            <td>RemainPose</td>
-                                            <td>TransactionTime</td>
-                                            <td>Status</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow" class="alin chnj">
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>@i</td>
-                                                <td>@item.RetailerName</td>
-                                                <td>@item.Mobile</td>
-                                                <td>@item.Type</td>
-                                                <td>@item.AepsCharges</td>
-                                                <td>@item.AadharpayCharges</td>
-                                                <td>@item.Gst</td>
-                                                <td>@item.RemainPre</td>
-                                                <td>@item.RemainPose</td>
-                                                <td>@item.TransactionTime</td>
-                                                <td>@item.Status</td>
-                                            </tr>
-                                            i++;
-                                        }
-                                    </tbody>
-                                </table>
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                    <img src="~/img/ajax-loader.gif" />
-                                </div>
-                            </div>
+                            </tbody>
+                        </table>
+                        <div id="loadingdiv" class="vm-opr-table-loading" style="display:none;">
+                            <img src="~/img/ajax-loader.gif" alt="Loading" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/main.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#txt_frm_date, #txt_to_date').datepicker({
             format: "yyyy-mm-dd",
             todayHighlight: true,
             autoclose: true,
-            orientation: "bottom auto",
-
+            orientation: "bottom auto"
         });
         var val = '@ViewBag.chk';
         if (val != "post") {
             $("#txt_frm_date").datepicker("setDate", new Date());
             $("#txt_to_date").datepicker("setDate", new Date());
         }
+    });
 
-   });
-
+    $(function () {
+        if (window.location.href.indexOf('/ADMIN/Home/AepsChargeReport') !== -1) {
+            $('.sidebar .kkli li:nth-child(2) a').addClass('activee');
+        }
+    });
 </script>

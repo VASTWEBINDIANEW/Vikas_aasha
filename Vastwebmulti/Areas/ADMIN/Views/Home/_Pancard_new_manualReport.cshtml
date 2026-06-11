@@ -1,0 +1,139 @@
+@model IEnumerable<Vastwebmulti.Models.pancard_transation_manual>
+@{
+    Layout = null;
+    var items = Model == null ? new List<Vastwebmulti.Models.pancard_transation_manual>() : Model.ToList();
+    var srIndex = ViewBag.SrOffset != null ? Convert.ToInt32(ViewBag.SrOffset) : 0;
+}
+@if (items.Count > 0)
+{
+    foreach (var i in items)
+    {
+        srIndex++;
+        var sts = i.status ?? "";
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = sts;
+        if (sts.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "refund";
+            statusFa = "fa-undo";
+            statusLabel = "Refund";
+        }
+        else if (sts.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+            statusLabel = "Success";
+        }
+        else if (sts.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+            statusLabel = "Failed";
+        }
+        else if (sts.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            statusLabel = "Pending";
+        }
+        var userName = !string.IsNullOrWhiteSpace(i.Name) ? i.Name : "—";
+        var userEmail = !string.IsNullOrWhiteSpace(i.Email) ? i.Email : "—";
+        var userMobile = !string.IsNullOrWhiteSpace(i.Mobile) ? i.Mobile : "";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-dmt-sr-cell">
+                <span class="vm-dmt-sr-num">@srIndex</span>
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+            </td>
+            <td class="vm-dmt-user-cell">
+                <div class="vm-dmt-user-stack">
+                    <div class="vm-dmt-user-line">
+                        <span class="vm-dmt-user-role">Retailer</span>
+                        <span class="vm-dmt-user-sep">&rsaquo;</span>
+                        <span class="vm-dmt-user-name">@userName</span>
+                    </div>
+                    <div class="vm-dmt-user-meta">@userEmail@if (!string.IsNullOrWhiteSpace(userMobile)) {<text> &bull; @userMobile</text>}</div>
+                </div>
+            </td>
+            <td>@(i.Title) @(i.Name)</td>
+            <td>Aadhar=@i.AadharregNumber<br />Customer=@i.Mobile</td>
+            <td>@i.Email</td>
+            <td>@i.Fathername</td>
+            <td>@i.DOB</td>
+            <td>@i.Aadharno</td>
+            <td>@i.Gender</td>
+            <td class="vm-dmt-amt-cell">@i.Amount</td>
+            <td>@i.Rem_comm</td>
+            <td>@i.Rem_tds</td>
+            <td>@i.Rem_pre</td>
+            <td>@i.rem_post</td>
+            <td class="vm-dmt-time-cell">@i.request_time</td>
+            <td class="vm-dmt-amt-cell">@i.Rem_final</td>
+            <td>@i.dlm_pre</td>
+            <td>@i.dlm_post</td>
+            <td>@i.master_pre</td>
+            <td>@i.master_post</td>
+            <td class="vm-pancard-doc-cell">
+                @if (sts.IndexOf("Failed", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    <span class="vm-dmt-user-meta">@i.imageurl</span>
+                }
+                else if (sts.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    if ((i.imageurl ?? "").Contains("/SlipPanCard/"))
+                    {
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--view" title="View slip" onclick="views(@i.idno)">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <a href="~/@i.imageurl" target="_blank" class="fftt vm-dmt-act-btn vm-dmt-act-btn--view" title="View document">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </a>
+                    }
+                }
+            </td>
+            <td class="vm-dmt-action-cell">
+                @if (sts.IndexOf("PENDING", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    <div class="nrch vm-dmt-action-bar">
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--danger" title="Mark failed"
+                                data-name="@userName" data-email="@userEmail" data-amount="@i.Amount" data-comm="@i.Rem_comm"
+                                data-idno="@i.idno" data-requestid="@i.requestid" data-status="@i.status" data-sts="Failed"
+                                onclick="openPopup(this)">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--success" title="Mark success"
+                                data-name="@userName" data-email="@userEmail" data-amount="@i.Amount" data-comm="@i.Rem_comm"
+                                data-idno="@i.idno" data-requestid="@i.requestid" data-status="@i.status" data-sts="success"
+                                onclick="openPopup(this)">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        @if (ViewBag.checkdata != null)
+        {
+            <td colspan="22" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <span>No transactions found for current search.</span>
+            </td>
+        }
+        else
+        {
+            <td colspan="22" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-id-card" aria-hidden="true"></i>
+                <span>Pan card transaction not found.</span>
+            </td>
+        }
+    </tr>
+}

@@ -2,1763 +2,437 @@
 @{
     ViewBag.Title = "Operator_report_new";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = (ViewBag.chk as string) == "post" ? "post" : "get";
+    var statusFilter = (Request["ddl_status"] ?? ViewBag.ddl_status as string ?? "").Trim();
+    var hasPortStats = (Model.srspending != null && Model.srspending.Any())
+        || (Model.srspending_old != null && Model.srspending_old.Any());
+    var reportRows = ViewBag.ReportRows as IEnumerable<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>
+        ?? Enumerable.Empty<Vastwebmulti.Models.proc_Recharge_operator_report_newPaging_Result>();
 }
 
-<style>
-
-    /* new css */
-
-    #all .table {
-        margin-bottom: 0px;
-        height: 47px;
-    }
-
-    #all td {
-        line-height: 1.2;
-    }
-    /* new css */
-    #button_Successful {
-        position: fixed;
-        z-index: 9999;
-        top: 0;
-        right: 0;
-        color: #fff;
-        background: #0000006e;
-        width: 100%;
-        height: 100%;
-    }
-
-    .p_set {
-        background: #fff;
-        width: 350px;
-        height: auto;
-        border: 7px solid #ccc;
-        color: #000;
-        text-align: center;
-        position: absolute;
-        left: 44%;
-        top: 40%;
-    }
-
-        .p_set h2 {
-            font-size: 22px;
-        }
-
-        .p_set button {
-            padding: 3px 19px;
-            background: #2ba92bde;
-            margin: 19px 0px;
-            border: 1px solid #fff;
-            border-radius: 3px;
-            font-size: 18px;
-            color: #fff;
-        }
-
-    .card {
-        background: transparent !important;
-    }
-
-    table #trow {
-        counter-reset: rowNumber;
-    }
-
-        table #trow tr::before {
-            display: table-cell;
-            counter-increment: rowNumber;
-            content: counter(rowNumber) ".";
-            text-align: right;
-        }
-
-
-    .responcive-fifty {
-        width: auto;
-    }
-
-    .responcive-full {
-        width: auto;
-    }
-
-    .col-md-2.cjk.rrt.responcive-full .select2.select2-container.select2-container--default.select2-container--below.select2-container--focus {
-        width: 200px !important;
-    }
-
-    .btn:not(.btn-link):not(.btn-circle) {
-        border: 1px solid #dfdfdf96 !important;
-    }
-
-    span.filter-option.pull-left::after {
-        content: "";
-        position: absolute;
-        clip-path: polygon(100% 0, 0 0, 51% 100%);
-        width: 8px;
-        height: 5px;
-        background: #888;
-        top: 7px;
-        right: 4px;
-    }
-
-    .btn-group.bootstrap-select.form-control.open span.filter-option.pull-left::after {
-        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    }
-
-    span.filter-option.pull-left {
-        padding: 0px 14px 0px 7px;
-    }
-
-    .sponc11 {
-        position: relative;
-        animation: mymove11 2s infinite;
-    }
-
-    @@keyframes mymove11 {
-        from {
-            background: #eae1e1;
-        }
-
-        to {
-            background: #cacdca;
-        }
-    }
-
-
-    #custnav .bartu {
-        margin: 0px 2px !important;
-    }
-</style>
-
-
-<link href="~/MainFrontDesign/css/Dashcustom.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/globalallcss.css" rel="stylesheet" />
-<style>
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: var(--main-bg-lcolor);
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #c7c7c7;
-            animation-delay: -0.5s;
-        }
-
-    #loadredmodel {
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        z-index: 9999999;
-        opacity: .8;
-    }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0;
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-
-    .input-container {
-        border: 1px solid #cdcccc;
-        display: inline-block;
-        width: 100%;
-        height: 34px;
-        padding: 11px 8px;
-        font-size: 14px;
-        line-height: 1.42857143;
-        background-color: #fff;
-        background-image: none;
-    }
-
-        .input-container input:focus, .input-container input:active {
-            outline: none;
-        }
-
-        .input-container input {
-            width: 80%;
-            border: none;
-        }
-
-        .input-container button {
-            float: right;
-        }
-    /******************************************/
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 4px 5px;
-    }
-
-    .form-inline .bootstrap-select.btn-group, .form-horizontal .bootstrap-select.btn-group, .form-group .bootstrap-select.btn-group {
-        height: 26px;
-    }
-
-    #example_length {
-        margin-left: 20px;
-    }
-
-    .pagination {
-        margin-top: 0px;
-    }
-
-    .custom-loader-color {
-        color: #fff !important;
-        font-size: 50px !important;
-    }
-
-    .custom-loader-background {
-        background-color: crimson !important;
-    }
-
-    .custom-middle-align {
-        vertical-align: middle !important;
-    }
-
-    ._1pcQ {
-        margin-right: 12px;
-        margin-top: 4px;
-    }
-
-    ._1IeO {
-        transition: all .2s ease;
-    }
-
-    span._1IeO._1pcQ {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    span.CheckBal {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .CheckBal .fa-circle:before {
-        content: "B";
-        background: #000;
-        color: #fff;
-        width: 24px;
-        height: 24px;
-        display: inline-block;
-        border: 1px solid #fff;
-        float: left;
-        border-radius: 50%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        font-size: 18px;
-        font-weight: 600;
-        float: left;
-    }
-
-    .eree {
-        padding-left: 0px;
-        padding-right: 0px;
-        width: auto;
-    }
-
-    .err2 {
-        padding: 0px;
-    }
-
-    .rer2 {
-        padding: 0px;
-    }
-
-    .ere3 {
-        padding: 0px;
-        width: auto;
-        float: right;
-    }
-
-    .topwil {
-        display: inline-block;
-        padding: 1px 6px;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .bck {
-        text-align: center;
-        background: #bfbebe;
-    }
-
-    .find #txtmob {
-        padding: 2px 0px !important;
-        height: auto !important;
-        margin-top: 2px;
-        margin-left: 6px !important;
-        width: 97%;
-    }
-
-    .ner {
-        width: 25px !important;
-        border: 1px solid #b1a6a638 !important;
-    }
-
-    .ner2 {
-        width: 25px !important;
-        border: 1px solid #b1a6a638 !important;
-    }
-
-    .nrr3 {
-        float: left;
-        position: relative;
-    }
-
-    .ner .fa.fa-calendar, .ner2 .fa.fa-calendar {
-        left: 5px;
-    }
-
-    .clk input {
-        padding-right: 0px;
-        padding-left: 20px !important;
-    }
-
-    .ckj .select2-selection.select2-selection--single {
-        border-radius: 0px;
-        height: 32px;
-    }
-
-    .cjk .select2-selection.select2-selection--single {
-        border-radius: 0px;
-        height: 32px;
-    }
-
-    .rer2 .btn.dropdown-toggle.btn-default::after {
-        content: "";
-        display: block;
-        border-color: #888 transparent transparent transparent;
-        border-style: solid;
-        border-width: 5px 4px 0 4px;
-        height: 0;
-        left: 88%;
-        margin-left: -4px;
-        margin-top: -2px;
-        position: absolute;
-        top: 50%;
-        width: 0;
-        right: 3px;
-    }
-
-    .rer2 button span {
-        color: #444;
-    }
-
-    .rer2 button {
-        border: 1px solid #b1a6a638 !important;
-    }
-
-    .rer2 .select2-container--default .select2-selection--single {
-        border: 1px solid #b1a6a638 !important;
-    }
-
-    .suc3 {
-        position: absolute;
-        top: 113px;
-        width: auto;
-        right: 13px;
-        z-index: 2;
-        background: #fff;
-    }
-
-        .suc3 span {
-            margin-left: 3px;
-        }
-
-        .suc3 span {
-            float: left;
-        }
-
-    .rrt .dropdown-menu, .r2t .dropdown-menu {
-        box-shadow: none;
-    }
-
-    .chnj td img {
-        height: 18px !important;
-        padding: 2px !important;
-    }
-
-    .chnj td p {
-        margin-bottom: 0px;
-    }
-
-    .nrch span {
-        margin: 0px !important;
-        float: left;
-    }
-
-    .nrch button {
-        margin: 0px !important;
-        float: left;
-        margin-right: 2px !important;
-        margin-left: 0px !important;
-        height: 20px;
-    }
-
-    .nrch [type="checkbox"] + label {
-        padding-left: 20px;
-        height: 20px;
-        margin-bottom: 0px;
-    }
-
-    .nrch [type="checkbox"].filled-in:not(:checked) + label::after {
-        border-color: var(--main-bg-lcolor);
-        border-radius: 0px;
-    }
-
-    .nrch span label {
-        padding-left: 20px;
-        height: 17px;
-        margin: 0px !important;
-        margin-right: 0px !important;
-    }
-
-    #ul li {
-        margin-right: -1px !important;
-    }
-
-    .nrch span label::after {
-        height: 18px !important;
-        width: 18px !important;
-        top: 0px !important;
-        border: 1px solid #c7c2c2 !important;
-        border-radius: 0px !important;
-        margin-top: 1px;
-    }
-
-    .nrch .fa.fa-angle-double-right {
-        border: 1px solid #c7c2c2;
-        padding: 2px 5px;
-        color: #c7c2c2;
-    }
-
-    .ppo p {
-        float: left;
-    }
-
-    .mmks {
-        max-width: 110px;
-        max-height: 27px;
-        position: relative;
-        padding: 0px;
-    }
-
-        .mmks button {
-            position: absolute;
-            right: -18px;
-            bottom: 2px;
-            border: 0px;
-            padding: 4px 2px
-        }
-
-            .mmks button span {
-                color: #fff !important;
-            }
-
-        .mmks input {
-            width: 100%;
-            height: 100%;
-            font-size: 12px;
-            box-shadow: none;
-        }
-
-    .ppo {
-        width: 136px;
-    }
-
-    .chnj td {
-        font-size: 13px;
-    }
-
-    .rrt .dropdown-menu ul li, .r2t .dropdown-menu ul li {
-        border-bottom: 1px dotted;
-    }
-
-    .for-select-new select {
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-    }
-
-    .for-select-new::before {
-        content: '';
-        border-bottom: 1px solid #555;
-        border-left: 1px solid #555;
-        width: 7px;
-        height: 7px;
-        display: block;
-        position: absolute;
-        z-index: 9;
-        right: 8px;
-        transform: rotate(-45deg);
-        top: 7px;
-    }
-
-    .for-select-new {
-        position: relative;
-    }
-
-    #loadingdiv {
-        width: 100%;
-        float: left;
-    }
-
-    .loadertablecssnew, .loadertablecssnew:before, .loadertablecssnew:after {
-        border-radius: 50%;
-        width: 2.5em;
-        height: 2.5em;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
-        -webkit-animation: load7 1.8s infinite ease-in-out;
-        animation: load7 1.8s infinite ease-in-out;
-    }
-
-    .loadertablecssnew {
-        color: var(--main-bg-lcolor);
-        font-size: 10px;
-        margin: 80px auto;
-        position: relative;
-        text-indent: -9999em;
-        -webkit-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        transform: translateZ(0);
-        -webkit-animation-delay: -0.16s;
-        animation-delay: -0.16s;
-    }
-
-        .loadertablecssnew:before, .loadertablecssnew:after {
-            content: '';
-            position: absolute;
-            top: 0;
-        }
-
-        .loadertablecssnew:before {
-            left: -3.5em;
-            -webkit-animation-delay: -0.32s;
-            animation-delay: -0.32s;
-        }
-
-        .loadertablecssnew:after {
-            left: 3.5em;
-        }
-
-    .loadertablecssnew {
-        margin: 0px auto;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-
-    @@-webkit-keyframes load7 {
-        0%, 80%, 100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-        }
-
-        40% {
-            box-shadow: 0 2.5em 0 0;
-        }
-    }
-
-    @@keyframes load7 {
-        0%, 80%, 100% {
-            box-shadow: 0 2.5em 0 -1.3em;
-        }
-
-        40% {
-            box-shadow: 0 2.5em 0 0;
-        }
-    }
-
-    .report-status {
-        width: 80%;
-        float: left;
-    }
-
-        .report-status label {
-            float: left;
-        }
-
-        .report-status input {
-            float: left;
-            font-size: 16px;
-            background-color: transparent !important;
-            font-weight: 800;
-            height: 17px !important;
-        }
-
-        .report-status .form-group {
-            width: 46%;
-            float: left;
-            margin: auto 2%;
-        }
-
-    .table-bordered tbody tr td, .table-bordered thead tr th {
-        padding: 10px 4px;
-    }
-
-        .table-bordered tbody tr td, .table-bordered tbody tr td span {
-            color: #555;
-        }
-
-    .for-new [type="checkbox"].filled-in:not(:checked) + label::after {
-        height: 18px;
-        width: 18px;
-        border: 1px solid var(--border-color);
-        border-radius: 0px;
-    }
-
-    .for-new [type="checkbox"].filled-in:checked + label::after {
-        height: 18px;
-        border-radius: 0px;
-        width: 18px;
-    }
-
-    .for-new [type="checkbox"].filled-in:checked + label::before {
-        border-radius: 0px;
-    }
-
-    .for-new-button {
-        height: 48px;
-        margin-left: 15px;
-        float: left;
-        border: 1px solid #ddd;
-        padding: 7px 10px;
-    }
-
-        .for-new-button button {
-            padding: 5px 15px;
-            margin: 0px 2px;
-        }
-
-    .s-b-pop-first {
-        width: 45%;
-        margin-right: 5%;
-        float: left;
-    }
-
-    .s-b-pop-second {
-        width: 50%;
-        float: right;
-    }
-
-    .s-b-pop-second-top {
-        float: left;
-        border: 1px solid #bbb;
-        padding: 4px;
-        width: 45%;
-        margin-right: 10%
-    }
-
-    .s-b-pop-second input, .s-b-pop-second select {
-        width: 100%;
-        height: 27px;
-        padding: 2px 10px;
-        -webkit-appearance: button;
-        font-size: 14 px;
-        border: 1px dotted #bbb;
-    }
-
-    .s-b-pop-second label {
-        font-size: 12px;
-        margin: 0px;
-    }
-
-    .s-b-pop-first fieldset {
-        border: 1px solid #bbb;
-        padding: 5px;
-        border-radius: 2px;
-        background: #fbd7175c;
-    }
-
-        .s-b-pop-first fieldset p {
-            margin-bottom: 3px;
-        }
-
-        .s-b-pop-first fieldset legend {
-            width: auto;
-            padding: 0px 10px;
-            border-bottom: 0px;
-            margin-left: 20px;
-            font-size: 14px;
-            margin-bottom: 0px;
-            background: #fff;
-            border: 1px solid #bbb;
-            border-radius: 2px;
-        }
-
-    .s-b-pop-second-button {
-        width: 45%;
-        float: left;
-        padding: 5px 10px;
-        border: 1px solid #bbb
-    }
-
-        .s-b-pop-second-button button.fullbodydycolorbg {
-            float: left !important;
-            color: #fff;
-            padding: 5px 20px;
-            border: 0px;
-            height: 43px;
-            font-size: 20px
-        }
-
-        .s-b-pop-second-button button[type="button"] {
-            float: right;
-            padding: 5px 20px;
-            font-size: 20px
-        }
-
-    .custom-icon-one {
-        position: relative;
-    }
-
-        .custom-icon-one::after {
-            content: '';
-            border-bottom: 1px solid #555;
-            border-left: 1px solid #555;
-            width: 8px;
-            height: 8px;
-            position: absolute;
-            transform: rotate(-45deg);
-            right: 10px;
-            top: 9px
-        }
-
-    table #trow tr::before {
-        display: table-cell;
-        counter-increment: rowNumber;
-        content: counter(rowNumber) ".";
-        text-align: left;
-        border-right: 1px solid #aaa4a4;
-        padding-left: 2px;
-    }
-
-    .newfourdesign-admin .btn:not(.btn-link):not(.btn-circle) {
-        border: 1px solid #eae8ea !important;
-        background: transparent;
-    }
-
-    .newfourdesign-admin .form-group .form-control {
-        border: 0px !important;
-    }
-
-    #custnav {
-        padding-top: 0px !important;
-    }
-
-    .newfourdesign-admin .kklo #custnav ul li a {
-        padding: 5px 1px;
-        padding-right: 1px;
-        font-size: 13px;
-        padding-right: 4px !important;
-    }
-
-    .newfourdesign-admin .white-l-search-nine.pdfexpoer-second input, .newfourdesign-admin .white-l-search-nine.pdfexpoer-second button {
-        font-size: 13px;
-    }
-
-    .newfourdesign-admin .col-md-1.ere3.re-treyop {
-        float: right;
-    }
-
-    .newfourdesign-admin .kklo #custnav ul li a.activee.navbar {
-        background: var(--fullbodybg-four) !important;
-    }
-
-    .newfourdesign-admin .btn-group.form-control {
-        background: transparent;
-    }
-
-    @@media only screen and (max-width:1300px) {
-        .ere3 {
-            top: -100px;
-        }
-
-        .col-md-4.rtrt, .col-md-2.find.find-addclass, .col-md-2.err2, .col-md-1.ere3 {
-            width: auto !important;
-            margin-right: 15px;
-        }
-    }
-
-    @@media only screen and (min-width:481px) and (max-width:992px) {
-        .col-md-2.err2.up-to-up {
-            width: 100% !important;
-            padding: 0 15px !important;
-        }
-
-        .up-to-up #custnav ul li {
-            width: 33%;
-        }
-
-        .responcive-fifty {
-            width: 49.5% !important;
-            float: left;
-            margin-right: 3px
-        }
-
-        .rtrt.responcive-full {
-            width: 100% !important;
-            float: left;
-        }
-
-        .clk.responcive-full, .responcive-full .sre input {
-            width: 99% !important;
-            padding: 0px 15px;
-        }
-
-        .responcive-full {
-            width: 100% !important;
-            padding: 0px 15px;
-        }
-
-            .responcive-full .nrr3 {
-                width: 100% !important;
-                padding-right: 5px;
-            }
-
-            .responcive-full .sre {
-                width: 50%;
-                float: left;
-                padding: 0px;
-                margin-top: 10px;
-            }
-
-        .ere3.re-treyop {
-            top: -55px !important;
-        }
-
-        .out-space {
-            padding: 0px 15px;
-        }
-
-        .col-md-12.ttuo.no-space-between {
-            margin: 0;
-        }
-
-        .no-space-between .find.find-addclass {
-            float: left;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .responcive-fifty .form-line {
-            padding-bottom: 0px !important;
-        }
-
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            position: static !important;
-        }
-    }
-
-
-
-    @@media only screen and (max-width:480px) {
-        .responcive-fifty {
-            width: 100% !important;
-            float: left !important;
-            margin: 2px 0 !important;
-        }
-
-        .err2 {
-            width: 100%;
-            margin-bottom: 0px;
-        }
-
-            .err2 .kklo #custnav #ul li {
-                float: left;
-                margin-right: 2px;
-            }
-
-        .responcive-fifty {
-            width: 42% !important;
-            margin-top: 0px;
-        }
-
-        .rer2 .col-md-1, .rer2 .col-md-2 {
-            width: 49% !important;
-            float: left;
-            padding: 0px !important;
-            margin-top: 0px !important;
-        }
-
-            .rer2 .col-md-2.ckj.rrt {
-                margin: 0px !important;
-            }
-
-            .rer2 .col-md-1 .form-line, .rer2 .col-md-2 .form-line {
-                padding-bottom: 0px !important;
-            }
-
-            .rer2 .col-md-2.r2t .form-group {
-                margin-bottom: 8px;
-            }
-
-            .rer2 .col-md-2.cjk.rrt {
-                width: 99% !important;
-            }
-
-        .rer2 {
-            padding: 0px !important;
-        }
-
-        .rtrt {
-            width: 100%;
-            float: left;
-            margin-top: 2px !important;
-        }
-
-            .rtrt .clk {
-                width: 95% !important;
-                padding-left: 12px !important;
-                margin-bottom: 2px;
-            }
-
-            .rtrt .col-md-2.sre {
-                padding-left: 12px !important;
-                width: 35% !important;
-            }
-
-                .rtrt .col-md-2.sre input {
-                    width: 100%;
-                }
-
-                .rtrt .col-md-2.sre i {
-                    left: 20% !important;
-                }
-
-        .ere3 {
-            width: 50% !important;
-            top: 251px;
-            position: absolute;
-        }
-
-        .ttuo {
-            margin-top: 10px;
-        }
-
-        .find {
-            width: 100% !important;
-            float: right;
-        }
-
-        .ttuo > .card {
-            margin-bottom: 5px;
-            overflow-x: scroll;
-            overflow-y: hidden;
-        }
-
-        .topwil {
-            font-size: 9px;
-        }
-
-        .find .col-md-9 {
-            float: right;
-            width: 84%;
-            padding: 0px;
-        }
-
-        .find .col-md-3 {
-            float: left;
-            padding: 0px;
-            width: 15%;
-        }
-
-        .suc3 {
-            width: 100% !important;
-            right: 10px !important;
-            top: 5px;
-        }
-
-            .suc3 button {
-                height: 32px !important;
-                background: #ddd !important;
-            }
-
-                .suc3 button p {
-                    padding: 0px 4px !important;
-                    line-height: 15px;
-                }
-
-                .suc3 button span {
-                    padding: 0px 0px !important;
-                }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .for-new-button {
-            padding: 12px 1px;
-            width: 50%;
-        }
-
-            .for-new-button button {
-                padding: 1px 2px;
-                margin: 0px 2px;
-                font-size: 12px;
-            }
-
-        .s-b-pop-first {
-            width: 100%;
-            margin-right: 0PX;
-        }
-
-        .s-b-pop-second {
-            width: 100%;
-        }
-
-        .s-b-pop-second-top {
-            width: 100%;
-            margin-right: 0px;
-            margin-top: 5px;
-        }
-
-        .s-b-pop-second-button {
-            width: 100%;
-            margin-top: 5px;
-        }
-
-            .s-b-pop-second-button button[type="button"] {
-                padding: 5px 14px;
-            }
-
-        #r-b-pop .modal-dialog, #f-b-pop .modal-dialog, #s-b-pop .modal-dialog {
-            top: 20px !important;
-        }
-
-        .mastetr222Modal .modal-dialog {
-            width: 95%;
-        }
-
-        .report-status {
-            width: 90%;
-        }
-
-            .report-status input {
-                font-size: 12px;
-            }
-
-        .col-md-2.err2.up-to-up {
-            width: 100% !important;
-        }
-    }
-
-    .Popupbox {
-        display: none;
-        width: 400px;
-        border: 1px solid #ccc;
-        position: absolute;
-        background: #f1f1f1;
-        left: 32%;
-        top: 102%;
-        padding: 30px;
-        border-radius: 4px;
-        z-index: 9;
-    }
-
-        .Popupbox input {
-            padding: 18px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            border-radius: 4px;
-        }
-
-    .firstbutton {
-        padding: 5px 20px;
-        border: none;
-        background: #ee837b;
-        color: white;
-        font-size: 18px;
-        float: left;
-    }
-
-    .secondbutton {
-        padding: 5px 20px;
-        border: none;
-        background: #ee837b;
-        color: white;
-        font-size: 18px;
-        float: right;
-    }
-
-    #showhide {
-        width: 100%;
-    }
-
-    .suc3 {
-        top: 72px;
-        right: 55px;
-        z-index: 99;
-        width: 166px !important;
-        position: absolute !important;
-    }
-
-    #showreport {
-        overflow-x: auto;
-    }
-
-
-    /*   New recponcvie     */
-    @@media only screen and (max-width:1367px) {
-
-        .rtrt {
-            width: auto;
-        }
-
-        .clk {
-            display: table;
-        }
-
-        .fa.fa-search.color-white-second {
-            left: 8px !important;
-        }
-    }
-
-    @@media only screen and (max-width:1300px) {
-
-        .col-md-2.sre.responcive-full {
-            padding: 0;
-            padding-left: 0px;
-        }
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:992px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-
-        .up-to-up #custnav ul li {
-            width: auto;
-        }
-
-        .responcive-fifty {
-            width: 117px !important;
-        }
-
-        .responcive-full {
-            width: 117px !important;
-            float: left;
-        }
-
-        .rtrt.responcive-full {
-            width: auto !important;
-            float: left;
-        }
-
-        .width_s {
-            width: 100% !important;
-            margin-top: 10px;
-        }
-
-        .sre.responcive-full {
-            width: 39px !important;
-            margin: 0px !important;
-        }
-
-        .clk.responcive-full {
-            width: 80% !important;
-            padding: 0px 0px;
-            padding-right: 15px;
-        }
-
-        .rtrt.responcive-full .row {
-            margin: 0px !important;
-            padding: 0px !important;
-        }
-
-        .out-space {
-            padding: 0px 0px;
-        }
-
-        .form-group {
-            margin-bottom: 0px;
-        }
-
-        .fa.fa-search.color-white-second {
-            left: 12px !important;
-        }
-    }
-
-    @@media only screen and (max-width:768px) {
-
-        .err2 {
-            width: 100%;
-        }
-
-        .responcive-fifty {
-            width: auto !important;
-            margin-top: 0;
-        }
-
-        .responcive-full {
-            width: auto !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-
-        #sidebar-open {
-            top: -2px;
-            left: -4px;
-        }
-
-        .responcive-fifty {
-            width: 50% !important;
-            float: left !important;
-            margin: 2px 0 !important;
-        }
-
-        .responcive-full {
-            width: 50% !important;
-            float: left;
-            margin: 2px 0 !important;
-        }
-
-        .col-md-2.ckj.rrt.responcive-fifty {
-            width: 100% !important;
-        }
-
-        .col-md-2.cjk.rrt.responcive-full .select2.select2-container.select2-container--default.select2-container--below.select2-container--focus {
-            width: 100% !important;
-        }
-
-        .rtrt.responcive-full {
-            margin: 0;
-        }
-
-        .sre.responcive-full {
-            margin: 2px 0 !important;
-        }
-    }
-
-
-
-    @@media only screen and (max-width:481px) {
-
-
-        .up-to-up #custnav ul li {
-            width: auto;
-        }
-
-        .responcive-fifty {
-            width: 117px !important;
-        }
-
-        .responcive-full {
-            width: 117px !important;
-            float: left;
-        }
-
-        .rtrt.responcive-full {
-            width: auto !important;
-            float: left;
-        }
-
-        .clk.responcive-full {
-            width: 80% !important;
-            padding: 0px 0px !important;
-            padding-right: 15px;
-        }
-
-        .out-space {
-            padding: 0px 0px;
-        }
-
-        .form-group {
-            margin-bottom: 0px;
-        }
-
-        .responcive-fifty {
-            width: 100% !important;
-            float: left !important;
-            margin: 2px 0 !important;
-        }
-
-        .responcive-full {
-            width: 100% !important;
-            float: left;
-            margin: 2px 0;
-        }
-
-        .col-md-2.r2t.responcive-fifty {
-            margin-bottom: 8px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .rtrt .col-md-2.sre {
-            padding-left: 3px !important;
-            width: auto !important;
-        }
-    }
-
-
-    @@media only screen and (max-width:400px) {
-
-        #all {
-            position: relative;
-            float: left;
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 3px;
-        }
-
-        .find.find-addclass {
-            position: absolute;
-            right: 0;
-        }
-
-        .card {
-            display: table;
-            height: auto !important;
-        }
-    }
-</style>
-
-<section class="content">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Prepaid & Utility</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Prepaid & Utility</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix page-header-third margin-bottom-third cardbackg-thirdclass onlymargin-third pageheader-third-respon" style="width:auto;float:left;">
-            <div class=" err2 up-to-up up-third-design">
-                <div style="">
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-page.css?v=16" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-settings-page saas-admin-report-page saas-operator-report-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-pan-toolbar-unified saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head">
+                <ol class="saas-acc-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Prepaid &amp; Utility Report</li>
+                </ol>
+
+                <div class="vm-opr-toolbar-lookup">
+                    @using (Html.BeginForm("Operator_report_new", "Home", FormMethod.Post, new { @class = "vm-opr-quick-search vm-opr-quick-search--toolbar vm-opr-consumer-search-form find find-addclass", data_search_url = Url.Action("_showRechargeReport", "Home") }))
+                    {
+                        <div class="vm-opr-quick-search__brand">
+                            <span class="vm-opr-quick-search__icon" aria-hidden="true"><i class="fas fa-mobile-alt"></i></span>
+                            <span class="vm-opr-quick-search__meta">
+                                <label class="vm-opr-quick-search__title" for="txtmob">Consumer lookup</label>
+                                <span class="vm-opr-quick-search__sub">Search last 30 days</span>
+                            </span>
+                        </div>
+                        <div class="vm-opr-quick-search__field">
+                            <i class="fas fa-phone vm-opr-quick-search__field-icon" aria-hidden="true"></i>
+                            @Html.TextBox("txtmob", "", new { @class = "form-control vm-opr-quick-search__input", @placeholder = "Enter mobile number", autocomplete = "off", id = "txtmob" })
+                        </div>
+                        <button type="submit" class="vm-opr-quick-search__btn" title="Search consumer">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <span>Search</span>
+                        </button>
+                    }
+                </div>
+
+                <div class="vm-opr-page-nav">
                     @Html.Partial("menuoperatorreport")
+                </div>
+            </div>
+
+                @if (hasPortStats)
+                {
+                <div class="vm-opr-utility-strip">
+                        <div id="all" class="vm-opr-port-chips">
+                            @{
+                                var oprPortIdx = 0;
+                            }
+                            @if (Model.srspending != null)
+                            {
+                                var oprCounts = Model.srspending1 != null ? Model.srspending1.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_Result>();
+                                foreach (var item in Model.srspending)
+                                {
+                                    var cntVal = oprCounts.Count > oprPortIdx ? oprCounts[oprPortIdx].cnt : null;
+                                    <button type="button" class="vm-opr-port-chip @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
+                                        <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
+                                        <span class="vm-opr-port-chip__count">@(cntVal.HasValue ? cntVal.Value : 0)</span>
+                                    </button>
+                                    oprPortIdx++;
+                                }
+                            }
+                            else if (Model.srspending_old != null)
+                            {
+                                var oprCountsOld = Model.srspending1_old != null ? Model.srspending1_old.ToList() : new List<Vastwebmulti.Models.SRS_pending_count_ALL_old_Result>();
+                                foreach (var item in Model.srspending_old)
+                                {
+                                    var cntVal = oprCountsOld.Count > oprPortIdx ? oprCountsOld[oprPortIdx].cnt : null;
+                                    <button type="button" class="vm-opr-port-chip @(item.portname == null ? "vm-opr-port-chip--nil" : "")" name="prtname" value="@(item.portname ?? "pen")" onclick="getval(this)">
+                                        <span class="vm-opr-port-chip__name">@(item.portname ?? "NILL COM")</span>
+                                        <span class="vm-opr-port-chip__count">@(cntVal.HasValue ? cntVal.Value : 0)</span>
+                                    </button>
+                                    oprPortIdx++;
+                                }
+                            }
+                        </div>
+                </div>
+                }
+
+            <div class="vm-rpt-filters-panel">
+            @using (Html.BeginForm("Operator_report_new", "Home", FormMethod.Post, new { id = "operatorReportForm", @class = "vm-opr-inline-form vm-rpt-filters-panel__form", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate, data_ddlusers = ViewBag.ddlusers, data_user = ViewBag.user, data_search_url = Url.Action("_showRechargeReport", "Home") }))
+            {
+
+                <div class="saas-acc-filter-bar vm-opr-filter-row vm-rpt-filters-panel__bar">
+
+                    <div class="vm-opr-field vm-opr-field--user">
+                        @Html.DropDownList("ddlusers", new List<SelectListItem>
+                    {
+                    new SelectListItem{ Text="All User",Value="Admin"},
+                    new SelectListItem{Text="Master",Value="Master"},
+                     new SelectListItem{Text="Distributor",Value="Dealer"},
+                    new SelectListItem{Text="Retailer",Value="Retailer"},
+                      new SelectListItem{Text="Api User",Value="API"},
+                      new SelectListItem{Text="Whitelabel",Value="WAdmin"},
+                     }, new { @class = "vm-opr-select form-control", @title = "User type" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-filter-extra" id="allmaster" style="display:none;">
+                        @Html.DropDownList("allmaster1", ViewBag.allmaster as SelectList, "All User", new { @class = "vm-opr-select form-control", @title = "Master" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-filter-extra" id="dlm" style="display:none;">
+                        @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All User", new { id = "alldealer", @class = "vm-opr-select form-control", @title = "Distributor" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-filter-extra" id="rem" style="display:none;">
+                        @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select form-control", @title = "Retailer" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-filter-extra" id="apiid" style="display:none;">
+                        @Html.DropDownList("API", ViewBag.API as SelectList, "Select API", new { id = "API", @class = "vm-opr-select form-control", @title = "API user" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-filter-extra" id="whitelabelid" style="display:none;">
+                        @Html.DropDownList("Whitelabel", ViewBag.whitelabel as SelectList, "Select Whitelabel", new { id = "Whitelabel", @class = "vm-opr-select form-control", @title = "Whitelabel" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-field--status">
+                        @Html.DropDownList("ddl_status", new List<SelectListItem>
+                                 {
+                                 new SelectListItem{ Text="ALL STATUS", Value="", Selected = string.IsNullOrEmpty(statusFilter)},
+                                 new SelectListItem{ Text="Pending", Value="req", Selected = statusFilter == "req"},
+                                 new SelectListItem{ Text="Success", Value="SUCCESS", Selected = string.Equals(statusFilter, "SUCCESS", StringComparison.OrdinalIgnoreCase)},
+                                 new SelectListItem{ Text="Failed", Value="FAILED", Selected = string.Equals(statusFilter, "FAILED", StringComparison.OrdinalIgnoreCase)}
+                                  }, new { id = "ddl_status", @class = "vm-opr-select form-control", @title = "Status" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-field--port">
+                        @Html.DropDownList("lapuno11", ViewBag.Lapuno as SelectList, "Select Port", new { id = "lapuno11", @class = "vm-opr-select form-control", @title = "Port" })
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-field--code" style="display:none;">
+                        <select id="txtcode" name="txtcode" class="vm-opr-select form-control" multiple="multiple" onchange="Check(this)" title="Operator codes"></select>
+                    </div>
+
+                    <div class="vm-opr-field vm-opr-field--operator">
+                        @Html.TextArea("txtdemo", "", new { @style = "display:none;" })
+                        @Html.DropDownList("Operator", ViewBag.Operatornew as IEnumerable<SelectListItem>, "All Operators", new { id = "Operator", @class = "vm-opr-select form-control", @title = "Operator" })
+                    </div>
+
+                    <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field">
+                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                        @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                    </div>
+                    <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field">
+                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                        @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                    </div>
+
+                    <button id="btntype_OLD" name="btntype" type="submit" value="Search" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search"><i class="fas fa-search" aria-hidden="true"></i><span>Search</span></button>
+
+                    <div class="vm-opr-filter-actions saas-acc-export-group saas-pan-export-group">
+                        <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport" title="Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                        <button type="button" class="saas-acc-btn saas-acc-btn--pdf saas-pan-export-btn" id="btnPDF" title="PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        <button type="button" class="vm-opr-icon-btn vm-opr-icon-btn--plus vm-opr-totals-btn" onclick="findtotal()" title="Totals"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                        <div class="vm-opr-field vm-opr-field--chkbal" id="chkbk" style="display:none">
+                            <button type="button" class="vm-opr-chkbal-btn" onclick="page11(this); return false;">CHK BAL</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+            </div>
+
+        </div>
+
+        <div class="vm-opr-totals-panel" style="display:none;">
+            <div class="vm-opr-totals-grid">
+                <div class="vm-opr-total-card vm-opr-total-card--pending">
+                    <span class="vm-opr-total-card__label">Pending</span>
+                    <strong class="vm-opr-total-card__value" id="Pendingtotal">—</strong>
+                </div>
+                <div class="vm-opr-total-card vm-opr-total-card--failed">
+                    <span class="vm-opr-total-card__label">Failed</span>
+                    <strong class="vm-opr-total-card__value" id="Failedtotal">—</strong>
+                </div>
+                <div class="vm-opr-total-card vm-opr-total-card--success">
+                    <span class="vm-opr-total-card__label">Success</span>
+                    <strong class="vm-opr-total-card__value" id="successtotal">—</strong>
                 </div>
             </div>
         </div>
 
+        <div class="vm-opr-main-card">
 
-        <div class="web-white-filter fil page-header-third" style="float: right; width: auto; height: 42px;">
-
-            <input type="button" id="btnExport" value="" style="margin-left: 0px; padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; background-image: url(../../images/reportimage/xls.png); background-repeat: no-repeat; background-position: 9px center; padding-left: 20px; width: 32px; float: left; " />
-            <input type="button" id="btnPDF" value="" style="margin-left: 3px; padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; background-image: url(../../images/reportimage/pdf.png); background-repeat: no-repeat; background-position: 9px center; padding-left: 19px; width: 32px; float: left;" />
-
-            <button class="white-success-button" style="margin-left: 3px; padding: 0px 6px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; font-size: 29px; float: left; " onclick="findtotal()"><span style=" position: relative; top: -6px;">+</span></button>
-
-
-
-            <div class="white-success suc3" style="display:none;">
-
-                <button class="btn  waves-effect" style="height:auto;padding: 0px;float:right;background:transparent;border:1px solid #ddd;border-left:0px;">
-                    <p class="btn-warning" style="margin-bottom:0px;padding:1px 4px;">Panding</p>
-                    <span id="Pendingtotal" style="font-size: 13px;padding:4px 0px;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
-                </button>
-                <button class="btn  waves-effect" style="height:auto;padding: 0px;float:right;background:transparent;border:1px solid #ddd;border-left:0px;">
-                    <p class="btn-danger" style="margin-bottom:0px;padding:1px 6px;">Failed</p>
-                    <span id="Failedtotal" style="font-size: 13px;padding:4px 0px;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                </button>
-                <button class="btn  waves-effect" style="height:auto;padding: 0px;float:right;background:transparent;border:1px solid #ddd;">
-                    <p class="btn-success" style="margin-bottom:0px;padding:1px 4px;">Success</p>
-                    <span id="successtotal" style="font-size: 13px;padding:4px 0px;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                </button>
-            </div>
-        </div>
-
-
-        <div class="row clearfix page-header-third margin-bottom-third cardbackg-thirdclass onlymargin-third pageheader-third-respon width_s" style="width: auto; float: right;">
-            <div class="eree out-space all-type-third all-type-third-responsive">
-                @using (Html.BeginForm("Operator_report_new", "Home", FormMethod.Post))
-                {
-
-                    <div class="card" style="margin-bottom: 0px;">
-
-
-
-                        <div class="col-md-1 rrt ttr responcive-fifty" style="padding: 0px;">
-                            <div class="form-line" style="width:100%;">
-
-                                @Html.DropDownList("ddlusers", new List<SelectListItem>
-    {
-    new SelectListItem{ Text="All User",Value="Admin"},
-    new SelectListItem{Text="Master",Value="Master"},
-     new SelectListItem{Text="Distributor",Value="Dealer"},
-    new SelectListItem{Text="Retailer",Value="Retailer"},
-      new SelectListItem{Text="Api User",Value="API"},
-      new SelectListItem{Text="Whitelabel",Value="WAdmin"},
-     }, new { @class = "selectpicker form-control", @style = "margin-top:4px; padding:0px;text-align:center;height:34px;", @onchange = "answers()" })
-
-                            </div>
-                        </div>
-                        <div class="col-md-1 responcive-fifty" style="display:none;width:150px;padding: 0px;padding-left: 3px;" id="allmaster">
-                            <div class="form-line" style="">
-                                @Html.DropDownList("allmaster1", ViewBag.allmaster as SelectList, "All User", new { @style = "margin-top:0px;padding:0px;height:34px;border: 1px solid #efe8e8;text-align:center;", @class = "selectpicker form-control" })
-                                <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-1 responcive-fifty" style="display:none;padding: 0px; width:auto;padding-left: 3px;" id="dlm">
-                            <div class="form-line" style="">
-                                @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All User", new { id = "alldealer", @class = "selectpicker form-control", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;width: 105px !important;" })
-                            </div>
-                        </div>
-                        <div class="col-md-2 responcive-fifty" style="display:none;width:auto;padding: 0px;padding-left: 3px;" id="rem">
-                            <div class="form-line" style="">
-                                @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                            </div>
-                        </div>
-                        <div class="col-md-2 responcive-fifty" style="display:none;width:auto;padding: 0px;padding-left: 3px;" id="apiid">
-                            <div class="form-line" style="">
-                                @Html.DropDownList("API", ViewBag.API as SelectList, "Select API", new { id = "API", @class = "selectpicker form-control", @style = "margin-top:0px;  padding:0px;text-align:center;height:34px;" })
-                            </div>
-                        </div>
-                        <div class="col-md-2 responcive-fifty" style="display:none;width:auto;padding: 0px;padding-left: 3px;" id="whitelabelid">
-                            <div class="form-line" style="">
-                                @Html.DropDownList("Whitelabel", ViewBag.whitelabel as SelectList, "Select Whitelabel", new { id = "Whitelabel", @class = "selectpicker form-control", @style = "margin-top:0px;  padding:0px;text-align:center;height:34px;" })
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 r2t responcive-fifty" style="padding: 0px;width:auto;padding-left: 3px;">
-                            <div class="form-group">
-                                <div>
-                                    @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                     {
-                                     new SelectListItem{ Text="ALL STATUS",Value=null},
-                                     new SelectListItem{Text="Pending",Value="req"},
-                                      new SelectListItem{Text="Success",Value="SUCCESS"},
-                                     new SelectListItem{Text="Failed",Value="FAILED"}
-                                      }, new { @class = "selectpicker form-control", @style = "height:32px;padding:0px;" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 ckj rrt responcive-fifty" style="padding: 0px; width:auto;padding-left: 3px;">
-                            @Html.DropDownList("lapuno11", ViewBag.Lapuno as SelectList, "Select Port", new { id = "lapuno11", @class = "form-control" })
-                        </div>
-                        <div class="col-md-2 cjk rrt responcive-full" style="padding: 0px;width:auto;padding-left: 3px;">
-                            @*@Html.ListBox("txtcode", Model.CountryListModel, new { @onchange = "Check(this)", @id = "txtcode", @style = "background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;height:32px;margin-top:0px;border:none;", @class = "form-control" })*@
-                            @Html.TextArea("txtdemo", "", new { @style = "display:none;" })
-                            @Html.DropDownList("Operator", ViewBag.Operatornew as IEnumerable<SelectListItem>, "All Operators", new { id = "Operator", @style = "display:none;margin-top:0px;padding:0px;height:32px;width:200px !important;", @class = "selectpicker form-control", data_live_search = "true" })
-                        </div>
-
-
-                        <div class="col-md-4 rtrt responcive-full" style="padding: 0px;padding-left: 3px;">
-                            <div class="row">
-                                <div class="col-md-10 clk responcive-full" style="padding-right:0px;">
-                                    <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                        <div class="custom-date-icon ner">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                        </div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 105px;" })
-                                        <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
-
-                                        </span>
-                                        <div class="nrr3">
-                                            <div class="custom-date-icon ner2">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; height:32px; width: 105px;" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 sre responcive-full" style="padding-left:3px;">
-                                    <center>
-                                        <div class="sponc11">
-
-                                            <i class="fa fa-search color-white-second" style=" position: absolute; top: 8px; left: 11px; color: var(--main-bg-lcolor); z-index: 1;" aria-hidden="true"></i>
-
-                                            @*<input id="btntype_TODAY" name="btntype" type="submit" value="TODAY" class="btn" style="margin-top:0px; height:32px;border:1px solid #c7c2c2;background:#dedddd;" />*@
-                                            <input id="btntype_OLD" name="btntype" type="submit" value="" class="btn input-back-second" style="padding-left: 20px; margin-top: 0px; height: 32px; border: none; background: transparent; z-index: 2; position: relative;" />
-                                        </div>
-                                    </center>
-                                </div>
-                                <div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1 responcive-full" id="chkbk" style="margin-top:0px;display:none">
-                            <center>
-                                <div class="">
-                                    <div class="">
-                                        <input type="button" value="CHK BAL" class="btn" onclick="page11(this); return false;" style="height:32px;border:1px solid #c7c2c2;background:#dedddd;" />
-                                    </div>
-
-                                </div>
-                            </center>
-                        </div>
-
+            <div class="vm-opr-table-panel" id="showreport">
+                <div class="vm-opr-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-list-alt" aria-hidden="true"></i>
+                        <span>Transaction report</span>
                     </div>
+                    <span class="vm-opr-table-panel__hint">Scroll horizontally for all columns</span>
+                </div>
+                <div class="showreport-class vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="example" class="table table-bordered table-striped table-hover third-design-table vm-opr-data-table">
+                            <thead>
+                                <tr>
+                                    <th>S.N</th>
+                                    <th>S/B</th>
+                                    <th>#&nbsp;User&nbsp;Information</th>
+                                    <th>Operator&nbsp;Name</th>
+                                    <th>Consumer&nbsp;/&nbsp;Circle</th>
+                                    <th>Net&nbsp;₹</th>
+                                    <th>Opening&nbsp;₹</th>
+                                    <th>Dr/Cr&nbsp;₹</th>
+                                    <th>Closing&nbsp;₹</th>
+                                    <th>Port/API</th>
+                                    <th>Charge/Comm</th>
+                                    <th>Api-R&nbsp;₹</th>
+                                    <th>Operator&nbsp;ID</th>
+                                    <th>Request&nbsp;Time</th>
+                                    <th>Response&nbsp;Time</th>
+                                    <th>##</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow" class="alin chnj">
+                                @if (reportRows.Any())
+                                {
+                                    @Html.Partial("_showRechargeReport", reportRows)
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="16" class="vm-opr-table-empty">
+                                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                                            <span>No transactions for selected filters. Adjust dates or search to load data.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
 
-                }
 
 
+                        </table>
+
+
+                        <div id="loadingdiv" class="vm-opr-table-loading" style="display:none;">
+                            <div class="loadertablecssnew">Loading...</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div><!-- vm-opr-main-card -->
+    </div>
 
-        </div>
-
-
-
-        <div class="col-md-12 ttuo no-space-between ttuo-responsive-third">
-            <div class="card" style="">
-
+    <!-- Transaction detail modal (inside page scope for grid CSS) -->
+    <div class="modal fade mastetr222Modal saas-admin-modal vm-opr-detail-modal" id="defaultModal222" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-lg vm-opr-detail-dialog" role="document">
+            <div id="loadredmodel" class="vm-opr-detail-loader loadingio-spinner-ripple-92ar2pfqk5j" style="display:none;">
+                <div class="ldio-zdyd6mf6t5"><div></div><div></div></div>
             </div>
+            <div id="userinfodiv" class="modal-content vm-opr-detail-content">
+                <div class="modal-header saas-admin-modal-header vm-opr-detail-header accent-sky">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon vm-opr-detail-header__icon"><i class="fas fa-receipt" aria-hidden="true"></i></div>
+                        <div class="vm-opr-detail-header__text">
+                            <h4 class="modal-title saas-admin-modal-title">Transaction details</h4>
+                            <p class="saas-admin-modal-sub">Wallet split, device info and API request logs</p>
+                            <span class="vm-opr-detail-txn-id" id="vmOprDetailTxnId"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body vm-opr-detail-body">
+                    @Html.Hidden("Idno")
+                    @Html.Hidden("ReceiverName")
 
-
-        </div>
-
-
-
-
-
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="">
-                    <div class="card page-header-third" style="display: grid; margin-top: 9px; float: left; width: 100%;">
-                        <div class="card" style="background-color:White; height:48px;float: left;">
-                            <div class="pull-left" style="border:1px solid #dddddd;background:white;height:47px;">
-                                <img src="~/images/Spiner.svg" style="height:105px;width:63px;margin-top:-30px;" />
+                    <div class="vm-opr-detail-panel vm-opr-detail-panel--overview">
+                        <div class="vm-opr-detail-panel__head">
+                            <i class="fas fa-circle-info" aria-hidden="true"></i>
+                            <span>Overview</span>
+                        </div>
+                        <div class="vm-opr-detail-panel__body vm-opr-detail-grid vm-opr-detail-grid--2">
+                            <div class="vm-opr-detail-field vm-opr-detail-field--status" id="vmOprDetailStatusField">
+                                <label><i class="fas fa-signal" aria-hidden="true"></i> Status</label>
+                                @Html.TextBox("Status", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--status", @readonly = "readonly" })
                             </div>
-                            <div id="all" class="pull-left">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" style="margin-top:0px;">
-                                        <tr>
-                                            @if (Model.srspending != null)
-                                            {
-                                                foreach (var item in Model.srspending)
-                                                {
-                                                    <td align="center" style="text-transform: uppercase;background-color:#bfbebe; padding: 0px 4px !important;">
-                                                        @if (item.portname != null)
-                                                        {
-                                                            <button id="prtname" name="prtname" value="@item.portname" style="color:white;font-size: 12px; background-color:transparent; border:none;" onclick='getval(this)'>@item.portname</button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <button id="prtname" name="prtname" value="pen" style="color:white; background-color:transparent; border:none; text-decoration:underline;" onclick='getval(this)'>NILL COM</button>
-                                                        }
-                                                    </td>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                foreach (var item in Model.srspending_old)
-                                                {
-                                                    <td align="center" style="text-transform: uppercase;background-color:#bfbebe; padding:0;">
-                                                        @if (item.portname != null)
-                                                        {
-                                                            <button id="prtname" name="prtname" value="@item.portname" style="color:white; background-color:transparent; border:none;" onclick='getval(this)'>@item.portname</button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <button id="prtname" name="prtname" value="pen" style="color:white; background-color:transparent; border:none; text-decoration:underline;" onclick='getval(this)'>NILL COM</button>
-                                                        }
-                                                    </td>
-                                                }
-                                            }
-                                        </tr>
-                                        <tr>
-                                            @if (Model.srspending1 != null)
-                                            {
-                                                foreach (var item in Model.srspending1)
-                                                {
-                                                    <td align="center" style="border:1px solid #dddddd;padding: 0px;">
-                                                        @Html.DisplayFor(modelItem => item.cnt)
-                                                    </td>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                foreach (var item in Model.srspending1_old)
-                                                {
-                                                    <td align="center" style="border:1px solid #dddddd;padding: 0px;">
-                                                        @Html.DisplayFor(modelItem => item.cnt)
-                                                    </td>
-                                                }
-                                            }
-                                        </tr>
-                                    </table>
-
-                                </div>
-
+                            <div class="vm-opr-detail-field">
+                                <label><i class="fas fa-mobile-alt" aria-hidden="true"></i> Consumer number</label>
+                                @Html.TextBox("ConsumerNo", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--mono", @readonly = "readonly" })
                             </div>
-                            <div class="col-md-2 find find-addclass" style="padding: 0px;margin-left: 10px;width: auto;">
-                                <div class="bck fullbodydycolorbg">
-                                    <span class="topwil fullbodydycolorbg"> - Will search in 30 days record only -</span>
-                                </div>
-                                <div class="input-group" style="border: 1px solid #dddddd;width:100%;border-top: 0px;">
-                                    @using (Html.BeginForm("Operator_report_new", "Home", FormMethod.Post))
-                                    {
-
-                                        <div class="col-md-9" style="float: left;">
-
-                                            @Html.TextBox("txtmob", "", new { @class = "form-control", @placeholder = " Search Consumer Number", @style = "height:30px;padding:0px;" })
-                                        </div>
-                                        <div class="col-md-3" style="float: right;">
-                                            <button type="submit" class="input-group-addon" style="padding: 0px;cursor: pointer;">
-                                                <i class="fa fa-search" style="margin-left: 3px;
-                                color: #999999;
-                                background: #dedddd;
-                                border-radius: 50%;
-                                padding: 5px;
-                                margin-right: 5px;font-size: 11px;margin-top: 3px;"></i>
-                                            </button>
-                                        </div>
-
-                                        @*<span class="input-group-addon" style="padding: 0px;;cursor: pointer;">
-
-                                            </span>*@
-                                    }
-                                </div>
+                            <div class="vm-opr-detail-field">
+                                <label><i class="fas fa-clock" aria-hidden="true"></i> Request time</label>
+                                @Html.TextBox("ReqTime", "", new { @class = "form-control vm-opr-detail-input", @readonly = "readonly" })
                             </div>
-                            <div class="for-new-button" style="display:none;">
-                                <div class="for-new-button-inner">
-                                    <button data-toggle="modal" onclick="checkboxinfo()" data-target="#s-b-pop" style="border: 1px solid #5cb85c;background:#94ca94;">Success</button>
-                                    <button data-toggle="modal" onclick="checkboxinfoF()" data-target="#f-b-pop" style="border: 1px solid #fb483a;background:#ee837b;">Failed</button>
-                                    <button data-toggle="modal" onclick="checkboxinfoR()" data-target="#r-b-pop" style="border: 1px solid #ff9600;background:#f0bd74;">Resend</button>
-                                </div>
-                            </div>
-                        </div><br />
-
-                        <div class="showreport-class" id="showreport" style="margin-top:2px;">
-                            <div class="table-responsive" style="">
-                                <table id="example" class="table table-bordered table-striped table-hover table-background-second third-design-table" style="width:100%;font-size:13px;">
-                                    <thead style="color:black;font-size: 13px;">
-                                        <tr>
-                                            <th>S.N</th>
-                                            <th>S/B</th>
-                                            <th>#&nbsp;User&nbsp;Information</th>
-                                            <th>Operator&nbsp;Name</th>
-                                            <th>Consumer&nbsp;/&nbsp;Circle</th>
-                                            <th>Net&nbsp;₹</th>
-                                            <th>Opening&nbsp;₹</th>
-                                            <th>Dr/Cr&nbsp;₹</th>
-                                            <th>Closing&nbsp;₹</th>
-                                            <th>Port/API</th>
-                                            <th>Charge/Comm</th>
-                                            <th>Api-R&nbsp;₹</th>
-                                            <th>Operator&nbsp;ID</th>
-                                            <th>Request&nbsp;Time</th>
-                                            <th>Response&nbsp;Time</th>
-                                            <th>##</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trow" class="alin chnj">
-                                        @{
-                                            Html.RenderAction("_showRechargeReport", "Home", new { Model = Model });
-                                        }
-                                    </tbody>
-
-
-
-                                </table>
-
-
-                                <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                    <div class="loadertablecssnew">Loading...</div>
-                                </div>
-
+                            <div class="vm-opr-detail-field">
+                                <label><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> Response time</label>
+                                @Html.TextBox("ResTime", "", new { @class = "form-control vm-opr-detail-input", @readonly = "readonly" })
                             </div>
                         </div>
                     </div>
+
+                    <div class="vm-opr-detail-panel vm-opr-detail-panel--wallet">
+                        <div class="vm-opr-detail-panel__head">
+                            <i class="fas fa-wallet" aria-hidden="true"></i>
+                            <span>Wallet &amp; commission</span>
+                        </div>
+                        <div class="vm-opr-detail-panel__body vm-opr-detail-grid vm-opr-detail-grid--2">
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money">
+                                <label>Distributor remain ₹</label>
+                                @Html.TextBox("dlmpost", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money">
+                                <label>Master remain ₹</label>
+                                @Html.TextBox("masterpost", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money">
+                                <label>User commission ₹</label>
+                                @Html.TextBox("UserComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money">
+                                <label>Distributor ₹</label>
+                                @Html.TextBox("dlmComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money">
+                                <label>Master ₹</label>
+                                @Html.TextBox("mdComm", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field vm-opr-detail-field--money vm-opr-detail-field--highlight">
+                                <label>My income ₹</label>
+                                @Html.TextBox("AdminIncome", "", new { @class = "form-control vm-opr-detail-input vm-opr-detail-input--money vm-opr-detail-input--highlight", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vm-opr-detail-panel">
+                        <div class="vm-opr-detail-panel__head">
+                            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                            <span>Device &amp; source</span>
+                        </div>
+                        <div class="vm-opr-detail-panel__body vm-opr-detail-grid vm-opr-detail-grid--2">
+                            <div class="vm-opr-detail-field">
+                                <label>IP address</label>
+                                @Html.TextBox("IP", "", new { @class = "form-control vm-opr-detail-input", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field">
+                                <label>MAC address</label>
+                                @Html.TextBox("MAC", "", new { @class = "form-control vm-opr-detail-input", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-opr-detail-field">
+                                <label>Request by</label>
+                                @Html.TextBox("ReqType", "", new { @class = "form-control vm-opr-detail-input", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vm-opr-detail-cta" id="status_check">
+                        <div class="vm-opr-detail-cta__text">
+                            <strong>Pending transaction?</strong>
+                            <span>Refresh live status from operator port</span>
+                        </div>
+                        <button type="button" id="status_button" onclick="status_check(this)" class="saas-admin-modal-btn saas-admin-modal-btn--success vm-opr-status-check-btn">
+                            <i class="fas fa-arrows-rotate" aria-hidden="true"></i> Check live status
+                        </button>
+                    </div>
+
+                    <div class="vm-opr-detail-panel vm-opr-detail-panel--logs">
+                        <div class="vm-opr-detail-panel__head vm-opr-detail-panel__head--dark">
+                            <i class="fas fa-terminal" aria-hidden="true"></i>
+                            <span>API logs</span>
+                        </div>
+                        <div class="vm-opr-detail-panel__body vm-opr-detail-logs vm-opr-detail-grid vm-opr-detail-grid--2">
+                            <div class="vm-opr-detail-log">
+                                <label>Request URL</label>
+                                @Html.TextArea("RequestUrl", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                            <div class="vm-opr-detail-log">
+                                <label>Recharge response</label>
+                                @Html.TextArea("Response", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                            <div class="vm-opr-detail-log">
+                                <label>CallBack</label>
+                                @Html.TextArea("CallBack", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                            <div class="vm-opr-detail-log">
+                                <label>API request</label>
+                                @Html.TextArea("APIRequest", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                            <div class="vm-opr-detail-log">
+                                <label>API response</label>
+                                @Html.TextArea("APIResponse", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                            <div class="vm-opr-detail-log">
+                                <label>API callback</label>
+                                @Html.TextArea("APICallBack", "", new { @class = "form-control vm-opr-detail-textarea", @readonly = "readonly", rows = "3" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer saas-admin-modal-footer vm-opr-detail-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-
 </section>
 
 
 <!--Refund Model-->
-<div class="modal fade mastetr222Modal " id="defaultModal1" tabindex="-1" role="dialog" style="overflow-y: hidden;">
+<div class="modal fade mastetr222Modal saas-admin-modal" id="defaultModal1" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;overflow-y:hidden;">
     <div class="modal-dialog" role="document" style="min-height:auto;">
         <div class="modal-content">
-            <div class="modal-header" style="border-bottom:1px solid #ece7e7;background-color:whitesmoke;">
-                <h4 class="modal-title" id="defaultModalLabel" style="color:#100f0fa8;">Manualy Refund</h4>
+            <div class="modal-header saas-admin-modal-header accent-danger">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title" id="defaultModalLabel">Manual refund / failed</h4>
+                        <p class="saas-admin-modal-sub">Select reason and confirm transaction failure</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <div class="body">
@@ -1787,220 +461,36 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer" style="margin-bottom:0px;">
-
-                        <button type="button" class="btn bg-grey waves-effect" style="color:#555;" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn  waves-effect fullbodydycolorbg" style="padding: 5px 10px !important;color: #fff !important;" onclick="Failed()">Click To Failed</button>
+                    <div class="modal-footer saas-admin-modal-footer" style="margin-bottom:0px;">
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
+                        <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--danger" onclick="Failed()">Mark as failed</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!--For Right Popup -->
-<div class="modal mastetr222Modal" id="defaultModal222" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div id="loadredmodel" style="display:none;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-            <div class="ldio-zdyd6mf6t5">
-                <div></div><div></div>
-            </div>
-        </div>
-        <div id="userinfodiv" class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left">
-                <div class="modal-back width100 float-left">
-                    @Html.Hidden("Idno")
-                    <div class="report-status">
-                        <div class="form-group" style="border-right: 3px solid #555;">
-
-                            @Html.TextBox("Status", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                        </div>
-                        <div class="form-group">
-
-                            @Html.TextBox("ConsumerNo", "", new { @class = "form-control", @style = "text-transform:uppercase;text-align:right;", @readonly = "readonly" })
-                        </div>
-
-                    </div>
-                    <button type="button" class="btn waves-effect" data-dismiss="modal" style="padding: 0px;background:transparent;">
-                        <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left">
-
-                <div class="float-left width100">
-
-                    <form class="first-form">
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Reqest Time</label>
-                                    @Html.TextBox("ReqTime", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Response Time</label>
-                                    @Html.TextBox("ResTime", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor Remain &#8377;</label>
-                                    @Html.TextBox("dlmpost", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Master Remain &#8377;</label>
-                                    @Html.TextBox("masterpost", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>User &#8377;</label>
-                                    @Html.TextBox("UserComm", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor &#8377;</label>
-                                    @Html.TextBox("dlmComm", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Master &#8377;</label>
-                                    @Html.TextBox("mdComm", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>My &#8377;</label>
-                                    @Html.TextBox("AdminIncome", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                        </div><!--.row-->
-
-                        <div class="row">
-
-                            <div class="col-md-5 col-sm-5 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>IP Address</label>
-                                    @Html.TextBox("IP", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>MAC Address</label>
-                                    @Html.TextBox("MAC", "", new { @class = "form-control", @readonly = "readonly" })
-
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Request By</label>
-                                    @Html.TextBox("ReqType", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row" id="status_check">
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Status Check</label>
-                                    <button type="button" id="status_button" onclick="status_check(this)" class="btn btn-default">Status Check</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Request Url</label>
-                                    @Html.TextArea("RequestUrl", "", new { @class = "form-control", @style = "height:115px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Recharge Response</label>
-                                    @Html.TextArea("Response", "", new { @class = "form-control", @style = "height:80px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>CallBack</label>
-                                    @Html.TextArea("CallBack", "", new { @class = "form-control", @style = "height:50px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>API Request</label>
-                                    @Html.TextArea("APIRequest", "", new { @class = "form-control", @style = "height:80px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>API Response</label>
-                                    @Html.TextArea("APIResponse", "", new { @class = "form-control", @style = "height:50px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>API CallBack</label>
-                                    @Html.TextArea("APICallBack", "", new { @class = "form-control", @style = "height:50px;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                    </form>
-
-                </div>
-            </div><!--.modal-body-->
-
-
-        </div>
-
     </div>
 </div>
 
 
 <!--for s/b popup-->
-<div class="modal fade mastetr222Modal in" id="s-b-pop" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 88%;top: 120px;right: 14px;">
+<div class="modal fade mastetr222Modal saas-admin-modal" id="s-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-
-            <div class="modal-header" style="padding-bottom: 0px;border-bottom: 0px !important;background:#fff;">
+            <div class="modal-header saas-admin-modal-header accent-emerald">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="saas-admin-modal-title">Bulk success</h4>
+                        <p class="saas-admin-modal-sub">Mark selected transactions as success</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="vm-opr-bulk-panel">
                 <div class="s-b-pop-first">
                     <fieldset>
-                        <p>Failed transactions can only Success. Transaction history shown in report  <b>fail > Success</b>.</p>
+                        <p>Failed transactions can only Success. Transaction history shown in report  <b>fail &gt; Success</b>.</p>
                         <p>Pending transactions can success or fail. Transaction history shown in report  <b>success</b> or <b>fail</b>.</p>
                     </fieldset>
                 </div>
@@ -2010,27 +500,12 @@
                         <input id="hiddenid" type="hidden" />
                         <input id="optidsuccess" type="text" placeholder="Enter" />
                     </div>
-                    @*<div class="s-b-pop-second-top" style="display:none;">
-                            <label>Select Reason</label>
-                            <div class="custom-icon-one">
-                                <select>
-                                    <option>dsfcds</option>
-                                    <option>dsfcds</option>
-                                    <option>dsfcds</option>
-                                </select>
-                            </div>
-                        </div>*@
-                    @*<div class="s-b-pop-second-top" style="display:none;">
-                        <h4 style="font-size: 19px;font-weight: 800;">Please verify first and resend carefully</h4>
-                        </div>*@
                     <div class="s-b-pop-second-button">
-                        <button type="button" onclick="successall()" class="fullbodydycolorbg" style="background:#94ca94 !important;">Go To Success</button>
-                        <button type="button" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="successall()" class="saas-admin-modal-btn saas-admin-modal-btn--success">Go To Success</button>
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
-            </div>
-            <div class="modal-body">
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -2051,14 +526,24 @@
         </div>
     </div>
 </div>
-<div class="modal fade mastetr222Modal in" id="f-b-pop" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 88%;top: 120px;right: 14px;">
+<div class="modal fade mastetr222Modal saas-admin-modal" id="f-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-
-            <div class="modal-header" style="padding-bottom: 0px;border-bottom: 0px !important;background:#fff;">
+            <div class="modal-header saas-admin-modal-header accent-danger">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-times-circle" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="saas-admin-modal-title">Bulk failed</h4>
+                        <p class="saas-admin-modal-sub">Mark selected transactions as failed</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="vm-opr-bulk-panel">
                 <div class="s-b-pop-first">
                     <fieldset>
-                        <p>Successful transactions can only fail. Transaction history shown in report <b>success > fail</b>.</p>
+                        <p>Successful transactions can only fail. Transaction history shown in report <b>success &gt; fail</b>.</p>
                         <p>Pending transactions can success or fail. Transaction history shown in report  <b>success</b> or <b>fail</b>.</p>
                     </fieldset>
                 </div>
@@ -2103,23 +588,21 @@
                         @if (@ViewBag.checkfailedstatus)
                         {
 
-                            <button type="button" id="showpopupbox" class="fullbodydycolorbg" onclick="sendotp()" style="background:#ee837b !important;">Go To Failed</button>
-                            <button id="closepopupbox" type="button" data-dismiss="modal">Close</button>
+                            <button type="button" id="showpopupbox" class="saas-admin-modal-btn saas-admin-modal-btn--danger" onclick="sendotp()">Go To Failed</button>
+                            <button id="closepopupbox" type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
 
                         }
                         else
                         {
-                            <button type="button" onclick="Failedall('Without')" class="fullbodydycolorbg" style="background:#ee837b !important;">Go To Failed</button>
-                            <button type="button" data-dismiss="modal">Close</button>
+                            <button type="button" onclick="Failedall('Without')" class="saas-admin-modal-btn saas-admin-modal-btn--danger">Go To Failed</button>
+                            <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
                         }
 
                     </div>
                     <span id="txterrormsg" style="color:red;"></span>
 
                 </div>
-
-            </div>
-            <div class="modal-body">
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -2140,36 +623,35 @@
         </div>
     </div>
 </div>
-<div class="modal fade mastetr222Modal in" id="r-b-pop" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 88%;top: 120px;right: 14px;">
+<div class="modal fade mastetr222Modal saas-admin-modal" id="r-b-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-
-            <div class="modal-header" style="padding-bottom: 0px;border-bottom: 0px !important;background:#fff;">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-redo" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="saas-admin-modal-title">Bulk resend</h4>
+                        <p class="saas-admin-modal-sub">Resend selected pending transactions</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="vm-opr-bulk-panel">
                 <div class="s-b-pop-first">
                     <fieldset>
-
                         <p>Verify selected amount entries very well, aggregated transactions are more risky.</p>
-
                         <p>Resend process applicable only for the pending transactions. history showing in the live report.</p>
                     </fieldset>
                 </div>
                 <div class="s-b-pop-second">
-
-
                     <input id="hiddenidR" type="hidden" />
-
-
-                    @*<div class="s-b-pop-second-top" style="display:none;">
-                        <h4 style="font-size: 19px;font-weight: 800;">Please verify first and resend carefully</h4>
-                        </div>*@
                     <div class="s-b-pop-second-button" style="float:right;">
-                        <button type="button" onclick="Resendall()" class="fullbodydycolorbg" style="background:#f0bd74 !important;">Go To Resend</button>
-                        <button type="button" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="Resendall()" class="saas-admin-modal-btn saas-admin-modal-btn--warning">Go To Resend</button>
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
-            </div>
-            <div class="modal-body">
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -2211,19 +693,7 @@
 <script>
     //$(".for-new [type='checkbox']").change(function () {
     function functionch() {
-        var count = 0;
-        $.each($("input[name='datavalue']:checked"), function () {
-            count++;
-        });
-        if (count > 0) {
-            $('.find-addclass').hide();
-            $('.for-new-button').show();
-        }
-
-        else {
-            $('.find-addclass').show();
-            $('.for-new-button').hide();
-        }
+        /* Checkbox change — consumer lookup always stays visible */
     }
     // alert(count);
     //alert("gg");
@@ -2324,7 +794,6 @@
         var int = 1;
         var markup = "";
         $.each($("input[name='datavalue']:checked"), function () {
-            debugger;
             var val = $(this).val();
             console.log(val);
             var split = val.split("-");
@@ -2499,31 +968,6 @@
 </script>
 
 
-<script>
-    $(document).ready(function () {
-        var usertype = '@ViewBag.ddlusers';
-        var userid = '@ViewBag.user';
-        $('#ddlusers').val(usertype);
-        answers();
-        if (usertype == "Master") {
-            $('#allmaster1').val(userid);
-        }
-        else     if (usertype == "Dealer") {
-            $('#alldealer').val(userid);
-        }
-         else     if (usertype == "Retailer") {
-            $('#allretailer').val(userid);
-        }
-          else     if (usertype == "API") {
-            $('#API').val(userid);
-        }
-          else     if (usertype == "WAdmin") {
-            $('#Whitelabel').val(userid);
-        }
-    });
-</script>
-
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 <!-- Custom Js -->
 <script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/AdminDesign/js/demo.js"></script>
@@ -2539,24 +983,6 @@
 <script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
 <script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
 <script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-
-
-
-
-
-<script>
-    $('#lapuno11').select2();
-    $('#Operator').select2();
-    $('#allmaster1').select2();
-    $('#alldealer').select2();
-    $('#allretailer').select2();
-    $('#API').select2();
-    $('#Whitelabel').select2();
-
-</script>
 
 <script>
     function cancel(e) {
@@ -2593,31 +1019,55 @@
 </script>
 
 <script>
-    var txtmob = $('#txtmob').val();
-    var Operator = $('#Operator').val();
-    var txtdemo = $('#txtdemo').val();
-    var lapuno11 = $('#lapuno11').val();
-    var ddl_status = $('#ddl_status').val();
-    var Whitelabel = $('#Whitelabel').val();
-    var API = $('#API').val();
-    var allretailer = $('#allretailer').val();
-    var alldealer = $('#alldealer').val();
-    var allmaster1 = $('#allmaster1').val();
-    var ddlusers = $('#ddlusers').val();
+        (function dedupeOprEmptyRows() {
+            var $rows = $('#trow .vm-opr-table-empty-row');
+            if ($rows.length > 1) {
+                $rows.slice(1).remove();
+            }
+        })();
 
         var pageindex = 2;
-        var NoMoredata = false;
+        var NoMoredata = $('#trow .vm-opr-table-empty-row').length > 0;
         var inProgress = false;
-    $(window).scroll(function () {
+
+        window.vmOprOnSearchComplete = function (resp) {
+            pageindex = 2;
+            NoMoredata = $('#trow .vm-opr-table-empty-row').length > 0 || !!(resp && resp.NoMoredata);
+            inProgress = false;
+            $('#loadingdiv').hide();
+        };
+    $(window).off('scroll.vmOprReport').on('scroll.vmOprReport', function () {
         if ($(window).scrollTop() > Number($("#example").height()) / 4 && !NoMoredata && !inProgress) {
                 inProgress = true;
                 $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll","Home")",
-                    { "pageindex": pageindex, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val(), txtmob: txtmob, ddl_status: ddl_status, lapuno11: lapuno11, Operator: Operator, ddlusers: ddlusers, allmaster1: allmaster1, alldealer: alldealer, allretailer: allretailer, Whitelabel: Whitelabel, API: API, txtdemo: txtdemo},
-                    function (data) {
+                var scrollPayload = typeof window.vmOprGetFilterPayload === 'function'
+                    ? window.vmOprGetFilterPayload()
+                    : {};
+                scrollPayload.pageindex = pageindex;
+                scrollPayload.txtdemo = $('#txtdemo').val() || scrollPayload.txtdemo || '';
+
+                $.ajax({
+                    url: "@Url.Action("InfiniteScroll","Home")",
+                    type: "POST",
+                    dataType: "json",
+                    data: scrollPayload
+                }).done(function (data) {
                         pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#trow").append(data.HTMLString);
+                        if (data) {
+                            if (data.NoMoredata !== undefined) {
+                                NoMoredata = data.NoMoredata;
+                            } else if (data.noMoredata !== undefined) {
+                                NoMoredata = data.noMoredata;
+                            }
+                        }
+                        var html = data && (data.HTMLString || data.htmlString) ? String(data.HTMLString || data.htmlString) : '';
+                        if (html && html.indexOf('vm-opr-table-empty-row') === -1) {
+                            $('#trow .vm-opr-table-empty-row').remove();
+                            $("#trow").append(html);
+                        }
+                        $("#loadingdiv").hide();
+                        inProgress = false;
+                    }).fail(function () {
                         $("#loadingdiv").hide();
                         inProgress = false;
                     });
@@ -2668,10 +1118,9 @@
                     },
                     complete: function () {
                         Hide();
-                    },
+                    }
 
                 });
-        window.location.reload();
         });
 </script>
 
@@ -2807,11 +1256,14 @@
                     mdtblHtml += "<td><button data-toggle='modal' data-target='#defaultModal222' onclick='ActionBtn("+b.idno+")' style='color:black;background:transparent;border:none;margin-top:0px !important;'>";
                     mdtblHtml += "<img src='../../ashok-images/rightaeps.svg' style='border: 2px solid var(--border-color);padding: 3px 5px;font-size: 10px;height:20px !important;vertical-align: baseline;'>";
                     mdtblHtml += "</button></td>";
-                    "</tr> ";
+                    mdtblHtml += "</tr>";
 
                     i++;
                 });
                 $('#example > tbody').html(mdtblHtml);
+                if (typeof window.vmOprEnhanceTable === 'function') {
+                    window.vmOprEnhanceTable();
+                }
 
                 //******************* End Dynamic table **************************
 
@@ -2869,7 +1321,7 @@
                             url: '@Url.Action("show_Operator_report_new1", "Home")',
                             type: 'GET',
                             dataType: "html",
-                            data: { prtname: portno, type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+                            data: { prtname: ($('#lapuno11').val() || ''), type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
                             success: function (data) {
 
                                 //$('#showreport').html(data);
@@ -2917,7 +1369,7 @@
                             url: '@Url.Action("show_Operator_report_new1", "Home")',
                             type: 'GET',
                             dataType: "html",
-                            data: { prtname: portno, type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+                            data: { prtname: ($('#lapuno11').val() || ''), type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
                             success: function (data) {
                                 //$('#showreport').html(data);
                                 //reloadPageeee('live');
@@ -3025,7 +1477,7 @@
                             url: '@Url.Action("show_Operator_report_new1", "Home")',
                             type: 'GET',
                             dataType: "html",
-                            data: { prtname: portno, type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
+                            data: { prtname: ($('#lapuno11').val() || ''), type: '', txt_frm_date: txt_frm_date, txt_to_date: txt_to_date },
                             success: function (data) {
 
                                 //$('#showreport').html(data);
@@ -3051,15 +1503,8 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#operatorReportForm');
             }
         });
 </script>
@@ -3095,9 +1540,8 @@
              var chk = $('#lapuno11').val();
              if (chk != "") {
                  if ((chk.indexOf("COM") !== -1)||(chk.indexOf("APP") !== -1) || chk == "DISH"  || chk == "TSSKY" || chk == "VID") {
-                     $('#txtcode').show();
-                     $('#Operator').hide();
-                     $("select#Operator").prop('selectedIndex', 0);
+                     if (window.vmOprShowCodeMode) { vmOprShowCodeMode(); }
+                     if (window.vmOprSetSelectIndex) { vmOprSetSelectIndex('Operator', 0); } else { $("select#Operator").prop('selectedIndex', 0); }
                      var url = '@Url.Action("service", "Home")';
                      $.ajax({
                          url: url,
@@ -3122,8 +1566,7 @@
                      });
                  }
                  else {
-                     $('#txtcode').hide();
-                     $('#Operator').show();
+                     if (window.vmOprShowOperatorMode) { vmOprShowOperatorMode(); }
                      jQuery('#getfile').css("display", "none")
                      jQuery('#chkbk').css("display", "none")
                  }
@@ -3135,9 +1578,8 @@
          $('#lapuno11').change(function () {
              var chk = $('#lapuno11').val();
              if ((chk.indexOf("COM") !== -1) || (chk.indexOf("APP") !== -1) || chk == "DISH" ||  chk == "TSSKY" || chk == "VID") {
-                 $('#txtcode').show();
-                 $('#Operator').hide();
-                 $("select#Operator").prop('selectedIndex', 0);
+                 if (window.vmOprShowCodeMode) { vmOprShowCodeMode(); }
+                 if (window.vmOprSetSelectIndex) { vmOprSetSelectIndex('Operator', 0); } else { $("select#Operator").prop('selectedIndex', 0); }
                  var url = '@Url.Action("service", "Home")';
                  $.ajax({
                      url: url,
@@ -3174,7 +1616,7 @@
                              items += district.Text + '\n';
                              items += "<option value='" + district.Value + "'>" + district.Text + "</option>";
                          });
-                         $('#txtcode').html(items);
+                         if (window.vmOprUpdateTxtcodeOptions) { vmOprUpdateTxtcodeOptions(items); }
 
                      },
                      error: function (reponse) {
@@ -3183,8 +1625,7 @@
                  });
              }
              else {
-                 $('#txtcode').hide();
-                 $('#Operator').show();
+                 if (window.vmOprShowOperatorMode) { vmOprShowOperatorMode(); }
                  jQuery('#getfile').css("display", "none")
                  jQuery('#chkbk').css("display", "none")
              }
@@ -3194,13 +1635,11 @@
                 var chk = $('#lapuno11').val();
          if (chk != "") {
              if ((chk.indexOf("COM") !== -1) || (chk.indexOf("APP") !== -1) || (chk.indexOf("RCH") !== -1) || chk == "DISH" ||  chk == "TSSKY" || chk == "VID") {
-                 $('#txtcode').show();
-                 $('#Operator').hide();
+                 if (window.vmOprShowCodeMode) { vmOprShowCodeMode(); }
              }
              else {
 
-                 $('#txtcode').hide();
-                 $('#Operator').show();
+                 if (window.vmOprShowOperatorMode) { vmOprShowOperatorMode(); }
              }
          }
          if (chk != "") {
@@ -3218,7 +1657,7 @@
                          items += district.Text + '\n';
                          items += "<option value='" + district.Value + "'>" + district.Text + "</option>";
                      });
-                     $('#txtcode').html(items);
+                     if (window.vmOprUpdateTxtcodeOptions) { vmOprUpdateTxtcodeOptions(items); }
 
                  },
                  error: function (reponse) {
@@ -3345,15 +1784,16 @@ url,
     });
 </script>
 <script>
-
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-
-
-</script>
-<script>
     function findtotal() {
+        var $panel = $('.vm-opr-totals-panel');
+        var $btn = $('.vm-opr-totals-btn');
+        if ($panel.hasClass('is-open')) {
+            $panel.removeClass('is-open').hide();
+            $btn.removeClass('is-active').attr('title', 'Totals');
+            return;
+        }
+        $panel.addClass('is-open').show();
+        $btn.addClass('is-active').attr('title', 'Hide totals');
          var txt_frm_date = $('#txt_frm_date').val();
          var txt_to_date = $('#txt_to_date').val();
          var ddl_status = $('#ddl_status').val();
@@ -3475,6 +1915,9 @@ url,
             document.getElementById("allmaster1").selectedIndex = "0";
             document.getElementById("Whitelabel").selectedIndex = "0";
         }
+        if (window.vmOprAfterAnswers) {
+            vmOprAfterAnswers();
+        }
     }
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -3498,6 +1941,19 @@ url,
             success: function (ResponseRch) {
 
                 $('#Idno').val(ResponseRch[0].idno)
+                $('#vmOprDetailTxnId').text('Transaction #' + ResponseRch[0].idno)
+                var $statusField = $('#vmOprDetailStatusField');
+                $statusField.removeClass('is-pending is-success is-failed is-refund');
+                var st = (ResponseRch[0].rstatus || '').toUpperCase();
+                if (st.indexOf('REQUEST') >= 0 || st === 'PENDING') {
+                    $statusField.addClass('is-pending');
+                } else if (st.indexOf('SUCCESS') >= 0) {
+                    $statusField.addClass('is-success');
+                } else if (st.indexOf('FAILED') >= 0) {
+                    $statusField.addClass('is-failed');
+                } else if (st.indexOf('REFUND') >= 0 || st === 'RESEND') {
+                    $statusField.addClass('is-refund');
+                }
                 if (ResponseRch[0].rstatus == "Request Send") {
                     $('#status_check').show();
                 }
@@ -3576,13 +2032,13 @@ url,
 
 <script>
     function Edit_OPT(id) {
-        var btn1 = "subTblshowEdit" + id;
-        var btn2 = "subTblhideEdit" + id;
-        var btn3 = "subTbl" + id;
+        var showId = "subTblshowEdit" + id;
+        var hideId = "subTblhideEdit" + id;
+        var penBtnId = "subTbl" + id;
 
-        $('#' + btn1).css("display", "none");
-        $('#' + btn2).css("display", "block");
-        $('#' + btn3).css("display", "none");
+        $('#' + showId).addClass('is-hidden');
+        $('#' + hideId).addClass('is-editing');
+        $('#' + penBtnId).closest('.pen').addClass('is-hidden');
     }
 
     function UpdateOptId(id) {
@@ -3612,20 +2068,7 @@ url,
 
 
 
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-</script>
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-report-datepicker.js"></script>
+<script src="~/MainFrontDesign/js/admin-operator-report-nav.js?v=2"></script>
+<script src="~/MainFrontDesign/js/admin-operator-report.js?v=15"></script>

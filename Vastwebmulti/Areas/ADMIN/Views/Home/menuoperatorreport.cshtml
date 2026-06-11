@@ -1,74 +1,32 @@
-﻿<style>
-    #ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        /*background-color: #e91e63;*/
-    }
+﻿<nav class="vm-opr-nav vm-opr-nav--page" id="vmOprNav" aria-label="Recharge report navigation">
 
-        #ul li {
-            float: left;
-           margin-right:2px;
-        }
+    <a class="vm-opr-nav__link" href="@Url.Action("Operator_report_new", "Home")" data-vm-opr-key="live">
 
-            #ul li a {
-                display: block;
-                text-align: center;
-                padding: 5px 5px;
-                text-decoration: none;
-                border: 1px solid #b1a6a638;
-                position: initial;
-            }
+        <i class="fas fa-broadcast-tower" aria-hidden="true"></i>
 
-                #ul li a:hover:not(.activee) {
-                    background-color: #FFC107;
-                    color: black;
-                    border: 1px solid #b1a6a6;
-                }
+        <span>Live</span>
 
-    .activee {
-        /*background-color: #000000;*/
-        color: white;
-        margin-bottom:0px;
-    }
+    </a>
 
-    .bartu a img {
-    width: 12px;
-    float:none;
-    margin-top: -2px;
-}
-    .kklo #custnav ul li a.activee.navbar {
-   background-image: linear-gradient(to right , var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-}
-    .kklo #custnav ul li a img.ddise{display:none;}
-    .kklo #custnav ul li a.activee.navbar img.ddise{display:inline-block;}
-    .kklo #custnav ul li a.activee.navbar img.ddis{display:none;}
-      
-</style>
+    <span class="vm-opr-nav__pipe" aria-hidden="true">|</span>
 
-<div class="kklo">
-    <div id="custnav" style="">
-        <ul id="ul">
-            <li class="bartu"><a href="~/ADMIN/Home/Operator_report_new"><img class="ddis" src="~/ashok-images/glob2.svg" /><img class="ddise" src="~/ashok-images/glob.svg" />&nbsp;Live</a></li>
-            @*<li><a href="~/ADMIN/Home/Recharge_Report">User&nbsp;TXN</a></li>*@
-            <li class="bartu"><a href="~/ADMIN/Home/Incoming"><img class="ddis" src="~/ashok-images/sim2.svg" /><img class="ddise" src="~/ashok-images/sim.svg" />&nbsp;Incoming</a></li>
-            
-            <li class="bartu"><a href="~/ADMIN/Home/Roffer_history"><img class="ddis" src="~/ashok-images/roffr.svg" /><img class="ddise" src="~/ashok-images/roffer.svg" />&nbsp;R-Offer</a></li>
+    <a class="vm-opr-nav__link" href="@Url.Action("Incoming", "Home")" data-vm-opr-key="incoming">
 
-            </ul>
-    </div>
-</div>
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var current = location.pathname;
-        $('#custnav li a').each(function () {
-            var $this = $(this);
-            if ($this.attr('href').indexOf(current) !== -1) {
-                $this.addClass('activee');
-                $this.addClass('navbar');
-            }
-        })
-    });
-</script>
+        <i class="fas fa-inbox" aria-hidden="true"></i>
+
+        <span>Incoming</span>
+
+    </a>
+
+    <span class="vm-opr-nav__pipe" aria-hidden="true">|</span>
+
+    <a class="vm-opr-nav__link" href="@Url.Action("Roffer_history", "Home")" data-vm-opr-key="roffer">
+
+        <i class="fas fa-tags" aria-hidden="true"></i>
+
+        <span>R-Offer</span>
+
+    </a>
+
+</nav>
+

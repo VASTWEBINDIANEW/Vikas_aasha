@@ -1,27 +1,36 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.SRS_show_incomg_msg_Result>
+
+@using System.Linq
+
 @{
+
     Layout = null;
+
 }
 
+
+
 @if (Model != null)
+
 {
-    int i = 1;
+
     foreach (var item in Model)
+
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.portno)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lapu)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.msg)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.edate)
-        </td>
-    </tr>
-        i++;
+
+        <tr>
+
+            <td>@Html.DisplayFor(modelItem => item.portno)</td>
+
+            <td>@Html.DisplayFor(modelItem => item.Lapu)</td>
+
+            <td>@Html.DisplayFor(modelItem => item.msg)</td>
+
+            <td>@Html.DisplayFor(modelItem => item.edate)</td>
+
+        </tr>
+
     }
+
 }
+

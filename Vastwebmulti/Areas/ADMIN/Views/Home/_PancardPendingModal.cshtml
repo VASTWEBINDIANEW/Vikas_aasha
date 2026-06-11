@@ -1,0 +1,47 @@
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-pancard-pending-modal" id="pancardPendingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-id-card" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Pan card token details</h4>
+                        <p class="saas-admin-modal-sub">Review and update pending transaction</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close" onclick="hidePancardPendingModal()"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-detail-grid vm-dmt-detail-grid--2 vm-pancard-pending-details">
+                    <div class="vm-dmt-modal-field">
+                        <label for="popup_name">Name</label>
+                        <input type="text" id="popup_name" class="form-control vm-dmt-modal-input" readonly="readonly" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label for="popup_email">Email</label>
+                        <input type="text" id="popup_email" class="form-control vm-dmt-modal-input" readonly="readonly" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label for="popup_amount">Amount</label>
+                        <input type="text" id="popup_amount" class="form-control vm-dmt-modal-input" readonly="readonly" />
+                    </div>
+                    <div class="vm-dmt-modal-field">
+                        <label for="popup_comm">Commission</label>
+                        <input type="text" id="popup_comm" class="form-control vm-dmt-modal-input" readonly="readonly" />
+                    </div>
+                </div>
+                @using (Html.BeginForm("Pancard_Panding_success_failed", "Home", FormMethod.Post, new { id = "pancardPendingForm" }))
+                {
+                    <input type="hidden" name="idno" id="idno" value="" />
+                    <input type="hidden" name="transid" id="requestid" value="" />
+                    <input type="hidden" name="status" id="status" value="" />
+                    <input type="hidden" name="sts" id="sts" value="" />
+                    <div class="saas-admin-modal-footer vm-pancard-pending-footer">
+                        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal" onclick="hidePancardPendingModal()"><i class="fas fa-times" aria-hidden="true"></i> Cancel</button>
+                        <button type="submit" id="submitButton" class="saas-admin-modal-btn saas-admin-modal-btn--primary" value="Failed">Submit</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
