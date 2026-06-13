@@ -1,0 +1,361 @@
+/* ADMIN — Flight & Hotel Cancellation Report v=3 */
+
+body.saas-admin-ui .saas-cancellation-report-page {
+    --cancel-accent: #ef4444;
+    --cancel-filter-width: 128px;
+}
+
+/* Filters — same one-line layout as Ticket Report */
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > * {
+    flex-shrink: 0 !important;
+    align-self: center !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-field:not(.vm-opr-filter-extra),
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-dmt-field:not(.vm-opr-filter-extra) {
+    flex: 0 0 var(--cancel-filter-width) !important;
+    width: var(--cancel-filter-width) !important;
+    min-width: var(--cancel-filter-width) !important;
+    max-width: var(--cancel-filter-width) !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-filter-extra:not(.is-visible) {
+    display: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-filter-extra.is-visible {
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 var(--cancel-filter-width) !important;
+    width: var(--cancel-filter-width) !important;
+    min-width: var(--cancel-filter-width) !important;
+    max-width: var(--cancel-filter-width) !important;
+    overflow: hidden !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .saas-acc-dp-field,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .vm-opr-dp-compact,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .vm-dmt-field--date {
+    flex: 0 0 var(--cancel-filter-width) !important;
+    width: var(--cancel-filter-width) !important;
+    min-width: var(--cancel-filter-width) !important;
+    max-width: var(--cancel-filter-width) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel select,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .form-control,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-search-input,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .saas-acc-dp-input {
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-cancel-pnr-input {
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 9px !important;
+    padding: 0 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .saas-acc-dp-input {
+    padding-left: 30px !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 38px !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .select2-container .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 9px !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-opr-toolbar-search,
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .saas-acc-report-search-btn {
+    height: 38px !important;
+    min-height: 38px !important;
+    white-space: nowrap !important;
+}
+
+/* Table — override operator-report 44px first-col rule */
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table {
+    display: table !important;
+    table-layout: auto !important;
+    width: 100% !important;
+    min-width: 3400px !important;
+    font-size: 0.78rem !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead {
+    display: table-header-group !important;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:first-child {
+    display: table-cell !important;
+    width: auto !important;
+    min-width: 96px !important;
+    max-width: none !important;
+    padding: 11px 10px !important;
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    border-right: 1px solid #e8edf4 !important;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+    color: #334155 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    line-height: 1.3 !important;
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody td:first-child {
+    display: table-cell !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 10px 10px !important;
+    border: none !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-right: 1px solid #f1f5f9 !important;
+    color: #334155 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(1) { min-width: 118px !important; }
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(2) { min-width: 160px !important; }
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(3) { min-width: 140px !important; }
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(4) { min-width: 130px !important; }
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(7) { min-width: 130px !important; }
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(8),
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th:nth-child(9) { min-width: 150px !important; }
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-opr-table-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody tr:hover td {
+    background: #fff8f8 !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-cancel-status-cell .vm-dmt-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-status--success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-status--failed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-status--pending {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-status--refund {
+    background: #f3e8ff;
+    color: #7e22ce;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-status--info {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-act-btn--status {
+    min-width: 72px;
+    padding: 0 10px !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    border: none !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-act-btn--status:hover {
+    color: #fff !important;
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-opr-table-panel__title i {
+    color: var(--cancel-accent);
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-row--success td {
+    background: #fafffb;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-row--failed td {
+    background: #fffafa;
+}
+
+body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-row--pending td {
+    background: #fffdf8;
+}
+
+/* Hotel Cancellation Queue — 11 columns */
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table {
+    display: table !important;
+    table-layout: auto !important;
+    width: 100% !important;
+    min-width: 1800px !important;
+    font-size: 0.78rem !important;
+    margin: 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead {
+    display: table-header-group !important;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead tr,
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody tr {
+    display: table-row !important;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody {
+    display: table-row-group !important;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:first-child,
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody td,
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody td:first-child {
+    display: table-cell !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 10px 10px !important;
+    border: none !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    border-right: 1px solid #f1f5f9 !important;
+    color: #334155 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th,
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:first-child {
+    padding: 11px 10px !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    border-right: 1px solid #e8edf4 !important;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    min-width: 96px !important;
+}
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(1) { min-width: 118px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(2) { min-width: 160px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(3) { min-width: 140px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(4) { min-width: 130px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(5) { min-width: 130px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(6) { min-width: 130px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(7),
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(8) { min-width: 120px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(9),
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(10) { min-width: 150px !important; }
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th:nth-child(11) { min-width: 80px !important; }
+
+body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody tr:hover td {
+    background: #fff8f8 !important;
+}

@@ -56470,8 +56470,21 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             db.SaveChanges();
             return View(entry);
         }
-        public ActionResult BusBookingReport()
+        public ActionResult BusBookingReport(string export, string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string TicketNo)
         {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
+                    case "excel":
+                        return ExcelBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
+                    case "pdf":
+                        return PDFBusBookingReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, allwhitelabel, TicketNo);
+                }
+            }
+
             try
             {
                 var userid = User.Identity.GetUserId();
@@ -56834,6 +56847,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         [HttpPost]
         public ActionResult GetCreditReport(string RoleType, string allmaster1, string alldealer, string allretailer, string allapiuser, string txt_frm_date, string txt_to_date)
         {
+            ViewBag.chk = "post";
             var User = "";
             if (RoleType == "master")
             {
@@ -57121,6 +57135,80 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 TempData["Status"] = "Failed";
                 TempData["Message"] = "An error occured while proccessing request.";
                 return RedirectToAction("Travel", "Home");
+            }
+        }
+
+        public ActionResult TotalBusBookingReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string TicketNo)
+        {
+            try
+            {
+                string retailerid = null;
+                string DealerId = null;
+                string MasterId = null;
+                using (VastwebmultiEntities db = new VastwebmultiEntities())
+                {
+                    if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
+                    {
+                        txt_frm_date = DateTime.Now.ToString();
+                        txt_to_date = DateTime.Now.ToString();
+                    }
+
+                    DateTime frm = Convert.ToDateTime(txt_frm_date);
+                    DateTime to = Convert.ToDateTime(txt_to_date);
+                    txt_frm_date = frm.ToString("yyyy-MM-dd");
+                    txt_to_date = to.ToString("yyyy-MM-dd");
+                    string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                    DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                    DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                    DateTime frm_date = dt.Date;
+                    DateTime to_date = dt1.AddDays(1);
+                    if (ddl_top == null)
+                    {
+                        ddl_top = 1000000;
+                    }
+                    TicketNo = string.IsNullOrWhiteSpace(TicketNo) ? null : TicketNo;
+                    ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? null : ddl_status;
+                    if (ddlusers == "Master")
+                    {
+                        MasterId = (allmaster == "" || allmaster == null || allmaster.Contains("All Master")) ? null : allmaster;
+                    }
+                    if (ddlusers == "Dealer")
+                    {
+                        DealerId = (alldealer == "" || alldealer == null || alldealer.Contains("All Distubutor")) ? null : alldealer;
+                    }
+                    if (ddlusers == "Retailer")
+                    {
+                        retailerid = (allretailer == "" || allretailer == null || allretailer.Contains("All Retailer")) ? null : allretailer;
+                    }
+                    if (ddlusers == "Admin")
+                    {
+                        retailerid = null;
+                        DealerId = null;
+                        MasterId = null;
+                    }
+
+                    var proc_Response = db.proc_BusReport(1, ddl_top.Value, ddl_status, retailerid, DealerId, MasterId, null, TicketNo, null, null, null, frm_date, to_date).ToList();
+                    var successtotal = proc_Response
+                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("CONFIRMED"))
+                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
+                    var failedtotal = proc_Response
+                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("FAILED"))
+                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
+                    var pendingtotal = proc_Response
+                        .Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("PROCCESSED"))
+                        .Sum(s => (decimal?)s.FareAmount) ?? 0;
+
+                    return Json(new
+                    {
+                        success = successtotal,
+                        failed = failedtotal,
+                        pending = pendingtotal
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch
+            {
+                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -58654,6 +58742,40 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             Response.Flush();
             Response.End();
             return View();
+        }
+
+        public ActionResult PDFMicroAtmReport(string ddlusers, string allwhitelabel1, string allmaster2, string alldealer, string allretailer, string ddl_status, DateTime txt_frm_date, DateTime txt_to_date)
+        {
+            var userid = "";
+            if (ddlusers == "Admin")
+            {
+                userid = "Admin";
+            }
+            else if (ddlusers == "Master")
+            {
+                userid = allmaster2;
+            }
+            else if (ddlusers == "Dealer")
+            {
+                userid = alldealer;
+            }
+            else if (ddlusers == "Retailer")
+            {
+                userid = allretailer;
+            }
+
+            DateTime to = txt_to_date.AddDays(1);
+            List<microatm_report_Result> chk;
+            if (string.IsNullOrEmpty(ddlusers))
+            {
+                chk = db.microatm_report("Admin", "Admin", txt_frm_date, to, "").ToList();
+            }
+            else
+            {
+                chk = db.microatm_report(ddlusers, userid, txt_frm_date, to, ddl_status).ToList();
+            }
+
+            return new ViewAsPdf(chk);
         }
 
 
@@ -106067,6 +106189,31 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             return View();
         }
 
+        public ActionResult PDFCashDepositReport(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date, string ddlusers, string allmaster1, string alldealer, string allretailer)
+        {
+            if (ddlusers == "")
+            {
+                ddlusers = "Admin";
+            }
+
+            var userid = "";
+            if (allmaster1 != "")
+            {
+                userid = allmaster1;
+            }
+            else if (alldealer != "")
+            {
+                userid = alldealer;
+            }
+            else if (allretailer != "")
+            {
+                userid = allretailer;
+            }
+            DateTime to = txt_to_date.AddDays(1);
+            var chk = db.report_cash_deposit(txt_frm_date, to, ddl_status, ddlusers, userid).ToList();
+            return new ViewAsPdf(chk);
+        }
+
         public ActionResult FindcashdepositTotal(string ddl_status, DateTime txt_frm_date, DateTime txt_to_date, string ddlusers, string allmaster1, string alldealer, string allretailer)
         {
             if (ddlusers == "")
@@ -118009,67 +118156,178 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
         }
         #region IRCTC
 
-        public ActionResult IRCTC_rem_REPORTS(string allmaster, string alldealer, string allretailer, string ddl_status)
+        public ActionResult IRCTC_rem_REPORTS(string export, string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            if (string.IsNullOrEmpty(allretailer))
+            if (!string.IsNullOrWhiteSpace(export))
             {
-                allretailer = "ALL";
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+                    case "excel":
+                        return ExcelIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+                    case "pdf":
+                        return PDFIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+                }
             }
 
-            IRCTC_report_model reposts = new IRCTC_report_model();
-            reposts.Admin_IRCTC_reports = db.Rem_IRCTC_TokenPurchase_reports(allretailer, DateTime.Now, DateTime.Now.AddDays(1));
-            IEnumerable<SelectListItem> mdList = from s in db.Superstokist_details.ToList()
-                                                 select new SelectListItem
-                                                 {
-                                                     Value = s.SSId,
-                                                     Text = s.FarmName + "_" + s.Mobile
-                                                 };
-            ViewBag.allmasters = new SelectList(mdList, "Value", "Text");
-
-            IEnumerable<SelectListItem> dlmList = from s in db.Dealer_Details.ToList()
-                                                  select new SelectListItem
-                                                  {
-                                                      Value = s.DealerId,
-                                                      Text = s.FarmName + "_" + s.Mobile
-                                                  };
-            ViewBag.alldealer = new SelectList(mdList, "Value", "Text");
-
-            IEnumerable<SelectListItem> remList = from s in db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).ToList()
-                                                  select new SelectListItem
-                                                  {
-                                                      Value = s.RetailerId,
-                                                      Text = s.Frm_Name + "_" + s.Mobile
-                                                  };
-            ViewBag.allretailer = new SelectList(remList, "Value", "Text");
-
-
-
-
-
-            return View(reposts);
+            try
+            {
+                PopulateIrctcViewBags();
+                var reposts = new IRCTC_report_model
+                {
+                    Admin_IRCTC_reports = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date)
+                };
+                return View(reposts);
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("Travel", "Home");
+            }
         }
+
         [HttpPost]
         public ActionResult IRCTC_rem_REPORTS(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
         {
-            ViewBag.chk = "post";
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
-
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
-            if (string.IsNullOrEmpty(allretailer))
+            try
             {
-                allretailer = "ALL";
+                ViewBag.chk = "post";
+                PopulateIrctcViewBags();
+                var reposts = new IRCTC_report_model
+                {
+                    Admin_IRCTC_reports = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date)
+                };
+                return View(reposts);
             }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("Travel", "Home");
+            }
+        }
 
-            IRCTC_report_model reposts = new IRCTC_report_model();
-            reposts.Admin_IRCTC_reports = db.Rem_IRCTC_TokenPurchase_reports(allretailer, frm_date, to_date);
+        public ActionResult TotalIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+                var successTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && s.status.Contains("Success")).Sum(s => s.amount ?? 0);
+                var failedTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && (s.status.ToUpper().Contains("FAILED") || s.status.Contains("Refund"))).Sum(s => s.amount ?? 0);
+                var pendingTotal = rows.Where(s => !string.IsNullOrEmpty(s.status) && (s.status.Contains("Pending") || s.status.Contains("Proccessed"))).Sum(s => s.amount ?? 0);
+
+                return Json(new
+                {
+                    success = successTotal,
+                    failed = failedTotal,
+                    pending = pendingTotal
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcelIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+
+                DataTable dtt = new DataTable();
+                dtt.Columns.Add("Status", typeof(string));
+                dtt.Columns.Add("Order ID", typeof(string));
+                dtt.Columns.Add("Retailer Name", typeof(string));
+                dtt.Columns.Add("Mobile", typeof(string));
+                dtt.Columns.Add("Secondary Mobile", typeof(string));
+                dtt.Columns.Add("Email", typeof(string));
+                dtt.Columns.Add("Secondary Email", typeof(string));
+                dtt.Columns.Add("Amount", typeof(string));
+                dtt.Columns.Add("Transection date", typeof(string));
+                dtt.Columns.Add("Expire time", typeof(string));
+                dtt.Columns.Add("Retailer OLD balance", typeof(string));
+                dtt.Columns.Add("Retailer Latest Balance", typeof(string));
+                dtt.Columns.Add("Distributor OLD balance", typeof(string));
+                dtt.Columns.Add("Distributor Latest Balance", typeof(string));
+                dtt.Columns.Add("MasterDistributor OLD balance", typeof(string));
+                dtt.Columns.Add("MasterDistributor Latest Balance", typeof(string));
+
+                if (rows.Count > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        dtt.Rows.Add(
+                            item.status,
+                            item.TxnID,
+                            item.RetailerName,
+                            item.remmobile,
+                            item.secondmobile,
+                            item.remEmail,
+                            item.secondemail,
+                            item.amount,
+                            item.txn_date.HasValue ? item.txn_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.expire_time.HasValue ? item.expire_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.remain_pre,
+                            item.remain,
+                            item.dealer_remain_pre,
+                            item.dealerremain,
+                            item.master_remain_pre,
+                            item.masterremain);
+                    }
+                }
+                else
+                {
+                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                }
+
+                var grid = new GridView();
+                grid.DataSource = dtt;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=IRCTC_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+
+                return View();
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("IRCTC_rem_REPORTS", "Home");
+            }
+        }
+
+        public ActionResult PDFIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var rows = QueryIrctcReport(allmaster, alldealer, allretailer, ddl_status, txt_frm_date, txt_to_date);
+                return new ViewAsPdf("PDFIrctcReport", rows)
+                {
+                    FileName = "IRCTC_Report.pdf"
+                };
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("IRCTC_rem_REPORTS", "Home");
+            }
+        }
+
+        private void PopulateIrctcViewBags()
+        {
             IEnumerable<SelectListItem> mdList = from s in db.Superstokist_details.ToList()
                                                  select new SelectListItem
                                                  {
@@ -118084,7 +118342,7 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                                       Value = s.DealerId,
                                                       Text = s.FarmName + "_" + s.Mobile
                                                   };
-            ViewBag.alldealer = new SelectList(mdList, "Value", "Text");
+            ViewBag.alldealer = new SelectList(dlmList, "Value", "Text");
 
             IEnumerable<SelectListItem> remList = from s in db.Retailer_Details.Where(aa => aa.ISDeleteuser == false).ToList()
                                                   select new SelectListItem
@@ -118093,12 +118351,77 @@ System.Data.Entity.Core.Objects.ObjectParameter("Output", typeof(string));
                                                       Text = s.Frm_Name + "_" + s.Mobile
                                                   };
             ViewBag.allretailer = new SelectList(remList, "Value", "Text");
+        }
 
+        private static bool IsIrctcSuccessStatus(string status)
+        {
+            return !string.IsNullOrWhiteSpace(status)
+                && status.IndexOf("success", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
 
+        private static bool IsIrctcFailedStatus(string status)
+        {
+            return !string.IsNullOrWhiteSpace(status)
+                && (status.IndexOf("failed", StringComparison.OrdinalIgnoreCase) >= 0
+                    || status.IndexOf("refund", StringComparison.OrdinalIgnoreCase) >= 0);
+        }
 
+        private static bool IsIrctcPendingStatus(string status)
+        {
+            return !string.IsNullOrWhiteSpace(status)
+                && status.IndexOf("pending", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
 
+        private List<Rem_IRCTC_TokenPurchase_reports_Result> QueryIrctcReport(string allmaster, string alldealer, string allretailer, string ddl_status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
+                {
+                    txt_frm_date = DateTime.Now.ToString("yyyy-MM-dd");
+                    txt_to_date = DateTime.Now.ToString("yyyy-MM-dd");
+                }
 
-            return View(reposts);
+                DateTime frm = Convert.ToDateTime(txt_frm_date);
+                DateTime to = Convert.ToDateTime(txt_to_date);
+                txt_frm_date = frm.ToString("yyyy-MM-dd");
+                txt_to_date = to.ToString("yyyy-MM-dd");
+                string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+                DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                DateTime frm_date = dt.Date;
+                DateTime to_date = dt1.Date.AddDays(1);
+
+                var retailerId = "ALL";
+                if (!string.IsNullOrWhiteSpace(allretailer) && allretailer.IndexOf("All Retailer", StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    retailerId = allretailer;
+                }
+
+                var rows = db.Rem_IRCTC_TokenPurchase_reports(retailerId, frm_date, to_date).ToList();
+
+                if (!string.IsNullOrWhiteSpace(ddl_status))
+                {
+                    if (ddl_status == "Confirmed")
+                    {
+                        rows = rows.Where(r => IsIrctcSuccessStatus(r.status)).ToList();
+                    }
+                    else if (ddl_status == "PROCCESSED")
+                    {
+                        rows = rows.Where(r => IsIrctcPendingStatus(r.status)).ToList();
+                    }
+                    else if (ddl_status == "Failed")
+                    {
+                        rows = rows.Where(r => IsIrctcFailedStatus(r.status)).ToList();
+                    }
+                }
+
+                return rows;
+            }
+            catch
+            {
+                return new List<Rem_IRCTC_TokenPurchase_reports_Result>();
+            }
         }
 
 
@@ -126987,39 +127310,82 @@ ORDER BY a.CreatedAt DESC";
             }
            
         }
-        public ActionResult RadiantPrepay()
+        private (DateTime fromdate, DateTime todate) ParseRadiantPrepayDateRange(string txt_frm_date, string txt_to_date, bool defaultToday)
         {
-            var fromdate = DateTime.Now.Date;
-            var todate = fromdate.AddDays(1);
-            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
+            if (defaultToday && string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
+            {
+                var today = DateTime.Now.Date;
+                return (today, today.AddDays(1));
+            }
 
-            var results = (
-    from rpt in db.RadiantPrepayTransfers
-        .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate)
+            var fromdate = DateTime.TryParse(txt_frm_date, out var parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
+            var todate = DateTime.TryParse(txt_to_date, out var parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
+            return (fromdate, todate);
+        }
 
-    join rem in db.Retailer_Details
-        on rpt.Userid equals rem.RetailerId.ToString()
+        private List<RadiantPrepayReportVM> QueryRadiantPrepayReports(DateTime fromdate, DateTime todate, string allretailer, string status)
+        {
+            var query = db.RadiantPrepayTransfers.Where(x => x.Insertdate >= fromdate && x.Insertdate < todate);
 
-    select new RadiantPrepayReportVM
-    {
-        Firmname = rem.Frm_Name,
-        UserId = rpt.Userid,
-        CEID = rpt.CEID,
-        Amount = rpt.Amount,
-        RemainPre = rpt.RemainPre,
-        RemainPost = rpt.RemainPost,
-        InsertDate = rpt.Insertdate,
-        UpdateDate = rpt.Updatedate,
-        Status = rpt.sts,
-        AdminRemainPre = rpt.Adminremainpre,
-        AdminRemainPost = rpt.Adminremainpost,
-        RequestID = rpt.RequestID,
-        Mobile = rem.Mobile
-    }
-).OrderByDescending(aa => aa.InsertDate).ToList();
-            var total = results.Sum(aa => aa.Amount);
-            ViewBag.total = total;
+            if (!string.IsNullOrWhiteSpace(allretailer))
+            {
+                query = query.Where(x => x.Userid == allretailer);
+            }
 
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                query = query.Where(x => x.sts == status);
+            }
+
+            return (
+                from rpt in query
+                join rem in db.Retailer_Details on rpt.Userid equals rem.RetailerId.ToString()
+                select new RadiantPrepayReportVM
+                {
+                    Firmname = rem.Frm_Name,
+                    UserId = rpt.Userid,
+                    CEID = rpt.CEID,
+                    Amount = rpt.Amount,
+                    RemainPre = rpt.RemainPre,
+                    RemainPost = rpt.RemainPost,
+                    InsertDate = rpt.Insertdate,
+                    UpdateDate = rpt.Updatedate,
+                    Status = rpt.sts,
+                    AdminRemainPre = rpt.Adminremainpre,
+                    AdminRemainPost = rpt.Adminremainpost,
+                    RequestID = rpt.RequestID,
+                    Mobile = rem.Mobile
+                }
+            ).OrderByDescending(aa => aa.InsertDate).ToList();
+        }
+
+        private void PopulateRadiantPrepayViewBags(List<RadiantPrepayReportVM> results, string selectedRetailer)
+        {
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", selectedRetailer);
+            ViewBag.total = results.Sum(aa => aa.Amount ?? 0);
+            ViewBag.totalSuccess = results.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0);
+            ViewBag.totalFailed = results.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0);
+            ViewBag.totalPending = results.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0);
+        }
+
+        public ActionResult RadiantPrepay(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "excel":
+                        return ExcelRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "pdf":
+                        return PDFRadiantPrepayReport(allretailer, Status, txt_frm_date, txt_to_date);
+                }
+            }
+
+            var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
+            var results = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+            PopulateRadiantPrepayViewBags(results, allretailer);
             return View(results);
         }
         [HttpPost]
@@ -127028,35 +127394,112 @@ ORDER BY a.CreatedAt DESC";
             ViewBag.chk = "post";
             var fromdate = txt_frm_date;
             var todate = txt_to_date.AddDays(1);
-            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null);
-            var results = (
-                     from rpt in db.RadiantPrepayTransfers
-                         .Where(x => x.Insertdate >= fromdate && x.Insertdate < todate && x.Userid.Contains(allretailer) && x.sts.Contains(Status))
-
-                     join rem in db.Retailer_Details
-                         on rpt.Userid equals rem.RetailerId.ToString()
-
-                     select new RadiantPrepayReportVM
-                     {
-                         Firmname = rem.Frm_Name,
-                         UserId = rpt.Userid,
-                         CEID = rpt.CEID,
-                         Amount = rpt.Amount,
-                         RemainPre = rpt.RemainPre,
-                         RemainPost = rpt.RemainPost,
-                         InsertDate = rpt.Insertdate,
-                         UpdateDate = rpt.Updatedate,
-                         Status = rpt.sts,
-                         AdminRemainPre = rpt.Adminremainpre,
-                         AdminRemainPost = rpt.Adminremainpost,
-                         RequestID = rpt.RequestID,
-                         Mobile = rem.Mobile
-                     }
-                 ).OrderByDescending(aa => aa.InsertDate).ToList();
-            var total = results.Sum(aa => aa.Amount);
-            ViewBag.total = total;
-
+            var results = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
+            PopulateRadiantPrepayViewBags(results, allretailer);
             return View(results);
+        }
+
+        public ActionResult TotalRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
+                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+                return Json(new
+                {
+                    total = rows.Sum(x => x.Amount ?? 0),
+                    success = rows.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0),
+                    failed = rows.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0),
+                    pending = rows.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0)
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { total = 0, success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcelRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
+                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+
+                DataTable dtt = new DataTable();
+                dtt.Columns.Add("Firm Name", typeof(string));
+                dtt.Columns.Add("RCEID", typeof(string));
+                dtt.Columns.Add("Amount", typeof(string));
+                dtt.Columns.Add("Remain Pre", typeof(string));
+                dtt.Columns.Add("Remain Post", typeof(string));
+                dtt.Columns.Add("Request ID", typeof(string));
+                dtt.Columns.Add("Insert Date", typeof(string));
+                dtt.Columns.Add("Update Date", typeof(string));
+                dtt.Columns.Add("Status", typeof(string));
+
+                if (rows.Count > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        dtt.Rows.Add(
+                            item.Firmname,
+                            item.CEID,
+                            item.Amount,
+                            item.RemainPre,
+                            item.RemainPost,
+                            item.RequestID,
+                            item.InsertDate.HasValue ? item.InsertDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.Status);
+                    }
+                }
+                else
+                {
+                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                }
+
+                var grid = new GridView();
+                grid.DataSource = dtt;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=Radiant_Prepay_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+
+                return View();
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("RadiantPrepay", "Home");
+            }
+        }
+
+        public ActionResult PDFRadiantPrepayReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
+                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+                return new ViewAsPdf("PDFRadiantPrepayReport", rows)
+                {
+                    FileName = "Radiant_Prepay_Report.pdf"
+                };
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("RadiantPrepay", "Home");
+            }
         }
         [HttpPost]
         public ActionResult UpdatePrepayStatus(string id, string status)

@@ -897,8 +897,21 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             //return View(respo);
         }
-        public ActionResult CancellationReport()
+        public ActionResult CancellationReport(string export, string txt_frm_date, string txt_to_date, string ddl_status, string PNR, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel)
         {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "excel":
+                        return ExcelCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, allwhitelabel);
+                    case "pdf":
+                        return PDFCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, allwhitelabel);
+                    case "total":
+                        return TotalCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, allwhitelabel);
+                }
+            }
+
             try
             {
                 var userid = User.Identity.GetUserId();
@@ -1055,6 +1068,143 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 return RedirectToAction("Travel", "Home");
             }
         }
+
+        public ActionResult ExcelCancellationReport(string txt_frm_date, string txt_to_date, string ddl_status, string PNR, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel)
+        {
+            try
+            {
+                var rows = QueryCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, 1000000);
+
+                DataTable dtt = new DataTable();
+                dtt.Columns.Add("Live Status", typeof(string));
+                dtt.Columns.Add("Email Id", typeof(string));
+                dtt.Columns.Add("Retailer Name", typeof(string));
+                dtt.Columns.Add("Frim Name", typeof(string));
+                dtt.Columns.Add("Request Type", typeof(string));
+                dtt.Columns.Add("Cancel Type", typeof(string));
+                dtt.Columns.Add("Cancellation Id", typeof(string));
+                dtt.Columns.Add("Request Date", typeof(string));
+                dtt.Columns.Add("Response Date", typeof(string));
+                dtt.Columns.Add("Refunded Amount", typeof(string));
+                dtt.Columns.Add("Charge", typeof(string));
+                dtt.Columns.Add("Retailer Pre", typeof(string));
+                dtt.Columns.Add("Retailer Income", typeof(string));
+                dtt.Columns.Add("Retailer Post", typeof(string));
+                dtt.Columns.Add("Dealer Pre", typeof(string));
+                dtt.Columns.Add("Dealer Income", typeof(string));
+                dtt.Columns.Add("Dealer Post", typeof(string));
+                dtt.Columns.Add("Master Pre", typeof(string));
+                dtt.Columns.Add("Master Income", typeof(string));
+                dtt.Columns.Add("Master Post", typeof(string));
+                dtt.Columns.Add("Admin Pre", typeof(string));
+                dtt.Columns.Add("Admin Income", typeof(string));
+                dtt.Columns.Add("Admin Post", typeof(string));
+
+                if (rows.Count > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        var sts = item.ChangeRequestStatus.HasValue
+                            ? ((Areas.RETAILER.Enums.ChangeRequestStatus)Convert.ToInt32(item.ChangeRequestStatus)).ToString()
+                            : string.Empty;
+                        dtt.Rows.Add(
+                            sts,
+                            item.Email,
+                            item.RetailerName,
+                            item.Frm_Name,
+                            item.RequestType,
+                            item.CancellationType,
+                            item.ChangeRequestId,
+                            item.CancellationRequestDate.ToString("dd-MMM HH:mm:ss"),
+                            item.CancellationResponseDate.HasValue ? item.CancellationResponseDate.Value.ToString("dd-MMM HH:mm:ss") : string.Empty,
+                            item.RefundedAmount,
+                            item.CancellationCharge,
+                            Math.Round(item.RemPre, 2),
+                            Math.Round(item.RemInc, 2),
+                            Math.Round(item.RemPost, 2),
+                            Math.Round(item.DlmPre, 2),
+                            Math.Round(item.DlmInc, 2),
+                            Math.Round(item.DlmPost, 2),
+                            Math.Round(item.MdPre, 2),
+                            Math.Round(item.MdInc, 2),
+                            Math.Round(item.MdPost, 2),
+                            Math.Round(item.AdminPre, 2),
+                            Math.Round(item.AdminInc, 2),
+                            Math.Round(item.AdminPost, 2));
+                    }
+                }
+                else
+                {
+                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                }
+
+                var grid = new GridView();
+                grid.DataSource = dtt;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=Flight_Cancellation_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+
+                return View();
+            }
+            catch
+            {
+                TempData["Status"] = "Processed";
+                TempData["Message"] = "Processed.";
+                return RedirectToAction("CancellationReport", "Air");
+            }
+        }
+
+        public ActionResult PDFCancellationReport(string txt_frm_date, string txt_to_date, string ddl_status, string PNR, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel)
+        {
+            try
+            {
+                var rows = QueryCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, 1000000);
+                return new ViewAsPdf("PDFCancellationReport", rows)
+                {
+                    FileName = "Flight_Cancellation_Report.pdf"
+                };
+            }
+            catch
+            {
+                TempData["Status"] = "Processed";
+                TempData["Message"] = "Processed.";
+                return RedirectToAction("CancellationReport", "Air");
+            }
+        }
+
+        public ActionResult TotalCancellationReport(string txt_frm_date, string txt_to_date, string ddl_status, string PNR, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel)
+        {
+            try
+            {
+                var rows = QueryCancellationReport(txt_frm_date, txt_to_date, ddl_status, PNR, ddlusers, allmaster, alldealer, allretailer, 1000000);
+                var successTotal = rows.Where(a => a.ChangeRequestStatus == 4).Sum(a => a.RefundedAmount ?? 0);
+                var failedTotal = rows.Where(a => a.ChangeRequestStatus == 5).Sum(a => a.RefundedAmount ?? 0);
+                var pendingTotal = rows.Where(a => !a.ChangeRequestStatus.HasValue || a.ChangeRequestStatus <= 3 || a.ChangeRequestStatus == 7 || a.ChangeRequestStatus == 8).Sum(a => a.RefundedAmount ?? 0);
+
+                return Json(new
+                {
+                    success = successTotal,
+                    failed = failedTotal,
+                    pending = pendingTotal
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                TempData["Status"] = "Processed";
+                TempData["Message"] = "Processed";
+                return RedirectToAction("CancellationReport", "Air");
+            }
+        }
+
         [HttpPost]
         public ActionResult CancellationStatus(int ChangeReqId, int idno)
         {
@@ -1516,6 +1666,65 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             }
 
+        }
+
+        private List<proc_FlightCancellationReport_Result> QueryCancellationReport(
+            string txt_frm_date,
+            string txt_to_date,
+            string ddl_status,
+            string PNR,
+            string ddlusers,
+            string allmaster,
+            string alldealer,
+            string allretailer,
+            int pageSize)
+        {
+            string retailerid = null;
+            string DealerId = null;
+            string MasterId = null;
+
+            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+            }
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("dd-MM-yyyy");
+            txt_to_date = to.ToString("dd-MM-yyyy");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime frm_date = dt.Date;
+            DateTime to_date = dt1.AddDays(1);
+
+            PNR = string.IsNullOrWhiteSpace(PNR) || PNR == "undefined" ? null : PNR;
+            ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? "ALL" : ddl_status;
+
+            if (ddlusers == "Master")
+            {
+                MasterId = string.IsNullOrWhiteSpace(allmaster) || allmaster.Contains("All Master") ? null : allmaster;
+            }
+            if (ddlusers == "Dealer")
+            {
+                DealerId = string.IsNullOrWhiteSpace(alldealer) || alldealer.Contains("Distubutor") || alldealer.Contains("Distributor") ? null : alldealer;
+            }
+            if (ddlusers == "Retailer")
+            {
+                retailerid = string.IsNullOrWhiteSpace(allretailer) || allretailer.Contains("All Retailer") ? null : allretailer;
+            }
+            if (ddlusers == "Admin")
+            {
+                retailerid = null;
+                DealerId = null;
+                MasterId = null;
+            }
+
+            using (VastwebmultiEntities entities = new VastwebmultiEntities())
+            {
+                return entities.proc_FlightCancellationReport(1, pageSize, ddl_status, retailerid, DealerId, MasterId, null, null, PNR, frm_date, to_date).ToList();
+            }
         }
     }
 }

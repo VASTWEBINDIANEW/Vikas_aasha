@@ -1,1097 +1,398 @@
-﻿@using Vastwebmulti.Models;
+﻿@using Vastwebmulti.Models
 @using Microsoft.AspNet.Identity
 @model List<Vastwebmulti.Models.proc_BusReport_Result>
 @{
-    ViewBag.Title = "Bus";
+    ViewBag.Title = "Bus Booking Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
-}
-@{
+
     var userid = User.Identity.GetUserId();
     var logoimage = "";
-    VastwebmultiEntities db = new VastwebmultiEntities();
-    var logo = db.tblHeaderLogoes.Where(p => p.Role == "ADMIN").ToList();
-    if (logo.Count > 0)
+    using (var db = new VastwebmultiEntities())
     {
-        logoimage = logo.SingleOrDefault().LogoImage;
+        var logo = db.tblHeaderLogoes.Where(p => p.Role == "ADMIN").ToList();
+        logoimage = logo.Count > 0 ? logo.SingleOrDefault().LogoImage : "";
+        ViewBag.AdminMobile = db.Admin_details.Where(a => a.userid == userid).Select(a => a.mobile).FirstOrDefault();
     }
-    else
-    {
-        logoimage = "";
-    }
-    var mobile = db.Admin_details.Where(a => a.userid == userid).FirstOrDefault().mobile;
 
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedUsers = (Request["ddlusers"] ?? "Admin").Trim();
+    var selectedStatus = (Request["ddl_status"] ?? "").Trim();
+    var ticketNoValue = (Request["TicketNo"] ?? "").Trim();
 }
-<style>
-    .second-design .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
 
-    .loader_innner {
-        position: fixed;
-        z-index: 999999;
-        height: 100%;
-        margin: auto;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: rgba(255, 255, 255, 0.8) none repeat scroll 0 0;
-    }
-
-    .nrch .material-icons:hover {
-        color: green !important;
-    }
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .card-rel-third-respo {
-        width: 100% !important;
-        float: left !important;
-    }
-    .tre3 .mrj button {
-        border-color: #ddd !important;
-        padding: 0px 3px;
-    }
-    .all-type-third.tickt-third-responsive .responcive-full .mrj.responcive-fifty button {
-        padding: 0 10px;
-    }
-    .all-type-third.tickt-third-responsive .responcive-full .mrj.responcive-fifty button span, .all-type-third.tickt-third-responsive .responcive-full .mrj.responcive-fifty button i {
-    top: 0 !important;
-}
-    .newfourdesign-admin .all-type-third.tickt-third-responsive .btn-group, .newfourdesign-admin .all-type-third.tickt-third-responsive .btn-group button {
-        background: transparent !important;
-    }
-    .newfourdesign-admin .all-type-third.tickt-third-responsive input {
-        background: transparent;
-    }
-    .ticketreport-adminmain .col-md-2.tre1 #custnav ul li a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .newfourdesign-admin .col-md-12.up-to-up {
-        width: 100%;
-        float: left;
-        padding: 0;
-    }
-    .newfourdesign-admin .row.clearfix.page-header-third.margin-bottom-third.cardbackg-third.onlymargin-third {
-        margin: 0;
-    }
-    .kklo #custnav ul li a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-        .kklo #custnav ul li a img {
-            margin-top: 0;
-        }
-
-    @@media screen and (max-width:1366px) {
-        
-        .col-md-5.mrj .mrj.responcive-fifty {
-            width: auto !important;
-        }
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width: 1366px) and (min-width: 993px) {
-        
-        .tre3 {
-            width: 100%;
-            float: left;
-            margin-bottom: 15px;
-        }
-
-        
-        .tre4, .web-white-filter {
-            float: left !important;
-        }
-
-        .tre1 ul li a, .tre2 ul li a {
-            text-align: left !important;
-        }
-    }
-
-    @@media only screen and (max-width: 992px) {
-
-
-        .t_menu {
-            margin: 4px 0;
-            float: left;
-            width: 100%;
-        }
-
-
-
-        .tre3 {
-            width: 100%;
-            float: left;
-            display: block !important;
-        }
-
-        
-
-    }
-
-    @@media only screen and (max-width:767px) {
-
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media only screen and (max-width:766px) {
-        
-
-            .tre1 .kklo #custnav ul li a {
-                padding: 5px 25px !important;
-            }
-
-        
-
-            .tre2 .uuio #ul li a {
-                padding: 5px 40px;
-            }
-
-        .tre3 {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-            .tre3 .col-md-2 {
-                width: 49% !important;
-                height: 32px;
-                margin-bottom: 5px;
-            }
-
-            .tre3 .col-md-5 {
-                width: 100% !important;
-            }
-
-                .tre3 .col-md-5 .form-group.jjp {
-                    width: 100%;
-                    margin-bottom: 5px;
-                }
-
-                    .tre3 .col-md-5 .form-group.jjp input {
-                        width: 49% !important;
-                    }
-
-                    .tre3 .col-md-5 .form-group.jjp .nrr3 {
-                        width: 50%;
-                    }
-
-                        .tre3 .col-md-5 .form-group.jjp .nrr3 input {
-                            width: 100% !important;
-                        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-        
-        
-            .col-md-2.tre2.up-third-design.airtab-respon-third ul li {
-                width: auto;
-            }
-    }
-
-    @@media only screen and (max-width:480px){
-        .page-header-third #custnav ul li {
-            width: 50%;
-            float: left;
-            margin: 0;
-            padding: 5px 0;
-            padding-right: 2px;
-        }
-        .tre1 {
-            float: left;
-            width: 100% !important;
-        }
-        .irctcmenu-two {
-            width: 100% !important;
-        }
-        .D_menu {
-            width: 100% !important;
-        }
-
-        .tre3 .col-md-2 {
-            width: 100% !important;
-        }
-        .tre3 .col-md-5 .form-group.jjp .nrr3 {
-            width: 100%;
-            margin-top: 4px;
-        }
-        .tre3 .col-md-5 .form-group.jjp input {
-            width: 100% !important;
-        }
-
-
-
-    }
-
-
-</style>
-<section class="content">
-    <div class="container-fluid">
-        <div class="row clearfix margin-bottom-third cardbackg-third onlymargin-third">
-            <div class="col-md-12 up-to-up" style="padding-right: 15px; padding-left: 15px;">
-                <div class="card card-rel-third-respo">
-
-                    <div class="page-header-third" style="width: auto; float: left;">
-                        <div class="col-md-2 tre1 up-third-design airtab-respon-third irctcmenu" style="padding: 0; width: auto;">
-                            <div>
-                                @Html.Partial("~/Areas/ADMIN/Views/Air/_travelReportMenu.cshtml")
-                            </div>
-                        </div>
-                        <div class="col-md-2 tre2 up-third-design airtab-respon-third irctcmenu-two" style="padding: 0; width: auto;">
-                            @Html.Partial("BuspartialView")
-                        </div>
-                    </div>
-
-                        
-                    
-                        <div class="page-header-third D_menu" style="width: auto; float: right;">
-                            <div class="col-md-2 tre4 pdf-lastclass-third widthautposit-third-respon" style="padding: 0; width: 100%;">
-                                <div class="white-l-search-nine">
-                                    <div class="web-white-filter pdfexpoer-second totalbutton-secondclas" style="float: right;">
-                                        <input type="button" id="btnExportA" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                        <input type="button" id="btnPDFA" value="PDF" style="margin-left:2px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                        <button class="white-success-button" style="height:32px;font-size: 11px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: left;margin-left: 2px;background: #b1a6a638;" onclick="findtotalA()">Total</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="white-success" style="display: none; position: absolute;" id="total">
-                                <span id="successtotal" class="btn btn-success waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                                <span id="Failedtotal" class="btn btn-danger waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                                <span id="Pendingtotal" class="btn btn-warning waves-effect" style="font-size: 13px;padding:9px;color:white; font-weight:600;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
-
-                            </div>
-                        </div>
-
-                        </div>
-                </div>
-        </div>
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="page-header-third">
-
-                        <div class="col-md-6 tre3 all-type-third tickt-third-responsive" style="width: 100%; padding: 0px; margin: 0px; position: relative; display: flex; align-items: center; justify-content: space-between;">
-                            
-                            <div class="t_menu">
-                                <div class="bread-same-all-page breadsameall-second">
-                                    <ul>
-                                        <li class="smli">
-                                            <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                            </a>
-                                        </li>
-
-                                        <li class="fullbodydycolorbg tmw-total-color-one">
-                                            BusBookingReport
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-                            
-                            <div class="t_menu">
-                                @using (Html.BeginForm("BusBookingReport", "Home", FormMethod.Post))
-                                {
-
-                                    <div class="col-md-2 mrj jkjk responcive-fifty">
-                                        <div class="">
-                                            @Html.DropDownList("ddlusers", new List<SelectListItem>
-                                      {
-                                   new SelectListItem{ Text="All User",Value="Admin"},
-                                   new SelectListItem{Text="Master",Value="Master"},
-                                   new SelectListItem{Text="Distributor",Value="Dealer"},
-                                   new SelectListItem{Text="Retailer",Value="Retailer"},
-                                   //new SelectListItem{Text="Api User",Value="APIID"},
-                                    new SelectListItem{Text="Whitelabel",Value="Whitelabel"}
-                                  }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;", @onchange = "answers()" })
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2 mrj jkjk dip responcive-fifty" style="display:none;" id="allwhitelabel">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allwhitelabel", ViewBag.allwhitelabel as SelectList, "All Whitelabel", new { @style = "margin-top:0px", @class = "selectpicker form-control", data_live_search = "true", })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 mrj jkjk dip responcive-fifty" style="display:none;" id="allmaster">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { @style = "margin-top:0px", @class = "selectpicker form-control", data_live_search = "true", })
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2 mrj jkjk dip responcive-fifty" style="display:none;" id="dlm">
-                                        <div class="form-line">
-                                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, " All Distubutor", new { id = "alldealer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 mrj jkjk dip responcive-fifty" style="display:none;" id="rem">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 mrj jkjk responcive-fifty" id="sts">
-                                        <div class="">
-                                            @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                        {
-                                new SelectListItem{ Text="All Status",Value="",},
-                                new SelectListItem{Text="Success",Value="SUCCESS"},
-                                new SelectListItem{Text="Pending",Value="PENDING"},
-                                new SelectListItem{Text="Failed",Value="FAILED"}
-                                 }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2 mrj responcive-fifty" style="width: 100px;">
-                                        <div class="inp">
-                                            <input type="text" placeholder="Ticket No" id="TicketNo" style="border-color:#ddd !important;" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-5 mrj responcive-full" style="width: auto;">
-                                        <div class="form-group jjp">
-                                            <div class="input-daterange input-group">
-                                                <div class="custom-date-icon ner height-icon-third" style="border-color:#ddd !important;height: 33px;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd !important; height: 33px !important;", autocomplete = "off" })
-
-                                                <div class="nrr3">
-                                                    <div class="custom-date-icon ner height-icon-third" style="border-color:#ddd !important;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important !important;", autocomplete = "off" })
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mrj responcive-fifty" style="margin-right: 0px;">
-
-                                            <button type="submit" value="Old" name="submit" class="btn input-back-second" style="background: transparent;border: 1px solid #ddd;">
-                                                <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                <span style="top:-2px;color:black;">Search</span>
-                                            </button>
-
-                                        </div>
-                                    </div>
-
-                                }
-                            </div>
-
-                        </div>
-
-
-
-                        <div id="BusLoader" style="display:none;">
-                            <div class="loader_innner">
-                                <img src="~/images/Busloader.gif" style="margin-top:15%;margin-left:46%;" />
-                            </div>
-                        </div>
-                        <div class="body table-responsive tableseconddes-admin" style="position: inherit; padding: 0px; width: 100%; float: left; margin-top: 6px;">
-                            <table id="example1" class="table table-bordered table-striped example-second thpadding-second" style="width:100%; font-size:12px;background:#f5f5f5;">
-                                <thead style="color:black;position:inherit;background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Status</th>
-                                        <th>Ticket&nbsp;Status</th>
-                                        <th>Firm&nbsp;Name</th>
-                                        <th>Passanger&nbsp;Name</th>
-                                        <th>Source&nbsp;(From)</th>
-                                        <th>Destination&nbsp;(To)</th>
-                                        <th>Date&nbsp;Of&nbsp;Journey</th>
-                                        <th>Fare</th>
-                                        <th>Retailer&nbsp;Pre</th>
-                                        <th>Dr&nbsp;/&nbsp;Cr</th>
-                                        <th>Retailer&nbsp;Post</th>
-                                        <th>Earn</th>
-                                        <th>PNR</th>
-                                        <th>Booking&nbsp;Time</th>
-                                        <th>Action</th>
-
-                                        @*<th>Email&nbsp;Id</th>
-                        <th>Retailer&nbsp;Name</th>*@
-
-
-                                        @*<th>Booking&nbsp;No</th>*@
-
-
-
-
-
-
-
-
-                                        @*<th>Dealer&nbsp;Pre</th>
-                        <th>Dealer&nbsp;Income</th>
-                        <th>Dealer&nbsp;Post</th>*@
-                                        @*<th>Master&nbsp;Pre</th>
-                        <th>Master&nbsp;Income</th>
-                        <th>Master&nbsp;Post</th>*@
-                                        @*<th>Admin&nbsp;Pre</th>
-                        <th>Admin&nbsp;Income</th>
-                        <th>Admin&nbsp;Post</th>*@
-                                        @*<th>Date</th>*@
-                                        @*<th>#</th>
-                        <th>#</th>*@
-                                        @*<th>Request&nbsp;Url</th>
-                        <th>Response&nbsp;Url</th>*@
-                                    </tr>
-                                </thead>
-                                <tbody id="myTable" class="chnj" style="color: black;">
-
-                                    @foreach (var item in Model)
-                                    {
-                                        var sts = "";
-                                        var color = "";
-                                        var icon = "";
-                                        var pandingcolor = "";
-                                        if (item.Status.Contains("Pending") || item.TicketStatus.Contains("Proccessed"))
-                                        {
-                                            color = "#ff9600";
-                                            sts = "Pending";
-                                            icon = "../../ashok-images/clkk.png";
-                                            pandingcolor = "#fff8d1";
-                                        }
-                                        if (item.Status.Contains("Success"))
-                                        {
-                                            color = "green";
-                                            sts = "Success";
-                                            icon = "../../ashok-images/correct.svg";
-                                        }
-                                        if (item.Status.ToUpper().Contains("FAILED"))
-                                        {
-                                            color = "red";
-                                            sts = "Failed";
-                                            icon = "../../ashok-images/closes.svg";
-                                        }
-                                        if (item.Status.Contains("Refund"))
-                                        {
-                                            color = "#9C27B0";
-                                            sts = "Refund";
-                                            icon = "../../ashok-images/undo.svg";
-                                        }
-                                        <tr style="background:@pandingcolor;">
-                                            <td class="bbrd"><p><img style="background-color:@color" src="@icon" /></p>@Html.DisplayFor(modelItem => item.TicketNo)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TicketStatus)</td>
-                                            <td>@item.Frm_Name</td>
-                                            <td>@Html.DisplayFor(modelItem => item.PassengerName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.sourceStationName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.destinationStationName)</td>
-                                            <td>@item.dateOfJourney.ToString("dddd,dd MMMM yyyy")</td>
-                                            <td>@Html.DisplayFor(modelItem => item.FareAmount)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemPre)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemInc)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.RemPost)</td>
-                                            <td>Earn</td>
-                                            <td>@Html.DisplayFor(modelItem => item.PNR)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TicketDate)</td>
-                                            @*<td><span>view</span><span>print</span><span>>></span></td>*@
-
-                                            @*<td>@item.Email</td>
-                            <td>@item.RetailerName</td>*@
-
-
-                                            @*<td>@Html.DisplayFor(modelItem => item.TicketNo)</td>*@
-
-
-
-
-
-
-
-
-                                            @*<td>@item.DlmPre</td>
-                            <td>@item.DlmInc</td>
-                            <td>@item.DlmPost</td>*@
-                                            @*<td>@item.MdPre</td>
-                            <td>@item.MdInc</td>
-                            <td>@item.MdPost</td>*@
-                                            @*<td>@item.AdminPre</td>
-                            <td>@item.AdminInc</td>
-                            <td>@item.AdminPost</td>*@
-                                            @*<td>@Html.DisplayFor(modelItem => item.TicketDate)</td>*@
-                                            @if (item.Status == "Success" || item.Status == "Cancelled")
-                                            {
-                                                <td class="nrch" title="View Booking Details">
-                                                    <span onclick="BookingDetails('@item.TraceId')" style="border: 1px solid #c7c2c2;cursor: pointer;padding: 1px 4px;">View</span>
-                                                    <span><a href="/ADMIN/Air/ViewTicket?TraceId=71ac0cad-e9fa-449c-bad6-999e1296eae0&amp;firsName=zainuddin&amp;lastName=kabadi%20wala" target="_blank" class="btn btn-primary" style="border: 0px;background: transparent !important;padding: 0px;"><i class="material-icons" style="color: #555555;border: 1px solid #c7c2c2;font-size: 13px;margin-top: 1px;padding: 2px 3px;">print</i></a></span>
-                                                    <span class="fftt" data-toggle="modal" data-target="#defaultModal222" onclick="ActionBtn('75')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td><span>&nbsp;</span></td>
-                                            }
-
-                                            @*@if (item.Status == "Success")
-                            {
-                                <td title="Cancel Booking"><span onclick="CancelBooking('@item.TraceId','@item.BusId','@item.TicketNo')"><i class="fa fa-window-close"></i></span></td>
-                            }
-                            else
-                            {
-                                <td><span>&nbsp;</span></td>
-                            }*@
-                                            @*<td>@item.RequestJson</td>
-                            <td>@item.ResponseJson</td>*@
-                                        </tr>
-
-                                    }
-                                </tbody>
-                            </table>
-
-                        </div>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=11" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=15"></script>
+
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
+<div id="BusLoader" class="vm-dmt-loader" style="display:none;"></div>
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-bus-booking-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("BusBookingReport", "Home", FormMethod.Post, new { id = "busBookingReportForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Travel &amp; Hotels</li>
+                        <li>Bus Booking Report</li>
+                    </ol>
+
+                    <div class="vm-dmt-fin-nav-row vm-ticket-travel-nav-row">
+                        @Html.Partial("~/Areas/ADMIN/Views/Air/_ticketTravelNav.cshtml")
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!--For Right Popup -->
-    <div class="modal mastetr222Modal" id="defaultModal222" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document" style="margin-bottom: 0px;">
-            <div id="loadredmodel" style="display:none;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-                <div class="ldio-zdyd6mf6t5">
-                    <div></div><div></div>
-                </div>
-            </div>
-            <div id="userinfodiv" class="modal-content width100 float-left">
-                <div class="modal-header width100 float-left">
-                    <div class="modal-back width100 float-left">
-                        <span style="display: inline-block;font-size: 14px;font-weight: 600;margin-right: 7px;">Web</span>
-                        <span style="display: inline-block;font-size: 14px;font-weight: 600;margin-right: 7px;">Passanger Name</span>
-                        <span style="display: inline-block;font-size: 14px;font-weight: 600;margin-right: 7px;">Status</span>
-                        @Html.Hidden("Idno")
-                        <button type="button" class="btn waves-effect" data-dismiss="modal" style="padding: 0px;margin-top: 7px;background:transparent;">
-                            <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true"></i>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="busTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Bus booking totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideBusTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
                         </button>
                     </div>
-                </div><!--.modal-header-->
-                <div class="modal-body width100 float-left">
-
-                    <div class="float-left width100">
-
-                        <form class="first-form">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-3 col-xs-12 col">
-                                    <button type="button" class="btn waves-effect fullbodydycolorbg" data-dismiss="modal" style="padding: 4px;color: white;width: 100%;">
-                                        Cancel Ticket
-                                    </button>
-                                </div>
-                                <div class="col-md-6 col-sm-3 col-xs-12 col">
-                                    <button type="button" class="btn waves-effect" data-dismiss="modal" style="padding: 4px;color: black;width: 100%;background: #eeebeb">
-                                        Upgrade Ticket
-                                    </button>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-4 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>User Markup</label>
-                                        @Html.TextBox("RetailerPre", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-
-
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-4 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Distributor Inc</label>
-                                        @Html.TextBox("RetailerPre", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-sm-3 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Distributor Pre</label>
-                                        @Html.TextBox("RetailerInc", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-5 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Distributor Post</label>
-                                        @Html.TextBox("RetailerPost", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-4 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Master Distributor inc</label>
-                                        @Html.TextBox("RetailerPre", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-sm-3 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Master Distributor Pre</label>
-                                        @Html.TextBox("RetailerInc", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-5 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Master Distributor Post</label>
-                                        @Html.TextBox("RetailerPost", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-4 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Whitelabel Inc</label>
-                                        @Html.TextBox("RetailerPre", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-sm-3 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Whitelabel Pre</label>
-                                        @Html.TextBox("RetailerInc", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-5 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Whitelabel Post</label>
-                                        @Html.TextBox("RetailerPost", "", new { @class = "form-control", @style = "text-transform:uppercase", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>Request</label>
-                                        @Html.TextBox("Request", "", new { @class = "form-control", @readonly = "readonly" })
-
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Response</label>
-                                        @Html.TextArea("Response", "", new { @class = "form-control", @style = "height:100px;", @readonly = "readonly" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                        </form>
-
-                    </div>
-                </div><!--.modal-body-->
-
-
-            </div>
-
-        </div>
-    </div>
-</section>
-<div id="BookingDetailsModel" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header" style="background:linear-gradient(to right,#ffff00,#ff0000);opacity: 1.4; ">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <img src="@Url.Content("~/" +logoimage)" class="img-responsive" data-holder-rendered="true" style="margin-top:-10px;" />
-                <strong>
-                    <span class="pull-right" style="margin-top:-28px"><i class="fa fa-headphones" aria-hidden="true"></i>&nbsp;@mobile</span>
-                </strong>
-            </div>
-            <div class="modal-body" style="color:#484747;">
-                <div class="row">
-                    <div class="col-md-5">
-                        <strong>
-                            <span id="spanSourceCityName"></span><br />
-                            <span id="spanDepartureDateTime"></span><br />
-
-                            <small> (Source)</small>
-                        </strong>
-
-                    </div>
-                    <div class="col-md-2">
-                        <i class="fas fa-shuttle-van" style="font-size:25px;color: brown;"></i>
-                    </div>
-                    <div class="col-md-5" style="text-align:right;">
-                        <strong>
-                            <span id="spanDestinationCityName"></span><br />
-                            <span id="spanArrivalDateTime"></span><br />
-                            <small> (Destination)</small>
-                        </strong>
-                    </div>
-                </div>
-                <div class="row">
-                    <h4 style="text-align:center;background-color :antiquewhite;padding: 4px 4px;">
-                        BOARDING DETAILS
-                    </h4>
-                    <br />
-                    <strong>Boarding Point &nbsp;:&nbsp; </strong> <span id="spanBoardingPoint"></span><br />
-                    <strong>Boarding Contact Number &nbsp;:&nbsp; </strong> <span id="spanBoardingcontantno"></span><br />
-                    <strong>Landmark &nbsp;:&nbsp;</strong> <span id="spanDroppingPoint"></span><br />
-                    <strong>Bus  Operator &nbsp;:&nbsp;</strong> <span id="spanBusOptName"></span><br />
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-3 p-l-0 p-r-0">
-                        <strong>Ticket No</strong><br />
-                        <small><span id="spanTicketNum"></span></small>
-                    </div>
-                    <div class="col-md-2 p-r-0">
-                        <strong>PNR No</strong><br />
-                        <small><span id="spanPNR"></span></small>
-                    </div>
-                    <div class="col-md-2 p-r-0">
-                        <strong>Total Fare</strong><br />
-                        <i class="fa fa-inr" aria-hidden="true"></i><span id="spanBaseFare"></span>
-                    </div>
-                    <div class="col-md-2 p-r-0">
-                        <strong>Cahrge/Tax</strong><br />
-                        <i class="fa fa-inr" aria-hidden="true"></i><span id="spanTaxAmount"></span>
-                    </div>
-                    <div class="col-md-3 p-r-0">
-                        <strong>Total Amount</strong><br />
-                        <i class="fa fa-inr" aria-hidden="true"></i><span id="spanTotalFareWithTax"></span>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="body table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>NAME</th>
-                                        <th>SEAT NO</th>
-                                        <th>GENDER</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="travellerDetails"></tbody>
-                            </table>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="successtotal">—</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">—</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">—</strong>
                         </div>
                     </div>
                 </div>
+
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-rpt-filters-panel__bar">
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddlusers", new SelectList(new[]
+                            {
+                                new SelectListItem{ Text="All User", Value="Admin"},
+                                new SelectListItem{ Text="Master", Value="Master"},
+                                new SelectListItem{ Text="Distributor", Value="Dealer"},
+                                new SelectListItem{ Text="Retailer", Value="Retailer"},
+                                new SelectListItem{ Text="Whitelabel", Value="Whitelabel"}
+                            }, "Value", "Text", selectedUsers), new { id = "ddlusers", @class = "vm-opr-select vm-dmt-select form-control", @title = "User type", @onchange = "answers()" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="ticket-wrap-whitelabel" style="display:none;" hidden>
+                            @Html.DropDownList("allwhitelabel", ViewBag.allwhitelabel as SelectList, "All Whitelabel", new { id = "allwhitelabel", @class = "vm-opr-select vm-dmt-select form-control", @title = "Whitelabel" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="ticket-wrap-master" style="display:none;" hidden>
+                            @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { id = "allmaster", @class = "vm-opr-select vm-dmt-select form-control", @title = "Master" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="dlm" style="display:none;" hidden>
+                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Distributor" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="rem" style="display:none;" hidden>
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field" id="sts">
+                            @Html.DropDownList("ddl_status", new SelectList(new[]
+                            {
+                                new SelectListItem{ Text="All Status", Value=""},
+                                new SelectListItem{ Text="Success", Value="SUCCESS"},
+                                new SelectListItem{ Text="Pending", Value="PENDING"},
+                                new SelectListItem{ Text="Failed", Value="FAILED"}
+                            }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", @title = "Status" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-dmt-field--pnr">
+                            <input type="text" name="TicketNo" id="TicketNo" class="form-control vm-dmt-search-input vm-ticket-pnr-input" placeholder="Ticket No" autocomplete="off" title="Ticket No" value="@ticketNoValue" />
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-bus" aria-hidden="true"></i>
+                        <span>Bus booking report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-bus-totals-btn" onclick="findtotalBus()" title="Show totals" aria-expanded="false" aria-controls="busTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="busBookingReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Ticket&nbsp;Status</th>
+                                    <th>Firm&nbsp;Name</th>
+                                    <th>Passanger&nbsp;Name</th>
+                                    <th>Source&nbsp;(From)</th>
+                                    <th>Destination&nbsp;(To)</th>
+                                    <th>Date&nbsp;Of&nbsp;Journey</th>
+                                    <th>Fare</th>
+                                    <th>Retailer&nbsp;Pre</th>
+                                    <th>Dr&nbsp;/&nbsp;Cr</th>
+                                    <th>Retailer&nbsp;Post</th>
+                                    <th>Earn</th>
+                                    <th>PNR</th>
+                                    <th>Booking&nbsp;Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="busReportRows">
+                                @Html.Partial("_BusBookingReportRows", Model)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-ticket-detail-modal" id="busDetailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-sky">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-bus" aria-hidden="true"></i></div>
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Bus booking details</h4>
+                        <p class="saas-admin-modal-sub">Commission and API information</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2">
+                    <div class="vm-dmt-modal-field"><label>Retailer Pre</label><input type="text" id="busRemPre" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Retailer Inc</label><input type="text" id="busRemInc" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Retailer Post</label><input type="text" id="busRemPost" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Distributor Inc</label><input type="text" id="busDlmInc" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Distributor Pre</label><input type="text" id="busDlmPre" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Distributor Post</label><input type="text" id="busDlmPost" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Master Inc</label><input type="text" id="busMdInc" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Master Pre</label><input type="text" id="busMdPre" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Master Post</label><input type="text" id="busMdPost" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Whitelabel Inc</label><input type="text" id="busWlInc" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Whitelabel Pre</label><input type="text" id="busWlPre" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                    <div class="vm-dmt-modal-field"><label>Whitelabel Post</label><input type="text" id="busWlPost" class="form-control vm-dmt-modal-input" readonly="readonly" /></div>
+                </div>
+                <div class="vm-dmt-modal-field" style="margin-top:12px;">
+                    <label>Request</label>
+                    <textarea id="busRequestJson" class="form-control vm-dmt-modal-input" rows="3" readonly="readonly"></textarea>
+                </div>
+                <div class="vm-dmt-modal-field">
+                    <label>Response</label>
+                    <textarea id="busResponseJson" class="form-control vm-dmt-modal-input" rows="4" readonly="readonly"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
             </div>
         </div>
     </div>
 </div>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+
+<div id="BookingDetailsModel" class="modal fade saas-admin-modal vm-dmt-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header accent-sky">
+                <div class="saas-admin-modal-head-main">
+                    @if (!string.IsNullOrEmpty(logoimage))
+                    {
+                        <img src="@Url.Content("~/" + logoimage)" alt="Logo" style="max-height:36px;margin-right:10px;" />
+                    }
+                    <div>
+                        <h4 class="modal-title saas-admin-modal-title">Boarding details</h4>
+                        <p class="saas-admin-modal-sub"><i class="fa fa-headphones" aria-hidden="true"></i> @ViewBag.AdminMobile</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div class="modal-body vm-dmt-modal-body">
+                <div class="row" style="margin-bottom:12px;">
+                    <div class="col-md-5"><strong><span id="spanSourceCityName"></span><br /><span id="spanDepartureDateTime"></span><br /><small>(Source)</small></strong></div>
+                    <div class="col-md-2 text-center"><i class="fas fa-shuttle-van" style="font-size:22px;color:#92400e;"></i></div>
+                    <div class="col-md-5 text-right"><strong><span id="spanDestinationCityName"></span><br /><span id="spanArrivalDateTime"></span><br /><small>(Destination)</small></strong></div>
+                </div>
+                <div class="vm-dmt-modal-field"><strong>Boarding Point:</strong> <span id="spanBoardingPoint"></span></div>
+                <div class="vm-dmt-modal-field"><strong>Boarding Contact:</strong> <span id="spanBoardingcontantno"></span></div>
+                <div class="vm-dmt-modal-field"><strong>Landmark:</strong> <span id="spanDroppingPoint"></span></div>
+                <div class="vm-dmt-modal-field"><strong>Bus Operator:</strong> <span id="spanBusOptName"></span></div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-3"><strong>Ticket No</strong><br /><small id="spanTicketNum"></small></div>
+                    <div class="col-md-2"><strong>PNR</strong><br /><small id="spanPNR"></small></div>
+                    <div class="col-md-2"><strong>Total Fare</strong><br /><i class="fa fa-inr"></i><span id="spanBaseFare"></span></div>
+                    <div class="col-md-2"><strong>Charge/Tax</strong><br /><i class="fa fa-inr"></i><span id="spanTaxAmount"></span></div>
+                    <div class="col-md-3"><strong>Total Amount</strong><br /><i class="fa fa-inr"></i><span id="spanTotalFareWithTax"></span></div>
+                </div>
+                <div class="table-responsive" style="margin-top:12px;">
+                    <table class="table vm-opr-data-table">
+                        <thead><tr><th>#</th><th>Name</th><th>Seat No</th><th>Gender</th></tr></thead>
+                        <tbody id="travellerDetails"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times" aria-hidden="true"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-ticket-report.js?v=8"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
 <script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    window.busReportBaseUrl = '@Url.Action("BusBookingReport", "Home")';
+
+    function buildBusExportQuery() {
+        return 'txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val())
+            + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val())
+            + '&ddl_status=' + encodeURIComponent($('#ddl_status').val() || '')
+            + '&TicketNo=' + encodeURIComponent($('#TicketNo').val() || '')
+            + '&ddlusers=' + encodeURIComponent($('#ddlusers').val() || '')
+            + '&allmaster=' + encodeURIComponent($('select#allmaster').val() || '')
+            + '&alldealer=' + encodeURIComponent($('#alldealer').val() || '')
+            + '&allretailer=' + encodeURIComponent($('#allretailer').val() || '')
+            + '&allwhitelabel=' + encodeURIComponent($('select#allwhitelabel').val() || '');
     }
-</script>
-<!--Calendar Javascript-->
-<script type="text/javascript">
+
+    function downloadBusExport(type) {
+        var url = window.busReportBaseUrl + '?export=' + encodeURIComponent(type) + '&' + buildBusExportQuery();
+        var frame = document.getElementById('busExportFrame');
+        if (!frame) {
+            frame = document.createElement('iframe');
+            frame.id = 'busExportFrame';
+            frame.style.display = 'none';
+            document.body.appendChild(frame);
+        }
+        frame.src = url;
+    }
+
+    $('#btnExportA').click(function () { downloadBusExport('excel'); });
+    $('#btnPDFA').click(function () { downloadBusExport('pdf'); });
+
+    function busActionBtn(el, remPre, remInc, remPost, dlmInc, dlmPre, dlmPost, mdInc, mdPre, mdPost, wlInc, wlPre, wlPost) {
+        $('#busRemPre').val(remPre);
+        $('#busRemInc').val(remInc);
+        $('#busRemPost').val(remPost);
+        $('#busDlmInc').val(dlmInc);
+        $('#busDlmPre').val(dlmPre);
+        $('#busDlmPost').val(dlmPost);
+        $('#busMdInc').val(mdInc);
+        $('#busMdPre').val(mdPre);
+        $('#busMdPost').val(mdPost);
+        $('#busWlInc').val(wlInc);
+        $('#busWlPre').val(wlPre);
+        $('#busWlPost').val(wlPost);
+        $('#busRequestJson').val($(el).data('req') || '');
+        $('#busResponseJson').val($(el).data('res') || '');
+        $('#busDetailModal').modal('show');
+    }
+
+    function BookingDetails(id) {
+        $('#BusLoader').show();
+        $.post('@Url.Action("getBookingDetails", "Home")', { TraceId: id }, function (data) {
+            var response = JSON.parse(data);
+            if (response.Status === 'Success' && response.Message.Error.ErrorCode === 0) {
+                $('#BusLoader').hide();
+                $('#spanSourceCityName').html(response.Message.Itinerary.Origin);
+                $('#spanDepartureDateTime').html(response.Message.Itinerary.DepartureTime + ',' + response.Message.Itinerary.DateOfJourney);
+                $('#spanDestinationCityName').html(response.Message.Itinerary.Destination);
+                $('#spanArrivalDateTime').html(response.Message.Itinerary.ArrivalTime);
+                $('#spanBoardingPoint').html(response.Message.Itinerary.BoardingPointdetails.CityPointName);
+                $('#spanBoardingcontantno').html(response.Message.Itinerary.BoardingPointdetails.CityPointContactNumber);
+                $('#spanDroppingPoint').html(response.Message.Itinerary.BoardingPointdetails.CityPointLandmark);
+                $('#spanBusOptName').html(response.Message.Itinerary.TravelName);
+                $('#spanTicketNum').html(response.Message.Itinerary.TicketNo);
+                $('#spanPNR').html(response.Message.Itinerary.TravelOperatorPNR);
+                $('#spanBaseFare').html(response.Message.Itinerary.Price.BasePrice);
+                $('#spanTaxAmount').html(parseInt(response.Message.Itinerary.Price.OtherCharges + response.Message.Itinerary.Price.Tax));
+                $('#spanTotalFareWithTax').html(response.Message.Itinerary.Price.PublishedPriceRoundedOff);
+                var tabRow = '';
+                var PaxCount = 1;
+                response.Message.Itinerary.Passenger.forEach(function (entry) {
+                    var Paxgender = entry.Gender === '1' ? 'Male' : 'Female';
+                    tabRow += '<tr><th scope="row">' + PaxCount + '</th><td>' + entry.FirstName + ' ' + entry.LastName + '</td><td>' + entry.Seat.SeatName + '</td><td>' + Paxgender + '</td></tr>';
+                    PaxCount += 1;
+                });
+                $('#travellerDetails').html(tabRow);
+                $('#BookingDetailsModel').modal('show');
+            } else {
+                $('#BusLoader').hide();
+                swal('Oops!!!', response.Message.Error ? response.Message.Error.ErrorMessage : response.Message, 'error');
+            }
+        }).fail(function (jqXHR) {
+            $('#BusLoader').hide();
+            swal('Oops!!!', jqXHR.responseText, 'error');
+        });
+    }
+
     $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
+        $('#txt_frm_date, #txt_to_date').datepicker({
+            format: 'yyyy-mm-dd',
             todayHighlight: true,
             autoclose: true,
-            orientation: "bottom auto",
-
+            orientation: 'bottom auto'
         });
         var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        if (val !== 'post') {
+            $('#txt_frm_date').datepicker('setDate', new Date());
+            $('#txt_to_date').datepicker('setDate', new Date());
         }
-        answers();
-    });
-</script>
-<script>
-    function BookingDetails(id) {
-        $("#BusLoader").show();
-        var url = '@Url.Action("getBookingDetails", "Home")'
-        var jqxhr = $.post(url, { TraceId: id }, function (data) {
-            console.log(data);
-            var response = JSON.parse(data);
-            if (response.Status == "Success") {
-                $("#BusLoader").hide();
-                console.log(response.Message);
-                //console.log(response.Message.apiStatus);
-                if (response.Message.Error.ErrorCode == 0)
-                {
-                    $("#spanSourceCityName").html(response.Message.Itinerary.Origin);
-
-                    $("#spanDepartureDateTime").html(response.Message.Itinerary.DepartureTime + "," + response.Message.Itinerary.DateOfJourney);
-                    $("#spanDestinationCityName").html(response.Message.Itinerary.Destination);
-                    $("#spanArrivalDateTime").html(response.Message.Itinerary.ArrivalTime);
-                    $("#spanBoardingPoint").html(response.Message.Itinerary.BoardingPointdetails.CityPointName);
-                    $("#spanBoardingcontantno").html(response.Message.Itinerary.BoardingPointdetails.CityPointContactNumber);
-                    $("#spanDroppingPoint").html(response.Message.Itinerary.BoardingPointdetails.CityPointLandmark);
-                    $("#spanBusOptName").html(response.Message.Itinerary.TravelName);
-                    $("#spanTicketNum").html(response.Message.Itinerary.TicketNo);
-                    $("#spanPNR").html(response.Message.Itinerary.TravelOperatorPNR);
-                    $("#spanBaseFare").html(response.Message.Itinerary.Price.BasePrice);
-                    $("#spanTaxAmount").html(parseInt(response.Message.Itinerary.Price.OtherCharges + response.Message.Itinerary.Price.Tax));
-                    $("#spanTotalFareWithTax").html(response.Message.Itinerary.Price.PublishedPriceRoundedOff);
-                    var tabRow = '';
-                    var PaxCount = 1;
-                    response.Message.Itinerary.Passenger.forEach(function (entry) {
-                        var Paxgender;
-                        if (entry.Gender == "1")
-                        {
-                            Paxgender = "Male";
-                        } else {
-                            Paxgender = "Female";
-                        }
-                        tabRow = tabRow + '<tr><th scope="row">' + PaxCount + '</th><td>' + entry.FirstName + ' ' + entry.LastName + '</td><td>' + entry.Seat.SeatName + '</td><td>'+ Paxgender +'</td></tr>';
-                        PaxCount = PaxCount + 1;
-                        console.log(entry);
-                    });
-                    $("#travellerDetails").html(tabRow);
-                    $("#BookingDetailsModel").modal('show');
-                } else {
-                    swal("Oops!!!", response.Message.Error.ErrorMessage, "error");
-                }
-                //swal("Wow!", response.Message, "success");
-            }
-            else {
-                $("#BusLoader").hide();
-                swal("Oops!!!", response.Message, "error");
-            }
-        })
-       .fail(function (jqXHR, textStatus, errorThrown) {
-           $("#BusLoader").hide();
-           swal("Oops!!!", jqXHR.responseText, "error");
-       })
-    }
-</script>
-@*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>*@
-<script>
-    function CancelBooking(id,bid,tcno)
-    {
-
-         swal({
-                   title: 'Are you sure?',
-                   //text: 'Total Fare : ' + totalTicketFare + '\nCancellation Charges :' + cancellationCharges + '\nRefund Amount :  ' + totalRefundAmount + '\n\nNote: You will not be able to recover this again!',
-                   text: 'Once cancelled, You will not be able to recover this again!',
-                   type: 'warning',
-                   showCancelButton: true,
-                   confirmButtonColor: '#dd6b55',
-                   cancelButtonColor: '#999',
-                   confirmButtonText: 'Yes!',
-                   cancelButtonText: 'No',
-                   closeOnConfirm: false
-               }, function (data) {
-             if(data == true)
-             {
-                 CancelBookingConfirm(id,bid,tcno);
-             }
-         })
-
-    }
-    function CancelBookingConfirm(id, bid, tcno) {
-        try{
-            $("#BusLoader").show();
-            var url = '@Url.Action("seatCancellationConfirm", "Bus")'
-            var jqxhr = $.post(url, { TraceId: id, BusId: bid, Ticketno: tcno }, function (data) {
-                $("#BusLoader").hide();
-                var response = JSON.parse(data);
-                if (response.Status == "Success") {
-                    console.log(response.Message);
-                    if (response.Message.Content.Addinfo.Error.ErrorCode == 0) {
-
-                        //var totalTicketFare = response.Message.totalTicketFare;
-                        //var totalRefundAmount = response.Message.totalRefundAmount;
-                        //var cancellationCharges = response.Message.cancellationCharges;
-                        //console.log(totalTicketFare);
-                        //console.log(totalRefundAmount);
-                        //console.log(cancellationCharges);
-                        swal("Wow!!!", "Ticket cancellation proceeded successfully", "success");
-                        setTimeout(function () {
-                            location.reload();
-                        }, 5000);
-
-                    } else {
-                        swal("Oops!!!", response.Message.Content.Addinfo.Error.ErrorMessage, "error");
-                    }
-                    //swal("Wow!", response.Message, "success");
-                }
-                else {
-                    swal("Oops!!!", response.Message, "error");
-                }
-            })
-           .fail(function (jqXHR, textStatus, errorThrown) {
-               $("#BusLoader").hide();
-               swal("Oops!!!", jqXHR.responseText, "error");
-           })
-        } catch (err) {
-            $("#BusLoader").hide();
-            console.log('Error : ' +err.message)
-        }
-    }
-</script>
-
-<script type="text/javascript">
-    function answers() {
-        var e = document.getElementById("ddlusers");
-        var answer = e.options[e.selectedIndex].value;
-        if (answer == "Dealer") {
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("allwhitelabel").style.display = "none";
-            document.getElementById("dlm").style.display = "block";
-            document.getElementById("rem").style.display = "none";
-            //document.getElementById("apiid").style.display = "none";
-        }
-        else if (answer == "Whitelabel") {
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("allwhitelabel").style.display = "block";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-            //document.getElementById("apiid").style.display = "none";
-        }
-        else if (answer == "Master") {
-            document.getElementById("allmaster").style.display = "block";
-            document.getElementById("allwhitelabel").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-            //document.getElementById("apiid").style.display = "none";
-        }
-        else if (answer == "Admin") {
-            document.getElementById("allwhitelabel").style.display = "none";
-            document.getElementById("allmaster").style.display = "none";
-            //document.getElementById("apiid").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-        }
-        else if (answer == "Retailer") {
-            document.getElementById("allwhitelabel").style.display = "none";
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "block";
-            // document.getElementById("apiid").style.display = "none";
-        }
-        //else if (answer == "APIID") {
-        //    document.getElementById("allwhitelabel").style.display = "none";
-        //    document.getElementById("allmaster").style.display = "none";
-        //    document.getElementById("apiid").style.display = "block";
-        //    document.getElementById("dlm").style.display = "none";
-        //    document.getElementById("rem").style.display = "none";
-        //      }
-    }
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>
-
-<script>
-    $("#btnExportA").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddlusers = $('#ddlusers').val();
-        var ddl_status = $('#ddl_status').val();
-        var alldealer = $('#alldealer').val();
-        var allretailer = $('#allretailer').val();
-        var allmaster = $('#allmaster').val();
-        var allwhitelabel = $('#allwhitelabel').val();
-        var ddl_top = $('#ddl_top').val();
-        var TicketNo = $('#TicketNo').val();
-        var url = '@Url.Action("ExcelBusBookingReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddlusers=' + ddlusers + '&ddl_status=' + ddl_status + '&alldealer=' + alldealer + '&allretailer=' + allretailer + '&allmaster=' + allmaster + '&allwhitelabel=' + allwhitelabel + '&ddl_top=' + ddl_top + '&TicketNo=' + TicketNo;
-        location.href = url;
-    });
-</script>
-
-
-<script>
-    $("#btnPDFA").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var ddlusers = $('#ddlusers').val();
-        var ddl_status = $('#ddl_status').val();
-        var alldealer = $('#alldealer').val();
-        var allretailer = $('#allretailer').val();
-        var allmaster = $('#allmaster').val();
-        var allwhitelabel = $('#allwhitelabel').val();
-        var ddl_top = $('#ddl_top').val();
-        var TicketNo = $('#TicketNo').val();
-
-        var url = '@Url.Action("PDFBusBookingReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddlusers=' + ddlusers + '&ddl_status=' + ddl_status + '&alldealer=' + alldealer + '&allretailer=' + allretailer + '&allmaster=' + allmaster + '&allwhitelabel=' + allwhitelabel + '&ddl_top=' + ddl_top + '&TicketNo=' + TicketNo;
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
     });
 </script>

@@ -1,0 +1,823 @@
+/* ADMIN — Ticket + Cancellation + Bus + Hotel + IRCTC + Radiant Prepay Report mobile/tablet v=15 */
+
+/* ── Tablet ── */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > *,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > *,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > *,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > * {
+        flex-shrink: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters {
+        justify-content: flex-start !important;
+        margin-left: 0 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-opr-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-dmt-field {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-dmt-field--date {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-panel__head {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-panel__right,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-panel__right,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-panel__right,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-totals-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-page-shell,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-page-shell,
+    body.saas-admin-ui .saas-bus-booking-report-page .vm-opr-page-shell,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-page-shell,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-page-shell {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-toolbar-unified,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-toolbar-unified,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-toolbar-unified,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-toolbar-unified {
+        padding: 6px 8px 8px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Toolbar: nav top, breadcrumb below */
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-toolbar-head--one-line,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-toolbar-head--one-line,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-toolbar-head--one-line,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-toolbar-one-line {
+        flex-wrap: wrap !important;
+        overflow: visible !important;
+        gap: 8px !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-breadcrumb {
+        order: 1 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        border-right: none !important;
+        padding-right: 0 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 2px 0 6px !important;
+        font-size: 0.74rem !important;
+        line-height: 1.35 !important;
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters {
+        order: 2 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        margin-left: 0 !important;
+        gap: 8px !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .select2-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-ticket-travel-nav-row,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-ticket-travel-nav-row,
+    body.saas-admin-ui .saas-irctc-report-page .vm-ticket-travel-nav-row {
+        order: 1 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-toolbar-head .vm-dmt-breadcrumb,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-toolbar-head .vm-dmt-breadcrumb,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-toolbar-head .vm-dmt-breadcrumb {
+        order: 2 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 2px 0 6px !important;
+        margin: 0 !important;
+        flex-wrap: wrap !important;
+        font-size: 0.74rem !important;
+        line-height: 1.35 !important;
+        gap: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-breadcrumb li:first-child,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-breadcrumb li:first-child,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-breadcrumb li:first-child {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-ticket-nav-wrap,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-ticket-nav-wrap,
+    body.saas-admin-ui .saas-irctc-report-page .vm-ticket-nav-wrap {
+        flex-direction: column !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #ticket-travel-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-travel-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-travel-nav .vm-fin-nav__list {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 4px !important;
+        padding: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #ticket-flight-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-flight-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-flight-nav .vm-fin-nav__list {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 4px !important;
+        padding: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #ticket-travel-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-ticket-report-page #ticket-flight-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-travel-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-flight-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-travel-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-flight-nav .vm-fin-nav__list > li {
+        flex: none !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #ticket-travel-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-ticket-report-page #ticket-flight-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-travel-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-flight-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-travel-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-flight-nav .vm-fin-nav__link {
+        min-height: 34px !important;
+        height: 34px !important;
+        font-size: 0.66rem !important;
+        padding: 0 6px !important;
+    }
+
+    /* Totals panel */
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-totals-grid,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-totals-grid,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-totals-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-totals-panel .vm-opr-total-card,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-totals-panel .vm-opr-total-card,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-totals-panel .vm-opr-total-card {
+        padding: 6px 7px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-totals-panel .vm-opr-total-card__value,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-totals-panel .vm-opr-total-card__value,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-totals-panel .vm-opr-total-card__value {
+        font-size: 0.78rem !important;
+    }
+
+    /* Filters — 2 per row */
+    body.saas-admin-ui .saas-ticket-report-page .vm-rpt-filters-panel,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-rpt-filters-panel,
+    body.saas-admin-ui .saas-irctc-report-page .vm-rpt-filters-panel {
+        padding: 6px 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-rpt-filters-panel__bar,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-rpt-filters-panel__bar,
+    body.saas-admin-ui .saas-irctc-report-page .vm-rpt-filters-panel__bar {
+        padding: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > *,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > *,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > * {
+        flex-shrink: 1 !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-filter-extra.is-visible {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket.vm-dmt-filter-row--one-line > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket.vm-dmt-filter-row--one-line > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket.vm-dmt-filter-row--one-line > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-filter-extra.is-visible {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+        width: auto !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-dmt-filter-search-group .vm-dmt-field--date,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .vm-dmt-field--date {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket .saas-acc-report-search-btn,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel .saas-acc-report-search-btn,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .saas-acc-report-search-btn {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 40px !important;
+        height: 40px !important;
+    }
+
+    /* Table header + export */
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-panel__head,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-panel__head {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 10px 10px 8px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-table-panel__title,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-table-panel__title,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-table-panel__title {
+        font-size: 0.88rem !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-panel__right,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-panel__right,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-actions,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-actions,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        justify-content: space-between !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-actions .vm-opr-icon-btn,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-actions .vm-opr-icon-btn,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-actions .vm-opr-icon-btn {
+        flex: 0 0 38px !important;
+        width: 38px !important;
+        min-width: 38px !important;
+        height: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-table-actions .saas-acc-btn,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-table-actions .saas-acc-btn,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-table-actions .saas-acc-btn {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        min-height: 38px !important;
+        height: 38px !important;
+        padding: 0 8px !important;
+        font-size: 0.72rem !important;
+    }
+
+    /* Table scroll */
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-table-wrap,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-table-wrap,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-table-wrap {
+        padding: 0 6px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page .vm-opr-table-scroll,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-opr-table-scroll,
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-table-scroll {
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0 0 10px 10px;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #flightticket.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-ticket-report-page #flightticket.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-cancellation-report-page #cancellationReport.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #flightticket .vm-dmt-act-btn {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+    }
+
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-act-btn--status {
+        min-width: 64px !important;
+        height: 30px !important;
+        font-size: 0.62rem !important;
+    }
+
+    body.saas-admin-ui .saas-bus-booking-report-page #busBookingReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-bus-booking-report-page #busBookingReport.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-hotel-report-page #hotelBookingReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-hotel-report-page #hotelBookingReport.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-hotel-cancellation-queue-page #hotelCancellationQueue.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-hotel-cancellation-queue-page .vm-dmt-act-btn--status {
+        min-width: 64px !important;
+        height: 30px !important;
+        font-size: 0.62rem !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > .vm-opr-field,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > .vm-dmt-field {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .select2-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .select2-container .select2-selection--single {
+        min-height: 38px !important;
+        height: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc select,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .form-control,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .saas-acc-dp-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 38px !important;
+        min-height: 38px !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport.vm-opr-data-table thead th,
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport.vm-opr-data-table tbody td {
+        padding: 8px 7px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport .vm-ticket-status-cell {
+        display: table-cell !important;
+        min-width: 96px !important;
+        vertical-align: middle !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport .vm-ticket-status-text {
+        display: block !important;
+        font-size: 0.64rem !important;
+        margin-top: 4px !important;
+        max-width: 88px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport .vm-dmt-act-btn--status {
+        min-width: 58px !important;
+        height: 28px !important;
+        font-size: 0.58rem !important;
+        margin-top: 4px !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport .vm-dmt-action-bar {
+        display: inline-flex !important;
+        gap: 4px !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page #irctcReport .vm-dmt-act-btn {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-opr-main-card {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Radiant Prepay — mobile filters + table */
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-opr-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-dmt-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant > .vm-opr-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant > .vm-dmt-field {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-dmt-field--date {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: none !important;
+        display: block !important;
+        position: relative !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field .saas-acc-dp-icon {
+        position: absolute !important;
+        left: 10px !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+        width: 16px !important;
+        height: 16px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 14px !important;
+        line-height: 1 !important;
+        color: #3b82f6 !important;
+        z-index: 3 !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field .saas-acc-dp-icon i {
+        font-size: 14px !important;
+        line-height: 1 !important;
+        width: auto !important;
+        height: auto !important;
+        transform: none !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+        padding: 10px 10px 10px 36px !important;
+        font-size: 14px !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-radiant-search-btn {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        justify-content: center !important;
+        min-height: 42px !important;
+        height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-panel__head {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 10px 10px 8px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-panel__title {
+        font-size: 0.88rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-total {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 8px 12px !important;
+        border-radius: 10px !important;
+        background: #eef2ff !important;
+        font-size: 0.82rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        justify-content: space-between !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-actions .vm-opr-icon-btn,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-actions .vm-radiant-totals-btn {
+        flex: 0 0 40px !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-table-actions .saas-acc-btn {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        min-height: 40px !important;
+        height: 40px !important;
+        padding: 0 8px !important;
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-main-card,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-panel {
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-wrap {
+        padding: 0 4px 10px !important;
+        overflow: visible !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .table-responsive.vm-opr-table-scroll {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0 0 10px 10px;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table {
+        width: auto !important;
+        min-width: 1320px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead {
+        position: static !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th {
+        white-space: nowrap !important;
+        min-width: 82px !important;
+        padding: 10px 8px !important;
+        font-size: 0.68rem !important;
+        letter-spacing: 0.01em !important;
+        line-height: 1.25 !important;
+        vertical-align: middle !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(1) {
+        min-width: 108px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(6) {
+        min-width: 96px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(7),
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table thead th:nth-child(8) {
+        min-width: 128px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport.vm-opr-data-table tbody td {
+        white-space: nowrap !important;
+        min-width: 82px !important;
+        padding: 8px 7px !important;
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-main-card {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-totals-grid.vm-radiant-totals-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-totals-panel .vm-opr-total-card {
+        padding: 6px 7px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-totals-panel .vm-opr-total-card__value {
+        font-size: 0.78rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-dmt-act-btn {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-dmt-status {
+        min-width: 72px !important;
+        font-size: 0.62rem !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-opr-table-empty,
+    body.saas-admin-ui .saas-radiant-prepay-page #radiantPrepayReport .vm-dmt-table-empty {
+        min-width: 300px !important;
+        white-space: normal !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-cancellation-report-page .vm-dmt-filter-row--cancel > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > .vm-opr-field,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc > .vm-dmt-field {
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-irctc-report-page .vm-dmt-filter-row--irctc .vm-dmt-filter-search-group .vm-dmt-field--date {
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-opr-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters > .vm-dmt-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant > .vm-opr-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-filter-row--radiant > .vm-dmt-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-opr-dp-compact,
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .vm-dmt-field--date {
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-field .saas-acc-dp-icon {
+        left: 10px !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-radiant-inline-filters .vm-dmt-filter-search-group .saas-acc-dp-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        padding: 10px 10px 10px 38px !important;
+        font-size: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-radiant-prepay-page .vm-dmt-totals-grid.vm-radiant-totals-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.saas-admin-ui .saas-ticket-report-page #ticket-travel-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-cancellation-report-page #ticket-travel-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-irctc-report-page #ticket-travel-nav .vm-fin-nav__list {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}

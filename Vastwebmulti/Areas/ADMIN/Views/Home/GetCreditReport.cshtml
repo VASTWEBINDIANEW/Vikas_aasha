@@ -1,312 +1,324 @@
-﻿@{
-    ViewBag.Title = "AepsReport";
+﻿@model IEnumerable<Vastwebmulti.Models.GetCreditDetails_Result>
+
+@{
+
+    ViewBag.Title = "GetCreditReport";
+
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var creditRows = Model == null ? new List<Vastwebmulti.Models.GetCreditDetails_Result>() : Model.ToList();
+    var creditTotalAmount = creditRows.Sum(x => x.Amount ?? 0);
+    var creditTotalBalance = creditRows.Sum(x => x.ToRemainPose ?? 0);
+    var creditTotalDue = creditRows.Sum(x => x.CrPose ?? 0);
+    var creditTotalLiveDue = creditRows.Sum(x => x.livecr ?? 0);
+    var creditHasRows = creditRows.Count > 0;
 }
 
-@Html.Partial("_FinancialReportAssets")
-<script src="~/MainFrontDesign/js/admin-financial-report.js?v=1"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
-<section class="content saas-admin-account-page saas-admin-report-page saas-financial-report-page">
-    <div class="container-fluid">
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Financial Services</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Aeps Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
 
-        <div class="row clearfix margin-bottom-third cardbackg-third onlymargin-third">
-            <div class="col-md-12">
-                <div class="card card-rel-third-respo">
-                    <div class="col-md-12" style="padding:0px;">
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
 
-                        <div class="page-header-third" style="width: auto; float: left;">
-                            @Html.Partial("_finicalmenureport")
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-credit-report-modern.css?v=2" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=11"></script>
+
+<script src="~/MainFrontDesign/js/admin-credit-report.js?v=1"></script>
+
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-credit-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+
+
+        @using (Html.BeginForm("GetCreditReport", "Home", FormMethod.Post, new { id = "creditReportForm", @class = "vm-rpt-filters-panel__form" }))
+
+        {
+
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                        <li>Financial Services</li>
+
+                        <li>Credit Report</li>
+
+                    </ol>
+
+                    <div class="vm-dmt-fin-nav-row">
+
+                        @Html.Partial("_finicalmenureport")
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="vm-rpt-filters-panel">
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--credit vm-rpt-filters-panel__bar">
+
+                        <div class="vm-opr-field vm-dmt-field">
+
+                            <select class="vm-opr-select vm-dmt-select form-control" data-live-search="true" id="ddlusers" name="RoleType" title="User type" onchange="answers()">
+
+                                <option value="ALL">All User</option>
+
+                                <option value="master">Master</option>
+
+                                <option value="Dealer">Distributor</option>
+
+                                <option value="Retailer">Retailer</option>
+
+                                <option value="API">Api User</option>
+
+                            </select>
+
                         </div>
 
-                        <div class="page-header-third d_menu" style="width: auto; float: right;">
-                            <div class="col-md-2 fin3 responcive-fify pdfresponsive-second pdf-lastclass-third widthauto-resp-third exl-respo-third pdfadmin-allpageclass" style="padding: 0px;">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div style="float:right; text-align:right;" class="web-white-filter">
-                                            <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;" />
-                                            <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="allmaster" style="display:none;">
 
-                                        </div>
+                            @Html.DropDownList("allmaster1", ViewBag.allmaster as SelectList, "All Master", new { @class = "vm-opr-select vm-dmt-select form-control", @title = "Master" })
 
-                                    </div>
-                                </div>
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="dlm" style="display:none;">
+
+                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Distributor" })
+
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="rem" style="display:none;">
+
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="apiid" style="display:none;">
+
+                            @Html.DropDownList("allapiuser", ViewBag.apiid as SelectList, "All API", new { id = "allapiuser", @class = "vm-opr-select vm-dmt-select form-control", @title = "API user" })
+
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+
                             </div>
 
-                            <div class="white-success white-successadmin-money" style="display:none;position: absolute;width: auto;right: 53px !important;z-index: 9;">
-                                <span id="successtotal" class="btn btn-success waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;float: left;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                                <span id="Failedtotal" class="btn btn-danger waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;float: left;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                                <span id="Pendingtotal" class="btn btn-warning waves-effect" style="font-size: 13px;padding:9px;color:white; font-weight:600;float: left;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-opr-field vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
 
                             </div>
+
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+
+                            </button>
 
                         </div>
 
                     </div>
 
                 </div>
+
             </div>
-        </div>
-        <div class="row clearfix">
 
-            <div class="col-md-12" style="margin-top: 10px;">
-                <div class="card page-header-third">
+        }
 
-                    <div class="col-md-12 fin2 all-type-third allpagefinincal-report" style="padding: 0px; margin-top: 0px; position: relative; display: flex; align-items: center; justify-content: space-between;">
 
-                        <div class="t_menu">
-                            <div class="bread-same-all-page breadsameall-second">
-                                <ul>
-                                    <li class="smli">
-                                        <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                        </a>
-                                    </li>
 
-                                    <li class="fullbodydycolorbg tmw-total-color-one">
-                                        AepsReport
-                                    </li>
-                                </ul>
+        <div class="vm-opr-main-card">
 
-                            </div>
+            <div class="vm-opr-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+
+                    <div class="vm-opr-table-panel__title">
+
+                        <i class="fas fa-credit-card" aria-hidden="true"></i>
+
+                        <span>Credit report</span>
+
+                    </div>
+
+                    <div class="vm-dmt-table-panel__right">
+
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+
                         </div>
 
-                        <div class="t_menu">
-                            @using (Html.BeginForm("GetCreditReport", "Home", FormMethod.Post))
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-table-wrap">
+
+                    <div class="table-responsive vm-opr-table-scroll">
+
+                        <table id="creditreport" class="table vm-opr-data-table" cellspacing="0">
+
+                            <thead>
+                                <tr>
+                                    <th class="vm-credit-th vm-credit-th--from">Transfer From</th>
+                                    <th class="vm-credit-th vm-credit-th--to">Transfer To</th>
+                                    <th class="vm-credit-th vm-credit-th--frm">Frm Name</th>
+                                    <th class="vm-credit-th vm-credit-th--person">Person Name</th>
+                                    <th class="vm-credit-th vm-credit-th--mobile">Mobile No.</th>
+                                    <th class="vm-credit-th vm-credit-th--district">District</th>
+                                    <th class="vm-credit-th vm-credit-th--state">State</th>
+                                    <th class="vm-credit-th vm-credit-th--amount">Admin Credit Amount</th>
+                                    <th class="vm-credit-th vm-credit-th--balance">Account Balance</th>
+                                    <th class="vm-credit-th vm-credit-th--due">Due Credit</th>
+                                    <th class="vm-credit-th vm-credit-th--live">Live Due Credit</th>
+                                    <th class="vm-credit-th vm-credit-th--time">Transfer Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trow">
+                                @Html.Partial("_GetCreditReport", Model)
+                            </tbody>
+                            @if (creditHasRows)
                             {
-
-                                <div class="col-md-1 cltu responcive-fify" style="padding: 0px; margin-right: 3px;">
-                                    <div class="form-line">
-                                        <select class="selectpicker form-control" data-live-search="true" id="ddlusers" name="RoleType" style="margin-top:4px;padding-left:0px; padding-right:0px;text-align:center;" onchange="answers()">
-                                            <option value="ALL">All User</option>
-                                            <option value="master">Master</option>
-                                            <option value="Dealer">Distributor</option>
-                                            <option value="Retailer">Retailer</option>
-                                            <option value="API">Api User</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 responcive-fify" style="display:none;padding: 0px; margin-right: 3px; margin-bottom: 10px;" id="allmaster">
-                                    <div class="form-line">
-                                        @Html.DropDownList("allmaster1", ViewBag.allmaster as SelectList, "All Master", new { @style = "margin-top:0px", @class = "selectpicker form-control", data_live_search = "true", })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 responcive-fify" style="display:none;padding: 0px; margin-right: 3px; margin-bottom: 10px;" id="dlm">
-                                    <div class="form-line">
-                                        @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, " All Distubutor", new { id = "alldealer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-2 responcive-fify" style="display:none;padding: 0px; margin-right: 3px; margin-bottom: 10px;" id="rem">
-                                    <div class="form-line">
-                                        @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-2 responcive-fify" style="display:none;padding: 0px; margin-right: 3px; margin-bottom: 10px;" id="apiid">
-                                    <div class="form-line">
-                                        @Html.DropDownList("allapiuser", ViewBag.apiid as SelectList, "All API", new { id = "allapiuser", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-3 responcive-full reportdate-money-allpage" style="padding: 0px;float: left;">
-                                    <div class="form-group" style="margin-bottom: 0px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="inputiconsateall" style="padding-right:2px;">
-                                                <div class="custom-date-icon ner">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width: 105px;margin-right: 3px;" })
-                                            </div>
-                                            <div class="nrr3 inputiconsateall" style="padding-left:2px;">
-                                                <div class="custom-date-icon ner2">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638; margin-top:0px;height:32px;padding-right: 0px;padding-left: 23px;width: 105px;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1 responcive-fify respon-third-button responcive-fify-search" style="padding: 0px;float: left;width: 10px;">
-
-                                    <center>
-                                        <button type="submit" value="Old" name="submit" class="btn llpo input-back-second" style=" border:1px solid #b1a6a638;background: transparent;">
-                                            <i class="fa fa-search" style="top:0px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">SEARCH</span>
-                                        </button>
-                                    </center>
-
-                                </div>
-
-                            }
-
-                        </div>
-                    </div>
-
-
-                    <div class="body" style="padding: 0px; float: left; width: 100%; margin-top: 6px;">
-                        <div class="table-responsive tableseconddes-admin" style="position:inherit;margin-top:0px;">
-                            <table id="Aeps" class="table table-bordered table-striped table-hover example-second thpadding-second whitetable-second" cellspacing="0" style="width:100%;background:#f5f5f5;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr style="color: black;font-size: 13px;">
-                                        <th>Transfer From</th>
-                                        <th>Transfer To</th>
-                                        <th>Frm Name</th>
-                                        <th>Person Name</th>
-                                        <th>Mobile No.</th>
-                                        <th>District</th>
-                                        <th>State</th>
-                                        <th>Admin Credit Amount</th>
-                                        <th>Account Balance</th>
-                                        <th>Due Credit</th>
-                                        <th>Live Due Credit</th>
-                                        <th>Transfer Time</th>
+                                <tfoot>
+                                    <tr class="vm-credit-total-row">
+                                        <td colspan="7" class="vm-credit-total-label">Total</td>
+                                        <td class="vm-credit-amt-cell vm-credit-total-value">@creditTotalAmount</td>
+                                        <td class="vm-credit-amt-cell vm-credit-total-value">@creditTotalBalance</td>
+                                        <td class="vm-credit-amt-cell vm-credit-total-value">@creditTotalDue</td>
+                                        <td class="vm-credit-amt-cell vm-credit-total-value">@creditTotalLiveDue</td>
+                                        <td class="vm-credit-total-time">—</td>
                                     </tr>
-                                </thead>
-                                <tbody id="trow" class="alin chnj">
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@item.FromRole</td>
-                                            <td>@item.ToRole</td>
-                                            <td>@item.FrmName</td>
-                                            <td>@item.Name</td>
-                                            <td>@item.Mobile</td>
-                                            <td>@item.Dist_Desc</td>
-                                            <td>@item.State_name</td>
-                                            <td>@item.Amount</td>
-                                            <td>@item.ToRemainPose</td>
-                                            <td>@item.CrPose</td>
-                                            <td>@item.livecr</td>
-                                            <td>@item.TransferTime</td>
-                                        </tr>
-                                    }
+                                </tfoot>
+                            }
+                        </table>
 
-                                </tbody>
-                            </table>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <img src="~/img/ajax-loader.gif" />
-                            </div>
+                        <div id="loadingdiv" class="vm-opr-table-loading" style="display:none;">
+
+                            <img src="~/img/ajax-loader.gif" alt="Loading" />
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
         </div>
+
+
+
     </div>
 
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
 
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
+
+
 <script>
-    $(document).ready(function () {
 
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                   autoclose: true,
-                orientation: "bottom auto",
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
+    function buildCreditExportQuery() {
 
-        }
-    });
+        return 'txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val())
 
-    function answers() {
-        var selectElement = document.getElementById("ddlusers");
-        var selectedValue = selectElement.value;
-        if (selectedValue == 'master') {
-            document.getElementById('allmaster').style.display = 'block';
-            document.getElementById('dlm').style.display = 'none';
-            document.getElementById('rem').style.display = 'none';
-            document.getElementById('apiid').style.display = 'none';
-        }
-        else if (selectedValue == 'Dealer') {
-            document.getElementById('dlm').style.display = 'block';
-            document.getElementById('allmaster').style.display = 'none';
-            document.getElementById('rem').style.display = 'none';
-            document.getElementById('apiid').style.display = 'none';
-        }
-        else if (selectedValue == 'Retailer') {
-            document.getElementById('rem').style.display = 'block';
-            document.getElementById('allmaster').style.display = 'none';
-            document.getElementById('dlm').style.display = 'none';
-            document.getElementById('apiid').style.display = 'none';
-        }
-        else if (selectedValue == 'API') {
-            document.getElementById('apiid').style.display = 'block';
-            document.getElementById('allmaster').style.display = 'none';
-            document.getElementById('dlm').style.display = 'none';
-            document.getElementById('rem').style.display = 'none';
-        }
-        else if (selectedValue == 'ALL') {
-            document.getElementById('apiid').style.display = 'none';
-            document.getElementById('allmaster').style.display = 'none';
-            document.getElementById('dlm').style.display = 'none';
-            document.getElementById('rem').style.display = 'none';
-        }
+            + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val())
+
+            + '&RoleType=' + encodeURIComponent($('#ddlusers').val() || '')
+
+            + '&allmaster1=' + encodeURIComponent($('#allmaster1').val() || '')
+
+            + '&alldealer=' + encodeURIComponent($('#alldealer').val() || '')
+
+            + '&allretailer=' + encodeURIComponent($('#allretailer').val() || '')
+
+            + '&allapiuser=' + encodeURIComponent($('#allapiuser').val() || '');
+
     }
 
-     $("#btnExport").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-         var RoleType = $('#ddlusers').val();
-         console.log("RoleType " + RoleType)
-        var allmaster = $('#allmaster1').val();
-        var alldealer = $('#alldealer').val();
-        var allretailer = $('#allretailer').val();
-        var allapiuser = $('#allapiuser').val();
-         var url = '@Url.Action("ExcelCreditReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&RoleType=' + RoleType + '&allmaster1=' + allmaster + '&alldealer=' + alldealer + '&allretailer=' + allretailer + '&allapiuser' + allapiuser;
-        location.href = url;
-     });
 
-    $("#btnPDF").click(function () {
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var RoleType = $('#ddlusers').val();
-        var allmaster = $('#allmaster1').val();
-        var alldealer = $('#alldealer').val();
-        var allretailer = $('#allretailer').val();
-        var allapiuser = $('#allapiuser').val();
-        var url = '@Url.Action("PDFCreditReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&RoleType=' + RoleType + '&allmaster1=' + allmaster + '&alldealer=' + alldealer + '&allretailer=' + allretailer + '&allapiuser' + allapiuser;
-        window.open(url,'_blank');
+
+    $('#btnExport').click(function () {
+
+        location.href = '@Url.Action("ExcelCreditReport", "Home")?' + buildCreditExportQuery();
+
     });
+
+
+
+    $('#btnPDF').click(function () {
+
+        window.open('@Url.Action("PDFCreditReport", "Home")?' + buildCreditExportQuery(), '_blank');
+
+    });
+
+
+
+    $(document).ready(function () {
+
+        $('#txt_frm_date, #txt_to_date').datepicker({
+
+            format: 'yyyy-mm-dd',
+
+            todayHighlight: true,
+
+            autoclose: true,
+
+            orientation: 'bottom auto'
+
+        });
+
+        var val = '@ViewBag.chk';
+
+        if (val != 'post') {
+
+            $('#txt_frm_date').datepicker('setDate', new Date());
+
+            $('#txt_to_date').datepicker('setDate', new Date());
+
+        }
+
+    });
+
 </script>
+

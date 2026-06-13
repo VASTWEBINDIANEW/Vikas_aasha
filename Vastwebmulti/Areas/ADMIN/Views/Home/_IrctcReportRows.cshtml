@@ -1,0 +1,88 @@
+@model IEnumerable<Vastwebmulti.Models.Rem_IRCTC_TokenPurchase_reports_Result>
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Rem_IRCTC_TokenPurchase_reports_Result>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = item.status ?? "";
+
+        if (!string.IsNullOrEmpty(item.status) && item.status.Contains("Failed"))
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+        }
+        else if (!string.IsNullOrEmpty(item.status) && item.status.Contains("Refund"))
+        {
+            statusTone = "refund";
+            statusFa = "fa-undo";
+        }
+        else if (!string.IsNullOrEmpty(item.status) && item.status.ToUpper().Contains("SUCCESS"))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+        }
+        else if (!string.IsNullOrEmpty(item.status) && item.status.Contains("Pending"))
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+        }
+
+        DateTime txn_date = item.txn_date.HasValue ? Convert.ToDateTime(item.txn_date) : DateTime.MinValue;
+        DateTime expire_time = item.expire_time.HasValue ? Convert.ToDateTime(item.expire_time) : DateTime.MinValue;
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-ticket-status-text">@statusLabel</span>
+                @if (item.status == "Pending")
+                {
+                    <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--status" title="Check status" onclick="checkstatusdata('@item.TxnID')">STATUS</button>
+                }
+            </td>
+            <td class="vm-irctc-order-cell">@item.TxnID</td>
+            <td>@item.RetailerName</td>
+            <td>@item.remmobile</td>
+            <td>@item.secondmobile</td>
+            <td>@item.remEmail</td>
+            <td>@item.secondemail</td>
+            <td class="vm-dmt-amt-cell">@(item.amount.HasValue ? Math.Round(item.amount.Value, 2).ToString() : "—")</td>
+            <td class="vm-ticket-time-cell">@(item.txn_date.HasValue ? txn_date.ToString("dd-MMM-yyyy HH:mm:ss") : "—")</td>
+            <td class="vm-ticket-time-cell">@(item.expire_time.HasValue ? expire_time.ToString("dd-MMM-yyyy HH:mm:ss") : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.remain_pre.HasValue ? Math.Round(item.remain_pre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.remain.HasValue ? Math.Round(item.remain.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dealer_remain_pre.HasValue ? Math.Round(item.dealer_remain_pre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.dealerremain.HasValue ? Math.Round(item.dealerremain.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.master_remain_pre.HasValue ? Math.Round(item.master_remain_pre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.masterremain.HasValue ? Math.Round(item.masterremain.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-action-cell">
+                @if (item.status == "Pending")
+                {
+                    <div class="vm-dmt-action-bar">
+                        <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--success" title="Approve" onclick="successdstatus('@item.TxnID','APPROVE')">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--danger" title="Reject" onclick="successdstatus('@item.TxnID','REJECT')">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="17" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-train" aria-hidden="true"></i>
+            <span>IRCTC report not found.</span>
+        </td>
+    </tr>
+}

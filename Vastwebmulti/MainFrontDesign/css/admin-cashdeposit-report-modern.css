@@ -1,0 +1,688 @@
+/* ADMIN — Cash Deposit Report v=1 (extends DMT report shell) */
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page {
+
+    --cashdeposit-accent: #059669;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-dmt-filter-row--cashdeposit {
+
+    flex-wrap: wrap !important;
+
+    align-items: center !important;
+
+    gap: 8px 10px !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-dmt-filter-row--cashdeposit > .vm-opr-field,
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-dmt-filter-row--cashdeposit > .vm-dmt-field {
+
+    flex: 0 1 160px;
+
+    min-width: 130px;
+
+    max-width: 200px;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-dmt-filter-row--cashdeposit .vm-dmt-filter-search-group {
+
+    margin-left: auto;
+
+    flex: 0 0 auto;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table {
+
+    width: 100% !important;
+
+    min-width: 1520px;
+
+    font-size: 0.8rem !important;
+
+    margin: 0 !important;
+
+    border-collapse: separate !important;
+
+    border-spacing: 0 !important;
+
+    background: #fff !important;
+
+    border: 1px solid #e2e8f0 !important;
+
+    border-radius: 0 0 12px 12px;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th {
+
+    padding: 11px 8px !important;
+
+    border: none !important;
+
+    border-bottom: 2px solid #dbe4f0 !important;
+
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+
+    color: #475569 !important;
+
+    font-size: 0.6rem !important;
+
+    font-weight: 800 !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: 0.04em !important;
+
+    white-space: nowrap !important;
+
+    vertical-align: middle !important;
+
+    text-align: center !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:first-child,
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-sr-cell {
+
+    width: 72px;
+
+    min-width: 72px;
+
+    max-width: 72px;
+
+    padding: 8px 6px !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:nth-child(2),
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-user-cell {
+
+    text-align: left !important;
+
+    min-width: 180px;
+
+    padding: 10px 12px !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table thead th:last-child,
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td.vm-dmt-action-cell {
+
+    min-width: 110px;
+
+    width: 110px;
+
+    padding: 8px 4px !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody td {
+
+    font-size: 0.78rem !important;
+
+    padding: 11px 10px !important;
+
+    vertical-align: middle !important;
+
+    border: none !important;
+
+    border-bottom: 1px solid #eef2f7 !important;
+
+    color: #334155 !important;
+
+    text-align: center;
+
+    line-height: 1.45 !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody tr:nth-child(even) {
+
+    background: #fafbfc;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody tr:hover {
+
+    background: #f1f5f9 !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit.vm-opr-data-table tbody tr.vm-dmt-row--pending {
+
+    background: #fffbeb !important;
+
+    box-shadow: inset 3px 0 0 #f59e0b;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-sr-cell {
+
+    text-align: center !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-sr-num {
+
+    display: block;
+
+    font-size: 0.68rem;
+
+    font-weight: 800;
+
+    color: #94a3b8;
+
+    line-height: 1.2;
+
+    margin-bottom: 4px;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status {
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 28px;
+
+    height: 28px;
+
+    border-radius: 50%;
+
+    margin: 0 auto;
+
+    border: none;
+
+    padding: 0;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status i.fa {
+
+    font-size: 12px !important;
+
+    color: #fff !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status--success {
+
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status--failed {
+
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status--pending {
+
+    background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-status--refund {
+
+    background: linear-gradient(135deg, #92400e, #b45309) !important;
+
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.35);
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-user-stack {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-user-line {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 2px;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-user-role {
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.03em;
+
+    color: #059669;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-user-sep {
+
+    color: #cbd5e1;
+
+    font-weight: 700;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-user-name {
+
+    font-weight: 700;
+
+    color: #1e293b !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-amt-cell {
+
+    font-weight: 700;
+
+    color: #0f172a !important;
+
+    font-variant-numeric: tabular-nums;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-time-cell,
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-cashdeposit-rrn-cell {
+
+    font-size: 0.72rem !important;
+
+    color: #64748b !important;
+
+    white-space: nowrap;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-action-cell {
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+
+    pointer-events: auto !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-action-cell .nrch {
+
+    pointer-events: auto !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-action-cell .nrch button {
+
+    float: left !important;
+
+    display: inline-block !important;
+
+    margin: 0 3px 0 0 !important;
+
+    padding: 0 !important;
+
+    height: auto !important;
+
+    background: transparent !important;
+
+    border: none !important;
+
+    cursor: pointer !important;
+
+    pointer-events: auto !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-action-cell .nrch button i.fa {
+
+    display: inline-block !important;
+
+    font-size: 10px !important;
+
+    border: 1px solid #c7c2c2 !important;
+
+    border-radius: 4px !important;
+
+    padding: 3px 4px !important;
+
+    color: #334155 !important;
+
+    background: transparent !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-act-btn--success i.fa {
+
+    color: #15803d !important;
+
+    border-color: #bbf7d0 !important;
+
+    background: #f0fdf4 !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-act-btn--danger i.fa {
+
+    color: #dc2626 !important;
+
+    border-color: #fecaca !important;
+
+    background: #fef2f2 !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-act-btn--detail i.fa {
+
+    color: #059669 !important;
+
+    border-color: #a7f3d0 !important;
+
+    background: #ecfdf5 !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-table-empty,
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-opr-table-empty {
+
+    text-align: center !important;
+
+    padding: 42px 20px !important;
+
+    color: #64748b !important;
+
+    font-size: 0.88rem !important;
+
+    font-weight: 600 !important;
+
+    background: #f8fafc !important;
+
+    border: none !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-dmt-table-empty i,
+
+body.saas-admin-ui .saas-cashdeposit-report-page #cashdeposit .vm-opr-table-empty i {
+
+    display: block !important;
+
+    font-size: 1.65rem !important;
+
+    color: #94a3b8 !important;
+
+    margin: 0 auto 10px !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page #trow > tr.vm-opr-table-empty-row ~ tr.vm-opr-table-empty-row {
+
+    display: none !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-opr-data-table #trow > tr::before,
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-opr-data-table #trow > tr.vm-opr-table-empty-row::before {
+
+    display: none !important;
+
+    content: none !important;
+
+}
+
+
+
+body.saas-admin-ui .saas-cashdeposit-report-page .vm-opr-table-panel__title i.fa-money-bill-wave {
+
+    color: #059669;
+
+}
+
+
+
+/* Modals */
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .modal-dialog,
+
+body.saas-admin-ui .vm-cashdeposit-success-modal .modal-dialog,
+
+body.saas-admin-ui .vm-cashdeposit-detail-modal .modal-dialog {
+
+    float: none !important;
+
+    margin: 30px auto !important;
+
+    width: auto !important;
+
+    min-height: 0 !important;
+
+    background: transparent !important;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-success-modal .modal-dialog,
+
+body.saas-admin-ui .vm-cashdeposit-detail-modal .modal-dialog {
+
+    max-width: 900px !important;
+
+    width: calc(100% - 32px) !important;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .modal-dialog {
+
+    max-width: 560px !important;
+
+    width: calc(100% - 32px) !important;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-dmt-modal-grid--2,
+
+body.saas-admin-ui .vm-cashdeposit-success-modal .vm-dmt-modal-grid--2,
+
+body.saas-admin-ui .vm-cashdeposit-detail-modal .vm-dmt-modal-grid--2 {
+
+    display: grid !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 14px 16px !important;
+
+    width: 100% !important;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-dmt-modal-grid--2 .vm-dmt-modal-field,
+
+body.saas-admin-ui .vm-cashdeposit-success-modal .vm-dmt-modal-grid--2 .vm-dmt-modal-field,
+
+body.saas-admin-ui .vm-cashdeposit-detail-modal .vm-dmt-modal-grid--2 .vm-dmt-modal-field {
+
+    margin-bottom: 0 !important;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-cashdeposit-refund-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px 16px;
+
+    margin-bottom: 14px;
+
+    font-size: 0.82rem;
+
+    color: #475569;
+
+}
+
+
+
+body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-cashdeposit-refund-meta strong {
+
+    color: #0f172a;
+
+}
+
+
+
+@media (max-width: 767px) {
+
+    body.saas-admin-ui .vm-cashdeposit-refund-modal .vm-dmt-modal-grid--2,
+
+    body.saas-admin-ui .vm-cashdeposit-success-modal .vm-dmt-modal-grid--2,
+
+    body.saas-admin-ui .vm-cashdeposit-detail-modal .vm-dmt-modal-grid--2 {
+
+        grid-template-columns: 1fr !important;
+
+    }
+
+}
+
+
+
+@media (max-width: 992px) {
+
+    body.saas-admin-ui .saas-cashdeposit-report-page .vm-dmt-filter-row--cashdeposit .vm-dmt-filter-search-group {
+
+        margin-left: 0 !important;
+
+        width: 100% !important;
+
+    }
+
+}
+

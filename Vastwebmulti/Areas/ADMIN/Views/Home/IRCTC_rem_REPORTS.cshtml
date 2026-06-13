@@ -1,497 +1,268 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.IRCTC_report_model
-
 @{
-    ViewBag.Title = "IRCTC_rem_REPORTS";
+    ViewBag.Title = "IRCTC Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedStatus = (Request["ddl_status"] ?? "").Trim();
+    var reports = Model != null ? Model.Admin_IRCTC_reports : null;
 }
 
-<style>
-    .jkjk::after {
-        display:none;
-    }
-    .form-control {
-        padding-left: 2px;
-    }
-    .mrj input {
-        border: 1px solid #ccc !important;
-    }
-    .custom-date-icon.ner {
-        height: 34px;
-    }
-    .mrj.responcive-fifty .btn.input-back-second {
-        height: 34px;
-        border-color: #ccc !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=13" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=17"></script>
 
-     /* New css vs responcive   */
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-    .irctcmenu {
-        width: auto;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-irctc-report-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
+        @using (Html.BeginForm("IRCTC_rem_REPORTS", "Home", FormMethod.Post, new { id = "irctcReportForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
 
-    @@media screen and (max-width:1366px){
-        
-        .col-md-6.tre3.all-type-third.tickt-third-responsive {
-            width: 100%;
-            float: left !important;
-        }
-            
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Travel &amp; Hotels</li>
+                        <li>IRCTC Report</li>
+                    </ol>
 
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:992px){
-
-        .t_menu {
-            margin: 4px 0;
-            float: left;
-            width: 100%;
-        }
-        .tre3 {
-            display: block !important;
-        }
-
-
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px){
-        .col-md-6.tre3.all-type-third.tickt-third-responsive .col-md-2 {
-            width: 50%;
-            float: left !important;
-            margin: 0;
-            padding-right: 3px;
-            margin-bottom: 15px;
-        }
-
-        .col-md-6.tre3.all-type-third.tickt-third-responsive .col-md-1 {
-            width: 50%;
-            margin: 0;
-        }
-
-        .col-md-5.mrj.responcive-full {
-            width: 100% !important;
-            float: left;
-            margin: 0;
-        }
-
-            .col-md-5.mrj.responcive-full .form-group.jjp {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-        .tre3 .col-md-5 .form-group.jjp input {
-            width: 50% !important;
-        }
-        .nrr3 {
-            width: 49%;
-        }
-        .tre3 .col-md-5 .form-group.jjp .nrr3 input {
-            width: 100% !important;
-        }
-    }
-
-@@media only screen and (max-width:480px){
-    .col-md-6.tre3.all-type-third.tickt-third-responsive .col-md-2 {
-        width: 100%;
-    }
-
-    .col-md-6.tre3.all-type-third.tickt-third-responsive .col-md-1 {
-        width: 100%;
-        margin-bottom: 8px;
-    }
-    .tre3 .col-md-5 .form-group.jjp input {
-        width: 100% !important;
-        margin-bottom: 8px;
-    }
-    .nrr3 {
-        width: 100%;
-    }
-
-    .D_menu {
-        width: 100% !important;
-    }
-    .page-header-third {
-        width: 100% !important;
-    }
-        .page-header-third #custnav ul li {
-            width: 50%;
-            float: left;
-            margin: 0;
-            padding: 5px 0;
-            padding-right: 2px;
-        }
-
-    .irctcmenu { 
-        width: 100%;
-    }
-
-}
-
-
-
-</style>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row clearfix margin-bottom-third cardbackg-third onlymargin-third">
-            <div class="col-md-12 up-to-up" style="padding-right: 15px; padding-left: 15px;">
-                <div class="card card-rel-third-respo">
-
-                    <div class="page-header-third" style="width: auto; float: left;">
-                        <div class="col-md-2 tre1 up-third-design airtab-respon-third airtab-respon-third-design irctcmenu" style="padding: 0px;">
-                            <div>
-                                @Html.Partial("~/Areas/ADMIN/Views/Air/_travelReportMenu.cshtml")
-
-                            </div>
-                        </div>
-                        <!--<div class="col-md-2 tre2 up-third-design airtab-respon-third airtab-respon-third-design" style="padding: 0px;">-->
-                        @*@Html.Partial("HotelpartialView")*@
-                        <!--</div>-->
-                    </div>
-
-                    <div class="page-header-third D_menu" style="width: auto; float: right;">
-                        <div class="col-md-2 tre4 pdf-lastclass-third widthautposit-third-respon" style="padding: 0; float: right; width: auto; ">
-                            <div class="white-l-search-nine pdfexpoer-second totalbutton-secondclas">
-                                <div class="web-white-filter" style="float: right;">
-                                    <input type="button" id="btnExportA" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:34px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                    <input type="button" id="btnPDFA" value="PDF" style="margin-left:2px;font-size: 11px;float: left; padding: 0px 4px;height:34px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                    <button class="white-success-button" style="height:32px;font-size: 11px;padding: 0px 4px;height: 34px;border: 1px solid #b1a6a638;float: left;margin-left: 2px;background: #b1a6a638;" onclick="findtotalA()">Total</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="white-success" style="display: none; position: absolute;" id="total">
-                            <span id="successtotal" class="btn btn-success waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                            <span id="Failedtotal" class="btn btn-danger waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                            <span id="Pendingtotal" class="btn btn-warning waves-effect" style="font-size: 13px;padding:9px;color:white; font-weight:600;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
-
-                        </div>
-                    </div>
-
-
-                        
+                    <div class="vm-dmt-fin-nav-row vm-ticket-travel-nav-row">
+                        @Html.Partial("~/Areas/ADMIN/Views/Air/_ticketTravelNav.cshtml")
                     </div>
                 </div>
-        </div>
-        <div class="row clearfix" id="tblshowdtaa">
-            <div class="col-md-12" style="">
 
-                <div class="page-header-third">
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="irctcTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>IRCTC totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideIrctcTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="successtotal">—</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">—</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">—</strong>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="col-md-6 tre3 all-type-third tickt-third-responsive" style="padding: 0px; margin: 0; width: 100%; display: flex; align-items: center; justify-content: space-between;">
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--irctc vm-rpt-filters-panel__bar">
 
-                        <div class="t_menu">
-                            <div class="bread-same-all-page breadsameall-second">
-                                <ul>
-                                    <li class="smli">
-                                        <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                        </a>
-                                    </li>
-
-                                    <li class="fullbodydycolorbg tmw-total-color-one">
-                                        IRCTC_rem_REPORTS
-                                    </li>
-                                </ul>
-
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("allmaster", ViewBag.allmasters as SelectList, "All Master", new { id = "allmaster", @class = "vm-opr-select vm-dmt-select form-control", @title = "Master" })
                         </div>
 
-                        <div class="t_menu">
-                            @using (Html.BeginForm("IRCTC_rem_REPORTS", "Home", FormMethod.Post))
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Distributor" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field" id="sts">
+                            @Html.DropDownList("ddl_status", new SelectList(new[]
                             {
+                                new SelectListItem{ Text="All Status", Value=""},
+                                new SelectListItem{ Text="Success", Value="Confirmed"},
+                                new SelectListItem{ Text="Pending", Value="PROCCESSED"},
+                                new SelectListItem{ Text="Failed", Value="Failed"}
+                            }, "Value", "Text", selectedStatus), new { id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control", @title = "Status" })
+                        </div>
 
-
-
-
-                                <div class="col-md-2 mrj jkjk dip responcive-fifty">
-                                    <div class="form-line">
-                                        @Html.DropDownList("allmaster", ViewBag.allmasters as SelectList, "All Master", new { @style = "margin-top:0px", @class = "form-control", data_live_search = "true", })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 mrj jkjk dip responcive-fifty">
-                                    <div class="form-line">
-                                        @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, " All Distubutor", new { id = "alldealer", @class = "form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-2 mrj jkjk dip responcive-fifty">
-                                    <div class="form-line">
-                                        @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-1 mrj jkjk responcive-fifty aapearnce-noneclass apperancenone-third selecthotel-third" id="sts">
-                                    <div class="">
-                                        @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                                          {
-                                                         new SelectListItem{ Text="Status",Value="",},
-                                                         new SelectListItem{Text="SUCCESS",Value="Confirmed"},
-                                                         new SelectListItem{Text="PENDING",Value="PROCCESSED"},
-                                                         new SelectListItem{Text="FAILED",Value="Failed"}
-                                                          }, new { @class = "form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:34px;" })
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-md-5 mrj responcive-full" style="width: auto;">
-                                    <div class="form-group jjp">
-                                        <div class="input-daterange input-group">
-                                            <div class="custom-date-icon ner height-icon-third" style="border-color:#ccc !important;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc; height: 34px !important;", autocomplete = "off" })
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner height-icon-third" style="border-color:#ccc !important;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc !important; height: 34px !important;", autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mrj responcive-fifty" style="margin-right: 0px;">
-                                        <button type="submit" value="Old" name="submit" class="btn input-back-second" style="background: transparent;border: 1px solid #b1a6a638;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            }
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
+                </div>
 
-
-                        <div style="overflow: auto; width: 100%; float: left; margin-top: 6px; ">
-
-                            <table class="table table-responsive table-bordered" style="background: #f5f5f5;">
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Order ID</th>
-                                    <th>Retailer Name</th>
-                                    <th>Mobile</th>
-                                    <th>Secondary Mobile</th>
-                                    <th>Email</th>
-                                    <th>Secondary Email</th>
-                                    <th>Amount</th>
-                                    <th>Transection date</th>
-                                    <th>Expire time</th>
-                                    <th>Retailer OLD balance</th>
-                                    <th>Retailer Latest Balance</th>
-                                    <th>Distributor OLD balance</th>
-                                    <th>Distributor Latest Balance</th>
-                                    <th>MasterDistributor OLD balance</th>
-                                    <th>MasterDistributor Latest Balance</th>
-
-                                    <th>Action</th>
-                                </tr>
-
-                                <tbody id="turborbl" class="chnj">
-                                    @foreach (var item in Model.Admin_IRCTC_reports)
-                                    {
-                                        DateTime txn_date = Convert.ToDateTime(item.txn_date);
-                                        DateTime expire_time = Convert.ToDateTime(item.expire_time);
-                                        var btnstyle = "none";
-                                        var img = "";
-                                        var color = "";
-
-                                        if (item.status.Contains("Failed"))
-                                        {
-                                            img = "../../ashok-images/closes.svg";
-                                            color = "red";
-                                        }
-                                        if (item.status.Contains("Refund"))
-                                        {
-                                            color = "#673ab7";
-                                            img = "../../ashok-images/undo.svg";
-                                        }
-                                        if (item.status.Contains("Success".ToUpper()))
-                                        {
-                                            color = "green";
-                                            img = "../../ashok-images/correct.svg";
-                                        }
-                                        if (item.status.Contains("Pending"))
-                                        {
-                                            color = "#ff9600";
-                                            img = "../../ashok-images/clkk.png";
-                                        }
-
-                                        <tr>
-                                            <td>
-                                                @if (item.status == "Pending")
-                                                {
-                                                    <img src="@img" style="background-color:@color;border-radius:50%;" />@*<span>Pending</span>*@
-                                                    <input type="button" value="status chk" onclick="checkstatusdata('@item.TxnID')" style="border: 1px solid #aaa4a4; font-size: 12px; text-transform: uppercase; padding: 6px 5px; margin-top: 5px;" />
-                                                }
-                                                else
-                                                {
-                                                    <span>
-                                                        <img src="@img" style="background-color:@color;border-radius:50%;" /> @item.status
-                                                    </span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @item.TxnID
-                                            </td>
-                                            <td>
-                                                @item.RetailerName
-                                            </td>
-                                            <td>
-                                                @item.remmobile
-                                            </td>
-                                            <td>
-                                                @item.secondmobile
-                                            </td>
-                                            <td>
-                                                @item.remEmail
-                                            </td>
-                                            <td>
-                                                @item.secondemail
-                                            </td>
-                                            <td>
-                                                @item.amount
-                                            </td>
-                                            <td>
-                                                @txn_date.ToString("d-MMM-yyyy HH:mm:ss")
-                                            </td>
-                                            <td>
-                                                @expire_time.ToString("d-MMM-yyyy HH:mm:ss")
-                                            </td>
-                                            <td>
-                                                @item.remain_pre
-                                            </td>
-                                            <td>
-                                                @item.remain
-                                            </td>
-                                            <td>
-                                                @item.dealer_remain_pre
-                                            </td>
-                                            <td>
-                                                @item.dealerremain
-                                            </td>
-                                            <td>
-                                                @item.master_remain_pre
-                                            </td>
-                                            <td>
-                                                @item.masterremain
-                                            </td>
-                                            <td>
-                                                @if (item.status == "Pending")
-                                                {
-                                                    <button type="button" onclick="successdstatus('@item.TxnID','APPROVE')" style="border:0;background:transparent;">
-                                                        <i class="fa fa-check" style="top:1px;border: 1px solid #c7c2c2;padding: 3px;font-size: 10px;" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="button" onclick="successdstatus('@item.TxnID','REJECT')" style="border:0;background:transparent;">
-                                                        <i class="fa fa-times" style="top:1px;border: 1px solid #c7c2c2;padding: 3px 4px;font-size: 10px;" aria-hidden="true"></i>
-                                                    </button>
-
-                                                    @*<input type="button" value="Success" onclick="successdstatus('@item.TxnID','APPROVE')" />
-                                    <input type="button" value="Failed" onclick="successdstatus('@item.TxnID','REJECT')" />*@
-                                                }
-                                            </td>
-                                        </tr>
-
-                                    }
-                                </tbody>
-
-
-
-
-
-                            </table>
-
-
-                        </div>
-
-
-                    </div>
-            
             </div>
-
-
-        </div>
-        </div>
-</section>
-
-<script>
-
-    function checkstatusdata(idno) {
-        
-        $.ajax({
-            url: '@Url.Action("Status_IRCTC_CHECK", "Home")',
-            data: { idno: idno},
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                
-                alert(data);
-
-            }
-
-        })
-    }
-    function successdstatus(idno,sts) {
-        alert(idno)
-
-        $.ajax({
-            url: '@Url.Action("IRCTCT_PENDING_SUCCESS_FAILED", "Home")',
-            data: { generate_txnid: idno,sts:sts },
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                // alert(data);
-                location.reload();
-            }
-
-        })
-    }
- 
-
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
         }
 
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-train" aria-hidden="true"></i>
+                        <span>IRCTC token purchase report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-irctc-totals-btn" onclick="findtotalIrctc()" title="Show totals" aria-expanded="false" aria-controls="irctcTotalsPanel"><i class="fas fa-chart-pie" aria-hidden="true"></i></button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i> Excel</button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="irctcReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Order&nbsp;ID</th>
+                                    <th>Retailer&nbsp;Name</th>
+                                    <th>Mobile</th>
+                                    <th>Secondary&nbsp;Mobile</th>
+                                    <th>Email</th>
+                                    <th>Secondary&nbsp;Email</th>
+                                    <th>Amount</th>
+                                    <th>Transection&nbsp;date</th>
+                                    <th>Expire&nbsp;time</th>
+                                    <th>Retailer&nbsp;OLD&nbsp;balance</th>
+                                    <th>Retailer&nbsp;Latest&nbsp;Balance</th>
+                                    <th>Distributor&nbsp;OLD&nbsp;balance</th>
+                                    <th>Distributor&nbsp;Latest&nbsp;Balance</th>
+                                    <th>MasterDistributor&nbsp;OLD&nbsp;balance</th>
+                                    <th>MasterDistributor&nbsp;Latest&nbsp;Balance</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="irctcReportRows">
+                                @Html.Partial("_IrctcReportRows", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-ticket-report.js?v=12"></script>
+<script src="~/Swalalert/sweetalert-dev.js"></script>
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<script>
+    window.irctcReportBaseUrl = '@Url.Action("IRCTC_rem_REPORTS", "Home")';
+
+    function buildIrctcExportQuery() {
+        return 'txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val())
+            + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val())
+            + '&ddl_status=' + encodeURIComponent($('#ddl_status').val() || '')
+            + '&allmaster=' + encodeURIComponent($('#allmaster').val() || '')
+            + '&alldealer=' + encodeURIComponent($('#alldealer').val() || '')
+            + '&allretailer=' + encodeURIComponent($('#allretailer').val() || '');
+    }
+
+    function downloadIrctcExport(type) {
+        var url = window.irctcReportBaseUrl + '?export=' + encodeURIComponent(type) + '&' + buildIrctcExportQuery();
+        var frame = document.getElementById('irctcExportFrame');
+        if (!frame) {
+            frame = document.createElement('iframe');
+            frame.id = 'irctcExportFrame';
+            frame.style.display = 'none';
+            document.body.appendChild(frame);
+        }
+        frame.src = url;
+    }
+
+    $('#btnExportA').click(function () { downloadIrctcExport('excel'); });
+    $('#btnPDFA').click(function () { downloadIrctcExport('pdf'); });
+
+    function checkstatusdata(idno) {
+        $('#loadermoney').show();
+        $.ajax({
+            url: '@Url.Action("Status_IRCTC_CHECK", "Home")',
+            data: { idno: idno },
+            cache: false,
+            type: 'POST',
+            success: function (data) {
+                $('#loadermoney').hide();
+                if (typeof swal === 'function') {
+                    swal('Status', data, 'info');
+                } else {
+                    alert(data);
+                }
+            },
+            error: function () {
+                $('#loadermoney').hide();
+                if (typeof swal === 'function') {
+                    swal('Oops!', 'Unable to fetch status.', 'error');
+                }
+            }
+        });
+    }
+
+    function successdstatus(idno, sts) {
+        $('#loadermoney').show();
+        $.ajax({
+            url: '@Url.Action("IRCTCT_PENDING_SUCCESS_FAILED", "Home")',
+            data: { generate_txnid: idno, sts: sts },
+            cache: false,
+            type: 'POST',
+            success: function () {
+                $('#loadermoney').hide();
+                location.reload();
+            },
+            error: function () {
+                $('#loadermoney').hide();
+                if (typeof swal === 'function') {
+                    swal('Oops!', 'Unable to update status.', 'error');
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        var sts = '@TempData["Status"]';
+        var msg = '@TempData["Message"]';
+        if (sts && msg && typeof swal === 'function') {
+            swal('Oops..', msg, 'error');
+        }
+
+        $('#txt_frm_date, #txt_to_date').datepicker({
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            autoclose: true,
+            orientation: 'bottom auto'
+        });
+        var val = '@ViewBag.chk';
+        if (val !== 'post') {
+            $('#txt_frm_date').datepicker('setDate', new Date());
+            $('#txt_to_date').datepicker('setDate', new Date());
+        }
     });
 </script>

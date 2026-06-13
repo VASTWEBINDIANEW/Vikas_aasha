@@ -1,0 +1,86 @@
+@model List<Vastwebmulti.Models.microatm_report_Result>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Micro ATM Report PDF</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 11px; }
+        table, td, th { border: 1px solid #333; }
+        th { background: #f1f5f9; padding: 4px 6px; text-align: center; }
+        td { padding: 4px 6px; text-align: center; }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+    </style>
+</head>
+<body>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Status</th>
+                <th>Firm Name</th>
+                <th>Amount</th>
+                <th>Time</th>
+                <th>BankRRN No</th>
+                <th>Tran Type</th>
+                <th>Card Type</th>
+                <th>Card No</th>
+                <th>Network</th>
+                <th>Remain Pre</th>
+                <th>Comm</th>
+                <th>GST</th>
+                <th>TDS</th>
+                <th>Remain Post</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                var sno = 0;
+                foreach (var item in Model)
+                {
+                    sno++;
+                    decimal comm = 0;
+                    var transtype = "";
+                    if ((item.status ?? "").IndexOf("success", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        if (item.transaction_type == "microatm")
+                        {
+                            comm = item.Retailer_comm ?? 0;
+                            transtype = "-cm";
+                        }
+                        else if (item.transaction_type == "purchase")
+                        {
+                            comm = (item.amount.HasValue && item.Retailer_comm.HasValue)
+                                ? (item.amount.Value * item.Retailer_comm.Value) / 100
+                                : 0;
+                            transtype = "-ch";
+                        }
+                    }
+                    <tr>
+                        <td>@sno</td>
+                        <td>@item.status</td>
+                        <td>@item.Frm_Name</td>
+                        <td>@item.amount</td>
+                        <td>@item.transtime</td>
+                        <td>@item.rrn</td>
+                        <td>@item.transaction_type</td>
+                        <td>@item.card_payment_type</td>
+                        <td>@item.masked_pan</td>
+                        <td>@item.network</td>
+                        <td>@item.retailer_remain_pre</td>
+                        <td>@comm@transtype</td>
+                        <td>@item.Retailer_gst</td>
+                        <td>@item.Retailer_tds</td>
+                        <td>@item.retailer_remain_post</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>

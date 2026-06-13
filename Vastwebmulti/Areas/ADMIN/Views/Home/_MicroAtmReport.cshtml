@@ -1,0 +1,119 @@
+@model IEnumerable<Vastwebmulti.Models.microatm_report_Result>
+@{
+    Layout = null;
+    var items = Model == null ? new List<Vastwebmulti.Models.microatm_report_Result>() : Model.ToList();
+}
+@if (items.Count > 0)
+{
+    var srIndex = ViewBag.SrOffset != null ? Convert.ToInt32(ViewBag.SrOffset) : 0;
+    foreach (var item in items)
+    {
+        srIndex++;
+        decimal comm = 0;
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = item.status ?? "Pending";
+        var sts = (item.status ?? "").ToUpperInvariant();
+
+        if (sts.Contains("SUCCESS"))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+            statusLabel = "Success";
+            if (item.transaction_type == "microatm")
+            {
+                comm = item.Retailer_comm.HasValue ? item.Retailer_comm.Value : 0;
+            }
+            else if (item.transaction_type == "purchase")
+            {
+                comm = (item.amount.HasValue && item.Retailer_comm.HasValue)
+                    ? (item.amount.Value * item.Retailer_comm.Value) / 100
+                    : 0;
+            }
+        }
+        else if (sts.Contains("FAILED"))
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+            statusLabel = "Failed";
+        }
+        else if (sts.Contains("PENDING"))
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+            statusLabel = "Pending";
+        }
+
+        var userName = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : "—";
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-dmt-sr-cell">
+                <span class="vm-dmt-sr-num">@srIndex</span>
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+            </td>
+            <td class="vm-dmt-user-cell">
+                <div class="vm-dmt-user-stack">
+                    <div class="vm-dmt-user-line">
+                        <span class="vm-dmt-user-role">Retailer</span>
+                        <span class="vm-dmt-user-sep">&rsaquo;</span>
+                        <span class="vm-dmt-user-name">@userName</span>
+                    </div>
+                </div>
+            </td>
+            <td class="vm-dmt-amt-cell">@item.amount</td>
+            <td class="vm-dmt-time-cell">@item.transtime</td>
+            <td class="vm-microatm-rrn-cell">@item.rrn</td>
+            <td>@item.transaction_type</td>
+            <td>@item.card_payment_type</td>
+            <td>@item.masked_pan</td>
+            <td>@item.network</td>
+            <td>@item.retailer_remain_pre</td>
+            <td class="vm-dmt-amt-cell">@comm</td>
+            <td>@item.Retailer_gst</td>
+            <td>@item.Retailer_tds</td>
+            <td>@item.retailer_remain_post</td>
+            <td class="vm-dmt-action-cell">
+                <div class="nrch vm-dmt-action-bar">
+                    @if (string.Equals(item.transaction_type, "REVERSAL", StringComparison.OrdinalIgnoreCase) && sts == "SUCCESS")
+                    {
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--danger" title="Refund" onclick="refundshow('@item.rrn')">
+                            <i class="fa fa-undo" aria-hidden="true"></i>
+                        </button>
+                    }
+                    @if (sts == "PENDING")
+                    {
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--success" title="Mark success" onclick="successMATM('@item.Requestid', '@item.amount', '@item.transaction_type')">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--danger" title="Mark failed" onclick="FailedMTM('@item.Requestid', '@item.amount')">
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                        </button>
+                    }
+                    <button type="button" class="fftt vm-dmt-act-btn vm-dmt-act-btn--detail" title="View details" onclick="mdActionBtn('@item.idno')">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        @if (ViewBag.checkdata != null)
+        {
+            <td colspan="15" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <span>No transactions found for current search.</span>
+            </td>
+        }
+        else
+        {
+            <td colspan="15" class="vm-opr-table-empty vm-dmt-table-empty">
+                <i class="fas fa-university" aria-hidden="true"></i>
+                <span>Micro ATM transaction not found.</span>
+            </td>
+        }
+    </tr>
+}

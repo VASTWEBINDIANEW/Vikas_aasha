@@ -1,121 +1,164 @@
 ﻿@model List<Vastwebmulti.Models.proc_FlightReport_Result>
+
 @{
+
     Layout = null;
+
+    var items = Model == null ? new List<Vastwebmulti.Models.proc_FlightReport_Result>() : Model;
+
 }
-@if (Model != null && Model.Count > 0)
+
+@if (items.Count > 0)
+
 {
-    foreach (var item in Model)
+
+    foreach (var item in items)
+
     {
-        #region CssSettings
-        var color = "";
-        var fontweight = "";
-        var text = "";
-        var emailid = "";
-        var Retailername = "";
-        var framname = "";
-        var mobile = "";
-        var rolename = "";
-        var icon = "";
-        var rchtype = "";
-        var rchtypeicon = "";
-        var sts = "";
-        var refundcolor = "";
-        var dmtytpe = "";
 
-        sts = ((Vastwebmulti.Areas.RETAILER.Enums.TicketStatus)Convert.ToInt32(item.TicketStatusCode)).ToString();
+        var statusTone = "pending";
 
-        //if (item.TicketStatusCode == 3 || item.TicketStatusCode == 4 || item.TicketStatusCode == 6 || item.TicketStatusCode == 8 || item.TicketStatusCode == 9)
+        var statusFa = "fa-clock-o";
+
+        var sts = ((Vastwebmulti.Areas.RETAILER.Enums.TicketStatus)Convert.ToInt32(item.TicketStatusCode)).ToString();
+
+
+
         if (item.TicketStatus.Contains("FAILED"))
+
         {
-            color = "red";
-            fontweight = "700";
-            icon = "../../ashok-images/closes.svg";
+
+            statusTone = "failed";
+
+            statusFa = "fa-times";
+
         }
-        if (item.TicketStatus.Contains("Success"))
+
+        else if (item.TicketStatus.Contains("Success"))
+
         {
-            color = "green";
-            fontweight = "700";
-            icon = "../../ashok-images/correct.svg";
+
+            statusTone = "success";
+
+            statusFa = "fa-check";
+
         }
-        if (item.TicketStatus.ToUpper().Contains("REFUND"))
+
+        else if (item.TicketStatus.ToUpper().Contains("REFUND"))
+
         {
-            color = "#673ab7";
-            fontweight = "700";
-            icon = "../../ashok-images/undo.svg";
+
+            statusTone = "refund";
+
+            statusFa = "fa-undo";
+
         }
-        if (item.TicketStatus.ToUpper().Contains("PENDING"))
+
+        else if (item.TicketStatus.ToUpper().Contains("PENDING"))
+
         {
-            color = "#ff9600";
-            fontweight = "700";
-            icon = "../../ashok-images/clkk.png";
+
+            statusTone = "pending";
+
+            statusFa = "fa-clock-o";
+
         }
-        #endregion
-        <tr>
-            <td class="bbrd"><p><img style="background-color:@color" src="@icon" /></p>@item.TicketStatus</td>
-            <td><p>@sts</p></td>
 
 
-            <td><p>@item.Frm_Name</p></td>
-            <td>
-                <p>&nbsp;@item.LeadPaxFirstName @item.LeadPaxLastName&nbsp;</p>
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+
+            <td class="vm-ticket-status-cell">
+
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@item.TicketStatus">
+
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+
+                </span>
+
+                <span class="vm-ticket-status-text">@item.TicketStatus</span>
+
             </td>
+
+            <td>@sts</td>
+
+            <td>@item.Frm_Name</td>
+
+            <td>@item.LeadPaxFirstName @item.LeadPaxLastName</td>
+
             <td>@item.AirlineName</td>
+
             <td>@item.BookingId</td>
-            <td>@item.PNR</td>
-            <td><p>@String.Format("{0:dd-MMM HH:mm:ss}", item.TicketDate)&nbsp;&nbsp;</p></td>
-            <td>@Math.Round(item.FareAmount, 2)</td>
 
-            <td>
+            <td class="vm-ticket-pnr-cell">@item.PNR</td>
+
+            <td class="vm-ticket-time-cell">@String.Format("{0:dd-MMM HH:mm:ss}", item.TicketDate)</td>
+
+            <td class="vm-dmt-amt-cell">@Math.Round(item.FareAmount, 2)</td>
+
+            <td class="vm-ticket-action-cell">
+
                 @if (!item.TicketStatus.Contains("Refund"))
+
                 {
 
+                    <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--info" title="Current Status" onclick="getTicketStatus('@item.TraceId','@item.BookingId','@item.PNR')">
 
-                    <p id="statusLink" onclick="getTicketStatus('@item.TraceId','@item.BookingId','@item.PNR')"><a class="btn btn-primary" style="background: transparent !important;color: black;padding: 6px 5px;font-size: 12px;">Current Status</a></p>
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
 
+                    </button>
 
                 }
-            </td>
-            <td class="nrch" style="text-align: center;">
-                @if (item.TicketStatusCode == 1 && item.ResponseJson != null && item.ResponseJson.Contains("TicketId"))
-                {
-                    <span><a href="@Url.Action("ViewTicket","Air",new { idno = item.idno, firsName =item.LeadPaxFirstName,lastName= item.LeadPaxLastName})" target="_blank" class="btn btn-primary" style="border: 0px;background: transparent !important;padding: 0px;"><i class="material-icons" style="color: #555555;border: 1px solid #c7c2c2;font-size: 13px;padding: 2px 3px;">print</i></a></span>
-                }
-                else
-                {
-                    <span></span>
-                }
 
-                <span class="fftt" data-toggle="modal" data-target="#defaultModal222" onclick="ActionBtn('@item.idno')"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
             </td>
 
-            @*<td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemPre, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemInc, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.RemPost, 2)</td>
+            <td class="vm-dmt-action-cell">
 
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmPre, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmInc, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.DlmPost, 2)</td>
+                <div class="nrch vm-dmt-action-bar">
 
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.MdPre, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.MdInc, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.MdPost, 2)</td>
+                    @if (item.TicketStatusCode == 1 && item.ResponseJson != null && item.ResponseJson.Contains("TicketId"))
 
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.AdminPre, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.AdminInc, 2)</td>
-                <td style="font-size:13px;margin-left:-7px;">@Math.Round(item.AdminPost, 2)</td>*@
+                    {
+
+                        <a href="@Url.Action("ViewTicket","Air",new { idno = item.idno, firsName = item.LeadPaxFirstName, lastName = item.LeadPaxLastName})" target="_blank" class="vm-dmt-act-btn vm-dmt-act-btn--print" title="Print ticket">
+
+                            <i class="fa fa-print" aria-hidden="true"></i>
+
+                        </a>
+
+                    }
+
+                    <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--detail" title="View details" onclick="ticketActionBtn('@item.idno')">
+
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+
+                    </button>
+
+                </div>
+
+            </td>
+
         </tr>
+
     }
+
 }
 
+else
 
+{
 
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+    <tr class="vm-opr-table-empty-row">
 
+        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
 
-            paging: false
-        });
-    });
+            <i class="fas fa-plane" aria-hidden="true"></i>
 
-</script>
+            <span>Flight ticket report not found.</span>
+
+        </td>
+
+    </tr>
+
+}
+

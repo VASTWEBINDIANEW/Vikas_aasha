@@ -1,0 +1,65 @@
+@model List<Vastwebmulti.Models.report_cash_deposit_Result>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Cash Deposit Report PDF</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 11px; }
+        table, td, th { border: 1px solid #333; }
+        th { background: #f1f5f9; padding: 4px 6px; text-align: center; }
+        td { padding: 4px 6px; text-align: center; }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+    </style>
+</head>
+<body>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Status</th>
+                <th>Firm Name</th>
+                <th>Amount</th>
+                <th>Time</th>
+                <th>BankRRN No</th>
+                <th>Ben Name</th>
+                <th>Bank Name</th>
+                <th>Remain Pre</th>
+                <th>Comm</th>
+                <th>GST</th>
+                <th>TDS</th>
+                <th>Remain Post</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                var sno = 0;
+                foreach (var item in Model)
+                {
+                    sno++;
+                    <tr>
+                        <td>@sno</td>
+                        <td>@item.status</td>
+                        <td>@item.Frm_Name</td>
+                        <td>@item.amount</td>
+                        <td>@item.req_date</td>
+                        <td>@item.bankrrn</td>
+                        <td>@item.benname</td>
+                        <td>@item.bankname</td>
+                        <td>@item.Rem_pre</td>
+                        <td>@item.rem_comm</td>
+                        <td>@item.rem_gst</td>
+                        <td>@item.rem_tds</td>
+                        <td>@item.rem_post</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>

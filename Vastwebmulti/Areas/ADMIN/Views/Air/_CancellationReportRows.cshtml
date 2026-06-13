@@ -1,0 +1,83 @@
+@model List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>
+@using System.Web.Mvc.Ajax
+@{
+    Layout = null;
+    var items = Model ?? new List<Vastwebmulti.Models.proc_FlightCancellationReport_Result>();
+}
+@if (items.Count > 0)
+{
+    foreach (var item in items)
+    {
+        var statusTone = "pending";
+        var sts = item.ChangeRequestStatus.HasValue
+            ? ((Vastwebmulti.Areas.RETAILER.Enums.ChangeRequestStatus)Convert.ToInt32(item.ChangeRequestStatus)).ToString()
+            : "—";
+
+        if (item.ChangeRequestStatus == 5)
+        {
+            statusTone = "failed";
+        }
+        else if (item.ChangeRequestStatus == 4)
+        {
+            statusTone = "success";
+        }
+        else if (item.ChangeRequestStatus <= 3)
+        {
+            statusTone = "pending";
+        }
+        else if (item.ChangeRequestStatus == 6 || item.ChangeRequestStatus == 8)
+        {
+            statusTone = "refund";
+        }
+        else if (item.ChangeRequestStatus == 7)
+        {
+            statusTone = "info";
+        }
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-cancel-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@sts">@sts</span>
+            </td>
+            <td>@item.Email</td>
+            <td>@item.RetailerName</td>
+            <td>@item.Frm_Name</td>
+            <td>@item.RequestType</td>
+            <td>@item.CancellationType</td>
+            <td class="vm-cancel-id-cell">@item.ChangeRequestId</td>
+            <td class="vm-cancel-time-cell">@String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationRequestDate)</td>
+            <td class="vm-cancel-time-cell">@(item.CancellationResponseDate.HasValue ? String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationResponseDate) : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.RefundedAmount.HasValue ? Math.Round(item.RefundedAmount.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.CancellationCharge.HasValue ? Math.Round(item.CancellationCharge.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-action-cell">
+                @if (item.ChangeRequestId.HasValue)
+                {
+                    @Ajax.ActionLink("STATUS", "CancellationStatus", "Air",
+                        new { ChangeReqId = item.ChangeRequestId.Value, idno = item.idno },
+                        new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnCancellationStatusSuccess", OnFailure = "OnCancellationStatusFailure", LoadingElementId = "loadermoney" },
+                        new { @class = "vm-dmt-act-btn vm-dmt-act-btn--status", title = "Check cancellation status" })
+                }
+            </td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.RemPre, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.RemInc, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.RemPost, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.DlmPre, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.DlmInc, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.DlmPost, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.MdPre, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.MdInc, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.MdPost, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.AdminPre, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.AdminInc, 2)</td>
+            <td class="vm-dmt-amt-cell">@Math.Round(item.AdminPost, 2)</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="25" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-ban" aria-hidden="true"></i>
+            <span>Flight cancellation report not found.</span>
+        </td>
+    </tr>
+}

@@ -1,0 +1,68 @@
+@model IEnumerable<Vastwebmulti.Models.GetCreditDetails_Result>
+
+@{
+
+    Layout = null;
+
+    var items = Model == null ? new List<Vastwebmulti.Models.GetCreditDetails_Result>() : Model.ToList();
+
+}
+
+@if (items.Count > 0)
+
+{
+
+    foreach (var item in items)
+
+    {
+
+        <tr>
+
+            <td>@item.FromRole</td>
+
+            <td>@item.ToRole</td>
+
+            <td>@item.FrmName</td>
+
+            <td>@item.Name</td>
+
+            <td>@item.Mobile</td>
+
+            <td>@item.Dist_Desc</td>
+
+            <td>@item.State_name</td>
+
+            <td class="vm-credit-amt-cell">@item.Amount</td>
+
+            <td class="vm-credit-amt-cell">@item.ToRemainPose</td>
+
+            <td class="vm-credit-amt-cell">@item.CrPose</td>
+
+            <td class="vm-credit-amt-cell">@item.livecr</td>
+
+            <td class="vm-credit-time-cell">@item.TransferTime</td>
+
+        </tr>
+
+    }
+
+}
+
+else
+
+{
+
+    <tr class="vm-opr-table-empty-row">
+
+        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+
+            <i class="fas fa-credit-card" aria-hidden="true"></i>
+
+            <span>Credit report data not found.</span>
+
+        </td>
+
+    </tr>
+
+}
+

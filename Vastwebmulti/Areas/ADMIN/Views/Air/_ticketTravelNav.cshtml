@@ -1,0 +1,131 @@
+@{
+    var travelPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    var isBusReport = travelPath.IndexOf("BusBookingReport", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isHotelReport = travelPath.IndexOf("HotelReport", StringComparison.OrdinalIgnoreCase) >= 0
+        || travelPath.IndexOf("CancellationQueue", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isIrctcReport = travelPath.IndexOf("IRCTC_rem_REPORTS", StringComparison.OrdinalIgnoreCase) >= 0;
+}
+
+<nav class="vm-ticket-nav-wrap" aria-label="Travel and flight report navigation">
+
+    <div id="ticket-travel-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-ticket-travel-nav">
+
+        <ul class="vm-fin-nav__list" id="ticket-travel-nav-list">
+
+            <li>
+
+                <a class="vm-fin-nav__link" href="@Url.Action("TicketReport", "Air")" title="Flight">
+
+                    <i class="fas fa-plane vm-fin-nav__ico" aria-hidden="true"></i>
+
+                    <span>Flight</span>
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a class="vm-fin-nav__link" href="@Url.Action("BusBookingReport", "Home")" title="Bus">
+
+                    <i class="fas fa-bus vm-fin-nav__ico" aria-hidden="true"></i>
+
+                    <span>Bus</span>
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a class="vm-fin-nav__link" href="@Url.Action("HotelReport", "Hotel")" title="Hotel">
+
+                    <i class="fas fa-hotel vm-fin-nav__ico" aria-hidden="true"></i>
+
+                    <span>Hotel</span>
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a class="vm-fin-nav__link" href="@Url.Action("IRCTC_rem_REPORTS", "Home")" title="IRCTC">
+
+                    <i class="fas fa-train vm-fin-nav__ico" aria-hidden="true"></i>
+
+                    <span>IRCTC</span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div id="ticket-flight-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-ticket-flight-nav">
+
+        <ul class="vm-fin-nav__list" id="ticket-flight-nav-list">
+
+            @if (isIrctcReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link is-active" href="@Url.Action("IRCTC_rem_REPORTS", "Home")" title="IRCTC reports">
+                        <i class="fas fa-train vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>IRCTC</span>
+                    </a>
+                </li>
+            }
+            else if (isBusReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("BusBookingReport", "Home")" title="Booked bus tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="#" title="Canceled bus tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+            else if (isHotelReport)
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("HotelReport", "Hotel")" title="Booked hotel tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("CancellationQueue", "Hotel")" title="Canceled hotel tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("TicketReport", "Air")" title="Booked tickets">
+                        <i class="fas fa-ticket-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Booked</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="vm-fin-nav__link" href="@Url.Action("CancellationReport", "Air")" title="Canceled tickets">
+                        <i class="fas fa-ban vm-fin-nav__ico" aria-hidden="true"></i>
+                        <span>Canceled</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+
+    </div>
+
+</nav>
+

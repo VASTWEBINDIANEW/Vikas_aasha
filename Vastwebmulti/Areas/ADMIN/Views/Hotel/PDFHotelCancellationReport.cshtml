@@ -1,0 +1,60 @@
+@model List<Vastwebmulti.Models.proc_HotelCancellationReport_Result>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PDF Hotel Cancellation Report</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 11px; }
+        table, td, th { border: 1px solid #000; }
+        th { background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Email&nbsp;Id</th>
+                <th>Retailer&nbsp;Name</th>
+                <th>Frim&nbsp;Name</th>
+                <th>Cancellation&nbsp;Id</th>
+                <th>Booking&nbsp;Id</th>
+                <th>Cancallation&nbsp;Charge</th>
+                <th>Refund&nbsp;Amount</th>
+                <th>Request&nbsp;Date</th>
+                <th>Response&nbsp;Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    var sts = "Pending";
+                    if (!string.IsNullOrEmpty(item.ChangeRequestStatus))
+                    {
+                        if (item.ChangeRequestStatus.Contains("4")) { sts = "Failed"; }
+                        else if (item.ChangeRequestStatus.Contains("3")) { sts = "Processed"; }
+                    }
+                    <tr>
+                        <td>@sts</td>
+                        <td>@item.Email</td>
+                        <td>@item.RetailerName</td>
+                        <td>@item.Frm_Name</td>
+                        <td>@item.ChangeRequestId</td>
+                        <td>@item.BookingId</td>
+                        <td>@(item.CancellationCharge.HasValue ? Math.Round(item.CancellationCharge.Value, 2) : 0)</td>
+                        <td>@(item.RefundedAmount.HasValue ? Math.Round(item.RefundedAmount.Value, 2) : 0)</td>
+                        <td>@String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationRequestDate)</td>
+                        <td>@(item.CancellationResponseDate.HasValue ? String.Format("{0:dd-MMM HH:mm:ss}", item.CancellationResponseDate) : "")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>

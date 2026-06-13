@@ -63,8 +63,21 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
         //[MenuAccessFilter] //used in paid and nonpaid services
-        public ActionResult HotelReport()
+        public ActionResult HotelReport(string export, string ddl_status, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string ddl_status_ticket)
         {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalHotelBookingReport(ddl_status, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, ddl_status_ticket);
+                    case "excel":
+                        return ExcelHotelBookingReport(ddl_status, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, ddl_status_ticket);
+                    case "pdf":
+                        return PDFHotelReport(ddl_status, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, ddl_status_ticket);
+                }
+            }
+
             try
             {
                 var userid = User.Identity.GetUserId();
@@ -158,7 +171,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         userid = allmaster;
                     }
-                    else if (ddlusers == "Distributor")
+                    else if (ddlusers == "Dealer")
                     {
                         userid = alldealer;
                     }
@@ -180,7 +193,27 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
         }
 
+        public ActionResult TotalHotelBookingReport(string ddl_status, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string ddl_status_ticket)
+        {
+            try
+            {
+                var rows = QueryHotelReport(ddl_status, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, ddl_status_ticket);
+                var successTotal = rows.Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.Contains("Success")).Sum(s => s.totalOfferedFare ?? 0);
+                var failedTotal = rows.Where(s => !string.IsNullOrEmpty(s.TicketStatus) && s.TicketStatus.ToUpper().Contains("FAILED")).Sum(s => s.totalOfferedFare ?? 0);
+                var pendingTotal = rows.Where(s => !string.IsNullOrEmpty(s.TicketStatus) && (s.TicketStatus.Contains("Pending") || s.TicketStatus.Contains("Proccessed"))).Sum(s => s.totalOfferedFare ?? 0);
 
+                return Json(new
+                {
+                    success = successTotal,
+                    failed = failedTotal,
+                    pending = pendingTotal
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public ActionResult ExcelHotelBookingReport(string ddl_status, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string ddl_status_ticket)
         {
@@ -227,7 +260,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         userid = allmaster;
                     }
-                    else if (ddlusers == "Distributor")
+                    else if (ddlusers == "Dealer")
                     {
                         userid = alldealer;
                     }
@@ -339,7 +372,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         userid = allmaster;
                     }
-                    else if (ddlusers == "Distributor")
+                    else if (ddlusers == "Dealer")
                     {
                         userid = alldealer;
                     }
@@ -349,7 +382,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     }
 
                     var ch = db.proc_HotelReport_new(frm_date, to_date, ddl_status, ddl_status_ticket, ddlusers, userid).ToList();
-                    return new ViewAsPdf(ch);
+                    return new ViewAsPdf("PDFHotelReport", ch) { FileName = "Hotel_Booking_Report.pdf" };
                 }
 
             }
@@ -363,8 +396,20 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
         [HttpGet]
-        public ActionResult CancellationQueue()
+        public ActionResult CancellationQueue(string export, string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string allwhitelabel, string BookingId)
         {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+                    case "excel":
+                        return ExcelHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+                    case "pdf":
+                        return PDFHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+                }
+            }
 
             try
             {
@@ -377,7 +422,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                              select new SelectListItem
                                                              {
                                                                  Value = s.SSId,
-                                                                 Text = s.Email + "--" + s.SuperstokistName.ToString()
+                                                                 Text = s.FarmName.ToString()
                                                              };
                     ViewBag.allmaster = new SelectList(selectList, "Value", "Text");
                     //show whitelabel
@@ -386,13 +431,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                               select new SelectListItem
                                                               {
                                                                   Value = s.WhiteLabelID,
-                                                                  Text = s.EmailId + "--" + s.Name.ToString()
+                                                                  Text = s.FrmName.ToString()
                                                               };
                     ViewBag.allwhitelabel = new SelectList(selectList1, "Value", "Text");
                     //show dealer
-                    ViewBag.alldealer = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "DealerName", null).ToList();
+                    ViewBag.alldealer = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "FarmName", null).ToList();
                     //Retailer 
-                    ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "RetailerName", null).ToList();
+                    ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
                     string txt_frm_date = DateTime.Now.ToString();
                     string txt_to_date = DateTime.Now.ToString();
                     var frm_date = Convert.ToDateTime(txt_frm_date).Date;
@@ -441,13 +486,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                                                               select new SelectListItem
                                                               {
                                                                   Value = s.WhiteLabelID,
-                                                                  Text = s.EmailId + "--" + s.Name.ToString()
+                                                                  Text = s.FrmName.ToString()
                                                               };
                     ViewBag.allwhitelabel = new SelectList(selectList1, "Value", "Text");
                     //show dealer
-                    ViewBag.alldealer = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "DealerName", null).ToList();
+                    ViewBag.alldealer = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "FarmName", null).ToList();
                     //Retailer 
-                    ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "RetailerName", null).ToList();
+                    ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
 
                     DateTime frm = Convert.ToDateTime(txt_frm_date);
                     DateTime to = Convert.ToDateTime(txt_to_date);
@@ -527,6 +572,112 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 TempData["Status"] = "Failed";
                 TempData["Message"] = "An error occured while proccessing request.";
                 return RedirectToAction("Travel", "Home");
+            }
+        }
+
+        public ActionResult TotalHotelCancellationReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string BookingId)
+        {
+            try
+            {
+                var rows = QueryHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+                var successTotal = rows.Where(a => !string.IsNullOrEmpty(a.ChangeRequestStatus) && a.ChangeRequestStatus.Contains("3")).Sum(a => a.RefundedAmount ?? 0);
+                var failedTotal = rows.Where(a => !string.IsNullOrEmpty(a.ChangeRequestStatus) && a.ChangeRequestStatus.Contains("4")).Sum(a => a.RefundedAmount ?? 0);
+                var pendingTotal = rows.Where(a => string.IsNullOrEmpty(a.ChangeRequestStatus) || a.ChangeRequestStatus.Contains("1") || a.ChangeRequestStatus.Contains("2")).Sum(a => a.RefundedAmount ?? 0);
+
+                return Json(new
+                {
+                    success = successTotal,
+                    failed = failedTotal,
+                    pending = pendingTotal
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { success = 0, failed = 0, pending = 0 }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcelHotelCancellationReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string BookingId)
+        {
+            try
+            {
+                var rows = QueryHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+
+                DataTable dtt = new DataTable();
+                dtt.Columns.Add("Status", typeof(string));
+                dtt.Columns.Add("Email Id", typeof(string));
+                dtt.Columns.Add("Retailer Name", typeof(string));
+                dtt.Columns.Add("Frim Name", typeof(string));
+                dtt.Columns.Add("Cancellation Id", typeof(string));
+                dtt.Columns.Add("Booking Id", typeof(string));
+                dtt.Columns.Add("Cancallation Charge", typeof(string));
+                dtt.Columns.Add("Refund Amount", typeof(string));
+                dtt.Columns.Add("Request Date", typeof(string));
+                dtt.Columns.Add("Response Date", typeof(string));
+
+                if (rows.Count > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        var sts = GetHotelCancellationStatusLabel(item.ChangeRequestStatus);
+                        dtt.Rows.Add(
+                            sts,
+                            item.Email,
+                            item.RetailerName,
+                            item.Frm_Name,
+                            item.ChangeRequestId,
+                            item.BookingId,
+                            item.CancellationCharge,
+                            item.RefundedAmount,
+                            item.CancellationRequestDate.ToString("dd-MMM HH:mm:ss"),
+                            item.CancellationResponseDate.HasValue ? item.CancellationResponseDate.Value.ToString("dd-MMM HH:mm:ss") : string.Empty);
+                    }
+                }
+                else
+                {
+                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                }
+
+                var grid = new GridView();
+                grid.DataSource = dtt;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=Hotel_Cancellation_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+
+                return View();
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("CancellationQueue", "Hotel");
+            }
+        }
+
+        public ActionResult PDFHotelCancellationReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string BookingId)
+        {
+            try
+            {
+                var rows = QueryHotelCancellationReport(ddl_status, ddl_top, txt_frm_date, txt_to_date, ddlusers, allmaster, alldealer, allretailer, BookingId);
+                return new ViewAsPdf("PDFHotelCancellationReport", rows)
+                {
+                    FileName = "Hotel_Cancellation_Report.pdf"
+                };
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("CancellationQueue", "Hotel");
             }
         }
 
@@ -1050,6 +1201,112 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 tokn.exptime = exp;
                 db.SaveChanges();
 
+            }
+        }
+
+        private static string GetHotelCancellationStatusLabel(string changeRequestStatus)
+        {
+            if (string.IsNullOrEmpty(changeRequestStatus))
+            {
+                return "Pending";
+            }
+            if (changeRequestStatus.Contains("4"))
+            {
+                return "Failed";
+            }
+            if (changeRequestStatus.Contains("3"))
+            {
+                return "Processed";
+            }
+            return "Pending";
+        }
+
+        private List<proc_HotelCancellationReport_Result> QueryHotelCancellationReport(string ddl_status, int? ddl_top, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string BookingId)
+        {
+            if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+            }
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("yyyy-MM-dd");
+            txt_to_date = to.ToString("yyyy-MM-dd");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime frm_date = dt.Date;
+            DateTime to_date = dt1.AddDays(1);
+            if (ddl_top == null)
+            {
+                ddl_top = 1000000;
+            }
+
+            BookingId = string.IsNullOrWhiteSpace(BookingId) ? null : BookingId;
+            ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? null : ddl_status;
+
+            string retailerid = null;
+            string DealerId = null;
+            string MasterId = null;
+            if (ddlusers == "Master")
+            {
+                MasterId = (allmaster == "" || allmaster == null || allmaster.Contains("All Master")) ? null : allmaster;
+            }
+            else if (ddlusers == "Dealer")
+            {
+                DealerId = (alldealer == "" || alldealer == null || alldealer.Contains("All Distubutor") || alldealer.Contains("All Distributor")) ? null : alldealer;
+            }
+            else if (ddlusers == "Retailer")
+            {
+                retailerid = (allretailer == "" || allretailer == null || allretailer.Contains("All Retailer")) ? null : allretailer;
+            }
+
+            using (var db = new VastwebmultiEntities())
+            {
+                return db.proc_HotelCancellationReport(ddl_top, ddl_status, retailerid, DealerId, MasterId, null, null, BookingId, null, null, frm_date, to_date).ToList();
+            }
+        }
+
+        private List<proc_HotelReport_new_Result> QueryHotelReport(string ddl_status, string txt_frm_date, string txt_to_date, string ddlusers, string allmaster, string alldealer, string allretailer, string ddl_status_ticket)
+        {
+            if ((txt_frm_date == null && txt_to_date == null) || (txt_frm_date == "" && txt_to_date == ""))
+            {
+                txt_frm_date = DateTime.Now.ToString();
+                txt_to_date = DateTime.Now.ToString();
+            }
+
+            DateTime frm = Convert.ToDateTime(txt_frm_date);
+            DateTime to = Convert.ToDateTime(txt_to_date);
+            txt_frm_date = frm.ToString("yyyy-MM-dd");
+            txt_to_date = to.ToString("yyyy-MM-dd");
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            DateTime dt = DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime dt1 = DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            DateTime frm_date = dt.Date;
+            DateTime to_date = dt1.AddDays(1);
+
+            ddl_status = string.IsNullOrWhiteSpace(ddl_status) ? "" : ddl_status;
+            ddl_status_ticket = string.IsNullOrWhiteSpace(ddl_status_ticket) ? "" : ddl_status_ticket;
+            ddlusers = string.IsNullOrWhiteSpace(ddlusers) ? "Admin" : ddlusers;
+
+            var userid = "";
+            if (ddlusers == "Master")
+            {
+                userid = (allmaster == "" || allmaster == null || allmaster.Contains("All Master")) ? "" : allmaster;
+            }
+            else if (ddlusers == "Dealer")
+            {
+                userid = (alldealer == "" || alldealer == null || alldealer.Contains("All Distubutor") || alldealer.Contains("All Distributor")) ? "" : alldealer;
+            }
+            else if (ddlusers == "Retailer")
+            {
+                userid = (allretailer == "" || allretailer == null || allretailer.Contains("All Retailer")) ? "" : allretailer;
+            }
+
+            using (var db = new VastwebmultiEntities())
+            {
+                return db.proc_HotelReport_new(frm_date, to_date, ddl_status, ddl_status_ticket, ddlusers, userid).ToList();
             }
         }
     }

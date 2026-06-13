@@ -1,0 +1,31 @@
+@{
+    var radiantPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    var isPrepay = radiantPath.IndexOf("RadiantPrepay", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isCmsDeposit = radiantPath.IndexOf("RadiantCMSDeposit", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isReferenceLocation = radiantPath.IndexOf("RadiantReferenceLocation", StringComparison.OrdinalIgnoreCase) >= 0;
+}
+
+<nav class="vm-ticket-nav-wrap vm-radiant-nav-wrap" aria-label="Radiant services navigation">
+    <div id="radiant-services-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-radiant-services-nav">
+        <ul class="vm-fin-nav__list" id="radiant-services-nav-list">
+            <li>
+                <a class="vm-fin-nav__link@(isPrepay ? " is-active" : "")" href="@Url.Action("RadiantPrepay", "Home")" title="Radiant Prepay">
+                    <i class="fas fa-wallet vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Prepay</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link@(isCmsDeposit ? " is-active" : "")" href="@Url.Action("RadiantCMSDeposit", "Home")" title="CMS Cash Deposit">
+                    <i class="fas fa-cash-register vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>CMS Deposit</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link@(isReferenceLocation ? " is-active" : "")" href="@Url.Action("RadiantReferenceLocation", "Home")" title="Reference Location">
+                    <i class="fas fa-map-marker-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Reference Location</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,106 @@
+@model List<Vastwebmulti.Models.proc_HotelReport_new_Result>
+@using System.Web
+@using System.Web.Mvc.Ajax
+@{
+    Layout = null;
+    var items = Model ?? new List<Vastwebmulti.Models.proc_HotelReport_new_Result>();
+}
+@if (items.Count > 0)
+{
+    foreach (var item in items)
+    {
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+
+        if (item.TicketStatus != null && item.TicketStatus.ToUpper().Contains("FAILED"))
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+        }
+        else if (item.TicketStatus != null && item.TicketStatus.Contains("Success"))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+        }
+        else if (item.TicketStatus != null && item.TicketStatus.Contains("Refund"))
+        {
+            statusTone = "refund";
+            statusFa = "fa-undo";
+        }
+        else if (item.TicketStatus != null && (item.TicketStatus.Contains("Pending") || item.TicketStatus.Contains("Proccessed")))
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+        }
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone">
+            <td class="vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@item.TicketStatus">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-ticket-status-text">@item.Frm_Name</span>
+            </td>
+            <td>@item.HotelName</td>
+            <td>@item.NoOfRooms</td>
+            <td class="vm-hotel-action-cell">
+                @Ajax.ActionLink("View Guests", "GuestDetails", "Hotel", new { TXNID = item.TraceId },
+                    new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnFailure = "OnFailed", UpdateTargetId = "guestDescription" },
+                    new { @class = "vm-hotel-ajax-link", title = "View guests" })
+            </td>
+            <td class="vm-ticket-time-cell">@item.ticketdate</td>
+            <td class="vm-ticket-time-cell">@item.checkindate</td>
+            <td class="vm-dmt-amt-cell">@item.totalpublishfare</td>
+            <td class="vm-dmt-amt-cell">@item.totalOfferedFare</td>
+            <td>@item.rempre</td>
+            <td>@item.reminc</td>
+            <td>@item.rempost</td>
+            <td>@item.reminc</td>
+            @if (item.TicketStatus != null && item.TicketStatus.Contains("Refund"))
+            {
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            }
+            else
+            {
+                <td>@item.BookingId</td>
+                <td class="vm-hotel-action-cell">
+                    @Ajax.ActionLink("View Price", "HotelPriceDetails", "Hotel", new { TXNID = item.TraceId },
+                        new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessPrice", OnFailure = "OnFailedPrice", UpdateTargetId = "priceDescription" },
+                        new { @class = "vm-hotel-ajax-link", title = "View price" })
+                </td>
+                <td class="vm-hotel-action-cell">
+                    @Ajax.ActionLink("View Status", "HotelBookingStatus", "Hotel", new { TXNID = item.TraceId },
+                        new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" },
+                        new { @class = "vm-hotel-ajax-link", title = "View status" })
+                </td>
+                <td class="vm-hotel-action-cell">
+                    @if (item.HotelBookingStatus == "Confirmed" && item.IsVoucherBooking == true)
+                    {
+                        @Ajax.ActionLink("CANCEL", "BookingCancallation", "Hotel", new { id = item.idno, BookingId = item.BookingId },
+                            new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccessStatus", OnFailure = "OnFailedStatus" },
+                            new { @class = "vm-hotel-ajax-link vm-hotel-ajax-link--danger", title = "Cancel booking" })
+                    }
+                </td>
+            }
+            <td class="vm-dmt-action-cell">
+                <button type="button" class="vm-dmt-act-btn vm-dmt-act-btn--detail" title="View details"
+                        data-req="@HttpUtility.HtmlAttributeEncode(item.Requestjson ?? "")"
+                        data-res="@HttpUtility.HtmlAttributeEncode(item.Responsejson ?? "")"
+                        onclick="hotelActionBtn(this, '@item.retailer_markup','@item.dlminc','@item.dlmpre','@item.dlmpost','@item.masterinc','@item.masterpre','@item.masterpost','@item.wlinc','@item.wlpre','@item.wlpost','@HttpUtility.JavaScriptStringEncode(item.Frm_Name ?? "")')">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="17" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-hotel" aria-hidden="true"></i>
+            <span>Hotel booking report not found.</span>
+        </td>
+    </tr>
+}

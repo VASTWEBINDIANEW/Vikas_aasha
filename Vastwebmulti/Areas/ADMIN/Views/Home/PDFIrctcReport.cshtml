@@ -1,0 +1,66 @@
+@model List<Vastwebmulti.Models.Rem_IRCTC_TokenPurchase_reports_Result>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PDF IRCTC Report</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 10px; }
+        table, td, th { border: 1px solid #000; }
+        th { background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Order&nbsp;ID</th>
+                <th>Retailer&nbsp;Name</th>
+                <th>Mobile</th>
+                <th>Secondary&nbsp;Mobile</th>
+                <th>Email</th>
+                <th>Secondary&nbsp;Email</th>
+                <th>Amount</th>
+                <th>Transection&nbsp;date</th>
+                <th>Expire&nbsp;time</th>
+                <th>Retailer&nbsp;OLD&nbsp;balance</th>
+                <th>Retailer&nbsp;Latest&nbsp;Balance</th>
+                <th>Distributor&nbsp;OLD&nbsp;balance</th>
+                <th>Distributor&nbsp;Latest&nbsp;Balance</th>
+                <th>MasterDistributor&nbsp;OLD&nbsp;balance</th>
+                <th>MasterDistributor&nbsp;Latest&nbsp;Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.status</td>
+                        <td>@item.TxnID</td>
+                        <td>@item.RetailerName</td>
+                        <td>@item.remmobile</td>
+                        <td>@item.secondmobile</td>
+                        <td>@item.remEmail</td>
+                        <td>@item.secondemail</td>
+                        <td>@(item.amount.HasValue ? Math.Round(item.amount.Value, 2) : 0)</td>
+                        <td>@(item.txn_date.HasValue ? item.txn_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
+                        <td>@(item.expire_time.HasValue ? item.expire_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
+                        <td>@(item.remain_pre.HasValue ? Math.Round(item.remain_pre.Value, 2) : 0)</td>
+                        <td>@(item.remain.HasValue ? Math.Round(item.remain.Value, 2) : 0)</td>
+                        <td>@(item.dealer_remain_pre.HasValue ? Math.Round(item.dealer_remain_pre.Value, 2) : 0)</td>
+                        <td>@(item.dealerremain.HasValue ? Math.Round(item.dealerremain.Value, 2) : 0)</td>
+                        <td>@(item.master_remain_pre.HasValue ? Math.Round(item.master_remain_pre.Value, 2) : 0)</td>
+                        <td>@(item.masterremain.HasValue ? Math.Round(item.masterremain.Value, 2) : 0)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>
