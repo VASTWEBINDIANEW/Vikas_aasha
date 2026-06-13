@@ -108,8 +108,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
 
-                    string txt_frm_date = DateTime.Now.ToString();
-                    string txt_to_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_frm_date))
+                        txt_frm_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_to_date))
+                        txt_to_date = DateTime.Now.ToString();
                     var frm_date = Convert.ToDateTime(txt_frm_date).Date;
                     var to_date = Convert.ToDateTime(txt_to_date).AddDays(1);
                     var ch = db.proc_HotelReport_new(frm_date, to_date, "", "", "Admin", "").ToList();
@@ -438,8 +440,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     ViewBag.alldealer = new SelectList(db.select_Dealer_for_ddl(), "Dealerid", "FarmName", null).ToList();
                     //Retailer 
                     ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
-                    string txt_frm_date = DateTime.Now.ToString();
-                    string txt_to_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_frm_date))
+                        txt_frm_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_to_date))
+                        txt_to_date = DateTime.Now.ToString();
                     var frm_date = Convert.ToDateTime(txt_frm_date).Date;
                     var to_date = Convert.ToDateTime(txt_to_date).AddDays(1);
 

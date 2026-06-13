@@ -56513,8 +56513,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     //Retailer 
                     ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", null).ToList();
 
-                    string txt_frm_date = DateTime.Now.ToString();
-                    string txt_to_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_frm_date))
+                        txt_frm_date = DateTime.Now.ToString();
+                    if (string.IsNullOrWhiteSpace(txt_to_date))
+                        txt_to_date = DateTime.Now.ToString();
                     var frm_date = Convert.ToDateTime(txt_frm_date).Date;
                     var to_date = Convert.ToDateTime(txt_to_date).AddDays(1);
 
@@ -127310,17 +127312,19 @@ ORDER BY a.CreatedAt DESC";
             }
            
         }
-        private (DateTime fromdate, DateTime todate) ParseRadiantPrepayDateRange(string txt_frm_date, string txt_to_date, bool defaultToday)
+        private void GetRadiantPrepayDateRange(string txt_frm_date, string txt_to_date, out DateTime fromdate, out DateTime todate)
         {
-            if (defaultToday && string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
+            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
             {
-                var today = DateTime.Now.Date;
-                return (today, today.AddDays(1));
+                fromdate = DateTime.Now.Date;
+                todate = fromdate.AddDays(1);
+                return;
             }
 
-            var fromdate = DateTime.TryParse(txt_frm_date, out var parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
-            var todate = DateTime.TryParse(txt_to_date, out var parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
-            return (fromdate, todate);
+            DateTime parsedFrom;
+            DateTime parsedTo;
+            fromdate = DateTime.TryParse(txt_frm_date, out parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
+            todate = DateTime.TryParse(txt_to_date, out parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
         }
 
         private List<RadiantPrepayReportVM> QueryRadiantPrepayReports(DateTime fromdate, DateTime todate, string allretailer, string status)
@@ -127383,8 +127387,10 @@ ORDER BY a.CreatedAt DESC";
                 }
             }
 
-            var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
-            var results = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+            DateTime fromdate;
+            DateTime todate;
+            GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+            var results = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
             PopulateRadiantPrepayViewBags(results, allretailer);
             return View(results);
         }
@@ -127403,8 +127409,10 @@ ORDER BY a.CreatedAt DESC";
         {
             try
             {
-                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
-                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
                 return Json(new
                 {
                     total = rows.Sum(x => x.Amount ?? 0),
@@ -127423,8 +127431,10 @@ ORDER BY a.CreatedAt DESC";
         {
             try
             {
-                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
-                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
 
                 DataTable dtt = new DataTable();
                 dtt.Columns.Add("Firm Name", typeof(string));
@@ -127487,8 +127497,10 @@ ORDER BY a.CreatedAt DESC";
         {
             try
             {
-                var range = ParseRadiantPrepayDateRange(txt_frm_date, txt_to_date, true);
-                var rows = QueryRadiantPrepayReports(range.fromdate, range.todate, allretailer, Status);
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantPrepayDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantPrepayReports(fromdate, todate, allretailer, Status);
                 return new ViewAsPdf("PDFRadiantPrepayReport", rows)
                 {
                     FileName = "Radiant_Prepay_Report.pdf"
