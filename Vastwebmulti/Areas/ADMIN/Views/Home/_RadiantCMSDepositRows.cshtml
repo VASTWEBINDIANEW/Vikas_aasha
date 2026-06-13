@@ -1,0 +1,82 @@
+@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>();
+    var slipBaseUrl = (ViewBag.url ?? "").ToString();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusTone = "pending";
+        var statusFa = "fa-clock-o";
+        var statusLabel = item.Status ?? "";
+
+        if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Failed", StringComparison.OrdinalIgnoreCase))
+        {
+            statusTone = "failed";
+            statusFa = "fa-times";
+        }
+        else if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+        {
+            statusTone = "success";
+            statusFa = "fa-check";
+        }
+        else if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+        {
+            statusTone = "pending";
+            statusFa = "fa-clock-o";
+        }
+
+        var repurl = string.IsNullOrWhiteSpace(item.Slipname)
+            ? string.Empty
+            : slipBaseUrl + "/uploads/slips/" + item.Slipname;
+
+        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-amount="@(item.Amount ?? 0)" data-status="@statusLabel">
+            <td class="vm-radiant-firm-cell">@item.Firmanme</td>
+            <td class="vm-radiant-request-cell">@item.Requestid</td>
+            <td>@item.Mode</td>
+            <td class="vm-radiant-bank-cell">@item.BankName</td>
+            <td>@item.Slipid</td>
+            <td class="vm-dmt-amt-cell">@(item.Amount.HasValue ? Math.Round(item.Amount.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Remainpre.HasValue ? Math.Round(item.Remainpre.Value, 2).ToString() : "—")</td>
+            <td class="vm-dmt-amt-cell">@(item.Remainpost.HasValue ? Math.Round(item.Remainpost.Value, 2).ToString() : "—")</td>
+            <td class="vm-ticket-time-cell">
+                @(item.Insertdate.HasValue ? item.Insertdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "—")
+            </td>
+            <td class="vm-ticket-time-cell">
+                @(item.Updatedate.HasValue ? item.Updatedate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "—")
+            </td>
+            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                    <i class="fa @statusFa" aria-hidden="true"></i>
+                </span>
+                <span class="vm-radiant-status-text">@statusLabel</span>
+            </td>
+            <td class="vm-dmt-action-cell">
+                @if (!string.IsNullOrWhiteSpace(repurl))
+                {
+                    <button type="button"
+                            class="vm-dmt-act-btn vm-dmt-act-btn--view vm-radiant-slip-btn"
+                            data-slip-url="@repurl"
+                            title="View slip">
+                        <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                    </button>
+                }
+                else
+                {
+                    <span class="vm-radiant-slip-empty">—</span>
+                }
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-cash-register" aria-hidden="true"></i>
+            <span>Radiant CMS deposit report not found.</span>
+        </td>
+    </tr>
+}

@@ -175,6 +175,7 @@
         initReportDateForm("#incomingReportForm");
         initReportDateForm("#rofferReportForm");
         initReportDateForm("#radiantPrepayForm");
+        initReportDateForm("#radiantCmsDepositForm");
     }
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.datepicker) {

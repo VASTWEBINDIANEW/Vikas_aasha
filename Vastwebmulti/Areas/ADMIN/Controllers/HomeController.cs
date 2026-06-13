@@ -127648,6 +127648,251 @@ ORDER BY a.CreatedAt DESC";
 
             return View(results);
         }
+
+        private void GetRadiantCMSDepositDateRange(string txt_frm_date, string txt_to_date, out DateTime fromdate, out DateTime todate)
+        {
+            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
+            {
+                fromdate = DateTime.Now.Date;
+                todate = fromdate.AddDays(1);
+                return;
+            }
+
+            DateTime parsedFrom;
+            DateTime parsedTo;
+            fromdate = DateTime.TryParse(txt_frm_date, out parsedFrom) ? parsedFrom.Date : DateTime.Now.Date;
+            todate = DateTime.TryParse(txt_to_date, out parsedTo) ? parsedTo.Date.AddDays(1) : fromdate.AddDays(1);
+        }
+
+        private string GetRadiantCMSDepositSlipBaseUrl()
+        {
+            string websiteurl = db.Admin_details.SingleOrDefault().WebsiteUrl;
+            string cleanUrl = websiteurl
+                .Replace("https://", "")
+                .Replace("http://", "")
+                .Replace("www.", "")
+                .Trim();
+            return "http://native." + cleanUrl;
+        }
+
+        private List<radiantcashdepositlist> QueryRadiantCMSDepositReports(DateTime fromdate, DateTime todate, string allretailer, string status)
+        {
+            var query = db.RadiantCashDeposites.Where(x => x.Insertdate >= fromdate && x.Insertdate < todate);
+
+            if (!string.IsNullOrWhiteSpace(allretailer))
+            {
+                query = query.Where(x => x.Userid == allretailer);
+            }
+
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                query = query.Where(x => x.Status == status);
+            }
+
+            return (
+                from rpt in query
+                join rem in db.Retailer_Details on rpt.Userid equals rem.RetailerId.ToString()
+                select new radiantcashdepositlist
+                {
+                    Firmanme = rem.Frm_Name,
+                    Userid = rpt.Userid,
+                    Amount = rpt.Amount,
+                    Remainpre = rpt.Remainpre,
+                    Remainpost = rpt.Remainpost,
+                    Adminremainpre = rpt.Adminremainpre,
+                    Adminremainpost = rpt.Adminremainpost,
+                    Insertdate = rpt.Insertdate,
+                    Updatedate = rpt.Updatedate,
+                    Status = rpt.Status,
+                    BankName = rpt.BankName,
+                    Ifsccode = rpt.Ifsccode,
+                    Accountnumber = rpt.Accountnumber,
+                    Charge = rpt.Charge,
+                    FinalCharge = rpt.FinalCharge,
+                    Gst = rpt.Gst,
+                    Tds = rpt.Tds,
+                    Mode = rpt.Mode,
+                    Slipid = rpt.Slipid,
+                    Slipname = rpt.Slipname,
+                    RejectedReson = rpt.RejectedReson,
+                    ResponseBy = rpt.ResponseBy,
+                    Requestid = rpt.Requestid
+                }
+            ).OrderByDescending(aa => aa.Insertdate).ToList();
+        }
+
+        private void PopulateRadiantCMSDepositViewBags(List<radiantcashdepositlist> results, string selectedRetailer)
+        {
+            ViewBag.url = GetRadiantCMSDepositSlipBaseUrl();
+            ViewBag.allretailer = new SelectList(db.select_retailer_for_ddl("Admin"), "RetailerId", "Frm_Name", selectedRetailer);
+            ViewBag.total = results.Sum(aa => aa.Amount ?? 0);
+            ViewBag.totalSuccess = results.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0);
+            ViewBag.totalFailed = results.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0);
+            ViewBag.totalPending = results.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0);
+        }
+
+        public ActionResult RadiantCMSDepositReport(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "excel":
+                        return ExcelRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "pdf":
+                        return PDFRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                }
+            }
+
+            return RedirectToAction("RadiantCMSDeposit", "Home", new { area = "ADMIN" });
+        }
+
+        [HttpGet]
+        public ActionResult RadiantCMSDepositSearch(string export, string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            if (!string.IsNullOrWhiteSpace(export))
+            {
+                switch (export.Trim().ToLowerInvariant())
+                {
+                    case "total":
+                        return TotalRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "excel":
+                        return ExcelRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                    case "pdf":
+                        return PDFRadiantCMSDepositReport(allretailer, Status, txt_frm_date, txt_to_date);
+                }
+            }
+
+            return RedirectToAction("RadiantCMSDeposit", "Home", new { area = "ADMIN" });
+        }
+
+        [HttpPost]
+        public ActionResult RadiantCMSDepositSearch(string allretailer, DateTime txt_frm_date, DateTime txt_to_date, string Status = "")
+        {
+            ViewBag.chk = "post";
+            var fromdate = txt_frm_date;
+            var todate = txt_to_date.AddDays(1);
+            var results = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
+            PopulateRadiantCMSDepositViewBags(results, allretailer);
+            return View("RadiantCMSDeposit", results);
+        }
+
+        [HttpGet]
+        public ActionResult TotalRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
+                return Json(new
+                {
+                    total = Convert.ToDouble(rows.Sum(x => x.Amount ?? 0)),
+                    success = Convert.ToDouble(rows.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0)),
+                    failed = Convert.ToDouble(rows.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0)),
+                    pending = Convert.ToDouble(rows.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0))
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { total = 0d, success = 0d, failed = 0d, pending = 0d }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult ExcelRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
+
+                DataTable dtt = new DataTable();
+                dtt.Columns.Add("Firm Name", typeof(string));
+                dtt.Columns.Add("Req ID", typeof(string));
+                dtt.Columns.Add("Mode", typeof(string));
+                dtt.Columns.Add("Bank Info", typeof(string));
+                dtt.Columns.Add("Slip/ Bank RRN", typeof(string));
+                dtt.Columns.Add("Amount", typeof(string));
+                dtt.Columns.Add("Remain Pre", typeof(string));
+                dtt.Columns.Add("Remain Post", typeof(string));
+                dtt.Columns.Add("Insert Date", typeof(string));
+                dtt.Columns.Add("Update Date", typeof(string));
+                dtt.Columns.Add("Status", typeof(string));
+
+                if (rows.Count > 0)
+                {
+                    foreach (var item in rows)
+                    {
+                        dtt.Rows.Add(
+                            item.Firmanme,
+                            item.Requestid,
+                            item.Mode,
+                            item.BankName,
+                            item.Slipid,
+                            item.Amount,
+                            item.Remainpre,
+                            item.Remainpost,
+                            item.Insertdate.HasValue ? item.Insertdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.Updatedate.HasValue ? item.Updatedate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : string.Empty,
+                            item.Status);
+                    }
+                }
+                else
+                {
+                    dtt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+                }
+
+                var grid = new GridView();
+                grid.DataSource = dtt;
+                grid.DataBind();
+                Response.ClearContent();
+                Response.Buffer = true;
+                Response.AddHeader("content-disposition", "attachment; filename=Radiant_CMS_Deposit_Report.xls");
+                Response.ContentType = "application/ms-excel";
+                Response.Charset = "";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                grid.RenderControl(htw);
+                Response.Output.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+
+                return View();
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("RadiantCMSDeposit", "Home");
+            }
+        }
+
+        public ActionResult PDFRadiantCMSDepositReport(string allretailer, string Status, string txt_frm_date, string txt_to_date)
+        {
+            try
+            {
+                DateTime fromdate;
+                DateTime todate;
+                GetRadiantCMSDepositDateRange(txt_frm_date, txt_to_date, out fromdate, out todate);
+                var rows = QueryRadiantCMSDepositReports(fromdate, todate, allretailer, Status);
+                return new ViewAsPdf("PDFRadiantCMSDepositReport", rows)
+                {
+                    FileName = "Radiant_CMS_Deposit_Report.pdf"
+                };
+            }
+            catch
+            {
+                TempData["Status"] = "Failed";
+                TempData["Message"] = "An error occured while proccessing request.";
+                return RedirectToAction("RadiantCMSDeposit", "Home");
+            }
+        }
+
         public ActionResult RadiantReferenceLocation()
         {
             var stateList = db.State_Desc

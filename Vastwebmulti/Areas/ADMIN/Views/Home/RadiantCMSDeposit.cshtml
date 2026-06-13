@@ -1,236 +1,380 @@
 ﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "RadiantCMSDeposit";
+    ViewBag.Title = "Radiant CMS Deposit";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var selectedStatus = (Request["Status"] ?? "").Trim();
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>();
+    var rowCount = reports.Count();
+
+    var totalAmount = ViewBag.total != null ? Convert.ToDecimal(ViewBag.total) : reports.Sum(x => x.Amount ?? 0m);
+    var totalSuccess = ViewBag.totalSuccess != null ? Convert.ToDecimal(ViewBag.totalSuccess) : reports.Where(x => x.Status == "Success").Sum(x => x.Amount ?? 0m);
+    var totalFailed = ViewBag.totalFailed != null ? Convert.ToDecimal(ViewBag.totalFailed) : reports.Where(x => x.Status == "Failed").Sum(x => x.Amount ?? 0m);
+    var totalPending = ViewBag.totalPending != null ? Convert.ToDecimal(ViewBag.totalPending) : reports.Where(x => x.Status == "Pending").Sum(x => x.Amount ?? 0m);
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=28" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=17" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/js/admin-financial-report.js?v=18"></script>
 
-<section class="content cas-hdeposi-tcharge-page upicharge-thirddesign">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
+<div id="loadermoney" class="vm-dmt-loader" style="display:none;"></div>
 
-        <!--Four-Design-Admin-page-Header-Section-End-->
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-radiant-cms-deposit-page">
 
-        <div class="page-header-third pageheader-margin-third retailerlist-header-resp">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul class="padding-top-third">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
+    <div class="container-fluid vm-opr-page-shell">
 
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("RadiantCMSDeposit","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Radiant CMS Deposit
-                        </a>
+        @{
+            var cmsFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "radiantCmsDepositForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
+        }
+        @using (Html.BeginForm("RadiantCMSDepositSearch", "Home", new { area = "ADMIN" }, FormMethod.Post, cmsFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-                    </li>
-                </ul>
-            </div>
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line">
 
-        </div>
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Trans. Reports</li>
+                        <li>Radiant CMS Deposit</li>
+                    </ol>
 
-    </div>
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters">
 
-    <div class="col-md-12">
-
-        <div class="row clearfix ">
-            <div class="switch-user-tab">
-
-
-                <div class="col-md-12 switch-user-tab-right">
-
-                    <div class="page-header-third">
-                        <div class="col-md-12 rtrt responcive-full" style="padding: 0px;padding-left: 3px;">
-                            <div class="row">
-                                @using (Html.BeginForm("RadiantCMSDeposit", "Home", FormMethod.Post))
-                                {
-                                    <div class="col-md-3 clk responcive-full" style="padding-right:0px;">
-                                        <div class="form-line">
-                                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 clk responcive-full" style="padding-right:0px;">
-                                        @Html.DropDownList(
-                                            "Status",
-                                            new List<SelectListItem>
-                                            {
-                                                new SelectListItem { Text = "Success", Value = "Success" },
-                                                new SelectListItem { Text = "Failed", Value = "Failed" },
-                                                new SelectListItem { Text = "Pending", Value = "Pending" }
-                                            },
-                                            "Select Status",
-                                            new { @class = "form-control" }
-                                        )
-                                    </div>
-                                    <div class="col-md-3 clk responcive-full" style="padding-right:0px;">
-
-                                        <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                            <div class="custom-date-icon ner">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638;" })
-                                            <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
-
-                                            </span>
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner2">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #b1a6a638;" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2 sre responcive-full" style="padding-left:3px;">
-                                        <button type="submit" class="btn input-back-second" style="background-color:transparent;border-color:transparent;">
-                                            <i class="fa fa-search color-white-second" style=" position: absolute; top: 8px; left: 11px; color: var(--main-bg-lcolor); z-index: 1;" aria-hidden="true"></i>
-                                        </button>
-                                        <!--<center>
-                                        <div class="sponc11">
-
-                                            <i class="fa fa-search color-white-second" style=" position: absolute; top: 8px; left: 11px; color: var(--main-bg-lcolor); z-index: 1;" aria-hidden="true"></i>-->
-                                        @*<input id="btntype_TODAY" name="btntype" type="submit" value="TODAY" class="btn" style="margin-top:0px; height:32px;border:1px solid #c7c2c2;background:#dedddd;" />*@
-                                        <!--<input name="btntype" type="submit" value="" class="btn input-back-second" style="padding-left: 20px; margin-top: 0px; height: 32px; border: none; background: transparent; z-index: 2; position: relative;" />
-                                            </div>
-                                        </center>-->
-                                    </div>
-                                }
-                                <div class="col-md-2 clk responcive-full" style="padding-right:0px;">
-                                    <span>Total : @ViewBag.total</span>
-                                </div>
-                                <div>
-                                </div>
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--retailer">
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control", @title = "Retailer" })
                         </div>
 
+                        <div class="vm-opr-field vm-dmt-field vm-radiant-field--status">
+                            @Html.DropDownList("Status", new SelectList(new[]
+                            {
+                                new SelectListItem { Text = "All Status", Value = "" },
+                                new SelectListItem { Text = "Pending", Value = "Pending" },
+                                new SelectListItem { Text = "Success", Value = "Success" },
+                                new SelectListItem { Text = "Failed", Value = "Failed" }
+                            }, "Value", "Text", selectedStatus), new { id = "Status", @class = "vm-opr-select vm-dmt-select form-control", @title = "Status" })
+                        </div>
 
-
-
-                        <div class="table-responsive " style="width:100%;">
-                            <table class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr style="background:#f9f9f9;">
-                                        <th>Firm Name</th>
-                                        <th>Req ID</th>
-                                        <th>Mode</th>
-                                        <th>Bank Info</th>
-                                        <th>Slip/ Bank RRN</th>
-                                        <th>Amount</th>
-                                        <th>Remain Pre</th>
-                                        <th>Remain Post</th>
-                                        <th>Insert Date </th>
-                                        <th>Update Date </th>
-                                        <th>Status </th>
-                                        <th>Upload Slip  </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var repurl = ViewBag.url + "/uploads/slips/" + item.Slipname;
-                                        <tr>
-                                            <td>@item.Firmanme</td>
-                                            <td>@item.Requestid</td>
-                                            <td>@item.Mode</td>
-                                            <td>@item.BankName</td>
-                                            <td>@item.Slipid</td>
-                                            <td>@item.Amount</td>
-                                            <td>@item.Remainpre</td>
-                                            <td>@item.Remainpost</td>
-                                            <td>@(item.Insertdate?.ToString("dd-MM-yyyy hh:mm:ss tt"))</td>
-                                            <td>@(item.Updatedate?.ToString("dd-MM-yyyy hh:mm:ss tt"))</td>
-                                            <td>@item.Status</td>
-                                            <td>
-                                                <a href="javascript:void(0);"
-                                                   onclick="openSlip('@repurl')"
-                                                   class="btn btn-sm btn-primary">
-                                                    View Slip
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
 
+                </div>
 
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="radiantCmsDepositTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Radiant CMS deposit totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRadiantCmsDepositTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value" id="radiantCmsTotalAmount">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="radiantCmsSuccessAmount">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="radiantCmsFailedAmount">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="radiantCmsPendingAmount">@totalPending.ToString("N2")</strong>
+                        </div>
+                    </div>
                 </div>
 
             </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-cash-register" aria-hidden="true"></i>
+                        <span>Radiant CMS cash deposit report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>₹ @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-radiant-cms-totals-btn" onclick="findtotalRadiantCmsDeposit()" title="Show totals" aria-expanded="false" aria-controls="radiantCmsDepositTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnRadiantCmsExcel" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnRadiantCmsPdf" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="radiantCmsDepositReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Firm&nbsp;Name</th>
+                                    <th>Req&nbsp;ID</th>
+                                    <th>Mode</th>
+                                    <th>Bank&nbsp;Info</th>
+                                    <th>Slip/&nbsp;Bank&nbsp;RRN</th>
+                                    <th>Amount</th>
+                                    <th>Remain&nbsp;Pre</th>
+                                    <th>Remain&nbsp;Post</th>
+                                    <th>Insert&nbsp;Date</th>
+                                    <th>Update&nbsp;Date</th>
+                                    <th>Status</th>
+                                    <th>Slip</th>
+                                </tr>
+                            </thead>
+                            <tbody id="radiantCmsDepositReportRows">
+                                @Html.Partial("_RadiantCMSDepositRows", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </section>
-<div id="slipModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999;">
-    <div style="background:#fff; width:70%; margin:5% auto; padding:15px; position:relative;">
-        <span id="closeSlip" style="position:absolute; right:10px; top:5px; cursor:pointer; font-size:22px;">×</span>
-        <div id="slipBody" style="text-align:center;"></div>
+
+<div id="radiantCmsSlipModal" class="vm-radiant-slip-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="radiantCmsSlipModalTitle">
+    <div class="vm-radiant-slip-modal__dialog">
+        <div class="vm-radiant-slip-modal__head">
+            <h4 id="radiantCmsSlipModalTitle">Deposit slip</h4>
+            <button type="button" class="vm-radiant-slip-modal__close" id="closeRadiantCmsSlip" title="Close" aria-label="Close">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="vm-radiant-slip-modal__body" id="radiantCmsSlipBody"></div>
     </div>
 </div>
 
-<!--=======    Modal For Bank Details   ========-->
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<!------------------------------------------partialpage-->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-    $('#allretailer').select2();
-    $('#allDetails').select2();
-</script>
-<script>
-    $(document).ready(function () {
-               $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
+    window.radiantCmsDepositBaseUrl = '@Url.Action("RadiantCMSDepositSearch", "Home", new { area = "ADMIN" })';
+
+    function formatRadiantCmsAmount(value) {
+        var num = parseFloat(value);
+        if (isNaN(num)) {
+            return '0.00';
+        }
+        return num.toFixed(2);
+    }
+
+    function getRadiantCmsDepositFilterData() {
+        return {
+            txt_frm_date: $('#txt_frm_date').val(),
+            txt_to_date: $('#txt_to_date').val(),
+            Status: $('#Status').val() || '',
+            allretailer: $('#allretailer').val() || ''
+        };
+    }
+
+    function buildRadiantCmsDepositExportQuery() {
+        var data = getRadiantCmsDepositFilterData();
+        return 'txt_frm_date=' + encodeURIComponent(data.txt_frm_date)
+            + '&txt_to_date=' + encodeURIComponent(data.txt_to_date)
+            + '&Status=' + encodeURIComponent(data.Status)
+            + '&allretailer=' + encodeURIComponent(data.allretailer);
+    }
+
+    function collectRadiantCmsTotalsFromTable() {
+        var total = 0;
+        var success = 0;
+        var failed = 0;
+        var pending = 0;
+
+        $('#radiantCmsDepositReportRows tr.vm-dmt-row').each(function () {
+            var amount = parseFloat($(this).attr('data-amount'));
+            if (isNaN(amount)) {
+                amount = 0;
+            }
+            var status = ($(this).attr('data-status') || '').toString();
+            total += amount;
+            if (status === 'Success') {
+                success += amount;
+            } else if (status === 'Failed') {
+                failed += amount;
+            } else if (status === 'Pending') {
+                pending += amount;
             }
         });
-</script>
-<script>
-    function openSlip(url) {
-        var html = "";
 
-        if (url.toLowerCase().endsWith(".pdf")) {
-            html = '<iframe src="' + url + '" width="100%" height="500px"></iframe>';
-        } else {
-            html = '<img src="' + url + '" style="max-width:100%;max-height:500px;" />';
+        return { total: total, success: success, failed: failed, pending: pending };
+    }
+
+    function downloadRadiantCmsDepositExport(type) {
+        var url = window.radiantCmsDepositBaseUrl + '?export=' + encodeURIComponent(type) + '&' + buildRadiantCmsDepositExportQuery();
+        if (type === 'pdf') {
+            window.open(url, '_blank');
+            return;
+        }
+        var frame = document.getElementById('radiantCmsDepositExportFrame');
+        if (!frame) {
+            frame = document.createElement('iframe');
+            frame.id = 'radiantCmsDepositExportFrame';
+            frame.style.display = 'none';
+            document.body.appendChild(frame);
+        }
+        frame.src = url;
+    }
+
+    function applyRadiantCmsTotalsToPanel(data) {
+        if (!data) {
+            return;
+        }
+        $('#radiantCmsTotalAmount').text(formatRadiantCmsAmount(data.total));
+        $('#radiantCmsSuccessAmount').text(formatRadiantCmsAmount(data.success));
+        $('#radiantCmsFailedAmount').text(formatRadiantCmsAmount(data.failed));
+        $('#radiantCmsPendingAmount').text(formatRadiantCmsAmount(data.pending));
+        $('.vm-radiant-inline-total strong').text('₹ ' + formatRadiantCmsAmount(data.total));
+    }
+
+    function showRadiantCmsDepositTotalsPanel() {
+        var panel = $('#radiantCmsDepositTotalsPanel');
+        var btn = $('.vm-radiant-cms-totals-btn');
+        panel.slideDown(180).attr('aria-hidden', 'false');
+        btn.attr('aria-expanded', 'true');
+    }
+
+    function findtotalRadiantCmsDeposit() {
+        var panel = $('#radiantCmsDepositTotalsPanel');
+        if (panel.is(':visible')) {
+            hideRadiantCmsDepositTotals();
+            return;
         }
 
-        $("#slipBody").html(html);
-        $("#slipModal").fadeIn();
+        $('#loadermoney').show();
+        $.ajax({
+            url: window.radiantCmsDepositBaseUrl,
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            data: $.extend({ export: 'total' }, getRadiantCmsDepositFilterData())
+        })
+            .done(function (data) {
+                applyRadiantCmsTotalsToPanel(data);
+                showRadiantCmsDepositTotalsPanel();
+            })
+            .fail(function () {
+                applyRadiantCmsTotalsToPanel(collectRadiantCmsTotalsFromTable());
+                showRadiantCmsDepositTotalsPanel();
+            })
+            .always(function () {
+                $('#loadermoney').hide();
+            });
+    }
+
+    function hideRadiantCmsDepositTotals() {
+        $('#radiantCmsDepositTotalsPanel').slideUp(180).attr('aria-hidden', 'true');
+        $('.vm-radiant-cms-totals-btn').attr('aria-expanded', 'false');
+    }
+
+    function openRadiantCmsSlip(url) {
+        if (!url) {
+            return;
+        }
+        var html = '';
+        if (url.toLowerCase().indexOf('.pdf') > -1) {
+            html = '<iframe src="' + url + '" width="100%" height="480px" title="Deposit slip PDF"></iframe>';
+        } else {
+            html = '<img src="' + url + '" alt="Deposit slip" style="max-width:100%;max-height:480px;" />';
+        }
+        $('#radiantCmsSlipBody').html(html);
+        $('#radiantCmsSlipModal').fadeIn(180);
+    }
+
+    function closeRadiantCmsSlipModal() {
+        $('#radiantCmsSlipModal').fadeOut(180);
+        $('#radiantCmsSlipBody').empty();
     }
 
     $(document).ready(function () {
-        $("#closeSlip").on("click", function () {
-            $("#slipModal").fadeOut();
+        var sts = '@TempData["Status"]';
+        var msg = '@TempData["Message"]';
+        if (sts && msg && typeof swal === 'function') {
+            swal('Oops..', msg, 'error');
+        }
+
+        $('#btnRadiantCmsExcel').on('click', function () { downloadRadiantCmsDepositExport('excel'); });
+        $('#btnRadiantCmsPdf').on('click', function () { downloadRadiantCmsDepositExport('pdf'); });
+
+        $('#allretailer, #Status').select2({
+            width: '100%',
+            minimumResultsForSearch: 6
         });
 
-        $("#slipModal").on("click", function (e) {
-            if (e.target.id === "slipModal") {
-                $("#slipModal").fadeOut();
+        $(document).on('click', '.vm-radiant-slip-btn', function () {
+            openRadiantCmsSlip($(this).data('slip-url'));
+        });
+
+        $('#closeRadiantCmsSlip').on('click', closeRadiantCmsSlipModal);
+
+        $('#radiantCmsSlipModal').on('click', function (e) {
+            if (e.target.id === 'radiantCmsSlipModal') {
+                closeRadiantCmsSlipModal();
             }
         });
+
+        function initRadiantCmsDatepickers() {
+            if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+                window.setTimeout(initRadiantCmsDatepickers, 50);
+                return;
+            }
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#radiantCmsDepositForm');
+            }
+        }
+        initRadiantCmsDatepickers();
     });
 </script>

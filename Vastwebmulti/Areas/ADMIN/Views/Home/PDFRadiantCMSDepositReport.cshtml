@@ -1,0 +1,64 @@
+@model List<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>
+@{
+    Layout = null;
+    var rows = Model ?? new List<Vastwebmulti.Areas.ADMIN.Models.radiantcashdepositlist>();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PDF Radiant CMS Deposit Report</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; font-size: 9px; }
+        table, td, th { border: 1px solid #000; }
+        th { background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <h3 style="font-size:12px;margin:0 0 8px;">Radiant CMS Cash Deposit Report</h3>
+    <table cellspacing="0">
+        <thead>
+            <tr>
+                <th>Firm Name</th>
+                <th>Req ID</th>
+                <th>Mode</th>
+                <th>Bank Info</th>
+                <th>Slip/ Bank RRN</th>
+                <th>Amount</th>
+                <th>Remain Pre</th>
+                <th>Remain Post</th>
+                <th>Insert Date</th>
+                <th>Update Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (rows.Any())
+            {
+                foreach (var item in rows)
+                {
+                    <tr>
+                        <td>@item.Firmanme</td>
+                        <td>@item.Requestid</td>
+                        <td>@item.Mode</td>
+                        <td>@item.BankName</td>
+                        <td>@item.Slipid</td>
+                        <td>@(item.Amount.HasValue ? Math.Round(item.Amount.Value, 2) : 0)</td>
+                        <td>@(item.Remainpre.HasValue ? Math.Round(item.Remainpre.Value, 2) : 0)</td>
+                        <td>@(item.Remainpost.HasValue ? Math.Round(item.Remainpost.Value, 2) : 0)</td>
+                        <td>@(item.Insertdate.HasValue ? item.Insertdate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
+                        <td>@(item.Updatedate.HasValue ? item.Updatedate.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="11">No records found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1594,3 +1594,100 @@ body.saas-admin-ui .saas-radiant-prepay-page .vm-opr-table-scroll {
     }
 }
 
+/* Radiant CMS Deposit — shares Radiant Prepay shell */
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 1560px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table thead th:nth-child(1) { min-width: 140px; }
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table thead th:nth-child(2) { min-width: 110px; }
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table thead th:nth-child(4) { min-width: 120px; }
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table thead th:nth-child(9),
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table thead th:nth-child(10) { min-width: 150px; }
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport .vm-radiant-bank-cell {
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport .vm-dmt-act-btn--view {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-empty {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10050;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__dialog {
+    width: min(920px, 100%);
+    max-height: 92vh;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.28);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__head h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__close {
+    border: none;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__body {
+    padding: 16px;
+    overflow: auto;
+    text-align: center;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-radiant-cms-deposit-page #radiantCmsDepositReport.vm-opr-data-table {
+        min-width: 1560px !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-radiant-cms-deposit-page .vm-radiant-slip-modal__dialog {
+        width: 100%;
+        max-height: 88vh;
+    }
+}
