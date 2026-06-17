@@ -1,0 +1,40 @@
+@{
+    var activeKey = (ViewBag.AutoFundNavActive as string ?? "").Trim().ToLowerInvariant();
+    if (string.IsNullOrEmpty(activeKey))
+    {
+        var path = (Request.Path ?? "").ToLowerInvariant();
+        if (path.Contains("autofundtransferdistributor")) { activeKey = "distributor"; }
+        else if (path.Contains("autofundtransfermd")) { activeKey = "md"; }
+        else if (path.Contains("autofundtransfer_api_user")) { activeKey = "api"; }
+        else { activeKey = "retailer"; }
+    }
+}
+
+<nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="auto-fund-nav" aria-label="Auto fund transfer settings">
+    <ul class="vm-fin-nav__list" id="auto-fund-nav-list">
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "retailer" ? " is-active" : "")" href="@Url.Action("AutoFundtransferStatus", "Home")" title="Auto Fund TransferStatus to Retailer">
+                <i class="fas fa-store vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Auto Fund TransferStatus to Retailer</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "distributor" ? " is-active" : "")" href="@Url.Action("AutoFundTransferDistributor", "Home")" title="Auto Transfer to Distributor">
+                <i class="fas fa-sitemap vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Auto Transfer to Distributor</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "md" ? " is-active" : "")" href="@Url.Action("AutoFundTransferMD", "Home")" title="Auto Transfer to MD">
+                <i class="fas fa-user-tie vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Auto Transfer to MD</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "api" ? " is-active" : "")" href="@Url.Action("AutoFundTransfer_Api_user", "Home")" title="Auto Transfer to API">
+                <i class="fas fa-code vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Auto Transfer to API</span>
+            </a>
+        </li>
+    </ul>
+</nav>

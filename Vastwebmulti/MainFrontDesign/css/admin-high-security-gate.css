@@ -1,0 +1,325 @@
+/* ADMIN — High security gate overlay (Trans_highsecurity_Setting) v=1 */
+
+body.saas-admin-ui .saas-high-security-gate-page {
+    --hs-gate-primary: #2563eb;
+    --hs-gate-primary-dark: #1e40af;
+    --hs-gate-danger: #dc2626;
+    --hs-gate-border: #e2e8f0;
+    --hs-gate-muted: #64748b;
+    --hs-gate-text: #0f172a;
+}
+
+body.saas-admin-ui .saas-high-security-gate-page.content {
+    position: fixed !important;
+    inset: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    height: 100vh !important;
+    z-index: 999999 !important;
+    background: rgba(15, 23, 42, 0.62) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow: auto !important;
+}
+
+body.saas-admin-ui .saas-high-security-gate-page .vm-hs-gate-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    box-sizing: border-box;
+}
+
+body.saas-admin-ui .vm-hs-gate-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1000001;
+    background: rgba(248, 250, 252, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .vm-hs-gate-loader::after {
+    content: "";
+    width: 42px;
+    height: 42px;
+    border: 3px solid #dbe4f0;
+    border-top-color: var(--hs-gate-primary, #2563eb);
+    border-radius: 50%;
+    animation: vmHsGateSpin 0.75s linear infinite;
+}
+
+@keyframes vmHsGateSpin {
+    to { transform: rotate(360deg); }
+}
+
+body.saas-admin-ui .vm-hs-gate-card {
+    width: min(440px, 100%);
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid var(--hs-gate-border);
+    box-shadow: 0 28px 64px rgba(15, 23, 42, 0.28);
+    overflow: hidden;
+    animation: vmHsGateIn 0.22s ease;
+}
+
+body.saas-admin-ui .vm-hs-gate-card--wide {
+    width: min(520px, 100%);
+}
+
+@keyframes vmHsGateIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+body.saas-admin-ui .vm-hs-gate-header {
+    padding: 22px 22px 18px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%);
+    color: #fff;
+    text-align: center;
+}
+
+body.saas-admin-ui .vm-hs-gate-header--warning {
+    background: linear-gradient(135deg, #9a3412 0%, #ea580c 48%, #f97316 100%);
+}
+
+body.saas-admin-ui .vm-hs-gate-header__icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+body.saas-admin-ui .vm-hs-gate-header__title {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+body.saas-admin-ui .vm-hs-gate-header__sub {
+    margin: 8px 0 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.saas-admin-ui .vm-hs-gate-body {
+    padding: 22px;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .vm-hs-gate-field {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .vm-hs-gate-field:last-child {
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui .vm-hs-gate-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--hs-gate-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .vm-hs-gate-input-wrap {
+    position: relative;
+}
+
+body.saas-admin-ui .vm-hs-gate-input-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .vm-hs-gate-input {
+    width: 100% !important;
+    height: 42px !important;
+    margin: 0 !important;
+    padding: 0 12px 0 38px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    font-size: 0.88rem !important;
+    color: var(--hs-gate-text) !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .vm-hs-gate-input:focus {
+    border-color: #93c5fd !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+body.saas-admin-ui .vm-hs-gate-field-error {
+    margin: 6px 0 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--hs-gate-danger);
+}
+
+body.saas-admin-ui .vm-hs-gate-message {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+}
+
+body.saas-admin-ui .vm-hs-gate-message--error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .vm-hs-gate-message--success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #047857;
+}
+
+body.saas-admin-ui .vm-hs-gate-message--info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+body.saas-admin-ui .vm-hs-gate-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+body.saas-admin-ui .vm-hs-gate-actions--split .vm-hs-gate-btn {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+body.saas-admin-ui .vm-hs-gate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--ghost {
+    background: #fff;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--ghost:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--primary {
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    border-color: #1d4ed8;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--primary:disabled {
+    opacity: 0.72;
+    cursor: not-allowed;
+}
+
+body.saas-admin-ui .vm-hs-gate-btn--warning {
+    background: linear-gradient(135deg, #c2410c, #ea580c);
+    border-color: #c2410c;
+    color: #fff;
+}
+
+body.saas-admin-ui .vm-hs-gate-reset-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+body.saas-admin-ui .vm-hs-gate-reset-row .vm-hs-gate-btn--ghost {
+    flex: 0 0 32%;
+}
+
+body.saas-admin-ui .vm-hs-gate-reset-row .vm-hs-gate-btn--warning,
+body.saas-admin-ui .vm-hs-gate-reset-row .password-sure {
+    flex: 1 1 auto;
+}
+
+body.saas-admin-ui .vm-hs-gate-validation .text-danger {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--hs-gate-danger) !important;
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-high-security-gate-page .vm-hs-gate-shell {
+        padding: 16px 12px;
+    }
+
+    body.saas-admin-ui .vm-hs-gate-header {
+        padding: 18px 16px 14px;
+    }
+
+    body.saas-admin-ui .vm-hs-gate-body {
+        padding: 16px;
+    }
+
+    body.saas-admin-ui .vm-hs-gate-actions {
+        flex-direction: column;
+    }
+
+    body.saas-admin-ui .vm-hs-gate-reset-row {
+        flex-direction: column;
+    }
+
+    body.saas-admin-ui .vm-hs-gate-reset-row .vm-hs-gate-btn--ghost,
+    body.saas-admin-ui .vm-hs-gate-reset-row .vm-hs-gate-btn--warning,
+    body.saas-admin-ui .vm-hs-gate-reset-row .password-sure {
+        width: 100%;
+        flex: none;
+    }
+}

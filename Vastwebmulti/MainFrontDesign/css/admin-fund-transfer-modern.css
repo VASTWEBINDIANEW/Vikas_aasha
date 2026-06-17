@@ -1,0 +1,1411 @@
+/* ADMIN Fund Transfer — premium modern shell v=6 */
+
+body.saas-admin-ui .saas-fund-transfer-page {
+    --ft-accent: #2563eb;
+    --ft-accent-dark: #1d4ed8;
+    --ft-accent-soft: #dbeafe;
+    --ft-accent-glow: rgba(37, 99, 235, 0.18);
+    --ft-surface: #ffffff;
+    --ft-surface-2: #f8fafc;
+    --ft-border: #e2e8f0;
+    --ft-muted: #64748b;
+    --ft-text: #0f172a;
+    --ft-success: #059669;
+    --ft-danger: #dc2626;
+    --ft-radius: 16px;
+    --ft-radius-sm: 10px;
+    --ft-shadow: 0 10px 36px rgba(15, 23, 42, 0.08);
+    --ft-shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.06);
+    --ft-filter-width: 148px;
+    --ft-date-width: 132px;
+    font-family: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+    min-height: calc(100vh - var(--admin-header-height, 58px)) !important;
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui section.content.saas-admin-account-page.saas-fund-transfer-page {
+    padding: 6px 12px 12px !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-shell.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-shell {
+    padding: 0;
+    max-width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-layout-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0 !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-layout-wrap,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-col,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* —— Page toolbar / hero (compact) —— */
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--ft-border);
+    border-radius: 12px;
+    background: var(--ft-surface);
+    box-shadow: var(--ft-shadow-sm);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-toolbar--premium {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-color: #e2e8f0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-hero {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-hero__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1e40af, #2563eb 55%, #4f46e5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px var(--ft-accent-glow);
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--ft-text);
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-page-subtitle {
+    margin: 0;
+    font-size: 0.72rem;
+    color: var(--ft-muted);
+    line-height: 1.3;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.74rem;
+    color: var(--ft-muted);
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-breadcrumb a {
+    color: var(--ft-accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-breadcrumb li:not(:last-child)::after {
+    content: "/";
+    margin-left: 6px;
+    color: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-wrap {
+    flex: 0 1 280px;
+    max-width: 320px;
+    min-width: 160px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-label {
+    display: none;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-wrap input#txtsearch {
+    width: 100% !important;
+    height: 34px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 0.84rem !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+    float: none !important;
+    margin: 0 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-wrap input#txtsearch:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+/* —— Layout (full height) —— */
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-layout.vm-ft-layout--full {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    margin: 0 !important;
+    gap: 12px !important;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-col {
+    flex: 0 0 calc(36% - 8px) !important;
+    max-width: calc(36% - 8px) !important;
+    width: calc(36% - 8px) !important;
+    padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-col {
+    flex: 0 0 calc(64% - 8px) !important;
+    max-width: calc(64% - 8px) !important;
+    width: calc(64% - 8px) !important;
+    padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* —— Left form card —— */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left.vm-ft-form-card {
+    border: 1px solid var(--ft-border);
+    border-radius: var(--ft-radius);
+    background: var(--ft-surface);
+    box-shadow: var(--ft-shadow);
+    overflow: hidden;
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 52%, #4f46e5 100%);
+    border-radius: var(--ft-radius) var(--ft-radius) 0 0;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-card-header__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-card-header__title {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-form-card-header__sub {
+    display: block;
+    font-size: 0.72rem;
+    opacity: 0.88;
+    margin-top: 2px;
+}
+
+/* Role tabs — icon left + box-style inactive */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 12px 12px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    float: none !important;
+    width: calc(100% - 24px) !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link {
+    float: none !important;
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto !important;
+    margin: 0 !important;
+    border: none !important;
+    list-style: none;
+    position: relative;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active::after,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current::after,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link.active::after,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link.current::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link.active,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.tab-link.current {
+    background: transparent !important;
+    border-bottom: none !important;
+    color: inherit !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0;
+    padding: 8px 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #64748b !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-decoration: none !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    min-height: 38px;
+    height: 100%;
+    text-align: center !important;
+    width: 100%;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs .vm-ft-role-tab__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    order: 0;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs .vm-ft-role-tab__label {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    order: 1;
+    text-align: left !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Inactive — white box */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--inactive > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .nav-tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    border: 1px solid #e2e8f0 !important;
+    border-right: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--inactive > a .vm-ft-role-tab__icon,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a .vm-ft-role-tab__icon {
+    background: #f1f5f9 !important;
+    color: #94a3b8 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--inactive > a .vm-ft-role-tab__label,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a .vm-ft-role-tab__label {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--inactive > a.vm-ft-role-tab:hover,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a:hover {
+    background: #f8fafc !important;
+    background-image: none !important;
+    color: #475569 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+    transform: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--inactive > a:hover .vm-ft-role-tab__icon,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li:not(.active):not(.current) > a:hover .vm-ft-role-tab__icon {
+    background: #e2e8f0 !important;
+    color: #64748b !important;
+}
+
+/* Active — blue box, icon left */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--active > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current > a.vm-ft-role-tab,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active > a,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current > a,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .nav-tabs.vm-ft-role-tabs > li.active > a,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .nav-tabs.vm-ft-role-tabs > li.current > a {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+    border-color: transparent !important;
+    border-right: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.32) !important;
+    transform: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--active > a .vm-ft-role-tab__icon,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active > a .vm-ft-role-tab__icon,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current > a .vm-ft-role-tab__icon {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--active > a .vm-ft-role-tab__label,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active > a .vm-ft-role-tab__label,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current > a .vm-ft-role-tab__label {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.active > a.vm-ft-role-tab:focus,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.current > a.vm-ft-role-tab:focus,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li.vm-ft-role-tab-li--active > a.vm-ft-role-tab:focus {
+    outline: 2px solid rgba(37, 99, 235, 0.45);
+    outline-offset: 2px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign {
+    padding: 14px 12px 16px !important;
+    border: none !important;
+    float: none !important;
+    width: 100% !important;
+    background: #fff;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active,
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active.in {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex !important;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane {
+    display: none !important;
+    float: none !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: hidden !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active,
+body.saas-admin-ui .saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active.in,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .tab-pane.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: vm-ft-fade-in 0.25s ease;
+}
+
+@keyframes vm-ft-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form fields */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form {
+    padding: 4px 4px 0;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto !important;
+    background: transparent !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .col-md-12.col-sm-12.col-xs-12 {
+    margin-bottom: 12px !important;
+    padding: 0 6px !important;
+    width: 100% !important;
+    float: none !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: 0.01em;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form input[type="text"],
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form input[type="password"],
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form textarea,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form select {
+    width: 100% !important;
+    height: 38px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px !important;
+    font-size: 0.84rem !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form input:focus,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form textarea:focus,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form select:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form textarea {
+    min-height: 76px;
+    padding: 10px 12px !important;
+    height: auto !important;
+}
+
+/* Amount highlight */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .amount input,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .damount input,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .ramount input,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .aamount input,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .wamount input {
+    background: linear-gradient(180deg, #f0fdf4, #fff) !important;
+    border-color: #bbf7d0 !important;
+    font-weight: 700 !important;
+    color: #065f46 !important;
+    font-size: 0.92rem !important;
+}
+
+/* Balance badges */
+body.saas-admin-ui .saas-fund-transfer-page .mdremainbalance,
+body.saas-admin-ui .saas-fund-transfer-page .dlmremainbalance,
+body.saas-admin-ui .saas-fund-transfer-page .remremainbalance,
+body.saas-admin-ui .saas-fund-transfer-page .remremainbalance1,
+body.saas-admin-ui .saas-fund-transfer-page .apiremainbalance,
+body.saas-admin-ui .saas-fund-transfer-page .wlremainbalance {
+    position: static !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 5px 12px !important;
+    border-radius: 999px !important;
+    border: 1px solid #bfdbfe !important;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+    color: #1d4ed8 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    right: auto !important;
+    top: auto !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .old-cr {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+/* Alerts */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .errorss {
+    color: #fff !important;
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-radius: var(--ft-radius-sm);
+    padding: 8px 12px;
+    margin-top: 8px;
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .errorss1 {
+    color: #fff !important;
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    border-radius: var(--ft-radius-sm);
+    padding: 8px 12px;
+    margin-top: 8px;
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+/* Action buttons */
+body.saas-admin-ui .saas-fund-transfer-page .button-seconddesign {
+    margin-top: 4px;
+    padding: 12px 6px 4px !important;
+    border-top: 1px dashed var(--ft-border);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .button-seconddesign > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .button-seconddesign .fullbodydycolorbg,
+body.saas-admin-ui .saas-fund-transfer-page .fullbodydycolorbg.btn-first,
+body.saas-admin-ui .saas-fund-transfer-page #btnchksecurity,
+body.saas-admin-ui .saas-fund-transfer-page #btnchkdealerfundtransfer,
+body.saas-admin-ui .saas-fund-transfer-page #btnchksendfundretailer,
+body.saas-admin-ui .saas-fund-transfer-page #btnAPIfundtranswithchk,
+body.saas-admin-ui .saas-fund-transfer-page #btnWLchkfundtransfer,
+body.saas-admin-ui .saas-fund-transfer-page #btnshowdetails,
+body.saas-admin-ui .saas-fund-transfer-page #btndistributorInform,
+body.saas-admin-ui .saas-fund-transfer-page #btnRetailerInform,
+body.saas-admin-ui .saas-fund-transfer-page #btnAPIUSERInform,
+body.saas-admin-ui .saas-fund-transfer-page #btnWLUSERInform {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--ft-radius-sm) !important;
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    padding: 10px 18px !important;
+    line-height: 1.2 !important;
+    float: none !important;
+    margin: 0 !important;
+    box-shadow: 0 6px 16px var(--ft-accent-glow);
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .button-seconddesign .fullbodydycolorbg:hover,
+body.saas-admin-ui .saas-fund-transfer-page .fullbodydycolorbg.btn-first:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnchksecurity:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnshowdetails:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px var(--ft-accent-glow);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #btnbackshow,
+body.saas-admin-ui .saas-fund-transfer-page #btnddbackshow,
+body.saas-admin-ui .saas-fund-transfer-page #btnRRbackshow,
+body.saas-admin-ui .saas-fund-transfer-page #btnAPIbackshow,
+body.saas-admin-ui .saas-fund-transfer-page #btnWLbackshow,
+body.saas-admin-ui .saas-fund-transfer-page .button-third-design {
+    background: #fff !important;
+    color: #475569 !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    padding: 10px 16px !important;
+    line-height: 1.2 !important;
+    float: none !important;
+    margin: 0 !important;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #btnbackshow:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnddbackshow:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnRRbackshow:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnAPIbackshow:hover,
+body.saas-admin-ui .saas-fund-transfer-page #btnWLbackshow:hover {
+    background: var(--ft-surface-2) !important;
+    border-color: #cbd5e1 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #outer-loader {
+    border-radius: var(--ft-radius);
+}
+
+/* Confirmation panel */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form.show-after-submit {
+    background: linear-gradient(180deg, #f8fafc, #fff) !important;
+    border: 1px dashed #c7d2fe;
+    border-radius: var(--ft-radius-sm);
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form.show-after-submit h3 {
+    text-align: center;
+    margin: 4px 0 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--ft-text);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .show-after-submit .txtcodecodec {
+    margin-top: 8px !important;
+}
+
+/* —— History panel —— */
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-right.vm-ft-history-panel {
+    border: 1px solid var(--ft-border);
+    border-radius: var(--ft-radius);
+    background: var(--ft-surface);
+    box-shadow: var(--ft-shadow);
+    overflow: hidden;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--ft-border);
+    background: var(--ft-surface-2);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar--premium {
+    background: linear-gradient(180deg, #f8fafc, #eef2f7);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar__head > i {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+    color: var(--ft-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: var(--ft-shadow-sm);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar__title {
+    display: block;
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--ft-text);
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar__sub {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--ft-muted);
+    margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-toolbar__filters,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-filters-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-field {
+    flex: 1.15 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-field--mode {
+    flex: 0.9 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-field > select,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-field .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-dmt-filter-search-group.vm-ft-date-search-group {
+    display: flex !important;
+    flex: 2.4 1 0 !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field {
+    flex: 1 1 128px !important;
+    width: auto !important;
+    min-width: 128px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    display: block !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-label {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-icon {
+    position: absolute !important;
+    top: 50% !important;
+    bottom: auto !important;
+    left: 10px !important;
+    right: auto !important;
+    transform: translateY(-50%) !important;
+    width: 16px !important;
+    height: 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 3 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    color: #3b82f6 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-icon i {
+    font-size: 14px !important;
+    line-height: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
+    transform: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-input,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .form-control.saas-acc-dp-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    margin: 0 !important;
+    padding: 8px 10px 8px 34px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    background: #f8fafc !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    line-height: 1.25 !important;
+    box-sizing: border-box !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field.is-active .saas-acc-dp-input,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-dp-field .saas-acc-dp-input:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .saas-acc-btn,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-date-search-group .vm-ft-search-btn {
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    align-self: center !important;
+    flex: 0 0 auto !important;
+    min-width: 104px !important;
+    width: auto !important;
+    max-width: 140px !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 16px;
+    border: none;
+    border-radius: var(--ft-radius-sm);
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex: 0 0 auto !important;
+    min-width: 104px !important;
+    white-space: nowrap !important;
+    box-shadow: 0 4px 14px var(--ft-accent-glow);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-search-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px var(--ft-accent-glow);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-export-group {
+    display: flex;
+    gap: 6px;
+    flex: 0 0 auto;
+    align-items: center;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-export-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--ft-border);
+    border-radius: var(--ft-radius-sm);
+    background: #fff;
+    color: #334155;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-export-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--ft-shadow-sm);
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-export-btn--excel {
+    color: #059669;
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-export-btn--pdf {
+    color: #dc2626;
+    border-color: #fecaca;
+    background: #fef2f2;
+}
+
+/* Table */
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-table-wrap {
+    flex: 1 1 auto;
+    overflow: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 12px 14px 16px;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD table,
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD .third-design-table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    font-size: 0.78rem;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm);
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(180deg, #f1f5f9, #e2e8f0) !important;
+    color: #334155 !important;
+    font-weight: 800 !important;
+    padding: 10px 10px !important;
+    border: none !important;
+    border-bottom: 2px solid #cbd5e1 !important;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody td {
+    padding: 9px 10px !important;
+    border: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    vertical-align: middle !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr {
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr:hover td {
+    background: #eff6ff !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr[style*="ff0000"] td,
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr[style*="FF0000"] td {
+    background: #fef2f2 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tbody tr td p {
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page #tblshowMasterD tfoot td {
+    background: linear-gradient(180deg, #f8fafc, #eef2f7) !important;
+    font-weight: 800 !important;
+    border-top: 2px solid var(--ft-border) !important;
+    padding: 10px !important;
+}
+
+/* Select2 */
+/* Select2 — match report pages */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .select2-container,
+body.saas-admin-ui .saas-fund-transfer-page .vm-ft-history-filters-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default .select2-selection--single {
+    min-height: 38px !important;
+    height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    background: #f8fafc !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    padding-left: 10px !important;
+    padding-right: 28px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 6px !important;
+    width: 20px !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default.select2-container--focus .select2-selection--single,
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-dropdown {
+    border: 1px solid var(--ft-border) !important;
+    border-radius: 10px !important;
+    box-shadow: var(--ft-shadow) !important;
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-results__option--highlighted[aria-selected] {
+    background: var(--ft-accent) !important;
+}
+
+/* Native selects in transfer form (payment mode, bank, etc.) */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form select:not(.select2-hidden-accessible),
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form .custom-district1 select,
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form #idst,
+body.saas-admin-ui .saas-fund-transfer-page .vm-opr-select.form-control {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-color: #f8fafc !important;
+    padding-right: 28px !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-selection.select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    font-size: 0.82rem;
+    padding-left: 10px !important;
+}
+
+/* Loader */
+@keyframes vm-ft-ripple {
+    0% { top: 96px; left: 96px; width: 0; height: 0; opacity: 1; }
+    100% { top: 18px; left: 18px; width: 156px; height: 156px; opacity: 0; }
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .ldio-zdyd6mf6t5 div {
+    position: absolute;
+    border-width: 4px;
+    border-style: solid;
+    opacity: 1;
+    border-radius: 50%;
+    animation: vm-ft-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    box-sizing: content-box;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .ldio-zdyd6mf6t5 div:nth-child(1) { border-color: #2563eb; }
+body.saas-admin-ui .saas-fund-transfer-page .ldio-zdyd6mf6t5 div:nth-child(2) { border-color: #60a5fa; animation-delay: -0.5s; }
+
+body.saas-admin-ui .saas-fund-transfer-page .loadingio-spinner-ripple-92ar2pfqk5j {
+    width: 120px;
+    height: 120px;
+}
+
+/* —— Detail modals (modern) —— */
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.in,
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 20px 16px !important;
+    z-index: 11000 !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.in .modal-dialog,
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.show .modal-dialog,
+body.saas-admin-ui .vm-ft-detail-modal.in .vm-ft-detail-modal__dialog,
+body.saas-admin-ui .vm-ft-detail-modal.show .vm-ft-detail-modal__dialog {
+    margin: 1.75rem auto !important;
+    float: none !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: calc(100% - 32px) !important;
+    max-width: 800px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    display: block !important;
+    pointer-events: auto !important;
+}
+
+body.saas-admin-ui .modal.vm-ft-detail-modal .modal-content,
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .modal-content.vm-ft-detail-modal__content {
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+body.saas-admin-ui .modal.vm-ft-detail-modal .saas-admin-modal-header,
+body.saas-admin-ui .modal.vm-ft-detail-modal .modal-header {
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .modal-body,
+body.saas-admin-ui .vm-ft-detail-modal__body {
+    padding: 0 !important;
+    background: #f1f5f9 !important;
+    float: none !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: calc(100vh - 160px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal__body > .float-left.width100 {
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form {
+    padding: 18px 20px 20px !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+    margin-bottom: 10px !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form .row > [class*="col-"] {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    box-sizing: border-box !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form .row > .col-md-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .form-group {
+    margin-bottom: 0 !important;
+    padding: 10px 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .form-group:hover {
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .form-group label {
+    display: block !important;
+    margin: 0 0 6px !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    color: #64748b !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    line-height: 1.3 !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .form-control {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: auto !important;
+    padding: 8px 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 9px !important;
+    background: #f8fafc !important;
+    color: #0f172a !important;
+    font-size: 0.86rem !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .form-control:focus {
+    border-color: #93c5fd !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal #txtnetamounttranferedshow,
+body.saas-admin-ui .vm-ft-detail-modal input[id*="netamount"],
+body.saas-admin-ui .vm-ft-detail-modal input[style*="main-bg-lcolor"] {
+    background: linear-gradient(180deg, #eff6ff, #f8fafc) !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal #txtCOMMNETSshow,
+body.saas-admin-ui .vm-ft-detail-modal input[style*="height:50px"] {
+    min-height: 72px !important;
+    height: auto !important;
+    padding: 10px 12px !important;
+    line-height: 1.45 !important;
+}
+
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form .row:last-child .form-group {
+    background: linear-gradient(180deg, #fff, #f8fafc) !important;
+}
+
+/* Modal footer strip */
+body.saas-admin-ui .vm-ft-detail-modal .vm-ft-modal-form::after {
+    content: "";
+    display: block;
+    margin-top: 14px;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
+    opacity: 0.35;
+}
+
+/* Override legacy float widths inside modals */
+body.saas-admin-ui .vm-ft-detail-modal .width100,
+body.saas-admin-ui .vm-ft-detail-modal .float-left {
+    float: none !important;
+}
+
+/* Confirmation detail rows */
+body.saas-admin-ui .saas-fund-transfer-page #Retailershowinformation .col-md-12,
+body.saas-admin-ui .saas-fund-transfer-page #showinformation .col-md-12,
+body.saas-admin-ui .saas-fund-transfer-page #DIstribotorshowinformation .col-md-12,
+body.saas-admin-ui .saas-fund-transfer-page #APIUSERshowinformation .col-md-12,
+body.saas-admin-ui .saas-fund-transfer-page #WLUSERshowinformation .col-md-12 {
+    border-bottom: 1px solid var(--ft-border) !important;
+    margin: 0 0 8px !important;
+    width: 100% !important;
+    padding-bottom: 8px !important;
+}
+
+/* Override legacy Dashcustom on this page */
+body.saas-admin-ui .saas-fund-transfer-page .fund-transfer-form {
+    height: auto !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .nav-tabs li a::before,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left .nav-tabs > li > a::before,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a::before,
+body.saas-admin-ui .saas-fund-transfer-page .fund-trasfer-left > #tabs.vm-ft-role-tabs > li > a.vm-ft-role-tab::before {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .second-design .saas-fund-transfer-page .fund-trasfer-left #tabs.vm-ft-role-tabs > li.active,
+body.saas-admin-ui .second-design .saas-fund-transfer-page .fund-trasfer-left #tabs.vm-ft-role-tabs > li.current {
+    background: transparent !important;
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .datepicker.dropdown-menu {
+    z-index: 1070 !important;
+}
+
+body.saas-admin-ui .saas-fund-transfer-page .saas-acc-dp-field .saas-acc-dp-input {
+    cursor: pointer;
+}
+
+/* Neutralize legacy Dashcustom fund-tr-history rules on modern modals */
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .modal-dialog {
+    width: calc(100% - 32px) !important;
+    max-width: 800px !important;
+    margin: 1.75rem auto !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .modal-header {
+    padding: 0 !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .first-form .form-group {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .first-form .form-group label {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .first-form input.form-control {
+    height: auto !important;
+    min-height: 42px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .modal-content .modal-body {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.ecomm-pop-body,
+body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .ecomm-pop-body {
+    padding: 0 !important;
+}

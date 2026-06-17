@@ -176,6 +176,11 @@
         initReportDateForm("#rofferReportForm");
         initReportDateForm("#radiantPrepayForm");
         initReportDateForm("#radiantCmsDepositForm");
+        initReportDateForm("#ecommerceHistoryForm");
+        initReportDateForm("#securityReportForm");
+        initReportDateForm("#whatsappPurchaseForm");
+        initReportDateForm("#giftcardReportForm");
+        initReportDateForm("#prepaidCardReportForm");
     }
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.datepicker) {

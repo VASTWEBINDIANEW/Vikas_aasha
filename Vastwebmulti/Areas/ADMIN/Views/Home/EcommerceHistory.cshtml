@@ -1,604 +1,373 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "EcommerceHistory";
+    ViewBag.Title = "Ecommerce History";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>();
+    var rowCount = reports.Count();
+
+    decimal totalSuccess = ViewData["Totals"] != null ? Convert.ToDecimal(ViewData["Totals"]) : 0m;
+    decimal totalPending = ViewData["Totalp"] != null ? Convert.ToDecimal(ViewData["Totalp"]) : 0m;
+    decimal totalFailed = ViewData["Totalf"] != null ? Convert.ToDecimal(ViewData["Totalf"]) : 0m;
+    decimal totalAmount = totalSuccess + totalPending + totalFailed;
 }
 
-<style>
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=37" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page">
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    /*  New css vs responcive    */
-    .mrj {
-        width: auto;
-    }
-    .filter-option.pull-left {
-        margin: 0px 10px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
+        @{
+            var ecommFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "ecommerceHistoryForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-    }
+        @using (Html.BeginForm("EcommerceHistory", "Home", FormMethod.Post, ecommFormAttrs))
+        {
+            @Html.Hidden("ddl_top", 50)
 
-    @@media only screen and (max-width:1169px) {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-    @@media only screen and (max-width:1024px) {
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Ecommerce</li>
+                        <li>Ecommerce History</li>
+                    </ol>
 
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
 
-
-
-    @@media only screen and (max-width: 992px){
-        .t_menu {
-            margin: 4px 0;
-            float: left;
-            width: 100%;
-        }
-        .all-type-third {
-            display: block !important;
-        }
-
-    }
-
-    @@media only screen and (max-width:767px){
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-
-        .tre1, .tre2 {
-            width: 50% !important;
-            float: left !important;
-            margin-bottom: 15px;
-        }
-
-        .tre3 {
-            width: 100%;
-            float: left;
-            margin-bottom: 15px;
-        }
-
-        .tre1 ul li, .tre2 ul li {
-            width: 32%;
-        }
-
-        .web-white-filter {
-            float: left !important;
-        }
-
-        .tre1 ul li a, .tre2 ul li a {
-            text-align: left !important;
-        }
-
-        .responcive-fifty {
-            width: 50% !important;
-            float: left;
-            margin: 0;
-            margin-bottom: 10px;
-        }
-
-            .responcive-fifty{
-                margin-right: 0px;
-                margin-bottom: 10px;
-            }
-
-        .responcive-full {
-            width: 100% !important;
-            float: left;
-            margin-bottom: 10px !important;
-        }
-
-            .responcive-full input {
-                width: 50% !important;
-            }
-
-            .responcive-full .nrr3 input {
-                width: 100% !important;
-            }
-
-            .responcive-full .nrr3 {
-                width: 49.5% !important;
-            }
-
-            .responcive-full .form-group.jjp {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-        .responcive-fifty button {
-            width: 100%;
-            text-align: left;
-        }
-
-
-    }
-
-    @@media screen and (max-width: 600px) {
-        .responcive-full {
-            margin-bottom: 0px !important;
-        }
-
-        .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-            height: auto;
-        }
-        .D_menu {
-            width: 100% !important;
-        }
-        .responcive-fifty {
-            width: 100% !important;
-            float: left;
-            margin-bottom: 4px;
-        }
-        .responcive-full{width: 100% !important;float: left;}
-        .responcive-full .form-group.jjp,.responcive-full .nrr3 input {width: 100% !important;}
-        .responcive-full input {width: 100% !important;margin: 0;}
-            .responcive-full .nrr3 {
-                width: 100% !important;
-                margin-top: 6px;
-            }
-        .responcive-full .mrj {width: 100% !important;}
-        .responcive-full .mrj button {width: 100%;text-align: left;}
-
-    }
-</style>
-
-
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row clearfix margin-bottom-third cardbackg-third onlymargin-third">
-            <div class="col-md-12 up-to-up" style="padding-right: 15px; padding-left: 15px;">
-                <div class="card" style="margin-bottom:5px;">
-                    @*<div class="col-md-5">
-                            <div style="margin-left:-13px;margin-top:1px;">
-                                @Html.Partial("Ecommercemenu")
-                            </div>
-
-                        </div>*@
-                    
-
-                    <div class="page-header-third D_menu" style="width: auto; float: right;">
-                        <div class="col-md-2 tre4 pdf-lastclass-third" style="padding: 0; width: auto;">
-                            <div class="white-l-search-nine">
-                                <div class="web-white-filter pdfexpoer-second totalbutton-secondclas" style="float: right;">
-                                    <input type="button" id="btnExportA" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                    <input type="button" id="btnPDFA" value="PDF" style="margin-left:2px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                                    <button class="white-success-button" style="height:32px;font-size: 11px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: left;margin-left: 2px;background: #b1a6a638;" onclick="findtotalA()">Total</button>
-                                </div>
-                            </div>
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddlusers", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All User", Value = "Admin" },
+                                new SelectListItem { Text = "Master D", Value = "Master" },
+                                new SelectListItem { Text = "Distributor", Value = "Dealer" },
+                                new SelectListItem { Text = "Retailer", Value = "Retailer" },
+                                new SelectListItem { Text = "Vendor", Value = "Vendor" }
+                            }, new { @id = "ddlusers", @class = "vm-opr-select vm-dmt-select form-control" })
                         </div>
-                        <div class="white-success" style="display: none; position: absolute;" id="total">
-                            <span id="successtotal" class="btn btn-success waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i> </span>
-                            <span id="Failedtotal" class="btn btn-danger waves-effect" style="font-size: 13px;padding:9px; color:white;font-weight:600;" title="Total  Failed"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i> </span>
-                            <span id="Pendingtotal" class="btn btn-warning waves-effect" style="font-size: 13px;padding:9px;color:white; font-weight:600;" title="Total  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i> </span>
 
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="allvendor" hidden>
+                            @Html.DropDownList("allvendor", ViewBag.allvendor as SelectList, "All Vendor", new { @id = "allvendorSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters" })
                         </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="allmaster" hidden>
+                            @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { @id = "allmasterSelect", @class = "vm-opr-select vm-dmt-select form-control allmasters" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="dlm" hidden>
+                            @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distributor", new { id = "alldealer", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="rem" hidden>
+                            @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("Cateid", ViewBag.category as SelectList, "Select Category", new { id = "Cateid", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field">
+                            @Html.DropDownList("ddl_status", new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "All Status", Value = "ALL" },
+                                new SelectListItem { Text = "Success", Value = "2" },
+                                new SelectListItem { Text = "Pending", Value = "1" },
+                                new SelectListItem { Text = "Rejected", Value = "3" }
+                            }, new { @id = "ddl_status", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" name="submit" value="Old" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
                     </div>
-
-
-                        @*<div class="col-md-2" style="float: right;padding: 0px;text-align: right;">
-            <div class="form-group">
-                <div>
-                    <button type="button" class="btn btn-success waves-effect" style="border: 1px solid #b1a6a638;" title="Total Order  Success"><i style="font-size:15px;top:1px;" class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;@ViewData["Totals"]</button>
-                    <button type="button" class="btn btn-danger waves-effect" style="border: 1px solid #b1a6a638;" title="Total Order  Rejected"><i style="font-size:15px;top:1px;" class="fa fa-times-circle-o" aria-hidden="true"></i>&nbsp;@ViewData["Totalf"]</button>
-                    <button type="button" class="btn btn-warning waves-effect" style="border: 1px solid #b1a6a638;" title="Total Order  Pending"><i style="font-size:15px;top:1px;" class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;@ViewData["Totalp"]</button>
 
                 </div>
-            </div>
-        </div>*@
 
-                    </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    @*<div class="">
-            <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                <li class="active" style="color:#9E9E9E; font-size:12px;">E-COMMERCE HISTORY&nbsp;></li>
-            </ol>
-        </div>*@
-
-
-
-                    <div class="col-md-9 all-type-third" style="padding: 0px; width: 100%; display: flex; align-items: center; justify-content: space-between;">
-
-                        <div class="t_menu">
-                            <div class="bread-same-all-page breadsameall-second">
-                                <ul>
-                                    <li class="smli">
-                                        <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                        </a>
-                                    </li>
-
-                                    <li class="fullbodydycolorbg tmw-total-color-one">
-                                        EcommerceHistory
-                                    </li>
-                                </ul>
-
-                            </div>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="ecommerceHistoryTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Ecommerce history totals</span>
                         </div>
-                        
-                        <div class="t_menu">
-                            
-                                @using (Html.BeginForm("EcommerceHistory", "Home", FormMethod.Post))
-                                {
-                                    <div class="">
-                                        <div class="col-md-2 mrj jkjk responcive-fifty">
-                                            <div class="form-line">
-                                                @Html.DropDownList("ddlusers", new List<SelectListItem>
-                                   {
-                                new SelectListItem{ Text="All User",Value="Admin"},
-                                new SelectListItem{Text="Master D",Value="Master"},
-                                new SelectListItem{Text="Distributor",Value="Dealer"},
-                                new SelectListItem{Text="Retailer",Value="Retailer"},
-                                new SelectListItem{Text="Vendor",Value="Vendor"}
-
-                               }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;", @onchange = "answers()" })
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-2 mrj responcive-fifty" style="display:none;" id="allvendor">
-                                            <div class="form-line">
-                                                @Html.DropDownList("allvendor", ViewBag.allvendor as SelectList, "All Vendor", new { @style = "margin-top:0px", @class = "selectpicker form-control allmasters", data_live_search = "true", })
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 mrj responcive-fifty" style="display:none;" id="allmaster">
-                                            <div class="form-line">
-                                                @Html.DropDownList("allmaster", ViewBag.allmaster as SelectList, "All Master", new { @style = "margin-top:0px", @class = "selectpicker form-control allmasters", data_live_search = "true", })
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-2 mrj responcive-fifty" style="display:none;" id="dlm">
-                                            <div class="form-line">
-                                                @Html.DropDownList("alldealer", ViewBag.alldealer as SelectList, "All Distubutor", new { id = "alldealer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 mrj responcive-fifty" style="display:none;" id="rem">
-                                            <div class="form-line">
-                                                @Html.DropDownList("allretailer", ViewBag.allretailer as SelectList, "All Retailer", new { id = "allretailer", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 mrj responcive-fifty" style="width: 130px;">
-                                            <div class="form-line">
-                                                @Html.DropDownList("Cateid", ViewBag.category as SelectList, "Select Category", new { id = "Cateid", @class = "selectpicker form-control", data_live_search = "true" })
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-2 mrj jkjk responcive-fifty">
-                                            <div class="form-line">
-                                                @Html.DropDownList("ddl_status", new List<SelectListItem>
-                                     {
-                             new SelectListItem{ Text="All Status",Value="ALL",},
-                             new SelectListItem{Text="SUCCESS",Value="2"},
-                             new SelectListItem{Text="Pending",Value="1"},
-                             new SelectListItem{Text="Rejected",Value="3"}
-                              }, new { @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-5 mrj responcive-full" style="width: auto;margin-top:1px;">
-                                            <div class="form-group jjp">
-                                                <div class="input-daterange input-group">
-                                                    <div class="custom-date-icon ner height-icon-third">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
-
-                                                    <div class="nrr3">
-                                                        <div class="custom-date-icon ner height-icon-third">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mrj responcive-fifty search-resp-third" style="margin-right: 0px;">
-
-                                                <button type="submit" value="Old" name="submit" class="btn input-back-second" style="background: transparent;border: 1px solid #b1a6a638;">
-                                                    <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                                    <span style="top:-2px;color:black;">Search</span>
-                                                </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideEcommerceHistoryTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value" id="ecommTotalAmount">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="successtotal">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Rejected</span>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">@totalPending.ToString("N2")</strong>
                         </div>
                     </div>
+                </div>
 
+            </div>
+        }
 
-
-                    <div class="body" style="padding: 0px; width: 100%; float: left;">
-                        <div class="table-responsive" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover dataTable example-second thpadding-second" style="width:100%;font-size:12px;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr&nbsp;No.</th>
-                                        <th>Live&nbsp;Status</th>
-                                        <th>Users&nbsp;Registration&nbsp;Information</th>
-                                        <th>Order&nbsp;Date</th>
-                                        <th>Product&nbsp;Name</th>
-                                        <th>MRP&nbsp;Price</th>
-                                        <th>Product&nbsp;Price</th>
-                                        <th>Qty</th>
-                                        <th>Total&nbsp;Amount</th>
-                                        <th><span>User&nbsp;Role</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                        <th><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                        <th><span>Master</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                        <th><span>Whitelabel</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                        <th><span>Admin</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                        <th>Approved&nbsp;Date</th>
-
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ var i = 1;}
-                                    @foreach (var item in Model)
-                                    {
-                                        var color = "";
-                                        var fontweight = "";
-                                        var emailid = "";
-                                        var name = "";
-                                        var framname = "";
-                                        var rolename = "";
-                                        var sts = "";
-
-                                        if (item.RoleName == "Retailer")
-                                        {
-                                            emailid = item.Email;
-                                            name = item.RetailerName;
-                                            framname = item.Frm_Name;
-                                            rolename = item.RoleName;
-
-                                        }
-                                        if (item.RoleName == "Vendor")
-                                        {
-                                            emailid = item.VendorEmail;
-                                            name = item.VendorName;
-                                            framname = item.Vendorfrmname;
-                                            rolename = item.RoleName;
-
-                                        }
-                                        if (item.OrderStatus == 2)
-                                        {
-                                            color = "green";
-                                            fontweight = "700";
-                                            sts = "Success";
-                                        }
-                                        if (item.OrderStatus == 3)
-                                        {
-                                            color = "red";
-                                            fontweight = "700";
-                                            sts = "Rejected";
-                                        }
-
-                                        if (item.OrderStatus == 1)
-                                        {
-                                            color = "#FF9800";
-                                            fontweight = "700";
-                                            sts = "Pending";
-                                        }
-                                        <tr role="row" class="odd">
-                                            <td>@i</td>
-                                            <td><p style="font-size:12px;"><span style="color:@color;font-weight:@fontweight;">@sts</span></p></td>
-                                            <td><p style="font-size:12px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;⇒&nbsp;@emailid</p></td>
-                                            <td><p style="font-size:11px;">&nbsp;@item.OrderDate</p></td>
-                                            <td><p style="font-size:11px;">&nbsp;@item.ProductName</p></td>
-                                            <td><p style="font-size:12px;">&nbsp;@item.ListPrice</p></td>
-                                            <td><p style="font-size:12px;">&nbsp;@item.StandardPrice</p></td>
-                                            <td><p style="font-size:12px;">&nbsp;@item.QTY</p></td>
-                                            <td><p style="font-size:12px;">&nbsp;@item.Amount</p></td>
-                                            <td>
-                                                @if (item.RoleName == "Retailer")
-                                                {
-                                                    <p><span>@rolename</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.RemPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.Remcomm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.RemPost</span></p>
-                                                }
-                                                else
-                                                {
-                                                    <p><span>@rolename</span></p>
-                                                }
-                                            </td>
-
-                                            <td>
-                                                @if (item.RoleName == "Retailer")
-                                                {
-                                                    <p><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.DlmPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.DlmComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.DlmPost</span></p>
-                                                }
-                                                else
-                                                {
-                                                    <p><span></span></p>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.RoleName == "Retailer")
-                                                {
-                                                    <p><span>Master</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.MasterPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.MdComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.MasterPost</span></p>
-                                                }
-                                                else
-                                                {
-                                                    <p><span></span></p>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.RoleName == "Retailer")
-                                                {
-                                                    <p><span>Whitelabel</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.WhitelabelPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.Whitelabecomm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.WhitelabelPost</span></p>
-                                                }
-                                                else
-                                                {
-                                                    <p><span></span></p>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.RoleName == "Retailer")
-                                                {
-                                                    <p><span>Admin</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.AdminPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.AdminComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.AdminPost</span></p>
-                                                }
-                                                else
-                                                {
-                                                    <p><span></span></p>
-                                                }
-                                            </td>
-                                            <td><p style="font-size:11px;">&nbsp;@item.UpdatedOn</p></td>
-                                        </tr>
-                                        i++;
-                                    }
-                                </tbody>
-                            </table>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                        <span>Ecommerce order history</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong>₹ @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ecomm-totals-btn" onclick="findtotalA()" title="Show totals" aria-expanded="false" aria-controls="ecommerceHistoryTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="ecommerceHistoryReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr&nbsp;No.</th>
+                                    <th>Live&nbsp;Status</th>
+                                    <th>Users&nbsp;Registration&nbsp;Information</th>
+                                    <th>Order&nbsp;Date</th>
+                                    <th>Product&nbsp;Name</th>
+                                    <th>MRP&nbsp;Price</th>
+                                    <th>Product&nbsp;Price</th>
+                                    <th>Qty</th>
+                                    <th>Total&nbsp;Amount</th>
+                                    <th><span>User&nbsp;Role</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th><span>Master</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th><span>Whitelabel</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th><span>Admin</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                    <th>Approved&nbsp;Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_EcommerceHistoryRows", reports)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
 
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
-
 <script>
-
-    $('.allmasters').select2();
-    $('#alldealer').select2();
-    $('#allretailer').select2();
-    $('#Cateid').select2();
-</script>
-
-<script>
-    $(document).ready(function() {
-
-   $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
-
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
-            answers();
-    });
-</script>
-
-
-<script type="text/javascript">
-    function answers() {
-        var e = document.getElementById("ddlusers");
-        var answer = e.options[e.selectedIndex].value;
-        if (answer == "Dealer") {
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("allvendor").style.display = "none";
-            document.getElementById("dlm").style.display = "block";
-            document.getElementById("rem").style.display = "none";
-
+    function formatEcommAmount(value) {
+        var num = parseFloat(value);
+        if (isNaN(num)) {
+            return '0.00';
         }
-        else if (answer == "Vendor") {
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("allvendor").style.display = "block";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-
-        }
-        else if (answer == "Master") {
-            document.getElementById("allmaster").style.display = "block";
-            document.getElementById("allvendor").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-
-        }
-        else if (answer == "Admin") {
-            document.getElementById("allvendor").style.display = "none";
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-        }
-        else if (answer == "Retailer") {
-            document.getElementById("allvendor").style.display = "none";
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "block";
-
-        }
-
+        return num.toFixed(2);
     }
-</script>
 
-<script>
+    function hideEcommerceHistoryTotals() {
+        var $panel = $('#ecommerceHistoryTotalsPanel');
+        var $btn = $('.vm-ecomm-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function findtotalA() {
+        var $panel = $('#ecommerceHistoryTotalsPanel');
+        var $btn = $('.vm-ecomm-totals-btn');
+        if ($panel.is(':visible')) {
+            hideEcommerceHistoryTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function exportEcommerceHistoryTable(type) {
+        var table = document.getElementById('ecommerceHistoryReport');
+        if (!table) {
+            return;
+        }
+
+        var stamp = new Date().toISOString().slice(0, 10);
+        var title = 'Ecommerce History';
+        var clone = table.cloneNode(true);
+        var emptyRow = clone.querySelector('.vm-opr-table-empty-row');
+        if (emptyRow) {
+            alert('No data available to export.');
+            return;
+        }
+
+        if (type === 'excel') {
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'EcommerceHistory_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
+
+        var printWin = window.open('', '_blank');
+        if (!printWin) {
+            alert('Please allow pop-ups to export PDF.');
+            return;
+        }
+        printWin.document.write(
+            '<html><head><title>' + title + '</title>'
+            + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #ccc;padding:4px;text-align:left}th{background:#f3f4f6}</style>'
+            + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+        );
+        printWin.document.close();
+        printWin.focus();
+        printWin.print();
+    }
+
+    var ecommExtraWrapSelectors = ['#allvendor', '#allmaster', '#dlm', '#rem'];
+    var ecommExtraSelectSelectors = ['#allvendorSelect', '#allmasterSelect', '#alldealer', '#allretailer'];
+
+    function destroyEcommSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyEcommSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyEcommSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6
+        });
+    }
+
+    function hideEcommFilterExtras() {
+        $(ecommExtraWrapSelectors.join(', ')).each(function () {
+            $(this).removeClass('is-visible').attr('hidden', 'hidden');
+        });
+        $(ecommExtraSelectSelectors.join(', ')).each(function () {
+            destroyEcommSelect2($(this));
+        });
+    }
+
+    function showEcommFilterExtra(selector) {
+        var $wrap = $(selector);
+        $wrap.addClass('is-visible').removeAttr('hidden');
+        var $select = $wrap.find('select');
+        applyEcommSelect2($select);
+        if ($select.length && $select.data('select2')) {
+            $select.next('.select2-container').css('width', '100%');
+        }
+    }
+
+    function ecommHistoryAnswers() {
+        var answer = $('#ddlusers').val();
+        hideEcommFilterExtras();
+
+        if (answer === 'Dealer') {
+            showEcommFilterExtra('#dlm');
+        } else if (answer === 'Vendor') {
+            showEcommFilterExtra('#allvendor');
+        } else if (answer === 'Master') {
+            showEcommFilterExtra('#allmaster');
+        } else if (answer === 'Retailer') {
+            showEcommFilterExtra('#rem');
+        }
+    }
+
+    function initEcommerceHistorySelect2() {
+        applyEcommSelect2($('#ddlusers'));
+        applyEcommSelect2($('#Cateid'));
+        applyEcommSelect2($('#ddl_status'));
+        $('#ddlusers').off('change.ecommHistory').on('change.ecommHistory', ecommHistoryAnswers);
+    }
+
+    function initEcommerceHistoryDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initEcommerceHistoryDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#ecommerceHistoryForm');
+        }
+    }
+
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+        initEcommerceHistorySelect2();
+        ecommHistoryAnswers();
+        initEcommerceHistoryDatepickers();
 
+        $('#ecommerceHistoryForm .select2-container').css('width', '100%');
 
-            paging: false
+        $('#btnExportA').on('click', function () {
+            exportEcommerceHistoryTable('excel');
+        });
+        $('#btnPDFA').on('click', function () {
+            exportEcommerceHistoryTable('pdf');
         });
     });
-
 </script>

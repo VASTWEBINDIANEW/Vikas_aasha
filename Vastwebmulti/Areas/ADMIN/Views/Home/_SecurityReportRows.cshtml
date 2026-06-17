@@ -1,0 +1,101 @@
+@model IEnumerable<Vastwebmulti.Models.history_norton_Result>
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.history_norton_Result>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var icon = "";
+        var backcolor = "";
+        var padd = "";
+        var statusUpper = (item.Status ?? "").ToUpper();
+        if (statusUpper == "SUCCESS")
+        {
+            icon = "../../ashok-images/correct.svg";
+            backcolor = "green";
+            padd = "3px";
+        }
+        else if (statusUpper == "FAILED")
+        {
+            icon = "../../ashok-images/closes.svg";
+            backcolor = "red";
+            padd = "3px";
+        }
+        else if (statusUpper == "PENDING")
+        {
+            icon = "../../ashok-images/clock.svg";
+            backcolor = "";
+            padd = "0px";
+        }
+        else
+        {
+            icon = "../../ashok-images/backresnd.svg";
+            backcolor = "brown";
+            padd = "2px";
+        }
+        decimal final = Convert.ToDecimal(item.amount) - Convert.ToDecimal(item.total_rem_pay);
+
+        var idnn = item.idno + "divchk";
+        var rchsuc = item.idno + "nrchsuccess";
+        var rchfailed = item.idno + "nrchfailed";
+
+        var statusText = item.Status;
+        if (!string.IsNullOrEmpty(statusText) && statusText.ToUpper().Contains("REQ"))
+        {
+            statusText = "Pending";
+        }
+
+        <tr>
+            <td>
+                <span class="vm-security-status-cell"><img src="@icon" style="width: 17px;background:@backcolor;border-radius: 50%;padding: @padd;float:left;margin-right:4px;" />&nbsp;@statusText</span>
+            </td>
+            <td>@item.req_id</td>
+            <td>@item.plan_nm</td>
+            <td>@item.Frm_Name</td>
+            <td>@item.amount</td>
+            <td>@item.total_rem_pay</td>
+            <td>@item.rempre</td>
+            <td>@final</td>
+            <td>@item.rempost</td>
+            <td>@item.OPerator_id</td>
+            <td>@item.transfer_time</td>
+            <td>
+                <p id="@idnn" style="margin:0px;">
+                    @if (statusUpper == "PENDING")
+                    {
+                        <button class="ss" onclick="Successchk('@item.idno')" style="margin-left:0px;background:transparent;border:none;float:left;margin-right:2px;" title="Manual Success">
+                            <i class="fa fa-check" style="top:1px;border:1px solid var(--border-color);padding: 3px;font-size: 13px;" aria-hidden="true"></i>
+                        </button>
+                        <button class="ff" onclick="Failedchk('@item.idno')" style="background:transparent;border:none;float:left;margin-right:2px;" title="Manual Failed">
+                            <i class="fa fa-times" style="top:1px;border:1px solid var(--border-color);padding: 3px 4px;font-size: 13px;" aria-hidden="true"></i>
+                        </button>
+                    }
+                    <button class="ff" data-toggle="modal" data-target="#defaultModal222" onclick="ActionBtn('@item.Response_time','@item.dlmpre','@item.total_dlm_pay','@item.dlmpost','@item.mdpre','@item.total_md_pay','@item.mdpost','@item.purchase_final','@item.Api_request','@item.Api_response')" style="color:#ffc107;background:transparent;border:none;margin-top:0px !important;float:left;">
+                        <img src="~/ashok-images/rightaeps.svg" style="border: 1px solid var(--border-color);padding: 3px 3px;font-size: 10px;height:20px !important;">
+                    </button>
+                </p>
+                <p id="@rchsuc" class="nrchsuccess" style="display: none;margin:0px; text-align: center; background: green; width: 100%; padding: 5px;">
+                    <button style="color: #fff; font-weight: 800;font-size: 11px; background-color:transparent;border-color:transparent;" onclick="Response('@item.req_id','Success')">
+                        I'M SURE&nbsp;>&nbsp;SUCCESS
+                    </button>
+                </p>
+                <p id="@rchfailed" class="nrchsuccess" style="display: none;margin:0px; text-align: center; background: red; width: 100%; padding: 5px;" onclick="Response('@item.req_id','Failed')">
+                    <button style="color: #fff; font-weight: 800;font-size: 11px; background-color:transparent;border-color:transparent;">
+                        I'M SURE&nbsp;>&nbsp;FAILED
+                    </button>
+                </p>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+            <span>Security report not found.</span>
+        </td>
+    </tr>
+}

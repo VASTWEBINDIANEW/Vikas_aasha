@@ -1,653 +1,338 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.prepaid_card_Transaction>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Prepaid_Card_report";
+    ViewBag.Title = "Prepaid Card Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.prepaid_card_Transaction>();
+    var rowCount = reports.Count();
+
+    decimal totalAmount = reports.Sum(i => i.Amount ?? 0m);
+    decimal totalSuccess = reports.Where(i => string.Equals(i.Status, "SUCCESS", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Amount ?? 0m);
+    decimal totalFailed = reports.Where(i => string.Equals(i.Status, "FAILED", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Amount ?? 0m);
+    decimal totalPending = reports.Where(i => string.Equals(i.Status, "PENDING", StringComparison.OrdinalIgnoreCase)).Sum(i => i.Amount ?? 0m);
 }
 
-<link href="~/Swalalert/datatable.css" rel="stylesheet" />
-<style>
-    .second-design .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page saas-prepaid-card-report-page">
 
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .ss :hover {
-        color: green;
-    }
-
-    .ff :hover {
-        color: red;
-    }
-
-    .gift-select select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-    }
-
-    .gift-select {
-        position: relative;
-        padding: 0;
-        width: auto;
-    }
-
-        .gift-select::before {
-            content: '';
-            border-bottom: 1px solid #555;
-            border-left: 1px solid #555;
-            width: 7px;
-            height: 7px;
-            display: block;
-            position: absolute;
-            right: 10px;
-            transform: rotate(-45deg);
-            top: 11px;
+        @{
+            var prepaidFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "prepaidCardReportForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Ajax.BeginForm("Prepaid_Card_report", "Home", null, new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnSuccess = "onPrepaidCardReportSuccess",
+            OnFailure = "onPrepaidCardReportFail",
+            UpdateTargetId = "resultTarget",
+            LoadingElementId = "prepaidCardLoading"
+        }, prepaidFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .giftadmin-tableste tbody tr td, .giftadmin-tableste thead tr th {
-        white-space: nowrap;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
-        .giftadmin-tableste tbody tr td .row {
-            margin: 0px;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>Prepaid Card Report</li>
+                    </ol>
 
-        .giftadmin-tableste tbody tr td:nth-child(17) {
-            white-space: normal;
-        }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line">
 
-    .status-gift-admin img {
-        height: 18px !important;
-        padding: 3px !important;
-        width: 18px;
-        border-radius: 50%;
-    }
-
-    .status-gift-admin p {
-        font-size: 0px !important;
-    }
-
-    .second-design .giftth-seconclass, .giftth-seconclass {
-        width: 80px !important;
-    }
-
-    .borderclassgift select, .borderclassgift input, .borderclassgift button, .borderclassgift .select2-selection.select2-selection--single {
-        border-color: #ddd !important;
-    }
-
-
-    .report-status {
-        width: 80%;
-        float: left;
-    }
-
-        .report-status label {
-            float: left;
-        }
-
-        .report-status input {
-            float: left;
-            font-size: 16px;
-            background-color: transparent !important;
-            font-weight: 800;
-            height: 17px !important;
-        }
-
-        .report-status .form-group {
-            width: 46%;
-            float: left;
-            margin: auto 2%;
-        }
-
-    .mastetr222Modal .modal-body .form-group input {
-        min-height: 32px;
-        width: 100%;
-    }
-
-    .newfourdesign-admin .gift-select::before {
-        display: none;
-    }
-
-    .newfourdesign-admin .btn:not(.btn-link):not(.btn-circle), .newfourdesign-admin .form-group .form-control {
-        border: 1px solid #ddd !important;
-        background: transparent !important;
-    }
-
-    .newfourdesign-admin .margi-topo-third .col-lg-12.col-md-12.col-sm-12.col-xs-12.for-margin-top {
-        margin-top: 0px !important;
-    }
-
-    .newfourdesign-admin .form-control {
-        background: transparent !important;
-    }
-
-    .ner {
-        width: 25px !important;
-        border: 1px solid #ddd !important;
-    }
-
-    .custom-date-icon i {
-        left: 5px;
-    }
-
-    .admin-giftcard-table table tbody tr:first-child td, .admin-giftcard-table table tbody tr:first-child {
-        border-top: 0px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .mastetr222Modal .modal-dialog {
-            width: 95% !important;
-        }
-    }
-
-
-    @@media only screen and (max-width:992px) {
-        .gift-select, .ytr-okpli {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-        }
-
-        .col-md-4.respo-upup {
-            margin: 10px 0 !important;
-        }
-
-        .ytr-okpli button {
-            width: 100%;
-            text-align: left;
-        }
-
-        .card {
-            margin: 0px;
-        }
-
-
-        .col-md-4.respo-upup {
-            width: 100%;
-            float: left;
-            padding: 0 !important;
-        }
-        .form-line {
-            width: 100% !important;
-        }
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            position: static !important;
-            margin-left: 5px !important;
-        }
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .gift-card-top .col-md-1 {
-            width: 100%;
-            float: left;
-            padding-left: 0px !important;
-            margin: 0;
-        }
-
-        .gift-card-top .col-md-2 {
-            width: 50%;
-            float: left;
-            margin-bottom: 3px;
-        }
-
-        .gift-card-top .col-md-4 {
-            padding-left: 0px !important;
-            margin-bottom: 4px;
-            float: left;
-        }
-
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-
-        .gift-card-top .col-md-1 center button {
-            margin-top: 0px !important;
-            float: left;
-            width: 100%;
-        }
-
-        #total {
-            text-align: right;
-            margin-right: 15px;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .body.table-responsive {
-            padding: 1px !important;
-        }
-
-        .col-md-2.tre4.pdf-lastclass-third {
-            float: right;
-            padding: 0px;
-        }
-    }
-</style>
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Giftcard Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Giftcard Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-
-            <div class="col-lg-12 col-md-12 gift-card-top all-type-third">
-                <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="margin-top:2px;">
-                    @using (Ajax.BeginForm("Prepaid_Card_report", "Home", null, new AjaxOptions
-                    {
-                        HttpMethod = "POST",
-                        OnSuccess = "SuccessMessage",
-                        OnFailure = "FailMessage",
-                        UpdateTargetId = "resultTarget",
-                        LoadingElementId = "image"
-                    }, new { id = "MyNewNameId" }))
-                    {
-                        <div class="">
-
-
-
-
-                            <div class="col-md-1 gift-select">
-                                <div class="form-line selecthotel-third" style="width: 146px;">
-                                    @Html.DropDownList("allretailer", ViewBag.retailer as SelectList, "All Retailer", new { id = "allretailer", @class = "select-s form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:32px;" })
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="col-md-4 respo-upup" style="margin-top: 1px;padding: 0px;padding-left:4px;">
-                                <div class="">
-                                    <div class="">
-                                        <div class="form-group" style="margin-bottom:0px;">
-                                            <div class="input-daterange input-group">
-                                                <div class="custom-date-icon ner">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;", autocomplete = "off" })
-                                                <span class="input-group-addon" style="padding:0px;min-width:3px;">
-
-                                                </span>
-                                                <div style="position:relative;">
-                                                    <div class="custom-date-icon ner">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ;height:32px;", autocomplete = "off" })
-                                                </div>
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third" style="padding:0px;padding-left:5px;">
-                                <div class="">
-                                    <div class="">
-                                        <center>
-                                            <button name="btntype" type="submit" class="btn input-back-second" style="  height:32px;border: 1px solid #b1a6a638;background: #fff;margin-top:1px;background: #f9f9f9;width: 100%;" onclick="serch()">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                <span style="top:-1px;color:black;">Search</span>
-                                            </button>
-                                        </center>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-
+                        <div class="vm-opr-field vm-dmt-field vm-prepaid-field--retailer">
+                            @Html.DropDownList("allretailer", ViewBag.retailer as SelectList, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control" })
                         </div>
-                    }
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" name="btntype" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
 
                 </div>
 
-               
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="prepaidCardTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Prepaid card report totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hidePrepaidCardTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalSuccess">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed</span>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalFailed">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Pending</span>
+                            <strong class="vm-opr-total-card__value" id="prepaidTotalPending">@totalPending.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        }
 
-            <div id="resultTarget" >
-                @Html.Partial("_Prepaid_Card_report", Model)
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-prepaid-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-credit-card" aria-hidden="true"></i>
+                        <span>Prepaid card report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="prepaidRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total amount for current filter">
+                            Total: <strong id="prepaidInlineTotal">₹ @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-prepaid-totals-btn" onclick="findtotalA()" title="Show totals" aria-expanded="false" aria-controls="prepaidCardTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-prepaid-table-wrap">
+                    <div id="prepaidCardLoading" class="vm-prepaid-table-loading" style="display:none;" aria-hidden="true">
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        <span>Loading report...</span>
+                    </div>
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="prepaidCardReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>User</th>
+                                    <th>Quantity</th>
+                                    <th>Amount</th>
+                                    <th>Request&nbsp;Time</th>
+                                    <th>Response&nbsp;Time</th>
+                                    <th>Comm</th>
+                                    <th>GST</th>
+                                    <th>TDS</th>
+                                    <th>Retailer&nbsp;Pre</th>
+                                    <th>Retailer&nbsp;Post</th>
+                                    <th>Final</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultTarget">
+                                @Html.Partial("_Prepaid_Card_report", reports)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
-         
-
-
         </div>
+
     </div>
 </section>
 
-
-
-<script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-
-<script src="~/Swalalert/datatablejquery.js"></script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
 <script>
-    $('.select-s').select2();
-
-</script>
-
-
-<!--Calendar Javascript-->
-<script>
-
-    $('.white-success-button').click(function () {
-        $('.white-success').toggle();
-    });
-
-
-</script>
-<script type="text/javascript">
-            $(document).ready(function () {
-
-                $('.input-daterange').datepicker({
-                    format: "yyyy-mm-dd",
-                    todayHighlight: true,
-                    autoclose: true,
-                    orientation: "bottom auto",
-
-                });
-                var val = '@ViewBag.chk';
-                if (val != "post") {
-                    $("#txt_frm_date").datepicker("setDate", new Date());
-                    $("#txt_to_date").datepicker("setDate", new Date());
-                }
-
-                answers();
-            });
-
-</script>
-
-
-<script type="text/javascript">
-    function answers() {
-        var e = document.getElementById("ddlusers");
-        var answer = e.options[e.selectedIndex].value;
-        if (answer == "Dealer") {
-            $("#optt").removeClass("col-md-3");
-            $("#optt").addClass("col-md-2");
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("whitelabelid").style.display = "none";
-            document.getElementById("dlm").style.display = "block";
-            document.getElementById("rem").style.display = "none";
-            document.getElementById("allretailer").selectedIndex = "0";
-            document.getElementById("allmaster1").selectedIndex = "0";
-            document.getElementById("Whitelabel").selectedIndex = "0";
-        }
-        else if (answer == "Master") {
-            $("#optt").removeClass("col-md-3");
-            $("#optt").addClass("col-md-2");
-            document.getElementById("allmaster").style.display = "block";
-            document.getElementById("whitelabelid").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-            document.getElementById("alldealer").selectedIndex = "0";
-            document.getElementById("allretailer").selectedIndex = "0";
-            document.getElementById("Whitelabel").selectedIndex = "0";
-        }
-        else if (answer == "Admin") {
-            $("select#allmaster1").attr('selectedIndex', 0);
-            $("select#alldealer").attr('selectedIndex', 0);
-            $("#optt").removeClass("col-md-3");
-            $("#optt").addClass("col-md-2");
-
-            document.getElementById("whitelabelid").style.display = "none";
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-            document.getElementById("alldealer").selectedIndex = "0";
-            document.getElementById("allretailer").selectedIndex = "0";
-            document.getElementById("allmaster1").selectedIndex = "0";
-            document.getElementById("Whitelabel").selectedIndex = "0";
-        }
-        else if (answer == "Retailer") {
-            $("#optt").removeClass("col-md-3");
-            $("#optt").addClass("col-md-2");
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("whitelabelid").style.display = "none";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "block";
-            document.getElementById("alldealer").selectedIndex = "0";
-            document.getElementById("allmaster1").selectedIndex = "0";
-            document.getElementById("Whitelabel").selectedIndex = "0";
-        }
-
-        else if (answer == "WAdmin") {
-            $("#optt").removeClass("col-md-3");
-            $("#optt").addClass("col-md-2");
-            document.getElementById("allmaster").style.display = "none";
-            document.getElementById("whitelabelid").style.display = "block";
-            document.getElementById("dlm").style.display = "none";
-            document.getElementById("rem").style.display = "none";
-            document.getElementById("alldealer").selectedIndex = "0";
-            document.getElementById("allretailer").selectedIndex = "0";
-            document.getElementById("allmaster1").selectedIndex = "0";
-            document.getElementById("Whitelabel").selectedIndex = "0";
-        }
-
-
+    function hidePrepaidCardTotals() {
+        var $panel = $('#prepaidCardTotalsPanel');
+        var $btn = $('.vm-prepaid-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
     }
-</script>
 
-<!--failed show model popup-->
-<script>
-    function refundshow(orderid, status) {
-        $("#txtorderid").val(orderid);
-        $("#status").val(status);
-
+    function findtotalA() {
+        var $panel = $('#prepaidCardTotalsPanel');
+        var $btn = $('.vm-prepaid-totals-btn');
+        if ($panel.is(':visible')) {
+            hidePrepaidCardTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
     }
-</script>
 
-<!--Manual failed -->
-<script>
-            function Failed()
-            {
-             var answer = confirm('Are you sure ?');
-             if(answer)
-             {
-                 var orderid = $("#txtorderid").val();
-                 var status = $("#status").val();
-                 var e = document.getElementById("ddl_refund");
-                 var ddlval = e.options[e.selectedIndex].value
+    function formatPrepaidAmount(value) {
+        var num = parseFloat(value);
+        if (isNaN(num)) {
+            return '0.00';
+        }
+        return num.toFixed(2);
+    }
 
-                 $.ajax({
-                     url: '@Url.Action("GiftcardFailed", "Home")',
-                     type: 'POST',
-                     dataType: "html",
-                     data: { orderid: orderid, status: status, ddl_refund: ddlval },
-                     success: function (data) {
-                         var response = JSON.parse(data);
-                         if (response.Status) {
-                             swal("Good Job!", response.Message, "success");
-                             window.location.reload();
-                              }
-                         else {
-                             swal("Oops...", response.Message, "error");
-                         }
-                     },
-                     error: function (data) {
+    function refreshPrepaidCardSummary() {
+        var rows = document.querySelectorAll('#prepaidCardReportTable tbody tr:not(.vm-opr-table-empty-row)');
+        var count = rows.length;
+        var total = 0;
+        var success = 0;
+        var failed = 0;
+        var pending = 0;
 
-                     }
-                 }).done(function () {
-                     $("#defaultModal1").modal('hide');
-                 });
-                     return true;
-
-                }
-             else {
-                 $("#defaultModal1").modal('hide');
-                    return false;
-                }
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var amount = parseFloat(row.getAttribute('data-amount') || '0');
+            var status = (row.getAttribute('data-status') || '').toUpperCase();
+            if (isNaN(amount)) {
+                amount = 0;
             }
-</script>
-
-<!--Mannual Success-->
-<script>
-            function success(orderid, status)
-            {
-             var answer = confirm('Are you sure ?');
-             if(answer)
-             {
-                 $.ajax({
-                     url: '@Url.Action("GiftcardSuccess", "Home")',
-                     type: 'POST',
-                     dataType: "html",
-                     data: { orderid: orderid, status: status },
-                     success: function (data) {
-                         var response = JSON.parse(data);
-                         if (response.Status) {
-                             swal("Good Job!", response.Message, "success");
-                             window.location.reload();
-                         }
-                         else {
-                             swal("Oops...", response.Message, "error");
-                         }
-                     },
-                     error: function (data) {
-
-                     }
-                 });
-                     return true;
-
-                }
-             else {
-
-                    return false;
-                }
+            total += amount;
+            if (status === 'SUCCESS') {
+                success += amount;
+            } else if (status === 'FAILED') {
+                failed += amount;
+            } else if (status === 'PENDING') {
+                pending += amount;
             }
-</script>
+        }
 
+        $('#prepaidRecordCount').text(count);
+        $('#prepaidInlineTotal').text('₹ ' + formatPrepaidAmount(total));
+        $('#prepaidTotalSuccess').text(formatPrepaidAmount(success));
+        $('#prepaidTotalFailed').text(formatPrepaidAmount(failed));
+        $('#prepaidTotalPending').text(formatPrepaidAmount(pending));
+    }
 
+    function exportPrepaidCardTable(type) {
+        var table = document.getElementById('prepaidCardReportTable');
+        if (!table) {
+            return;
+        }
 
+        var stamp = new Date().toISOString().slice(0, 10);
+        var title = 'Prepaid Card Report';
+        var clone = table.cloneNode(true);
+        var emptyRow = clone.querySelector('.vm-opr-table-empty-row');
+        if (emptyRow) {
+            alert('No data available to export.');
+            return;
+        }
 
+        if (type === 'excel') {
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'PrepaidCardReport_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
 
+        var printWin = window.open('', '_blank');
+        if (!printWin) {
+            alert('Please allow pop-ups to export PDF.');
+            return;
+        }
+        printWin.document.write(
+            '<html><head><title>' + title + '</title>'
+            + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #ccc;padding:4px;text-align:left}th{background:#f3f4f6}</style>'
+            + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+        );
+        printWin.document.close();
+        printWin.focus();
+        printWin.print();
+    }
 
+    function onPrepaidCardReportSuccess() {
+        refreshPrepaidCardSummary();
+    }
 
-<script>
+    function onPrepaidCardReportFail() {
+        alert('Unable to load prepaid card report. Please try again.');
+    }
+
+    function destroyPrepaidSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyPrepaidSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyPrepaidSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6
+        });
+    }
+
+    function initPrepaidCardSelect2() {
+        applyPrepaidSelect2($('#allretailer'));
+    }
+
+    function initPrepaidCardDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initPrepaidCardDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#prepaidCardReportForm');
+        }
+    }
+
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+        initPrepaidCardSelect2();
+        initPrepaidCardDatepickers();
+        refreshPrepaidCardSummary();
+        $('#prepaidCardReportForm .select2-container').css('width', '100%');
 
+        $('#btnExportA').on('click', function () {
+            exportPrepaidCardTable('excel');
+        });
 
-            paging: false
+        $('#btnPDFA').on('click', function () {
+            exportPrepaidCardTable('pdf');
         });
     });
-
 </script>
-
-<script>
-            $("#btnExportA").click(function () {
-                var txt_frm_date = $('#txt_frm_date').val();
-                var txt_to_date = $('#txt_to_date').val();
-                var ddlusers = $('#ddlusers').val();
-                var ddl_status = $('#ddl_status').val();
-                var alldealer = $('#alldealer').val();
-                var allretailer = $('#allretailer').val();
-                var allmaster = $('#allmaster').val();
-                var allapiuser = $('#allapiuser').val();
-                var Whitelabel = $('#Whitelabel').val();
-                var ddl_Type = $('#ddl_Type').val();
-                var Operator = $('#Operator').val();
-                var allmaster1 = $('#allmaster1').val();
-                var url = '@Url.Action("ExcelGiftCardReport", "Home")?txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date + '&ddlusers=' + ddlusers + '&ddl_status=' + ddl_status + '&allmaster=' + allmaster + '&alldealer=' + alldealer + '&allretailer=' + allretailer + '&allapiuser=' + allapiuser + '&Whitelabel=' + Whitelabel + '&ddl_Type=' + ddl_Type + '&Operator=' + Operator + '&allmaster1=' + allmaster1;
-                location.href = url;
-            });
-</script>
-
-
-

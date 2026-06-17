@@ -1,0 +1,45 @@
+@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.whatsapppurinfo>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.whatsapppurinfo>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var statusUpper = (item.status ?? "").ToUpper();
+        var rowClass = "";
+        if (statusUpper == "SUCCESS")
+        {
+            rowClass = "vm-wa-row--success";
+        }
+        else if (statusUpper == "FAILED" || (item.status ?? "").Contains("Refund"))
+        {
+            rowClass = "vm-wa-row--failed";
+        }
+
+        var pdate = item.purchasedate.HasValue ? item.purchasedate.Value : DateTime.MinValue;
+        var renewaldate = item.renewaldate.HasValue ? item.renewaldate.Value : DateTime.MinValue;
+
+        <tr class="@rowClass">
+            <td>@item.farmname</td>
+            <td>@item.planname</td>
+            <td>@(item.planprice.HasValue ? item.planprice.Value.ToString("N2") : "—")</td>
+            <td>@item.status</td>
+            <td>@(item.remainpre.HasValue ? item.remainpre.Value.ToString("N2") : "—")</td>
+            <td>@(item.remainpost.HasValue ? item.remainpost.Value.ToString("N2") : "—")</td>
+            <td>@(item.purchasedate.HasValue ? pdate.ToString("dd-MM-yyyy hh:mm:ss tt") : "—")</td>
+            <td>@(item.renewaldate.HasValue ? renewaldate.ToString("dd-MM-yyyy hh:mm:ss tt") : "—")</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <span>WhatsApp purchase report not found.</span>
+        </td>
+    </tr>
+}

@@ -1,555 +1,509 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Loilistreport_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "RadiantReferenceLocation";
+    ViewBag.Title = "Reference Location";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Loilistreport_Result>();
+    var rowCount = items.Count();
 }
 
-<style>
-    .tmw-pad-services .btn:not(.btn-link):not(.btn-circle), .form-group .form-control {
-        border: 0;
-        border: 1px solid #ccc;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=30" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=18" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
-    .modal .modal-footer {
-        padding: 15px 53px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-radiant-ref-location-page">
 
-    .form-group {
-        margin-bottom: 5px !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .modal-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-radiant-ref-toolbar-one-line">
 
-    .modal-lg {
-        width: 1140px;
-    }
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Trans. Reports</li>
+                    <li>Reference Location</li>
+                </ol>
 
-    .modal-header::after, .modal-header::before {
-        display: none;
-    }
-</style>
-
-<section class="content cas-hdeposi-tcharge-page upicharge-thirddesign">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third retailerlist-header-resp">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <div class="row" style=" display: flex; align-items: center; justify-content: space-between;">
-                    <div class="col-md-8">
-                        <ul class="padding-top-third">
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                </a>
-                            </li>
-
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                <a href="@Url.Action("RadiantReferenceLocation","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Reference Location
-                                </a>
-
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-4" style="text-align:end;">
-                        <button type="button"
-                                class="btn btn-success"
-                                data-toggle="modal"
-                                data-target="#addLoiModal">
-                            + Add New
-                        </button>
-                    </div>
+                <div class="vm-radiant-ref-toolbar-actions">
+                    <button type="button"
+                            class="saas-acc-btn saas-acc-btn--search vm-radiant-ref-add-btn"
+                            data-toggle="modal"
+                            data-target="#addLoiModal"
+                            title="Add new reference location">
+                        <i class="fas fa-plus" aria-hidden="true"></i><span>Add New</span>
+                    </button>
                 </div>
+
             </div>
         </div>
 
-    </div>
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                        <span>Radiant reference location list</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                    </div>
+                </div>
 
-    <div class="col-md-12">
-
-        <div class="row clearfix " style="margin:0;">
-            <div class="switch-user-tab page-header-third">
-
-                <div class="table-responsive " style="width:100%;">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr style="background:#f9f9f9;">
-                                <th>Full Details </th>
-                                <th>Refered by</th>
-                                <th>Ref Number</th>
-                                <th>State Name</th>
-                                <th>District Name</th>
-                                <th>City Name</th>
-                                <th>Client Name</th>
-                                <th>Dis Code</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="radiantRefLocationReport" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <button class="btn btn-sm btn-info"
-                                                data-toggle="modal"
-                                                data-target="#detailsModal"
-                                                data-rceid="@item.RetailerName"
-                                                data-clientname="@item.ClientName"
-                                                data-cashlimit="@item.Cashlimit"
-                                                data-status="@item.Status"
-                                                data-dccode="@item.DCCode"
-                                                data-pointname="@item.PointName"
-                                                data-pointmobile="@item.PointMobile"
-                                                data-pickupaddress="@item.pickupaddress"
-                                                data-subdescrtion="@item.SubDescrtion"
-                                                data-workmode="@item.WorkMode"
-                                                data-statename="@item.State_name"
-                                                data-districtname="@item.Dist_Desc"
-                                                data-cityname="@item.CityName"
-                                                data-pincode="@item.Pincode"
-                                                data-additionalrequirement="@item.AdditionalRequirement"
-                                                data-latitude="@item.Latitude"
-                                                data-longitude="@item.Longitude"
-                                                data-depositionmode="@item.Depositionmode"
-                                                onclick="showDetails(this)">
-                                            Full Details
-                                        </button>
-                                    </td>
-                                    <td>@item.RetailerName</td>
-                                    <td>@item.Refnumber</td>
-
-                                    <td>@item.State_name</td>
-                                    <td>@item.Dist_Desc</td>
-                                    <td>@item.CityName</td>
-                                    <td>@item.ClientName</td>
-                                    <td>@item.DCCode</td>
-                                    <td>@item.Status</td>
-
+                                    <th>Details</th>
+                                    <th>Referred&nbsp;By</th>
+                                    <th>Ref&nbsp;Number</th>
+                                    <th>State&nbsp;Name</th>
+                                    <th>District&nbsp;Name</th>
+                                    <th>City&nbsp;Name</th>
+                                    <th>Client&nbsp;Name</th>
+                                    <th>DC&nbsp;Code</th>
+                                    <th>Status</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                @if (items.Any())
+                                {
+                                    foreach (var item in items)
+                                    {
+                                        var statusTone = "pending";
+                                        var statusFa = "fa-clock-o";
+                                        var statusLabel = item.Status ?? "";
 
+                                        if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Failed", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusTone = "failed";
+                                            statusFa = "fa-times";
+                                        }
+                                        else if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Success", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusTone = "success";
+                                            statusFa = "fa-check";
+                                        }
+                                        else if (!string.IsNullOrEmpty(item.Status) && item.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            statusTone = "pending";
+                                            statusFa = "fa-clock-o";
+                                        }
+
+                                        <tr class="vm-dmt-row vm-dmt-row--@statusTone" data-status="@statusLabel">
+                                            <td class="vm-dmt-action-cell">
+                                                <button type="button"
+                                                        class="vm-dmt-act-btn vm-dmt-act-btn--view vm-radiant-ref-detail-btn"
+                                                        data-toggle="modal"
+                                                        data-target="#detailsModal"
+                                                        data-rceid="@item.RetailerName"
+                                                        data-clientname="@item.ClientName"
+                                                        data-cashlimit="@item.Cashlimit"
+                                                        data-status="@item.Status"
+                                                        data-dccode="@item.DCCode"
+                                                        data-pointname="@item.PointName"
+                                                        data-pointmobile="@item.PointMobile"
+                                                        data-pickupaddress="@item.pickupaddress"
+                                                        data-subdescrtion="@item.SubDescrtion"
+                                                        data-workmode="@item.WorkMode"
+                                                        data-statename="@item.State_name"
+                                                        data-districtname="@item.Dist_Desc"
+                                                        data-cityname="@item.CityName"
+                                                        data-pincode="@item.Pincode"
+                                                        data-additionalrequirement="@item.AdditionalRequirement"
+                                                        data-latitude="@item.Latitude"
+                                                        data-longitude="@item.Longitude"
+                                                        data-depositionmode="@item.Depositionmode"
+                                                        onclick="showRadiantRefDetails(this)"
+                                                        title="View full details">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                            <td class="vm-radiant-firm-cell">@item.RetailerName</td>
+                                            <td class="vm-radiant-request-cell">@item.Refnumber</td>
+                                            <td>@item.State_name</td>
+                                            <td>@item.Dist_Desc</td>
+                                            <td>@item.CityName</td>
+                                            <td>@item.ClientName</td>
+                                            <td>@item.DCCode</td>
+                                            <td class="vm-radiant-status-cell vm-ticket-status-cell">
+                                                <span class="vm-dmt-status vm-dmt-status--@statusTone" title="@statusLabel">
+                                                    <i class="fa @statusFa" aria-hidden="true"></i>
+                                                </span>
+                                                <span class="vm-radiant-status-text">@statusLabel</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="9" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                            <span>Reference location records not found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
-
-
-
 </section>
-<div class="modal fade" id="addLoiModal" tabindex="-1" role="dialog">
+
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-radiant-ref-add-modal" id="addLoiModal" tabindex="-1" role="dialog" aria-labelledby="addLoiModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            @using (Html.BeginForm("Add_new_LOI", "Home", FormMethod.Post, new { @onsubmit = "return validateLatLongOnSubmit();" }))
+            @using (Html.BeginForm("Add_new_LOI", "Home", new { area = "ADMIN" }, FormMethod.Post, new { id = "addLoiForm", @onsubmit = "return validateLatLongOnSubmit();" }))
             {
                 @Html.AntiForgeryToken()
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Cash Deposit Bank Info</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
+                <div class="modal-header saas-admin-modal-header accent-emerald">
+                    <div class="saas-admin-modal-head-main">
+                        <div class="saas-admin-modal-icon"><i class="fas fa-plus-circle" aria-hidden="true"></i></div>
+                        <div class="saas-admin-modal-title-wrap">
+                            <h4 class="modal-title saas-admin-modal-title" id="addLoiModalTitle">Add New Cash Deposit Bank Info</h4>
+                            <span class="saas-admin-modal-subtitle">Create a new radiant reference location</span>
+                        </div>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="State" class="col-sm-4 text-right control-label col-form-label">State</label>
-                                    <div class="col-sm-8">
 
-                                        @Html.DropDownList("state1", ViewBag.state1 as SelectList, "Select State", new { @id = "state1", @class = "form-control select2-inside-modal", @required = "required", @onchange = "myFunction(this)", style = "width:100% !important" })
-                                        <span class="text-danger field-validation-error" id="state1msg">
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="district" class="col-sm-4 text-right control-label col-form-label">District</label>
-                                    <div class="col-sm-8">
-                                        <select id="district1" class="form-control select2-inside-modal" name="district1" style="width:100% !important" required>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">City Name</label>
-                                    <div class="col-sm-8">
-
-                                        @Html.TextBox("txtcity", "", new { @id = "txtcity", @class = "form-control", placeholder = "Enter City Name", required = "required" })
-                                        <span id="pinMessage" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Name" class="col-sm-4 text-right control-label col-form-label">Client</label>
-                                    <div class="col-sm-8">
-                                        @Html.DropDownList("LOIClient", ViewBag.LOIClient as SelectList, "Select Client", new { @id = "LOIClient", @class = "form-control select2-inside-modal", @required = "required", style = "width:100% !important" })
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Pin&nbsp;Code</label>
-                                    <div class="col-sm-8">
-
-                                        @Html.TextBox("txtpincode", "", new { @id = "txtpincode", @class = "form-control", placeholder = "Enter Pin Code Number", required = "required", @type = "number" })
-                                        <span id="pinMessage" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">DC&nbsp;Code</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtdiscode", "", new { @id = "txtdiscode", @class = "form-control", placeholder = "Enter DIS Code" })
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Additional&nbsp;Requirement</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextArea("txtAdditionalRequirement", "", new { @id = "txtAdditionalRequirement", @class = "form-control", placeholder = "Enter Additional Requirement" })
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Latitude</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtlat", "", new
-                                        {
-                                            @id = "txtlat",
-                                                                        @class = "form-control",
-                                                                        placeholder = "Enter Latitude",
-                                                                        type = "number",
-                                                                        step = "any",
-                                                                        onblur = "validateLatitude()"
-                                                                        })
-                                        <span id="latError" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label for="Name" class="col-sm-4 text-right control-label col-form-label">Work&nbsp;Mode</label>
-                                    <div class="col-sm-8">
-                                        <select id="workmode" name="workmode" class="form-control select2-inside-modal" style="width:100% !important" required>
-                                            <option value="">Select Pickup Option</option>
-                                            <option value="Day Pickup - All Days">Day Pickup - All Days</option>
-                                            <option value="Day Pickup - Banking Days">Day Pickup - Banking Days</option>
-                                            <option value="Day Pickup - Holidays / Weekend">Day Pickup - Holidays / Weekend</option>
-                                            <option value="Evening Pickup - All Days">Evening Pickup - All Days</option>
-                                            <option value="Evening Pickup - Banking Days">Evening Pickup - Banking Days</option>
-                                            <option value="Evening Pickup - Holidays / Weekend">Evening Pickup - Holidays / Weekend</option>
-                                            <option value="Drop and Vaulting - All Days">Drop and Vaulting - All Days</option>
-                                            <option value="Drop and Vaulting - Holidays / Weekend">Drop and Vaulting - Holidays / Weekend</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Name" class="col-sm-4 text-right control-label col-form-label">Deposit&nbsp;Mode</label>
-                                    <div class="col-sm-8">
-                                        <select id="Depositmode" name="Depositmode" class="form-control select2-inside-modal" style="width:100% !important" required>
-                                            <option value="">Select Deposit Mode</option>
-                                            <option value="Partner Bank">Partner Bank</option>
-                                            <option value="Burial">Burial</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Point&nbsp;Address</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextArea("txtpointaddress", "", new { @class = "form-control", placeholder = "Enter Customer Point Address", required = "required" })
-
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Cash&nbsp;Limit</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtcashlimit", "", new { @class = "form-control", placeholder = "Enter Cash Limit", @type = "number" })
-
-
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Point&nbsp;Contact&nbsp;Name</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtpointcontactname", "", new { @class = "form-control", placeholder = "Enter Customer Point Name" })
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Point&nbsp;Contact&nbsp;Number</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtpointmobilenumber", "", new { @class = "form-control", placeholder = "Enter Point Contact Number", @type = "number" })
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Sub&nbsp;description</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextArea("txtSubDescrtion", "", new { @id = "txtSubDescrtion", @class = "form-control", placeholder = "Enter Sub description" })
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="Firm Name" class="col-sm-4 text-right control-label col-form-label">Longitude</label>
-                                    <div class="col-sm-8">
-                                        @Html.TextBox("txtlong", "", new
-                                        {
-                                                                            @id = "txtlong",
-                                                                            @class = "form-control",
-                                                                            placeholder = "Enter Longitude",
-                                                                            type = "number",
-                                                                            step = "any",
-                                                                            onblur = "validateLongitude()"
-                                                                            })
-                                        <span id="longError" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                    <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-radiant-ref-form-grid">
+                        <div class="vm-dmt-modal-field">
+                            <label for="state1">State</label>
+                            @Html.DropDownList("state1", ViewBag.state1 as SelectList, "Select State", new { @id = "state1", @class = "form-control vm-dmt-modal-input select2-inside-modal", @required = "required", @onchange = "radiantRefDistrictBind(this)" })
+                            <span class="vm-radiant-ref-field-error text-danger" id="state1msg"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="district1">District</label>
+                            <select id="district1" class="form-control vm-dmt-modal-input select2-inside-modal" name="district1" required>
+                                <option value="">Select District</option>
+                            </select>
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtcity">City Name</label>
+                            @Html.TextBox("txtcity", "", new { @id = "txtcity", @class = "form-control vm-dmt-modal-input", placeholder = "Enter city name", required = "required" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="LOIClient">Client</label>
+                            @Html.DropDownList("LOIClient", ViewBag.LOIClient as SelectList, "Select Client", new { @id = "LOIClient", @class = "form-control vm-dmt-modal-input select2-inside-modal", @required = "required" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtpincode">Pin Code</label>
+                            @Html.TextBox("txtpincode", "", new { @id = "txtpincode", @class = "form-control vm-dmt-modal-input", placeholder = "Enter pin code", required = "required", @type = "number" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtdiscode">DC Code</label>
+                            @Html.TextBox("txtdiscode", "", new { @id = "txtdiscode", @class = "form-control vm-dmt-modal-input", placeholder = "Enter DC code" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="workmode">Work Mode</label>
+                            <select id="workmode" name="workmode" class="form-control vm-dmt-modal-input select2-inside-modal" required>
+                                <option value="">Select Pickup Option</option>
+                                <option value="Day Pickup - All Days">Day Pickup - All Days</option>
+                                <option value="Day Pickup - Banking Days">Day Pickup - Banking Days</option>
+                                <option value="Day Pickup - Holidays / Weekend">Day Pickup - Holidays / Weekend</option>
+                                <option value="Evening Pickup - All Days">Evening Pickup - All Days</option>
+                                <option value="Evening Pickup - Banking Days">Evening Pickup - Banking Days</option>
+                                <option value="Evening Pickup - Holidays / Weekend">Evening Pickup - Holidays / Weekend</option>
+                                <option value="Drop and Vaulting - All Days">Drop and Vaulting - All Days</option>
+                                <option value="Drop and Vaulting - Holidays / Weekend">Drop and Vaulting - Holidays / Weekend</option>
+                            </select>
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="Depositmode">Deposit Mode</label>
+                            <select id="Depositmode" name="Depositmode" class="form-control vm-dmt-modal-input select2-inside-modal" required>
+                                <option value="">Select Deposit Mode</option>
+                                <option value="Partner Bank">Partner Bank</option>
+                                <option value="Burial">Burial</option>
+                            </select>
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtpointaddress">Point Address</label>
+                            @Html.TextArea("txtpointaddress", "", new { @id = "txtpointaddress", @class = "form-control vm-dmt-modal-input vm-radiant-ref-textarea", placeholder = "Enter customer point address", required = "required", rows = "2" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtAdditionalRequirement">Additional Requirement</label>
+                            @Html.TextArea("txtAdditionalRequirement", "", new { @id = "txtAdditionalRequirement", @class = "form-control vm-dmt-modal-input vm-radiant-ref-textarea", placeholder = "Enter additional requirement", rows = "2" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtcashlimit">Cash Limit</label>
+                            @Html.TextBox("txtcashlimit", "", new { @id = "txtcashlimit", @class = "form-control vm-dmt-modal-input", placeholder = "Enter cash limit", @type = "number" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtpointcontactname">Point Contact Name</label>
+                            @Html.TextBox("txtpointcontactname", "", new { @id = "txtpointcontactname", @class = "form-control vm-dmt-modal-input", placeholder = "Enter point contact name" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtpointmobilenumber">Point Contact Number</label>
+                            @Html.TextBox("txtpointmobilenumber", "", new { @id = "txtpointmobilenumber", @class = "form-control vm-dmt-modal-input", placeholder = "Enter point contact number", @type = "number" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtSubDescrtion">Sub Description</label>
+                            @Html.TextArea("txtSubDescrtion", "", new { @id = "txtSubDescrtion", @class = "form-control vm-dmt-modal-input vm-radiant-ref-textarea", placeholder = "Enter sub description", rows = "2" })
+                            <span class="vm-radiant-ref-field-error" aria-hidden="true"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtlat">Latitude</label>
+                            @Html.TextBox("txtlat", "", new { @id = "txtlat", @class = "form-control vm-dmt-modal-input", placeholder = "Enter latitude", type = "number", step = "any", onblur = "validateLatitude()" })
+                            <span class="vm-radiant-ref-field-error text-danger" id="latError"></span>
+                        </div>
+                        <div class="vm-dmt-modal-field">
+                            <label for="txtlong">Longitude</label>
+                            @Html.TextBox("txtlong", "", new { @id = "txtlong", @class = "form-control vm-dmt-modal-input", placeholder = "Enter longitude", type = "number", step = "any", onblur = "validateLongitude()" })
+                            <span class="vm-radiant-ref-field-error text-danger" id="longError"></span>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button style=" background-color: #0f7e0f !important; " type="submit" class="btn btn-primary">Submit</button>
+
+                <div class="modal-footer saas-admin-modal-footer">
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-check" aria-hidden="true"></i> Submit
+                    </button>
                 </div>
             }
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade saas-admin-modal vm-dmt-modal vm-radiant-ref-detail-modal" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">My Popup</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <p>This is modal popup content.</p>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Close
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="detailsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Full Details</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="row">
-                    <!-- LEFT PART -->
-                    <div class="col-md-6 border-end">
-                        <table class="table table-bordered">
-                            <tr><th>Refered By</th><td id="rceid"></td></tr>
-                            <tr><th>Client Name</th><td id="clientname"></td></tr>
-                            <tr>
-                                <th>Cash Limit</th>
-                                <td id="cashlimit"></td>
-
-                            </tr>
-                            <tr><th>Status</th><td id="status"></td></tr>
-                            <tr>
-                                <th>DC Code</th>
-                                <td id="dccode"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Point Name</th>
-                                <td id="pointname"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Point Mobile</th>
-                                <td id="pointmobile"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Pickup Address</th>
-                                <td id="pickupaddress"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Sub Description</th>
-                                <td id="subdescrtion"></td>
-
-                            </tr>
-                        </table>
-
-
-
-
+            <div class="modal-header saas-admin-modal-header accent-violet">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-info-circle" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h4 class="modal-title saas-admin-modal-title" id="detailsModalTitle">Full Details</h4>
+                        <span class="saas-admin-modal-subtitle">Reference location information</span>
                     </div>
-                    <div class="col-md-6 border-end">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Mode</th>
-                                <td id="workmode"></td>
-
-                            </tr>
-                            <tr>
-                                <th>State</th>
-                                <td id="statename"></td>
-                            </tr>
-                            <tr><th>District</th><td id="districtname"></td></tr>
-                            <tr>
-                                <th>City</th>
-                                <td id="cityname"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Pincode</th>
-                                <td id="pincode"></td>
-
-                            </tr>
-                            <tr>
-                                <th>Additional Requirement</th>
-                                <td id="additionalrequirement"></td>
-
-                            </tr>
-                            <tr>
-                                <th>latitude</th>
-                                <td id="latitude"></td>
-
-                            </tr>
-                            <tr>
-                                <th>longitude</th>
-                                <td id="longitude"></td>
-
-                            </tr>
-                            <tr><th>Deposition Mode</th><td id="depositionmode"></td></tr>
-
-                        </table>
-                    </div>
-
                 </div>
-
-
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
             </div>
 
+            <div class="modal-body saas-admin-modal-body saas-admin-modal-scroll vm-dmt-modal-body">
+                <div class="vm-dmt-modal-grid vm-dmt-modal-grid--2 vm-radiant-ref-detail-grid">
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Referred By</label>
+                        <div class="vm-radiant-ref-detail-value" id="rceid">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Client Name</label>
+                        <div class="vm-radiant-ref-detail-value" id="clientname">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Cash Limit</label>
+                        <div class="vm-radiant-ref-detail-value" id="cashlimit">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Status</label>
+                        <div class="vm-radiant-ref-detail-value" id="status">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>DC Code</label>
+                        <div class="vm-radiant-ref-detail-value" id="dccode">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Point Name</label>
+                        <div class="vm-radiant-ref-detail-value" id="pointname">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Point Mobile</label>
+                        <div class="vm-radiant-ref-detail-value" id="pointmobile">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Work Mode</label>
+                        <div class="vm-radiant-ref-detail-value" id="workmode">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Pickup Address</label>
+                        <div class="vm-radiant-ref-detail-value vm-radiant-ref-detail-value--multi" id="pickupaddress">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Sub Description</label>
+                        <div class="vm-radiant-ref-detail-value vm-radiant-ref-detail-value--multi" id="subdescrtion">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>State</label>
+                        <div class="vm-radiant-ref-detail-value" id="statename">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>District</label>
+                        <div class="vm-radiant-ref-detail-value" id="districtname">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>City</label>
+                        <div class="vm-radiant-ref-detail-value" id="cityname">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Pincode</label>
+                        <div class="vm-radiant-ref-detail-value" id="pincode">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Additional Requirement</label>
+                        <div class="vm-radiant-ref-detail-value vm-radiant-ref-detail-value--multi" id="additionalrequirement">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Deposition Mode</label>
+                        <div class="vm-radiant-ref-detail-value" id="depositionmode">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Latitude</label>
+                        <div class="vm-radiant-ref-detail-value" id="latitude">—</div>
+                    </div>
+                    <div class="vm-dmt-modal-field vm-radiant-ref-detail-field">
+                        <label>Longitude</label>
+                        <div class="vm-radiant-ref-detail-value" id="longitude">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer saas-admin-modal-footer">
+                <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                    <i class="fas fa-times" aria-hidden="true"></i> Close
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-<!--=======    Modal For Bank Details   ========-->
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<!------------------------------------------partialpage-->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-
 <script>
-    function showDetails(btn) {
-        document.getElementById("rceid").innerText = btn.dataset.rceid;
-        document.getElementById("clientname").innerText = btn.dataset.clientname;
-        document.getElementById("cashlimit").innerText = btn.dataset.cashlimit;
-        document.getElementById("status").innerText = btn.dataset.status;
-        document.getElementById("dccode").innerText = btn.dataset.dccode;
-        document.getElementById("pointname").innerText = btn.dataset.pointname;
-        document.getElementById("pointmobile").innerText = btn.dataset.pointmobile;
-        document.getElementById("pickupaddress").innerText = btn.dataset.pickupaddress;
-        document.getElementById("subdescrtion").innerText = btn.dataset.subdescrtion;
-        document.getElementById("workmode").innerText = btn.dataset.workmode;
-        document.getElementById("statename").innerText = btn.dataset.statename;
-        document.getElementById("districtname").innerText = btn.dataset.districtname;
-        document.getElementById("cityname").innerText = btn.dataset.cityname;
-        document.getElementById("pincode").innerText = btn.dataset.pincode;
-        document.getElementById("additionalrequirement").innerText = btn.dataset.additionalrequirement;
-        document.getElementById("latitude").innerText = btn.dataset.latitude;
-        document.getElementById("longitude").innerText = btn.dataset.longitude;
-        document.getElementById("depositionmode").innerText = btn.dataset.depositionmode;
-        //$('#myModal').modal('show');
-    }
-</script>
-<script>
-    function myFunction(e) {
-        var id = $(e).val();
+    window.radiantRefDistrictUrl = '@Url.Action("District_Bind", "Home", new { area = "ADMIN" })';
 
-        $("#district1").empty()
-            .append("<option value=''>--- Select ---</option>");
+    function showRadiantRefDetails(btn) {
+        var fields = [
+            'rceid', 'clientname', 'cashlimit', 'status', 'dccode', 'pointname', 'pointmobile',
+            'pickupaddress', 'subdescrtion', 'workmode', 'statename', 'districtname', 'cityname',
+            'pincode', 'additionalrequirement', 'latitude', 'longitude', 'depositionmode'
+        ];
 
-        $.get("District_Bind", { state_id: id }, function (data) {
-            var options = "<option value=''>--- Select ---</option>";
-
-            $.each(data, function (i, v1) {
-                options += "<option value='" + v1.value + "'>" + v1.text + "</option>";
-            });
-
-            $("#district1").html(options);
+        fields.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) {
+                return;
+            }
+            var value = btn.getAttribute('data-' + id) || btn.dataset[id] || '';
+            el.textContent = String(value).trim() !== '' ? String(value) : '—';
         });
     }
-</script>
-<script>
+
+    function radiantRefDistrictBind(el) {
+        var id = $(el).val();
+
+        $('#district1').empty().append('<option value="">Select District</option>');
+
+        if (!id) {
+            $('#district1').trigger('change.select2');
+            return;
+        }
+
+        $.get(window.radiantRefDistrictUrl, { state_id: id }, function (data) {
+            var options = '<option value="">Select District</option>';
+            $.each(data, function (i, v1) {
+                options += '<option value="' + v1.value + '">' + v1.text + '</option>';
+            });
+            $('#district1').html(options).trigger('change.select2');
+        });
+    }
+
     function validateLatitude() {
-        var lat = parseFloat(document.getElementById("txtlat").value);
-        var error = document.getElementById("latError");
+        var lat = parseFloat(document.getElementById('txtlat').value);
+        var error = document.getElementById('latError');
 
         if (isNaN(lat)) {
-            error.innerText = "Latitude is required";
+            error.innerText = 'Latitude is required';
             return false;
         }
 
         if (lat < -90 || lat > 90) {
-            error.innerText = "Latitude must be between -90 and 90";
+            error.innerText = 'Latitude must be between -90 and 90';
             return false;
         }
 
-        error.innerText = "";
+        error.innerText = '';
         return true;
     }
 
     function validateLongitude() {
-        var lng = parseFloat(document.getElementById("txtlong").value);
-        var error = document.getElementById("longError");
+        var lng = parseFloat(document.getElementById('txtlong').value);
+        var error = document.getElementById('longError');
 
         if (isNaN(lng)) {
-            error.innerText = "Longitude is required";
+            error.innerText = 'Longitude is required';
             return false;
         }
 
         if (lng < -180 || lng > 180) {
-            error.innerText = "Longitude must be between -180 and 180";
+            error.innerText = 'Longitude must be between -180 and 180';
             return false;
         }
 
-        error.innerText = "";
+        error.innerText = '';
         return true;
     }
 
     function validateLatLongOnSubmit() {
         return validateLatitude() && validateLongitude();
     }
+
+    function initRadiantRefModalSelect2(modalId) {
+        var $modal = $(modalId);
+        $modal.find('.select2-inside-modal').each(function () {
+            var $el = $(this);
+            if ($el.hasClass('select2-hidden-accessible')) {
+                $el.select2('destroy');
+            }
+            $el.select2({
+                width: '100%',
+                dropdownParent: $modal,
+                minimumResultsForSearch: 6
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        $('#addLoiModal').on('shown.bs.modal', function () {
+            initRadiantRefModalSelect2('#addLoiModal');
+        });
+
+        $('#addLoiModal').on('hidden.bs.modal', function () {
+            $('#addLoiForm')[0].reset();
+            $('#district1').empty().append('<option value="">Select District</option>');
+            $('#latError, #longError, #state1msg').text('');
+        });
+    });
 </script>

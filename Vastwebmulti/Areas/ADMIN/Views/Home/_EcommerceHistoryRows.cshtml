@@ -1,0 +1,101 @@
+@model IEnumerable<Vastwebmulti.Models.show_ecomm_report_Result>
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.show_ecomm_report_Result>();
+    var i = 1;
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var color = "";
+        var fontweight = "";
+        var emailid = "";
+        var framname = "";
+        var rolename = item.RoleName ?? "";
+        var sts = "Pending";
+
+        if (item.RoleName == "Retailer")
+        {
+            emailid = item.Email;
+            framname = item.Frm_Name;
+        }
+        else if (item.RoleName == "Vendor")
+        {
+            emailid = item.VendorEmail;
+            framname = item.Vendorfrmname;
+        }
+
+        if (item.OrderStatus == 2)
+        {
+            color = "green";
+            fontweight = "700";
+            sts = "Success";
+        }
+        else if (item.OrderStatus == 3)
+        {
+            color = "red";
+            fontweight = "700";
+            sts = "Rejected";
+        }
+        else if (item.OrderStatus == 1)
+        {
+            color = "#FF9800";
+            fontweight = "700";
+            sts = "Pending";
+        }
+
+        <tr>
+            <td>@i</td>
+            <td><p style="font-size:12px;"><span style="color:@color;font-weight:@fontweight;">@sts</span></p></td>
+            <td><p style="font-size:12px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;⇒&nbsp;@emailid</p></td>
+            <td><p style="font-size:11px;">&nbsp;@item.OrderDate</p></td>
+            <td><p style="font-size:11px;">&nbsp;@item.ProductName</p></td>
+            <td><p style="font-size:12px;">&nbsp;@item.ListPrice</p></td>
+            <td><p style="font-size:12px;">&nbsp;@item.StandardPrice</p></td>
+            <td><p style="font-size:12px;">&nbsp;@item.QTY</p></td>
+            <td><p style="font-size:12px;">&nbsp;@item.Amount</p></td>
+            <td>
+                @if (item.RoleName == "Retailer")
+                {
+                    <p><span>@rolename</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.RemPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.Remcomm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.RemPost</span></p>
+                }
+            </td>
+            <td>
+                @if (item.RoleName == "Retailer")
+                {
+                    <p><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.DlmPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.DlmComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.DlmPost</span></p>
+                }
+            </td>
+            <td>
+                @if (item.RoleName == "Retailer")
+                {
+                    <p><span>Master</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.MasterPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.MdComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.MasterPost</span></p>
+                }
+            </td>
+            <td>
+                @if (item.RoleName == "Retailer")
+                {
+                    <p><span>Whitelabel</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.WhitelabelPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.Whitelabecomm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.WhitelabelPost</span></p>
+                }
+            </td>
+            <td>
+                @if (item.RoleName == "Retailer")
+                {
+                    <p><span>Admin</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">@item.AdminPre</span><span style="padding-left:18px;">│</span><span style="padding-left:3px;">@item.AdminComm</span><span style="padding-left:14px;">│</span><span style="padding-left:9px;">@item.AdminPost</span></p>
+                }
+            </td>
+            <td><p style="font-size:11px;">&nbsp;@item.UpdatedOn</p></td>
+        </tr>
+        i++;
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="15" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+            <span>Ecommerce history not found.</span>
+        </td>
+    </tr>
+}

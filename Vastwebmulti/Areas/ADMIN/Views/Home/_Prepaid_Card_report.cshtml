@@ -1,73 +1,68 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.prepaid_card_Transaction>
+@using System.Linq
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.prepaid_card_Transaction>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var status = item.Status ?? "";
+        var statusLower = status.ToLowerInvariant();
+        var rowClass = "";
+        var icon = "";
+        var iconBg = "";
 
-<div class="row clearfix margi-topo-third" style="margin:0;">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 for-margin-top">
-        <div class="card page-header-third">
+        if (statusLower.Contains("success"))
+        {
+            rowClass = "vm-gift-row--success";
+            icon = "../../ashok-images/correct.svg";
+            iconBg = "green";
+        }
+        else if (statusLower.Contains("failed"))
+        {
+            rowClass = "vm-gift-row--failed";
+            icon = "../../ashok-images/closes.svg";
+            iconBg = "red";
+        }
+        else if (statusLower.Contains("pending"))
+        {
+            rowClass = "vm-gift-row--pending";
+            icon = "../../ashok-images/clkk.png";
+            iconBg = "#FF9800";
+        }
 
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 admin-giftcard-table">
-                    <div class="">
-                        <div class="body table-responsive tableseconddes-admin giftcard-table-reportnew" style="position:inherit;padding:3px;">
-                            <table class="table table-bordered table-striped table-hover giftadmin-tableste table-background-second example-second thpadding-second third-design-table" cellspacing="0" style="width:100%;font-size:12px;background:#f9f9f9;">
-                                <thead class="navbar" style="color:#000; position:inherit;">
-                                    <tr>
-                                        <th>Status</th>
-                                        <th>User</th>
-                                        <th>Quantity</th>
-                                        <th>Amount</th>
-                                        <th>Request&nbsp;Time</th>
-                                        <th>Response&nbsp;Time</th>
-                                        <th>Comm</th>
-                                        <th>GST</th>
-                                        <th>TDS</th>
-                                        <th>Retailer&nbsp;Pre</th>
-                                        @*<th><span>Retailer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>*@
-                                        @*<th><span>Dealer</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                            <th><span>Master</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                            <th><span>Whitelabel</span><span style="padding-left:4px;">⇒</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">│</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">│</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>*@
-                                        <th>Retailer&nbsp;Post</th>
-                                        <th>Final</th>
-                                        @*<th>Gift&nbsp;Card&nbsp;Message</th>*@
-                                        @*<th>API&nbsp;Request</th>*@
-                                        @*<th>API&nbsp;Response</th>*@
-                                        @*<th class="giftth-seconclass" style="width: 80px !important; display: block;">Action</th>*@
-                                    </tr>
-                                </thead>
-                                <tbody id="resultTarget">
-                                    @if (Model != null)
-                                    {
-                                        foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td> <p class="status-gift-admin">&nbsp;@item.Status</p></td>
-                                                <td><p style="font-size:11px;"><span>@item.Name</span>&nbsp;⇒&nbsp;@item.Email</p></td>
-                                                <td><p style="font-size:11px;">&nbsp;@item.Quantity</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.Amount</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.Request_time</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.Response_time</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.Rem_comm</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.rem_gst</p></td>
-                                                <td><p style="font-size:13px;">@item.rem_tds</p></td>
-                                                <td><p style="font-size:13px;">@item.Rem_remain_pre</p></td>
+        var amount = item.Amount ?? 0m;
 
-                                                <td><p style="font-size:13px;">&nbsp;@item.dlm_remain_post</p></td>
-                                                <td><p style="font-size:13px;">&nbsp;@item.rem_final</p></td>
-                                            </tr>
-
-
-                                        }
-                                    }
-
-                                </tbody>
-                                <tfoot class="navbar" style="color:white;position:inherit;">
-
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        <tr class="@rowClass" data-status="@status" data-amount="@amount.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+            <td class="vm-gift-status-cell">
+                @if (!string.IsNullOrEmpty(icon))
+                {
+                    <img src="@icon" alt="" style="background-color:@iconBg" />
+                }
+                <span>@status</span>
+            </td>
+            <td><span class="vm-gift-info-line">@item.Name&nbsp;⇒&nbsp;@item.Email</span></td>
+            <td>@(item.Quantity.HasValue ? item.Quantity.Value.ToString() : "—")</td>
+            <td>@amount.ToString("N2")</td>
+            <td>@(item.Request_time.HasValue ? item.Request_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "—")</td>
+            <td>@(item.Response_time.HasValue ? item.Response_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "—")</td>
+            <td>@(item.Rem_comm.HasValue ? item.Rem_comm.Value.ToString("N2") : "—")</td>
+            <td>@(item.rem_gst.HasValue ? item.rem_gst.Value.ToString("N2") : "—")</td>
+            <td>@(item.rem_tds.HasValue ? item.rem_tds.Value.ToString("N2") : "—")</td>
+            <td>@(item.Rem_remain_pre.HasValue ? item.Rem_remain_pre.Value.ToString("N2") : "—")</td>
+            <td>@(item.dlm_remain_post.HasValue ? item.dlm_remain_post.Value.ToString("N2") : "—")</td>
+            <td>@(item.rem_final.HasValue ? item.rem_final.Value.ToString("N2") : "—")</td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="12" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-credit-card" aria-hidden="true"></i>
+            <span>Prepaid card report not found.</span>
+        </td>
+    </tr>
+}

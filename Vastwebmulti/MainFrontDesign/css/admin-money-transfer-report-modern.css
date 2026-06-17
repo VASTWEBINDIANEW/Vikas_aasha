@@ -1,4 +1,4 @@
-/* ADMIN — Money_Transfer_Report v=26 */
+/* ADMIN — Money_Transfer_Report v=28 */
 
 body.saas-admin-ui .saas-dmt-report-page {
     --dmt-accent: #2563eb;
@@ -83,7 +83,10 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-fin-nav-row {
     overflow: visible !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav.vm-fin-nav--single-line {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav.vm-fin-nav--single-line,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav.vm-fin-nav--single-line,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav.vm-fin-nav--single-line,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav.vm-fin-nav--single-line {
     display: block !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -91,7 +94,13 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav.vm-fin-nav--single-line
 }
 
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__list,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__list,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav #auto-fund-nav-list,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__list,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav #invoice-gst-nav-list,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__list,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav #invoice-retailer-nav-list {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
@@ -109,7 +118,13 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list {
 }
 
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__list > li,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__list > li,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav #auto-fund-nav-list > li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__list > li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav #invoice-gst-nav-list > li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__list > li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav #invoice-retailer-nav-list > li {
     flex: 1 1 0 !important;
     min-width: 0 !important;
     float: none !important;
@@ -118,7 +133,10 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > 
     margin: 0 !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link {
     display: inline-flex !important;
     flex-direction: row !important;
     align-items: center !important;
@@ -145,12 +163,18 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link {
     transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link::before {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link::before,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link::before,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link::before,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link::before {
     display: none !important;
     content: none !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__ico {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__ico {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -166,13 +190,19 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__ico {
     order: -1 !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link img {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link img,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link img,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link img,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link img {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link span {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link span,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link span {
     display: block;
     min-width: 0;
     max-width: 100%;
@@ -182,30 +212,48 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link span 
 }
 
 /* Inactive tab */
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:not(.is-active):not(.activee) {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link:not(.is-active):not(.activee) {
     background: #fff !important;
     border-color: #e2e8f0 !important;
     color: #64748b !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:not(.is-active):not(.activee) .vm-fin-nav__ico {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link:not(.is-active):not(.activee) .vm-fin-nav__ico {
     color: #94a3b8 !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee),
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) {
     background: #eff6ff !important;
     border-color: #93c5fd !important;
     color: #1d4ed8 !important;
     box-shadow: 0 1px 4px rgba(37, 99, 235, 0.12) !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) .vm-fin-nav__ico {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link:hover:not(.is-active):not(.activee) .vm-fin-nav__ico {
     color: #2563eb !important;
 }
 
 /* Active tab — clear contrast */
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.is-active,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.is-active,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.activee,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.is-active,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.activee,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.is-active,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.activee {
     background: linear-gradient(135deg, #1e40af, #2563eb) !important;
     border-color: #1d4ed8 !important;
     color: #fff !important;
@@ -213,12 +261,24 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activ
 }
 
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.is-active .vm-fin-nav__ico,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee .vm-fin-nav__ico {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.is-active .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.activee .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.is-active .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.activee .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.is-active .vm-fin-nav__ico,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.activee .vm-fin-nav__ico {
     color: #fff !important;
 }
 
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.is-active span,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee span {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activee span,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.is-active span,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link.activee span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.is-active span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link.activee span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.is-active span,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link.activee span {
     color: #fff !important;
     font-weight: 800 !important;
 }
@@ -226,11 +286,23 @@ body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link.activ
 /* Kill legacy float/tab rules that break single-line nav */
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav ul,
 body.saas-admin-ui .saas-dmt-report-page #fin-report-nav li,
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav a {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav a,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav ul,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav li,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav a,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav ul,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav a,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav ul,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav a {
     float: none !important;
 }
 
-body.saas-admin-ui .saas-dmt-report-page #fin-report-nav li {
+body.saas-admin-ui .saas-dmt-report-page #fin-report-nav li,
+body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav li,
+body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav li {
     width: auto !important;
     max-width: none !important;
 }
@@ -1370,7 +1442,10 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
         font-size: 0.7rem !important;
     }
 
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link {
         font-size: 0.6rem !important;
         min-height: 26px !important;
         height: 26px !important;
@@ -1378,7 +1453,10 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
         gap: 4px !important;
     }
 
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__ico {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__ico,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__ico,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__ico,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__ico {
         font-size: 0.68rem !important;
         width: 14px !important;
         min-width: 14px !important;
@@ -1391,7 +1469,13 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
     }
 
     body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__list > li,
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav #auto-fund-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav #invoice-gst-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav #invoice-retailer-nav-list > li {
         flex: 0 0 auto !important;
         min-width: 72px !important;
     }
@@ -1507,7 +1591,13 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
     }
 
     body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__list,
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav #auto-fund-nav-list,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav #invoice-gst-nav-list,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__list,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav #invoice-retailer-nav-list {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         flex-direction: unset !important;
@@ -1517,13 +1607,22 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
     }
 
     body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__list > li,
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav #fin-report-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav #auto-fund-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav #invoice-gst-nav-list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__list > li,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav #invoice-retailer-nav-list > li {
         flex: none !important;
         min-width: 0 !important;
         width: auto !important;
     }
 
-    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link {
+    body.saas-admin-ui .saas-dmt-report-page #fin-report-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #auto-fund-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-gst-nav .vm-fin-nav__link,
+    body.saas-admin-ui .saas-dmt-report-page #invoice-retailer-nav .vm-fin-nav__link {
         min-height: 32px !important;
         height: 32px !important;
         font-size: 0.64rem !important;
@@ -1613,6 +1712,321 @@ body.saas-admin-ui .saas-dmt-report-page .vm-dmt-loader {
 
     body.saas-admin-ui .saas-dmt-report-page .vm-dmt-table-panel__right .vm-opr-table-panel__hint {
         text-align: center !important;
+        width: 100% !important;
+    }
+}
+
+/* Auto Fund Transfer Status (Retailer) — Money Transfer Report shell */
+body.saas-admin-ui .saas-auto-fund-status-page .vm-opr-table-panel__title i.fa-sync-alt {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-search-wrap {
+    position: relative;
+    min-width: 200px;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-search-wrap i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.78rem;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-search-input {
+    height: 36px !important;
+    padding-left: 32px !important;
+    border-radius: 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    font-size: 0.8rem !important;
+    min-width: 200px;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page #autoFundTransferTable.vm-auto-fund-data-table {
+    min-width: 1180px !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-firm strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-firm span {
+    display: block;
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-edit-input {
+    min-width: 88px !important;
+    height: 32px !important;
+    padding: 4px 8px !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-field-error {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-type-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px 4px 6px;
+    border-radius: 999px;
+    border: 1px solid #dbe4f0;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-type-pill--credit {
+    border-color: #fdba74;
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-type-pill--cash {
+    border-color: #86efac;
+    background: #ecfdf5;
+    color: #047857;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-type-btn {
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    color: inherit !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-status-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-switch-wrap {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-switch-btn {
+    min-width: 52px !important;
+    height: 28px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    border: 1px solid #cbd5e1 !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-switch-btn.costom-on {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-switch-btn.custom-off {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-edit-btn,
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-save-btn {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 4px 10px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    background: #fff !important;
+    color: #334155 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-save-btn {
+    border-color: #2563eb !important;
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-edit-btn:hover {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-save-btn:hover {
+    background: #dbeafe !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-dmt-toolbar-head--one-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-dmt-fin-nav-row {
+        width: 100% !important;
+        padding-top: 4px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-dmt-table-panel__head {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-search-wrap,
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-search-input {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-dmt-table-actions {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page #autoFundTransferTable.vm-auto-fund-data-table {
+        min-width: 1000px !important;
+    }
+
+    body.saas-admin-ui .saas-auto-fund-status-page .vm-auto-fund-main-card {
+        margin-top: 10px !important;
+    }
+}
+
+/* Invoice GST pages */
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-nav-row--sub {
+    margin-top: 4px !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-pdf-cell {
+    text-align: center;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fff;
+    color: #dc2626;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-pdf-btn:hover {
+    background: #fef2f2;
+    border-color: #f87171;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-pdf-btn i {
+    font-size: 0.9rem;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page #retailerSellGstTable.vm-auto-fund-data-table {
+    min-width: 720px !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-table-toolbar {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field--month,
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field--year {
+    max-width: 110px;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field:first-child {
+    min-width: 150px;
+    max-width: 200px;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field .select2-container {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field .form-control,
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field .select2-selection--single {
+    height: 34px !important;
+    min-height: 34px !important;
+    font-size: 0.75rem !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-search {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-table-toolbar {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-filters {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field,
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-field:first-child {
+        flex: 1 1 calc(50% - 4px) !important;
+        max-width: none !important;
+        min-width: calc(50% - 4px) !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-head-search {
+        flex: 1 1 100% !important;
         width: 100% !important;
     }
 }

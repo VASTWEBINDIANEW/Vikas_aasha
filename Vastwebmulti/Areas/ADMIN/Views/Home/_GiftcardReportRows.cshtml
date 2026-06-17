@@ -1,0 +1,97 @@
+@model IEnumerable<Vastwebmulti.Models.Gift_card_details_report_Result>
+@using System.Linq
+@using System.Web
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Gift_card_details_report_Result>();
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var status = item.status ?? "";
+        var statusLower = status.ToLowerInvariant();
+        var rowClass = "";
+        var icon = "";
+        var iconBg = "";
+
+        if (statusLower.Contains("success"))
+        {
+            rowClass = "vm-gift-row--success";
+            icon = "../../ashok-images/correct.svg";
+            iconBg = "green";
+        }
+        else if (statusLower.Contains("failed"))
+        {
+            rowClass = "vm-gift-row--failed";
+            icon = "../../ashok-images/closes.svg";
+            iconBg = "red";
+        }
+        else if (statusLower.Contains("pending"))
+        {
+            rowClass = "vm-gift-row--pending";
+            icon = "../../ashok-images/clkk.png";
+            iconBg = "#FF9800";
+        }
+        else if (status.Contains("Refund"))
+        {
+            rowClass = "vm-gift-row--refund";
+            icon = "../../ashok-images/undo.svg";
+            iconBg = "#9C27B0";
+        }
+
+        <tr class="@rowClass">
+            <td class="vm-gift-status-cell">
+                @if (!string.IsNullOrEmpty(icon))
+                {
+                    <img src="@icon" alt="" style="background-color:@iconBg" />
+                }
+                <span>@status</span>
+            </td>
+            <td><span class="vm-gift-info-line">@item.sender_name&nbsp;⇒&nbsp;@item.sender_email</span></td>
+            <td><span class="vm-gift-info-line">@item.reciver_name&nbsp;⇒&nbsp;@item.reciver_email</span></td>
+            <td>@(item.request_time.HasValue ? item.request_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "—")</td>
+            <td>@(item.amount.HasValue ? item.amount.Value.ToString("N2") : "—")</td>
+            <td>@item.operator_Name</td>
+            <td>@item.Operator_type</td>
+            <td>@item.operator_id</td>
+            <td>@(item.rem_pre_remain.HasValue ? item.rem_pre_remain.Value.ToString("N2") : "—")</td>
+            <td>@(item.rem_post_remain.HasValue ? item.rem_post_remain.Value.ToString("N2") : "—")</td>
+            <td>@(item.Response_time.HasValue ? item.Response_time.Value.ToString("dd-MMM-yy HH:mm:ss") : "—")</td>
+            <td>@(item.api_remain.HasValue ? item.api_remain.Value.ToString("N2") : "—")</td>
+            <td>
+                <div class="vm-gift-action-cell">
+                    <button type="button" class="vm-gift-act-btn vm-gift-act-btn--success" onclick="success('@item.orderid','success')" title="Manual Success">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="vm-gift-act-btn vm-gift-act-btn--failed" onclick="refundshow('@item.orderid','failed')" data-target="#defaultModal1" data-toggle="modal" title="Manual Failed">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="vm-gift-act-btn vm-gift-act-btn--detail vm-gift-detail-btn"
+                            data-toggle="modal" data-target="#defaultModal222"
+                            data-dealer-pre="@(item.dlm_pre_remain)"
+                            data-dealer-post="@(item.dlm_post_remain)"
+                            data-master-pre="@(item.master_pre_remain)"
+                            data-master-post="@(item.master_post_remain)"
+                            data-whitelabel-pre="@(item.whitelabel_pre_remain)"
+                            data-whitelabel-post="@(item.whitelabel_post_remain)"
+                            data-gift-message="@HttpUtility.HtmlAttributeEncode(item.gift_message ?? "")"
+                            data-api-request="@HttpUtility.HtmlAttributeEncode(item.api_request ?? "")"
+                            data-api-response="@HttpUtility.HtmlAttributeEncode(item.api_response ?? "")"
+                            title="View details">
+                        <img src="~/ashok-images/rightaeps.svg" alt="Details" />
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr class="vm-opr-table-empty-row">
+        <td colspan="13" class="vm-opr-table-empty vm-dmt-table-empty">
+            <i class="fas fa-gift" aria-hidden="true"></i>
+            <span>Gift card report not found.</span>
+        </td>
+    </tr>
+}

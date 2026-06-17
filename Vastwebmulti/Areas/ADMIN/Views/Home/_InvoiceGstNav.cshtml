@@ -1,0 +1,40 @@
+@{
+    var activeKey = (ViewBag.InvoiceGstNavActive as string ?? "").Trim().ToLowerInvariant();
+    if (string.IsNullOrEmpty(activeKey))
+    {
+        var path = (Request.Path ?? "").ToLowerInvariant();
+        if (path.Contains("dealerpurchasegst")) { activeKey = "distributor"; }
+        else if (path.Contains("masterpurchasegst")) { activeKey = "master"; }
+        else if (path.Contains("apisellgst")) { activeKey = "api"; }
+        else { activeKey = "retailer"; }
+    }
+}
+
+<nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="invoice-gst-nav" aria-label="GST invoice type">
+    <ul class="vm-fin-nav__list" id="invoice-gst-nav-list">
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "retailer" ? " is-active" : "")" href="@Url.Action("retailersellgst", "Home")" title="Retailer GST">
+                <i class="fas fa-store vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Retailer GST</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "distributor" ? " is-active" : "")" href="@Url.Action("DealerPurchasegst", "Home")" title="Distributor GST">
+                <i class="fas fa-sitemap vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Distributor GST</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "master" ? " is-active" : "")" href="@Url.Action("MasterPurchasegst", "Home")" title="Master GST">
+                <i class="fas fa-user-tie vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Master GST</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "api" ? " is-active" : "")" href="@Url.Action("Apisellgst", "Home")" title="API GST">
+                <i class="fas fa-code vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>API GST</span>
+            </a>
+        </li>
+    </ul>
+</nav>

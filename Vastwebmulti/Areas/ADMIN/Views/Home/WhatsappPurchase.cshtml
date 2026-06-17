@@ -1,225 +1,278 @@
 ﻿@model IEnumerable<Vastwebmulti.Areas.ADMIN.Models.whatsapppurinfo>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "WhatsappPurchase";
+    ViewBag.Title = "WhatsApp Sell";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.whatsapppurinfo>();
+    var rowCount = reports.Count();
+
+    decimal totalAmount = reports.Sum(i => i.planprice ?? 0m);
+    decimal totalSuccess = reports.Where(i => string.Equals(i.status, "SUCCESS", StringComparison.OrdinalIgnoreCase)).Sum(i => i.planprice ?? 0m);
+    decimal totalFailed = reports.Where(i =>
+        string.Equals(i.status, "FAILED", StringComparison.OrdinalIgnoreCase)
+        || (!string.IsNullOrEmpty(i.status) && i.status.IndexOf("Refund", StringComparison.OrdinalIgnoreCase) >= 0)
+    ).Sum(i => i.planprice ?? 0m);
+    decimal totalOther = totalAmount - totalSuccess - totalFailed;
+    if (totalOther < 0m) { totalOther = 0m; }
 }
 
-<style>
-    .select2-container .select2-selection--single{
-        height:32px !important;
-        border-radius:0px !important;
-    }
-    .width_r {
-        width: auto;
-        float: left;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=41" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    @@media only screen and (max-width:1280px) {
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-whatsapp-purchase-page">
 
-        section.content {
-            margin: 75px 0px 0 160px;
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var whatsappFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "whatsappPurchaseForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
-    }
+        @using (Html.BeginForm("WhatsappPurchase", "Home", FormMethod.Post, whatsappFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    @@media only screen and (max-width:1169px) {
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Report's</li>
+                        <li>WhatsApp Sell</li>
+                    </ol>
 
-    @@media only screen and (max-width:1024px) {
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-wa-filter-row--one-line">
 
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px){
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .width_r {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-
-
-    }
-
-</style>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 gift-card-top all-type-third">            
-                <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="width: auto; float: left;">
-                    @using (Html.BeginForm("WhatsappPurchase", "Home", FormMethod.Post))
-                    {
-                        <div class="">
-                            <div class="col-md-2 gift-select width_r" style="padding: 0px;">
-                                <div class="form-line selecthotel-third">
-                                    @Html.DropDownList("API", ViewBag.API as SelectList, "Select API", new { @style = "margin-top:0px;padding:0px;height:34px;", @class = "select-s form-control", data_live_search = "true", })
-                                </div>
-                            </div>
-                            <div class="col-md-4 respo-upup width_r" style="margin-top: 1px;padding: 0px;padding-left:3px;">
-                                <div class="form-group" style="margin-bottom:0px;">
-                                    <div class="input-daterange input-group">
-                                        <div class="custom-date-icon ner">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                        </div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;", autocomplete = "off" })
-                                        <span class="input-group-addon" style="padding:0px;min-width:3px;">
-                                        </span>
-                                        <div style="position:relative;">
-                                            <div class="custom-date-icon ner">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ;height:32px;", autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                    <!-- /.input group -->
-                                </div>
-                            </div>
-                            <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third width_r" style="padding:0px;padding-left:5px;">
-                                <div class="">
-                                    <div class="">
-                                        <center>
-                                            <button name="btntype" type="submit" class="btn input-back-second" style="  height:32px;border: 1px solid #b1a6a638;background: #fff;margin-top:1px;background: #f9f9f9;width: 100%;" onclick="serch()">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                <span style="top:-1px;color:black;">Search</span>
-                                            </button>
-                                        </center>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                        <div class="vm-opr-field vm-dmt-field vm-wa-field--api">
+                            @Html.DropDownList("API", ViewBag.API as SelectList, "Select API", new { @id = "API", @class = "vm-opr-select vm-dmt-select form-control" })
                         </div>
-                    }
-                </div>
-                <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="width: auto; float: right;">
-                    <div style="float:right;" class="web-white-filter lop pdfexpoer-second totalbutton-secondclas">
-                        <button class="white-success-button" style="height:32px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: right;margin-left: 4px;background: #b1a6a638;" onclick="findtotal()">Total</button>
-                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 20px;">
-                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
 
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" name="btntype" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="whatsappPurchaseTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>WhatsApp purchase totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideWhatsappPurchaseTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Success</span>
+                            <strong class="vm-opr-total-card__value">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Failed / Refund</span>
+                            <strong class="vm-opr-total-card__value">@totalFailed.ToString("N2")</strong>
+                        </div>
+                        @if (totalOther > 0m)
+                        {
+                            <div class="vm-opr-total-card vm-opr-total-card--pending">
+                                <span class="vm-opr-total-card__label">Other</span>
+                                <strong class="vm-opr-total-card__value">@totalOther.ToString("N2")</strong>
+                            </div>
+                        }
                     </div>
                 </div>
 
             </div>
+        }
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="page-header-third">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @*<h2 style="font-size: 24px;">Purchase Report </h2>*@
-                                <div class="table-responsive" style="">
-                                    <table id="simple-table" class="table  table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>API ID</th>
-                                                <th>Plan Name</th>
-                                                <th>Plan Price</th>
-                                                <th>Status</th>
-                                                @*<th>GST</th>*@
-                                                <th>Remain Pre</th>
-                                                <th>Remain Post</th>
-                                                <th>Purchase Date</th>
-                                                <th>Expire Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model)
-                                            {
-                                                var pdate = Convert.ToDateTime(item.purchasedate);
-                                                var renewaldate = Convert.ToDateTime(item.renewaldate);
-                                                var color = ""; var fcolor = "";
-                                                if (item.status.ToUpper() == "SUCCESS")
-                                                {
-                                                    color = "green";
-                                                    fcolor = "White";
-                                                }
-                                                else if (item.status.ToUpper() == "FAILED" || item.status.Contains("Refund"))
-                                                {
-                                                    color = "Red";
-                                                    fcolor = "White";
-                                                }
-                                                <tr style="background-color:@color;color:@fcolor">
-                                                    <td>@item.farmname</td>
-                                                    <td>@item.planname</td>
-                                                    <td>@item.planprice</td>
-                                                    <td>@item.status</td>
-                                                    @*<td>@item.gst</td>*@
-                                                    <td>@item.remainpre</td>
-                                                    <td>@item.remainpost</td>
-                                                    <td>@pdate.ToString("dd-MM-yyyy hh:mm:ss tt")</td>
-                                                    <td>@renewaldate.ToString("dd-MM-yyyy hh:mm:ss tt")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
-                            </div>
-
+        <div class="vm-opr-main-card vm-security-report-main-card vm-wa-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-wa-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span>WhatsApp purchase report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total plan price for current filter">
+                            Total: <strong>₹ @totalAmount.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-wa-totals-btn" onclick="findWhatsappTotal()" title="Show totals" aria-expanded="false" aria-controls="whatsappPurchaseTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
                         </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="whatsappPurchaseTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>API ID</th>
+                                    <th>Plan Name</th>
+                                    <th>Plan Price</th>
+                                    <th>Status</th>
+                                    <th>Remain Pre</th>
+                                    <th>Remain Post</th>
+                                    <th>Purchase Date</th>
+                                    <th>Expire Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @Html.Partial("_WhatsappPurchaseRows", reports)
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<script src="~/Swalalert/datatablejquery.js"></script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
 <script>
-    $('.select-s').select2();
+    function hideWhatsappPurchaseTotals() {
+        var $panel = $('#whatsappPurchaseTotalsPanel');
+        var $btn = $('.vm-wa-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-</script>
+    function findWhatsappTotal() {
+        var $panel = $('#whatsappPurchaseTotalsPanel');
+        var $btn = $('.vm-wa-totals-btn');
+        if ($panel.is(':visible')) {
+            hideWhatsappPurchaseTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-<script type="text/javascript">
-            $(document).ready(function () {
+    function exportWhatsappPurchaseTable(type) {
+        var table = document.getElementById('whatsappPurchaseTable');
+        if (!table) {
+            return;
+        }
 
-                $('.input-daterange').datepicker({
-                    format: "yyyy-mm-dd",
-                    todayHighlight: true,
-                    autoclose: true,
-                    orientation: "bottom auto",
+        var stamp = new Date().toISOString().slice(0, 10);
+        var title = 'WhatsApp Purchase Report';
+        var clone = table.cloneNode(true);
+        var emptyRow = clone.querySelector('.vm-opr-table-empty-row');
+        if (emptyRow) {
+            alert('No data available to export.');
+            return;
+        }
 
-                });
-                var val = '@ViewBag.chk';
-                if (val != "post") {
-                    $("#txt_frm_date").datepicker("setDate", new Date());
-                    $("#txt_to_date").datepicker("setDate", new Date());
-                }
+        if (type === 'excel') {
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'WhatsappPurchase_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
 
-                answers();
-            });
+        var printWin = window.open('', '_blank');
+        if (!printWin) {
+            alert('Please allow pop-ups to export PDF.');
+            return;
+        }
+        printWin.document.write(
+            '<html><head><title>' + title + '</title>'
+            + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #ccc;padding:4px;text-align:left}th{background:#f3f4f6}.vm-wa-row--success td{background:#dcfce7}.vm-wa-row--failed td{background:#fee2e2}</style>'
+            + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+        );
+        printWin.document.close();
+        printWin.focus();
+        printWin.print();
+    }
 
+    function initWhatsappPurchaseSelect2() {
+        if (!window.jQuery || !$.fn.select2) {
+            return;
+        }
+        var $api = $('#API');
+        if ($api.data('select2')) {
+            $api.select2('destroy');
+        }
+        $api.select2({
+            width: '100%',
+            minimumResultsForSearch: 6
+        });
+    }
+
+    function initWhatsappPurchaseDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initWhatsappPurchaseDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#whatsappPurchaseForm');
+        }
+    }
+
+    $(document).ready(function () {
+        initWhatsappPurchaseSelect2();
+        initWhatsappPurchaseDatepickers();
+        $('#whatsappPurchaseForm .select2-container').css('width', '100%');
+
+        $('#btnExport').on('click', function () {
+            exportWhatsappPurchaseTable('excel');
+        });
+
+        $('#btnPDF').on('click', function () {
+            exportWhatsappPurchaseTable('pdf');
+        });
+    });
 </script>
