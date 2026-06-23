@@ -1,0 +1,46 @@
+@model string
+@{
+    var statusRaw = Model ?? "";
+    var statusUpper = statusRaw.Trim().ToUpperInvariant();
+    var allowRefund = ViewData["AllowRefund"] as bool? ?? false;
+
+    var label = statusRaw;
+    var pillClass = "vm-rpt-status-pill vm-rpt-status-pill--neutral";
+    var iconClass = "fas fa-info-circle";
+
+    if (statusUpper == "SUCCESS")
+    {
+        pillClass = "vm-rpt-status-pill vm-rpt-status-pill--success";
+        iconClass = "fas fa-check-circle";
+        label = "Success";
+    }
+    else if (statusUpper == "PENDING")
+    {
+        pillClass = "vm-rpt-status-pill vm-rpt-status-pill--pending";
+        iconClass = "fas fa-clock";
+        label = "Pending";
+    }
+    else if (statusUpper == "FAILED")
+    {
+        pillClass = "vm-rpt-status-pill vm-rpt-status-pill--failed";
+        iconClass = "fas fa-times-circle";
+        label = "Failed";
+    }
+    else if (allowRefund)
+    {
+        pillClass = "vm-rpt-status-pill vm-rpt-status-pill--refund";
+        iconClass = "fas fa-undo";
+        label = "Refund";
+    }
+    else if (!string.IsNullOrWhiteSpace(statusRaw))
+    {
+        pillClass = "vm-rpt-status-pill vm-rpt-status-pill--failed";
+        iconClass = "fas fa-times-circle";
+        label = statusRaw;
+    }
+}
+
+<span class="@pillClass">
+    <i class="@iconClass" aria-hidden="true"></i>
+    <span>@label</span>
+</span>

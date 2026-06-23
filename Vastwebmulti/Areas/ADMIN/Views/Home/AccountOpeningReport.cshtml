@@ -1,428 +1,674 @@
 ﻿@model List<Vastwebmulti.Models.account_opening_report_Result>
+
+@using System.Linq
+
+@using System.Collections.Generic
+
 @{
+
     ViewBag.Title = "AccountOpeningReport";
+
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+
+    var reports = Model ?? new List<Vastwebmulti.Models.account_opening_report_Result>();
+
+    var rowCount = reports.Count;
+
+    var totalSuccess = reports.Count(i => string.Equals(i.status, "success", StringComparison.OrdinalIgnoreCase) || string.Equals(i.status, "SUCCESS", StringComparison.OrdinalIgnoreCase));
+
+    var totalPending = reports.Count(i => string.Equals(i.status, "pending", StringComparison.OrdinalIgnoreCase) || string.Equals(i.status, "PENDING", StringComparison.OrdinalIgnoreCase));
+
+    var totalFailed = reports.Count(i => string.Equals(i.status, "failed", StringComparison.OrdinalIgnoreCase) || string.Equals(i.status, "FAILED", StringComparison.OrdinalIgnoreCase));
+
 }
 
+
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=1" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
 <style>
-    #example tbody tr td {
-        padding: 10px;
-    }
-    .form-group {
-        width: 100%;
-    }
-    i.fa.fa-calendar.tmw-total-color-one.fullbodydycolorbg {
-        position: absolute;
-        top: 0px;
-        z-index: 99;
-        left: 6px;
-        border-right: 1px solid #ddd;
-        height: 33px;
-        padding-right: 5px;
-        padding-top: 9px;
-    }
-    #calender_icons_1 {
-        position: absolute;
-        top: 0px;
-        z-index: 99;
-        left: 53%;
-        border-right: 1px solid #ddd;
-        height: 33px;
-        padding-right: 5px;
-        padding-top: 9px;
-    }
-    .col-md-2.rechargefirst {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    .col-md-3.rechargesecond {
-        padding-left: 5px;
-        padding-right: 0;
-    }
-    .col-md-2.rechargefiveclass {
-        padding-left: 5px;
-        padding-right: 0;
-    }
-    .col-md-3.rechargethrees {
-        padding-left: 5px;
-        padding-right: 0;
-    }
-    .col-md-2.rechargefive {
-        padding-right: 0;
-        padding-left: 11px;
-        width: 8%;
-    }
-
-
-    .breadcrumb-arrows
-    li {
-        display: inline-block;
-        line-height: 30px;
-        position: relative;
-        margin-right: 13px;
-    }
-
-    .breadcrumb-arrows:after {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        right: -2px;
-        border-style: solid;
-        border-width: 15px 15px 15px 0px;
-        border-color: transparent #fff transparent transparent;
-        z-index: 0;
-    }
-
-    .breadcrumb-arrows:first-child:after {
-        border-color: transparent;
-    }
-
-    .breadcrumb-arrows a:before {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        left: -15px;
-        border-style: solid;
-        border-width: 15px 15px 15px 0px;
-        border-color: transparent #dca167 !important;
-        transparent transparent;
-        z-index: 10;
-    }
-
-    .breadcrumb-arrows a:after {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        right: 0px;
-        border-style: solid;
-        border-width: 15px 15px 15px 0px;
-        border-color: transparent #fff transparent transparent;
-        z-index: 10;
-    }
-
-    .breadcrumb-arrows .active a {
-        background: #dca167;
-        z-index: 100;
-        padding-right: 35px !important;
-    }
-
-        .breadcrumb-arrows .active a:before {
-            border-right-color: var(--main-bg-lcolor) !important;
-        }
-
-    .breadcrumb-arrows a {
+    body.saas-admin-ui .saas-account-opening-report-page.saas-dmt-report-page .vm-dmt-filter-row .vm-account-opening-consumer-input,
+    body.saas-admin-ui .saas-account-opening-report-page.saas-dmt-report-page .vm-dmt-filter-search-group #accountOpeningConsumerNo {
         display: block;
-        background: var(--main-bg-lcolor) !important;
-        padding: 0 20px;
-        padding-right: 35px !important;
+        width: 100%;
+        height: 38px;
+        min-height: 38px;
+        border: 1px solid #dbe4f0;
+        border-radius: 9px;
+        background: #fff !important;
+        background-color: #fff !important;
+        background-image: none !important;
+        background-repeat: no-repeat !important;
+        background-position: initial !important;
+        background-size: auto !important;
+        padding: 0 12px !important;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #334155;
+        box-sizing: border-box;
+        box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        cursor: text !important;
     }
 
-    .breadcrumb-arrows {
-        background: var(--main-bg-lcolor) !important;
+    body.saas-admin-ui .saas-account-opening-report-page.saas-dmt-report-page .vm-dmt-filter-row .vm-account-opening-consumer-input:focus,
+    body.saas-admin-ui .saas-account-opening-report-page.saas-dmt-report-page .vm-dmt-filter-search-group #accountOpeningConsumerNo:focus {
+        border-color: #2563eb;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-        .breadcrumb-arrows a:hover:before {
-            border-color: transparent #dca167;
-            transparent transparent;
-        }
-
-    .breadcrumb-arrows {
-        background: var(--main-bg-lcolor) !important;
-    }
-     
-</style>
-<style>
-   @* .datepicker-orient-bottom {
-        top: 173px !important;
+    body.saas-admin-ui .saas-account-opening-report-page .vm-dmt-filter-search-group .vm-dmt-field--search {
+        flex: 1 1 180px;
+        min-width: 140px;
+        max-width: 220px;
     }
 
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 147px !important;
-        }*@
-
-    .recharge-report-rtailer th {
-        border-bottom: 0px !important;
-    }
-
-    .table-responsive table tr, .table-responsive table, .table-responsive table tr td, .table-responsive table tr th {
-        border-color: #aaa4a4 !important;
-    }
-
-    .noexel-newclass img {
-        border-radius: 50% !important;
-    }
-
-    .datepicker.datepicker-dropdown.dropdown-menu.datepickerrecharge.datepicker-orient-left.datepicker-orient-bottom {
-        margin-top: -21px !important;
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:991px){
-
-        .rechargesecond {
-            width: 200px;
-        }
-        .col-md-3.rechargethrees {
-            width: 30%;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-        .rechargesecond {
-            width: 50%;
-        }
-        .col-md-3.rechargethrees {
-            width: 50%;
-            margin: 2px 0;
-        }
-        .col-md-2.rechargefive {
-            margin: 3px 0;
-        }
-
-    }
-
-    @@media screen and (max-width:766px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 151px !important;
-        }
-    }
-
-    @@media screen and (max-width:580px) {
-        .datepicker-orient-bottom.datepickerrecharge {
-            top: 194px !important;
-        }
-        .rechargesecond {
-            width: auto;
-        }
-        .col-md-2.rechargefiveclass {
-            width: 100% !important;
-            margin: 2px 0;
-        }
-        .col-md-3.rechargethrees {
-            width: 100%;
-        }
-        .col-md-2.rechargefirst {
-            width: auto !important;
-        }
-        .input-daterange {
-            display: table !important;
-            height: 35px;
-        }
-
-
-    }
-    .breadcrumb-arrows li {
-        display: inline-block;
-        line-height: 31px;
-        position: relative;
-        margin-right: 0px;
-    }
-    .breadcrumb-arrows {
-        margin-bottom: 0px !important;
+    body.saas-admin-ui .saas-account-opening-report-page #accountOpeningConsumerNo::-webkit-calendar-picker-indicator,
+    body.saas-admin-ui .saas-account-opening-report-page #accountOpeningConsumerNo::-webkit-list-button,
+    body.saas-admin-ui .saas-account-opening-report-page #accountOpeningConsumerNo::-webkit-inner-spin-button {
+        display: none !important;
     }
 </style>
 
-<section class="content content-margin-second content-fourdesign-page allpage-four-design-section"@* style="margin:90px 0px 0px 0px;"*@>
-    <div class="container-fluid retailer-page fundtranfer rechargefirstclass fundtranfer-responshive" style="height:100vh;">
-        <div class="page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass leftrightpadd-third positionrelavtive-third">
-        @using (Html.BeginForm("AccountOpeningReport", "Home", FormMethod.Post))
+
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-account-opening-report-page">
+
+
+
+    <div class="container-fluid vm-opr-page-shell">
+
+
+
+        @{
+
+            var accountOpeningFormAttrs = new Dictionary<string, object>
+
+            {
+
+                { "id", "accountOpeningReportForm" },
+
+                { "class", "vm-rpt-filters-panel__form" },
+
+                { "data-date-mode", dateMode },
+
+                { "data-frm-date", frmDate },
+
+                { "data-to-date", toDate }
+
+            };
+
+        }
+
+        @using (Html.BeginForm("AccountOpeningReport", "Home", FormMethod.Post, accountOpeningFormAttrs))
+
         {
-            <div class="" style=" display: flex; flex-direction: row; flex-wrap: wrap; align-content: stretch; justify-content: space-evenly;">
-                <div class="backtoaccountreport" style="">
-                    <div class="width_set" style="">
-                        <ul class="breadcrumb-arrows" style="background-color: var(--main-bg-lcolor) !important;">
-                            <li class="active"><a href="@Url.Action("Dashboard", "Home")" style="color:#000;">Dashboard</a></li>
-                            @*  <li><a href="@Url.Action("AccountOpeningReport", "Home")">Back&nbsp;To&nbsp;AccountOpeningReport</a></li>*@
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-2 rechargefirst" style="width:10%;">
-                    <div class="form-group" style=" border: 1px solid #ddd; ">
-                        <div class="" style="">
+
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line">
+
+
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+
+                        <li>Report's</li>
+
+                        <li>Account Opening Report</li>
+
+                    </ol>
+
+
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line">
+
+
+
+                        <div class="vm-opr-field vm-dmt-field">
+
                             @Html.DropDownList("status", new List<SelectListItem>
-                    {
-                    new SelectListItem{ Text="ALL Status",Value="",},
-                    new SelectListItem{Text="SUCCESS",Value="success"},
-                    new SelectListItem{Text="Pending",Value="pending"},
-                    new SelectListItem{Text="FAILED",Value="failed"}
-                    }, new { @class = "form-control", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
+
+                            {
+
+                                new SelectListItem { Text = "ALL Status", Value = "" },
+
+                                new SelectListItem { Text = "SUCCESS", Value = "success" },
+
+                                new SelectListItem { Text = "Pending", Value = "pending" },
+
+                                new SelectListItem { Text = "FAILED", Value = "failed" }
+
+                            }, new { @id = "status", @class = "vm-opr-select vm-dmt-select form-control" })
 
                         </div>
-                    </div>
 
-                </div>
 
-                <div class="col-md-3 rechargesecond">
-                    <div class="form-group" style=" border: 1px solid #ddd;">
-                        <div class="" style="">
-                            @Html.DropDownList("Retailers", ViewBag.Retailers as SelectList, "All Retailers", new { id = "Retailers", @class = "form-control" })
+
+                        <div class="vm-opr-field vm-dmt-field">
+
+                            @Html.DropDownList("Retailers", ViewBag.Retailers as SelectList, "All Retailers", new { id = "Retailers", @class = "vm-opr-select vm-dmt-select form-control" })
+
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-2 rechargefiveclass" style=" width: 14%;">
-                    <div class="form-group" style=" border: 1px solid #ddd;">
-                        <div class="" style=" ">
-                            @Html.TextBox("search", "", new { @class = "form-control", @placeholder = "Consumer Number", @style = "height:30px;" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 rechargethrees">
-                    <div class="form-group" style=" ">
-                        <div class="input-daterange input-group" style="display: flex; align-items: center">
-                            <div class="datesate datesates focused">
-                                <div class="form-iconmy" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg"></i>  </div>
-                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border: 1px solid #ddd; height: 32px;position: absolute;width: 50%;top: 0px;height: 34px !important; ", autocomplete = "off" })
+
+
+                        <div class="vm-dmt-filter-search-group">
+
+                            <div class="vm-opr-field vm-dmt-field vm-dmt-field--search">
+                                <input type="text"
+                                       name="search"
+                                       id="accountOpeningConsumerNo"
+                                       class="vm-account-opening-consumer-input"
+                                       placeholder="Consumer Number"
+                                       title="Consumer Number"
+                                       autocomplete="off"
+                                       style="background-image:none !important; cursor:text !important; padding-right:12px !important;"
+                                       value="@(Request["search"] ?? "")" />
                             </div>
-                            <span class="input-group-addon" style="display:none;">
-                                <i class="fa fa-exchange" style="padding-top:8px;"></i>
-                            </span>
-                            <div class="datesate datesatese">
-                                <div class="form-iconmy form-iconmyss" id="iconmyssee" style="top: 0px;left: 1px;padding: 6px 5px;"><i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" id="calender_icons_1"></i></div>
-                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "    margin-left: 5px; border: 1px solid #ddd; height: 32px;position: absolute;width: 50%;top: 0px; left:50%;height: 34px !important;", autocomplete = "off" })
-                            </div>
-                        </div>
-                        <!-- /.input group -->
-                    </div>
-                </div>
-                <div class="col-md-2 rechargefive">
-                    <div class="form-group" style="float:right !important;">
-                        <div class="form-line" style="border-bottom:none;margin-top:0px;">
-                            <center>
-                                <button value="LIVE" type="submit" class="btn" id="btntype" name="btntype" style="width:auto;">
-                                    <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                    <span style="top:-1px;color:black;">Search</span>
-                                </button>
 
-                            </center>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+
+                            </div>
+
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+
+                            </div>
+
+                            <button type="submit" name="btntype" value="LIVE" id="btntype" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+
+                            </button>
+
                         </div>
+
+
+
                     </div>
+
+
+
                 </div>
+
+
+
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="accountOpeningTotalsPanel" style="display:none;" aria-hidden="true">
+
+                    <div class="vm-dmt-totals-head">
+
+                        <div class="vm-dmt-totals-head__title">
+
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                            <span>Account opening totals</span>
+
+                        </div>
+
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideAccountOpeningTotals()" title="Hide totals" aria-label="Hide totals">
+
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+
+                        </button>
+
+                    </div>
+
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+
+                            <span class="vm-opr-total-card__label">Total Records</span>
+
+                            <strong class="vm-opr-total-card__value">@rowCount</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+
+                            <span class="vm-opr-total-card__label">Success</span>
+
+                            <strong class="vm-opr-total-card__value">@totalSuccess</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+
+                            <span class="vm-opr-total-card__label">Failed</span>
+
+                            <strong class="vm-opr-total-card__value">@totalFailed</strong>
+
+                        </div>
+
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+
+                            <span class="vm-opr-total-card__label">Pending</span>
+
+                            <strong class="vm-opr-total-card__value">@totalPending</strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
             </div>
+
         }
+
+
+
+        <div class="vm-opr-main-card vm-account-opening-main-card">
+
+            <div class="vm-opr-table-panel vm-account-opening-table-panel">
+
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+
+                    <div class="vm-opr-table-panel__title">
+
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>
+
+                        <span>Account opening report</span>
+
+                    </div>
+
+                    <div class="vm-dmt-table-panel__right">
+
+                        <span class="vm-radiant-record-badge" title="Total records">
+
+                            Records: <strong>@rowCount</strong>
+
+                        </span>
+
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-account-opening-totals-btn" onclick="toggleAccountOpeningTotals()" title="Show totals" aria-expanded="false" aria-controls="accountOpeningTotalsPanel">
+
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+
+                            </button>
+
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+
+                            </button>
+
+                            <button type="button" id="btnPDF" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="vm-opr-table-wrap">
+
+                    <div class="table-responsive vm-opr-table-scroll" id="accountOpeningReportExportWrap">
+
+                        <table id="accountOpeningReportTable" class="table vm-opr-data-table" cellspacing="0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Status</th>
+
+                                    <th>Retailer&nbsp;Firm</th>
+
+                                    <th>Name</th>
+
+                                    <th>Email</th>
+
+                                    <th>Mobile</th>
+
+                                    <th>DOB</th>
+
+                                    <th>Pincode</th>
+
+                                    <th>Time</th>
+
+                                    <th>Settlement&nbsp;Date</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @if (rowCount == 0)
+
+                                {
+
+                                    <tr class="vm-opr-table-empty-row">
+
+                                        <td colspan="9" class="vm-opr-table-empty vm-dmt-table-empty">
+
+                                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+
+                                            <span>No account opening records found.</span>
+
+                                        </td>
+
+                                    </tr>
+
+                                }
+
+                                else
+
+                                {
+
+                                    foreach (var item in reports)
+
+                                    {
+
+                                        var dobText = item.dob.HasValue ? item.dob.Value.ToString("yyyy-MM-dd") : "—";
+
+                                        var timeText = item.req_time.HasValue ? item.req_time.Value.ToString("yyyy-MM-dd HH:mm:ss") : "—";
+
+                                        var settlementText = item.settlement_date.HasValue ? item.settlement_date.Value.ToString("yyyy-MM-dd") : "—";
+
+
+
+                                        <tr class="vm-auto-fund-row">
+
+                                            <td>
+
+                                                @Html.Partial("_ReportStatusBadge", item.status)
+
+                                            </td>
+
+                                            <td>
+
+                                                <div class="vm-auto-fund-firm">
+
+                                                    <strong>@item.firmname</strong>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>@item.fname&nbsp;@item.lname</td>
+
+                                            <td>@item.email</td>
+
+                                            <td>@item.mobile</td>
+
+                                            <td>@dobText</td>
+
+                                            <td>@item.pincode</td>
+
+                                            <td>@timeText</td>
+
+                                            <td>@settlementText</td>
+
+                                        </tr>
+
+                                    }
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
             </div>
-        
-        <div class=" page-header-third" style="overflow-x: scroll;">
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>Retailer Firm</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>DOB</th>
-                        <th>Pincode</th>
-                        <th>Time</th>
-                        <th>Settlement Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        var type = item.status;
-                        var img = ""; var color = ""; var style = "";
-                        if (item.status.ToUpper() == "Success")
-                        {
-                            type = "Verify";
-                            style = "height:20px;width:20px;margin-right:3px;float:left;";
 
-                        }
-                        if (item.status.ToUpper() == "SUCCESS")
-                        {
-                            img = "../../ashok-images/correct.svg";
-                            color = "green";
-                            style = "height:20px;width:20px;margin-right:3px;float:left;";
-                        }
-                        else if (item.status.ToUpper() == "PENDING")
-                        {
-                            img = "../../ashok-images/clock.svg";
-                            style = "height: 20px;width: 20px;margin-right:3px;float:left;max-width: 100%;padding: 0;";
-                            //color = "#ff9e00";
-
-                        }
-                        else if (item.status.ToUpper() == "FAILED")
-                        {
-                            img = "../../ashok-images/closes.svg";
-                            color = "red";
-                            style = "height:20px;width:20px;margin-right:3px;float:left;";
-                        }
-                        else
-                        {
-                            img = "../../ashok-images/closes.svg";
-                            color = "red";
-                            style = "height:20px;width:20px;margin-right:3px;float:left;";
-                        }
-
-
-                        <tr>
-                            <td style="width: 100px;">
-                                <img style="@style background-color:@color;" src=@img />
-                                @Html.DisplayFor(modelItem => item.status)
-                            </td>
-                            <td>@Html.DisplayFor(modelItem => item.firmname)</td>
-                            <td>@Html.DisplayFor(modelItem => item.fname)&nbsp;@Html.DisplayFor(modelItem => item.lname)</td>
-                            <td>@Html.DisplayFor(modelItem => item.email)</td>
-                            <td>@Html.DisplayFor(modelItem => item.mobile)</td>
-
-                            <td>@Convert.ToDateTime(item.dob).ToString("yyyy-MM-dd")</td>
-                            <td>@Html.DisplayFor(modelItem => item.pincode)</td>
-                            <td>@Convert.ToDateTime(item.req_time).ToString("yyyy-MM-dd HH:mm:ss")</td>
-                            <td>@Html.DisplayFor(modelItem => item.settlement_date)</td>
-                        </tr>
-                    }
-                </tbody>
-
-
-            </table>
         </div>
+
+
+
     </div>
+
 </section>
 
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+
+
+<script>
+
+    function hideAccountOpeningTotals() {
+
+        var $panel = $('#accountOpeningTotalsPanel');
+
+        var $btn = $('.vm-account-opening-totals-btn');
+
+        $panel.hide().attr('aria-hidden', 'true');
+
+        $btn.attr('aria-expanded', 'false');
+
+    }
+
+
+
+    function toggleAccountOpeningTotals() {
+
+        var $panel = $('#accountOpeningTotalsPanel');
+
+        var $btn = $('.vm-account-opening-totals-btn');
+
+        if ($panel.is(':visible')) {
+
+            hideAccountOpeningTotals();
+
+            return;
+
+        }
+
+        $panel.show().attr('aria-hidden', 'false');
+
+        $btn.attr('aria-expanded', 'true');
+
+    }
+
+
+
+    function exportAccountOpeningTable(type) {
+
+        var table = document.getElementById('accountOpeningReportTable');
+
+        if (!table) {
+
+            return;
+
+        }
+
+
+
+        var stamp = new Date().toISOString().slice(0, 10);
+
+        var title = 'Account Opening Report';
+
+        var clone = table.cloneNode(true);
+
+        var emptyRow = clone.querySelector('.vm-opr-table-empty-row');
+
+        if (emptyRow) {
+
+            alert('No data available to export.');
+
+            return;
+
+        }
+
+
+
+        if (type === 'excel') {
+
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+
+            var link = document.createElement('a');
+
+            link.href = URL.createObjectURL(blob);
+
+            link.download = 'AccountOpeningReport_' + stamp + '.xls';
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+            return;
+
+        }
+
+
+
+        var printWin = window.open('', '_blank');
+
+        if (!printWin) {
+
+            alert('Please allow pop-ups to export PDF.');
+
+            return;
+
+        }
+
+        printWin.document.write(
+
+            '<html><head><title>' + title + '</title>'
+
+            + '<style>body{font-family:Arial,sans-serif;padding:16px}h3{margin:0 0 12px}table{border-collapse:collapse;width:100%;font-size:10px}th,td{border:1px solid #ccc;padding:4px;text-align:left}th{background:#f3f4f6}</style>'
+
+            + '</head><body><h3>' + title + '</h3>' + clone.outerHTML + '</body></html>'
+
+        );
+
+        printWin.document.close();
+
+        printWin.focus();
+
+        printWin.print();
+
+    }
+
+
+
+    function initAccountOpeningSelect2() {
+
+        if (!$.fn.select2) {
+
+            return;
+
+        }
+
+        $('#status, #Retailers').select2({
+
+            width: '100%',
+
+            minimumResultsForSearch: 8
+
         });
 
-        var check = '@ViewBag.chk';
-        if (!check) {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+    }
+
+
+
+    function initAccountOpeningDatepickers() {
+
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+
+            window.setTimeout(initAccountOpeningDatepickers, 50);
+
+            return;
+
         }
+
+        if (typeof window.initAdminReportDateForm === 'function') {
+
+            window.initAdminReportDateForm('#accountOpeningReportForm');
+
+        }
+
+    }
+
+
+
+    $(document).ready(function () {
+
+        initAccountOpeningSelect2();
+
+        initAccountOpeningDatepickers();
+
+        $('#accountOpeningReportForm .select2-container').css('width', '100%');
+
+
+
+        $('#btnExport').on('click', function () {
+
+            exportAccountOpeningTable('excel');
+
+        });
+
+        $('#btnPDF').on('click', function () {
+
+            exportAccountOpeningTable('pdf');
+
+        });
 
     });
 
 </script>
+

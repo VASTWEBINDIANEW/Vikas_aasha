@@ -62,8 +62,21 @@
         $input.closest(".saas-acc-dp-field").toggleClass("is-active", !!on);
     }
 
+    function unbindPicker($input) {
+        if (!$input.length || !$input.data("datepicker")) {
+            return;
+        }
+        $input.off("show hide changeDate click");
+        $input.siblings(".saas-acc-dp-icon").off("click");
+        $input.datepicker("destroy");
+    }
+
     function bindPicker($input) {
-        if (!$input.length || $input.data("datepicker")) {
+        if (!$input.length) {
+            return;
+        }
+
+        if ($input.data("datepicker")) {
             return;
         }
 
@@ -92,7 +105,41 @@
         });
     }
 
-    function initReportDateForm(formSelector) {
+    function resolveFormDateSelectors($form, fromSelector, toSelector) {
+        var fromSel = fromSelector || $form.attr("data-report-from") || "#txt_frm_date";
+        var toSel = toSelector || $form.attr("data-report-to") || "#txt_to_date";
+        return { fromSel: fromSel, toSel: toSel };
+    }
+
+    function bindDelegatedReportDateClicks() {
+        if (!window.jQuery) {
+            return;
+        }
+        var $ = window.jQuery;
+        $(document)
+            .off("click.adminReportDate", "[data-report-date-form] .saas-acc-dp-icon, [data-report-date-form] .saas-acc-dp-input")
+            .on("click.adminReportDate", "[data-report-date-form] .saas-acc-dp-icon, [data-report-date-form] .saas-acc-dp-input", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!$.fn.datepicker) {
+                    return;
+                }
+                var $input = $(this).is("input") ? $(this) : $(this).closest(".saas-acc-dp-field").find(".saas-acc-dp-input").first();
+                if (!$input.length) {
+                    return;
+                }
+                var $form = $input.closest("[data-report-date-form]");
+                if ($form.length && !$input.data("datepicker")) {
+                    var selectors = resolveFormDateSelectors($form);
+                    initReportDateForm("#" + $form.attr("id"), selectors.fromSel, selectors.toSel);
+                }
+                if ($input.data("datepicker")) {
+                    $input.datepicker("show");
+                }
+            });
+    }
+
+    function initReportDateForm(formSelector, fromSelector, toSelector, forceRebind) {
         var form = document.querySelector(formSelector);
         if (!form || !window.jQuery || !jQuery.fn.datepicker) {
             return !form;
@@ -100,11 +147,22 @@
 
         var $ = window.jQuery;
         var $form = $(form);
-        var $frm = $form.find("#txt_frm_date");
-        var $to = $form.find("#txt_to_date");
+        var selectors = resolveFormDateSelectors($form, fromSelector, toSelector);
+        var $frm = $form.find(selectors.fromSel);
+        var $to = $form.find(selectors.toSel);
+
+        if (!$frm.length || !$to.length) {
+            $frm = $(selectors.fromSel);
+            $to = $(selectors.toSel);
+        }
 
         if (!$frm.length || !$to.length) {
             return true;
+        }
+
+        if (forceRebind) {
+            unbindPicker($frm);
+            unbindPicker($to);
         }
 
         bindPicker($frm);
@@ -155,6 +213,7 @@
             return;
         }
         applyGlobalDatepickerDefaults();
+        bindDelegatedReportDateClicks();
         window.jQuery(document).on("show", "input, .form-control", function () {
             if (window.jQuery(this).data("datepicker")) {
                 repositionDatepickerForMobile();
@@ -181,6 +240,25 @@
         initReportDateForm("#whatsappPurchaseForm");
         initReportDateForm("#giftcardReportForm");
         initReportDateForm("#prepaidCardReportForm");
+        initReportDateForm("#upiChargesForm");
+        initReportDateForm("#payUGatewayForm", "#txt_frm_date1", "#txt_to_date1", true);
+    }
+
+    function schedulePayUGatewayDateInit() {
+        var attempts = 0;
+        function run() {
+            attempts += 1;
+            if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.datepicker) {
+                if (attempts < 80) {
+                    window.setTimeout(run, 50);
+                }
+                return;
+            }
+            if (typeof window.initAdminReportDateForm === "function") {
+                window.initAdminReportDateForm("#payUGatewayForm", "#txt_frm_date1", "#txt_to_date1", true);
+            }
+        }
+        run();
     }
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.datepicker) {
@@ -194,5 +272,6 @@
     }
 
     window.initAdminReportDateForm = initReportDateForm;
+    window.schedulePayUGatewayDateInit = schedulePayUGatewayDateInit;
     window.repositionAdminDatepickerForMobile = repositionDatepickerForMobile;
 })(window, document);

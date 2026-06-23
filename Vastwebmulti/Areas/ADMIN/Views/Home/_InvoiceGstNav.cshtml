@@ -4,8 +4,8 @@
     {
         var path = (Request.Path ?? "").ToLowerInvariant();
         if (path.Contains("dealerpurchasegst")) { activeKey = "distributor"; }
-        else if (path.Contains("masterpurchasegst")) { activeKey = "master"; }
-        else if (path.Contains("apisellgst")) { activeKey = "api"; }
+        else if (path.Contains("masterpurchasegst") || path.Contains("masteruploadgst")) { activeKey = "master"; }
+        else if (path.Contains("apipurchasegstrecharge") || path.Contains("apipurchasegst") || path.Contains("apiuploadgstrecharge") || path.Contains("apiuploadgst") || path.Contains("apisellgst")) { activeKey = "api"; }
         else { activeKey = "retailer"; }
     }
 }

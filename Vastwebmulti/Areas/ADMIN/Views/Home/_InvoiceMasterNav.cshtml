@@ -1,0 +1,52 @@
+@{
+
+    var activeKey = (ViewBag.InvoiceMasterNavActive as string ?? "").Trim().ToLowerInvariant();
+
+    if (string.IsNullOrEmpty(activeKey))
+
+    {
+
+        var path = (Request.Path ?? "").ToLowerInvariant();
+
+        if (path.Contains("masteruploadgst")) { activeKey = "upload"; }
+
+        else { activeKey = "purchase"; }
+
+    }
+
+}
+
+
+
+<nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="invoice-master-nav" aria-label="Master GST invoice">
+
+    <ul class="vm-fin-nav__list" id="invoice-master-nav-list">
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "purchase" ? " is-active" : "")" href="@Url.Action("MasterPurchasegst", "Home")" title="Master Purchase GST">
+
+                <i class="fas fa-shopping-cart vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Master Purchase Gst</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "upload" ? " is-active" : "")" href="@Url.Action("Masteruploadgst", "Home")" title="Master Upload GST">
+
+                <i class="fas fa-upload vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Master Upload Gst</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</nav>
+

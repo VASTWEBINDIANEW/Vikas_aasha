@@ -6,7 +6,7 @@
 
     function initFinNavActive() {
         var current = (window.location.pathname || '').toLowerCase();
-        $('#fin-report-nav .vm-fin-nav__link, #fin-report-nav li a, #auto-fund-nav .vm-fin-nav__link, #auto-fund-nav li a, #invoice-gst-nav .vm-fin-nav__link, #invoice-retailer-nav .vm-fin-nav__link').each(function () {
+        $('#fin-report-nav .vm-fin-nav__link, #fin-report-nav li a, #auto-fund-nav .vm-fin-nav__link, #auto-fund-nav li a, #invoice-gst-nav .vm-fin-nav__link, #invoice-retailer-nav .vm-fin-nav__link, #invoice-dealer-nav .vm-fin-nav__link, #invoice-master-nav .vm-fin-nav__link, #invoice-api-nav .vm-fin-nav__link').each(function () {
             var $link = $(this);
             var href = ($link.attr('href') || '').toLowerCase();
             if (!href) {

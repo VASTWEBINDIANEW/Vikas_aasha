@@ -1,0 +1,26 @@
+@{
+    var activeKey = (ViewBag.InvoiceDealerNavActive as string ?? "").Trim().ToLowerInvariant();
+    if (string.IsNullOrEmpty(activeKey))
+    {
+        var path = (Request.Path ?? "").ToLowerInvariant();
+        if (path.Contains("dealeruploadgst")) { activeKey = "upload"; }
+        else { activeKey = "purchase"; }
+    }
+}
+
+<nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="invoice-dealer-nav" aria-label="Distributor GST invoice">
+    <ul class="vm-fin-nav__list" id="invoice-dealer-nav-list">
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "purchase" ? " is-active" : "")" href="@Url.Action("DealerPurchasegst", "Home")" title="Distributor Purchase GST">
+                <i class="fas fa-shopping-cart vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Distributor Purchase Gst</span>
+            </a>
+        </li>
+        <li>
+            <a class="vm-fin-nav__link@(activeKey == "upload" ? " is-active" : "")" href="@Url.Action("Dealeruploadgst", "Home")" title="Distributor Upload GST">
+                <i class="fas fa-upload vm-fin-nav__ico" aria-hidden="true"></i>
+                <span>Distributor Upload Gst</span>
+            </a>
+        </li>
+    </ul>
+</nav>

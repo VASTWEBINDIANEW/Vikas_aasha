@@ -1,0 +1,94 @@
+@{
+
+    var activeKey = (ViewBag.InvoiceApiNavActive as string ?? "").Trim().ToLowerInvariant();
+
+    if (string.IsNullOrEmpty(activeKey))
+
+    {
+
+        var path = (Request.Path ?? "").ToLowerInvariant();
+
+        if (path.Contains("apipurchasegstrecharge")) { activeKey = "prepaid-purchase"; }
+
+        else if (path.Contains("apipurchasegst")) { activeKey = "purchase"; }
+
+        else if (path.Contains("apiuploadgstrecharge")) { activeKey = "prepaid-upload"; }
+
+        else if (path.Contains("apiuploadgst")) { activeKey = "upload"; }
+
+        else { activeKey = "sell"; }
+
+    }
+
+}
+
+
+
+<nav class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line" id="invoice-api-nav" aria-label="API GST invoice">
+
+    <ul class="vm-fin-nav__list" id="invoice-api-nav-list">
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "sell" ? " is-active" : "")" href="@Url.Action("Apisellgst", "Home")" title="API Sell GST">
+
+                <i class="fas fa-file-invoice vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Sell Gst</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "purchase" ? " is-active" : "")" href="@Url.Action("ApiPurchasegst", "Home")" title="API Purchase GST">
+
+                <i class="fas fa-shopping-cart vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Purchase Gst</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "prepaid-purchase" ? " is-active" : "")" href="@Url.Action("ApiPurchasegstRecharge", "Home")" title="API Prepaid Purchase GST">
+
+                <i class="fas fa-mobile-alt vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Prepaid Purchase Gst</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "upload" ? " is-active" : "")" href="@Url.Action("Apiuploadgst", "Home")" title="API Upload GST">
+
+                <i class="fas fa-upload vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Upload Gst</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="vm-fin-nav__link@(activeKey == "prepaid-upload" ? " is-active" : "")" href="@Url.Action("ApiuploadgstRecharge", "Home")" title="API Recharge Upload GST">
+
+                <i class="fas fa-cloud-upload-alt vm-fin-nav__ico" aria-hidden="true"></i>
+
+                <span>Recharge Upload Gst</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</nav>
+

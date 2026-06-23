@@ -1,15 +1,22 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.upiChargeAndgateway
-
-@{ 
-    decimal? TOTALAMOUNT = 0M;
-    decimal? TOTALNET = 0M;
-    decimal? TOTALPAY = 0M;
-    int i = 0;
+@using System.Linq
+@using System.Collections.Generic
+@{
+    var reports = Model.GATEWAYREPORT?.ToList() ?? new List<Vastwebmulti.Models.gateway_report_Result>();
+    var rowCount = reports.Count;
+    decimal? totalAmount = 0M;
+    decimal? totalNet = 0M;
+    decimal? totalPay = 0M;
+    foreach (var item in reports)
+    {
+        totalAmount += item.amount ?? 0M;
+        totalNet += item.finalpay ?? 0M;
+        totalPay += item.totalpay ?? 0M;
+    }
 }
-  
 
-<table class="table table-bordered table-striped table-hover third-design-table table-white-third">
-    <thead style="background-color:whitesmoke;">
+<table id="payUGatewayTable" class="table vm-opr-data-table" cellspacing="0">
+    <thead>
         <tr>
             <th>S.No</th>
             <th>Role</th>
@@ -30,108 +37,110 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.GATEWAYREPORT)
+        @if (rowCount == 0)
         {
-            i++;
-            TOTALAMOUNT = item.amount + TOTALAMOUNT;
-            TOTALNET = item.finalpay + TOTALNET;
-            TOTALPAY = item.totalpay + TOTALPAY;
-            var sts = item.status;
-            var code = "";
-            var bankrrn = item.errormsg;
-            var color = "";
-            var width = "20px";
-            var height = "20px";
-            if (sts == "Success")
-            {
-                code = "../../ashok-images/correct.svg";
-                bankrrn = item.bankrrnno;
-                color = "green";
-            }
-            else if (sts == "Failed")
-            {
-                code = "../../ashok-images/closes.svg";
-                color = "red";
-            }
-            else
-            {
-                code = "../../ashok-images/clkk.png";
-                width = "20px;";
-                height = "20px";
-                color = "#ffc107";
-            }
-            <tr>
-                <td>@i</td>
-                <td>@item.roles</td>
-                <td>@item.Frm_Name</td>
-                <td><img src="@code" style="width:@width;margin-right:3px;float:left; background-color:@color;border-radius: 50%;padding: 3px;">&nbsp;@item.mode</td>
-                <td>@item.PG_TYPE</td>
-                <td>@item.remainpre</td>
-                <td>@item.amount</td>
-                <td>@item.charge</td>
-                <td>@item.finalpay</td>
-                <td>@item.totalpay</td>
-                <td>@item.remainpost</td>
-                <td>@bankrrn</td>
-                <td>@item.payuMoneyId</td>
-                <td>@item.f_date</td>
-                <td>
-                    @if (item.issettled == true)
-                    {
-                        <span style="color: green">Settled</span>
-                    }
-                    else
-                    {
-                        <span style="color: red">Not Settled</span>
-                    }
-                </td>
-                <td>
-                    @if (item.status.ToUpper() == "PENDING")
-                    {
-                        <button onclick="Statuschk('@item.txnid')" class="done-third" style="border: 1px solid var(--main-bg-rcolor); padding: 4px 5px; background: var(--main-bg-lcolor); color: #fff !important;">Status Check</button>
-                    }
-                    else
-                    {
-                        @item.resptime
-                    }
+            <tr class="vm-opr-table-empty-row">
+                <td colspan="16" class="vm-opr-table-empty vm-dmt-table-empty">
+                    <i class="fas fa-credit-card" aria-hidden="true"></i>
+                    <span>No payment gateway records found.</span>
                 </td>
             </tr>
         }
+        else
+        {
+            var srIndex = 0;
+            foreach (var item in reports)
+            {
+                srIndex++;
+                var frmname = string.IsNullOrWhiteSpace(item.Frm_Name) ? item.RetailerName : item.Frm_Name;
+                var txnTime = item.f_date.HasValue ? item.f_date.Value.ToString("yyyy-MM-dd HH:mm:ss") : "—";
+                var respTime = item.resptime.HasValue ? item.resptime.Value.ToString("yyyy-MM-dd HH:mm:ss") : "—";
+                var isPending = string.Equals(item.status, "Pending", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(item.status, "PENDING", StringComparison.OrdinalIgnoreCase);
+                var statusBadge = item.status ?? "";
+                if (string.Equals(statusBadge, "Rejected", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(statusBadge, "REJECTED", StringComparison.OrdinalIgnoreCase))
+                {
+                    statusBadge = "Failed";
+                }
 
-        <tr>
-            <td colspan="6">TOTAL</td>
-            <td>@TOTALAMOUNT</td>
-            <td></td>
-            <td>@TOTALNET</td>
-            <td>@TOTALPAY</td>
-            <td colspan="6"></td>
+                var bankRrn = item.bankrrnno;
+                if (!string.Equals(statusBadge, "Success", StringComparison.OrdinalIgnoreCase)
+                    && !string.Equals(statusBadge, "SUCCESS", StringComparison.OrdinalIgnoreCase))
+                {
+                    bankRrn = string.IsNullOrWhiteSpace(item.errormsg) ? item.bankrrnno : item.errormsg;
+                }
 
-        </tr>
+                var rowClass = "vm-pay-gateway-report-row";
+                if (string.Equals(statusBadge, "Success", StringComparison.OrdinalIgnoreCase) || string.Equals(statusBadge, "SUCCESS", StringComparison.OrdinalIgnoreCase))
+                {
+                    rowClass += " vm-pay-gateway-report-row--success";
+                }
+                else if (isPending)
+                {
+                    rowClass += " vm-pay-gateway-report-row--pending";
+                }
+                else if (string.Equals(statusBadge, "Failed", StringComparison.OrdinalIgnoreCase) || string.Equals(statusBadge, "FAILED", StringComparison.OrdinalIgnoreCase))
+                {
+                    rowClass += " vm-pay-gateway-report-row--failed";
+                }
+
+                <tr class="@rowClass">
+                    <td class="vm-dmt-sr-cell">@srIndex</td>
+                    <td>@item.roles</td>
+                    <td class="vm-pg-user-cell-wrap">
+                        <div class="vm-pg-user-cell">
+                            <strong>@frmname</strong>
+                        </div>
+                    </td>
+                    <td class="vm-pg-mode-cell-wrap">
+                        @Html.Partial("_ReportStatusBadge", statusBadge)
+                        <span class="vm-pg-mode-name">@item.mode</span>
+                    </td>
+                    <td>@item.PG_TYPE</td>
+                    <td class="vm-pg-num-cell">@item.remainpre</td>
+                    <td class="vm-pg-num-cell">@item.amount</td>
+                    <td class="vm-pg-num-cell">@item.charge</td>
+                    <td class="vm-pg-num-cell">@item.finalpay</td>
+                    <td class="vm-pg-num-cell">@item.totalpay</td>
+                    <td class="vm-pg-num-cell">@item.remainpost</td>
+                    <td>@bankRrn</td>
+                    <td>@item.payuMoneyId</td>
+                    <td>@txnTime</td>
+                    <td class="vm-pg-settlement-cell">
+                        @if (item.issettled == true)
+                        {
+                            <span class="vm-pg-settled-text">Settled</span>
+                        }
+                        else
+                        {
+                            <span class="vm-pg-unsettled-text">Not Settled</span>
+                        }
+                    </td>
+                    <td class="vm-pg-action-cell">
+                        @if (isPending)
+                        {
+                            <button type="button" class="vm-pg-status-check-btn" onclick="Statuschk('@item.txnid')" title="Check payment status">
+                                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                                <span>Status Check</span>
+                            </button>
+                        }
+                        else
+                        {
+                            @respTime
+                        }
+                    </td>
+                </tr>
+            }
+
+            <tr class="vm-pg-totals-row">
+                <td colspan="6">TOTAL</td>
+                <td class="vm-pg-num-cell">@totalAmount</td>
+                <td></td>
+                <td class="vm-pg-num-cell">@totalNet</td>
+                <td class="vm-pg-num-cell">@totalPay</td>
+                <td colspan="6"></td>
+            </tr>
+        }
     </tbody>
 </table>
-
-
-<script>
-    function OnFailure(error) {
-        alert(error.responseText);
-    }
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-</script>

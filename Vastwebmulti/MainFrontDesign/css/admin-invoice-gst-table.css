@@ -1,0 +1,513 @@
+/* Invoice GST — table layout, column alignment, mobile horizontal scroll */
+
+body.saas-admin-ui .saas-invoice-gst-page #apiSellGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #retailerSellGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #retailerPurchaseGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #retailerPurchaseGstRechargeTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #apiPurchaseGstRechargeTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #apiPurchaseGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #masterPurchaseGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #dealerPurchaseGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #apiUploadGstRechargeTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #apiUploadGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #masterUploadGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #dealerUploadGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #uploadGstTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page #uploadGstRechargeTable.vm-invoice-gst-table,
+body.saas-admin-ui .saas-invoice-gst-page table.vm-invoice-gst-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Override operator-report checkbox column width */
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead th:first-child {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead th,
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table tbody td {
+    vertical-align: middle !important;
+    padding: 10px 14px !important;
+    text-align: left !important;
+    line-height: 1.35 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead th {
+    white-space: nowrap !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    color: #475569 !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table tbody td {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.8rem !important;
+    color: #334155 !important;
+}
+
+/* 3-column: Firm | Email | Download */
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(1),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(1) {
+    width: 32% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(2),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(2) {
+    width: 48% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(3),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(3) {
+    width: 20% !important;
+    text-align: center !important;
+}
+
+/* 4-column: Invoice No | Firm | Email | Download */
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(1),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(1) {
+    width: 18% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(2),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(2) {
+    width: 28% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(3),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(3) {
+    width: 38% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(4),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(4) {
+    width: 16% !important;
+    text-align: center !important;
+}
+
+/* 8-column upload GST: Email | Firm | Month | Year | Status | Reason | View | Action */
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(1),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(1) {
+    width: 18% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(2),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(2) {
+    width: 14% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(3),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(3) {
+    width: 9% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(4),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(4) {
+    width: 7% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(5),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(5) {
+    width: 10% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(6),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(6) {
+    width: 18% !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(7),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(7) {
+    width: 9% !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(8),
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(8) {
+    width: 15% !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-invoice-reason-cell {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-invoice-action-cell {
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: capitalize;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-status--pending {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-status--approved {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-status--rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 2px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-action-btn--approve {
+    color: #15803d;
+    border-color: #86efac;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-action-btn--approve:hover {
+    background: #dcfce7;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-action-btn--reject {
+    color: #b91c1c;
+    border-color: #fca5a5;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-action-btn--reject:hover {
+    background: #fee2e2;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal .modal-dialog {
+    margin: 1.5rem auto !important;
+    max-width: 96% !important;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal__dialog--sm {
+    max-width: 420px !important;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal__head {
+    background: linear-gradient(180deg, #f8fafc, #fff);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 18px;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal__head .modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal__body {
+    padding: 18px;
+}
+
+body.saas-admin-ui .vm-invoice-upload-modal__body iframe {
+    width: 100%;
+    min-height: 70vh;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+body.saas-admin-ui .vm-invoice-upload-detail {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+body.saas-admin-ui .vm-invoice-upload-detail__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.84rem;
+    color: #475569;
+}
+
+body.saas-admin-ui .vm-invoice-upload-detail__row strong {
+    color: #0f172a;
+    font-weight: 700;
+    text-align: right;
+}
+
+body.saas-admin-ui .vm-invoice-upload-detail__row--field {
+    flex-direction: column;
+    align-items: stretch;
+    border-bottom: none;
+    padding-top: 4px;
+}
+
+body.saas-admin-ui .vm-invoice-upload-detail__row--field label {
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .vm-invoice-upload-reason {
+    min-height: 38px;
+    border-radius: 10px !important;
+    border: 1px solid #dbe4f0 !important;
+}
+
+body.saas-admin-ui .vm-invoice-upload-submit {
+    width: 100%;
+    min-height: 40px;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-auto-fund-firm,
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-auto-fund-firm strong {
+    display: block !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-invoice-pdf-cell {
+    text-align: center !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table .vm-opr-table-empty-row td {
+    white-space: normal !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-scroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Tablet — horizontal scroll + fixed column widths */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-scroll {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+        padding-bottom: 8px;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-scroll::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 999px;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table {
+        width: max-content !important;
+        min-width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col {
+        min-width: 520px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(1),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(1) {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(2),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(2) {
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col thead th:nth-child(3),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--3col tbody td:nth-child(3) {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col {
+        min-width: 620px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(1),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(1) {
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(2),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(2) {
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(3),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(3) {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col thead th:nth-child(4),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--4col tbody td:nth-child(4) {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col {
+        min-width: 920px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(1),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(1) {
+        width: 180px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(2),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(2) {
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(3),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(3) {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(4),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(4) {
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(5),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(5) {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(6),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(6) {
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(7),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(7) {
+        width: 90px !important;
+        min-width: 90px !important;
+        max-width: 90px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col thead th:nth-child(8),
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table--8col tbody td:nth-child(8) {
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+}
+
+/* Mobile — same table in one row, swipe to scroll */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead {
+        position: static !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead th,
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table tbody td {
+        padding: 10px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table thead th {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.03em !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table tbody td {
+        font-size: 0.76rem !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-table tbody td::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    body.saas-admin-ui .saas-invoice-gst-page .vm-invoice-gst-scroll::after {
+        content: "Swipe table left / right";
+        display: block;
+        text-align: center;
+        font-size: 0.62rem;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 0.02em;
+        padding: 6px 0 2px;
+    }
+}
