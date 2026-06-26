@@ -1,0 +1,287 @@
+﻿@model Vastwebmulti.Areas.ADMIN.Models.RetailerDetalsModel
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.10.4/viewer.css" integrity="sha512-caKp8jXImkCfnEGA8RCJPQeW/+wtI9reknlKZMlKnIE8RHgxMBCppLsPvM429eoo0+PSZc9J/dQjVH3OH/K3Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.10.4/viewer.min.js" integrity="sha512-2HLzgJH7ZNywnEDB1HqijieFxszStt3QXS8Qk9m/VMUV/asMWlz9PmibHsvWIz9rtKOOr28z8zu1iJ3pf/TTHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<div class="vm-rl-table-scroll-host" id="vmRlTableScroll">
+<div class="retailer_list_container vm-ml-table-inner" id="_retailer_list">
+<div class="table-responsive vm-ml-table-scroll saas-acc-table-wrap" id="mmm">
+    <table class="table table-bordered saas-acc-table vm-ml-data-table third-design-table" id="mdList">
+        <thead>
+            <tr>
+                <th class="vm-rl-th vm-rl-th--sr">Sr</th>
+                <th class="vm-rl-th vm-rl-th--user">
+                    <div>User Info &amp; Login</div>
+                    <span class="vm-rl-th-sub">Create Date</span>
+                </th>
+                <th class="vm-rl-th vm-rl-th--mobile">Mobile</th>
+                <th class="vm-rl-th vm-rl-th--dist">Distributor</th>
+                <th class="vm-rl-th vm-rl-th--verify">
+                    <div>Verification</div>
+                    <span class="vm-rl-th-sub">Aadhar | PAN | Email</span>
+                </th>
+                <th class="vm-rl-th vm-rl-th--wallet">
+                    <div>Wallet</div>
+                    <span class="vm-rl-th-sub">Capping Amt</span>
+                </th>
+                <th class="vm-rl-th vm-rl-th--perm">
+                    <div>Permission</div>
+                    <span class="vm-rl-th-sub">Finance | Travel | Other</span>
+                </th>
+                <th class="vm-rl-th vm-rl-th--kyc">KYC</th>
+                <th class="vm-rl-th vm-rl-th--vkyc">Video KYC</th>
+            </tr>
+        </thead>
+        <tbody id="body">
+            @if (Model.select_retailer_details_paging != null)
+            {
+                int i = 0;
+                int id = 1;
+                foreach (var item in Model.select_retailer_details_paging)
+                {
+                    var idno = "subTbl";
+                    idno = idno + i;
+
+                    var idshow = "subTblshow";
+                    idshow = idshow + i;
+
+                    var idhide = "subTblhide";
+                    idhide = idhide + i;
+
+
+                    var colorchange = "";
+                    var borderleft = "";
+                    var imggg = "";
+                    if (item.aadharcardPath != null && item.BackSideAadharcardphoto != null)
+                    {
+                        if (item.AadhaarStatus == "N")
+                        {
+                            colorchange = "#dbdb70";
+
+                            borderleft = "7px solid var(--main-bg-lcolor)";
+                            imggg = "☻";
+
+                        }
+                    }
+                    if (item.pancardPath != null)
+                    {
+                        if (item.PSAStatus == "N")
+                        {
+                            colorchange = "#dbdb70";
+
+                            borderleft = "7px solid var(--main-bg-lcolor)";
+                            imggg = "☻";
+                        }
+
+                    }
+
+                    if (item.ShopwithSalfie != null)
+                    {
+                        if (item.ShopwithSalfieStatus == "N")
+                        {
+                            colorchange = "#dbdb70";
+
+                            borderleft = "7px solid var(--main-bg-lcolor)";
+                            imggg = "☻";
+                        }
+
+                    }
+                    if (item.videokycpath != null)
+                    {
+                        if (item.videokycstatus == "N")
+                        {
+                            colorchange = "#dbdb70";
+
+                            borderleft = "7px solid var(--main-bg-lcolor)";
+                            imggg = "☻";
+                        }
+
+                    }
+
+
+                    <tr class="tr vm-ml-parent-row @(!string.IsNullOrEmpty(colorchange) ? "vm-rl-row--pending" : "")" style="@(string.IsNullOrEmpty(colorchange) ? null : "background-color:" + colorchange)">
+                        <td class="vm-rl-sr">@id</td>
+                        <td class="vm-rl-user-cell">
+                            @Html.Partial("_RetailerlistUserCell", item)
+                        </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        @*<td style="border-left:@borderleft">@item.Address</td>*@
+                        <td class="vm-rl-mobile-cell">
+                            <div class="vm-rl-mobile-cell__inner">
+                                <div class="vm-rl-mobile-status">
+                                    @if (item.PhoneNumberConfirmed == true)
+                                    {
+                                        <span class="securtyoff-show vm-rl-status-dot vm-rl-status-dot--on"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="securtyoff-show vm-rl-status-dot vm-rl-status-dot--off"></span>
+                                    }
+                                </div>
+                                <div class="vm-rl-mobile-num">@item.Mobile</div>
+                            </div>
+                            @if (item.Demouser == true)
+                            {
+                                <div class="demouser22"><span class="vm-rl-demo-badge">DEMO USER</span></div>
+                            }
+                        </td>
+                        <td class="vm-rl-distributor-cell@(string.IsNullOrEmpty(borderleft) ? "" : " vm-rl-cell--flag")" style="@(string.IsNullOrEmpty(borderleft) ? null : "border-left:" + borderleft)">@item.DealerFarmName</td>
+                        <td class="vm-rl-verify-cell">
+                            <div class="vm-rl-verify-cell__inner">
+                            @if (item.aadhar_verification == true)
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done" title="Aadhar">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due" title="Aadhar">Unverify</span>
+                            }
+                            @if (item.pan_verification == true)
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done" title="PAN">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due" title="PAN">Unverify</span>
+                            }
+                            @if (item.EmailConfirmed == true)
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done" title="Email">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due" title="Email">Unverify</span>
+                            }
+                            </div>
+                        </td>
+                        <td class="vm-rl-wallet-cell">
+                            <div class="vm-rl-wallet-amt">@item.Remainamount</div>
+                            @if (item.caption > 0)
+                            {
+                                <span class="vm-rl-cap-badge">Cap: @item.caption</span>
+                            }
+                        </td>
+
+                        <td class="vm-rl-permission-cell">
+                            <div class="vm-rl-permission-cell__inner">
+                                @foreach (var itempermission in Model.Service_BlockUserwiseclslist)
+                                {
+                                    var customclsadd = "";
+                                    var textdata = "OFF";
+                                    if (item.RetailerId == itempermission.remid)
+                                    {
+                                        if (itempermission.idno == itempermission.serviceidno && itempermission.servicestatus == true)
+                                        {
+                                            customclsadd = "costom-on";
+                                            textdata = "ON";
+                                        }
+                                        else
+                                        {
+                                            customclsadd = "custom-off";
+                                            textdata = "OFF";
+                                        }
+                                        <button type="button" data-idno="@itempermission.basedupdate_id" class="vm-ml-toggle-btn vm-rl-perm-btn @customclsadd clscall" onclick="callstats(this)">
+                                            <i class="fas fa-coins" aria-hidden="true"></i>
+                                            <span>@textdata</span>
+                                        </button>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td class="kyc-button vm-rl-kyc-cell vm-ml-ev-cell" onclick="mdActionBtn('@item.RetailerId'); return false;">
+                            <div class="vm-rl-kyc-cell__inner vm-ml-ev-cell__inner">
+                            @if (item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.ShopwithSalfieStatus == "Y")
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done">Done</span>
+                            }
+                            else
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due">Due</span>
+                            }
+                            <i class="fas fa-chevron-right vm-ml-ev-arrow" aria-hidden="true"></i>
+                            </div>
+                        </td>
+
+                        <td class="vm-rl-video-kyc-cell">
+                            @if (item.videokycstatus == "Y")
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done">Done</span>
+                            }
+                            else
+                            {
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due">Due</span>
+                            }
+                        </td>
+
+
+
+
+
+
+
+                        @*<td>
+                                @if (item.videokycstatus == "Y")
+                                {
+                                    <span style="color: green; font-weight: bold;">Done</span>
+                                }
+                                else
+                                {
+                                    <button style="padding: 2px 6px; background-color: orange; color: white; border: none; border-radius: 4px;">
+                                        Start
+                                    </button>
+                                }
+                            </td>*@
+
+
+
+
+
+                        @* <td data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.RetailerId')">
+                                @if (item.EmailConfirmed == true)
+                                {
+                                    <button class="btn due-done-second done-third" style="border:1px solid #bbb;font-size: 11px;padding: 4px 7px;height: 25px;border: 1px solid #bbb;">Done</button>
+                                }
+                                else
+                                {
+                                    <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 8px;float:left; font-size: 11px;">&nbsp;Due&nbsp;</div>
+                                }
+                                <img class="email-popup-second" src="~/ashok-images/rightaeps.svg" style="width: 11px;margin-top: 6px;float: right;">
+                            </td>*@
+
+                    </tr>
+
+
+                    @*<tr id="@i" style="display:none;background-color: rgb(245, 245, 245);">
+                            <td colspan="8">
+                                <div id="@idno">
+
+                                </div>
+                            </td>
+                        </tr>*@
+
+                    i++;
+                    id++;
+
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+    <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
+        <img src="~/img/ajax-loader.gif" />
+    </div>
+</div>
+</div>

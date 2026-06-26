@@ -10,27 +10,23 @@
             <div class="slab-master-block">
                 <div class="slab-master-block-left">
                     <div id="allshow" class="row">
-                        <div class="col-md-12" style="padding-right:20px;">
-                            <div class="custom-district-img">
-                                <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
+                        <div class="col-md-12">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-users"></i></span>
+                                @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChange()" })
                             </div>
-                            @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChange()" })
                         </div>
                     </div>
                     <div id="retailerdrop" class="row" style="display:none;">
-                        <div class="col-md-6" style="padding-right:0px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
+                        <div class="col-md-6">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
                                 @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "for-select2 form-control", @onchange = "ddlretailerid()" })
                             </div>
                         </div>
-                        <div class="col-md-6" style="padding-left:5px;padding-right:20px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
+                        <div class="col-md-6">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-store"></i></span>
                                 @Html.DropDownList("ddlUserIdrem", Model.Retailerid, "All Retailer", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChangerem()" })
                             </div>
                         </div>
@@ -38,31 +34,27 @@
                 </div>
                 <div class="slab-master-block-right">
                     <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
-                        <p>  If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                        <p>If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
                     </div>
                     <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide" style="display: block;">
                         <div class="row clearfix">
-
                             <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon">
-                                    <img src="~/AdminDesign/images/user.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Name" value="@Model.Name">
-
+                                <div class="vm-pg-slab-field">
+                                    <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user"></i></span>
+                                    <input class="form-control" type="text" placeholder="User Name" value="@Model.Name" readonly="readonly" />
+                                </div>
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/number.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone">
-
+                                <div class="vm-pg-slab-field">
+                                    <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span>
+                                    <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone" readonly="readonly" />
+                                </div>
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/email.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email">
-
+                                <div class="vm-pg-slab-field">
+                                    <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                                    <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email" readonly="readonly" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -70,9 +62,9 @@
             </div>
         </div>
     </div>
-    <div class="slab-table">
-        <table class="table table-bordered third-design-table">
-            <thead class="navbar" style="position:initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap">
+        <table class="table table-bordered vm-pg-slab-table third-design-table slab-table">
+            <thead>
                 <tr>
                     <th rowspan="2">USER&nbsp;ID </th>
                     <th colspan="3" style="text-align:center;">Credit&nbsp;Card Charge/Limit</th>
@@ -132,7 +124,7 @@
                     <td style="border-left: 1px; border-color: #aaa4a4;">Max<sup>₹</sup></td>
                 </tr>
             </thead>
-            <tbody id="tbodyshow">
+            <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -481,7 +473,7 @@
                 }
                 <!--End API-->
             </tbody>
-            <tbody id="tbodyedit" style="display:none;">
+            <tbody id="tbodyedit" class="vm-pg-slab-tbody--edit vm-pg-slab-tbody--hidden">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -496,7 +488,7 @@
                 <tr>
                     @Html.HiddenFor(a => a.Materuser[i].idno)
                     <td>  @Html.EditorFor(a => a.Materuser[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.Materuser[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].creditcard)
 
@@ -518,7 +510,7 @@
                              new { Value = "T+1", Text = "T+1" },
                           }, "Value", "Text", Model.Materuser[i].creditsettlement))
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.Materuser[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].debitupto2000)
                         @Html.DropDownListFor(m => m.Materuser[i].DebitCardsts, new SelectList(new[]
@@ -535,7 +527,7 @@
                         @Html.EditorFor(a => a.Materuser[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].debitmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.Materuser[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].netbanking)
                         @Html.DropDownListFor(m => m.Materuser[i].netbankingsts, new SelectList(new[]
@@ -556,7 +548,7 @@
                         @Html.EditorFor(a => a.Materuser[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].netbankmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.Materuser[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].wallet)
                         @Html.DropDownListFor(m => m.Materuser[i].walletsts, new SelectList(new[]
@@ -569,7 +561,7 @@
                         @Html.EditorFor(a => a.Materuser[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].walletmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.Materuser[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.Materuser[i].UPI)
                         @Html.DropDownListFor(m => m.Materuser[i].upists, new SelectList(new[]
@@ -601,7 +593,7 @@
             <tr>
                 @Html.HiddenFor(a => a.Dealeruser[i].idno)
                 <td>  @Html.EditorFor(a => a.Dealeruser[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Dealeruser[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].creditcard)
 
@@ -623,7 +615,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.Dealeruser[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Dealeruser[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].debitupto2000)
                     @Html.DropDownListFor(m => m.Dealeruser[i].DebitCardsts, new SelectList(new[]
@@ -640,7 +632,7 @@
                     @Html.EditorFor(a => a.Dealeruser[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Dealeruser[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].netbanking)
                     @Html.DropDownListFor(m => m.Dealeruser[i].netbankingsts, new SelectList(new[]
@@ -661,7 +653,7 @@
                     @Html.EditorFor(a => a.Dealeruser[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Dealeruser[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].wallet)
                     @Html.DropDownListFor(m => m.Dealeruser[i].walletsts, new SelectList(new[]
@@ -674,7 +666,7 @@
                     @Html.EditorFor(a => a.Dealeruser[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Dealeruser[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Dealeruser[i].UPI)
                     @Html.DropDownListFor(m => m.Dealeruser[i].upists, new SelectList(new[]
@@ -709,7 +701,7 @@
             <tr>
                 @Html.HiddenFor(a => a.Retaileruser[i].idno)
                 <td>  @Html.EditorFor(a => a.Retaileruser[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Retaileruser[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].creditcard)
 
@@ -731,7 +723,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.Retaileruser[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Retaileruser[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].debitupto2000)
                     @Html.DropDownListFor(m => m.Retaileruser[i].DebitCardsts, new SelectList(new[]
@@ -748,7 +740,7 @@
                     @Html.EditorFor(a => a.Retaileruser[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Retaileruser[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].netbanking)
                     @Html.DropDownListFor(m => m.Retaileruser[i].netbankingsts, new SelectList(new[]
@@ -769,7 +761,7 @@
                     @Html.EditorFor(a => a.Retaileruser[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Retaileruser[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].wallet)
                     @Html.DropDownListFor(m => m.Retaileruser[i].walletsts, new SelectList(new[]
@@ -782,7 +774,7 @@
                     @Html.EditorFor(a => a.Retaileruser[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.Retaileruser[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.Retaileruser[i].UPI)
                     @Html.DropDownListFor(m => m.Retaileruser[i].upists, new SelectList(new[]
@@ -817,7 +809,7 @@
             <tr>
                 @Html.HiddenFor(a => a.APIuser[i].idno)
                 <td>  @Html.EditorFor(a => a.APIuser[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.APIuser[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].creditcard)
 
@@ -839,7 +831,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.APIuser[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.APIuser[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].debitupto2000)
                     @Html.DropDownListFor(m => m.APIuser[i].DebitCardsts, new SelectList(new[]
@@ -856,7 +848,7 @@
                     @Html.EditorFor(a => a.APIuser[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.APIuser[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].netbanking)
                     @Html.DropDownListFor(m => m.APIuser[i].netbankingsts, new SelectList(new[]
@@ -877,7 +869,7 @@
                     @Html.EditorFor(a => a.APIuser[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.APIuser[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].wallet)
                     @Html.DropDownListFor(m => m.APIuser[i].walletsts, new SelectList(new[]
@@ -890,7 +882,7 @@
                     @Html.EditorFor(a => a.APIuser[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.APIuser[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.APIuser[i].UPI)
                     @Html.DropDownListFor(m => m.APIuser[i].upists, new SelectList(new[]
@@ -908,7 +900,7 @@
                 }
                 <!--End API-->
             </tbody>
-            <tbody id="tbodyeditAll" style="display:none;">
+            <tbody id="tbodyeditAll" class="vm-pg-slab-tbody--edit vm-pg-slab-tbody--hidden">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -917,7 +909,7 @@
                 <tr>
                     @Html.HiddenFor(a => a.UpdateMaster[i].idno)
                     <td>  @Html.EditorFor(a => a.UpdateMaster[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.UpdateMaster[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].creditcard)
 
@@ -939,7 +931,7 @@
                              new { Value = "T+1", Text = "T+1" },
                           }, "Value", "Text", Model.UpdateMaster[i].creditsettlement))
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.UpdateMaster[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].debitupto2000)
                         @Html.DropDownListFor(m => m.UpdateMaster[i].DebitCardsts, new SelectList(new[]
@@ -956,7 +948,7 @@
                         @Html.EditorFor(a => a.UpdateMaster[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].debitmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.UpdateMaster[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].netbanking)
                         @Html.DropDownListFor(m => m.UpdateMaster[i].netbankingsts, new SelectList(new[]
@@ -977,7 +969,7 @@
                         @Html.EditorFor(a => a.UpdateMaster[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].netbankmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.UpdateMaster[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].wallet)
                         @Html.DropDownListFor(m => m.UpdateMaster[i].walletsts, new SelectList(new[]
@@ -990,7 +982,7 @@
                         @Html.EditorFor(a => a.UpdateMaster[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].walletmax)
                     </td>
-                    <td style="display:flex">
+                    <td class="vm-pg-slab-edit-cell">
                         @Html.EditorFor(a => a.UpdateMaster[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                         @Html.ValidationMessageFor(a => a.UpdateMaster[i].UPI)
                         @Html.DropDownListFor(m => m.UpdateMaster[i].upists, new SelectList(new[]
@@ -1015,7 +1007,7 @@
             <tr>
                 @Html.HiddenFor(a => a.UpdateDealer[i].idno)
                 <td>  @Html.EditorFor(a => a.UpdateDealer[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateDealer[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].creditcard)
 
@@ -1037,7 +1029,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.UpdateDealer[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateDealer[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].debitupto2000)
                     @Html.DropDownListFor(m => m.UpdateDealer[i].DebitCardsts, new SelectList(new[]
@@ -1054,7 +1046,7 @@
                     @Html.EditorFor(a => a.UpdateDealer[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateDealer[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].netbanking)
                     @Html.DropDownListFor(m => m.UpdateDealer[i].netbankingsts, new SelectList(new[]
@@ -1075,7 +1067,7 @@
                     @Html.EditorFor(a => a.UpdateDealer[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateDealer[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].wallet)
                     @Html.DropDownListFor(m => m.UpdateDealer[i].walletsts, new SelectList(new[]
@@ -1088,7 +1080,7 @@
                     @Html.EditorFor(a => a.UpdateDealer[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateDealer[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateDealer[i].UPI)
                     @Html.DropDownListFor(m => m.UpdateDealer[i].upists, new SelectList(new[]
@@ -1113,7 +1105,7 @@
             <tr>
                 @Html.HiddenFor(a => a.UpdateRetailer[i].idno)
                 <td>  @Html.EditorFor(a => a.UpdateRetailer[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateRetailer[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].creditcard)
 
@@ -1135,7 +1127,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.UpdateRetailer[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateRetailer[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].debitupto2000)
                     @Html.DropDownListFor(m => m.UpdateRetailer[i].DebitCardsts, new SelectList(new[]
@@ -1152,7 +1144,7 @@
                     @Html.EditorFor(a => a.UpdateRetailer[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateRetailer[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].netbanking)
                     @Html.DropDownListFor(m => m.UpdateRetailer[i].netbankingsts, new SelectList(new[]
@@ -1173,7 +1165,7 @@
                     @Html.EditorFor(a => a.UpdateRetailer[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateRetailer[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].wallet)
                     @Html.DropDownListFor(m => m.UpdateRetailer[i].walletsts, new SelectList(new[]
@@ -1186,7 +1178,7 @@
                     @Html.EditorFor(a => a.UpdateRetailer[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateRetailer[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateRetailer[i].UPI)
                     @Html.DropDownListFor(m => m.UpdateRetailer[i].upists, new SelectList(new[]
@@ -1211,7 +1203,7 @@
             <tr>
                 @Html.HiddenFor(a => a.UpdateAPI[i].idno)
                 <td>  @Html.EditorFor(a => a.UpdateAPI[i].userid, new { htmlAttributes = new { @style = "width:80px !important", @readonly = true } })</td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateAPI[i].creditcard, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].creditcard)
 
@@ -1233,7 +1225,7 @@
                          new { Value = "T+1", Text = "T+1" },
                       }, "Value", "Text", Model.UpdateAPI[i].creditsettlement))
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateAPI[i].debitupto2000, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].debitupto2000)
                     @Html.DropDownListFor(m => m.UpdateAPI[i].DebitCardsts, new SelectList(new[]
@@ -1250,7 +1242,7 @@
                     @Html.EditorFor(a => a.UpdateAPI[i].debitmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].debitmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateAPI[i].netbanking, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].netbanking)
                     @Html.DropDownListFor(m => m.UpdateAPI[i].netbankingsts, new SelectList(new[]
@@ -1271,7 +1263,7 @@
                     @Html.EditorFor(a => a.UpdateAPI[i].netbankmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].netbankmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateAPI[i].wallet, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].wallet)
                     @Html.DropDownListFor(m => m.UpdateAPI[i].walletsts, new SelectList(new[]
@@ -1284,7 +1276,7 @@
                     @Html.EditorFor(a => a.UpdateAPI[i].walletmax, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].walletmax)
                 </td>
-                <td style="display:flex">
+                <td class="vm-pg-slab-edit-cell">
                     @Html.EditorFor(a => a.UpdateAPI[i].UPI, new { htmlAttributes = new { @style = "width:50px !important" } })
                     @Html.ValidationMessageFor(a => a.UpdateAPI[i].UPI)
                     @Html.DropDownListFor(m => m.UpdateAPI[i].upists, new SelectList(new[]
@@ -1306,46 +1298,35 @@
     </div>
 }
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script>
-    $('.for-select2').select2();
-
-
-</script>
 <script>
     function OnSuccess1(data) {
-        $('#btnsubmituser').hide();
-        $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        } else {
+            $('#btnsubmituser, #btnsubmitusercommon, #btnsubmitusercommondlmrem').hide().removeClass('is-visible');
+            $('#btnEdit').show().removeClass('is-hidden');
+            $('#tbodyshow').removeClass('vm-pg-slab-tbody--hidden').addClass('vm-pg-slab-tbody--view');
+            $('#tbodyedit, #tbodyeditAll').addClass('vm-pg-slab-tbody--hidden');
+        }
          var chk = '@Model.role';
             if (chk == "Retailer") {
-                $('#retailerdrop').show();
-                $('#allshow').hide();
+                if (typeof showRetailerDrop === 'function') {
+                    showRetailerDrop();
+                } else {
+                    $('#retailerdrop').css('display', 'flex');
+                    $('#allshow').hide();
+                }
             }
             else {
-                $('#retailerdrop').hide();
-                $('#allshow').show();
+                if (typeof showAllUsersDrop === 'function') {
+                    showAllUsersDrop();
+                } else {
+                    $('#retailerdrop').hide();
+                    $('#allshow').show();
+                }
             }
     }
     function onfailed(error) {
         alert(error.responseText);
     }
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

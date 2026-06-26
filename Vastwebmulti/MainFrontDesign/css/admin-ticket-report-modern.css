@@ -3160,3 +3160,1183 @@ body.saas-admin-ui .vm-wallet-unload-swal--loading .swal2-loader {
         justify-content: center !important;
     }
 }
+
+/* Show Opening Balance Report — same shell as Giftcard Report */
+body.saas-admin-ui .saas-closing-balance-report-page {
+    --closing-balance-filter-retailer-width: 240px;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer {
+    flex: 0 0 var(--closing-balance-filter-retailer-width) !important;
+    width: var(--closing-balance-filter-retailer-width) !important;
+    min-width: var(--closing-balance-filter-retailer-width) !important;
+    max-width: var(--closing-balance-filter-retailer-width) !important;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-opr-table-panel__title i.fa-balance-scale {
+    color: #0d9488;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page #closingBalanceReportTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 920px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page #closingBalanceReportTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page #closingBalanceReportTable thead th,
+body.saas-admin-ui .saas-closing-balance-report-page #closingBalanceReportTable tbody td {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-user__firm {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-user__name {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-amount {
+    font-weight: 700;
+    color: #0d9488;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-date {
+    color: #475569;
+    font-size: 0.74rem !important;
+}
+
+body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-sr {
+    color: #64748b;
+    font-weight: 600;
+    width: 48px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line .select2-container,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-field--retailer select,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-field--retailer .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-closing-balance-report-page #closingBalanceReportTable.vm-opr-data-table {
+        min-width: 920px !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line .select2-container,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-field--retailer .select2-container,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-field--retailer select,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-field--retailer .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-closing-balance-report-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-end !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-total {
+        font-size: 0.72rem !important;
+    }
+}
+
+/* Override giftcard/shared filter widths when both page shells share markup */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-filters > .vm-closing-balance-field--retailer.vm-opr-field.vm-dmt-field,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-filters > .vm-closing-balance-field--retailer,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-dmt-filter-row > .vm-closing-balance-field--retailer.vm-opr-field.vm-dmt-field,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-dmt-filter-row > .vm-closing-balance-field--retailer,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer.vm-opr-field.vm-dmt-field,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-filters > .vm-closing-balance-field--retailer .select2-container,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer .select2-container,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer select,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer .form-control,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-closing-balance-field--retailer .selection {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-radiant-inline-filters > .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-closing-balance-report-page .vm-gift-filter-row--one-line > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Daywise Extra Commission — same shell as Show Opening Balance */
+body.saas-admin-ui .saas-daywise-comm-report-page {
+    --daywise-comm-filter-width: 200px;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--master,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--dealer,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--retailer {
+    flex: 0 0 var(--daywise-comm-filter-width) !important;
+    width: var(--daywise-comm-filter-width) !important;
+    min-width: var(--daywise-comm-filter-width) !important;
+    max-width: var(--daywise-comm-filter-width) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    padding-right: 28px !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    right: 8px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommFilterForm .select2-dropdown {
+    z-index: 10050 !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-opr-table-panel__title i.fa-percentage,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-opr-table-panel__title i.fa-sliders-h {
+    color: #7c3aed;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-card {
+    margin-bottom: 12px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table {
+    min-width: 640px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 820px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable thead th,
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable tbody td,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table thead th,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table tbody td {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-row.is-hidden,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row.is-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-input {
+    height: 38px !important;
+    border-radius: 10px !important;
+    border: 1px solid #dbe2ea !important;
+    background: #f8fafc !important;
+    min-width: 90px;
+    width: 100% !important;
+    font-size: 0.82rem !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-form {
+    display: contents;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row td {
+    vertical-align: middle !important;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-cell--actions {
+    min-width: 200px;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-edit-btn,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-save-btn,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-edit-btn {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-edit-btn:hover {
+    background: #dbeafe;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-save-btn {
+    flex: 1 1 auto;
+    min-width: 108px;
+    background-color: #2563eb !important;
+    background-image: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table button.vm-daywise-comm-save-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    background-color: #2563eb !important;
+    background-image: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table button.vm-daywise-comm-save-btn span,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table button.vm-daywise-comm-save-btn i {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-save-btn:hover,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table button.vm-daywise-comm-save-btn:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+    background-color: #1d4ed8 !important;
+    background-image: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-cancel-btn {
+    flex: 1 1 auto;
+    min-width: 108px;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #64748b !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-cancel-btn:hover {
+    background: #f8fafc !important;
+    color: #334155 !important;
+    border-color: #cbd5e1 !important;
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-save-btn i,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-cancel-btn i {
+    font-size: 0.85rem;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 72px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill i {
+    font-size: 0.82rem;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill--on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill--btn:hover,
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-status-pill--link:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-bulk-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-width: 96px !important;
+    height: 36px !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    background-image: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn i {
+    font-size: 0.95rem;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn--on {
+    background: linear-gradient(135deg, #15803d, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(21, 128, 61, 0.32) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn--off {
+    background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn:hover {
+    opacity: 0.95 !important;
+    transform: translateY(-1px) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-on-badge {
+    background: #ecfdf5 !important;
+    border: 1px solid #86efac !important;
+    color: #166534 !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-off-badge {
+    background: #fef2f2 !important;
+    border: 1px solid #fca5a5 !important;
+    color: #991b1b !important;
+    padding: 4px 10px !important;
+    border-radius: 999px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-on-badge strong {
+    color: #15803d !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-off-badge strong {
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-info {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable tbody tr.vm-daywise-comm-row--on td {
+    background: rgba(220, 252, 231, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable tbody tr.vm-daywise-comm-row--off td {
+    background: rgba(254, 242, 242, 0.22) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable tbody tr.vm-daywise-comm-row:hover td {
+    filter: brightness(0.98);
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--master,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--dealer,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field--retailer,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-radiant-inline-filters > .vm-daywise-comm-field,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-dmt-filter-row > .vm-daywise-comm-field {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field .select2-container,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field select,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-field .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-filter-row > .vm-dmt-filter-search-group .vm-opr-toolbar-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-daywise-comm-report-page #daywiseCommReportTable.vm-opr-data-table {
+        min-width: 820px !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-bulk-actions {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page a.vm-daywise-bulk-btn {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: none !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-report-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table.vm-opr-data-table {
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-wrap .table-responsive,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-wrap .vm-opr-table-scroll {
+        overflow: visible !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        border: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table thead {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-row:not(.is-hidden),
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row:not(.is-hidden) {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+        background: #fff !important;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-row:not(.is-hidden) {
+        padding: 4px 0 !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-row.is-hidden,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row.is-hidden {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row td {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        white-space: normal !important;
+        border: none !important;
+        border-bottom: 1px solid #eef2f7 !important;
+        padding: 12px 14px !important;
+        text-align: left !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell:last-child,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row td:last-child {
+        border-bottom: none !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell::before,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-cell::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell--edit::before,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell--status::before {
+        margin-bottom: 10px;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-cell--actions::before {
+        content: "Save changes";
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-form {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-row {
+        padding: 0 !important;
+        margin-top: 0 !important;
+        background: #fff !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-cell {
+        background: transparent !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-input {
+        min-width: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 42px !important;
+        font-size: 0.9rem !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-edit-cell--actions {
+        min-width: 0 !important;
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group .vm-daywise-comm-save-btn,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group .vm-daywise-comm-cancel-btn {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 auto !important;
+        min-height: 44px !important;
+        height: 44px !important;
+        padding: 0 16px !important;
+        justify-content: center !important;
+        display: inline-flex !important;
+        border-radius: 10px !important;
+        font-size: 0.84rem !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-table button.vm-daywise-comm-save-btn {
+        background-color: #2563eb !important;
+        background-image: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: none !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-edit-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 42px !important;
+        height: 42px !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-view-cell--status .vm-daywise-status-pill {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 42px !important;
+        height: 42px !important;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-wrap.is-editing .vm-daywise-settings-view-row {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-comm-settings-wrap.is-editing .vm-daywise-settings-edit-row:not(.is-hidden) {
+        display: block !important;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group .vm-daywise-comm-save-btn,
+    body.saas-admin-ui .saas-daywise-comm-report-page .vm-daywise-settings-action-group .vm-daywise-comm-cancel-btn {
+        flex: 1 1 calc(50% - 5px) !important;
+        width: calc(50% - 5px) !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+}
+
+/* Extra Commission History — same shell as Show Opening Balance */
+body.saas-admin-ui .saas-daywise-comm-history-page {
+    --daywise-comm-history-filter-retailer-width: 240px;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line > .vm-daywise-comm-history-field--retailer {
+    flex: 0 0 var(--daywise-comm-history-filter-retailer-width) !important;
+    width: var(--daywise-comm-history-filter-retailer-width) !important;
+    min-width: var(--daywise-comm-history-filter-retailer-width) !important;
+    max-width: var(--daywise-comm-history-filter-retailer-width) !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-filter-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-filter-row .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-filter-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryForm .select2-dropdown {
+    z-index: 10050 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-opr-table-panel__title i.fa-history {
+    color: #7c3aed;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 1380px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryTable thead th,
+body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryTable tbody td {
+    white-space: nowrap;
+    font-size: 0.76rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 130px;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-user__firm {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-user__name {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-amount {
+    font-weight: 600;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-amount--comm {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-amount--dlm {
+    color: #0d9488;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-amount--md {
+    color: #7c3aed;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-date {
+    color: #475569;
+    font-size: 0.74rem !important;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-sr {
+    color: #64748b;
+    font-weight: 600;
+    width: 48px;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-total-badge strong {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-dlm-badge strong {
+    color: #0d9488;
+}
+
+body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-md-badge strong {
+    color: #7c3aed;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line > .vm-daywise-comm-history-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line .select2-container,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-field--retailer select,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-field--retailer .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-daywise-comm-history-page #daywiseCommHistoryTable.vm-opr-data-table {
+        min-width: 1380px !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-radiant-inline-total {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: calc(50% - 4px) !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-radiant-inline-filters > .vm-daywise-comm-history-field--retailer.vm-opr-field.vm-dmt-field,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line > .vm-daywise-comm-history-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line .select2-container,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-field--retailer .select2-container,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-field--retailer select,
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-daywise-comm-history-field--retailer .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-daywise-comm-history-page .vm-gift-filter-row--one-line > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* By Pass DMT — same shell as Extra Commission History / daywisecomm */
+body.saas-admin-ui .saas-passby-retailer-dmt-page {
+    --passby-dmt-filter-retailer-width: 240px;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-gift-filter-row--one-line > .vm-passby-dmt-field--retailer {
+    flex: 0 0 var(--passby-dmt-filter-retailer-width) !important;
+    width: var(--passby-dmt-filter-retailer-width) !important;
+    min-width: var(--passby-dmt-filter-retailer-width) !important;
+    max-width: var(--passby-dmt-filter-retailer-width) !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtForm .select2-dropdown {
+    z-index: 10050 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-opr-table-panel__title i.fa-random {
+    color: #0891b2;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 820px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable thead th,
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable tbody td {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-user__firm {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-user__name {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-sr {
+    color: #64748b;
+    font-weight: 600;
+    width: 48px;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-on-badge strong {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-off-badge strong {
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 72px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-status-pill i {
+    font-size: 0.82rem;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-status-pill--on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-status-pill--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24) !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-status-pill--btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable.vm-opr-data-table button.vm-passby-dmt-status-pill {
+    padding: 0 14px !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    line-height: 1 !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-gift-filter-row--one-line > .vm-passby-dmt-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable.vm-opr-data-table {
+        min-width: 820px !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-radiant-inline-total {
+        flex: 1 1 calc(33.33% - 4px) !important;
+        min-width: calc(33.33% - 4px) !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row,
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-field--retailer,
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-radiant-inline-filters > .vm-passby-dmt-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-field .select2-container,
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-field select,
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-field .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-passby-retailer-dmt-page .vm-passby-dmt-filter-row > .vm-dmt-filter-search-group .vm-opr-toolbar-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}

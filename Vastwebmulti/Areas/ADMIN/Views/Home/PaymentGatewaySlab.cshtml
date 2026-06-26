@@ -4,61 +4,25 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-payment-gateway-slab-modern.css?v=8" rel="stylesheet" />
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
 <style>
-
-    /*new css */
-    .slab-edit-table #btnsubmitusercommon {
-        background: #16b316;
-        color: #fff;
-        border-radius: 4px;
-        border: 1px solid #fff;
-    }
-    .slab-edit-table #btnsubmituser {
-        background: #dfdf00;
-        border-radius: 4px;
-        border: 1px solid #fff;
-    }
-
-
-
-
-
-
-    /*new css */
-
-
-        .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
     #div_Loader {
         background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
         height: 100%;
-        position: absolute;
+        position: fixed;
+        left: 0;
         top: 0;
         width: 100%;
         z-index: 999999;
     }
-
 
     .ldio-gs56nt525f > div {
         transform-origin: 100px 100px;
@@ -117,137 +81,79 @@
         position: relative;
         transform: translateZ(0) scale(1);
         backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
+        transform-origin: 0 0;
     }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #bbb !important;
-        border-radius: 0px !important;
-        height: 38px !important;
-        background-color: #f5f5f5 !important;
-    }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 36px !important;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px !important;
-        }
 
     .ldio-gs56nt525f div {
         box-sizing: content-box;
     }
 
     @@keyframes ldio-gs56nt525f {
-        0% {
-            transform: rotate(0deg)
-        }
-
-        50% {
-            transform: rotate(22.5deg)
-        }
-
-        100% {
-            transform: rotate(45deg)
-        }
+        0% { transform: rotate(0deg) }
+        50% { transform: rotate(22.5deg) }
+        100% { transform: rotate(45deg) }
     }
-
-
-    @@media only screen and (max-width:480px){
-
-        .all-slab-header a, .all-slab-header button {
-            width: 49% !important;
-            margin: 0 !important;
-        }
-        .smli {
-            display: block ruby;
-        }
-
-    }
-
-
 </style>
-<section class="content">
+
+<section class="content saas-admin-account-page saas-admin-settings-page saas-pg-slab-page">
     <div class="container-fluid">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Aeps Slab Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">PaymentGateway Slab Setting</a></li>
-            </ul>
+        <div class="saas-acc-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li><a href="@Url.Action("UPIAndGatewaySetting", "Home")">Payment Gateway</a></li>
+                <li>Slab Setting</li>
+            </ol>
         </div>
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-header-third" style=" margin-top: 7px;">
-            <div class="col-md-6" style="padding: 0px;">
-                <ul style="display: flex; margin: 0; padding: 6px 8px;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="smli">
-                        <a href="@Url.Action("UPIAndGatewaySetting","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Payment Gateway API Setting &nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Slab Setting
-                    </li>
-                </ul>
-            </div>
-        </div>
 
-        <!--Four-Design-Admin-page-Header-Section-End-->
-        @*<div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card" style="margin-bottom:2px;">
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.Partial("_ApislabSetting")
+        <div class="vm-pg-slab-card">
+            <div class="vm-pg-slab-card__head">
+                <h3 class="vm-pg-slab-card__title">
+                    <i class="fas fa-layer-group" aria-hidden="true"></i>
+                    Payment Gateway Slab Setting
+                </h3>
+                <div class="vm-pg-slab-card__actions">
+                    <div class="vm-pg-slab-tab-bar">
+                        <div class="vm-pg-slab-tabs all-slab-header slab-buttonadminch all-slab-header-second slab-btn-second">
+                            <a href="@Url.Action("PaymentGatewaySlab", "Home")" id="Comm" class="vm-pg-slab-tab vm-pg-slab-tab--active" aria-selected="true">
+                                Common Slab
+                                <span>For New Users</span>
+                            </a>
+                            <button type="button" id="Mdbtn" class="vm-pg-slab-tab vm-pg-slab-tab--inactive" aria-selected="false" onclick="editUserWise('Master', 'EditFormUserWise')">
+                                MD Slab
+                                <span>Existing Users</span>
+                            </button>
+                            <button type="button" id="Dlmbtn" class="vm-pg-slab-tab vm-pg-slab-tab--inactive" aria-selected="false" onclick="editUserWise('Dealer', 'EditFormUserWise')">
+                                Distributor Slab
+                                <span>Existing Users</span>
+                            </button>
+                            <button type="button" id="Rembtn" class="vm-pg-slab-tab vm-pg-slab-tab--inactive" aria-selected="false" onclick="editUserWise('Retailer', 'EditFormUserWise')">
+                                Retailer Slab
+                                <span>Existing Users</span>
+                            </button>
+                            <button type="button" id="Apibtn" class="vm-pg-slab-tab vm-pg-slab-tab--inactive" aria-selected="false" onclick="editUserWise('API', 'EditFormUserWise')">
+                                API Slab
+                                <span>Existing Users</span>
+                            </button>
                         </div>
                     </div>
+                    <button id="btnEdit" type="button" class="vm-pg-slab-btn-edit" onclick="funcEdit(this, 'EditFormComm')">
+                        <img src="~/AdminDesign/images/edit.svg" alt="" />
+                        <span>Edit Slab</span>
+                    </button>
                 </div>
             </div>
-        </div>*@
-        <div class="row">
-            <div class="col-md-12">
 
-                <div class="col-md-12 slab-first-tab-content">
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0;">
-
-                            <div class="card">
-                                <div class="page-header-third">
-                                    <div class="row">
-                                        <div class="col-md-12 all-slab-header slab-buttonadminch all-slab-header-second slab-btn-second">
-                                            <a href="@Url.Action("PaymentGatewaySlab","Home")" id="Comm" class="btn bg-blue-grey waves-effect fullbodydycolorbg">Common Slab<p>For New Users</p></a>
-                                            <button type="button" id="Mdbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Master', 'EditFormUserWise')">
-                                                MD Slab<p>Exsiting Users</p>
-                                            </button><button type="button" id="Dlmbtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Dealer', 'EditFormUserWise')">Distributor Slab<p>Exsiting Users</p></button>
-                                            <button type="button" id="Rembtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('Retailer', 'EditFormUserWise')">Retailer Slab<p>Exsiting Users</p></button>
-                                            <button type="button" id="Apibtn" class="btn bg-blue-grey waves-effect" onclick="editUserWise('API', 'EditFormUserWise')">API Slab<p>Exsiting Users</p></button>
-                                            <button id="btnEdit" type="button" class="btn  waves-effect btn-first" style="margin-left: 22px; padding: 0 10px !important; border-radius: 4px;" onclick="funcEdit(this, 'EditFormComm')"><img src="~/AdminDesign/images/edit.svg" style="width:13px;" />&nbsp;<span style="color:#3c3c3c;">Edit Slab</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="page-header-third table-responsive">
-                                    <div id="divEditFormComm" class="table-responsive slab-edit-table tablefourdesign-admin" style="position:inherit;">
-                                        @Html.Partial("_common_PaymentGatewaySlab", Model)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="vm-pg-slab-body">
+                <div id="divEditFormComm" class="vm-pg-slab-edit-table slab-edit-table">
+                    @Html.Partial("_common_PaymentGatewaySlab", Model)
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <div id="div_Loader" style="display:none;">
     <div class="loadingio-spinner-gear-94vo528ab8">
         <div class="ldio-gs56nt525f">
@@ -255,201 +161,239 @@
         </div>
     </div>
 </div>
+
 <script>
     var FormId = "";
     var UpdateGstOnly = false;
     var roleshow = "";
-    function funcEdit(event,frmId)
-    {
+
+    function showRetailerDrop() {
+        $('#retailerdrop').css('display', 'flex');
+        $('#allshow').hide();
+    }
+
+    function showAllUsersDrop() {
+        $('#retailerdrop').hide();
+        $('#allshow').show();
+    }
+
+    function resetSlabSaveButtons() {
+        $('#btnsubmit, #btnsubmituser, #btnsubmitusercommon, #btnsubmitusercommondlmrem')
+            .hide().removeClass('is-visible');
+        $('#btnEdit').show().removeClass('is-hidden');
+    }
+
+    function resetSlabViewMode() {
+        $('#tbodyshow').removeClass('vm-pg-slab-tbody--hidden').addClass('vm-pg-slab-tbody--view');
+        $('#tbodyedit, #tbodyeditAll').addClass('vm-pg-slab-tbody--hidden');
+        resetSlabSaveButtons();
+    }
+
+    function showSlabEditMode() {
+        $('#tbodyshow').addClass('vm-pg-slab-tbody--hidden').removeClass('vm-pg-slab-tbody--view');
+        $('#tbodyedit, #tbodyeditAll').addClass('vm-pg-slab-tbody--hidden');
+
+        var ddlVal = $('#ddlUserId').val();
+        if ($('#tbodyeditAll').length && (ddlVal === '' || ddlVal === null)) {
+            $('#tbodyeditAll').removeClass('vm-pg-slab-tbody--hidden');
+        } else {
+            $('#tbodyedit').removeClass('vm-pg-slab-tbody--hidden');
+        }
+
+        $('#btnEdit').hide().addClass('is-hidden');
+    }
+
+    function showSlabSaveButtons() {
+        $('#btnsubmit, #btnsubmituser, #btnsubmitusercommon, #btnsubmitusercommondlmrem').removeClass('is-visible').hide();
+
         var val = $('#ddlUserId').val();
         var ddldlm = $('#ddldealer').val();
         var ddlrem = $('#ddlUserIdrem').val();
 
-        $('#btnsubmit').show();
-        $('#btnsubmituser').show();
-          if (val == "") {
-            $('#btnsubmitusercommon').show();
+        if ($('#btnsubmit').length) {
+            $('#btnsubmit').show().addClass('is-visible');
         }
-        if (roleshow == "Retailer" && ddldlm != "" && ddlrem=="") {
-            $('#btnsubmitusercommondlmrem').show();
+        if ($('#btnsubmituser').length) {
+            $('#btnsubmituser').show().addClass('is-visible');
         }
-        $('#btnEdit').hide();
-        $('#tbodyshow').hide();
-        $('#tbodyedit').show();
-       if (FormId == "")//Use in Default Slab edit
-        {
+        if (val === '' || val === null) {
+            if ($('#btnsubmitusercommon').length) {
+                $('#btnsubmitusercommon').show().addClass('is-visible');
+            }
+        }
+        if (roleshow === 'Retailer' && ddldlm !== '' && ddlrem === '') {
+            if ($('#btnsubmitusercommondlmrem').length) {
+                $('#btnsubmitusercommondlmrem').show().addClass('is-visible');
+            }
+        }
+    }
+
+    function initPgSlabPartialUi() {
+        if ($.fn.select2) {
+            $('.saas-pg-slab-page .for-select2').each(function () {
+                var $el = $(this);
+                try {
+                    if ($el.hasClass('select2-hidden-accessible')) {
+                        $el.select2('destroy');
+                    }
+                } catch (e) { }
+                $el.select2({ width: '100%' });
+            });
+        }
+    }
+
+    function bindPgSlabTableHover() {
+        $(document).off('mouseenter.pgslab mouseleave.pgslab', '.saas-pg-slab-page .third-design-table tbody td');
+        $(document).on('mouseenter.pgslab', '.saas-pg-slab-page .third-design-table tbody td', function () {
+            var colIndex = $(this).parent().children().index($(this)) + 1;
+            var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+            $(".saas-pg-slab-page .third-design-table td:nth-child(" + colIndex + ")").css({ background: 'var(--main-bg-rcolor, #2563eb)', color: '#fff' });
+            $(".saas-pg-slab-page .third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor, #2563eb)');
+        });
+        $(document).on('mouseleave.pgslab', '.saas-pg-slab-page .third-design-table tbody td', function () {
+            var colIndex = $(this).parent().children().index($(this)) + 1;
+            var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+            $(".saas-pg-slab-page .third-design-table td:nth-child(" + colIndex + ")").css({ background: '', color: '' });
+            $(".saas-pg-slab-page .third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', '');
+        });
+    }
+
+    $(document).ready(function () {
+        bindPgSlabTableHover();
+        initPgSlabPartialUi();
+        resetSlabViewMode();
+        setSlabTabByRole(roleshow || 'Common');
+    });
+
+    var slabTabByRole = {
+        'Common': '#Comm',
+        'Master': '#Mdbtn',
+        'Dealer': '#Dlmbtn',
+        'Retailer': '#Rembtn',
+        'API': '#Apibtn'
+    };
+
+    function setSlabTabActive(selector) {
+        $('.vm-pg-slab-tab')
+            .removeClass('vm-pg-slab-tab--active')
+            .addClass('vm-pg-slab-tab--inactive')
+            .attr('aria-selected', 'false');
+
+        $(selector)
+            .removeClass('vm-pg-slab-tab--inactive')
+            .addClass('vm-pg-slab-tab--active')
+            .attr('aria-selected', 'true');
+    }
+
+    function setSlabTabByRole(userRole) {
+        var selector = slabTabByRole[userRole] || '#Comm';
+        setSlabTabActive(selector);
+    }
+
+    function funcEdit(event, frmId) {
+        if (FormId === '') {
             FormId = frmId;
         }
-        var ddlVal = $('#ddlUserId').val();
-        if(ddlVal != null && ddlVal == '')//Update ALL
-        {
-                $('#tbodyeditAll').show();
-            $('#tbodyedit').hide();
-        } else if (ddlVal != null && ddlVal != '')//Update ALL
-        {
-
-            $('#tbodyeditAll').hide();
-            $('#tbodyedit').show();
+        showSlabEditMode();
+        showSlabSaveButtons();
+        var $scroll = $('.saas-pg-slab-page .vm-pg-slab-table-scroll').first();
+        if ($scroll.length) {
+            $scroll[0].scrollLeft = 0;
         }
     }
-    function funcSave()
-    {
-        //alert();
+
+    function funcSave() {
         $("#" + FormId + "").submit();
     }
-       function editUserWise(userRole, frmId) {
-          roleshow = userRole;
-           $('#div_Loader').show();
-          $('#btnsubmit').hide();
-        $('#btnsubmituser').hide();
-        $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
-        //alert(userRole);
+
+    function editUserWise(userRole, frmId) {
+        roleshow = userRole;
+        setSlabTabByRole(userRole);
+        $('#div_Loader').show();
+        resetSlabViewMode();
+
         var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
         $.post(url, { role: userRole }, function (data) {
-              $('#div_Loader').hide();
+            $('#div_Loader').hide();
             $("#divEditFormComm").html(data);
             FormId = frmId;
             $("#role").val(userRole);
-              if (userRole == "Retailer") {
-                $('#retailerdrop').show();
-                $('#allshow').hide();
-        }
-        else {
-                $('#retailerdrop').hide();
-                $('#allshow').show();
-        }
+            initPgSlabPartialUi();
+            resetSlabViewMode();
+            if (userRole == "Retailer") {
+                showRetailerDrop();
+            }
+            else {
+                showAllUsersDrop();
+            }
         })
             .fail(function (xhr, status, error) {
                 $('#div_Loader').hide();
-              alert("error");
-              //var err = eval("(" + xhr.responseText + ")");
-              //alert(err.Message);
-              console.log(xhr.responseText);
-          })
-          .always(function () {
-          });
-        if(userRole=="Master")
-        {
-            $("#Mdbtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
-            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-        }
-        if (userRole == "Dealer") {
-            $("#Dlmbtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
-            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-        }
-        if (userRole == "Retailer") {
-            $("#Rembtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
-            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Apibtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-        }
-        if (userRole == "API") {
-            $("#Apibtn").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect fullbodydycolorbg");
-            $("#Mdbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Dlmbtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Rembtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Whitebtn").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-            $("#Comm").removeClass("btn bg-grey waves-effect fullbodydycolorbg").addClass("btn bg-blue-grey waves-effect");
-        }
+                alert("error");
+                console.log(xhr.responseText);
+            });
     }
+
     function ddlUserIdChange() {
         var ddlVal = $('#ddlUserId').val();
         var role = $("#role").val();
-         $('#btnsubmit').hide();
-        $('#btnsubmituser').hide();
-        $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
-        //alert(ddlVal);
+        resetSlabViewMode();
         var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
         $.post(url, { role: role, userid: ddlVal }, function (data) {
             $("#divEditFormComm").html(data);
-          })
-          .fail(function (xhr, status, error) {
-              //alert("error");
-              //var err = eval("(" + xhr.responseText + ")");
-              //alert(err.Message);
-              console.log(xhr.responseText);
-          })
-          .always(function () {
-              //alert("finished");
-          });
-    }
-      function ddlRetailerIdChange() {
-        $('#btnsubmit').hide();
-        $('#btnsubmituser').hide();
-        $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
-        var ddlVal = $('#ddlUserId').val();
-
-        var role = $("#role").val();
-        //alert(ddlVal);
-        var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
-        $.post(url, { role: role, userid: ddlVal }, function (data) {
-            $("#divEditFormComm").html(data);
+            initPgSlabPartialUi();
+            resetSlabViewMode();
         })
-          .fail(function (xhr, status, error) {
-              console.log(xhr.responseText);
-          })
-          .always(function () {
-          });
+            .fail(function (xhr, status, error) {
+                console.log(xhr.responseText);
+            });
     }
 
-       function ddlretailerid() {
+    function ddlRetailerIdChange() {
+        resetSlabViewMode();
+        var ddlVal = $('#ddlUserId').val();
+        var role = $("#role").val();
+        var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
+        $.post(url, { role: role, userid: ddlVal }, function (data) {
+            $("#divEditFormComm").html(data);
+            initPgSlabPartialUi();
+            resetSlabViewMode();
+        })
+            .fail(function (xhr, status, error) {
+                console.log(xhr.responseText);
+            });
+    }
+
+    function ddlretailerid() {
         var dlmid = $('#ddldealer').val();
         var role = $("#role").val();
-        $('#btnsubmit').hide();
-        $('#btnsubmituser').hide();
-         $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
+        resetSlabViewMode();
         var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
         $.post(url, { role: role, dlmid: dlmid }, function (data) {
             $("#divEditFormComm").html(data);
-            $('#retailerdrop').show();
-            $('#allshow').hide();
+            showRetailerDrop();
+            initPgSlabPartialUi();
+            resetSlabViewMode();
         })
-          .fail(function (xhr, status, error) {
-              console.log(xhr.responseText);
-          })
-          .always(function () {
-          });
+            .fail(function (xhr, status, error) {
+                console.log(xhr.responseText);
+            });
     }
 
-     function ddlUserIdChangerem() {
+    function ddlUserIdChangerem() {
         var dlmid = $('#ddldealer').val();
         var ddlVal = $('#ddlUserIdrem').val();
         var role = $("#role").val();
-        $('#btnsubmit').hide();
-        $('#btnsubmituser').hide();
-         $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
+        resetSlabViewMode();
         var url = '@Url.Action("_UserPaymentGatewaySlab", "Home")';
-        $.post(url, { role: role, userid: ddlVal,dlmid: dlmid }, function (data) {
+        $.post(url, { role: role, userid: ddlVal, dlmid: dlmid }, function (data) {
             $("#divEditFormComm").html(data);
-            $('#retailerdrop').show();
-            $('#allshow').hide();
+            showRetailerDrop();
+            initPgSlabPartialUi();
+            resetSlabViewMode();
         })
-          .fail(function (xhr, status, error) {
-              console.log(xhr.responseText);
-          })
-          .always(function () {
-          });
+            .fail(function (xhr, status, error) {
+                console.log(xhr.responseText);
+            });
     }
 </script>
-<!--Window Load-->
-<script>
-    window.onload = function () {
-        $("#Comm").removeClass("btn bg-blue-grey waves-effect").addClass("btn bg-grey waves-effect");
-    }
-</script>
-

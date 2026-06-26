@@ -34,7 +34,7 @@
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=40" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=25" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-cms-report-status.css?v=3" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-pay-u-gateway-modern.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-pay-u-gateway-modern.css?v=6" rel="stylesheet" />
 <link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-pay-u-gateway-report-page">
@@ -518,16 +518,14 @@
     }
 
     function initPayUGatewayDatepickers() {
-        if (typeof window.schedulePayUGatewayDateInit === 'function') {
-            window.schedulePayUGatewayDateInit();
-            return;
-        }
         if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
             window.setTimeout(initPayUGatewayDatepickers, 50);
             return;
         }
         if (typeof window.initAdminReportDateForm === 'function') {
             window.initAdminReportDateForm('#payUGatewayForm', '#txt_frm_date1', '#txt_to_date1', true);
+        } else if (typeof window.bootPayUGatewayDates === 'function') {
+            window.bootPayUGatewayDates(0);
         }
     }
 
@@ -675,6 +673,7 @@
     $(document).ready(function () {
         initPayUGatewaySelect2();
         payUGatewayRoleFilter();
+        initPayUGatewayDatepickers();
         $('#payUGatewayForm .select2-container').css('width', '100%');
         $('#payUGatewayForm').on('submit', syncGatewayUserIdForSearch);
         refreshPayUGatewaySummary();
@@ -688,9 +687,12 @@
         });
 
         $(window).on('load.payUGatewayDates', function () {
-            initPayUGatewayDatepickers();
+            if (typeof window.bootPayUGatewayDates === 'function') {
+                window.bootPayUGatewayDates(0);
+            } else {
+                initPayUGatewayDatepickers();
+            }
         });
-        initPayUGatewayDatepickers();
 
         $('#SaveChargeGate').click(function () {
             var debitupto = $('#txtdebitupto').val();
@@ -734,4 +736,17 @@
             });
         });
     });
+</script>
+<script src="~/MainFrontDesign/js/admin-pay-u-gateway-dates.js?v=2"></script>
+<script>
+    (function retryPayUGatewayDates(attempt) {
+        attempt = attempt || 0;
+        if (typeof window.bootPayUGatewayDates === 'function') {
+            window.bootPayUGatewayDates(0);
+            return;
+        }
+        if (attempt < 200) {
+            window.setTimeout(function () { retryPayUGatewayDates(attempt + 1); }, 50);
+        }
+    })();
 </script>

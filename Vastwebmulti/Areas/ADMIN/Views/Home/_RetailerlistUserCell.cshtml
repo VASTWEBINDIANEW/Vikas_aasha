@@ -1,0 +1,26 @@
+@model Vastwebmulti.Models.Select_Retailer_Details_all_paging_Result
+@{
+    var joinLabel = Model.JoinDate != default(DateTime)
+        ? Model.JoinDate.ToString("dd-MM-yyyy HH:mm:ss")
+        : "—";
+    var isActive = Model.Status == "Y";
+}
+<div class="vm-rl-user-block">
+    <div class="vm-rl-user-block__media">
+        @Html.Partial("_RetailerlistAvatar", null, new ViewDataDictionary { { "RetailerId", Model.RetailerId }, { "AadharImage", Model.aadhar_image } })
+    </div>
+    <div class="vm-rl-user-block__body">
+        <div class="vm-rl-user-block__top">
+            <span class="vm-rl-user-block__name" title="@Model.RetailerName">@Model.RetailerName</span>
+            <span class="vm-rl-user-block__status @(isActive ? "vm-rl-user-block__status--on" : "vm-rl-user-block__status--off")">
+                <span class="vm-rl-status-dot @(isActive ? "vm-rl-status-dot--on" : "vm-rl-status-dot--off")"></span>
+                @(isActive ? "Active" : "Inactive")
+            </span>
+        </div>
+        <div class="vm-rl-user-block__firm" title="@Model.Frm_Name">@Model.Frm_Name</div>
+        <div class="vm-rl-user-block__join">
+            <i class="far fa-clock" aria-hidden="true"></i>
+            <span>Join: @joinLabel</span>
+        </div>
+    </div>
+</div>

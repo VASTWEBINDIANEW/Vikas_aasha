@@ -1,556 +1,425 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.UPI_status_setting
+@using System.Linq
 @{
     ViewBag.Title = "UPIAndGatewaySetting";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var gatewayCount = Model.upiandgateway?.Count() ?? 0;
+    var upiQrCount = Model.upiqr?.Count() ?? 0;
+    var upiIntentCount = Model.upiintent?.Count() ?? 0;
+    var upiCollectionCount = Model.upicollection?.Count() ?? 0;
+    var pgApiCount = Model.gateway?.Count() ?? 0;
 }
-<section class="content fourdesign-section-admin">
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-upi-gateway-setting-modern.css?v=7" rel="stylesheet" />
+<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-settings-page saas-upi-gateway-setting-page">
     <div class="container-fluid">
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Profile</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Profile</a></li>
-            </ul>
+
+        <div class="saas-acc-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                
+                <li>UPI &amp; Gateway Setting</li>
+            </ol>
         </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third" style="margin-bottom: 15px; margin-top: 8px;">
-                    <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                        <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                            <span id="spncompny"> UPI & Payment GateWay Status </span>
-                        </h1>
-                    </div>
-                    <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background:var(--second-bg-color);padding-bottom: 6px;  ">
 
-                        <table class="table table-bordered table-striped table-hover fourdesign-data-table">
-                            <thead style="background-color:whitesmoke;">
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.upiandgateway)
-                                {
-                                    <tr>
-                                        <td>@item.Name</td>
-                                        <td>
-                                            @if (item.Status == true)
-                                            {
-                                                <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="UPIGATEWAYSTS('upiandgateway','@item.Idno')"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="UPIGATEWAYSTS('upiandgateway','@item.Idno')"></i>
-                                            }
-                                       
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+        @if (!string.IsNullOrWhiteSpace(Model.msg))
+        {
+            <div class="vm-upi-set-msg" role="alert">@Model.msg</div>
+        }
 
-                    </div>
-                </div>
+        <div class="saas-acc-table-card">
+            <div class="saas-acc-table-card-head">
+                <h3><i class="fas fa-sliders-h" aria-hidden="true"></i> UPI &amp; Payment Gateway Status</h3>
+                <span class="saas-acc-row-count"><i class="fas fa-list" aria-hidden="true"></i> @gatewayCount records</span>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third" style="margin-bottom:15px;">
-                    <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
+            <div class="saas-acc-table-wrap table-responsive">
+                <table class="table saas-acc-table table-bordered vm-upi-set-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th class="vm-upi-set-status-col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.upiandgateway)
+                        {
+                            <tr>
+                                <td data-label="Type" class="vm-upi-set-name-cell">@item.Name</td>
+                                <td data-label="Status" class="vm-upi-set-status-cell">
+                                    @if (item.Status == true)
+                                    {
+                                        <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="UPIGATEWAYSTS('upiandgateway','@item.Idno')" title="Click to disable" aria-pressed="true">
+                                            <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                            <span class="vm-upi-set-toggle__label">ON</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="UPIGATEWAYSTS('upiandgateway','@item.Idno')" title="Click to enable" aria-pressed="false">
+                                            <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                            <span class="vm-upi-set-toggle__label">OFF</span>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                        <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px; padding:10px !important;">
-                            <span id="spncompny"> UPI API Setting </span>
-                            <button data-toggle="modal" data-target="#myModal" class="fullbodydycolorbg for-button-upi back-button-third" style="float:right;color:#fff;padding: 5px 12px;border: 1px solid #bfbebe;background: #f0f0f0 !important;color: #777; margin-left:4px;"><i class="fa fa-cog fa-spin" aria-hidden="true" style="margin-right:6px;font-size:16px;position:relative;top:1px;"></i>Set UPI Charges</button>
-
-                            <button data-toggle="modal" id="myModal123showdata" data-target="#myModal123" class="fullbodydycolorbg for-button-upi back-button-third" style="float: right; color: #fff; padding: 5px 5px; border: 1px solid #bfbebe; background: #f0f0f0 !important; color: #777; "><i class="fa fa-cog fa-spin" aria-hidden="true" style="margin-right:6px;font-size:16px;position:relative;top:1px;"></i> Set UPI Transction</button>
-
-
-                        </h1>
-
-                        <div style="display: flex; align-items: center;">
-                            @if (ViewBag.KYCCHECK != null)
+        <div class="saas-acc-table-card vm-upi-set-api-section">
+            <div class="saas-acc-table-card-head vm-upi-set-card-head">
+                <h3><i class="fas fa-qrcode" aria-hidden="true"></i> UPI API Setting</h3>
+                <div class="vm-upi-set-card-head-actions">
+                    @if (ViewBag.KYCCHECK != null)
+                    {
+                        <div class="vm-upi-set-kyc">
+                            <span>KYC Status</span>
+                            @if (ViewBag.KYCCHECK.isekyc == true)
                             {
-                                if (ViewBag.KYCCHECK.isekyc == true)
-                                {
-                                    <p style=" margin: 0; margin: 0 10px;">KYC Status</p>
-                                    <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="KYCONOFF('KYCON')"></i>
-                                }
-                                else
-                                {
-                                    <p style=" margin: 0; margin: 0 10px;">KYC Status</p>
-                                    <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="KYCONOFF('KYCON')"></i>
-                                }
+                                <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="KYCONOFF('KYCON')" title="Toggle KYC" aria-pressed="true">
+                                    <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                    <span class="vm-upi-set-toggle__label">ON</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="KYCONOFF('KYCON')" title="Toggle KYC" aria-pressed="false">
+                                    <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                    <span class="vm-upi-set-toggle__label">OFF</span>
+                                </button>
                             }
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style=" padding: 15px 10px;">
-                        <div class="card page-header-third" style="margin-bottom:0px;">
-                            <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                                <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                    <span id="spncompny"> UPI QR API </span>
-                                </h1>
-                            </div>
-                            <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background:var(--second-bg-color);padding-bottom: 13px;  ">
+                    }
+                    <button type="button" class="vm-upi-set-btn" data-toggle="modal" data-target="#myModal">
+                        <i class="fas fa-cog" aria-hidden="true"></i> Set UPI Charges
+                    </button>
+                    <button type="button" class="vm-upi-set-btn vm-upi-set-btn--primary" id="myModal123showdata" data-toggle="modal" data-target="#myModal123">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i> Set UPI Transaction
+                    </button>
+                </div>
+            </div>
 
-                                <table class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                    <thead style="background-color:whitesmoke;">
+            <div class="vm-upi-set-api-grid">
+                <div class="vm-upi-set-api-panel">
+                    <div class="vm-upi-set-api-panel__head">UPI QR API</div>
+                    <div class="vm-upi-set-api-panel__body">
+                        <div class="saas-acc-table-wrap vm-upi-set-api-table-wrap">
+                            <table class="table saas-acc-table vm-upi-set-table">
+                                <thead>
+                                    <tr>
+                                        <th>API Name</th>
+                                        <th class="vm-upi-set-status-col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.upiqr)
+                                    {
                                         <tr>
-                                            <th>API Name</th>
-                                            <th>Status</th>
+                                            <td data-label="API Name" class="vm-upi-set-name-cell">@item.Name</td>
+                                            <td data-label="Status" class="vm-upi-set-status-cell">
+                                                @if (item.Sts == true)
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="UPIGATEWAYSTS('upiqr','@item.Idno')" title="Click to disable" aria-pressed="true">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">ON</span>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="UPIGATEWAYSTS('upiqr','@item.Idno')" title="Click to enable" aria-pressed="false">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">OFF</span>
+                                                    </button>
+                                                }
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.upiqr)
-                                        {
-                                            <tr>
-                                                <td>@item.Name</td>
-                                                <td>
-                                                    @if (item.Sts == true)
-                                                    {
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="UPIGATEWAYSTS('upiqr','@item.Idno')"></i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="UPIGATEWAYSTS('upiqr','@item.Idno')"></i>
-                                                    }
-
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style=" padding: 15px 10px;">
-                        <div class="card page-header-third" style="margin-bottom:0px;">
-                            <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                                <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                    <span id="spncompny"> UPI Intent API </span>
-                                </h1>
-                            </div>
-                            <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background: var(--second-bg-color); padding-bottom: 13px; height: 379px; ">
+                </div>
 
-                                <table class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                    <thead style="background-color:whitesmoke;">
+                <div class="vm-upi-set-api-panel">
+                    <div class="vm-upi-set-api-panel__head">UPI Intent API</div>
+                    <div class="vm-upi-set-api-panel__body">
+                        <div class="saas-acc-table-wrap vm-upi-set-api-table-wrap">
+                            <table class="table saas-acc-table vm-upi-set-table">
+                                <thead>
+                                    <tr>
+                                        <th>API Name</th>
+                                        <th class="vm-upi-set-status-col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.upiintent)
+                                    {
                                         <tr>
-                                            <th>API Name</th>
-                                            <th>Status</th>
+                                            <td data-label="API Name" class="vm-upi-set-name-cell">@item.Name</td>
+                                            <td data-label="Status" class="vm-upi-set-status-cell">
+                                                @if (item.Sts == true)
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="UPIGATEWAYSTS('upiintent','@item.Idno')" title="Click to disable" aria-pressed="true">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">ON</span>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="UPIGATEWAYSTS('upiintent','@item.Idno')" title="Click to enable" aria-pressed="false">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">OFF</span>
+                                                    </button>
+                                                }
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.upiintent)
-                                        {
-                                            <tr>
-                                                <td>@item.Name</td>
-                                                <td>
-                                                    @if (item.Sts == true)
-                                                    {
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="UPIGATEWAYSTS('upiintent','@item.Idno')"></i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="UPIGATEWAYSTS('upiintent','@item.Idno')"></i>
-                                                    }
-
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style=" padding: 15px 10px;">
-                        <div class="card page-header-third" style="margin-bottom:0px;">
-                            <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                                <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                                    <span id="spncompny"> UPI Collection API </span>
-                                </h1>
-                            </div>
-                            <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background: var(--second-bg-color); padding-bottom: 13px; height: 379px; ">
+                </div>
 
-                                <table class="table table-bordered table-striped table-hover fourdesign-data-table">
-                                    <thead style="background-color:whitesmoke;">
+                <div class="vm-upi-set-api-panel">
+                    <div class="vm-upi-set-api-panel__head">UPI Collection API</div>
+                    <div class="vm-upi-set-api-panel__body">
+                        <div class="saas-acc-table-wrap vm-upi-set-api-table-wrap">
+                            <table class="table saas-acc-table vm-upi-set-table">
+                                <thead>
+                                    <tr>
+                                        <th>API Name</th>
+                                        <th class="vm-upi-set-status-col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.upicollection)
+                                    {
                                         <tr>
-                                            <th>API Name</th>
-                                            <th>Status</th>
+                                            <td data-label="API Name" class="vm-upi-set-name-cell">@item.Name</td>
+                                            <td data-label="Status" class="vm-upi-set-status-cell">
+                                                @if (item.sts == true)
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="UPIGATEWAYSTS('upicollection','@item.Idno')" title="Click to disable" aria-pressed="true">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">ON</span>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="UPIGATEWAYSTS('upicollection','@item.Idno')" title="Click to enable" aria-pressed="false">
+                                                        <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                                        <span class="vm-upi-set-toggle__label">OFF</span>
+                                                    </button>
+                                                }
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.upicollection)
-                                        {
-                                            <tr>
-                                                <td>@item.Name</td>
-                                                <td>
-                                                    @if (item.sts == true)
-                                                    {
-                                                        <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="UPIGATEWAYSTS('upicollection','@item.Idno')"></i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="UPIGATEWAYSTS('upicollection','@item.Idno')"></i>
-                                                    }
-
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third" style="margin-bottom:0px;">
-                    <div class="heading-back-third boxback-allpage-admin" style="background-color:#c7c7c7;padding: 5px 10px; padding:10px;">
-                        <h1 style="color:#555;font-size:20px;font-weight:bold;text-transform:uppercase;margin:0px;">
-                            <span id="spncompny"> Payment Gateway  API Setting </span>
-                            <button  class="fullbodydycolorbg for-button-upi back-button-third" style="float: right; color: #fff; padding: 5px 5px; border: 1px solid #bfbebe; background: #f0f0f0 !important; color: #777; ">
-                            <i class="fa fa-cog fa-spin" aria-hidden="true" style="margin-right:6px;font-size:16px;position:relative;top:1px;"></i> 
-              
-                            <a href="@Url.Action("PaymentGatewaySlab","Home")" target="_blank"> PG Charges Setting</a>
-                            </button>
-
-                            @*<a href="@Url.Action("PaymentGatewaySlab","Home")" class="fullbodydycolorbg for-button-upi button-third back-button-third rightfloat-third header-button-thirddesign" id="pggetwaysetting" style="float: left; color: #fff; padding: 6px 5px;  height: 32px;">
-            <i class="fa fa-cog fa-spin" aria-hidden="true" style="margin-right:0px;font-size:16px;top:1px;"></i>
-            PG Charges Setting
-        </a>*@
-                        </h1>
-                        
-                        <div style="display: flex; align-items: center;">
-                            @if (ViewBag.KYCGATEWAY != null)
+        <div class="saas-acc-table-card">
+            <div class="saas-acc-table-card-head vm-upi-set-card-head">
+                <h3><i class="fas fa-credit-card" aria-hidden="true"></i> Payment Gateway API Setting</h3>
+                <div class="vm-upi-set-card-head-actions">
+                    @if (ViewBag.KYCGATEWAY != null)
+                    {
+                        <div class="vm-upi-set-kyc">
+                            <span>KYC Status</span>
+                            @if (ViewBag.KYCGATEWAY.isekyc == true)
                             {
-                                if (ViewBag.KYCGATEWAY.isekyc == true)
-                                {
-                                    <p style=" margin: 0; margin: 0 10px;">KYC Status</p>
-                                    <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="KYCONOFFGATEWAY('KYCON')"></i>
-                                }
-                                else
-                                {
-                                    <p style=" margin: 0; margin: 0 10px;">KYC Status</p>
-                                    <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="KYCONOFFGATEWAY('KYCON')"></i>
-                                }
+                                <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="KYCONOFFGATEWAY('KYCON')" title="Toggle gateway KYC" aria-pressed="true">
+                                    <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                    <span class="vm-upi-set-toggle__label">ON</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="KYCONOFFGATEWAY('KYCON')" title="Toggle gateway KYC" aria-pressed="false">
+                                    <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                    <span class="vm-upi-set-toggle__label">OFF</span>
+                                </button>
                             }
                         </div>
-
-                    </div>
-                    <div class="body profile-register-address profile-address-second boxback-allpage-admin" style="background:var(--second-bg-color);padding-bottom: 13px;">
-
-                        <table class="table table-bordered table-striped table-hover fourdesign-data-table">
-                            <thead style="background-color:whitesmoke;">
-                                <tr>
-                                    <th>API Name</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.gateway)
-                                {
-                                    <tr>
-                                        <td>@item.Name</td>
-                                        <td>
-                                            @if (item.Sts == true)
-                                            {
-                                                <i class="fa fa-toggle-on fa-2x" style="color:green; cursor:pointer;" onclick="UPIGATEWAYSTS('gateway','@item.idno')"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="fa fa-toggle-off fa-2x" style="color:red; cursor:pointer;" onclick="UPIGATEWAYSTS('gateway','@item.idno')"></i>
-                                            }
-
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-
-                    </div>
+                    }
+                    <a href="@Url.Action("PaymentGatewaySlab", "Home")" target="_blank" class="vm-upi-set-btn vm-upi-set-btn--primary">
+                        <i class="fas fa-cog" aria-hidden="true"></i> PG Charges Setting
+                    </a>
                 </div>
             </div>
-
-
+            <div class="saas-acc-table-wrap table-responsive">
+                <table class="table saas-acc-table table-bordered vm-upi-set-table">
+                    <thead>
+                        <tr>
+                            <th>API Name</th>
+                            <th class="vm-upi-set-status-col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.gateway)
+                        {
+                            <tr>
+                                <td data-label="API Name" class="vm-upi-set-name-cell">@item.Name</td>
+                                <td data-label="Status" class="vm-upi-set-status-cell">
+                                    @if (item.Sts == true)
+                                    {
+                                        <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--on" onclick="UPIGATEWAYSTS('gateway','@item.idno')" title="Click to disable" aria-pressed="true">
+                                            <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                            <span class="vm-upi-set-toggle__label">ON</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="vm-upi-set-toggle vm-upi-set-toggle--off" onclick="UPIGATEWAYSTS('gateway','@item.idno')" title="Click to enable" aria-pressed="false">
+                                            <span class="vm-upi-set-toggle__track" aria-hidden="true"></span>
+                                            <span class="vm-upi-set-toggle__label">OFF</span>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 </section>
 
 <div id="loadermoney" class="loadermoney" style="display:none;"></div>
-<div id="myModal" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;">
+
+<div id="myModal" class="modal fade Wallet-To-Bank-Charge-modal vm-upi-set-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background:#bbb;">
-                <h4 class="modal-title" id="defaultModalLabel" style="width:50%;float:left"> Add UPI Charge</h4>
-                <button type="button" class="btn waves-effect" id="closebtn" data-dismiss="modal" style="width:auto;float:right;padding: 0px;background: transparent;font-size: 14px;line-height: 18px;
-                    margin-top: -5px;border:2px solid var(--main-bg-lcolor);color: var(--main-bg-lcolor);background:#fff;padding: 8px 7px;">
-                    <span style="color: var(--main-bg-lcolor);font-size: 21px;margin: 0;position: relative;top: -5px;">x</span>
-                </button>
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Add UPI Charge</h4>
+                <button type="button" class="vm-upi-set-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-
-
-
-            <div class="modal-body upi-charge-modal" style="margin-top:0px;background:#f5f5f5;">
-                <div class="body">
-
-                    <form id="form_validation" method="POST">
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                <label for="email_address_2">Minimum Charge (Rs)</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group">
-                                    <div class="">
-                                        <select class="form-control" id="RemMinAmt" name="RemMinAmt">
-                                            <option value="">Select one</option>
-                                            <option value="0.00">0.00</option>
-                                            <option value="0.05">0.05</option>
-                                            <option value="0.15">0.15</option>
-                                            <option value="0.25">0.25</option>
-                                            <option value="0.50">0.50</option>
-                                            <option value="0.75">0.75</option>
-                                            <option value="1.00 ">1.00 </option>
-                                            <option value="1.25">1.25</option>
-                                            <option value="1.50">1.50</option>
-                                            <option value="1.75">1.75</option>
-                                            <option value="2.00">2.00</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-
-                                <label for="email_address_2"> Charge (%)</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                <div class="form-group" style="margin-bottom:10px;">
-                                    <div class="">
-                                        <select class="form-control" id="RemMaxAmt" name="RemMaxAmt">
-                                            <option value="">Select one</option>
-                                            <option value="0.00">0.00</option>
-                                            <option value="0.01">0.01</option>
-                                            <option value="0.02">0.02</option>
-                                            <option value="0.03">0.03</option>
-                                            <option value="0.04">0.04</option>
-                                            <option value="0.05">0.05</option>
-                                            <option value="0.75">0.75</option>
-                                            <option value="1.00 ">1.00 </option>
-                                            <option value="1.25">1.25</option>
-                                            <option value="1.50">1.50</option>
-                                            <option value="1.75">1.75</option>
-                                            <option value="2.00">2.00</option>
-
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer special-iii">
-                            <button id="SaveChargeREM" type="button" class="btn waves-effect btnssl2233 fullbodydycolorbg enableOnInput" style="width:auto;border: 1px solid #ddd;color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                Save Change
-                            </button>
-
-                            <button type="button" class="btn waves-effect" style="width:auto;border: 1px solid #ddd;" id="closebtn" data-dismiss="modal">
-                                Close
-                            </button>
-
-                        </div>
-                    </form>
-                    <h2 style="font-size:18px;margin-bottom:0px;border-top: 3px solid var(--main-bg-lcolor);padding-top: 20px;margin-bottom:10px;">Current Active UPI Charge Detail</h2>
-                    <div class="table-responsive " style="width:100%; height:auto;" id="RemTbl">
-                        @Html.Partial("_Upi_slabList")
+            <div class="modal-body upi-charge-modal">
+                <form id="form_validation" method="POST">
+                    <div class="vm-upi-set-form-row">
+                        <label for="RemMinAmt">Minimum Charge (Rs)</label>
+                        <select class="form-control" id="RemMinAmt" name="RemMinAmt">
+                            <option value="">Select one</option>
+                            <option value="0.00">0.00</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.15">0.15</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.50">0.50</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1.00 ">1.00 </option>
+                            <option value="1.25">1.25</option>
+                            <option value="1.50">1.50</option>
+                            <option value="1.75">1.75</option>
+                            <option value="2.00">2.00</option>
+                        </select>
                     </div>
-                    @*<h2 style="font-size:18px;margin-bottom:0px;border-top: 3px solid var(--main-bg-lcolor);padding-top: 20px;margin-bottom:10px;">UPI SELF SETTING</h2>*@
-
-                    @*<form id="form_validation11" method="POST">
-                            <div class="row clearfix">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                    <label for="email_address_2">VPAID (Upi id)</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="">
-                                            <input id="txtupiid" type="text" placeholder="Enter UPI ID" class="form-control" required />
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                    <label for="email_address_2"> Minimum Amount (Rs)</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                    <div class="form-group" style="margin-bottom:10px;">
-                                        <div class="">
-                                            <input id="txtminbal" type="number" placeholder="Enter Minimum Amount" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row clearfix">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                    <label for="email_address_2"> Maximum Amount (Rs)</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                    <div class="form-group" style="margin-bottom:10px;">
-                                        <div class="">
-                                            <input id="txtmaxbal" type="number" placeholder="Enter Maximum Amount" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="modal-footer special-iii">
-                                <button id="SaveChargeminbal" type="button" class="btn waves-effect btnssl2233 fullbodydycolorbg enableOnInput" style="width:auto;border: 1px solid #ddd;color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    Save Change
-                                </button>
-
-                                <button type="button" class="btn waves-effect" style="width:auto;border: 1px solid #ddd;" id="closebtn" data-dismiss="modal">
-                                    Close
-                                </button>
-
-                            </div>
-                        </form>
-
-                        <form id="form_validation1" method="post" style="display:none;">
-                            <input type="hidden" id="hideupiid" />
-                            <input type="hidden" id="hidemin" />
-                            <input type="hidden" id="hidemax" />
-                            <div class="row clearfix">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ">
-                                    <label for="email_address_2">Enter OTP</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-7">
-                                    <div class="form-group">
-                                        <div class="">
-                                            <input id="txtotp" type="text" placeholder="Enter OTP" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer special-iii">
-                                <button id="Saveotp" type="button" class="btn waves-effect btnssl2233 fullbodydycolorbg enableOnInput" style="width:auto;border: 1px solid #ddd;color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                    Submit OTP
-                                </button>
-                                <button type="button" class="btn waves-effect" style="width:auto;border: 1px solid #ddd;" id="closebtn" data-dismiss="modal">
-                                    Close
-                                </button>
-
-                            </div>
-                        </form>*@
-                    @*<label id="lblmsg"></label>
-                        <input type="hidden" id="hideupiid" />
-                        <input type="hidden" id="hidemin" />
-                        <input type="hidden" id="hidemax" />
-
-                        <div class="table-responsive " style="width:100%; height:auto;" id="RemTbl111">
-                            @Html.Partial("_upi_SelfList")
-                        </div>*@
+                    <div class="vm-upi-set-form-row">
+                        <label for="RemMaxAmt">Charge (%)</label>
+                        <select class="form-control" id="RemMaxAmt" name="RemMaxAmt">
+                            <option value="">Select one</option>
+                            <option value="0.00">0.00</option>
+                            <option value="0.01">0.01</option>
+                            <option value="0.02">0.02</option>
+                            <option value="0.03">0.03</option>
+                            <option value="0.04">0.04</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.75">0.75</option>
+                            <option value="1.00 ">1.00 </option>
+                            <option value="1.25">1.25</option>
+                            <option value="1.50">1.50</option>
+                            <option value="1.75">1.75</option>
+                            <option value="2.00">2.00</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="SaveChargeREM" type="button" class="btn waves-effect enableOnInput">Save Change</button>
+                        <button type="button" class="vm-upi-set-btn" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <div class="vm-upi-set-section-divider"></div>
+                <h2>Current Active UPI Charge Detail</h2>
+                <div class="table-responsive" id="RemTbl">
+                    @Html.Partial("_Upi_slabList")
                 </div>
-
             </div>
-
         </div>
     </div>
-
 </div>
 
-<div id="myModal123" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;">
+<div id="myModal123" class="modal fade Wallet-To-Bank-Charge-modal vm-upi-set-modal vm-upi-set-modal--wide" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="background:#bbb;">
-                <h4 class="modal-title" id="defaultModalLabel" style="width:50%;float:left;">Set UPI Transction</h4>
-                <button type="button" class="btn waves-effect" id="closebtn" data-dismiss="modal" style="width:auto;float:right;padding: 0px;background: transparent;
-                    font-size: 14px;line-height: 18px;margin-top: -5px;border:2px solid var(--main-bg-lcolor);color: var(--main-bg-lcolor);background:#fff;padding: 8px 7px;">
-                    <span style="color: var(--main-bg-lcolor);font-size: 21px;margin: 0;position: relative;top: -5px;">x</span>
-                </button>
+            <div class="modal-header">
+                <h4 class="modal-title">Set UPI Transaction</h4>
+                <button type="button" class="vm-upi-set-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-            <div class="modal-body upi-charge-modal" style="margin-top:0px;background:#f5f5f5;">
-                <div class="body">
-                    <h2 style="font-size: 18px; margin-bottom: 5px; margin-top: 0px !important;">Set Variable QR / UPI Request Transction Limit</h2>
-                    <div class="table-responsive " style="width:100%; height:auto;" id="RemTblQRCODE">
-                        @Html.Partial("_Upi_VARIBALE_QR")
+            <div class="modal-body upi-charge-modal">
+                <h2>Set Variable QR / UPI Request Transaction Limit</h2>
+                <div class="table-responsive" id="RemTblQRCODE">
+                    @Html.Partial("_Upi_VARIBALE_QR")
+                </div>
+                <div class="vm-upi-set-section-divider"></div>
+                <h2>
+                    Self UPI Transaction Limit
+                    <span style="color:#dc2626;font-size:0.82rem;font-weight:600;">&nbsp;(*Self UPI Range Between 10 To 3000)</span>
+                </h2>
+                <label id="lblmsg"></label>
+                <input type="hidden" id="hideupiid" />
+                <input type="hidden" id="hidemin" />
+                <input type="hidden" id="hidemax" />
+                <input type="hidden" id="hidddlpaymenttype" />
+                <div id="RemTbl111">
+                    @Html.Partial("_upi_SelfList")
+                </div>
+                <h2>VPA Details</h2>
+                <div id="RemTbl222">
+                    @Html.Partial("_VPAset_SelfList")
+                </div>
+                <h2>Selected UPI Mode Are Blocked</h2>
+                <div id="RemTbl333">
+                    <div class="vm-upi-set-block-actions">
+                        <button type="button" class="vm-upi-set-btn" onclick="eselectAll()">
+                            <i class="far fa-check-square" aria-hidden="true"></i> Block All
+                        </button>
+                        <button type="button" class="vm-upi-set-btn" onclick="eUnSelectAll()">
+                            <i class="far fa-square" aria-hidden="true"></i> Unblock All
+                        </button>
+                        <button type="button" id="SaveAll" class="vm-upi-set-btn vm-upi-set-btn--primary">
+                            <i class="fas fa-save" aria-hidden="true"></i> Save Details
+                        </button>
                     </div>
-                    <div style="border-top: 3px solid var(--main-bg-lcolor);"></div>
-                    <h2 style="font-size:18px;margin-top: 0px;padding-top: 40px;margin-bottom: -10px;">
-                        Self UPI Transction Limit
-                        <span style="color: red; margin-bottom: -10px; font-size:13px;">&nbsp;(*Self UPI Range Between 10 To 3000)</span>
-                    </h2>
-                    <label id="lblmsg"></label>
-                    <input type="hidden" id="hideupiid" />
-                    <input type="hidden" id="hidemin" />
-                    <input type="hidden" id="hidemax" />
-                    <input type="hidden" id="hidddlpaymenttype" />
-                    <div class="" style="width: 100%; height: auto; overflow-y: auto;" id="RemTbl111">
-                        @Html.Partial("_upi_SelfList")
-                    </div>
-                    <h2 style="font-size: 18px; margin-bottom: 10px; margin-top: -10px;">VPA Details</h2>
-                    <div class="" style="width: 100%; height: auto; overflow-y: auto;" id="RemTbl222">
-                        @Html.Partial("_VPAset_SelfList")
-                    </div>
-                    <h2 style="font-size: 18px; margin-bottom: 10px; margin-top: -10px;">Selected UPI Mode Are Blocked</h2>
-                    <div class="" style="width: 100%; height: auto;" id="RemTbl333">
-                        <div class="card Are">
-                            <div class="demo-checkbox">
-                                <div class="row">
-                                </div>
-                                <div class="third">
-                                    <ul class="smssetting-top backgfull-third lllkggt" style="display: flex; margin: 3px; justify-content: space-around; width: 99%;">
-                                        <li style="width:20%; float:left;">
-                                            <button type="button" class="btn  waves-effect for-select-mail" onclick="eselectAll()" style="padding: revert;height:25px;">
-                                                <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);top:1px;"></i> <span style="top:-2px;">Block All</span>
-                                            </button>
-                                        </li>
-                                        <li style="width:20%; float:left;">
-                                            <button type="button" class="btn waves-effect for-select-mail text-center" onclick="eUnSelectAll()" style="padding: revert;height:25px;">
-                                                <i class="fa fa-square-o" aria-hidden="true" style="top:1px;"></i><span style="top:-2px;">Unblock All</span>
-                                            </button>
-                                        </li>
-                                        <li class="button-seconddesign" style="width:55%; float:left;">
-                                            <button type="button" id="SaveAll" class="btn  waves-effect fullbodydycolorbg btn-first" style="float: right; height: 25px; padding: 4px;">
-                                                <span style="color: #fff; top: -2px">Save Details </span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row" id="SelfUpiCheckUncheck">
-                                    <div class="col-md-12 col-sm-12 col-xs-12 co" style="margin: 8px;">
-                                        <div class="row">
-                                            <div class="col-md-3 col-sm-4 col-xs-6 co">
-                                                <input type="checkbox" id="Paytm" value="Paytm" class="filled-in chk-col-red" name="acs1">
-                                                <label for="Paytm" style="padding-left: 21px;">Paytm</label>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4 col-xs-6 co">
-                                                <input type="checkbox" id="PhonePe" value="PhonePe" class="filled-in chk-col-red" name="acs1">
-                                                <label for="PhonePe" style="padding-left: 21px;">PhonePe</label>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4 col-xs-6 co">
-                                                <input type="checkbox" id="GooglePay" value="Google Pay" class="filled-in chk-col-red" name="acs1">
-                                                <label for="GooglePay" style="padding-left: 21px;">Google Pay</label>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4 col-xs-6 co">
-                                                <input type="checkbox" id="AmazonPay" value="Amazon Pay" class="filled-in chk-col-red" name="acs1">
-                                                <label for="AmazonPay" style="padding-left: 21px;">Amazon Pay</label>
-                                            </div>
-                                            <div class="col-md-3 col-sm-4 col-xs-6 co">
-                                                <input type="checkbox" id="WhatsApp" value="WhatsApp" class="filled-in chk-col-red" name="acs1">
-                                                <label for="WhatsApp" style="padding-left: 21px;">WhatsApp</label>
-                                            </div>
-                                        </div><!--.row-->
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="vm-upi-set-check-grid" id="SelfUpiCheckUncheck">
+                        <div class="vm-upi-set-check-item">
+                            <input type="checkbox" id="Paytm" value="Paytm" class="filled-in chk-col-red" name="acs1">
+                            <label for="Paytm">Paytm</label>
+                        </div>
+                        <div class="vm-upi-set-check-item">
+                            <input type="checkbox" id="PhonePe" value="PhonePe" class="filled-in chk-col-red" name="acs1">
+                            <label for="PhonePe">PhonePe</label>
+                        </div>
+                        <div class="vm-upi-set-check-item">
+                            <input type="checkbox" id="GooglePay" value="Google Pay" class="filled-in chk-col-red" name="acs1">
+                            <label for="GooglePay">Google Pay</label>
+                        </div>
+                        <div class="vm-upi-set-check-item">
+                            <input type="checkbox" id="AmazonPay" value="Amazon Pay" class="filled-in chk-col-red" name="acs1">
+                            <label for="AmazonPay">Amazon Pay</label>
+                        </div>
+                        <div class="vm-upi-set-check-item">
+                            <input type="checkbox" id="WhatsApp" value="WhatsApp" class="filled-in chk-col-red" name="acs1">
+                            <label for="WhatsApp">WhatsApp</label>
                         </div>
                     </div>
                 </div>
@@ -558,12 +427,8 @@
         </div>
     </div>
 </div>
-<!--=======    Modal For Bank Details   ========-->
-<script>
-    $(document).ready(function () {
-        ddlnamechange();
-    });
-</script>
+<!--=======    Scripts   ========-->
+<script src="~/Swalalert/sweetalert-dev.js"></script>
 <script>
     function ddlnamechange() {
         var selectname = $('#ddlname').val();
@@ -705,37 +570,7 @@
         $('#Whitesubmit').submit();
     }
 </script>
-<!--=======    Modal For Bank Details   ========-->
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<!------------------------------------------partialpage-->
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-<script>
-    function failed(error) {
-        alert(error.statusText);
-    }
-    function failed1(error) {
-        alert(error.statusText);
-    }
-</script>
-<script>
-    $('#ddlname').select2();
-    $('#Retailerid').select2();
-    $('#Dealerid').select2();
-    $('#Masterid').select2();
-    $('#Whitelabelid').select2();
-    $('#ddlstatus').select2();
-</script>
-<!------------------------>
+
 <script>
 $(document).ready(function(){
     $("button.shownextrow").click(function () {
@@ -876,8 +711,6 @@ $(document).ready(function(){
 </script>
 
 
-
-<label style="color:red;">@Model.msg</label>
 
 <script>
     function UPIOnOff(usefor) {
@@ -1154,7 +987,6 @@ url,
 
 <script type="text/javascript">
     function eselectAll() {
-        debugger;
         var items = document.getElementsByName('acs1');
         for (var i = 0; i < items.length; i++) {
             if (items[i].type == 'checkbox')

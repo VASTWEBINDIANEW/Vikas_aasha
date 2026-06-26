@@ -1,0 +1,280 @@
+/* Recharge Seller (DistibutorListforseller) — Giftcard shell + mobile fixes */
+
+body.saas-admin-ui .saas-recharge-seller-page {
+    --rseller-filter-dealer-width: 240px;
+    --ticket-accent: #2563eb;
+}
+
+/* Desktop: dealer + search aligned right (ecommerce toolbar shell) */
+body.saas-admin-ui .saas-recharge-seller-page .vm-gift-filter-row--one-line > .vm-rseller-field--dealer {
+    flex: 0 0 var(--rseller-filter-dealer-width) !important;
+    width: var(--rseller-filter-dealer-width) !important;
+    min-width: var(--rseller-filter-dealer-width) !important;
+    max-width: var(--rseller-filter-dealer-width) !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-gift-filter-row--one-line > .vm-dmt-filter-search-group {
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-opr-table-panel__title i.fa-store {
+    color: #2563eb;
+}
+
+/* Table */
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable thead th,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable tbody td {
+    vertical-align: middle !important;
+    font-size: 0.78rem !important;
+    padding: 10px 12px !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable thead th.vm-rseller-th {
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #475569 !important;
+    line-height: 1.25 !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--master,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-td--master { width: 18% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--dist,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-td--dist { width: 18% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--name,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-td--name { width: 15% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--mobile,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-td--mobile { width: 11% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--email,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-td--email { width: 22% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-th--status,
+body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable .vm-rseller-sell-cell { width: 10% !important; }
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-firm {
+    font-weight: 600;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-mono {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-sell-cell {
+    text-align: center;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 52px !important;
+    min-height: 30px !important;
+    padding: 4px 12px !important;
+    border-radius: 999px !important;
+    border: 1px solid transparent !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-toggle--on {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-toggle--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-empty-row td {
+    text-align: center !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    padding: 28px 16px !important;
+}
+
+/* ── Tablet / Mobile toolbar (override operator + giftcard + dmt mobile conflicts) ── */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified {
+        padding: 8px 10px !important;
+        margin-bottom: 10px !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-head,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-dmt-report-page .vm-dmt-toolbar-head--one-line {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        gap: 0 !important;
+    }
+
+    /* Breadcrumb MUST stay on top — beats dmt-report order:2 on mobile */
+    body.saas-admin-ui .saas-recharge-seller-page.saas-dmt-report-page .vm-opr-toolbar-head .vm-dmt-breadcrumb.vm-rseller-breadcrumb,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-ticket-report-page .vm-opr-toolbar-head .vm-dmt-breadcrumb,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-breadcrumb,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-head .saas-acc-breadcrumb {
+        order: 1 !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 8px !important;
+        padding: 0 0 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        font-size: 0.74rem !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-acc-toolbar--stacked .saas-acc-filter-bar,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified .saas-acc-filter-bar,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-head .saas-acc-filter-bar,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-dmt-report-page .vm-opr-toolbar-head .saas-acc-filter-bar,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-gift-filter-row--one-line {
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-top: none !important;
+        gap: 8px !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified .saas-acc-filter-bar {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        padding-top: 0 !important;
+        border-top: none !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-ticket-report-page .vm-dmt-filter-row--ticket > .vm-rseller-field--dealer,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-ticket-report-page .vm-dmt-filter-row--ticket.vm-dmt-filter-row--one-line > .vm-rseller-field--dealer,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-dmt-report-page .vm-dmt-filter-row--one-line > .vm-rseller-field--dealer,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified .saas-acc-filter-bar > .vm-opr-field.vm-rseller-field--dealer,
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified .saas-acc-filter-bar > .vm-rseller-field--dealer,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-gift-filter-row--one-line > .vm-rseller-field--dealer {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        align-self: stretch !important;
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-field--dealer select,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-field--dealer .select2-container,
+    body.saas-admin-ui .saas-recharge-seller-page #Dealertdd,
+    body.saas-admin-ui .saas-recharge-seller-page #Dealertdd + .select2-container {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-gift-filter-row--one-line > .vm-dmt-filter-search-group {
+        flex: 0 0 auto !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-dmt-report-page .vm-dmt-filter-search-group,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-dmt-filter-search-group {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        justify-content: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page.saas-operator-report-page .vm-opr-toolbar-unified .vm-opr-toolbar-search,
+    body.saas-admin-ui .saas-recharge-seller-page .vm-dmt-filter-search-group .vm-opr-toolbar-search {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 40px !important;
+        height: 40px !important;
+        margin: 0 !important;
+        justify-content: center !important;
+        border-radius: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-field--dealer .select2-container--default .select2-selection--single {
+        width: 100% !important;
+        min-height: 40px !important;
+        height: 40px !important;
+        border-radius: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-field--dealer .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-recharge-seller-page .vm-opr-page-shell {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-breadcrumb__hide-mobile {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-rseller-breadcrumb__current {
+        font-weight: 800 !important;
+        color: #0f172a !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .table-responsive.vm-opr-table-scroll {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page #rechargeSellerTable.vm-opr-data-table {
+        min-width: 920px !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-seller-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+}

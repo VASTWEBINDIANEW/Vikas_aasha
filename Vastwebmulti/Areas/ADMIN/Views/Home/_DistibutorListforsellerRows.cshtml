@@ -1,0 +1,37 @@
+@model IEnumerable<Vastwebmulti.Models.Recharge_sell_by_dealer>
+@using System.Linq
+@using Vastwebmulti.Models
+@{
+    Layout = null;
+    var items = Model ?? Enumerable.Empty<Vastwebmulti.Models.Recharge_sell_by_dealer>();
+    VastwebmultiEntities db = new VastwebmultiEntities();
+    var sd = 0;
+}
+@if (items.Any())
+{
+    foreach (var item in items)
+    {
+        var dealess = db.Dealer_Details.Where(s => s.DealerId == item.Dealerid).ToList();
+        if (dealess.Count == 0) { continue; }
+        string ssdss = dealess[0].SSId;
+        var mastess = db.Superstokist_details.Where(s => s.SSId == ssdss).ToList();
+        if (mastess.Count == 0) { continue; }
+        <tr class="vm-rseller-row" data-row-index="@sd">
+            <td class="vm-rseller-firm vm-rseller-td--master" title="@mastess[0].FarmName">@mastess[0].FarmName</td>
+            <td class="vm-rseller-firm vm-rseller-td--dist" title="@dealess[0].FarmName">@dealess[0].FarmName</td>
+            <td class="vm-rseller-td--name" title="@dealess[0].DealerName">@dealess[0].DealerName</td>
+            <td class="vm-rseller-mono vm-rseller-td--mobile">@dealess[0].Mobile</td>
+            <td class="vm-rseller-email vm-rseller-td--email">@dealess[0].Email</td>
+            <td class="vm-rseller-sell-cell" data-row-index="@sd">
+                <button type="button" class="vm-rseller-toggle vm-rseller-toggle--on" onclick="stschange('@item.Dealerid', false, @sd)" title="Sell recharge is ON">ON</button>
+            </td>
+        </tr>
+        sd++;
+    }
+}
+else
+{
+    <tr class="vm-rseller-empty-row">
+        <td colspan="6">No recharge seller distributors found for the selected filter.</td>
+    </tr>
+}

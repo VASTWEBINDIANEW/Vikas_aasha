@@ -30097,6 +30097,65 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             jsonmodel.HTMLString = renderPartialViewtostring("_Retailerlist_Paging", viewmodel);
             return Json(jsonmodel);
         }
+
+        [HttpPost]
+        public ActionResult UploadRetailerTablePhoto(string retailerId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(retailerId))
+                {
+                    return Json(new { success = false, message = "Invalid retailer id." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var file = Request.Files["FileUpload"];
+                if (file == null || file.ContentLength <= 0)
+                {
+                    return Json(new { success = false, message = "Please select an image." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var ext = Path.GetExtension(file.FileName);
+                if (string.IsNullOrWhiteSpace(ext))
+                {
+                    ext = ".jpg";
+                }
+                ext = ext.ToLowerInvariant();
+                var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                if (!allowed.Contains(ext))
+                {
+                    return Json(new { success = false, message = "Only image files are allowed." }, JsonRequestBehavior.AllowGet);
+                }
+
+                var newFileName = Guid.NewGuid().ToString() + ext;
+                var relativePath = "Retailer_image/" + newFileName;
+                var physicalPath = Server.MapPath("~/" + relativePath);
+                var dir = Path.GetDirectoryName(physicalPath);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                file.SaveAs(physicalPath);
+
+                var webPath = "/" + relativePath;
+
+                var retailer = db.Retailer_Details.FirstOrDefault(aa => aa.RetailerId == retailerId && aa.ISDeleteuser == false);
+                if (retailer == null)
+                {
+                    return Json(new { success = false, message = "Retailer not found." }, JsonRequestBehavior.AllowGet);
+                }
+
+                retailer.Photo = webPath;
+                retailer.aadhar_image = webPath;
+                db.SaveChanges();
+
+                return Json(new { success = true, imageUrl = webPath, message = "Photo updated successfully." }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Upload failed. Please try again." }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public PartialViewResult RetailerSearchBy(string txtmob)
         {
@@ -30173,7 +30232,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
         }
 
 
@@ -30487,7 +30546,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
         }
         public ActionResult RetailerChangePermissionStatus(int id)
         {
@@ -30518,7 +30577,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
 
 
 
@@ -30580,7 +30639,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
 
 
 
@@ -30683,7 +30742,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
 
         }
 
@@ -30746,7 +30805,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                                          };
 
-                return PartialView("_Retailerlist", viewmodel);
+                return PartialView("_RetailerlistTable", viewmodel);
 
             }
             catch
@@ -30769,7 +30828,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                          };
-                return PartialView("_Retailerlist", viewmodel);
+                return PartialView("_RetailerlistTable", viewmodel);
             }
 
 
@@ -31118,7 +31177,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                                                                  };
 
-                        return PartialView("_Retailerlist", viewmodel);
+                        return PartialView("_RetailerlistTable", viewmodel);
                     }
                     else
                     {
@@ -31220,7 +31279,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             //        ViewBag.district = new SelectList(district, "Dist_id", "Dist_Desc").ToList();
             //        viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //        return PartialView("_Retailerlist", viewmodel);
+            //        return PartialView("_RetailerlistTable", viewmodel);
             //    }
             //    else
             //    {
@@ -31294,7 +31353,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //return PartialView("_Retailerlist", viewmodel);
+            //return PartialView("_RetailerlistTable", viewmodel);
 
 
         }
@@ -31342,7 +31401,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                                  };
-                        return PartialView("_Retailerlist", viewmodel);
+                        return PartialView("_RetailerlistTable", viewmodel);
                     }
                 }
                 else
@@ -31411,7 +31470,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                                  };
-                        return PartialView("_Retailerlist", viewmodel);
+                        return PartialView("_RetailerlistTable", viewmodel);
                     }
                 }
                 else
@@ -31490,7 +31549,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
             //viewmodel.select_retailer_details = db.Select_Retailer_Details_all("ADMIN", "ADMIN", "ADMIN").ToList();
 
-            //return PartialView("_Retailerlist", viewmodel);
+            //return PartialView("_RetailerlistTable", viewmodel);
 
 
         }
@@ -31533,7 +31592,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
 
                                                      };
-            return PartialView("_Retailerlist", viewmodel);
+            return PartialView("_RetailerlistTable", viewmodel);
         }
 
 
@@ -126109,6 +126168,39 @@ ORDER BY a.CreatedAt DESC";
             return Json("OK");
         }
 
+        [HttpGet]
+        public JsonResult GetDealerDetails(string masterId)
+        {
+            if (string.IsNullOrWhiteSpace(masterId))
+            {
+                return Json(new object[0], JsonRequestBehavior.AllowGet);
+            }
+
+            var dealers = db.Dealer_Details
+                .Where(x => x.SSId == masterId)
+                .OrderBy(x => x.FarmName)
+                .Select(x => new { DealerId = x.DealerId, FarmName = x.FarmName })
+                .ToList();
+
+            return Json(dealers, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetReailerDetails(string masterId)
+        {
+            var dealerId = masterId;
+            if (string.IsNullOrWhiteSpace(dealerId))
+            {
+                return Json(new object[0], JsonRequestBehavior.AllowGet);
+            }
+
+            var retailers = db.select_retailer_for_ddl(dealerId)
+                .Select(r => new { RetailerId = r.RetailerId, Frm_Name = r.Frm_Name })
+                .ToList();
+
+            return Json(retailers, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult daywisecomm(string retailss, string dealesds, string maststs)
         {
@@ -126349,21 +126441,8 @@ ORDER BY a.CreatedAt DESC";
 
         public ActionResult daywisecommhistory()
         {
-            var txt_frm_date = DateTime.Now.ToString();
-            var txt_to_date = DateTime.Now.ToString();
-
-
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
-
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            DateTime frm_date = DateTime.Today;
+            DateTime to_date = DateTime.Today.AddDays(1);
             var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
             IEnumerable<SelectListItem> selectallretailer = from p in allretailername
                                                             select new SelectListItem
@@ -126372,29 +126451,24 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            var df = db.daywisecomms.Where(s=>s.date>=frm_date).OrderByDescending(s => s.date).ToList();
+            var df = db.daywisecomms.Where(s => s.date >= frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
             return View(df);
         }
         [HttpPost]
          public ActionResult daywisecommhistory(string allretailer, string txt_frm_date, string txt_to_date)
         {
-            if (txt_frm_date == null && txt_to_date == null)
+            if (string.IsNullOrWhiteSpace(txt_frm_date) && string.IsNullOrWhiteSpace(txt_to_date))
             {
-                txt_frm_date = DateTime.Now.ToString();
-                txt_to_date = DateTime.Now.ToString();
-
+                txt_frm_date = DateTime.Today.ToString("yyyy-MM-dd");
+                txt_to_date = DateTime.Today.ToString("yyyy-MM-dd");
             }
-            DateTime frm = Convert.ToDateTime(txt_frm_date);
-            DateTime to = Convert.ToDateTime(txt_to_date);
-            txt_frm_date = frm.ToString("dd-MM-yyyy");
-            txt_to_date = to.ToString("dd-MM-yyyy");
 
             string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
                             "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
-            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Now;
-            DateTime frm_date = Convert.ToDateTime(dt).Date;
-            DateTime to_date = Convert.ToDateTime(dt1).Date.AddDays(1);
+            DateTime dt = !string.IsNullOrWhiteSpace(txt_frm_date) ? DateTime.ParseExact(txt_frm_date.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Today;
+            DateTime dt1 = !string.IsNullOrWhiteSpace(txt_to_date) ? DateTime.ParseExact(txt_to_date.Trim(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None) : DateTime.Today;
+            DateTime frm_date = dt.Date;
+            DateTime to_date = dt1.Date.AddDays(1);
             var allretailername = (db.select_retailer_for_ddl("Admin")).ToList();
             IEnumerable<SelectListItem> selectallretailer = from p in allretailername
                                                             select new SelectListItem
@@ -126403,7 +126477,15 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
-            var df = db.daywisecomms.Where(s => s.userid.Contains(allretailer)&&s.date>frm_date && s.date< to_date).OrderByDescending(s=>s.date).ToList();
+            ViewBag.chk = "post";
+
+            var query = db.daywisecomms.Where(s => s.date >= frm_date && s.date < to_date);
+            if (!string.IsNullOrWhiteSpace(allretailer))
+            {
+                query = query.Where(s => s.userid == allretailer);
+            }
+
+            var df = query.OrderByDescending(s => s.date).ToList();
             return View(df);
             
         }
@@ -126723,6 +126805,7 @@ ORDER BY a.CreatedAt DESC";
                                                                 Text = p.Frm_Name,
                                                             };
             ViewBag.allretailer = new SelectList(selectallretailer, "Value", "Text");
+            ViewBag.chk = "post";
             var chk = db.closingbalances.Where(s=>s.userid.Contains(allretailer) && s.date > frm_date && s.date < to_date).OrderByDescending(s => s.date).ToList();
 
             return View(chk);

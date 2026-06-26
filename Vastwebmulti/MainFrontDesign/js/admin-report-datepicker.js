@@ -242,23 +242,11 @@
         initReportDateForm("#prepaidCardReportForm");
         initReportDateForm("#upiChargesForm");
         initReportDateForm("#payUGatewayForm", "#txt_frm_date1", "#txt_to_date1", true);
-    }
-
-    function schedulePayUGatewayDateInit() {
-        var attempts = 0;
-        function run() {
-            attempts += 1;
-            if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.datepicker) {
-                if (attempts < 80) {
-                    window.setTimeout(run, 50);
-                }
-                return;
-            }
-            if (typeof window.initAdminReportDateForm === "function") {
-                window.initAdminReportDateForm("#payUGatewayForm", "#txt_frm_date1", "#txt_to_date1", true);
-            }
+        if (typeof window.bootPayUGatewayDates === "function") {
+            window.setTimeout(function () {
+                window.bootPayUGatewayDates(0);
+            }, 0);
         }
-        run();
     }
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.datepicker) {
@@ -272,6 +260,5 @@
     }
 
     window.initAdminReportDateForm = initReportDateForm;
-    window.schedulePayUGatewayDateInit = schedulePayUGatewayDateInit;
     window.repositionAdminDatepickerForMobile = repositionDatepickerForMobile;
 })(window, document);

@@ -1,738 +1,498 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.extracommhistory_Result>
+@using System
+@using System.Linq
+@using System.Collections.Generic
 @using Vastwebmulti.Models
 @{
-    VastwebmultiEntities db = new VastwebmultiEntities();
+    ViewBag.Title = "Extra Commission Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    VastwebmultiEntities db = new VastwebmultiEntities();
+
+    var reports = Model ?? Enumerable.Empty<extracommhistory_Result>();
+    var rowCount = reports.Count();
+    var onCount = reports.Count(i => i.sts == true);
+    var offCount = rowCount - onCount;
+
+    var settings = db.daywisesettelecomms.ToList();
+    var settingsRow = settings.FirstOrDefault();
+    var daysCount = settingsRow != null ? (settingsRow.dayscounts ?? 0) : 0;
+    var minAmount = settingsRow != null ? (settingsRow.minamount ?? 0m) : 0m;
+    var maxAmount = settingsRow != null ? (settingsRow.maxamount ?? 0m) : 0m;
+    var settingsOn = settingsRow != null && settingsRow.sts == true;
+
+    var masters = db.Superstokist_details.OrderBy(s => s.FarmName).ToList();
+    var selectedMaster = (Request["maststs"] ?? "").Trim();
+    var selectedDealer = (Request["dealesds"] ?? "").Trim();
+    var selectedRetailer = (Request["retailss"] ?? "").Trim();
 }
-<style>
-    /* new css  */
 
-    #inphidess input {
-        width: 100%;
-        border: none;
-    }
-    .all_page_alert {
-        position: absolute;
-        top: 109px;
-        z-index: 99;
-        right: 15px;
-        padding: 10px;
-        display: none;
-    }
-
-    .selecthotel-third select {
-        border: 1px solid;
-        height: 32px;
-    }
-
-    .res_div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-        .res_div svg:hover + .all_page_alert {
-            display: block;
-        }
-
-        .res_div svg {
-            width: 23px;
-            color: #000;
-            margin-left: 8px;
-            cursor: pointer;
-        }
-    .retailerlist-header-resp {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .row.clearfix {
-        margin: 0;
-    }   
-
-    /* end new css  */
-
-    .second-design .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
-
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .ss :hover {
-        color: green;
-    }
-
-    .ff :hover {
-        color: red;
-    }
-
-    .gift-select select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-    }
-
-    .gift-select {
-        position: relative;
-        padding: 0;
-        width: auto;
-    }
-
-        .gift-select::before {
-            content: '';
-            border-bottom: 1px solid #555;
-            border-left: 1px solid #555;
-            width: 7px;
-            height: 7px;
-            display: block;
-            position: absolute;
-            right: 10px;
-            transform: rotate(-45deg);
-            top: 11px;
-        }
-
-    .giftadmin-tableste tbody tr td, .giftadmin-tableste thead tr th {
-        white-space: nowrap;
-    }
-
-        .giftadmin-tableste tbody tr td .row {
-            margin: 0px;
-        }
-
-        .giftadmin-tableste tbody tr td:nth-child(17) {
-            white-space: normal;
-        }
-
-    .status-gift-admin img {
-        height: 18px !important;
-        padding: 3px !important;
-        width: 18px;
-        border-radius: 50%;
-    }
-
-    .status-gift-admin p {
-        font-size: 0px !important;
-    }
-
-    .second-design .giftth-seconclass, .giftth-seconclass {
-        width: 80px !important;
-    }
-
-    .borderclassgift select, .borderclassgift input, .borderclassgift button, .borderclassgift .select2-selection.select2-selection--single {
-        border-color: #ddd !important;
-    }
-
-
-    .report-status {
-        width: 80%;
-        float: left;
-    }
-
-        .report-status label {
-            float: left;
-        }
-
-        .report-status input {
-            float: left;
-            font-size: 16px;
-            background-color: transparent !important;
-            font-weight: 800;
-            height: 17px !important;
-        }
-
-        .report-status .form-group {
-            width: 46%;
-            float: left;
-            margin: auto 2%;
-        }
-
-    .mastetr222Modal .modal-body .form-group input {
-        min-height: 32px;
-        width: 100%;
-    }
-
-    .newfourdesign-admin .gift-select::before {
-        display: none;
-    }
-
-    .newfourdesign-admin .btn:not(.btn-link):not(.btn-circle), .newfourdesign-admin .form-group .form-control {
-        border: 1px solid #ddd !important;
-        background: transparent !important;
-    }
-
-    .newfourdesign-admin .margi-topo-third .col-lg-12.col-md-12.col-sm-12.col-xs-12.for-margin-top {
-        margin-top: 0px !important;
-    }
-
-    .newfourdesign-admin .form-control {
-        background: transparent !important;
-    }
-
-    .ner {
-        width: 25px !important;
-        border: 1px solid #ddd !important;
-    }
-
-    .custom-date-icon i {
-        left: 5px;
-    }
-
-    .admin-giftcard-table table tbody tr:first-child td, .admin-giftcard-table table tbody tr:first-child {
-        border-top: 0px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .mastetr222Modal .modal-dialog {
-            width: 95% !important;
-        }
-    }
-
-
-    @@media only screen and (max-width:992px) {
-        .gift-select, .ytr-okpli {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-        }
-
-        .col-md-4.respo-upup {
-            margin: 10px 0 !important;
-        }
-
-        .ytr-okpli button {
-            width: 100%;
-            text-align: left;
-        }
-
-        .card {
-            margin: 0px;
-        }
-
-
-        .col-md-4.respo-upup {
-            width: 100%;
-            float: left;
-            padding: 0 !important;
-        }
-
-        .form-line {
-            width: 100% !important;
-        }
-
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            position: static !important;
-            margin-left: 5px !important;
-        }
-
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .page-header-third {
-            overflow: scroll;
-        }
-        table {
-            overflow: scroll;
-        }
-        .all-type-third {
-            margin-bottom: 10px;
-        }
-        .selecthotel-third select {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-        .gift-select, .ytr-okpli {
-            width: 100%;
-            float: left;
-            margin-bottom: 10px;
-        }
-        .gift-card-top .col-md-1 {
-            width: 100%;
-            float: left;
-            padding-left: 0px !important;
-            margin: 0;
-        }
-
-        .gift-card-top .col-md-2 {
-            width: 50%;
-            float: left;
-            margin-bottom: 3px;
-        }
-
-        .gift-card-top .col-md-4 {
-            padding-left: 0px !important;
-            margin-bottom: 4px;
-            float: left;
-        }
-
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-
-        .gift-card-top .col-md-1 center button {
-            margin-top: 0px !important;
-            float: left;
-            width: 100%;
-        }
-
-        #total {
-            text-align: right;
-            margin-right: 15px;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .body.table-responsive {
-            padding: 1px !important;
-        }
-
-        .col-md-2.tre4.pdf-lastclass-third {
-            float: right;
-            padding: 0px;
-        }
-    }
-</style>
-
-<section class="content retailerList_Page fourdesign-section-admin">
-    <div class="container-fluid retailer-list-page">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Giftcard Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard", "Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Giftcard Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-        <div class="page-header-third pageheader-margin-third retailerlist-header-resp">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul class="padding-top-third">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Extra Commission Status
-                    </li>
-                </ul>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=54" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=34" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-closing-balance-report-page saas-daywise-comm-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell vm-daywise-comm-toolbar">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Settings</li>
+                    <li>Extra Commission Status</li>
+                </ol>
             </div>
-            <div class="res_div">
-                
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                </svg>
-                <div class="alert alert-success all_page_alert" role="alert">
-                    Extra Commission Status
+        </div>
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-daywise-comm-settings-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-sliders-h" aria-hidden="true"></i>
+                        <span>Daywise commission settings</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-daywise-comm-info" title="Configure days, amount range and global ON/OFF for extra commission">
+                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="vm-opr-table-wrap vm-daywise-comm-settings-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table class="table vm-opr-data-table vm-daywise-comm-settings-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Days</th>
+                                    <th>Minimum</th>
+                                    <th>Maximum</th>
+                                    <th>Edit</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="vmDaywiseSettingsView" class="vm-daywise-settings-view-row">
+                                    <td class="vm-daywise-settings-view-cell" data-label="Days">@daysCount</td>
+                                    <td class="vm-daywise-settings-view-cell" data-label="Minimum">@minAmount.ToString("N2")</td>
+                                    <td class="vm-daywise-settings-view-cell" data-label="Maximum">@maxAmount.ToString("N2")</td>
+                                    <td class="vm-daywise-settings-view-cell vm-daywise-settings-view-cell--edit" data-label="Edit">
+                                        <button type="button" class="vm-daywise-comm-edit-btn" onclick="vmDaywiseShowSettingsEdit()">
+                                            <i class="fas fa-edit" aria-hidden="true"></i><span>Edit</span>
+                                        </button>
+                                    </td>
+                                    <td class="vm-daywise-settings-view-cell vm-daywise-settings-view-cell--status" data-label="Status">
+                                        @if (settingsOn)
+                                        {
+                                            <a href="@Url.Action("Updatestsofdaily", "Home", new { sts = false })" class="vm-daywise-status-pill vm-daywise-status-pill--on vm-daywise-status-pill--link"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Updatestsofdaily", "Home", new { sts = true })" class="vm-daywise-status-pill vm-daywise-status-pill--off vm-daywise-status-pill--link"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></a>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr id="vmDaywiseSettingsEdit" class="vm-daywise-settings-edit-row is-hidden">
+                                    @using (Html.BeginForm("setcommdaywisests", "Home", FormMethod.Post, new { @class = "vm-daywise-settings-edit-form" }))
+                                    {
+                                        <td class="vm-daywise-settings-edit-cell" data-label="Days">
+                                            <input type="number" class="form-control vm-daywise-settings-input" name="dayscount" value="@daysCount" min="0" placeholder="Days" />
+                                        </td>
+                                        <td class="vm-daywise-settings-edit-cell" data-label="Minimum">
+                                            <input type="number" class="form-control vm-daywise-settings-input" name="minimums" value="@minAmount" min="0" step="0.01" placeholder="Minimum" />
+                                        </td>
+                                        <td class="vm-daywise-settings-edit-cell" data-label="Maximum">
+                                            <input type="number" class="form-control vm-daywise-settings-input" name="maximum" value="@maxAmount" min="0" step="0.01" placeholder="Maximum" />
+                                        </td>
+                                        <td class="vm-daywise-settings-edit-cell vm-daywise-settings-edit-cell--actions" data-label="Actions" colspan="2">
+                                            <div class="vm-daywise-settings-action-group">
+                                                <button type="submit" class="vm-daywise-comm-save-btn">
+                                                    <i class="fas fa-save" aria-hidden="true"></i><span>Save</span>
+                                                </button>
+                                                <button type="button" class="vm-daywise-comm-cancel-btn" onclick="vmDaywiseHideSettingsEdit()">
+                                                    <i class="fas fa-times" aria-hidden="true"></i><span>Cancel</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        @{
-            var chk = db.daywisesettelecomms.ToList();
+
+        @using (Html.BeginForm("daywisecomm", "Home", FormMethod.Post, new { id = "daywiseCommFilterForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line vm-daywise-comm-filter-row">
+
+                        <div class="vm-opr-field vm-dmt-field vm-daywise-comm-field vm-daywise-comm-field--master">
+                            <select id="maststs" name="maststs" class="vm-opr-select vm-dmt-select form-control">
+                                <option value="">ALL Master</option>
+                                @foreach (var master in masters)
+                                {
+                                    <option value="@master.SSId" @(master.SSId == selectedMaster ? "selected=\"selected\"" : "")>@master.FarmName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-daywise-comm-field vm-daywise-comm-field--dealer">
+                            <select id="dealesds" name="dealesds" class="vm-opr-select vm-dmt-select form-control">
+                                <option value="">ALL Dealer</option>
+                            </select>
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-daywise-comm-field vm-daywise-comm-field--retailer">
+                            <select id="retailss" name="retailss" class="vm-opr-select vm-dmt-select form-control">
+                                <option value="">ALL Retailer</option>
+                            </select>
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <button type="submit" name="btntype" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
 
-        <div class="row clearfix">
-
-
-            <div class="page-header-third">
-                <table style="margin:0;" class="table table-bordered table-striped table-hover table-background-second third-design-table">
-                    <tr style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: #fff;">
-                        <th>Days</th>
-                        <th>Minimum</th>
-                        <th>Maximum</th>
-                        <th>Set</th>
-                        <th>status</th>
-
-                    </tr>
-
-                    <tr id="inpshowss">
-                        <td>
-                            @if (chk.Count == 0)
-                            {
-
-
-                                <div>0</div>
-                            }
-                            else
-                            {
-                                <div>@chk[0].dayscounts</div>
-                            }
-                        </td>
-                        <td>
-                            @if (chk.Count == 0)
-                            {
-
-
-                                <div>0</div>
-                            }
-                            else
-                            {
-                                <div>@chk[0].minamount</div>
-                            }
-                        </td>
-                        <td>
-                            @if (chk.Count == 0)
-                            {
-
-
-                                <div>0</div>
-                            }
-                            else
-                            {
-                                <div>@chk[0].maxamount</div>
-                            }
-                        </td>
-                        <td>
-                            <button style="padding: 4px 12px; border: 1px solid #0000004d; border-radius: 4px;" onclick="document.getElementById('inpshowss').style.display = 'none';document.getElementById('inphidess').style.display = 'contents';"> <i class="fa fa-edit"></i> Edit</button>
-                        </td>
-                        <td>
-                            @if (chk.Count > 0 && chk[0].sts == true)
-                            {
-                                <a href="@Url.Action("Updatestsofdaily", "Home", new { sts = false })"> <button class="btn btn-success" style="padding: 3px 18px; color: white; border: 1px solid; border-radius: 2px;">ON</button></a>
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("Updatestsofdaily", "Home", new { sts = true })"> <button class="btn btn-danger" style="padding: 3px 18px; color: white; border: 1px solid; border-radius: 2px;">OFF</button></a>
-                            }
-                        </td>
-                    </tr>
-                    <tr id="inphidess" style="display:none">
-                        @using (Html.BeginForm("setcommdaywisests", "Home", FormMethod.Post))
-                        {
-                            <td>
-                                @if (chk.Count == 0)
-                                {
-                                    <input type="number" value="0" name="dayscount" />
-                                }
-                                else
-                                {
-                                    <input type="number" value="@chk[0].dayscounts" name="dayscount" />
-                                }
-                            </td>
-                            <td>
-                                @if (chk.Count == 0)
-                                {
-                                    <input type="number" value="0" name="minimums" />
-                                }
-                                else
-                                {
-                                    <input type="number" value="@chk[0].minamount" name="minimums" />
-                                }
-                            </td>
-                            <td>
-                                @if (chk.Count == 0)
-                                {
-                                    <input type="number" value="0" name="maximum" />
-                                }
-                                else
-                                {
-                                    <input type="number" value="@chk[0].maxamount" name="maximum" />
-                                }
-                            </td>
-                            <td>
-                                <input style="width: auto; padding: 4px 12px; border: 1px solid #0003; border-radius: 4px;" type="submit" value="submit" />
-                            </td>
-
-
-                        }
-                    </tr>
-
-                </table>
-            </div>
-
-
-
-
-        </div>
-        <style>
-            .idsdds {
-                width: 230px;
-                height: 34px;
-                text-align: center;
-                font-size: 15px;
-            }
-        </style>
-        <div class="row clearfix">
-
-            <div style=" padding: 0;" class="col-lg-12 col-md-12 gift-card-top all-type-third">
-                <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="margin-top:2px;">
-                    @using (Html.BeginForm("daywisecomm", "Home", FormMethod.Post))
-                    {
-                        <div class="">
-                            <div class="col-md-4 gift-select">
-                                <div class="form-line selecthotel-third" style="width: 100%;">
-                                    @{
-                                        var set = db.Superstokist_details.ToList();
-
-                                    }
-                                    <select id="maststs" class="idsdds" name="maststs" onchange="changeidss()">
-                                        <option value="">ALL Master</option>
-                                        @foreach (var i in set)
-                                        {
-                                            <option value="@i.SSId">@i.FarmName</option>
-                                        }
-                                    </select>
-
-
-                                    <select id="dealesds" class="idsdds" name="dealesds" onchange="changeretailrsidss()">
-                                        <option value="">ALL Dealer</option>
-
-                                    </select>
-
-
-                                    <select id="retailss" class="idsdds" name="retailss">
-                                        <option value="">ALL Retailer</option>
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third" style="padding:0px;padding-left:5px;">
-                                <div class="">
-                                    <div class="">
-                                        <center>
-                                            <button name="btntype" type="submit" class="btn input-back-second" style="  height:32px;border: 1px solid #b1a6a638;background: #fff;margin-top:1px;background: #f9f9f9;width: 100%;" onclick="serch()">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                <span style="top:-1px;color:black;">Search</span>
-                                            </button>
-                                        </center>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-daywise-comm-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-daywise-comm-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-percentage" aria-hidden="true"></i>
+                        <span>Extra commission status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="daywiseCommRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-daywise-comm-on-badge" title="Active retailers">
+                            ON: <strong id="daywiseCommOnCount">@onCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-daywise-comm-off-badge" title="Inactive retailers">
+                            OFF: <strong id="daywiseCommOffCount">@offCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-daywise-comm-bulk-actions">
+                            <a href="@Url.Action("allonoffextracommsts", "Home", new { sts = true })" class="vm-daywise-bulk-btn vm-daywise-bulk-btn--on" title="Turn all ON">
+                                <i class="fas fa-toggle-on" aria-hidden="true"></i><span>All ON</span>
+                            </a>
+                            <a href="@Url.Action("allonoffextracommsts", "Home", new { sts = false })" class="vm-daywise-bulk-btn vm-daywise-bulk-btn--off" title="Turn all OFF">
+                                <i class="fas fa-toggle-off" aria-hidden="true"></i><span>All OFF</span>
+                            </a>
                         </div>
-                    }
-                    <div>
-                        <a href="@Url.Action("allonoffextracommsts","Home", new { sts=true})"><button  class="btn btn-success" style="padding: 4px 15px; margin: 1px; float: right; color: white; background: green; border: 1px solid #fff; border-radius: 4px; ">ALL ON</button></a>
-                        <a href="@Url.Action("allonoffextracommsts","Home", new { sts=false})"><button  class="btn btn-danger" style="padding: 4px 15px; margin: 1px; float: right; color: white; background: red; border: 1px solid #fff; border-radius: 4px; ">ALL OFF</button></a>
-
                     </div>
                 </div>
 
-
-            </div>
-
-            <div class="page-header-third">
-                <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
-                    <tr style="background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: #fff;">
-                        <th>Sr.</th>
-                        <th>USER</th>
-                        <th>Dealer</th>
-                        <th>Master</th>
-                        <th>Status</th>
-                    </tr>
-                    @{ var id = 0; }
-                    @{ var id1 = 1; }
-                    @foreach (var i in Model)
-                    {
-                        var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.retailerid).SingleOrDefault();
-                        var dlmfrmname = db.Dealer_Details.Where(s => s.DealerId == frmname.DealerId).SingleOrDefault();
-                        var ssfrmname = db.Superstokist_details.Where(s => s.SSId == dlmfrmname.SSId).SingleOrDefault();
-
-                        <tr>
-                            <td>@id1</td>
-                            <td>@frmname.Frm_Name</td>
-                            <td>@dlmfrmname.FarmName</td>
-                            <td>@ssfrmname.FarmName</td>
-                            <td class="idchanges">
-                                @if (i.sts == true)
+                <div class="vm-opr-table-wrap vm-daywise-comm-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="daywiseCommReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>User</th>
+                                    <th>Dealer</th>
+                                    <th>Master</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rowCount == 0)
                                 {
-                                    <button style="border: 1px solid #fff; padding: 0px 20px;" class="btn btn-success" onclick="stsupd('@i.retailerid',@id,false)">ON</button>
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="5">No records found for the selected filters.</td>
+                                    </tr>
                                 }
                                 else
                                 {
-                                    <button style="border: 1px solid #fff; padding: 0px 20px;" class="btn btn-danger" onclick="stsupd('@i.retailerid',@id, true)">OFF</button>
+                                    var sr = 1;
+                                    var rowIndex = 0;
+                                    foreach (var item in reports)
+                                    {
+                                        var retailer = !string.IsNullOrWhiteSpace(item.retailerid)
+                                            ? db.Retailer_Details.FirstOrDefault(s => s.RetailerId == item.retailerid)
+                                            : null;
+                                        var dealer = retailer != null
+                                            ? db.Dealer_Details.FirstOrDefault(s => s.DealerId == retailer.DealerId)
+                                            : null;
+                                        var master = dealer != null
+                                            ? db.Superstokist_details.FirstOrDefault(s => s.SSId == dealer.SSId)
+                                            : null;
+
+                                        var userFirm = retailer != null ? retailer.Frm_Name : "-";
+                                        var userName = retailer != null ? retailer.RetailerName : "-";
+                                        var dealerName = dealer != null ? dealer.FarmName : "-";
+                                        var masterName = master != null ? master.FarmName : "-";
+                                        var isOn = item.sts == true;
+
+                                        <tr class="vm-daywise-comm-row @(isOn ? "vm-daywise-comm-row--on" : "vm-daywise-comm-row--off")" data-status="@(isOn ? "on" : "off")">
+                                            <td class="vm-closing-balance-sr">@sr</td>
+                                            <td>
+                                                <div class="vm-closing-balance-user">
+                                                    <strong class="vm-closing-balance-user__firm">@userFirm</strong>
+                                                    @if (!string.IsNullOrWhiteSpace(userName) && userName != "-")
+                                                    {
+                                                        <span class="vm-closing-balance-user__name">@userName</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@dealerName</td>
+                                            <td>@masterName</td>
+                                            <td class="vm-daywise-comm-status-cell idchanges" data-row-index="@rowIndex">
+                                                @if (isOn)
+                                                {
+                                                    <button type="button" class="vm-daywise-status-pill vm-daywise-status-pill--on vm-daywise-status-pill--btn" onclick="stsupd('@item.retailerid', @rowIndex, false)"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-daywise-status-pill vm-daywise-status-pill--off vm-daywise-status-pill--btn" onclick="stsupd('@item.retailerid', @rowIndex, true)"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>
+                                                }
+                                            </td>
+                                        </tr>
+                                        sr++;
+                                        rowIndex++;
+                                    }
                                 }
-
-                            </td>
-                        </tr>
-                        id++;
-                        id1++;
-                    }
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
-
-
-
         </div>
+
     </div>
 </section>
 
-
-
-<script>
-   function stsupd(u, i, s) {
-    $.ajax({
-        url: '@Url.Action("daywisecommupdate", "Home")',
-        type: "POST",
-        data: { userid: u, sts: s },
-        cache: false,
-        success: function (Response) {
-            if (Response == "OK") {
-                document.getElementsByClassName('idchanges')[i].innerHTML = "";
-                if (s == true) {
-                    // Fixing the onclick attribute syntax
-                    document.getElementsByClassName('idchanges')[i].innerHTML = "<button  class='btn btn-success'  onclick=\"stsupd('" + u + "', " + i + ", " + false + ")\">ON</button>";
-                }
-                else {
-                    document.getElementsByClassName('idchanges')[i].innerHTML = "<button  class='btn btn-danger'  onclick=\"stsupd('" + u + "', " + i + ", " + true + ")\">OFF</button>";
-                }
-            }
-        }
-    });
-}
-
-</script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
-
 <script>
-
-    $('#allretailer').select2();
-
-
-</script>
-<script>
-function changeidss() {
-            var masterid = document.getElementById('maststs').value;
-            $.ajax({
-                url: "@Url.Action("GetDealerDetails","Home")",
-                data: { masterId: masterid },
-                success: function (data) {
-                    var dealer = document.getElementById('dealesds');
-                    dealer.innerHTML = '';
-                    var option1 = document.createElement('option');
-                    option1.value = "";
-                    option1.text = "ALL Dealer";
-                    dealer.appendChild(option1);
-                    data.forEach(dealerDetail => {
-                        var option = document.createElement('option');
-                        option.value = dealerDetail.DealerId;
-                        option.text = dealerDetail.FarmName;
-                        dealer.appendChild(option);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+    function vmDaywiseShowSettingsEdit() {
+        $('#vmDaywiseSettingsView').addClass('is-hidden');
+        $('#vmDaywiseSettingsEdit').removeClass('is-hidden');
+        $('.vm-daywise-comm-settings-wrap').addClass('is-editing');
     }
 
+    function vmDaywiseHideSettingsEdit() {
+        $('#vmDaywiseSettingsEdit').addClass('is-hidden');
+        $('#vmDaywiseSettingsView').removeClass('is-hidden');
+        $('.vm-daywise-comm-settings-wrap').removeClass('is-editing');
+    }
 
-    function changeretailrsidss() {
-        var masterid = document.getElementById('dealesds').value;
-            $.ajax({
-                url: "@Url.Action("GetReailerDetails","Home")",
-                data: { masterId: masterid },
-                success: function (data) {
-                    var dealer = document.getElementById('retailss');
-                    dealer.innerHTML = '';
-                    var option1 = document.createElement('option');
-                    option1.value = "";
-                    option1.text = "ALL Retailer";
-                    dealer.appendChild(option1);
-                    data.forEach(dealerDetail => {
-                        var option = document.createElement('option');
-                        option.value = dealerDetail.RetailerId;
-                        option.text = dealerDetail.Frm_Name;
-                        dealer.appendChild(option);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+    function refreshDaywiseCommSummary() {
+        var rows = document.querySelectorAll('#daywiseCommReportTable tbody tr.vm-daywise-comm-row');
+        var onCount = 0;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].getAttribute('data-status') === 'on') {
+                onCount++;
+            }
+        }
+        $('#daywiseCommRecordCount').text(rows.length);
+        $('#daywiseCommOnCount').text(onCount);
+        $('#daywiseCommOffCount').text(rows.length - onCount);
+    }
+
+    function destroyDaywiseSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyDaywiseSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyDaywiseSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6,
+            dropdownParent: $('#daywiseCommFilterForm')
+        });
+    }
+
+    function setDaywiseSelectValue($el, value) {
+        if (!$el || !$el.length) {
+            return;
+        }
+        $el.val(value || '');
+        if ($el.data('select2')) {
+            $el.trigger('change.select2');
+        }
+    }
+
+    function resetDaywiseDealerSelect() {
+        var $dealer = $('#dealesds');
+        destroyDaywiseSelect2($dealer);
+        $dealer.empty().append($('<option>', { value: '', text: 'ALL Dealer' }));
+        applyDaywiseSelect2($dealer);
+    }
+
+    function resetDaywiseRetailerSelect() {
+        var $retailer = $('#retailss');
+        destroyDaywiseSelect2($retailer);
+        $retailer.empty().append($('<option>', { value: '', text: 'ALL Retailer' }));
+        applyDaywiseSelect2($retailer);
+    }
+
+    function bindDaywiseFilterEvents() {
+        $('#maststs').off('change.daywise').on('change.daywise', function () {
+            changeidss();
+        });
+        $('#dealesds').off('change.daywise').on('change.daywise', function () {
+            changeretailrsidss();
+        });
+    }
+
+    function syncDaywiseSelectWidth() {
+        $('.vm-daywise-comm-field').css({ width: '100%', maxWidth: '100%' });
+        $('#daywiseCommFilterForm select').css({ width: '100%', maxWidth: '100%' });
+        $('#daywiseCommFilterForm .select2-container').css({ width: '100%', maxWidth: '100%' });
+    }
+
+    function initDaywiseSelect2() {
+        applyDaywiseSelect2($('#maststs'));
+        applyDaywiseSelect2($('#dealesds'));
+        applyDaywiseSelect2($('#retailss'));
+        bindDaywiseFilterEvents();
+        window.setTimeout(syncDaywiseSelectWidth, 0);
+        window.setTimeout(syncDaywiseSelectWidth, 120);
+    }
+
+    function changeidss(selectedDealer, callback) {
+        var masterid = ($('#maststs').val() || '').trim();
+        if (!masterid) {
+            resetDaywiseDealerSelect();
+            resetDaywiseRetailerSelect();
+            syncDaywiseSelectWidth();
+            if (typeof callback === 'function') {
+                callback();
+            }
+            return;
         }
 
+        $.ajax({
+            url: '@Url.Action("GetDealerDetails", "Home")',
+            type: 'GET',
+            data: { masterId: masterid },
+            cache: false,
+            success: function (data) {
+                var $dealer = $('#dealesds');
+                destroyDaywiseSelect2($dealer);
+                $dealer.empty().append($('<option>', { value: '', text: 'ALL Dealer' }));
+                if (data && data.length) {
+                    $.each(data, function (_, dealerDetail) {
+                        $dealer.append($('<option>', {
+                            value: dealerDetail.DealerId,
+                            text: dealerDetail.FarmName
+                        }));
+                    });
+                }
+                applyDaywiseSelect2($dealer);
+                setDaywiseSelectValue($dealer, selectedDealer || '');
+                resetDaywiseRetailerSelect();
+                syncDaywiseSelectWidth();
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Dealer load error:', error);
+                resetDaywiseDealerSelect();
+                resetDaywiseRetailerSelect();
+            }
+        });
+    }
 
+    function changeretailrsidss(selectedRetailer) {
+        var dealerid = ($('#dealesds').val() || '').trim();
+        if (!dealerid) {
+            resetDaywiseRetailerSelect();
+            syncDaywiseSelectWidth();
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetReailerDetails", "Home")',
+            type: 'GET',
+            data: { masterId: dealerid },
+            cache: false,
+            success: function (data) {
+                var $retailer = $('#retailss');
+                destroyDaywiseSelect2($retailer);
+                $retailer.empty().append($('<option>', { value: '', text: 'ALL Retailer' }));
+                if (data && data.length) {
+                    $.each(data, function (_, retailerDetail) {
+                        $retailer.append($('<option>', {
+                            value: retailerDetail.RetailerId,
+                            text: retailerDetail.Frm_Name
+                        }));
+                    });
+                }
+                applyDaywiseSelect2($retailer);
+                setDaywiseSelectValue($retailer, selectedRetailer || '');
+                syncDaywiseSelectWidth();
+            },
+            error: function (xhr, status, error) {
+                console.error('Retailer load error:', error);
+                resetDaywiseRetailerSelect();
+            }
+        });
+    }
+
+    function restoreDaywiseFilters() {
+        var postMaster = '@selectedMaster';
+        var postDealer = '@selectedDealer';
+        var postRetailer = '@selectedRetailer';
+
+        if (!postMaster) {
+            return;
+        }
+
+        setDaywiseSelectValue($('#maststs'), postMaster);
+        changeidss(postDealer, function () {
+            if (postDealer) {
+                changeretailrsidss(postRetailer);
+            }
+        });
+    }
+
+    function stsupd(userid, rowIndex, nextStatus) {
+        $.ajax({
+            url: '@Url.Action("daywisecommupdate", "Home")',
+            type: 'POST',
+            data: { userid: userid, sts: nextStatus },
+            cache: false,
+            success: function (response) {
+                if (response !== 'OK') {
+                    return;
+                }
+
+                var $cell = $('.idchanges[data-row-index="' + rowIndex + '"]');
+                var $row = $cell.closest('tr');
+                if (nextStatus === true) {
+                    $cell.html('<button type="button" class="vm-daywise-status-pill vm-daywise-status-pill--on vm-daywise-status-pill--btn" onclick="stsupd(\'' + userid + '\', ' + rowIndex + ', false)"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>');
+                    $row.removeClass('vm-daywise-comm-row--off').addClass('vm-daywise-comm-row--on').attr('data-status', 'on');
+                } else {
+                    $cell.html('<button type="button" class="vm-daywise-status-pill vm-daywise-status-pill--off vm-daywise-status-pill--btn" onclick="stsupd(\'' + userid + '\', ' + rowIndex + ', true)"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>');
+                    $row.removeClass('vm-daywise-comm-row--on').addClass('vm-daywise-comm-row--off').attr('data-status', 'off');
+                }
+                refreshDaywiseCommSummary();
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        initDaywiseSelect2();
+        restoreDaywiseFilters();
+        refreshDaywiseCommSummary();
+        $(window).on('resize orientationchange', syncDaywiseSelectWidth);
+    });
 </script>

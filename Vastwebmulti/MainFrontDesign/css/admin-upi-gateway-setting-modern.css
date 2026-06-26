@@ -1,0 +1,868 @@
+/* ADMIN — UPI & Payment Gateway Setting */
+
+body.saas-admin-ui .saas-upi-gateway-setting-page {
+    --upi-set-accent: #2563eb;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-msg {
+    margin: 0 0 16px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card + .saas-acc-table-card {
+    margin-top: 20px;
+}
+
+/* Tables — name left, status right */
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table thead th {
+    text-align: left !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.05em !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table thead th.vm-upi-set-status-col {
+    text-align: center !important;
+    width: 130px;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table tbody td {
+    text-align: left !important;
+    padding: 12px 16px !important;
+    font-weight: 600 !important;
+    font-variant-numeric: normal !important;
+    border-bottom: 1px solid #eef2f6 !important;
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table tbody td.vm-upi-set-name-cell {
+    text-align: left !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table tbody tr:nth-child(even) td {
+    background: #fafbfd !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table tbody tr:hover td {
+    background: #f0f7ff !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card-head h3 {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card-head h3 i {
+    color: var(--upi-set-accent);
+    font-size: 0.9rem;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card-head::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-card-head {
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-card-head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-kyc {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 0 14px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    color: #1e40af !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-btn:hover {
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-btn--primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    color: #fff !important;
+}
+
+/* Buttons in modals (outside page section) */
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 0 14px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    color: #1e40af !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-btn--primary {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-section .vm-upi-set-card-head {
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    flex: 1 1 auto;
+    gap: 16px;
+    padding: 0 16px 16px;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 100%;
+    align-self: stretch;
+    border: 1px solid #eef2f6;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__head {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-bottom: 1px solid #eef2f6;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-api-table-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    height: 100%;
+    overflow: visible;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100%;
+    min-height: 100%;
+    margin: 0 !important;
+    border: none !important;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: transparent;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th,
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody td {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th {
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody td {
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead {
+    flex: 0 0 auto;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead tr {
+    display: table-row;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    background: #fff;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody::after {
+    content: "";
+    flex: 1 1 auto;
+    display: block;
+    width: 100%;
+    min-height: 8px;
+    background: transparent;
+    border: none;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:nth-child(even) td {
+    background: #fafbfd !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:hover td {
+    background: #f0f7ff !important;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 72px;
+    min-height: 34px;
+    padding: 4px 10px 4px 4px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle:hover {
+    opacity: 0.88;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle__track {
+    position: relative;
+    width: 42px;
+    height: 24px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle__track::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+    transition: left 0.2s;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--on .vm-upi-set-toggle__track {
+    background: #22c55e;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--on .vm-upi-set-toggle__track::after {
+    left: 21px;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--off .vm-upi-set-toggle__track {
+    background: #cbd5e1;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--off .vm-upi-set-toggle__track::after {
+    left: 3px;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle__label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--on .vm-upi-set-toggle__label {
+    color: #15803d;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle--off .vm-upi-set-toggle__label {
+    color: #94a3b8;
+}
+
+body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table tbody td.vm-upi-set-status-cell {
+    width: 130px;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Modals (rendered outside section — scope by modal class) */
+body.saas-admin-ui .vm-upi-set-modal.in,
+body.saas-admin-ui .vm-upi-set-modal.show {
+    z-index: 11010 !important;
+    display: block !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-dialog {
+    float: none !important;
+    margin: 0.75rem auto !important;
+    max-width: min(720px, 96vw) !important;
+    width: min(720px, 96vw) !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal--wide .modal-dialog {
+    max-width: min(920px, 98vw) !important;
+    width: min(920px, 98vw) !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-content {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(15, 23, 42, 0.18);
+    max-height: calc(100dvh - 24px);
+    display: flex;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 16px 18px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-title {
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    float: none !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-body {
+    margin-top: 0 !important;
+    padding: 18px !important;
+    background: #f8fafc !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100dvh - 140px);
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-body h2 {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin: 0 0 12px !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-body h2 + .table-responsive,
+body.saas-admin-ui .vm-upi-set-modal .modal-body h2 + div[id] {
+    margin-bottom: 16px;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 14px 18px 18px !important;
+    border: none !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .form-control {
+    min-height: 42px !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-form-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 34%) 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-section-divider {
+    height: 1px;
+    margin: 20px 0;
+    background: #e2e8f0;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-block-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-block-actions .vm-upi-set-btn {
+    min-height: 34px;
+    padding: 0 12px !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal #SaveAll.vm-upi-set-btn--primary {
+    margin-left: auto;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 8px 0;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #fff;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-check-item label {
+    margin: 0 !important;
+    padding-left: 0 !important;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input,
+body.saas-admin-ui .vm-upi-set-modal .table-bordered {
+    width: 100% !important;
+    margin-top: 0 !important;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input thead th,
+body.saas-admin-ui .vm-upi-set-modal .table-bordered thead th {
+    background: #f1f5f9 !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    color: #334155 !important;
+    border-color: #e2e8f0 !important;
+    padding: 10px !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input tbody td,
+body.saas-admin-ui .vm-upi-set-modal .table-bordered tbody td {
+    padding: 10px !important;
+    vertical-align: middle !important;
+    border-color: #eef2f6 !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input input {
+    width: 100% !important;
+    min-height: 38px;
+    padding: 0 10px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input input[readonly="readonly"] {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal .deleteCharged1,
+body.saas-admin-ui .vm-upi-set-modal .deleteCharged11,
+body.saas-admin-ui .vm-upi-set-modal .deleteCharge,
+body.saas-admin-ui .vm-upi-set-modal #SaveChargeUPIQRCODE,
+body.saas-admin-ui .vm-upi-set-modal #Saveupiminmax {
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    border: 1px solid #dbe4f0 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #1e40af !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .vm-upi-set-modal #SaveChargeREM {
+    min-height: 40px;
+    padding: 0 18px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui #loadermoney.loadermoney[style*="block"] {
+    display: flex !important;
+}
+
+body.saas-admin-ui #loadermoney.loadermoney {
+    position: fixed;
+    inset: 0;
+    z-index: 12050;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+body.saas-admin-ui #loadermoney.loadermoney::after {
+    content: "Loading...";
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: #fff;
+    color: #2563eb;
+    font-weight: 700;
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.15);
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-upi-gateway-setting-page .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-toolbar {
+        margin-bottom: 12px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-breadcrumb {
+        flex-wrap: wrap;
+        font-size: 0.78rem;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        padding: 0 12px 12px;
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel {
+        height: auto;
+        min-height: 0;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body {
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-api-table-wrap {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table {
+        display: table !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        table-layout: fixed !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table .vm-upi-set-name-cell {
+        white-space: normal !important;
+        word-break: break-word;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table .vm-upi-set-status-cell {
+        white-space: nowrap !important;
+        text-align: center !important;
+        width: 120px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead th.vm-upi-set-status-col {
+        width: 120px !important;
+        white-space: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table thead {
+        display: table-header-group !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody {
+        display: table-row-group !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tr {
+        display: table-row !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table th,
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table td {
+        display: table-cell !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__body .vm-upi-set-table tbody tr:last-child td {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-card-head {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-card-head-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card-head {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table {
+        min-width: 100% !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .vm-upi-set-modal.in .modal-dialog,
+    body.saas-admin-ui .vm-upi-set-modal.show .modal-dialog,
+    body.saas-admin-ui .vm-upi-set-modal .modal-dialog,
+    body.saas-admin-ui .vm-upi-set-modal--wide .modal-dialog {
+        margin: 8px auto !important;
+        max-width: calc(100vw - 16px) !important;
+        width: calc(100vw - 16px) !important;
+        float: none !important;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .modal-body {
+        padding: 14px !important;
+        max-height: calc(100dvh - 120px);
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .modal-content {
+        max-height: calc(100dvh - 16px);
+        border-radius: 14px !important;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-block-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-block-actions .vm-upi-set-btn,
+    body.saas-admin-ui .vm-upi-set-modal #SaveAll.vm-upi-set-btn--primary {
+        width: 100%;
+        margin-left: 0 !important;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .vm-upi-set-check-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .modal-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .modal-footer .vm-upi-set-btn,
+    body.saas-admin-ui .vm-upi-set-modal .modal-footer #SaveChargeREM {
+        width: 100%;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .vm-upi-set-modal .wallet-bank-input,
+    body.saas-admin-ui .vm-upi-set-modal .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-btn {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-kyc {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-toggle {
+        min-width: 64px;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table.vm-upi-set-table,
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table {
+        min-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-upi-gateway-setting-page .saas-acc-table-card-head h3 {
+        font-size: 0.88rem !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table thead th,
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-table tbody td {
+        padding: 10px 12px !important;
+        font-size: 0.8rem !important;
+    }
+
+    body.saas-admin-ui .saas-upi-gateway-setting-page .vm-upi-set-api-panel__head {
+        font-size: 0.76rem;
+        padding: 10px 12px;
+    }
+}

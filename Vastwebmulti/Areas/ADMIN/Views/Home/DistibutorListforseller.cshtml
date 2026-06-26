@@ -1,309 +1,169 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Recharge_sell_by_dealer>
-@using Vastwebmulti.Models
+@using System.Linq
 @{
-    ViewBag.Title = "DistibutorList";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-    VastwebmultiEntities db = new VastwebmultiEntities();
+    ViewBag.Title = "Recharge Seller Distributors";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.Recharge_sell_by_dealer>();
+    var rowCount = reports.Count();
+    var selectedDealer = (Request["Dealertdd"] ?? "").Trim();
 }
 
-<style>
-    .btn-group, .btn-group-vertical {
-        box-shadow: none;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=48" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-recharge-seller-modern.css?v=5" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-ecommerce-history-page saas-recharge-seller-page">
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        padding: 12px 16px;
-        z-index: 1;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
+        @using (Html.BeginForm("DistibutorListforseller", "Home", FormMethod.Post, new { id = "rechargeSellerForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
-    #div_Loader {
-        background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        z-index: 999999;
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-rseller-breadcrumb">
+                        <li class="vm-rseller-breadcrumb__parent vm-rseller-breadcrumb__hide-mobile"><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li class="vm-rseller-breadcrumb__parent"><a href="@Url.Action("DistibutorList", "Home")">Distributor List</a></li>
+                        <li class="vm-rseller-breadcrumb__current" aria-current="page">Recharge Seller</li>
+                    </ol>
 
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line">
 
-    .ldio-gs56nt525f > div {
-        transform-origin: 100px 100px;
-        animation: ldio-gs56nt525f 0.2s infinite linear;
-    }
+                        <div class="vm-opr-field vm-dmt-field vm-rseller-field--dealer">
+                            <select id="Dealertdd" name="Dealertdd" class="vm-opr-select vm-dmt-select form-control">
+                                <option value="">All Distributors</option>
+                                @if (ViewBag.dealerdetailess != null)
+                                {
+                                    foreach (var i in ViewBag.dealerdetailess)
+                                    {
+                                        var dealerId = (string)i.DealerId;
+                                        <option value="@dealerId" @(selectedDealer == dealerId ? "selected=\"selected\"" : null)>@i.FarmName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
 
-        .ldio-gs56nt525f > div div {
-            position: absolute;
-            width: 22px;
-            height: 152px;
-            background: var(--main-bg-lcolor);
-            left: 100px;
-            top: 100px;
-            transform: translate(-50%,-50%);
-        }
+                        <div class="vm-dmt-filter-search-group">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
 
-            .ldio-gs56nt525f > div div:nth-child(1) {
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-            }
-
-            .ldio-gs56nt525f > div div:nth-child(6) {
-                width: 80px;
-                height: 80px;
-                background: #fff;
-                border-radius: 50%;
-            }
-
-            .ldio-gs56nt525f > div div:nth-child(3) {
-                transform: translate(-50%,-50%) rotate(45deg)
-            }
-
-            .ldio-gs56nt525f > div div:nth-child(4) {
-                transform: translate(-50%,-50%) rotate(90deg)
-            }
-
-            .ldio-gs56nt525f > div div:nth-child(5) {
-                transform: translate(-50%,-50%) rotate(135deg)
-            }
-
-    .loadingio-spinner-gear-94vo528ab8 {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-    }
-
-    .ldio-gs56nt525f {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-gs56nt525f div {
-            box-sizing: content-box;
-        }
-
-    @@keyframes ldio-gs56nt525f {
-        0% {
-            transform: rotate(0deg)
-        }
-
-        50% {
-            transform: rotate(22.5deg)
-        }
-
-        100% {
-            transform: rotate(45deg)
-        }
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    .for-search {
-        position: absolute;
-        right: 130px;
-    }
-
-        .for-search input {
-            width: 250px;
-            border: 1px solid #dbdbdb;
-            padding: 3px 10px;
-        }
-
-    @@media only screen and (max-width:520px) {
-        .web-white-filter {
-            position: static !important;
-        }
-
-        .for-search {
-            position: absolute;
-            top: 108px;
-        }
-
-            .for-search input {
-                width: 100%;
-            }
-    }
-</style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<section class="content DistibutorList_page fourdesign-section-admin">
-    <div class="container-fluid">
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one" style="line-height: 22px;">
-                        <a href="@Url.Action("DistibutorList", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Distributor&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;"/>
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one" style="line-height: 22px;">
-                        Seller Distributor
-                    </li>
-                </ul>
-            </div>
-
-            @using (Html.BeginForm("DistibutorListforseller", "Home"))
-            {
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;position:absolute;right:15px;">
-
-                    <input type="submit" style="margin-left:7px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;padding-left: 19px;" value="Search">
+                    </div>
 
                 </div>
-                <div class="for-search tablesearch-second">
-                    <div class="search-after-third">
-                        <select id="Dealertdd" name="Dealertdd">
-                            <option value="">ALL</option>
-                            @foreach (var i in ViewBag.dealerdetailess)
-                            {
-                                <option value="@i.DealerId">@i.FarmName</option>
-                            }
-                        </select>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-rseller-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-rseller-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-store" aria-hidden="true"></i>
+                        <span>Recharge seller distributors</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="rsellerRecordCount">@rowCount</strong>
+                        </span>
                     </div>
                 </div>
-            }
 
-        </div>
-
-
-        <div class="row clearfix" style="margin-bottom:40px;">
-
-            <div class="col-md-12 col-sm-12 col-xs-12 ">
-                <div class="right-tabs width100 float-left custom-table-responsive">
-                    <div id="distributorlist" class="tablefourdesign-admin">
-                        <table class="table table-bordered table-due-second table-due-second-desti third-design-table" id="mdList">
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="rechargeSellerTable" class="table vm-opr-data-table" cellspacing="0">
                             <thead>
                                 <tr>
-
-                                    <th>Master&nbsp;Distributor&nbsp;Firm</th>
-                                    <th>Distributor&nbsp;Firm</th>
-                                    <th>Distributor&nbsp;Name</th>
-                                    <th>Mobile&nbsp;No</th>
-                                    <th>Email</th>
-                                    <th>#</th>
-
+                                    <th class="vm-rseller-th vm-rseller-th--master">Master Distributor Firm</th>
+                                    <th class="vm-rseller-th vm-rseller-th--dist">Distributor Firm</th>
+                                    <th class="vm-rseller-th vm-rseller-th--name">Distributor Name</th>
+                                    <th class="vm-rseller-th vm-rseller-th--mobile">Mobile No</th>
+                                    <th class="vm-rseller-th vm-rseller-th--email">Email</th>
+                                    <th class="vm-rseller-th vm-rseller-th--status">Sell Status</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
-                                @if (Model != null)
-                                { var sd = 0;
-                                                foreach (var item in Model)
-                                                {
-                                                    var dealess = db.Dealer_Details.Where(s => s.DealerId == item.Dealerid).ToList();
-                                                    string ssdss = dealess[0].SSId;
-                                                    var mastess = db.Superstokist_details.Where(s => s.SSId == ssdss).ToList();
-                                        <tr id="tr">
-                                            <td>@mastess[0].FarmName</td>
-                                            <td>@dealess[0].FarmName</td>
-                                            <td>@dealess[0].DealerName</td>
-                                            <td>@dealess[0].Mobile</td>
-                                            <td>@dealess[0].Email</td>
-                                            <th class="buttd">
-                                         <button style="background: green; color: white; padding: 2px 15px;" onclick="stschange('@item.Dealerid', false , @sd)">ON</button>
-                                            </th>
-                                        </tr>
-                                        sd++;
-                                    }
-
-                                }
+                                @Html.Partial("_DistibutorListforsellerRows", reports)
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
 
-
-
     </div>
-
 </section>
 
-
-
-
-
-<div class="loaderdealer"></div>
-
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/Swalalert/datatablejquery.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/MainFrontDesign/select2/dist/js/select2.min.js"></script>
 <script>
-    function myFunction() {
-        debugger;
-        var value = $('#myInput').val().toLowerCase();
-        $("#body .tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    function stschange(userid, status, rowIndex) {
+        $.ajax({
+            url: '@Url.Action("Stscanhgedlmsell", "Home")',
+            data: { userid: userid, status: status },
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                var $cell = $('.vm-rseller-sell-cell[data-row-index="' + rowIndex + '"]');
+                var isOff = (data === false || data === 'false');
+                if (isOff) {
+                    $cell.html('<button type="button" class="vm-rseller-toggle vm-rseller-toggle--off" onclick="stschange(\'' + userid + '\', true, ' + rowIndex + ')" title="Sell recharge is OFF">OFF</button>');
+                } else {
+                    $cell.html('<button type="button" class="vm-rseller-toggle vm-rseller-toggle--on" onclick="stschange(\'' + userid + '\', false, ' + rowIndex + ')" title="Sell recharge is ON">ON</button>');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('AJAX request failed: ' + textStatus + ', ' + errorThrown);
+            }
         });
     }
-  function stschange(u, s, r) {
-    $.ajax({
-        url: '@Url.Action("Stscanhgedlmsell","Home")',
-        data: { userid: u, status: s },
-        type: 'GET',
-        success: function (data) {
-            if (data == false) {
-                document.getElementsByClassName('buttd')[r].innerHTML =
-                    "<button style='background: red; color: white; padding: 2px 15px;' onclick=\"stschange('" + u + "', true, " + r + ")\">OFF</button>";
-            }
-            else {
-                document.getElementsByClassName('buttd')[r].innerHTML =
-                    "<button style='background: green; color: white; padding: 2px 15px;' onclick=\"stschange('" + u + "', false, " + r + ")\">ON</button>";
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('AJAX request failed: ' + textStatus + ', ' + errorThrown);
+
+    function initRechargeSellerSelect2() {
+        var $dealer = $('#Dealertdd');
+        if (!$dealer.length || !$.fn.select2) {
+            return;
         }
+        if ($dealer.data('select2')) {
+            $dealer.select2('destroy');
+        }
+        $dealer.select2({
+            width: '100%',
+            minimumResultsForSearch: 6,
+            placeholder: 'All Distributors',
+            dropdownParent: $('#rechargeSellerForm')
+        });
+        syncRechargeSellerSelect2Width();
+    }
+
+    function syncRechargeSellerSelect2Width() {
+        var $dealer = $('#Dealertdd');
+        if (!$dealer.length || !$dealer.data('select2')) {
+            return;
+        }
+        var isMobile = window.innerWidth <= 991;
+        var $container = $dealer.next('.select2-container');
+        if (isMobile) {
+            $container.css({
+                width: '100%',
+                minWidth: '100%',
+                maxWidth: '100%',
+                display: 'block'
+            });
+        } else {
+            $container.css({ width: '', minWidth: '', maxWidth: '', display: '' });
+        }
+    }
+
+    $(document).ready(function () {
+        initRechargeSellerSelect2();
+        $(window).on('resize orientationchange', syncRechargeSellerSelect2Width);
     });
-}
 </script>
-
-

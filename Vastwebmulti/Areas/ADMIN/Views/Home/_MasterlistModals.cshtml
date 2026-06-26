@@ -1,0 +1,345 @@
+@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
+
+<!--For Right Popup -->
+<div class="modal fade mastetr222Modal mastermodal-second-design saas-admin-modal vm-ml-detail-modal" id="defaultModal222" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div id="loadredmodel" style="display:none;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
+            <div class="ldio-zdyd6mf6t5">
+                <div></div><div></div>
+            </div>
+        </div>
+        <div id="userinfodiv" class="modal-content width100 float-left input-border-third vm-ml-side-modal-content">
+
+            <div class="modal-body width100 float-left vm-ml-modal-body">
+                <div class="background-kk width100 float-left mastermodal-second vm-ml-modal-hero">
+                    <div class="thisLeft float-left vm-ml-modal-hero__avatar">
+                        <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User" />
+                        <div id="alinks" class="vm-ml-modal-hero__links"></div>
+                    </div>
+                    <div class="thisRight vm-ml-modal-hero__meta">
+                        <ul class="float-left width100 vm-ml-modal-hero__list">
+                            <li><span class="vm-ml-modal-hero__label">Name</span><span><label id="Name"></label></span></li>
+                            <li><span class="vm-ml-modal-hero__label">Firm Name</span><span><label id="FirmName"></label></span></li>
+                            <li><span class="vm-ml-modal-hero__label">Registered Date</span><span><label id="RegisteredDate"></label></span></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="saas-admin-modal-close vm-ml-side-close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="float-left width100 vm-ml-modal-content-wrap">
+
+                    <form class="first-form vm-ml-modal-form">
+                        @Html.Hidden("ssidshow")
+                        <div class="vm-ml-modal-grid">
+                            <div class="vm-ml-modal-field vm-ml-modal-field--full">
+                                <label>Email</label>
+                                @Html.TextBox("Email11", "", new { @class = "form-control", placeholder = "Enter Email", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Distributor's Balance</label>
+                                @Html.TextBox("dealerremain", "", new { @class = "form-control vm-ml-field-highlight", placeholder = "Distributor Balance", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Retailer's Balance</label>
+                                @Html.TextBox("retailerremain", "", new { @class = "form-control vm-ml-field-highlight", placeholder = "Retailer Balance", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Pancard</label>
+                                @Html.TextBox("Pancard11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Aadhar Card</label>
+                                @Html.TextBox("Aadhar11", "", new { @class = "form-control", placeholder = "Enter Aadhar No", maxlength = 12, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-modal-field--full">
+                                <label>Farm Aggreement</label>
+                                @Html.TextBox("frmagr11", "", new { @class = "form-control", placeholder = "Farm agreement", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Pin Code</label>
+                                @Html.TextBox("pincode11", "", new { @class = "form-control", placeholder = "Enter Pin Code", maxlength = 6, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>GST Reg. No</label>
+                                @Html.TextBox("GSTRegistrationNo11", "", new { @class = "form-control", placeholder = "Enter Gst No", maxlength = 15, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Margine (Offline) %</label>
+                                <span id="offmargine" class="vm-ml-readonly-field"></span>
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Capping</label>
+                                <span id="Capping" class="vm-ml-readonly-field"></span>
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>State</label>
+                                @Html.TextBox("State11", "", new { @class = "form-control", placeholder = "Enter State", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>District</label>
+                                @Html.TextBox("District11", "", new { @class = "form-control", placeholder = "Enter District", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-modal-field--full">
+                                <label>Address</label>
+                                @Html.TextArea("address11", "", new { @class = "form-control", placeholder = "Enter Address", @style = "text-transform:uppercase;height:72px", required = "required", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="vm-ml-modal-actions modal-footer width100 float-left button-seconddesign">
+                            <div class="vm-ml-modal-alert" id="errormsg"></div>
+                            <div class="vm-ml-modal-actions__grid">
+                                <button type="button" value="Edit" class="btn vm-ml-modal-btn vm-ml-modal-btn--primary"><i class="fas fa-edit" aria-hidden="true"></i> Edit &amp; Update KYC</button>
+                                <button type="button" value="SaveChange" class="btn vm-ml-modal-btn vm-ml-modal-btn--save One2" style="display:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-save" aria-hidden="true"></i> Save Change</button>
+                                <button type="button" value="Email_Verify" class="btn vm-ml-modal-btn vm-ml-modal-btn--outline" onclick="EmailVerify()"><i class="fas fa-envelope" aria-hidden="true"></i> Email Verify</button>
+                                <button type="button" value="Delet" class="btn vm-ml-modal-btn vm-ml-modal-btn--danger" onclick="Deleteuser()"><i class="fas fa-trash-alt" aria-hidden="true"></i> Delete MD</button>
+                            </div>
+                            <div class="vm-ml-modal-alert vm-ml-modal-alert--error"><span id="error"></span></div>
+                        </div>
+
+                    </form>
+
+                    <!--=============-->
+                    <div class="second-form vm-ml-modal-form vm-ml-edit-kyc-form" style="display:none;">
+                        @using (Ajax.BeginForm("Edit_master_dealer", "Home", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "Masterlistupdate", OnBegin = "chkvalidation", OnSuccess = "OnSuccess" }))
+                        {
+                            @Html.Hidden("ssid")
+                            <div class="vm-ml-edit-kyc-head">
+                                <h5><i class="fas fa-user-edit" aria-hidden="true"></i> Edit &amp; Update KYC</h5>
+                                <p>Update profile details, verify documents and save changes</p>
+                            </div>
+                            <div class="vm-ml-modal-grid">
+                            <div class="vm-ml-modal-field">
+                                <label>Name</label>
+                                @Html.TextBox("NameEdit", "", new { @class = "form-control", placeholder = "Enter Name", required = "required" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Firm Name</label>
+                                @Html.TextBox("FirmEdit", "", new { @class = "form-control", placeholder = "Enter FirmName", required = "required" })
+                            </div>
+                            <div class="vm-ml-form-section-label"><i class="fas fa-id-card" aria-hidden="true"></i> KYC Documents</div>
+                            <div class="vm-ml-modal-field vm-ml-kyc-field">
+                                <label>Pancard <a href="https://www1.incometaxindiaefiling.gov.in/e-FilingGS/Services/VerifyYourPanDeatils.html?lang=eng" target="_blank" class="vm-ml-verify-link">Verify</a></label>
+                                @Html.TextBox("pancardEdit", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, minlength = 10 })
+                                <div class="vm-ml-doc-actions">
+                                    <div id="pandocshow" class="vm-ml-doc-actions__group">
+                                        <button type="button" class="btn vm-ml-doc-btn" data-toggle="modal" data-target="#panviewdoc" title="View"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--reject" title="Reject" onclick="Rejected('pan')"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--approve" id="panapproved" title="Approve" onclick="Approved('pan')"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    </div>
+                                    <div id="pandocnotshow">
+                                        <span class="vm-ml-doc-badge vm-ml-doc-badge--missing"><i class="fas fa-file-excel" aria-hidden="true"></i> Doc Not Found</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-kyc-field">
+                                <label>Aadhar Card <a href="https://resident.uidai.gov.in/verify" target="_blank" class="vm-ml-verify-link">Verify</a></label>
+                                @Html.TextBox("AadhaarEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", @style = "text-transform:uppercase", onkeypress = "return isNumber(event)", maxlength = "12", minlength = 12 })
+                                <div class="vm-ml-doc-actions">
+                                    <div id="aadhardocshow" class="vm-ml-doc-actions__group">
+                                        <button type="button" class="btn vm-ml-doc-btn" data-toggle="modal" data-target="#aadharviewdoc" title="View"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--reject" title="Reject" onclick="Rejected('aadhar')"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--approve" id="aadharapproved" title="Approve" onclick="Approved('aadhar')"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    </div>
+                                    <div id="aadhardocnotshow">
+                                        <span class="vm-ml-doc-badge vm-ml-doc-badge--missing"><i class="fas fa-file-excel" aria-hidden="true"></i> Doc Not Found</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-kyc-field vm-ml-modal-field--full">
+                                <label>GST Registration No <a href="https://services.gst.gov.in/services/searchtp" target="_blank" class="vm-ml-verify-link">Verify</a></label>
+                                @Html.TextBox("gstEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })
+                                <div class="vm-ml-doc-actions">
+                                    <div id="gstdocshow" class="vm-ml-doc-actions__group">
+                                        <button type="button" class="btn vm-ml-doc-btn" data-toggle="modal" data-target="#gstviewdoc" title="View"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--reject" title="Reject" onclick="Rejected('gst')"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--approve" id="gstapproved" title="Approve" onclick="Approved('gst')"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    </div>
+                                    <div id="gstdocnotshow">
+                                        <span class="vm-ml-doc-badge vm-ml-doc-badge--missing"><i class="fas fa-file-excel" aria-hidden="true"></i> Doc Not Found</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-kyc-field vm-ml-modal-field--full">
+                                <label>Farm Agreement</label>
+                                <input type="text" id="frmagrEdit" name="frmagrEdit" readonly class="form-control vm-ml-readonly-field vm-ml-status-field" />
+                                <div class="vm-ml-doc-actions">
+                                    <div id="frmagrdocshow" class="vm-ml-doc-actions__group">
+                                        <button type="button" class="btn vm-ml-doc-btn" data-toggle="modal" data-target="#frmagrviewdoc" title="View"><i class="fas fa-eye" aria-hidden="true"></i> View</button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--reject" title="Reject" onclick="Rejected('Aggrement')"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn vm-ml-doc-btn vm-ml-doc-btn--approve" id="frmagrapproved" title="Approve" onclick="Approved('Aggrement')"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    </div>
+                                    <div id="frmagrdocnotshow">
+                                        <span class="vm-ml-doc-badge vm-ml-doc-badge--missing"><i class="fas fa-file-excel" aria-hidden="true"></i> Doc Not Found</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vm-ml-form-section-label"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Location &amp; Settings</div>
+                            <div class="vm-ml-modal-field">
+                                <label>State</label>
+                                <div class="vm-ml-select-wrap custom-district">
+                                    <select id="StateEdit" onchange="Editstatechange()" name="StateEdit" class="form-control vm-ml-edit-select for-select2">
+                                        <option value="">Select State</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>District</label>
+                                <div class="vm-ml-select-wrap custom-district">
+                                    @Html.DropDownList("DistrictEdit",
+                                        new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
+                                        "Select district",
+                                        new { @class = "form-control vm-ml-edit-select for-select2", data_live_search = "true" })
+                                </div>
+                            </div>
+                            <div class="vm-ml-modal-field" id="roleShowNot">
+                                <label>Financial Role</label>
+                                <div id="DivEditddlrole" class="vm-ml-select-wrap custom-district">
+                                    <select id="Editddlrole" name="Editddlrole" class="form-control vm-ml-edit-select for-select2" required="required">
+                                        <option value="">Select Role</option>
+                                        <option value="TeamManager">Team Manager</option>
+                                        <option value="CommissionAgent">Commission Agent</option>
+                                    </select>
+                                </div>
+                                <input type="text" readonly value="" class="form-control vm-ml-readonly-field" style="display:none;" id="Edittxtlrole" name="Edittxtlrole" />
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Pin Code</label>
+                                @Html.TextBox("PinEdit", "", new { @class = "form-control", placeholder = "Enter Pin Code", @style = "text-transform:uppercase", required = "required" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Margine <span class="vm-ml-field-hint">(Offline)</span></label>
+                                @Html.TextBox("offmargineEdit", "", new { @class = "form-control", placeholder = "Enter Offline Margine Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
+                            </div>
+                            <div class="vm-ml-modal-field">
+                                <label>Capping <span class="vm-ml-field-hint">(Amount)</span></label>
+                                @Html.TextBox("CappingEdit", "", new { @class = "form-control", placeholder = "Enter Capping Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
+                            </div>
+                            <div class="vm-ml-modal-field vm-ml-modal-field--full">
+                                <label>Address</label>
+                                @Html.TextArea("AddressEdit", "", new { @class = "form-control", placeholder = "Enter Address", @style = "text-transform:uppercase;height:72px", required = "required" })
+                            </div>
+
+                            <div class="vm-ml-modal-actions modal-footer width100 float-left button-seconddesign vm-ml-modal-actions--edit">
+                                <div class="vm-ml-modal-actions__grid vm-ml-modal-actions__grid--single">
+                                    <button type="button" class="btn vm-ml-modal-btn vm-ml-modal-btn--ghost vm-ml-back-to-view" onclick="vmMlBackToViewForm()"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to View</button>
+                                    <button type="submit" value="SaveChange" class="btn vm-ml-modal-btn vm-ml-modal-btn--save One2" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-save" aria-hidden="true"></i> Save Change</button>
+                                </div>
+                            </div>
+                            </div><!--vm-ml-modal-grid-->
+                        }
+                    </div>
+
+                </div>
+            </div><!--.modal-body-->
+
+
+        </div>
+
+    </div>
+</div>
+
+<div id="panviewdoc" class="modal fade saas-admin-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header">
+                <div class="saas-admin-modal-header__text">
+                    <h4 id="headershow" class="modal-title">Pan Card View</h4>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div id="panmodal" class="modal-body">
+                <img id="panimageshow" src="" style="width:550px;" />
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="aadharviewdoc" class="modal fade saas-admin-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header">
+                <div class="saas-admin-modal-header__text">
+                    <h4 id="headershow" class="modal-title">Aadhar Card View</h4>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div id="aadharmodal" class="modal-body">
+                <img id="aadharimageshow" src="" style="width:550px;" />
+                <img id="aadharimagebackshow" src="" style="width:550px;" />
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="gstviewdoc" class="modal fade saas-admin-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header">
+                <div class="saas-admin-modal-header__text">
+                    <h4 id="headershow" class="modal-title">Gst View</h4>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div id="gstmodal" class="modal-body">
+                <img id="gstimageshow" src="" style="width:550px;" />
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="frmagrviewdoc" class="modal fade saas-admin-modal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header">
+                <div class="saas-admin-modal-header__text">
+                    <h4 id="headershow" class="modal-title">Certification View</h4>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+            </div>
+            <div id="gstmodal" class="modal-body">
+                <img id="frmagrimageshow" src="" style="width:550px;" />
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="otpmodal" class="modal fade mastermodal-second-design" role="dialog">
+    <div class="modal-dialog" style="float: right;margin: 0px;width: 520px;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="headershow" class="modal-title"><img src="~/MainFrontDesign/images/delete.svg" style="width:18px;margin-top:-4px;" />&nbsp;One Time Password</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("ConfirmDeleteOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "Masterlistupdate", OnSuccess = "OnSuccessdistributor", OnFailure = "OnFailureotperror" }))
+                {
+                    @Html.Hidden("ssiddelete")
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label>OTP</label>
+                                @Html.TextBox("Deleteotp", "", new { @class = "form-control", placeholder = "Enter OTP", required = "required", @style = "background: #f5f5f5;border: 1px solid #bbb;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
+                            <span id="otpwrong" style="color:red;float:left; "></span>
+                            <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 fullbodydycolorbg btn-first" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="float: right;color: #fff;font-weight: 600;width:93px;"><span style="color:#fff;">Delete User</span></button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

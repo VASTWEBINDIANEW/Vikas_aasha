@@ -13,435 +13,147 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=33" rel="stylesheet" />
+
 <style>
-
-    /*  new css  */
-
-
-    #serbystsdst, #Districtstates {
-        border: 1px solid #aaa;
-        padding: 6px 10px;
-        width: 100%;
-        margin-bottom: 8px;
-    }
-    .date_fa {
-        position: absolute;
-        background: #fff;
-        width: 100%;
-        z-index: 9;
-    }
-
-    #srcbysts .select2 {
-        margin-bottom: 5px;
-    }
-
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        height: 27px !important;
-    }
-
-    .retailerlist-header-resp {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .custom-table-responsive, #EmailHistory {
-        background: #fff !important;
-    }
-
-    .retailerList_Page .left-tabs form {
-        background: #fff;
-    }
-
-    .selection span {
-        background: #fff !important;
-    }
-
-    .t_menu {
-        float: left;
-        width: 100%;
-    }
-
-    #Retailertablelist {
-        float: left;
-        width: 100%;
-    }
-
-    /*  new css  */
-    .retailerlist-select {
-        width: 100%;
-    }
-
-    .t_menu {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 4px;
-        position: relative;
-    }
-
-    .retalerrlist-add-button {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .select_item {
-        width: 58px;
-        float: left;
-        font-size: 11px;
-        text-align: center;
-        border: 1px solid;
-        cursor: pointer;
-        line-height: 13px;
-    }
-
-    .retailerlist-select {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: relative;
-    }
-
-    #srcbysts {
-        position: absolute;
-        z-index: 999;
-        top: 33px;
-        background: #fff;
-        padding: 10px;
-    }
-
-
-    * {
-        outline: none;
-    }
-
-    .input-group.classborder-thirddesign {
-        border: 1px solid #bfbebe;
-        float: left;
-        width: 177px;
-    }
-
-    .btn-group, .btn-group-vertical {
-        box-shadow: none;
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        padding: 12px 16px;
-        z-index: 1;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-
-
-    .for-search input {
-        width: 250px;
-        border: 1px solid #dbdbdb;
-        padding: 3px 10px;
-    }
-
-    .retailerlist-select .select2 .select2-selection__arrow {
-        display: block !important;
-    }
-
-    .retailerlist-select .select2 .select2-selection.select2-selection--single {
-        height: auto;
-    }
-
-    .retailerlist-search input {
-        padding: 2px 10px;
-        font-size: 14px;
-        position: relative;
-        top: -1px;
-    }
-
-    @@media screen and (max-width: 1367px) {
-        .gglk {
-            width: 225px !important;
-        }
-
-        .llpo span {
-            display: block;
-        }
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-
-        .retalerrlist-add-button {
-            margin: 1px 0;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .retailer-list-page .bread-same-all-page ul {
-            width: 100%;
-            float: left;
-        }
-
-        .retailer-list-page .for-search {
-            position: static;
-            float: left;
-            width: auto !important;
-            margin-bottom: 15px;
-        }
-
-        .retailer-list-page .web-white-filter {
-            position: static !important;
-        }
-
-
-
-        .retailerlist-header-resp .bread-same-all-page ul {
-            margin-bottom: 0;
-        }
-
-        .retailerlist-header-resp .retalerrlist-add-button {
-            width: 100% !important;
-            float: right;
-            padding: 0px !important;
-        }
-
-            .retailerlist-header-resp .retalerrlist-add-button .retailerlist-select {
-                width: 70%;
-            }
-
-        .retailerlist-header-resp .for-search {
-            float: left !important;
-            border: 0px !important;
-            padding: 0px !important;
-        }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .web-white-filter {
-            position: static !important;
-        }
-
-        .for-search {
-            position: absolute;
-            top: 107px;
-        }
-
-            .for-search input {
-                width: 100%;
-            }
-    }
-
-    @@media screen and (max-width:480px) {
-
-        .create-bulk-add-image {
-            margin-right: 0px;
-        }
-
-        .four-noneclass-admin-only {
-            width: 100% !important;
-            float: left !important;
-            margin: 2px 0;
-        }
-
-        .res_div {
-            width: 100%;
-            float: left;
-            margin: 2px 0;
-        }
-
-
-        .retailerlist-header-resp {
-            display: block;
-        }
-
-        .Upload-form input[type="file"] {
-            padding: 2px;
-        }
-    }
-
-    .web-white-filter.pdfexpoer-second.pdf-third-design {
-        border-left: 0.2px solid #ccc;
-    }
+    body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
+    #mdList i, #Retailertablelist i { cursor: pointer; }
+    .toast-top-right1 { top: 65px; left: 81%; }
+    .retailerList_Page .onoffswitch { width: auto; min-width: 110px; height: 32px; margin: 0; }
+    .retailerList_Page .costom-on, .retailerList_Page .custom-off { font-size: 11px !important; }
 </style>
-<section class="content retailerList_Page fourdesign-section-admin">
-    <div class="container-fluid retailer-list-page">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Retailer List</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Retailer List</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+<section class="content retailerList_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-master-list-page saas-fund-transfer-premium">
 
-        <div class="page-header-third pageheader-margin-third retailerlist-header-resp" style="width:100%;float:left;margin-bottom:5px;">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only" style="width:auto;float:left;">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    @*<li class="smli">
-                            <a href="@Url.Action("FaceAPIFilter", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                FaceAPIFilter&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </a>
-                        </li>*@
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Retailers
-                    </li>
+    <div class="container-fluid vm-ft-page-shell">
 
-
-                </ul>
+        
+        <div class="vm-rl-action-menu">
+            <div class="vm-rl-action-menu__head">
+                
+                <div class="vm-ft-page-hero">
+                    <div>
+                        <ol class="vm-ft-breadcrumb">
+                            <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                            <li>User's &amp; Account</li>
+                            <li>Retailer List</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
+            <nav class="vm-rl-action-menu__grid" aria-label="Retailer quick actions">
+                <a href="@Url.Action("Showclosingbalance", "Home")" class="vm-rl-action-item vm-rl-action-item--wallet" title="Show Opening Balance">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-wallet"></i></span>
+                    <span class="vm-rl-action-item__label">Opening Balance</span>
+                </a>
+                <a href="@Url.Action("daywisecomm", "Home")" class="vm-rl-action-item vm-rl-action-item--comm" title="Extra Comm Status">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-percent"></i></span>
+                    <span class="vm-rl-action-item__label">Extra Comm</span>
+                </a>
+                <a href="@Url.Action("daywisecommhistory", "Home")" class="vm-rl-action-item vm-rl-action-item--history" title="Extra Comm History">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-history"></i></span>
+                    <span class="vm-rl-action-item__label">Comm History</span>
+                </a>
+                <a href="@Url.Action("passbyretailerdmtsd", "Home")" class="vm-rl-action-item vm-rl-action-item--dmt" title="By Pass DMT">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-unlock-alt"></i></span>
+                    <span class="vm-rl-action-item__label">By Pass DMT</span>
+                </a>
+                <a href="@Url.Action("userwisewhatsappstatus", "Home")" class="vm-rl-action-item vm-rl-action-item--whatsapp" title="Whatsapp Status">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fab fa-whatsapp"></i></span>
+                    <span class="vm-rl-action-item__label">Whatsapp Status</span>
+                </a>
+                @{
+                    var chjk = db.Email_show_passcode.SingleOrDefault().whatsappapists;
+                    if (chjk == true)
+                    {
+                        <button type="button" id="whtup" onclick="whtssupdate()" class="vm-rl-action-item vm-rl-action-item--btn vm-rl-action-item--whatsapp vm-rl-action-item--on" title="Whatsapp Sms">
+                            <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-comment-dots"></i></span>
+                            <span class="vm-rl-action-item__label">Whatsapp Sms</span>
+                            <span class="vm-rl-action-item__badge">ON</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" id="whtup" onclick="whtssupdate()" class="vm-rl-action-item vm-rl-action-item--btn vm-rl-action-item--whatsapp vm-rl-action-item--off" title="Whatsapp Sms">
+                            <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-comment-dots"></i></span>
+                            <span class="vm-rl-action-item__label">Whatsapp Sms</span>
+                            <span class="vm-rl-action-item__badge">OFF</span>
+                        </button>
+                    }
+                }
+                <a href="@Url.Action("RechargeB2C", "Home")" class="vm-rl-action-item vm-rl-action-item--recharge" title="Recharge B2C">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-mobile-alt"></i></span>
+                    <span class="vm-rl-action-item__label">Recharge B2C</span>
+                </a>
+                <a href="@Url.Action("retailerekyccheck", "Home")" class="vm-rl-action-item vm-rl-action-item--kyc" title="AEPS e-kyc">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-fingerprint"></i></span>
+                    <span class="vm-rl-action-item__label">AEPS e-kyc</span>
+                </a>
+                <a href="@Url.Action("Unloadlimitset","Home")" class="vm-rl-action-item vm-rl-action-item--unload" title="Wallet Unload Limit">
+                    <span class="vm-rl-action-item__icon" aria-hidden="true"><i class="fas fa-hand-holding-usd"></i></span>
+                    <span class="vm-rl-action-item__label">Unload Limit</span>
+                </a>
+            </nav>
+        </div>
 
-
-            <div class="res_div">
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("Showclosingbalance", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Show Opening Balance</a>
-
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("daywisecomm", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm Status</a>
-
-                </div>
-
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("daywisecommhistory", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Extra Comm History</a>
-
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("passbyretailerdmtsd", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">By Pass DMT</a>
-
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("userwisewhatsappstatus", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Whatsapp Status User Wise</a>
-
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-
-                    @{
-                        var chjk = db.Email_show_passcode.SingleOrDefault().whatsappapists;
-                        if (chjk == true)
-                        {
-                            <button id="whtup" onclick="whtssupdate()" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: green; font-size: 14px; color: white; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Whatsapp Sms</button>
-
-                        }
-                        else
-                        {
-                            <button id="whtup" onclick="whtssupdate()" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: red; font-size: 14px; color: white; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Whatsapp Sms</button>
-
+        <script>
+            function whtssupdate() {
+                var url = '@Url.Action("Whatsaapupdate","Home")'
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    type: "POST",
+                    success: function (data) {
+                        var upt = document.getElementById('whtup');
+                        var badge = upt ? upt.querySelector('.vm-rl-action-item__badge') : null;
+                        if (data == true) {
+                            upt.classList.remove('vm-rl-action-item--off');
+                            upt.classList.add('vm-rl-action-item--on');
+                            if (badge) badge.textContent = 'ON';
+                        } else {
+                            upt.classList.remove('vm-rl-action-item--on');
+                            upt.classList.add('vm-rl-action-item--off');
+                            if (badge) badge.textContent = 'OFF';
                         }
                     }
-                    <script>
-                    function whtssupdate() {
+                });
+            }
+        </script>
 
-                            var url = '@Url.Action("Whatsaapupdate","Home")'
-                            $.ajax({
-                                url: url,
-                                cache: false,
-                                type: "POST",
-                                success: function (data) {
-                                    console.log(data);
-                                    var upt = document.getElementById('whtup');
-                                    if (data == true) {
-                        
-                                        upt.style.background = "green";
-                        
-                                    }
-                                    else {
-                                        upt.style.background = "red";
-                                    }
-                                },
-                        
-                            });
-                        }
-                    </script>
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("RechargeB2C", "Home")" style=" margin-left: 0px; margin-right: 4px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">Recharge B2c</a>
-
-                </div>
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;position:static;width:auto;">
-                    <a href="@Url.Action("retailerekyccheck", "Home")" style=" margin-left: 0px; font-size: 11px; float: left; padding: 0px 4px; height: 28px; border: 0.2px solid #b1a6a638; background: #b1a6a638; font-size: 14px; color: #555; display: flex; align-items: center; position: relative; height: 29px; top: -1px;">AEPS&nbsp;e-kyc Report</a>
-
-                </div>
-
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right; position: static; width: auto; margin-left: 3px;">
-                    <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                    <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                    <iframe id="txtArea1" style="display:none"></iframe>
-                </div>
-
-            </div>
-
-
-
-
-        </div>
-
-
-        <!--////-->
-        <div class="row clearfix" style="margin-bottom:40px;">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="left-tabs width100 float-left boxback-allpage-admin page-header-third">
-                    <ul class="tabs width100 float-left tab-seconddesign tab-third-design">
-                        <li class="tab-link current" data-tab="tab-9"><img src="~/images/reportimage/add-user-button.svg" alt="add user" class="create-add-image">Create Retailers</li>
-                        <li class="tab-link" data-tab="tab-10"><img src="~/images/reportimage/create-group-button.svg" alt="add user" class="create-bulk-add-image">Create Bulk Users</li>
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full vm-rl-equal-cols">
+                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+                    <div class="fund-trasfer-left vm-ft-form-card" id="vmRlFormCard">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-store"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Create Retailer</span>
+                                <span class="vm-ft-form-card-header__sub">Add single or bulk retailer users</span>
+                            </div>
+                        </div>
+                    <ul id="tabs" class="tabs width100 float-left tab-seconddesign tab-third-design vm-ft-role-tabs">
+                        <li class="tab-link current vm-ft-role-tab-li vm-ft-role-tab-li--active" data-tab="tab-9">
+                            <span class="vm-ft-role-tab"><span class="vm-ft-role-tab__icon"><i class="fas fa-user-plus" aria-hidden="true"></i></span><span class="vm-ft-role-tab__label">Create Retailers</span></span>
+                        </li>
+                        <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive" data-tab="tab-10">
+                            <span class="vm-ft-role-tab"><span class="vm-ft-role-tab__icon"><i class="fas fa-users" aria-hidden="true"></i></span><span class="vm-ft-role-tab__label">Bulk Users</span></span>
+                        </li>
                     </ul>
 
-                    @*@using (Html.BeginForm("Insert_retailer", "Home", FormMethod.Post))
-                        {*@
+                    <div class="vm-rl-tab-panels-wrap" id="vmRlTabPanels">
 
-                    <div id="tab-9" class="tab-content current custom-table-responsive tabcurrent-seconddesign input-border-third" style="height:75vh !important;">
+                    <div id="tab-9" class="tab-content current vm-ml-tab-panel input-border-third">
+                        <div class="left-four-tabs width100 vm-ml-create-form fund-transfer-form">
                         @using (Ajax.BeginForm("Insert_retailer", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RegisterSuccess", OnBegin = "ajaxValidate()", LoadingElementId = "div-loader" }))
                         {
                             @Html.AntiForgeryToken()
-                            <div class="left-four-tabs width100 float-left">
 
                                 <div class="row clearfix">
                                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -604,185 +316,188 @@
                                 </div><!--.row-->
 
 
-                                <div class=" width100 float-left button-seconddesign">
-                                    <div id="lblSuccess">
-                                        <label id="lblmsg1" class="danger" style="color:#fff;font-size: 16px;background: green;width: 96%;margin-bottom:5px;"></label>
+                                <div class="vm-ml-create-form__footer col-md-12 col-sm-12 col-xs-12">
+                                    <div class="vm-ml-form-feedback-wrap">
+                                        <div id="lblSuccess" class="vm-ml-form-alert vm-ml-form-alert--success" role="status" hidden>
+                                            <span id="lblmsg1"></span>
+                                        </div>
+                                        <div id="lblerror" class="vm-ml-form-alert vm-ml-form-alert--error" role="alert" hidden>
+                                            <span id="lblmsg"></span>
+                                        </div>
                                     </div>
-                                    <div id="lblerror">
-                                        <label id="lblmsg" class="danger" style="color:#fff;font-size: 16px;background: red;width: 96%;margin-bottom:5px;"></label>
+                                    <div class="modal-footer width100 float-left border-0 button-seconddesign vm-ft-form-actions vm-ml-form-actions">
+                                        <div class="vm-ml-form-actions__row">
+                                            <button type="reset" class="btn btn-second button-third-design vm-ml-btn-reset">Reset</button>
+                                            <button type="submit" class="btn waves-effect fullbodydycolorbg btn-first button-third vm-ml-btn-submit">
+                                                <span>Create Retailer</span>
+                                            </button>
+                                        </div>
                                     </div>
-
-                                    <button type="submit" class="btn pull-right fullbodydycolorbg btn-first button-third" style="margin-left:15px;color:#fff;border-color:transparent;margin-right: 15px;margin-top:5px;"><span style="color:#fff;">Create Retailer</span></button>
-                                    <button type="reset" class="btn pull-right btn-second button-third-design" style="margin-top:5px;">Reset</button>
                                 </div>
 
-
-                            </div>
                         }
+                        </div>
                     </div>
 
-                    <div id="tab-10" class="tab-content custom-table-responsive tabcurrent-seconddesign">
-                        <div class="left-four-tabs width100 float-left">
-                            <div id="custom-master-form" class="master-upload-file">
-                                <div class="Upload-form">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        @using (Html.BeginForm("BulkRetailerCreate", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                        {
-                                            <div class="form-group centerclass-third">
-                                                <h2 class="afterheading-third">Upload Retailer File </h2>
-                                                <input type="file" id="FileUpload1" class="masterfile-second brouseinput-third" name="FileUpload1" accept=".xlsx, .xls" />
-                                                <input class="fullbodydycolorbg pull-right button-third" type="submit" value="Upload File" disabled="disabled">
-                                                <button type="reset" class="btn pull-right button-third-design" style="color:#000;">
-                                                    Reset
-                                                </button>
+                    <div id="tab-10" class="tab-content vm-ml-tab-panel input-border-third">
+                        <div class="left-four-tabs width100 vm-ml-bulk-form">
+                            <div class="Upload-form master-upload-file">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    @using (Html.BeginForm("BulkRetailerCreate", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="form-group centerclass-third vm-ml-bulk-upload-block">
+                                            <h2 class="afterheading-third">Upload Retailer File</h2>
+                                            <input type="file" id="FileUpload1" class="masterfile-second brouseinput-third" name="FileUpload1" accept=".xlsx, .xls" />
+                                            <div class="vm-ml-bulk-actions">
+                                                <button type="reset" class="btn button-third-design vm-ml-bulk-reset">Reset</button>
+                                                <input class="fullbodydycolorbg button-third vm-ml-bulk-upload-btn" type="submit" value="Upload File" disabled="disabled" />
                                             </div>
-                                        }
-                                    </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
-                            <hr />
-                            <div class="Upload-form button-seconddesign">
+                            <div class="Upload-form button-seconddesign vm-ml-bulk-download-block">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div id="custom-Download-form" class="downloadtaxt-second sup-color-third" style="margin-top: 25px;">
+                                    <div id="custom-Download-form" class="downloadtaxt-second sup-color-third">
                                         <p><sup>*</sup>To create bulk users, You must first download the Excel format.</p>
                                         <p><sup>*</sup>According to the download excel you have to fill the details of all users.</p>
                                         <p><sup>*</sup>While uploading the details, keep in mind that no Firm name, mobile number, mail id should be multiple.</p>
-
-
-                                        <button type="submit" id="DownloadAttachment" class="btn waves-effect special-iii btnssl2233 pull-right fullbodydycolorbg btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="border:1px solid #ccc;float: right;margin-bottom: 10px;width:230px;">
-                                            <span style="color:#fff;">Download Bulk User Create Format</span>
+                                        <button type="submit" id="DownloadAttachment" class="btn waves-effect special-iii btnssl2233 fullbodydycolorbg btn-first button-third vm-ml-bulk-download-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                            <span>Download Bulk User Create Format</span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
+                    </div>
+
+                    </div>
                 </div>
 
-            </div>
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                @*<div class="right-tabs width100 float-left">
-                        @using (Html.BeginForm("Exportdata", "Home", FormMethod.Post))
-                        {
-                            <input type="hidden" name="ExportData" />
-                            <input type="submit" id="btnSubmit" value="Export" />
-                        }
-                    </div>*@
-                @*<div class="col-md-8 col-sm-8 col-xs-12">
-                    <div class="right-tabs width100 float-left">*@
-                @*@using (Html.BeginForm("Exportdata", "Home", FormMethod.Post))
-                    {
-                        <input type="hidden" name="ExportData" />
-                        <input type="submit" id="btnSubmit" value="Export" />
-                    }*@
-                <div class="page-header-third">
-                    <div class="t_menu">
-                        <div class="retalerrlist-add-button" style="width: 50%;">
-                            <div class="retailerlist-select" style="float:left;">
-                                @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
-                                {
-                                    <div class="input-group classborder-thirddesign" style="border: 1px solid #bfbebe; float: left;width: 200px">
-                                        @*<span class="input-group-addon">
-                        </span>*@
-                                        <div class="ffjkt" style="overflow: hidden;">
-                                            @Html.TextBox("txtmob", "", new { @class = "form-control", @placeholder = "Name,PinCode,Mob,Email,Firm,Aadhar,PAN", @style = "height:27px !important;margin-left:8px;padding:0px; background:none;font-size:12px;" })
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col vm-rl-history-col">
+                    <div class="fund-trasfer-right vm-ft-history-panel vm-rl-history-panel" id="vmRlHistoryPanel">
+                        <div class="vm-ft-history-body vm-rl-history-body">
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium vm-ml-list-toolbar vm-rl-list-toolbar">
+                                <div class="vm-rl-toolbar-modern vm-rl-toolbar-modern--card">
+                                    
+
+                                    <div class="vm-rl-toolbar-modern__row vm-rl-toolbar-modern__row--primary">
+                                        <div class="vm-rl-tb-group vm-rl-tb-group--search">
+                                        @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
+                                        {
+                                            <div class="vm-rl-tb-control vm-rl-tb-control--icon">
+                                                <i class="fas fa-search vm-rl-tb-control__icon" aria-hidden="true"></i>
+                                                @Html.TextBox("txtmob", "", new { @class = "form-control vm-rl-tb-input", @placeholder = "Search name, mobile...", autocomplete = "off" })
+                                            </div>
+                                            <button type="submit" value="Old" name="submit" class="vm-rl-tb-btn vm-rl-tb-btn--primary">
+                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                            </button>
+                                        }
                                         </div>
-                                    </div>
-                                    <div class="retailerlist-search" style="float: left; padding-left: 5px;">
-                                        <button type="submit" value="Old" name="submit" class="btn llpo input-back-second" style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 29px; font-size: 14px; padding: 2px 10px; ">
-                                            Search
+                                        <div class="vm-rl-tb-group vm-rl-tb-group--dist">
+                                            <div class="vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
+                                                <i class="fas fa-user-tie vm-rl-tb-control__icon" aria-hidden="true"></i>
+                                                @Html.DropDownList("RetailerFilterDealerID", Model.Dealerlist, "Select Distributor", new { @class = "form-control vm-rl-tb-select", id = "RetailerFilterDealerID" })
+                                                <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="btnsearchbtn" name="btnsearchbtn" class="vm-rl-tb-btn vm-rl-tb-btn--primary vm-rl-tb-btn--filter">
+                                            <i class="fas fa-filter" aria-hidden="true"></i><span>Filter</span>
                                         </button>
                                     </div>
-                                }
 
-                                <div class="select_item">
-                                    <div class="date_f">Search By Date</div>
-                                </div>
-
-
-                                <div class="select_item">
-                                    <div onclick="document.getElementById('srcbysts').style.display = 'block';" id="sbarea">SEARCH BY AREA</div>
-                                </div>
-                                <div class="select_item" style="">
-                                    <a style="font-size: 9px; color: #000;" href="@Url.Action("Unloadlimitset","Home")">Wallet unload Limit</a>
-                                </div>
-                                <div id="srcbysts" style="display:none">
-                                    @{
-                                        var d = db.State_Desc.ToList();
-
-
-                                    }
-                                    @*@using (Ajax.BeginForm("RetailerSearchBystatedist", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
-                    {*@
-                                    <select onchange="srcbydist()" id="serbystsdst" name="serbystsdst">
-                                        <option value="N">Select State</option>
-                                        @foreach (var itr in d)
-                                        {
-                                            <option value="@itr.State_id">@itr.State_name</option>
-                                        }
-                                    </select>
-                                    <select id="Districtstates" name="Districtstates">
-                                    </select>
-                                    @*<div onclick="searchbysddd()">
-                        SEARCH
-                    </div>*@
-                                    <div class="retailerlist-search" style="float: left;" onclick="document.getElementById('srcbysts').style.display = 'none';document.getElementById('sbarea').style.display = 'block';">
-                                        @*<button type="submit" id="expstatedist" value="Old" name="submit" class="btn llpo input-back-second" style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 29px; font-size: 14px; padding: 2px 10px; ">
-                            Search
-                        </button>*@
-                                        <input type="button" id="expstatedist" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
-                                    </div>
-
-                                    @*}*@
-                                </div>
-                            </div>
-
-                        </div>
-
-                        
-
-                        <div class="date_fa" style="display:none;">
-                           @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
-                           {
-                            <div class="col-md-5 mrj responcive-full" style="width: auto;margin-top:1px;">
-                                <div class="form-group jjp">
-                                    <div class="input-daterange input-group">
-                                        <div class="custom-date-icon ner height-icon-third">
-                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                        </div>
-                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
-
-                                        <div class="nrr3">
-                                            <div class="custom-date-icon ner height-icon-third">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
+                                    <div class="vm-rl-toolbar-modern__row vm-rl-toolbar-modern__row--secondary vm-rl-toolbar-modern__row--actions">
+                                        <div class="vm-ft-history-toolbar__head vm-ml-list-toolbar__head vm-rl-tb-head-inline">
+                                            <i class="fas fa-list-alt" aria-hidden="true"></i>
+                                            <div class="vm-ml-list-toolbar__text">
+                                                <span class="vm-ft-history-toolbar__title">Retailer List</span>
+                                                <span class="vm-ft-history-toolbar__sub">View, search &amp; export retailer records</span>
                                             </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height: 33px !important;", autocomplete = "off" })
+                                        </div>
+                                        <button type="button" class="vm-rl-tb-chip" id="vmRlBtnDate"><i class="fas fa-calendar-alt" aria-hidden="true"></i><span>Date</span></button>
+                                        <button type="button" class="vm-rl-tb-chip" id="sbarea"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Area</span></button>
+                                        <div class="vm-rl-tb-group vm-rl-tb-group--demo">
+                                        @using (Ajax.BeginForm("Make_Demo_Retailer", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
+                                        {
+                                            <div class="vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--demo">
+                                                <i class="fas fa-mobile-alt vm-rl-tb-control__icon" aria-hidden="true"></i>
+                                                <input name="txtmob" type="text" maxlength="10" required placeholder="Demo mobile" class="form-control vm-rl-tb-input" onkeypress="return isNumber(event)" />
+                                            </div>
+                                            <button type="submit" class="vm-rl-tb-btn vm-rl-tb-btn--demo">
+                                                <i class="fas fa-plus" aria-hidden="true"></i><span>Demo</span>
+                                            </button>
+                                        }
+                                        </div>
+                                        <div class="vm-ft-export-group vm-ml-list-toolbar__exports vm-rl-tb-exports">
+                                            <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                                            <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                                            <iframe id="txtArea1" style="display:none"></iframe>
+                                        </div>
+                                    </div>
+
+                                    <div id="vmRlDatePanel" class="vm-rl-filter-panel vm-rl-filter-panel--date">
+                                        <div class="vm-rl-filter-drawer__header">
+                                            <span class="vm-rl-filter-drawer__title"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Search by date range</span>
+                                            <button type="button" class="vm-rl-filter-drawer__close" id="vmRlDateClose" aria-label="Close date filter"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        </div>
+                                        <div class="vm-rl-filter-drawer__body">
+                                        @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
+                                        {
+                                            <div class="vm-rl-filter-date-range">
+                                                <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", placeholder = "From", title = "From date" })
+                                                </div>
+                                                <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                    @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", placeholder = "To", title = "To date" })
+                                                </div>
+                                                <button type="submit" value="Old" name="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-ft-search-btn">
+                                                    <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                                                </button>
+                                            </div>
+                                        }
+                                        </div>
+                                    </div>
+
+                                    <div id="srcbysts" class="vm-rl-filter-panel vm-rl-filter-panel--area">
+                                        <div class="vm-rl-filter-drawer__header">
+                                            <span class="vm-rl-filter-drawer__title"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Search by state &amp; district</span>
+                                            <button type="button" class="vm-rl-filter-drawer__close" id="vmRlAreaClose" aria-label="Close area filter"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                        </div>
+                                        <div class="vm-rl-filter-drawer__body vm-rl-filter-drawer__body--area">
+                                        @{
+                                            var d = db.State_Desc.ToList();
+                                        }
+                                        <div class="vm-rl-field-with-icon vm-rl-field-with-icon--select-inline vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
+                                            <i class="fas fa-map vm-rl-tb-control__icon" aria-hidden="true"></i>
+                                            <select onchange="srcbydist()" id="serbystsdst" name="serbystsdst" class="form-control vm-rl-tb-select">
+                                                <option value="N">Select State</option>
+                                                @foreach (var itr in d)
+                                                {
+                                                    <option value="@itr.State_id">@itr.State_name</option>
+                                                }
+                                            </select>
+                                            <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="vm-rl-field-with-icon vm-rl-field-with-icon--select-inline vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
+                                            <i class="fas fa-map-pin vm-rl-tb-control__icon" aria-hidden="true"></i>
+                                            <select id="Districtstates" name="Districtstates" class="form-control vm-rl-tb-select">
+                                                <option value="0">Select District</option>
+                                            </select>
+                                            <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
+                                        </div>
+                                        <input type="button" id="expstatedist" value="Export" class="saas-acc-btn vm-rl-filter-btn--export" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mrj responcive-fifty search-resp-third" style="margin-right: 0px;background: #fff;">
-
-                                    <button type="submit" value="Old" name="submit" class="btn input-back-second" style="background: transparent;border: 1px solid #b1a6a638;">
-                                        <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                        <span style="top:-2px;color:black;">Search</span>
-                                    </button>
-
-                                </div>
                             </div>
-                            <div class="date_f" style="float: right; padding-top: 4px; padding-right: 3px; cursor: pointer; ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor"><path d="M16.34 9.322a1 1 0 1 0-1.364-1.463l-2.926 2.728L9.322 7.66A1 1 0 0 0 7.86 9.024l2.728 2.926l-2.927 2.728a1 1 0 1 0 1.364 1.462l2.926-2.727l2.728 2.926a1 1 0 1 0 1.462-1.363l-2.727-2.926z" /><path fill-rule="evenodd" d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12m11 9a9 9 0 1 1 0-18a9 9 0 0 1 0 18" clip-rule="evenodd" /></g></svg>
-                            </div>
-
-                           }
-                        </div>
 
                         <script>
                         function srcbydist() {
                             var dr = document.getElementById('serbystsdst').value;
-                            console.log(dr);
                             if (dr != "N") {
                                 var url = '@Url.Action("serchstates","Home")'
                                 $.ajax({
@@ -796,7 +511,9 @@
                                             markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
                                         }
                                         $("#Districtstates").html(markup).show();
-                                        setSelectedValue(objSelect1, dist);
+                                        if (typeof setSelectedValue === 'function' && typeof objSelect1 !== 'undefined') {
+                                            setSelectedValue(objSelect1, dist);
+                                        }
                                     },
                                     error: function (reponse) {
                                         alert("error : " + reponse);
@@ -805,67 +522,33 @@
                             }
                         }
                         function searchbysddd() {
-                            debugger;
                             var dr = document.getElementById('serbystsdst').value;
                             var dr1 = document.getElementById('Districtstates').value;
-                            console.log(dr);
-                            console.log(dr1);
                             if (dr != "N") {
-
-
                                 var url = '@Url.Action("RetailerSearchBystatedist", "Home")'
                                 $.ajax({
                                     url: url,
                                     data: { state: dr, dist: dr1 },
                                     cache: false,
                                     type: "POST"
-
                                 });
-
                             }
                         }
                         </script>
-                        <div class="retalerrlist-add-button" style="padding-right:4px;">
-                            <div class="retailerlist-select" style="float:left;">
-                                @Html.DropDownListFor(m => m.DealerID, Model.Dealerlist, "Select Distributor", new { @class = "form-control" })
+
+                            <div id="Retailertablelist" class="vm-ml-table-host vm-rl-table-host custom-table-responsive tablefourdesign-admin">
+
+                        @Html.Partial("_RetailerlistTable", Model)
+
                             </div>
-                            <div class="retailerlist-search" style="float: left; padding-left: 5px;">
-                                <input type="button" id="btnsearchbtn" name="btnsearchbtn" value="Search" style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 29px; margin-top: 1px; " />
-                            </div>
-
-                        </div>
-
-                        <div class="retalerrlist-add-button" style="padding-right:4px;">
-                            <div class="retailerlist-select" style="float:left;">
-                                @using (Ajax.BeginForm("Make_Demo_Retailer", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
-                                {
-                                    <div class="input-group classborder-thirddesign">
-                                        <div class="ffjkt">
-                                            <input name="txtmob" type="text" maxlength="10" required placeholder="Mobile for demo user" class="form-control" style="height: 27px !important; width: 115px; margin-left: 8px; padding: 0px; background: none; font-size: 12px;" onkeypress="return isNumber(event)" />
-                                            <div class="retailerlist-search" style="float: left; padding-left: 5px;">
-                                                <button type="submit" class="btn llpo input-back-second" style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 29px; font-size: 14px; padding: 2px 10px; ">
-                                                    Add
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                }
-                            </div>
-
                         </div>
                     </div>
-                    <div class="table-responsive custom-table-responsive tablefourdesign-admin" id="Retailertablelist">
-
-                        @Html.Partial("_Retailerlist")
-
-                    </div>
-
                 </div>
 
             </div>
         </div>
-        <div id="div-loader" style="display:none; position: fixed;top: 0px;background: rgba(0,0,0,.5);left: 0px;bottom: 0px;right: 0px;width: 100%;height: 100vh;z-index: 9999;">
+    </div>
+    <div id="div-loader" class="div-loader vm-ml-page-loader" style="display:none;">
             <div id="loader" style="position: absolute;right: 34%;top: 50%;display:block; transform: translate(-34%,-50%);">
                 <div class="loadingio-spinner-ripple-92ar2pfqk5j" style="background:transparent;">
                     <div class="ldio-zdyd6mf6t5">
@@ -875,6 +558,77 @@
             </div>
         </div>
 </section>
+
+@Html.Partial("_RetailerlistModals")
+
+<script>
+    var vmRlSkipModalRefresh = false;
+
+    function vmRlAfterTableUpdate() {
+        if (typeof vmRlBindTableScroll === 'function') vmRlBindTableScroll();
+        if (typeof vmRlInitHeightSync === 'function') vmRlInitHeightSync();
+    }
+
+    function vmRlMoveModalsToBody() {
+        $('#defaultModal222,#panviewdoc,#aadharviewdoc,#ShopwithSalfieviewdoc,#VideoKYCdocshowviewdoc,#gstviewdoc,#frmagrviewdoc,#otpmodal,#otpmodaldocument').each(function () {
+            var $m = $(this);
+            if ($m.length && !$m.parent().is('body')) {
+                $m.appendTo('body');
+            }
+        });
+    }
+
+    function vmRlResetDetailModal() {
+        var $m = $('#defaultModal222');
+        $m.find('.first-form').show();
+        $m.find('.second-form').hide();
+        $m.find('.modal-footer button.one, .first-form button.one').show();
+        $m.find('.modal-footer button.One2, .second-form button.One2').hide();
+        $('#error').text('');
+        $('#loadredmodel').hide();
+        $('#userinfodiv').css({ visibility: 'visible', opacity: 1 }).show();
+    }
+
+    function vmRlCloseDetailModal() {
+        $('#defaultModal222').modal('hide');
+    }
+
+    function vmRlInitModals() {
+        vmRlMoveModalsToBody();
+        $(document).off('click.vmRl', '#defaultModal222 button.btn[value="Edit"]')
+            .on('click.vmRl', '#defaultModal222 button.btn[value="Edit"]', function () {
+                var $m = $('#defaultModal222');
+                $m.find('.first-form').hide();
+                $m.find('.second-form').show();
+                $m.find('.modal-footer button.one, .first-form button.one').hide();
+                $m.find('.modal-footer button.One2, .second-form button.One2').show();
+            });
+        $('#defaultModal222').off('hidden.bs.modal.vmRl').on('hidden.bs.modal.vmRl', function () {
+            vmRlResetDetailModal();
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            if (vmRlSkipModalRefresh) {
+                vmRlSkipModalRefresh = false;
+                vmRlAfterTableUpdate();
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("RetailerlistPart", "Home")',
+                type: 'POST',
+                cache: false,
+                success: function (response) {
+                    $('#Retailertablelist').html(response);
+                    vmRlAfterTableUpdate();
+                }
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        vmRlInitModals();
+    });
+</script>
+
 <!--Add New Master Distributor  modal-->
 <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -1315,294 +1069,6 @@
     </div>
 </div>
 
-<!-- For Right Popup -->
-<div class="modal mastetr222Modal" id="defaultModal222" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left">
-                <div class="modal-back width100 float-left">
-                    <div class="sam">
-                        <h4 class="oneh">
-                            <span class="first">
-                                M
-                            </span>
-                        </h4>
-                        <span class="lastData">
-                            000
-                        </span>
-                    </div>
-                    <div class="sam">
-                        <h4 class="twoh">
-                            <span class="first">
-                                D
-                            </span>
-                        </h4>
-                        <span class="lastData">
-                            000
-                        </span>
-                    </div>
-                    <div class="sam">
-                        <h4 class="threeh">
-                            <span class="first">
-                                R
-                            </span>
-                        </h4>
-                        <span class="lastData">
-                            000
-                        </span>
-                    </div>
-                    <button type="button" class="btn waves-effect" data-dismiss="modal">
-                        <i class="fa fa-times fullbodydycolorbg fulltextbodycolor" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left">
-                <div class="background-kk width100 float-left">
-                    <div class="thisLeft float-left">
-                        <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User" />
-                    </div>
-                    <div class="thisRight">
-                        <ul class="float-left width100">
-                            <li><span><b>Name:</b></span><span>TestTest</span></li>
-                            <li><span><b>Firm:</b></span><span>TestTest</span></li>
-                            <li><span><b>Registered Date:</b></span><span>9837452845</span></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="float-left width100">
-
-                    <form class="first-form">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" placeholder="EmailID" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Pancard</label>
-                                    <input type="text" class="form-control" placeholder="Enter Pancard No" readonly />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Aadhar Card</label>
-                                    <input type="text" class="form-control" placeholder="Enter Aadhaar Number" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Firm Registration No</label>
-                                    <input type="text" class="form-control" placeholder="Enter Firm Registration No" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>GST Registration No</label>
-                                    <input type="text" class="form-control" placeholder="Enter GST Registration No" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>District</label>
-                                    <input type="text" class="form-control" placeholder="Select District" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>State</label>
-                                    <input type="text" class="form-control" placeholder="Select State" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <textarea class="form-control" placeholder="Enter Address" readonly></textarea>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Pin Code</label>
-                                    <input type="text" class="form-control" placeholder="Enter Pin Code" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                    </form>
-
-                    <!--=============-->
-                    <form class="second-form" style="display:none;">
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" placeholder="EmailID" readonly />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group spspl">
-                                    <label>Pancard</label>
-                                    <input type="text" class="form-control" placeholder="Enter Pancard No" />
-                                    <div class="ss-right">
-                                        <button type="button" class="btn" value="view">View</button>
-                                        <button type="button" class="btn" value="reject">Reject</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group spspl">
-                                    <label>Firm Registration No</label>
-                                    <input type="text" class="form-control" placeholder="Enter Firm Registration No" />
-                                    <div class="ss-right">
-                                        <button type="button" class="btn" value="view">View</button>
-                                        <button type="button" class="btn" value="reject">Reject</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>GST Registration No</label>
-                                    <input type="text" class="form-control" placeholder="Enter GST Registration No" />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group spspl">
-                                    <label>Aadhar Card</label>
-                                    <input type="text" class="form-control" placeholder="Enter Aadhaar Number" />
-                                    <div class="ss-right">
-                                        <button type="button" class="btn" value="view">View</button>
-                                        <button type="button" class="btn" value="reject">Reject</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>District</label>
-                                    <select class="form-control">
-                                        <option value="" selected>Select District</option>
-                                        <option value="1">Test</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>State</label>
-                                    <select class="form-control">
-                                        <option value="" selected>Select State</option>
-                                        <option value="1">Test</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <textarea class="form-control" placeholder="Enter Address"></textarea>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Pin Code</label>
-                                    <input type="text" class="form-control" placeholder="Enter Pin Code" />
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                    </form>
-
-                </div>
-            </div><!--.modal-body-->
-
-            <div class="modal-footer width100 float-left">
-                <ul class="width100 float-left">
-                    <li class="one">
-                        <button type="button" value="Edit" class="btn">Edit</button>
-                    </li>
-                    <li class="One2" style="display:none;">
-                        <button type="button" value="SaveChange" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Save Change</button>
-                    </li>
-                    <li class="two">
-                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                    </li>
-                    <li class="three">
-                        <button type="button" value="Email_Verify" class="btn">Email Verify</button>
-                    </li>
-                    <li class="four">
-                        <button type="button" value="Delet" class="btn">Delete</button>
-                    </li>
-                </ul>
-            </div><!--.modal-footer-->
-        </div>
-    </div>
-</div>
-<div class="modal fund-tr-history  in" id="myModal" tabindex="-1" role="dialog" style="display: none;">
-    <div class="modal-dialog" role="document" style="margin:0px;float:right;">
-
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left ecomm-pop-head">
-
-                <h5 id="mdhis">Not Create User History</h5>
-
-
-                <button type="button" class="btn waves-effect " data-dismiss="modal" style="float:right;border:0px;color:var(--main-bg-lcolor);padding:0px; height:auto;">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
-
-
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left ecomm-pop-body">
-                <div class="float-left width100">
-
-                    <div id="htmleerrrorrtable">
-
-                    </div>
-
-
-
-
-
-                    <!--=============-->
-
-                </div><!--.modal-body-->
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
 
 <!-- Jquery Core Js -->
 <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
@@ -1619,10 +1085,40 @@
 
 
 @* New *@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    $(".date_f").click(function () {
-        $(".date_fa").toggle();
+    function vmRlCloseFilterPanels() {
+        $('#vmRlDatePanel, #srcbysts').removeClass('vm-rl-filter-panel--open');
+        $('#vmRlBtnDate, #sbarea').removeClass('vm-rl-filter-chip--active');
+    }
+
+    $(document).ready(function () {
+        vmRlCloseFilterPanels();
+
+        $('#vmRlBtnDate').on('click', function (e) {
+            e.preventDefault();
+            var isOpen = $('#vmRlDatePanel').hasClass('vm-rl-filter-panel--open');
+            vmRlCloseFilterPanels();
+            if (!isOpen) {
+                $('#vmRlDatePanel').addClass('vm-rl-filter-panel--open');
+                $(this).addClass('vm-rl-filter-chip--active');
+            }
+        });
+
+        $('#sbarea').on('click', function (e) {
+            e.preventDefault();
+            var isOpen = $('#srcbysts').hasClass('vm-rl-filter-panel--open');
+            vmRlCloseFilterPanels();
+            if (!isOpen) {
+                $('#srcbysts').addClass('vm-rl-filter-panel--open');
+                $(this).addClass('vm-rl-filter-chip--active');
+            }
+        });
+
+        $('#vmRlDateClose, #vmRlAreaClose').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            vmRlCloseFilterPanels();
+        });
     });
 </script>
 
@@ -1661,7 +1157,7 @@
 
          $.ajax({
              url: '@Url.Action("RetailerlistPart","Home")',
-             data: { dealerid: $('#DealerID').val() },
+             data: { dealerid: $('#RetailerFilterDealerID').val() },
                type: 'GET',
                cache: false,
                success: function (response) {
@@ -1701,7 +1197,7 @@
 <script>
     $('#btnExport').click(function () {
 
-        var usernm = $('#DealerID').val();
+        var usernm = $('#RetailerFilterDealerID').val();
         var usernminput = $('#txtmob').val();
 
         var url = '@Url.Action("ExcellGenerateForRetailer", "Home")?usernm=' + usernm + '&usernminput=' + usernminput;
@@ -1720,7 +1216,7 @@
     })
     $('#btnPDF').click(function () {
 
-        var usernm = $('#DealerID').val();
+        var usernm = $('#RetailerFilterDealerID').val();
         var usernminput = $('#txtmob').val();
 
         var url = '@Url.Action("PrintPartialViewToPdf", "Home")?usernm=' + usernm + '&usernminput=' + usernminput;
@@ -1952,32 +1448,34 @@ window.open(
 <!--Edit Distributor Detail-->
 <script>
 
+    function vmRlHideFormFeedback() {
+        $('#lblerror, #lblSuccess').attr('hidden', 'hidden').removeClass('vm-ml-form-alert--show');
+        $('#lblmsg, #lblmsg1').text('');
+    }
+    function vmRlShowFormError(msg) {
+        vmRlHideFormFeedback();
+        $('#lblmsg').text(msg || '');
+        $('#lblerror').removeAttr('hidden').addClass('vm-ml-form-alert--show');
+    }
+    function vmRlShowFormSuccess(msg) {
+        vmRlHideFormFeedback();
+        $('#lblmsg1').text(msg || '');
+        $('#lblSuccess').removeAttr('hidden').addClass('vm-ml-form-alert--show');
+    }
+
     function RegisterSuccess(data) {
-        debugger
-         $('#div-loader').hide();
-         $('#lblSuccess').hide();
-        $('#lblmsg1').text('');
-        $('#lblerror').hide();
-        $('#lblmsg').text();
-         var sts = data.type;
-         $('#lblmsg').text(data.msg)
-
-           if (sts === "Success") {
-
-            $('#lblSuccess').show();
-               $('#lblmsg1').text('✅  Congratulations Account successfully Created');
-                $('#lblmsg1').css('padding', '5px');
-                     toastr.success('Congratulations Account successfully Created');
-                      ToastrMessage();
-              }
-        else {
-            $('#lblerror').show();
-               $('#lblmsg').text(data.msg);
-                $('#lblmsg').css('padding', '5px');
-
-                    ToastrMessage();
-                    toastr.error(data.msg);
-              }
+        $('#div-loader').hide();
+        vmRlHideFormFeedback();
+        var sts = data.type;
+        if (sts === "Success") {
+            vmRlShowFormSuccess('✅ Congratulations Account successfully Created');
+            ToastrMessage();
+            toastr.success('Congratulations Account successfully Created');
+        } else {
+            vmRlShowFormError('☒ ' + (data.msg || 'Unable to create account'));
+            ToastrMessage();
+            toastr.error(data.msg);
+        }
 
 
 
@@ -2279,16 +1777,6 @@ function () {
 </script>
 <script>
     $(document).ready(function () {
-        $('.mastetr222Modal button.btn[value="Edit"]').click(function () {
-            $(".mastetr222Modal .first-form").hide();
-            $(".mastetr222Modal .second-form").show();
-            $('.mastetr222Modal .modal-footer li.one').hide();
-            $('.mastetr222Modal .modal-footer li.One2').show();
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
         $('.master-upload-file input:file').change(function () {
             if ($(this).val()) {
                 $('.master-upload-file input:submit').attr('disabled', false);
@@ -2308,42 +1796,87 @@ function () {
     });
 </script>
 <script>
-    //$(document).ready(function () {
-    //    $("#myInput").on("keyup", function () {
+    function vmRlUploadTablePhoto(input, retailerId) {
+        if (!input || !input.files || !input.files[0] || !retailerId) return;
 
-    //        var value = $(this).val().toLowerCase();
-    //        $("#body .tr").filter(function () {
-    //            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    //        });
-    //    });
-    //});
+        var fd = new FormData();
+        fd.append('FileUpload', input.files[0]);
+        fd.append('retailerId', retailerId);
 
+        var $wrap = $(input).closest('.vm-rl-avatar-upload');
+        $wrap.addClass('vm-rl-avatar-upload--loading');
+
+        $.ajax({
+            url: '@Url.Action("UploadRetailerTablePhoto", "Home")',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                $wrap.removeClass('vm-rl-avatar-upload--loading');
+                if (res && res.success && res.imageUrl) {
+                    var bustUrl = res.imageUrl + (res.imageUrl.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
+                    var $img = $wrap.find('.vm-rl-avatar-img');
+                    if ($img.length) {
+                        $img.attr('src', bustUrl);
+                    } else {
+                        $wrap.find('.vm-rl-avatar-placeholder').replaceWith('<img src="' + bustUrl + '" class="vm-rl-avatar-img" alt="Retailer photo" onclick="viewImage(this)" />');
+                    }
+                } else {
+                    alert((res && res.message) ? res.message : 'Photo upload failed.');
+                }
+                input.value = '';
+            },
+            error: function () {
+                $wrap.removeClass('vm-rl-avatar-upload--loading');
+                alert('Photo upload failed.');
+                input.value = '';
+            }
+        });
+    }
+</script>
+<script>
     function RetailerMobSearch(htmldata) {
         $("#Retailertablelist").html(htmldata);
+        pageindex = 2;
+        NoMoredata = false;
+        inProgress = false;
+        vmRlBindTableScroll();
+        vmRlSyncPanelHeight();
     }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        vmRlHideFormFeedback();
+        $('#vmRlFormCard ul.tabs li.tab-link').on('click', function () {
+            var tab_id = $(this).attr('data-tab');
+            if (!tab_id) return;
+            $('#vmRlFormCard ul.tabs li.tab-link').removeClass('current vm-ft-role-tab-li--active').addClass('vm-ft-role-tab-li--inactive');
+            $('#vmRlFormCard .tab-content.vm-ml-tab-panel').removeClass('current');
+            $(this).addClass('current vm-ft-role-tab-li--active').removeClass('vm-ft-role-tab-li--inactive');
+            $('#' + tab_id).addClass('current');
+            setTimeout(vmRlSyncPanelHeight, 50);
+            setTimeout(vmRlSyncPanelHeight, 200);
+        });
+    });
 </script>
 
 
 
 <script>
-
-    //$(document).ready(() => {
-    //    $('#Retailertablelist').scroll((e) => {
-    //        console.log('test1')
-    //    })
-    //})
-
     var pageindex = 2;
     var NoMoredata = false;
     var inProgress = false;
-    $('#Retailertablelist').scroll(function () {
-        var dealer_selected = $('#DealerID').val();
-        if ($('#Retailertablelist').scrollTop() > Number($("#mmm").height()) / 4 && !NoMoredata && !inProgress && !dealer_selected) {
 
+    function vmRlBindTableScroll() {
+        $('#vmRlTableScroll').off('scroll.vmRlInfinite').on('scroll.vmRlInfinite', function () {
+            var dealer_selected = $('#RetailerFilterDealerID').val();
+            if ($(this).scrollTop() > Number($("#mmm").height()) / 4 && !NoMoredata && !inProgress && !dealer_selected) {
                 inProgress = true;
                 $("#loadingdiv").show();
                 $.post("@Url.Action("InfiniteScroll_retailer", "Home")",
-                    { "pageindex": pageindex},
+                    { "pageindex": pageindex },
                     function (data) {
                         pageindex = pageindex + 1;
                         NoMoredata = data.NoMoredata;
@@ -2353,6 +1886,90 @@ function () {
                     });
             }
         });
+    }
+
+    function vmRlSyncTabPanelHeight() {
+        var $wrap = $('#vmRlTabPanels');
+        var $tab9 = $('#tab-9');
+        var $tab10 = $('#tab-10');
+        if (!$wrap.length || !$tab9.length) return;
+
+        var h = 0;
+        if ($tab9.hasClass('current')) {
+            h = Math.ceil($tab9.outerHeight());
+        } else {
+            $tab9.addClass('vm-rl-tab-measure');
+            h = Math.ceil($tab9.outerHeight());
+            $tab9.removeClass('vm-rl-tab-measure');
+        }
+
+        if (h > 0) {
+            $wrap.css('min-height', h + 'px');
+            $tab9.css('min-height', h + 'px');
+            $tab10.css('min-height', h + 'px');
+        }
+    }
+
+    function vmRlSyncPanelHeight() {
+        vmRlSyncTabPanelHeight();
+
+        var $form = $('#vmRlFormCard');
+        var $panel = $('#vmRlHistoryPanel');
+        var $scroll = $('#vmRlTableScroll');
+        var $tableHost = $('#Retailertablelist');
+        if (!$form.length || !$panel.length) return;
+
+        if (window.innerWidth < 992) {
+            $panel.css({ height: '', maxHeight: '' });
+            $scroll.css({ height: '', maxHeight: '' });
+            $tableHost.css({ height: '', maxHeight: '' });
+            return;
+        }
+
+        var formH = Math.ceil($form.outerHeight());
+        if (formH <= 0) return;
+
+        $panel.css({ height: formH + 'px', maxHeight: formH + 'px' });
+
+        var toolbarH = $panel.find('.vm-rl-list-toolbar').outerHeight(true) || 0;
+        var scrollH = Math.max(formH - toolbarH, 140);
+
+        $tableHost.css({
+            height: scrollH + 'px',
+            maxHeight: scrollH + 'px'
+        });
+        $scroll.css({
+            height: scrollH + 'px',
+            maxHeight: scrollH + 'px'
+        });
+    }
+
+    function vmRlInitHeightSync() {
+        vmRlSyncPanelHeight();
+        setTimeout(vmRlSyncPanelHeight, 100);
+        setTimeout(vmRlSyncPanelHeight, 350);
+        setTimeout(vmRlSyncPanelHeight, 800);
+
+        $(window).off('load.vmRlSync resize.vmRlSync').on('load.vmRlSync resize.vmRlSync', function () {
+            vmRlSyncPanelHeight();
+        });
+
+        var formEl = document.getElementById('vmRlFormCard');
+        if (formEl && window.ResizeObserver) {
+            if (window._vmRlFormRo) {
+                window._vmRlFormRo.disconnect();
+            }
+            window._vmRlFormRo = new ResizeObserver(function () {
+                vmRlSyncPanelHeight();
+            });
+            window._vmRlFormRo.observe(formEl);
+        }
+    }
+
+    $(document).ready(function () {
+        vmRlBindTableScroll();
+        vmRlInitHeightSync();
+    });
 </script>
 
 

@@ -111,8 +111,8 @@
         top: 5px;
     }
 </style>
-<div class="table-responsive">
-    <table class="table table-bordered table-due-second table-due-second-desti third-design-table" id="mdList">
+<div class="table-responsive vm-ml-table-scroll saas-acc-table-wrap">
+    <table class="table table-bordered saas-acc-table vm-ml-data-table third-design-table" id="mdList">
         <thead>
             <tr>
                 <th>Sr</th>
@@ -121,11 +121,8 @@
                 <th>Distributor&nbsp;Name</th>
                 <th>Mobile&nbsp;No</th>
                 <th>Balance</th>
-                @*   <th>Aadhar&nbsp;No</th>*@
-                @*<th>PAN&nbsp;No</th>*@
                 <th>KYC</th>
-                <th>Email&nbsp;V/F</th>
-
+                <th style="width:90px;">Email&nbsp;V/F</th>
             </tr>
         </thead>
         <tbody id="body">
@@ -152,677 +149,136 @@
                     {
                         if (item.PSAStatus == "N" && item.AadhaarStatus == "N")
                         {
-                            colorchange = "#dbdb70";
-                            borderleft = "7px solid var(--main-bg-lcolor)";
+                            colorchange = "#fef9c3";
+                            borderleft = "4px solid #2563eb";
                             imggg = "☻";
-
                         }
-
                     }
-                    <tr class="tr" style="background-color:@colorchange">
+                    <tr class="tr vm-ml-parent-row" style="background-color:@colorchange">
                         <td>@id</td>
-                        <td>@item.MasterEmail</td>
+                        <td class="vm-ml-md-firm">@item.MasterEmail</td>
                         <td style="border-left:@borderleft">
-                            <span id="@idshow" onclick="md_dlm_List('@item.DealerId', '@i')">
-                                <i class="fa fa-caret-down" aria-hidden="true"></i>&nbsp;&nbsp;
-                                @item.FarmName
+                            <span id="@idshow" class="vm-ml-expand-toggle" onclick="md_dlm_List('@item.DealerId', '@i')">
+                                <i class="fa fa-caret-down vm-ml-expand-icon" aria-hidden="true"></i>
+                                <span class="vm-ml-firm-name">@item.FarmName</span>
                             </span>
-                            <span id="@idhide" style="display:none;" onclick="md_dlm_Listhide('@i')">
-                                <i class="fa fa-caret-up" aria-hidden="true"></i>&nbsp;&nbsp;
-                                @item.FarmName
+                            <span id="@idhide" class="vm-ml-expand-toggle vm-ml-expand-toggle--open" style="display:none;" onclick="md_dlm_Listhide('@i')">
+                                <i class="fa fa-caret-up vm-ml-expand-icon" aria-hidden="true"></i>
+                                <span class="vm-ml-firm-name">@item.FarmName</span>
                             </span>
                         </td>
-                        <td><span style="font-size:20px;width: 16px;display: inline-block;color: var(--main-bg-lcolor);">@imggg</span>&nbsp;@item.DealerName</td>
+                        <td><span class="vm-ml-pending-mark">@imggg</span>@item.DealerName</td>
                         <td>@item.Mobile</td>
-                        <td>@item.remaindlm</td>
-                        @*  <td>@item.adharcard</td>*@
-                        @* <td> @item.pancard</td>*@
+                        <td class="vm-ml-balance-cell">@item.remaindlm</td>
                         <td class="kyc-button">
                             @if (item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.pancardsts == "Y")
                             {
-                                <button class="btn done-third">Done</button>
+                                <span class="vm-ml-status-badge vm-ml-status-badge--done">Done</span>
                             }
                             else
                             {
-                                <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 10px;float:left; font-size: 11px;">Due</div>
+                                <span class="vm-ml-status-badge vm-ml-status-badge--due">Due</span>
                             }
-                            @*<button class="btn" style="background:yellow;"><img src="~/images/reportimage/wall-clock.svg" /></button>
-                                <button class="btn btn-danger"><img src="~/images/reportimage/close.svg" /></button>
-                                <button class="btn btn-success"><img src="~/images/reportimage/check.svg" /></button>*@
-
-
-
-                            @*@item.adharcard*@
                         </td>
-                        <td data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.DealerId')">
-                            @if (item.Emailconfirmed == true)
-                            {
-                                <button class="btn due-done-second done-third" style="border:1px solid #bbb;font-size: 11px;padding: 4px 7px;height: 25px;border: 1px solid #bbb;">Done</button>
-                            }
-                            else
-                            {
-                                <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 10px;float:left; font-size: 11px;">Due</div>
-                            }
-                            <img class="email-popup-second" src="~/ashok-images/rightaeps.svg" style="width: 11px;margin-top: 6px;float: right;" />
+                        <td class="vm-ml-ev-cell" onclick="mdActionBtn('@item.DealerId', this); return false;">
+                            <div class="vm-ml-ev-cell__inner">
+                                @if (item.Emailconfirmed == true)
+                                {
+                                    <span class="vm-ml-status-badge vm-ml-status-badge--done">Done</span>
+                                }
+                                else
+                                {
+                                    <span class="vm-ml-status-badge vm-ml-status-badge--due">Due</span>
+                                }
+                                <i class="fas fa-chevron-right vm-ml-ev-arrow" aria-hidden="true"></i>
+                            </div>
                         </td>
-
                     </tr>
 
-                    <tr id="@i" style="display:none;background-color: #fff;">
-                        <td colspan="8" style="padding:0px;">
-                            <div id="@idno">
-                                @*@Html.Partial("_SelectRID")*@
-                            </div>
+                    <tr id="@i" class="vm-ml-sub-row" style="display:none;">
+                        <td colspan="8" class="vm-ml-sub-row-cell">
+                            <div id="@idno"></div>
                         </td>
                     </tr>
 
                     i++;
                     id++;
                 }
-
             }
         </tbody>
     </table>
 </div>
 
 
-
-<!--For Right Popup -->
-<div class="modal mastetr222Modal mastermodal-second-design" id="defaultModal222" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div id="loadredmodel" style="display:none;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-            <div class="ldio-zdyd6mf6t5">
-                <div></div><div></div>
-            </div>
-        </div>
-
-        <div id="userinfodiv" class="modal-content width100 float-left input-border-third">
-
-            <div class="modal-body width100 float-left">
-                <div class="background-kk width100 float-left mastermodal-second">
-                    <div class="thisLeft float-left">
-                        <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User" />
-                    </div>
-                    <div class="thisRight">
-                        <ul class="float-left width100">
-                            <li><span><b>Name:</b></span><span><label id="Names"></label></span></li>
-                            <li><span><b>Firm:</b></span><span><label id="FirmName"></label></span></li>
-                            <li><span><b>Registered Date:</b></span><span><label id="RegisteredDate"></label></span></li>
-                            <li> <div id="alinks"></div></li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn waves-effect" data-dismiss="modal" style="background: #f5f5f5;border: 0px;position: absolute;right: 15px;top: 15px;padding: 4px 9px;height: auto;">
-                        <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <div class="float-left width100">
-
-                    <form class="first-form">
-                        @Html.Hidden("DealerIdshow")
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    @Html.TextBox("Email11", "", new { @class = "form-control", placeholder = "Enter Email", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Pancard</label>
-                                    @Html.TextBox("Pancard11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Aadhar Card</label>
-                                    @Html.TextBox("Aadhar11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor Balance</label>
-                                    @Html.TextBox("Distributorbalance", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase;background: #ffffce;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Retailer's Balance</label>
-                                    @Html.TextBox("Retailerbalance", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase;background: #ffffce;", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Area Pin Code</label>
-                                    @Html.TextBox("pincode11", "", new { @class = "form-control", placeholder = "Enter Area Pin Code", maxlength = 6, @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-sm-4 col-xs-12">
-                                <div class="form-group">
-                                    <label>GST Registration No</label>
-                                    @Html.TextBox("GSTRegistrationNo11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Margine(Offline)<span>%</span></label>
-                                    <span id="offmargine" style="background: #fff;border: 1px solid #ccc;height: 32px;display: inline-block;width: 100%;line-height: 30px;color: #555;padding-left: 10px"></span>
-
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Capping</label>
-                                    <span id="Capping" style="background: #fff;border: 1px solid #ccc;height: 32px;display: inline-block;width: 100%;line-height: 30px;color: #555;padding-left: 10px"></span>
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>State</label>
-                                    @Html.TextBox("State11", "", new { @class = "form-control", placeholder = "Enter State", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-
-                                    @*     @Html.DropDownList("State11", new SelectList(ViewBag.state1, "Value", "Text"), "Select State", new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>District</label>
-                                    @Html.TextBox("District11", "", new { @class = "form-control", placeholder = "Enter District", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-
-                                    @*@Html.DropDownList("District11",
-                        new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
-                               "Select district",
-                               new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    @Html.TextArea("address11", "", new { @class = "form-control", placeholder = "Enter Enter Address", @style = "text-transform:uppercase;height:72px", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                        @*<div style="float: right; background: #f0f0f0 !important; ">
-
-                <div class="KYCON onoffswitch" style="float: right; width: 114px; position: absolute; right: 15.6%; border: 1px solid #bfbebe !important; background: #f0f0f0 !important; ">
-                    <span class="custom-off" style="height:32px;" id="chargeback_otpsts" onclick="OTPONOFF('KYCON')">Charge Back OTP</span>
-                </div>
-            </div>*@
-                        <div class="modal-footer width100 float-left button-seconddesign">
-                            <ul class="width100 float-left">
-                                <li class="five onoffswitch">
-                                    <button type="button" class="costom-on costom-off" id="chargeback_otpsts" onclick="OTPONOFF('KYCON')" style="border:0px;height:30px;"><span style="color:#777; font-size: 12px;">Charge Back OTP</span></button>
-                                </li>
-                                <li class="one2  onoffswitch">
-                                    <button type="button" class="costom-on costom-off" id="self_upi" onclick="ONOFF('KYCON')" style="border:0px;height:30px;"><span style="color:#777; font-size: 12px;">Self UPI </span></button>
-                                </li>
-                                <li class="one" style="width:30%;">
-                                    <button type="button" value="Edit" class="btn btn-first button-third" style="width: 80%; padding: 0px"><span style="color:#777;font-size:12px;">Edit & Update KYC</span></button>
-                                </li>
-                                <li class="One2" style="display:none;">
-                                    <button type="button" value="SaveChange" class="btn special-iii btnssl2233 btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color: #777; font-size: 11px;">Save Change</span></button>
-                                </li>
-                                @*<li class="two">
-                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                    </li>*@
-                                <li class="three" style="width:18%;">
-                                    <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify()" style="padding:0px;"><span style="color:#777;font-size:12px;">Email Verify</span></button>
-                                </li>
-                                <li class="four">
-                                    <button type="button" value="Delet" class="btn btn-first button-third" onclick="Deleteuser()"><span style="color:#777;">Delete</span></button>
-                                </li>
-
-
-                            </ul>
-
-                            <div> <span id="error" style="color:red;"></span> </div>
-                        </div><!--.modal-footer-->
-
-                    </form>
-
-                    <!--=============-->
-
-
-                    <div style=" width: 100%; float: left; display: flex; justify-content: space-between; }">
-                        <div id="sellbutton" >
-
-                        </div>
-                        <div id="Messages12">
-
-                        </div>
-                    </div>
-                    <div class="second-form tabcurrent-seconddesign" style="display:none;">
-                        @using (Ajax.BeginForm("Edit_Distributer_dealer", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "distributorlist", OnSuccess = "OnSuccess", OnBegin = "chkvalidation" }))
-                        {
-                            @Html.Hidden("DealerId")
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        @Html.TextBox("NameEdit", "", new { @class = "form-control", placeholder = "Enter Name", required = "required" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Firm Name</label>
-                                        @Html.TextBox("FirmEdit", "", new { @class = "form-control", placeholder = "Enter FirmName", required = "required" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>DOB</label>
-                                        <input type="date" id="DOBEdit" name="DOBEdit" class="form-control" style="padding:0px 10px;" required="required" />
-                                        @*@Html.TextBox("DOBEdit", "", new { @class = "form-control", type = "date" , placeholder = "DOB", @style = "text-transform:uppercase;padding:0px 10px;", required = "required", @onkeypress = "javascript:return isNumber(event)" })*@
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Pancard<a href="https://www1.incometaxindiaefiling.gov.in/e-FilingGS/Services/VerifyYourPanDeatils.html?lang=eng" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("pancardEdit", "", new { @class = "form-control", placeholder = "Enter Pancard No", @style = "text-transform:uppercase", })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="pandocshow">
-
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#panviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-
-
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('pan')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="panapproved">
-
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('pan')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                                <div id="pandocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Aadhar Card<a href="https://resident.uidai.gov.in/verify" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("AadhaarEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", @style = "text-transform:uppercase", @onkeypress = "javascript:return isNumber(event)" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="aadhardocshow">
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#aadharviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-
-
-
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('aadhar')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="aadharapproved">
-
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('aadhar')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div id="aadhardocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>GST Registration No<a href="https://services.gst.gov.in/services/searchtp" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("gstEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="gstdocshow">
-
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#gstviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-
-
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('gst')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="gstapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('gst')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                                <div id="gstdocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Farm Aggreement</label>
-                                        <input type="text" id="frmagrEdit" name="frmagrEdit" readonly style="height: 32px;padding: 5px;" />
-                                        @*@Html.TextBox("frmagrEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })*@
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="frmagrdocshow">
-
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#frmagrviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-
-
-
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('Aggrement')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="frmagrapproved">
-
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('Aggrement')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                                <div id="frmagrdocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>State</label>
-                                        <div class="custom-district">
-                                            <select id="StateEdit" onchange="Editstatechange()" name="StateEdit">
-                                                <option>Select State</option>
-                                            </select>
-                                        </div>
-                                        @* @Html.DropDownList("StateEdit", new SelectList(ViewBag.state1, "Value", "Text"), "Select State", new { @class = "form-control", data_live_search = "true" })*@
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>District</label>
-                                        <div class="custom-district">
-                                            @Html.DropDownList("DistrictEdit",
-                                          new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
-                                                 "Select district",
-                                                 new { @class = "form-control", data_live_search = "true" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row" id="roleShowNot">
-                                <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                    <div class="form-group spspl">
-                                        <label>Financial Role</label>
-                                        @*<input type="text" id="frmagrEdit" name="frmagrEdit" readonly />*@
-
-                                        @*@Html.TextBox("frmagrEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })*@
-                                        <div id="DivEditddlrole" class="custom-district">
-                                            <select id="Editddlrole" name="Editddlrole" class="form-control" required="required" style="height:34px;">
-                                                <option value="">Select Finincial Role</option>
-                                                <option value="FieldSalesOfficer" title="Field Sales Officer">FOS</option>
-                                                <option value="CommissionAgent">Commission Agent</option>
-                                            </select>
-                                        </div>
-                                        <input type="text" readonly value="" style="display:none" id="Edittxtlrole" name="Edittxtlrole" />
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-4 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Pin Code</label>
-                                        @Html.TextBox("PinEdit", "", new { @class = "form-control", placeholder = "Enter Pin Code", @style = "text-transform:uppercase", required = "required" })
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-3 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Capping <span style="color: #555;font-size: 11px;">(Amount)</span></label>
-                                        @Html.TextBox("CappingEdit", "", new { @class = "form-control", placeholder = "Enter Capping Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-md-4 col-sm-4 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>Margine <span style="color: #555;font-size: 11px;">(Offline)</span></label>
-                                        @Html.TextBox("offmargineEdit", "", new { @class = "form-control", placeholder = "Enter Offline Margine Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Address</label>
-                                        @Html.TextArea("AddressEdit", "", new { @class = "form-control", placeholder = "Enter Address", @style = "text-transform:uppercase", required = "required" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="modal-footer width100 float-left button-seconddesign">
-                                <ul class="width100 float-left">
-                                    <li class="one">
-                                        <button type="button" value="Edit" class="btn btn-first button-third"><span style="color:#777;">Edit</span></button>
-                                    </li>
-                                    <li class="One2" style="display:none;">
-                                        <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 fullbodydycolorbg btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="color:#fff;"><span style="color:#fff;">Save Change</span></button>
-                                    </li>
-                                    @*<li class="two">
-                            <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                        </li>
-                        <li class="three">
-                            <button type="button" value="Email_Verify" class="btn">Email Verify</button>
-                        </li>
-                        <li class="four">
-                            <button type="button" value="Delet" class="btn">Delete MD</button>
-                        </li>*@
-                                </ul>
-                            </div><!--.modal-footer-->
-                        }
-                    </div>
-
-                </div>
-            </div><!--.modal-body-->
-
-            
-        </div>
-
-    </div>
-</div>
-
-<div id="panviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Pan Card View</h4>
-            </div>
-            <div id="panmodal" class="modal-body">
-                <img id="panimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-    </div>
-</div>
-<div id="aadharviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Aadhar Card View</h4>
-            </div>
-            <div id="aadharmodal" class="modal-body">
-                Front  <img id="aadharimageshow" src="" style="width:550px;" />
-                Back Image   <img id="aadharimagebackshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
-</div>
-<div id="gstviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Gst View</h4>
-            </div>
-            <div id="gstmodal" class="modal-body">
-                <img id="gstimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
-</div>
-<div id="frmagrviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Certification View</h4>
-            </div>
-            <div id="gstmodal" class="modal-body">
-                <img id="frmagrimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
-</div>
-<div id="otpmodal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="float:right;margin-top:0px;width:500px;">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">OTP</h4>
-            </div>
-            <div class="modal-body">
-                @using (Ajax.BeginForm("ConfirmDeleteDealerOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "distributorlist", OnSuccess = "OnSuccessdistributor", OnFailure = "OnFailureotperror" }))
-                {
-                    @Html.Hidden("DealerIddelete")
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-
-                                @Html.TextBox("Deleteotp", "", new { @class = "form-control", placeholder = "Enter OTP", required = "required", @style = "background: #f5f5f5;border: 1px solid #bbb;" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                            <span id="otpwrong" style="color:red;float:left; "></span>
-                            <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 fullbodydycolorbg btn-first" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="float: right;color: #fff;font-weight: 600;"><span style="color:#fff;">Delete User</span></button>
-                        </div>
-                    </div>
-
-                }
-            </div>
-        </div>
-
-    </div>
-</div>
 <script>
 
+    function vmDlEnsureDetailModal() {
+        var $modal = $('#defaultModal222');
+        if ($modal.length && !$modal.parent().is('body')) {
+            $modal.appendTo('body');
+        }
+        return $modal;
+    }
+
+    function vmDlResetDetailModalForms() {
+        $('#defaultModal222 .first-form').show();
+        $('#defaultModal222 .second-form').hide();
+        $('#defaultModal222 .first-form .vm-ml-modal-actions__grid button[value="Edit"]').show();
+        $('#loadredmodel').hide();
+        $('#userinfodiv').css('visibility', 'visible');
+    }
+
+    function vmDlShowEditForm() {
+        $('#defaultModal222 .first-form').hide();
+        $('#defaultModal222 .second-form').show();
+        vmDlInitEditSelects();
+    }
+
+    function vmDlBackToViewForm() {
+        vmDlResetDetailModalForms();
+    }
+
+    function vmDlCloseDetailModal() {
+        var $modal = $('#defaultModal222');
+        if ($modal.length) {
+            $modal.modal('hide');
+        }
+    }
+
+    function vmDlGetEditModalParent() {
+        return ravi('#defaultModal222');
+    }
+
+    function vmDlInitEditSelects() {
+        var $parent = vmDlGetEditModalParent();
+        $parent.find('.vm-ml-edit-select').each(function () {
+            if (ravi(this).data('select2')) {
+                ravi(this).select2('destroy');
+            }
+            ravi(this).select2({ dropdownParent: $parent });
+        });
+    }
+
+    $(document).off('click.vmDlEdit', '#defaultModal222 .first-form button.btn[value="Edit"]');
+    $(document).on('click.vmDlEdit', '#defaultModal222 .first-form button.btn[value="Edit"]', function () {
+        vmDlShowEditForm();
+    });
 
     function OnSuccessdistributor(data) {
-
-
         $('#distributorlist').html(data);
-        $('#defaultModal222').hide();
-        $('#otpmodal').hide();
-        $(".modal-backdrop").hide();
+        vmDlCloseDetailModal();
+        $('#otpmodal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
         ToastrMessage();
         toastr.success("Account Deleted Successfully");
     }
 
     function OnFailureotperror(data) {
-
         $('#otpmodal').modal('show');
-        //$('#otpwrong').text("otpmismatch");
         $('#otpwrong').text("OTP Mismatch , Please enter Correct OTP");
     }
 
-
-
-</script>
-<script>
-    //$(document).ready(function () {
-    $('.mastetr222Modal button.btn[value="Edit"]').click(function () {
-        $(".mastetr222Modal .first-form").hide();
-        $(".mastetr222Modal .second-form").show();
-        $('.mastetr222Modal .modal-footer li.one').hide();
-        $('.mastetr222Modal .modal-footer li.One2').show();
-    });
-    //});
 </script>
 <script>
     function OnFailure() {
@@ -991,32 +447,19 @@
 
 <script>
     $(document).ready(function () {
-
-        $("#defaultModal222").on('hide.bs.modal', function () {
-
-             $.ajax({
-            url: '@Url.Action("DealerlistPart","Home")',
-            type: 'POST',
-            cache: false,
-            success: function (response) {
-                $('#distributorlist').html(response);
-
-          }
-        });
-        });
-
-    });
-      $("#defaultModal222").on('hide.bs.modal', function () {
+        vmDlEnsureDetailModal();
+        $(document).off('hidden.bs.modal.vmDl', '#defaultModal222').on('hidden.bs.modal.vmDl', '#defaultModal222', function () {
+            vmDlResetDetailModalForms();
             $.ajax({
-            url: '@Url.Action("DealerlistPart","Home")',
-            type: 'POST',
-            cache: false,
-            success: function (response) {
-                $('#distributorlist').html(response);
-
-          }
+                url: '@Url.Action("DealerlistPart","Home")',
+                type: 'POST',
+                cache: false,
+                success: function (response) {
+                    $('#distributorlist').html(response);
+                }
+            });
         });
-        });
+    });
 </script>
 
 
@@ -1135,7 +578,7 @@
 
 <script>
     function OnSuccess() {
-        $(".modal-backdrop").hide();
+        vmDlBackToViewForm();
         ravi("select").select2();
     }
     $(document).ajaxComplete(function () {
@@ -1172,11 +615,12 @@
 </script>
 
 <script>
-    function mdActionBtn(SSId) {
-
-
-      $('#loadredmodel').show();
-         $('#userinfodiv').hide();
+    function mdActionBtn(SSId, values) {
+        vmDlResetDetailModalForms();
+        $('#error').text('');
+        vmDlEnsureDetailModal().modal({ backdrop: true, keyboard: true, show: true });
+        $('#loadredmodel').show();
+        $('#userinfodiv').css('visibility', 'hidden');
         $('#alinks').html('');
         $.ajax({
             url: '@Url.Action("DealerByIdSearch","Home")',
@@ -1237,26 +681,19 @@
                 console.log(data2.list[0].selregSTATUS);
                 console.log(data2.list[0].sellstatus);
                 if (data2.list[0].selregSTATUS == null && data2.list[0].sellstatus == null) {
-                   /* $("#sellbutton").val("<button>Submit<button>");*/
-
-                   
-                    buttonHTML = '<div onclick="disrecharsellupdate(\'' + dealerId + '\', \'SELL STATUS\')" style=" border: 1px solid; padding: 4px 7px; background: #f61212; color: #fff;"><div>SELL STATUS</div></div>';
+                    buttonHTML = '<button type="button" class="vm-ml-sell-chip vm-ml-sell-chip--danger" onclick="disrecharsellupdate(\'' + dealerId + '\', \'SELL STATUS\')" title="Sell Status">SELL</button>';
                     document.getElementById('sellbutton').innerHTML = buttonHTML;
-                }   
+                }
                 else if (data2.list[0].selregSTATUS == false && data2.list[0].sellstatus == false) {
-                    buttonHTML = '<div onclick="disrecharsellupdate(\'' + dealerId + '\', \'Registration\')" style=" border: 1px solid; padding: 4px 7px; background: #d9811b; color: #fff;"><div>Registration</div></div>';
-
+                    buttonHTML = '<button type="button" class="vm-ml-sell-chip vm-ml-sell-chip--warn" onclick="disrecharsellupdate(\'' + dealerId + '\', \'Registration\')" title="Registration">REG</button>';
                     document.getElementById('sellbutton').innerHTML = buttonHTML;
                 }
                 else if (data2.list[0].selregSTATUS == true && data2.list[0].sellstatus == false) {
-                    buttonHTML = '<div onclick="disrecharsellupdate(\'' + dealerId + '\', \'Sell RECHARGE OFF\')" style=" border: 1px solid; padding: 4px 7px; background: #f61212; color: #fff;"><div>Sell RECHARGE OFF</div></div>';
-               
+                    buttonHTML = '<button type="button" class="vm-ml-sell-chip vm-ml-sell-chip--danger" onclick="disrecharsellupdate(\'' + dealerId + '\', \'Sell RECHARGE OFF\')" title="Sell Recharge Off">OFF</button>';
                     document.getElementById('sellbutton').innerHTML = buttonHTML;
                 }
                 else if (data2.list[0].selregSTATUS == true && data2.list[0].sellstatus == true) {
-
-                    buttonHTML = '<div onclick="disrecharsellupdate(\'' + dealerId + '\', \'Sell RECHARGE ON\')" style=" border: 1px solid; padding: 4px 7px; background: #1db61f; color: #fff;"><div>Sell RECHARGE ON</div></div>';
-                   
+                    buttonHTML = '<button type="button" class="vm-ml-sell-chip vm-ml-sell-chip--success" onclick="disrecharsellupdate(\'' + dealerId + '\', \'Sell RECHARGE ON\')" title="Sell Recharge On">ON</button>';
                     document.getElementById('sellbutton').innerHTML = buttonHTML;
                 }
                 document.getElementById('Messages12').innerHTML ='';
@@ -1429,7 +866,7 @@
                 var objSelect11 = document.getElementById("DistrictEdit");
                 binddistmdAction(data2.list[0].State, data2.list[0].District, objSelect11);
                   $('#loadredmodel').hide();
-                $('#userinfodiv').show();
+                $('#userinfodiv').css('visibility', 'visible');
           }
         });
     }
@@ -1492,8 +929,7 @@
              dataType: "html",
              success: function (data2) {
                  $('#distributorlist').html(data2);
-                $('#defaultModal222').hide();
-                 $(".modal-backdrop").hide();
+                 vmDlCloseDetailModal();
           }
         });
     }

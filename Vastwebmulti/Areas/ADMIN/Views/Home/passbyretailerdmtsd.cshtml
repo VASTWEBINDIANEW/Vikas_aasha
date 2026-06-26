@@ -1,438 +1,246 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.passbyretailerdmt>
+@using System
+@using System.Linq
+@using System.Collections.Generic
 @using Vastwebmulti.Models
 @{
-    VastwebmultiEntities db = new VastwebmultiEntities();
+    ViewBag.Title = "By Pass DMT";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    VastwebmultiEntities db = new VastwebmultiEntities();
+
+    var selectedRetailer = (Request["allretailer"] ?? "").Trim();
+    var reports = Model ?? Enumerable.Empty<passbyretailerdmt>();
+    var rowCount = reports.Count();
+    var onCount = reports.Count(i => i.status == true);
+    var offCount = rowCount - onCount;
+
+    var retailerItems = (ViewBag.allretailer as SelectList)?.ToList() ?? new List<SelectListItem>();
+    if (!string.IsNullOrEmpty(selectedRetailer))
+    {
+        foreach (var item in retailerItems)
+        {
+            item.Selected = string.Equals(item.Value, selectedRetailer, StringComparison.OrdinalIgnoreCase);
+        }
+    }
 }
-<style>
-    .second-design .datepicker-dropdown.datepicker {
-        margin-top: 0px !important;
-    }
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=56" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=36" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-passby-retailer-dmt-page">
 
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+        @using (Html.BeginForm("passbyretailerdmtsd", "Home", FormMethod.Post, new { id = "passbyRetailerDmtForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .dataTables_wrapper .dt-buttons a.dt-button {
-        padding: 7px 10px 8px 8px;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Settings</li>
+                        <li>By Pass DMT</li>
+                    </ol>
 
-    .ss :hover {
-        color: green;
-    }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line vm-passby-dmt-filter-row">
 
-    .ff :hover {
-        color: red;
-    }
-
-    .gift-select select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-    }
-
-    .gift-select {
-        position: relative;
-        padding: 0;
-        width: auto;
-    }
-
-        .gift-select::before {
-            content: '';
-            border-bottom: 1px solid #555;
-            border-left: 1px solid #555;
-            width: 7px;
-            height: 7px;
-            display: block;
-            position: absolute;
-            right: 10px;
-            transform: rotate(-45deg);
-            top: 11px;
-        }
-
-    .giftadmin-tableste tbody tr td, .giftadmin-tableste thead tr th {
-        white-space: nowrap;
-    }
-
-        .giftadmin-tableste tbody tr td .row {
-            margin: 0px;
-        }
-
-        .giftadmin-tableste tbody tr td:nth-child(17) {
-            white-space: normal;
-        }
-
-    .status-gift-admin img {
-        height: 18px !important;
-        padding: 3px !important;
-        width: 18px;
-        border-radius: 50%;
-    }
-
-    .status-gift-admin p {
-        font-size: 0px !important;
-    }
-
-    .second-design .giftth-seconclass, .giftth-seconclass {
-        width: 80px !important;
-    }
-
-    .borderclassgift select, .borderclassgift input, .borderclassgift button, .borderclassgift .select2-selection.select2-selection--single {
-        border-color: #ddd !important;
-    }
-
-
-    .report-status {
-        width: 80%;
-        float: left;
-    }
-
-        .report-status label {
-            float: left;
-        }
-
-        .report-status input {
-            float: left;
-            font-size: 16px;
-            background-color: transparent !important;
-            font-weight: 800;
-            height: 17px !important;
-        }
-
-        .report-status .form-group {
-            width: 46%;
-            float: left;
-            margin: auto 2%;
-        }
-
-    .mastetr222Modal .modal-body .form-group input {
-        min-height: 32px;
-        width: 100%;
-    }
-
-    .newfourdesign-admin .gift-select::before {
-        display: none;
-    }
-
-    .newfourdesign-admin .btn:not(.btn-link):not(.btn-circle), .newfourdesign-admin .form-group .form-control {
-        border: 1px solid #ddd !important;
-        background: transparent !important;
-    }
-
-    .newfourdesign-admin .margi-topo-third .col-lg-12.col-md-12.col-sm-12.col-xs-12.for-margin-top {
-        margin-top: 0px !important;
-    }
-
-    .newfourdesign-admin .form-control {
-        background: transparent !important;
-    }
-
-    .ner {
-        width: 25px !important;
-        border: 1px solid #ddd !important;
-    }
-
-    .custom-date-icon i {
-        left: 5px;
-    }
-
-    .admin-giftcard-table table tbody tr:first-child td, .admin-giftcard-table table tbody tr:first-child {
-        border-top: 0px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .mastetr222Modal .modal-dialog {
-            width: 95% !important;
-        }
-    }
-
-
-    @@media only screen and (max-width:992px) {
-        .gift-select, .ytr-okpli {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-        }
-
-        .col-md-4.respo-upup {
-            margin: 10px 0 !important;
-        }
-
-        .ytr-okpli button {
-            width: 100%;
-            text-align: left;
-        }
-
-        .card {
-            margin: 0px;
-        }
-
-
-        .col-md-4.respo-upup {
-            width: 100%;
-            float: left;
-            padding: 0 !important;
-        }
-
-        .form-line {
-            width: 100% !important;
-        }
-
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            position: static !important;
-            margin-left: 5px !important;
-        }
-
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .gift-card-top .col-md-1 {
-            width: 100%;
-            float: left;
-            padding-left: 0px !important;
-            margin: 0;
-        }
-
-        .gift-card-top .col-md-2 {
-            width: 50%;
-            float: left;
-            margin-bottom: 3px;
-        }
-
-        .gift-card-top .col-md-4 {
-            padding-left: 0px !important;
-            margin-bottom: 4px;
-            float: left;
-        }
-
-        .for-margin-top {
-            margin-top: 10px !important;
-        }
-
-        .gift-card-top .col-md-1 center button {
-            margin-top: 0px !important;
-            float: left;
-            width: 100%;
-        }
-
-        #total {
-            text-align: right;
-            margin-right: 15px;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > tbody > tr > td:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .body.table-responsive {
-            padding: 1px !important;
-        }
-
-        .col-md-2.tre4.pdf-lastclass-third {
-            float: right;
-            padding: 0px;
-        }
-    }
-</style>
-
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Giftcard Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Giftcard Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-
-            <div class="col-lg-12 col-md-12 gift-card-top all-type-third">
-                <div class="card page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass borderclassgift" style="margin-top:2px;">
-                    @using (Html.BeginForm("passbyretailerdmtsd", "Home", FormMethod.Post))
-                    {
-                        <div class="">
-                            <div class="col-md-4 gift-select">
-                                <div class="form-line selecthotel-third" style="width: 146px;">
-                                    @Html.DropDownList("allretailer", ViewBag.retailer as SelectList, "All Retailer", new { id = "allretailer", @class = "select-s form-control", data_live_search = "true", @style = "margin-top:0px; padding:0px;text-align:center;height:32px;" })
-                                </div>
-                            </div>
-                            <div class="col-md-1 ytr-okpli gift-respo-thired search-resp-third" style="padding:0px;padding-left:5px;">
-                                <div class="">
-                                    <div class="">
-                                        <center>
-                                            <button name="btntype" type="submit" class="btn input-back-second" style="  height:32px;border: 1px solid #b1a6a638;background: #fff;margin-top:1px;background: #f9f9f9;width: 100%;" onclick="serch()">
-                                                <i class="fa fa-search" style="top:-1px;font-size:13px;color:black;"></i>
-                                                <span style="top:-1px;color:black;">Search</span>
-                                            </button>
-                                        </center>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-
+                        <div class="vm-opr-field vm-dmt-field vm-passby-dmt-field--retailer">
+                            @Html.DropDownList("allretailer", retailerItems, "All Retailer", new { id = "allretailer", @class = "vm-opr-select vm-dmt-select form-control" })
                         </div>
-                    }
+
+                        <div class="vm-dmt-filter-search-group">
+                            <button type="submit" name="btntype" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
 
                 </div>
 
-
             </div>
+        }
 
-            <div>
-                <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
-                    <tr>
-                        <th>Sr.</th>
-                        <th>USER</th>
-                        <th>Status</th>
-                    </tr>
-                    @{ var id = 0; }
-                    @{ var id1 = 1; }
-                    @foreach (var i in Model)
-                    {
-                        var frmname = db.Retailer_Details.Where(s => s.RetailerId == i.userid).SingleOrDefault().Frm_Name;
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-passby-dmt-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-passby-dmt-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-random" aria-hidden="true"></i>
+                        <span>Bypass DMT status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="passbyDmtRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-passby-dmt-on-badge" title="Bypass ON retailers">
+                            ON: <strong id="passbyDmtOnCount">@onCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-passby-dmt-off-badge" title="Bypass OFF retailers">
+                            OFF: <strong id="passbyDmtOffCount">@offCount</strong>
+                        </span>
+                    </div>
+                </div>
 
-                        <tr>
-                            <td>@id1</td>
-                            <td>@frmname</td>
-                            <td class="idchanges">
-                                @if (i.status == true)
+                <div class="vm-opr-table-wrap vm-passby-dmt-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="passbyRetailerDmtTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>User</th>
+                                    <th>Dealer</th>
+                                    <th>Master</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rowCount == 0)
                                 {
-                                    <button class="btn btn-success"  onclick="stsupd('@i.userid',@id,false)">ON</button>
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="5">No records found for the selected filters.</td>
+                                    </tr>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-danger" onclick="stsupd('@i.userid',@id, true)">OFF</button>
+                                    var sr = 1;
+                                    var rowIndex = 0;
+                                    foreach (var item in reports)
+                                    {
+                                        var retailer = !string.IsNullOrWhiteSpace(item.userid)
+                                            ? db.Retailer_Details.FirstOrDefault(s => s.RetailerId == item.userid)
+                                            : null;
+                                        var dealer = retailer != null
+                                            ? db.Dealer_Details.FirstOrDefault(s => s.DealerId == retailer.DealerId)
+                                            : null;
+                                        var master = dealer != null
+                                            ? db.Superstokist_details.FirstOrDefault(s => s.SSId == dealer.SSId)
+                                            : null;
+
+                                        var userFirm = retailer != null ? retailer.Frm_Name : "-";
+                                        var userName = retailer != null ? retailer.RetailerName : "-";
+                                        var dealerName = dealer != null ? dealer.FarmName : "-";
+                                        var masterName = master != null ? master.FarmName : "-";
+                                        var isOn = item.status == true;
+
+                                        <tr class="vm-passby-dmt-row @(isOn ? "vm-passby-dmt-row--on" : "vm-passby-dmt-row--off")" data-status="@(isOn ? "on" : "off")">
+                                            <td class="vm-passby-dmt-sr">@sr</td>
+                                            <td>
+                                                <div class="vm-passby-dmt-user">
+                                                    <strong class="vm-passby-dmt-user__firm">@userFirm</strong>
+                                                    @if (!string.IsNullOrWhiteSpace(userName) && userName != "-")
+                                                    {
+                                                        <span class="vm-passby-dmt-user__name">@userName</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@dealerName</td>
+                                            <td>@masterName</td>
+                                            <td class="vm-passby-dmt-status-cell" data-row-index="@rowIndex">
+                                                @if (isOn)
+                                                {
+                                                    <button type="button" class="vm-passby-dmt-status-pill vm-passby-dmt-status-pill--on vm-passby-dmt-status-pill--btn" onclick="passbyDmtUpdate('@item.userid', @rowIndex, false)"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-passby-dmt-status-pill vm-passby-dmt-status-pill--off vm-passby-dmt-status-pill--btn" onclick="passbyDmtUpdate('@item.userid', @rowIndex, true)"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>
+                                                }
+                                            </td>
+                                        </tr>
+                                        sr++;
+                                        rowIndex++;
+                                    }
                                 }
-
-                            </td>
-                        </tr>
-                        id++;
-                        id1++;
-                    }
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
-
-
-
         </div>
+
     </div>
 </section>
 
-
-
-<script>
-   function stsupd(u, i, s) {
-    $.ajax({
-        url: '@Url.Action("passbyupdate", "Home")',
-        type: "POST",
-        data: { userid: u, sts: s },
-        cache: false,
-        success: function (Response) {
-            if (Response == "OK") {
-                document.getElementsByClassName('idchanges')[i].innerHTML = "";
-                if (s == true) {
-                    // Fixing the onclick attribute syntax
-                    document.getElementsByClassName('idchanges')[i].innerHTML = "<button  class='btn btn-success'  onclick=\"stsupd('" + u + "', " + i + ", " + false + ")\">ON</button>";
-                }
-                else {
-                    document.getElementsByClassName('idchanges')[i].innerHTML = "<button  class='btn btn-danger'  onclick=\"stsupd('" + u + "', " + i + ", " + true + ")\">OFF</button>";
-                }
-            }
-        }
-    });
-}
-
-</script>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
-
 <script>
+    function refreshPassbyDmtSummary() {
+        var rows = document.querySelectorAll('#passbyRetailerDmtTable tbody tr.vm-passby-dmt-row');
+        var onCount = 0;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].getAttribute('data-status') === 'on') {
+                onCount++;
+            }
+        }
+        $('#passbyDmtRecordCount').text(rows.length);
+        $('#passbyDmtOnCount').text(onCount);
+        $('#passbyDmtOffCount').text(rows.length - onCount);
+    }
 
-    $('#allretailer').select2();
+    function destroyPassbyDmtSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
 
+    function applyPassbyDmtSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyPassbyDmtSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6,
+            dropdownParent: $('#passbyRetailerDmtForm')
+        });
+    }
 
+    function syncPassbyDmtSelectWidth() {
+        $('.vm-passby-dmt-field--retailer').css({ width: '100%', maxWidth: '100%' });
+        $('#allretailer').css({ width: '100%', maxWidth: '100%' });
+        $('#passbyRetailerDmtForm .select2-container').css({ width: '100%', maxWidth: '100%' });
+    }
+
+    function initPassbyDmtSelect2() {
+        applyPassbyDmtSelect2($('#allretailer'));
+        window.setTimeout(syncPassbyDmtSelectWidth, 0);
+        window.setTimeout(syncPassbyDmtSelectWidth, 120);
+    }
+
+    function passbyDmtUpdate(userid, rowIndex, nextStatus) {
+        $.ajax({
+            url: '@Url.Action("passbyupdate", "Home")',
+            type: 'POST',
+            data: { userid: userid, sts: nextStatus },
+            cache: false,
+            success: function (response) {
+                if (response !== 'OK') {
+                    return;
+                }
+
+                var $cell = $('.vm-passby-dmt-status-cell[data-row-index="' + rowIndex + '"]');
+                var $row = $cell.closest('tr');
+                if (nextStatus === true) {
+                    $cell.html('<button type="button" class="vm-passby-dmt-status-pill vm-passby-dmt-status-pill--on vm-passby-dmt-status-pill--btn" onclick="passbyDmtUpdate(\'' + userid + '\', ' + rowIndex + ', false)"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>');
+                    $row.removeClass('vm-passby-dmt-row--off').addClass('vm-passby-dmt-row--on').attr('data-status', 'on');
+                } else {
+                    $cell.html('<button type="button" class="vm-passby-dmt-status-pill vm-passby-dmt-status-pill--off vm-passby-dmt-status-pill--btn" onclick="passbyDmtUpdate(\'' + userid + '\', ' + rowIndex + ', true)"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>');
+                    $row.removeClass('vm-passby-dmt-row--on').addClass('vm-passby-dmt-row--off').attr('data-status', 'off');
+                }
+                refreshPassbyDmtSummary();
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        initPassbyDmtSelect2();
+        refreshPassbyDmtSummary();
+        $(window).on('resize orientationchange', syncPassbyDmtSelectWidth);
+    });
 </script>

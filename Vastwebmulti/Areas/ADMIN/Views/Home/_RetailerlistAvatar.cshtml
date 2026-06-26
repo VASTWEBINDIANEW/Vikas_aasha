@@ -1,0 +1,20 @@
+@{
+    var retailerId = ViewData["RetailerId"] as string ?? "";
+    var imageUrl = ViewData["AadharImage"] as string;
+}
+<div class="vm-rl-user-cell__avatar vm-rl-avatar-upload" data-retailer-id="@retailerId">
+    <div class="vm-rl-avatar-wrap">
+        @if (!string.IsNullOrWhiteSpace(imageUrl))
+        {
+            <img src="@imageUrl" class="vm-rl-avatar-img" alt="Retailer photo" onclick="viewImage(this)" />
+        }
+        else
+        {
+            <span class="vm-rl-avatar-placeholder" aria-hidden="true"><span class="vm-rl-avatar-noimg">No Image</span></span>
+        }
+        <label class="vm-rl-avatar-edit" title="Change photo">
+            <i class="fas fa-camera" aria-hidden="true"></i>
+            <input type="file" class="vm-rl-avatar-input" accept="image/jpeg,image/png,image/gif,image/webp" onchange="vmRlUploadTablePhoto(this, '@retailerId')" />
+        </label>
+    </div>
+</div>
