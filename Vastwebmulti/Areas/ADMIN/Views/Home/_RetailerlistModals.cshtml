@@ -95,7 +95,10 @@
                         </div>
                         <div class="vm-rl-bulk-payment-row">
                             <label>Bulk Payment Mode</label>
-                            <button type="button" class="vm-rl-bulk-payment-btn" title="Click here to change mode" id="bulkpayment" data-toggle="tab" onclick="bulkpaymentsetting()"></button>
+                            <button type="button" class="vm-rl-bulk-payment-btn" title="Click here to toggle Bulk Payment Mode" id="bulkpayment" data-toggle="tab" onclick="bulkpaymentsetting()">
+                                <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                                <span id="bulkpaymentText">Toggle</span>
+                            </button>
                         </div>
                         <div class="modal-footer width100 float-left button-seconddesign vm-ml-modal-actions vm-ml-modal-actions--view" id="deletedusernotshowbtn">
                             <div class="vm-ml-modal-actions__grid vm-rl-modal-actions__grid">
@@ -204,248 +207,127 @@
                             </div><!--.row-->
 
 
-                            <div class="row vm-rl-edit-row vm-rl-edit-row--docs">
-                                <div class="col-md-12 col-sm-12 col-xs-12 vm-ml-modal-field--full">
-                                    <div class="form-group spspl">
-                                        <label>Pancard<a href="https://eportal.incometax.gov.in/iec/foservices/#/pre-login/verifyYourPAN" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("pancardEdit", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, minlength = 10 })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="pandocshow">
+                            <!-- ===== Document sections ===== -->
+                            <div class="vm-rl-docs-grid">
 
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#panviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" value="Delet" class="btn" onclick="DeleteuserDucument('pan')" style="width: 110px; float: left;margin-right: 5px;">Delete Pan Card</button>
-                                                    @*<button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('pan')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                            <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                        </button>*@
-
-                                                    <div id="panapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('pan')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="pandocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <!-- PAN Card -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--pan"><i class="fas fa-id-card" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">PAN Card</span>
+                                        <a href="https://eportal.incometax.gov.in/iec/foservices/#/pre-login/verifyYourPAN" target="_blank" class="vm-rl-doc-card__verify-link"><i class="fas fa-external-link-alt"></i> Verify</a>
+                                    </div>
+                                    @Html.TextBox("pancardEdit", "", new { @class = "form-control vm-rl-doc-input", placeholder = "Enter PAN Card No", maxlength = 10, minlength = 10 })
+                                    <div class="vm-rl-doc-card__actions" id="pandocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#panviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="DeleteuserDucument('pan')"><i class="fas fa-trash-alt"></i> Delete PAN</button>
+                                        <div id="panapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('pan')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Aadhar Card<a href="https://resident.uidai.gov.in/verify" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("AadhaarEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", maxlength = 12, minlength = 12, @onkeypress = "javascript:return isNumber(event)" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="aadhardocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#aadharviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" value="Delet" class="btn" onclick="DeleteuserDucument('aadhar')" style="width: 110px;float: left;margin-right: 5px;">Delete Aadhar</button>
-                                                    @*<button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('aadhar')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                            <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                        </button>*@
-
-                                                    <div id="aadharapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('aadhar')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="aadhardocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="vm-rl-doc-card__notfound" id="pandocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
-                            </div><!--.row-->
 
-
-                            <div class="row vm-rl-edit-row vm-rl-edit-row--docs">
-                                <div class="col-md-12 col-sm-12 col-xs-12 vm-ml-modal-field--full">
-                                    <div class="form-group spspl">
-                                        <label>Salfie With Shop</label>
-                                        <span class="" style="width: 50%; float: left;background: #fff;border: 1px solid #ccc;height: 32px;padding: 5px 10px;color: #555;">Shop Image with Owner (Salfie)</span>
-                                        @*<span>(रिटेलर केवाईसी आधार कार्ड और पैनकार्ड और सेल्फी <br /> की मंजूरी के बाद किया जाएगा)</span>*@
-                                        @*@Html.TextBox("ShopwithSalfieEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", maxlength = 12, minlength = 12, @onkeypress = "javascript:return isNumber(event)" })*@
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="ShopwithSalfiedocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#ShopwithSalfieviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    @*<button type="button" value="Delet" class="btn" onclick="DeleteuserDucument('Salfie')" style="width: 110px;">Delete Salfie</button>*@
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('Salfie')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="ShopwithSalfieapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('Salfie')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="ShopwithSalfiedocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <!-- Aadhaar Card -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--aadhar"><i class="fas fa-fingerprint" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">Aadhaar Card</span>
+                                        <a href="https://resident.uidai.gov.in/verify" target="_blank" class="vm-rl-doc-card__verify-link"><i class="fas fa-external-link-alt"></i> Verify</a>
+                                    </div>
+                                    @Html.TextBox("AadhaarEdit", "", new { @class = "form-control vm-rl-doc-input", placeholder = "Enter Aadhaar Number", maxlength = 12, minlength = 12, @onkeypress = "javascript:return isNumber(event)" })
+                                    <div class="vm-rl-doc-card__actions" id="aadhardocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#aadharviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="DeleteuserDucument('aadhar')"><i class="fas fa-trash-alt"></i> Delete</button>
+                                        <div id="aadharapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('aadhar')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!--.row-->
-
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Video KYC</label>
-                                        <span class="" style="width: 50%; float: left;background: #fff;border: 1px solid #ccc;height: 32px;padding: 5px 10px;color: #555;">Video KYC</span>
-                                        @*<span>(रिटेलर केवाईसी आधार कार्ड और पैनकार्ड और सेल्फी <br /> की मंजूरी के बाद किया जाएगा)</span>*@
-                                        @*@Html.TextBox("ShopwithSalfieEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", maxlength = 12, minlength = 12, @onkeypress = "javascript:return isNumber(event)" })*@
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="VideoKYCdocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#VideoKYCdocshowviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    @*<button type="button" value="Delet" class="btn" onclick="DeleteuserDucument('Salfie')" style="width: 110px;">Delete Salfie</button>*@
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('VIDEOKYC')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="VideoKYCapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('VIDEOKYC')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="VideoKYCdocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="vm-rl-doc-card__notfound" id="aadhardocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
-                            </div><!--.row-->
 
-
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>GST Registration No<a href="https://services.gst.gov.in/services/searchtp" target="_blank" style="font-size: 12px;font-weight: 400;color: blue;"> (Verification Link)</a></label>
-                                        @Html.TextBox("gstEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="gstdocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#gstviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('gst')" style="border:1px solid #bbb;float:left;margin-right:5px;width: 110px;margin-right: 5px;">
-                                                        Delete GST No
-                                                        @*<img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />*@
-                                                    </button>
-
-                                                    <div id="gstapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('gst')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="gstdocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <!-- Selfie With Shop -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--selfie"><i class="fas fa-store" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">Selfie With Shop</span>
+                                    </div>
+                                    <div class="vm-rl-doc-input vm-rl-doc-input--readonly">Shop Image with Owner (Selfie)</div>
+                                    <div class="vm-rl-doc-card__actions" id="ShopwithSalfiedocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#ShopwithSalfieviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="Rejected('Salfie')"><i class="fas fa-trash-alt"></i> Delete</button>
+                                        <div id="ShopwithSalfieapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('Salfie')"><i class="fas fa-check-circle"></i> Approve</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!--.row-->
-                            <!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Farm Agreement</label>
-                                        <input type="text" id="frmagrEdit" name="frmagrEdit" readonly style="height:32px;padding:5px;" />
-                                        @*@Html.TextBox("frmagrEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })*@
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="frmagrdocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#frmagrviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('Aggrement')" style="border:1px solid #bbb;float:left;margin-right:5px;width: 110px;margin-right: 5px;">
-                                                        Delete Agreement
-                                                        @*<img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />*@
-                                                    </button>
-
-                                                    <div id="frmagrapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('Aggrement')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="frmagrdocnotshow">
-                                                    <div class="col-md-12" style="padding: 0;">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                    <div class="vm-rl-doc-card__notfound" id="ShopwithSalfiedocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
                                     </div>
                                 </div>
-                            </div><!--.row-->
+
+                                <!-- Video KYC -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--video"><i class="fas fa-video" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">Video KYC</span>
+                                    </div>
+                                    <div class="vm-rl-doc-input vm-rl-doc-input--readonly">Video KYC Recording</div>
+                                    <div class="vm-rl-doc-card__actions" id="VideoKYCdocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#VideoKYCdocshowviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="Rejected('VIDEOKYC')"><i class="fas fa-trash-alt"></i> Delete</button>
+                                        <div id="VideoKYCapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('VIDEOKYC')"><i class="fas fa-check-circle"></i> Approve</button>
+                                        </div>
+                                    </div>
+                                    <div class="vm-rl-doc-card__notfound" id="VideoKYCdocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
+                                    </div>
+                                </div>
+
+                                <!-- GST -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--gst"><i class="fas fa-file-invoice" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">GST Registration</span>
+                                        <a href="https://services.gst.gov.in/services/searchtp" target="_blank" class="vm-rl-doc-card__verify-link"><i class="fas fa-external-link-alt"></i> Verify</a>
+                                    </div>
+                                    @Html.TextBox("gstEdit", "", new { @class = "form-control vm-rl-doc-input", placeholder = "Enter GST No", @style = "text-transform:uppercase" })
+                                    <div class="vm-rl-doc-card__actions" id="gstdocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#gstviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="Rejected('gst')"><i class="fas fa-trash-alt"></i> Delete GST</button>
+                                        <div id="gstapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('gst')"><i class="fas fa-check-circle"></i> Approve</button>
+                                        </div>
+                                    </div>
+                                    <div class="vm-rl-doc-card__notfound" id="gstdocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
+                                    </div>
+                                </div>
+
+                                <!-- Farm Agreement -->
+                                <div class="vm-rl-doc-card">
+                                    <div class="vm-rl-doc-card__header">
+                                        <span class="vm-rl-doc-card__icon vm-rl-doc-card__icon--agreement"><i class="fas fa-file-contract" aria-hidden="true"></i></span>
+                                        <span class="vm-rl-doc-card__title">Farm Agreement</span>
+                                    </div>
+                                    <input type="text" id="frmagrEdit" name="frmagrEdit" readonly class="form-control vm-rl-doc-input" placeholder="Farm Agreement" />
+                                    <div class="vm-rl-doc-card__actions" id="frmagrdocshow">
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--view" data-toggle="modal" data-target="#frmagrviewdoc"><i class="fas fa-eye"></i> View</button>
+                                        <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--delete" onclick="Rejected('Aggrement')"><i class="fas fa-trash-alt"></i> Delete</button>
+                                        <div id="frmagrapproved">
+                                            <button type="button" class="vm-rl-doc-btn vm-rl-doc-btn--approve" onclick="Approved('Aggrement')"><i class="fas fa-check-circle"></i> Approve</button>
+                                        </div>
+                                    </div>
+                                    <div class="vm-rl-doc-card__notfound" id="frmagrdocnotshow">
+                                        <span class="vm-rl-doc-notfound-badge"><i class="fas fa-exclamation-circle"></i> Document Not Found</span>
+                                    </div>
+                                </div>
+
+                            </div><!--.vm-rl-docs-grid-->
 
                             </div><!--.vm-ml-modal-grid-->
 
@@ -1180,7 +1062,15 @@
                     $('#residential_address_box').hide();
                 }
                 let Mode = data2.list[0].payment;
-                document.getElementById("bulkpayment").innerHTML = Mode;
+                var $bpBtn = $('#bulkpayment');
+                var $bpText = $('#bulkpaymentText');
+                $bpText.text(Mode || 'Toggle');
+                $bpBtn.removeClass('vm-rl-bulk-payment-btn--on vm-rl-bulk-payment-btn--off');
+                if (Mode && Mode.toString().toUpperCase().indexOf('ON') > -1) {
+                    $bpBtn.addClass('vm-rl-bulk-payment-btn--on');
+                } else if (Mode && Mode.toString().toUpperCase().indexOf('OFF') > -1) {
+                    $bpBtn.addClass('vm-rl-bulk-payment-btn--off');
+                }
 
                 //$("#masterremain").html(data2[0].superremain);
                 //$("#dealerremain").html(data2[0].remaindlm);

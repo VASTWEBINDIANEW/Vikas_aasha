@@ -1,74 +1,102 @@
 ﻿@model List<Vastwebmulti.Models.Proc_Recharge_info_Failed_TO_Success_Reports_Result>
-
-    @{
-        Layout = null;
-    }
-
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>PDF_Rch_Failed_success_Report</title>
-        <style>
-            table {
-                border-collapse: collapse;
-            }
-
-            table, td, th {
-                border: 1px solid black;
-            }
-
-            thead {
-                display: table-header-group
-            }
-
-            tfoot {
-                display: table-row-group
-            }
-
-            tr {
-                page-break-inside: avoid
-            }
-        </style>
-    </head>
-    <body>
-        <table cellspacing="0">
-            <thead style="background-color: whitesmoke; display:table-header-group;">
-                <tr>
-                    <th>S.N</th>
-                    <th>User&nbsp;Information</th>
-                    <th>Recharge Request Time</th>
-                    <th>Operator&nbsp;Name</th>
-                    <th>Consumer&nbsp;No</th>
-                    <th>Port&nbsp;/&nbsp;API</th>
-                    <th>Request&nbsp;Time</th>
-                    <th>Operator&nbsp;ID</th>
-                    <th>Response&nbsp;Time</th>
-                    <th>Modify&nbsp;Time</th>
-                    <th>Modify&nbsp;Status</th>
-                </tr>
-
-            </thead>
-            @{ var i = 1;}
-            <tbody>
-                @foreach (var item in Model)
-                {                   
-                    <tr>
-                        <td>@i</td>
-                        <td>@item.usertype &nbsp;@item.frmname</td>
-                        <td>@item.Rch_time</td>
-                        <td>@item.operator_Name</td>
-                        <td>@item.Mobile</td>
-                        <td>@item.portno</td>
-                        <td>@item.Rch_time</td>
-                        <td>@item.OPt_id</td>
-                        <td>@item.Resp_time</td>
-                        <td>@item.Modify_time</td>
-                        <td>@item.modifystaus<span> (@item.rchidno) </span> </td>
-                    </tr
-                    >i++;
-                }
-            </tbody>
+@using System.Linq
+@{
+    Layout = null;
+    var rows = Model ?? new List<Vastwebmulti.Models.Proc_Recharge_info_Failed_TO_Success_Reports_Result>();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var i = 1;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Recharge Failed to Success Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:8px 6px; text-align:left; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:7px 6px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__sr { width:28px; text-align:center; font-weight:700; color:#64748b; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:9px; }
+        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="vm-ml-pdf">
+    <div class="vm-ml-pdf__header">
+        <div class="vm-ml-pdf__hero">
+            <h1 class="vm-ml-pdf__title">Recharge Failed to Success Report</h1>
+            <p class="vm-ml-pdf__subtitle">Recharge failure correction records &mdash; Admin Panel</p>
+        </div>
+        <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
+                <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">Recharge Failed to Success</span></td>
+            </tr>
         </table>
-    </body>
+    </div>
+    <div class="vm-ml-pdf__table-wrap">
+        @if (rows.Any())
+        {
+            <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="vm-ml-pdf__sr">SN</th>
+                        <th>User Info</th>
+                        <th>Rch Request Time</th>
+                        <th>Operator Name</th>
+                        <th>Consumer No</th>
+                        <th>Port / API</th>
+                        <th>Request Time</th>
+                        <th>Operator ID</th>
+                        <th>Response Time</th>
+                        <th>Modify Time</th>
+                        <th>Modify Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in rows)
+                    {
+                        <tr>
+                            <td class="vm-ml-pdf__sr">@(i++)</td>
+                            <td><span class="vm-ml-pdf__firm">@item.usertype</span> @item.frmname</td>
+                            <td>@item.Rch_time</td>
+                            <td>@item.operator_Name</td>
+                            <td class="vm-ml-pdf__mono">@item.Mobile</td>
+                            <td>@item.portno</td>
+                            <td>@item.Rch_time</td>
+                            <td class="vm-ml-pdf__mono">@item.OPt_id</td>
+                            <td>@item.Resp_time</td>
+                            <td>@item.Modify_time</td>
+                            <td>@item.modifystaus (@item.rchidno)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else { <div class="vm-ml-pdf__empty">No records found.</div> }
+    </div>
+    <div class="vm-ml-pdf__footer">Recharge Failed to Success Report &mdash; @generatedOn</div>
+</div>
+</body>
 </html>

@@ -1,88 +1,121 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.pdf_creator_Result>
+@using System.Linq
 @{
-    ViewBag.Title = "PDF";
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.pdf_creator_Result>();
 }
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!DOCTYPE html>
-<html lang="">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Money Transfer Invoice</title>
+    <style type="text/css">
+        @@page { size: A4 portrait; margin: 14mm 12mm 18mm 12mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .inv-header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .inv-hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .inv-hero h1 { margin:0; font-size:18px; font-weight:700; }
+        .inv-hero p { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .inv-meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .inv-meta td { padding:8px 14px; border-right:1px solid #e2e8f0; vertical-align:middle; font-size:10px; }
+        .inv-meta td:last-child { border-right:none; }
+        .inv-meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .inv-meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .inv-invoice-row { display:table; width:100%; margin-bottom:10px; }
+        .inv-invoice-row-left, .inv-invoice-row-right { display:table-cell; width:50%; vertical-align:top; font-size:10px; }
+        .inv-invoice-row-right { text-align:right; }
+        .inv-table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; margin-bottom:14px; }
+        .inv-table { width:100%; border:none; }
+        .inv-table thead th { padding:8px 10px; text-align:left; font-size:8.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; }
+        .inv-table tbody td { padding:7px 10px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; }
+        .inv-table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .inv-table tfoot td { padding:7px 10px; font-weight:700; background:#f1f5f9; border-top:2px solid #334155; font-size:10px; }
+        .inv-sig { display:table; width:100%; margin-top:30px; }
+        .inv-sig-left, .inv-sig-right { display:table-cell; width:50%; text-align:center; font-size:10px; }
+        .inv-sig-line { margin:20px auto 5px; width:120px; border-top:1px solid #94a3b8; }
+        .inv-footer { margin-top:14px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
+        .inv-thanks { text-align:center; font-size:12px; font-weight:700; color:#334155; margin:10px 0; }
+        .text-right { text-align:right; }
+        .fw-bold { font-weight:700; }
+        .amt { font-weight:700; color:#2563eb; }
+        .mono { font-family:"Courier New",monospace; font-size:9px; }
+    </style>
+</head>
 <body>
-    <div style="width:100%; height:150px;">
-        <div style="float:left;">
-            <div><span style="font-size:25px; ">www.PayNowRecharge.in </span></div>
-            <div><span style="font-size:18px;">Retailer Name :  @ViewData["retailername"] </span> </div>
-            <div><span style="font-size:18px;">Firm Name :  @ViewData["frmname"] </span> </div>
-            <div> <span style="font-size:18px; ">Retailer Mobile :  @ViewData["retailermobile"] </span></div>
-            <div> <span style="font-size:18px; ">Money Transfer Date :  @ViewData["retailerdate"] </span></div>
+    <div class="inv-header">
+        <div class="inv-hero">
+            <h1>www.PayNowRecharge.in</h1>
+            <p>Money Transfer Invoice</p>
         </div>
-        <div style=" float:right;">
-            <img src="@Context.Server.MapPath("~/Images/Logo.png")" alt="Vastwebmulti" />
-        </div>
-    </div>
-    <div style="background-color:Black;">
-        <center>
-            <h1 style="color:White; ">INVOICE </h1>
-        </center>
-    </div>
-    <div style=" height:40px;">
-        <div style="float:left;">
-            <span style="font-size:18px; ">Invoice No : @ViewData["invoiceno"]  </span>
-        </div>
-        <div style="float:right;">
-            <span style="font-size:18px; "> Date : @ViewData["date"] </span>
-        </div>
-    </div>
-    <table class="table">
-        <tr>
-            <th>Sr No.</th>
-            <th>Sender Mob.</th>
-            <th>Receiver</th>
-            <th>A/C No.</th>
-            <th>Bank Name </th>
-            <th>IFSC  </th>
-            <th>Amount  </th>
-        </tr>
-        @{int i = 1;}
-        @foreach (var item in Model)
-        {
+        <table class="inv-meta" cellpadding="0" cellspacing="0">
             <tr>
-                <td>@i</td>
-                <td>@Html.DisplayFor(modelItem => item.sender)</td>
-                <td>@Html.DisplayFor(modelItem => item.reciver)</td>
-                <td>@Html.DisplayFor(modelItem => item.accountno)</td>
-                <td>@Html.DisplayFor(modelItem => item.banknm)</td>
-                <td>@Html.DisplayFor(modelItem => item.ifsccode)</td>
-                <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                <td><span class="inv-meta-label">Retailer Name</span><span class="inv-meta-value">@ViewData["retailername"]</span></td>
+                <td><span class="inv-meta-label">Firm Name</span><span class="inv-meta-value">@ViewData["frmname"]</span></td>
+                <td><span class="inv-meta-label">Retailer Mobile</span><span class="inv-meta-value">@ViewData["retailermobile"]</span></td>
+                <td><span class="inv-meta-label">Transfer Date</span><span class="inv-meta-value">@ViewData["retailerdate"]</span></td>
             </tr>
-            i++;
-        }
+        </table>
+    </div>
+    <table style="width:100%;margin-bottom:10px;" cellpadding="0" cellspacing="0">
         <tr>
-            <th>Total</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <th>@ViewData["Total"] </th>
+            <td style="font-size:11px;font-weight:700;">Invoice No: @ViewData["invoiceno"]</td>
+            <td style="text-align:right;font-size:11px;font-weight:700;">Date: @ViewData["date"]</td>
         </tr>
     </table>
-    <div>
-        <center>
-            <span style="font-size:22px; font-weight:bold;"> Thanks for using PayNowRecharge</span>
-        </center>
+    <div class="inv-table-wrap">
+        @if (rows.Any())
+        {
+            <table class="inv-table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Sender Mob.</th>
+                        <th>Receiver</th>
+                        <th>A/C No.</th>
+                        <th>Bank Name</th>
+                        <th>IFSC</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1; }
+                    @foreach (var item in rows)
+                    {
+                        <tr>
+                            <td>@(i++)</td>
+                            <td>@item.sender</td>
+                            <td>@item.reciver</td>
+                            <td class="mono">@item.accountno</td>
+                            <td>@item.banknm</td>
+                            <td class="mono">@item.ifsccode</td>
+                            <td class="text-right amt">@item.amount</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-right">Total</td>
+                        <td class="text-right amt">@ViewData["Total"]</td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
     </div>
-    <div>
-        <div style="float:left;">
-            <div style="font-size:14px; font-weight:bold;">  <span>Customer Signature</span></div>
-            <div>
-                <img src="@Context.Server.MapPath("~/Images/Signature.png")" alt="SIGNATURE" style="margin-top:20px;" />
-            </div>
+    <p class="inv-thanks">Thanks for using PayNowRecharge</p>
+    <div class="inv-sig">
+        <div class="inv-sig-left">
+            <div class="inv-sig-line"></div>
+            <div>Customer Signature</div>
         </div>
-        <div style="float:right;">
-            <div style="font-size:14px; font-weight:bold;"> Retailer Signature</div>
-            <div> <img src="@Context.Server.MapPath("~/Images/Signature.png")" alt="SIGNATURE" style="margin-top:20px;" /> </div>
+        <div class="inv-sig-right">
+            <div class="inv-sig-line"></div>
+            <div>Retailer Signature</div>
         </div>
     </div>
+    <div class="inv-footer">Generated on @generatedOn &mdash; PayNowRecharge.in</div>
 </body>
 </html>

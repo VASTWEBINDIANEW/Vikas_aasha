@@ -1105,26 +1105,33 @@ body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
     width: 100% !important;
     min-width: 1180px !important;
     table-layout: auto !important;
-    border-collapse: separate !important;
+    border-collapse: collapse !important;
     border-spacing: 0 !important;
     font-size: 0.78rem !important;
     margin-bottom: 0 !important;
     border: none !important;
 }
 
+/* Remove all Bootstrap table-bordered borders from thead */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > thead > tr > th.vm-rl-th {
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    outline: none !important;
+}
+
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead th.vm-rl-th {
     position: sticky !important;
     top: 0 !important;
     z-index: 3 !important;
-    background: linear-gradient(180deg, #f1f5f9, #e8eef5) !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
     color: #334155 !important;
     font-weight: 700 !important;
     font-size: 0.68rem !important;
     text-transform: uppercase !important;
     letter-spacing: 0.04em !important;
-    padding: 10px 8px !important;
-    border-bottom: 2px solid #cbd5e1 !important;
-    border-top: none !important;
+    padding: 11px 8px !important;
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
     vertical-align: middle !important;
     white-space: nowrap !important;
     text-align: left !important;
@@ -1141,7 +1148,7 @@ body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead th.vm-rl-th
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead .vm-rl-th-sub {
     display: block !important;
     font-weight: 500 !important;
-    font-size: 0.6rem !important;
+    font-size: 0.59rem !important;
     color: #64748b !important;
     text-transform: none !important;
     letter-spacing: 0 !important;
@@ -1151,23 +1158,31 @@ body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead .vm-rl-th-s
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td {
     display: table-cell !important;
     vertical-align: middle !important;
-    padding: 9px 8px !important;
-    border-color: #e2e8f0 !important;
+    padding: 10px 10px !important;
+    border-color: #f1f5f9 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
     color: #334155 !important;
     background: #fff !important;
-    line-height: 1.35 !important;
+    line-height: 1.4 !important;
+    font-size: 0.8rem !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr {
+    transition: background .12s !important;
 }
 
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr:nth-child(even) td {
-    background: #fafbfc !important;
+    background: #f8fafc !important;
 }
 
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr:hover td {
-    background: #f1f5f9 !important;
+    background: #eff6ff !important;
+    border-color: #dbeafe !important;
 }
 
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.vm-rl-row--pending td {
     background: #fefce8 !important;
+    border-left: 3px solid #f59e0b !important;
 }
 
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.vm-rl-row--pending:hover td {
@@ -1498,12 +1513,13 @@ body.saas-admin-ui .retailerList_Page .vm-rl-cell--flag {
 
 body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell {
     text-align: center !important;
-    min-width: 200px !important;
+    min-width: 180px !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell__inner {
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 4px !important;
@@ -1513,25 +1529,26 @@ body.saas-admin-ui .retailerList_Page .vm-ml-status-badge {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 58px !important;
-    padding: 3px 8px !important;
-    border-radius: 999px !important;
-    font-size: 0.62rem !important;
+    min-width: 54px !important;
+    padding: 3px 7px !important;
+    border-radius: 6px !important;
+    font-size: 0.61rem !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
     white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--done {
-    background: #ecfdf5 !important;
-    color: #047857 !important;
-    border: 1px solid #bbf7d0 !important;
+    background: linear-gradient(135deg,#dcfce7,#bbf7d0) !important;
+    color: #166534 !important;
+    border: 1px solid #86efac !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--due {
-    background: #fff7ed !important;
-    color: #c2410c !important;
-    border: 1px solid #fed7aa !important;
+    background: linear-gradient(135deg,#fef3c7,#fde68a) !important;
+    color: #92400e !important;
+    border: 1px solid #fbbf24 !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-wallet-cell {
@@ -1558,39 +1575,55 @@ body.saas-admin-ui .retailerList_Page .vm-rl-cap-badge {
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell {
-    min-width: 200px !important;
+    min-width: 190px !important;
+    text-align: center !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell__inner {
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 5px !important;
+    gap: 4px !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.vm-ml-toggle-btn {
-    min-height: 30px !important;
-    padding: 4px 10px !important;
-    font-size: 0.68rem !important;
-    gap: 5px !important;
+    min-height: 26px !important;
+    height: 26px !important;
+    padding: 0 8px !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    gap: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 6px !important;
+    border: 1px solid transparent !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: opacity .15s !important;
 }
 
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.vm-ml-toggle-btn:hover { opacity: .82 !important; }
+
 body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.vm-ml-toggle-btn i {
-    font-size: 0.7rem !important;
-    opacity: 0.85 !important;
+    font-size: 0.65rem !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.costom-on {
-    background: #ecfdf5 !important;
-    border-color: #86efac !important;
-    color: #15803d !important;
+    background: linear-gradient(135deg,#16a34a,#22c55e) !important;
+    border-color: #16a34a !important;
+    color: #fff !important;
+    box-shadow: 0 1px 4px rgba(22,163,74,.3) !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.custom-off {
-    background: #fef2f2 !important;
-    border-color: #fecaca !important;
-    color: #b91c1c !important;
+    background: linear-gradient(135deg,#dc2626,#ef4444) !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+    box-shadow: 0 1px 4px rgba(220,38,38,.25) !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell {
@@ -1717,25 +1750,68 @@ body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-modal-label-sub {
 }
 
 body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 12px 0 4px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin: 14px 0 6px !important;
+    padding: 12px 16px !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #f0f7ff, #e8f2ff) !important;
+    border: 1.5px solid #bfdbfe !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-row label {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #1e3a5f !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-row label::before {
+    content: "\f4d8" !important;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    color: #3b82f6 !important;
 }
 
 body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-btn {
-    min-width: 88px;
-    height: 32px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
+    min-width: 110px !important;
+    height: 36px !important;
+    padding: 0 18px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
     color: #fff !important;
-    font-weight: 700;
-    font-size: 0.72rem;
+    font-weight: 700 !important;
+    font-size: 0.78rem !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    box-shadow: 0 3px 10px rgba(59,130,246,0.35) !important;
+    transition: opacity .18s, box-shadow .18s !important;
+    letter-spacing: 0.02em !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-btn:hover {
+    opacity: .88 !important;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.45) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-btn.vm-rl-bulk-payment-btn--on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    box-shadow: 0 3px 10px rgba(22,163,74,0.35) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-bulk-payment-btn.vm-rl-bulk-payment-btn--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    box-shadow: 0 3px 10px rgba(220,38,38,0.3) !important;
 }
 
 body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-modal-actions__grid {
@@ -2084,18 +2160,18 @@ body.saas-admin-ui .retailerList_Page .vm-rl-tb-control {
     align-items: center !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
-    height: 38px !important;
+    height: 36px !important;
     background: #fff !important;
     border: 1px solid #dbe2ea !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
     overflow: hidden !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo {
-    flex: 0 1 148px !important;
-    min-width: 130px !important;
-    max-width: 170px !important;
+    flex: 0 1 130px !important;
+    min-width: 110px !important;
+    max-width: 148px !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-tb-control__icon {
@@ -2130,14 +2206,14 @@ body.saas-admin-ui .retailerList_Page .vm-rl-tb-control .form-control {
     flex: 1 1 auto !important;
     width: 100% !important;
     height: 100% !important;
-    min-height: 36px !important;
-    max-height: 38px !important;
+    min-height: 34px !important;
+    max-height: 36px !important;
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     background: transparent !important;
-    padding: 0 12px 0 36px !important;
-    font-size: 0.8rem !important;
+    padding: 0 10px 0 30px !important;
+    font-size: 0.78rem !important;
     color: #334155 !important;
     appearance: none !important;
     -webkit-appearance: none !important;
@@ -2156,14 +2232,14 @@ body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
+    gap: 5px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 13px !important;
+    border-radius: 8px !important;
     border: none !important;
-    font-size: 0.76rem !important;
-    font-weight: 700 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
     white-space: nowrap !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
@@ -2192,14 +2268,14 @@ body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
-    height: 38px !important;
-    padding: 0 14px !important;
-    border-radius: 10px !important;
+    gap: 5px !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
     border: 1px solid #dbe2ea !important;
     background: #fff !important;
     color: #475569 !important;
-    font-size: 0.76rem !important;
+    font-size: 0.77rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     white-space: nowrap !important;
@@ -2211,7 +2287,7 @@ body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
 
 body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip i {
     color: #2563eb !important;
-    font-size: 0.76rem !important;
+    font-size: 0.77rem !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip:hover {
@@ -2585,4 +2661,2486 @@ body.saas-admin-ui .vm-rl-otp-modal,
 body.saas-admin-ui #otpmodal,
 body.saas-admin-ui #otpmodaldocument {
     z-index: 10630 !important;
+}
+
+/* ================================================================
+   CREATE RETAILER SIDE DRAWER  (v=34)
+   ================================================================ */
+
+/* Prevent body scroll when drawer is open */
+body.vm-rl-modal-open {
+    overflow: hidden !important;
+}
+
+/* Drawer root — covers full viewport, pointer-events off by default */
+.vm-rl-create-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 10500;
+    pointer-events: none;
+}
+.vm-rl-create-drawer.is-open {
+    pointer-events: all;
+}
+
+/* Backdrop */
+.vm-rl-create-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.50);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    cursor: pointer;
+}
+.vm-rl-create-drawer.is-open .vm-rl-create-drawer__backdrop {
+    opacity: 1;
+}
+
+/* Drawer panel — slides in from left */
+.vm-rl-create-drawer__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 420px;
+    max-width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #fff;
+    box-shadow: 6px 0 32px rgba(15, 23, 42, 0.22);
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+.vm-rl-create-drawer.is-open .vm-rl-create-drawer__panel {
+    transform: translateX(0);
+}
+
+/* Close button (sits above the form card header) */
+.vm-rl-create-drawer__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    z-index: 5;
+    transition: background 0.2s;
+    line-height: 1;
+}
+.vm-rl-create-drawer__close:hover,
+.vm-rl-create-drawer__close:focus {
+    background: rgba(255, 255, 255, 0.40);
+    outline: none;
+}
+
+/* Make the form card fill the drawer naturally */
+.vm-rl-create-drawer__panel .vm-ft-form-card,
+.vm-rl-create-drawer__panel #vmRlFormCard {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    min-height: 100vh !important;
+    height: auto !important;
+}
+
+/* Tab panels inside drawer should not be fixed height */
+.vm-rl-create-drawer__panel .vm-rl-tab-panels-wrap {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+.vm-rl-create-drawer__panel .vm-rl-tab-panels-wrap > .tab-content.vm-ml-tab-panel {
+    height: auto !important;
+    min-height: 0 !important;
+}
+.vm-rl-create-drawer__panel .vm-rl-tab-panels-wrap > .tab-content.vm-ml-tab-panel.current {
+    display: block !important;
+    height: auto !important;
+}
+.vm-rl-create-drawer__panel .vm-ml-create-form {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* ---- Hide original source column ---- */
+body.saas-admin-ui .retailerList_Page #vmRlFormColSource {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    pointer-events: none !important;
+}
+
+/* ---- Full-width history column ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-single-col {
+    gap: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-equal-cols > .vm-rl-history-col--full {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+/* ================================================================
+   BREADCRUMB AREA — breadcrumb left, Create Retailer right
+   ================================================================ */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head--with-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 6px 0 8px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head--with-cta .vm-ft-page-hero {
+    flex: 1 1 auto !important;
+    margin: 0 !important;
+}
+
+/* ---- Create Retailer trigger button ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.30);
+    text-decoration: none;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer:hover,
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer:focus {
+    background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.40);
+    outline: none;
+    color: #fff !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer i {
+    font-size: 12px;
+}
+
+/* ================================================================
+   ACTION MENU — desktop: single scrollable row | mobile: 2-col grid
+   ================================================================ */
+
+/* Desktop: single horizontal scrollable row */
+@media (min-width: 992px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 8px !important;
+        padding-bottom: 4px !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #cbd5e1 transparent !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid::-webkit-scrollbar {
+        height: 4px;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Mobile/Tablet: 2-column grid */
+@media (max-width: 991px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        flex-wrap: unset !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        gap: 8px !important;
+        padding-bottom: 4px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        flex: none !important;
+        flex-shrink: 0 !important;
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        gap: 6px !important;
+    }
+}
+
+/* ================================================================
+   TOOLBAR — unified SINGLE row (no wrap on desktop)
+   ================================================================ */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 8px 14px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #cbd5e1 transparent !important;
+    min-height: 52px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified::-webkit-scrollbar {
+    height: 3px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified::-webkit-scrollbar-thumb {
+    background: #cbd5e1 !important;
+    border-radius: 3px !important;
+}
+
+/* All direct children must not shrink/expand unboundedly */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified > * {
+    flex-shrink: 0 !important;
+}
+
+/* Retailer List title — compact */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-head-inline {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    color: #1e3a8a !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+    padding-right: 4px !important;
+    border-right: 2px solid #e2e8f0 !important;
+    margin-right: 2px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-head-inline i {
+    font-size: 14px !important;
+    color: #3b82f6 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-ft-history-toolbar__title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #1e3a8a !important;
+}
+
+/* ---- Unified row: fix group sizing (override base 50% flex rules) ---- */
+
+/* Search group — fixed, no expand */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search form {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-control {
+    flex: 0 0 165px !important;
+    width: 165px !important;
+    min-width: 165px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-input {
+    width: 100% !important;
+}
+
+/* Distributor select group — fixed, no expand */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-control {
+    flex: 0 0 170px !important;
+    width: 170px !important;
+    min-width: 170px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-select,
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist select.form-control {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Demo group — fixed, no expand */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo form {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo .vm-rl-tb-control--demo {
+    flex: 0 0 115px !important;
+    width: 115px !important;
+    min-width: 115px !important;
+    max-width: 115px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo .vm-rl-tb-input {
+    width: 100% !important;
+}
+
+/* Export group — always at end */
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-exports {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+}
+
+/* ================================================================
+   MOBILE RESPONSIVE — full page
+   ================================================================ */
+
+/* Tablet: slightly narrower controls */
+@media (max-width: 991px) {
+    .vm-rl-create-drawer__panel {
+        width: 100vw !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        gap: 5px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-control {
+        flex: 0 0 125px !important;
+        width: 125px !important;
+        min-width: 125px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-control {
+        flex: 0 0 135px !important;
+        width: 135px !important;
+        min-width: 135px !important;
+    }
+}
+
+/* Mobile portrait: wrap into sensible rows */
+@media (max-width: 767px) {
+    /* Toolbar: allow wrap */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        gap: 6px !important;
+        padding: 8px 10px !important;
+        min-height: 0 !important;
+    }
+
+    /* Title — full row */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-head-inline {
+        flex: 1 1 auto !important;
+        border-right: none !important;
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Export stays at end of first row */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-exports {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Search group: full width on mobile */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search form {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-control {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-input {
+        width: 100% !important;
+    }
+
+    /* Distributor: takes remaining width next to Filter btn */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-control {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-select,
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist select.form-control {
+        width: 100% !important;
+    }
+
+    /* Demo group: full width on mobile */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo form {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo .vm-rl-tb-control--demo {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo .vm-rl-tb-input {
+        width: 100% !important;
+    }
+
+    /* Action menu: single scrollable line on mobile too */
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        gap: 6px !important;
+        padding-bottom: 4px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        min-width: 68px !important;
+    }
+
+    /* Breadcrumb area on mobile: stack */
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head--with-cta {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 4px 0 6px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head--with-cta .vm-ft-page-hero {
+        flex: 1 1 auto !important;
+    }
+
+    /* Table area: allow horizontal scroll */
+    body.saas-admin-ui .retailerList_Page #vmRlTableScroll,
+    body.saas-admin-ui .retailerList_Page .vm-rl-table-scroll-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Filter panels: full width */
+    body.saas-admin-ui .retailerList_Page .vm-rl-filter-panel {
+        width: 100% !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-filter-date-range {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer span {
+        display: none !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--create-retailer {
+        padding: 7px 10px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item__label {
+        font-size: 10px !important;
+    }
+}
+
+/* ================================================================
+   RETAILER LIST TABLE — Enhanced Modern Look   v=41
+   ================================================================ */
+
+/* Table card container */
+body.saas-admin-ui .retailerList_Page #Retailertablelist .vm-rl-table-scroll-host {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 12px rgba(15,23,42,.07), 0 1px 3px rgba(15,23,42,.05) !important;
+    border: 1px solid #e8eef5 !important;
+}
+
+/* Table itself */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > tbody > tr.tr:last-child > td {
+    border-bottom: none !important;
+}
+
+/* SR column */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td.vm-rl-sr {
+    font-size: 0.72rem !important;
+    color: #94a3b8 !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    width: 44px !important;
+}
+
+/* Distributor cell */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td.vm-rl-distributor-cell {
+    font-size: 0.78rem !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+}
+
+/* Wallet amount */
+body.saas-admin-ui .retailerList_Page .vm-rl-wallet-amt {
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    font-family: 'Courier New', monospace !important;
+    color: #0f172a !important;
+}
+
+/* Active/Inactive status badges in user cell */
+body.saas-admin-ui .retailerList_Page .vm-rl-user-badge--active {
+    display: inline-block !important;
+    padding: 1px 7px !important;
+    border-radius: 20px !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    border: 1px solid #86efac !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-badge--inactive {
+    display: inline-block !important;
+    padding: 1px 7px !important;
+    border-radius: 20px !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    border: 1px solid #fca5a5 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+}
+
+/* Verification — horizontal one line */
+body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell {
+    min-width: 185px !important;
+    text-align: center !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell__inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+
+/* Permission — horizontal one line */
+body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell {
+    min-width: 185px !important;
+    text-align: center !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell__inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+
+/* Verification badges */
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge {
+    min-width: 54px !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    font-size: 0.61rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--done {
+    background: linear-gradient(135deg,#dcfce7,#bbf7d0) !important;
+    color: #166534 !important;
+    border: 1px solid #86efac !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--due {
+    background: linear-gradient(135deg,#fef3c7,#fde68a) !important;
+    color: #92400e !important;
+    border: 1px solid #fbbf24 !important;
+}
+
+/* Permission toggle buttons */
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.vm-ml-toggle-btn {
+    height: 26px !important;
+    padding: 0 9px !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    gap: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 6px !important;
+    border: 1px solid transparent !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: opacity .15s !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.costom-on {
+    background: linear-gradient(135deg,#16a34a,#22c55e) !important;
+    border-color: #16a34a !important;
+    color: #fff !important;
+    box-shadow: 0 1px 4px rgba(22,163,74,.28) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.custom-off {
+    background: linear-gradient(135deg,#dc2626,#ef4444) !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+    box-shadow: 0 1px 4px rgba(220,38,38,.22) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.vm-ml-toggle-btn:hover { opacity: .83 !important; }
+
+/* KYC / Video KYC cells */
+body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell,
+body.saas-admin-ui .retailerList_Page .vm-rl-video-kyc-cell {
+    text-align: center !important;
+    min-width: 70px !important;
+}
+
+
+/* ================================================================
+   EDIT & UPDATE KYC FORM — Modern Design   v=42
+   ================================================================ */
+
+/* ---- Header section ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-ml-edit-kyc-head {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%) !important;
+    border-radius: 10px !important;
+    padding: 14px 18px !important;
+    margin-bottom: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-ml-edit-kyc-head h5 {
+    color: #fff !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-ml-edit-kyc-head p {
+    color: #bfdbfe !important;
+    font-size: 0.76rem !important;
+    margin: 0 !important;
+}
+
+/* ---- Form labels ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group label {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+}
+
+/* ---- Form inputs ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-control {
+    height: 36px !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.8rem !important;
+    color: #1e293b !important;
+    background: #fff !important;
+    padding: 0 10px !important;
+    box-shadow: none !important;
+    transition: border-color .18s !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-control:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.1) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form textarea.form-control {
+    height: 70px !important;
+    resize: vertical !important;
+    padding: 8px 10px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form select.form-control {
+    padding: 0 8px !important;
+}
+
+/* ---- Document section (spspl) ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl {
+    background: #f8fafc !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 10px !important;
+    transition: border-color .18s !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl:hover {
+    border-color: #bfdbfe !important;
+    background: #f0f7ff !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl label {
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    color: #1e3a8a !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl label a {
+    font-size: 0.68rem !important;
+    font-weight: 500 !important;
+    color: #3b82f6 !important;
+    text-decoration: none !important;
+    background: #dbeafe !important;
+    padding: 1px 6px !important;
+    border-radius: 4px !important;
+}
+
+/* ---- Doc input span (non-editable display) ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .form-group.spspl > span {
+    display: block !important;
+    width: 100% !important;
+    height: 34px !important;
+    padding: 6px 10px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 7px !important;
+    background: #fff !important;
+    color: #64748b !important;
+    font-size: 0.78rem !important;
+    margin-bottom: 8px !important;
+    float: none !important;
+}
+
+/* ---- Document action buttons (ss-right) ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right {
+    margin-top: 8px !important;
+    float: none !important;
+    width: 100% !important;
+    clear: both !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .row {
+    margin: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .col-md-12 {
+    padding: 0 !important;
+    width: auto !important;
+    float: none !important;
+}
+
+/* All doc buttons — base reset */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn {
+    height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 7px !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    float: none !important;
+    margin: 0 !important;
+    transition: opacity .15s, transform .12s !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn:hover {
+    opacity: .86 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* View button */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn[value="view"] {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(59,130,246,.3) !important;
+}
+
+/* Delete buttons */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn[value="Delet"],
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn[value="reject"] {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(220,38,38,.25) !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Approve button */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn[value="view"][title="Approved"] {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(22,163,74,.28) !important;
+    min-width: 36px !important;
+    padding: 0 10px !important;
+}
+
+/* Doc Not Found button */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .ss-right .btn[value="Not Found"] {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1.5px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    font-style: italic !important;
+}
+
+/* ---- MPOS / MicroATM delete buttons ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form #mposshow {
+    display: flex !important;
+    gap: 8px !important;
+    margin: 10px 0 6px !important;
+    padding: 10px !important;
+    background: #fef9c3 !important;
+    border: 1.5px solid #fde68a !important;
+    border-radius: 10px !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form #mposshow > .col-md-6 {
+    width: auto !important;
+    flex: 1 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form #mposshow .btn-first {
+    width: 100% !important;
+    height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 7px !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    background: #fff !important;
+    border: 1.5px solid #f59e0b !important;
+    color: #92400e !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background .15s !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form #mposshow .btn-first span {
+    color: inherit !important;
+    position: static !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form #mposshow .btn-first:hover {
+    background: #fef3c7 !important;
+}
+
+/* ---- Save Change / Close footer ---- */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-actions--edit .vm-ml-modal-actions__grid {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: flex-end !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-btn--primary.One2 {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(22,163,74,.3) !important;
+    height: 38px !important;
+    padding: 0 20px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-btn--ghost {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    height: 38px !important;
+    padding: 0 18px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-btn--primary.One2:hover,
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-btn--ghost:hover {
+    opacity: .87 !important;
+}
+
+
+/* ================================================================
+   EDIT KYC — Document Cards Grid   v=43
+   ================================================================ */
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-docs-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    grid-column: 1 / -1 !important;
+    margin-top: 4px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card {
+    background: #f8fafc !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    transition: border-color .18s, background .18s !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card:hover {
+    border-color: #bfdbfe !important;
+    background: #f0f7ff !important;
+}
+
+/* Card header */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.78rem !important;
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--pan    { background: #dbeafe !important; color: #1d4ed8 !important; }
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--aadhar { background: #dcfce7 !important; color: #166534 !important; }
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--selfie { background: #fef9c3 !important; color: #92400e !important; }
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--video  { background: #fce7f3 !important; color: #9d174d !important; }
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--gst    { background: #ede9fe !important; color: #6d28d9 !important; }
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__icon--agreement { background: #fff7ed !important; color: #c2410c !important; }
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__title {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    flex: 1 !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__verify-link {
+    font-size: 0.65rem !important;
+    font-weight: 600 !important;
+    color: #3b82f6 !important;
+    text-decoration: none !important;
+    background: #dbeafe !important;
+    padding: 2px 7px !important;
+    border-radius: 5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Doc input */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-input.form-control,
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-input {
+    height: 34px !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.78rem !important;
+    color: #1e293b !important;
+    background: #fff !important;
+    padding: 0 10px !important;
+    box-shadow: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-input--readonly {
+    display: flex !important;
+    align-items: center !important;
+    color: #64748b !important;
+    background: #f1f5f9 !important;
+    border: 1.5px dashed #cbd5e1 !important;
+    font-style: italic !important;
+}
+
+/* Actions row */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__actions > div {
+    display: contents !important;
+}
+
+/* Doc action buttons */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn {
+    height: 30px !important;
+    padding: 0 11px !important;
+    border-radius: 7px !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    border: none !important;
+    white-space: nowrap !important;
+    transition: opacity .15s, transform .12s !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn:hover {
+    opacity: .84 !important;
+    transform: translateY(-1px) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn--view {
+    background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(59,130,246,.3) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn--delete {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(220,38,38,.25) !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-btn--approve {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(22,163,74,.28) !important;
+}
+
+/* Not found badge */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-card__notfound {
+    display: flex !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-doc-notfound-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    font-size: 0.7rem !important;
+    color: #92400e !important;
+    background: #fef9c3 !important;
+    border: 1px solid #fde68a !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+}
+
+/* Mobile: single column */
+@media (max-width: 600px) {
+    body.saas-admin-ui .vm-ml-detail-modal--retailer .vm-rl-docs-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Docs grid — span full width inside 2-col modal-grid */
+body.saas-admin-ui .vm-ml-detail-modal--retailer .second-form .vm-ml-modal-grid > .vm-rl-docs-grid {
+    grid-column: 1 / -1 !important;
+}
+
+/* ================================================================
+   RETAILER LIST — FULL MODERN REDESIGN  v=45
+   Table, Toolbar, Action Menu, Page Shell
+   ================================================================ */
+
+/* ---- CSS Variables for this page ---- */
+body.saas-admin-ui .retailerList_Page {
+    --rl-blue: #2563eb;
+    --rl-blue-lt: #dbeafe;
+    --rl-green: #16a34a;
+    --rl-green-lt: #dcfce7;
+    --rl-red: #dc2626;
+    --rl-amber: #d97706;
+    --rl-amber-lt: #fef9c3;
+    --rl-slate: #334155;
+    --rl-slate-lt: #f8fafc;
+    --rl-border: #e2e8f0;
+    --rl-shadow: 0 2px 16px rgba(15,23,42,.08);
+    --rl-radius: 14px;
+}
+
+/* ===============================================================
+   ACTION MENU (Quick Links Bar)
+   =============================================================== */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu {
+    background: #fff !important;
+    border: 1.5px solid var(--rl-border) !important;
+    border-radius: var(--rl-radius) !important;
+    box-shadow: var(--rl-shadow) !important;
+    margin-bottom: 14px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 16px !important;
+    background: linear-gradient(135deg, #f0f7ff 0%, #f8fafc 100%) !important;
+    border-bottom: 1px solid var(--rl-border) !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    list-style: none !important;
+    font-size: 0.78rem !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb li { display: inline-flex; align-items: center; }
+body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb li + li::before {
+    content: '/' !important;
+    margin: 0 5px !important;
+    color: #cbd5e1 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb a {
+    color: var(--rl-blue) !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb a:hover { text-decoration: underline !important; }
+
+/* Create Retailer button */
+body.saas-admin-ui .retailerList_Page #btnOpenCreateRetailer.vm-rl-tb-btn--create-retailer {
+    height: 34px !important;
+    padding: 0 16px !important;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 9px !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 10px rgba(37,99,235,.3) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: opacity .15s, box-shadow .15s !important;
+}
+body.saas-admin-ui .retailerList_Page #btnOpenCreateRetailer:hover {
+    opacity: .88 !important;
+    box-shadow: 0 4px 14px rgba(37,99,235,.38) !important;
+}
+
+/* Action items nav row */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 2px !important;
+    padding: 8px 10px !important;
+    scrollbar-width: none !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid::-webkit-scrollbar { display: none !important; }
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 7px 14px !important;
+    border-radius: 10px !important;
+    font-size: 0.73rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    text-decoration: none !important;
+    background: #f8fafc !important;
+    border: 1.5px solid #e9eef5 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    transition: background .14s, border-color .14s, box-shadow .14s, color .14s !important;
+    position: relative !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item:hover {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+    color: var(--rl-blue) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,.12) !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item__icon {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 7px !important;
+    background: #e2e8f0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.75rem !important;
+    flex-shrink: 0 !important;
+    transition: background .14s !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item:hover .vm-rl-action-item__icon {
+    background: var(--rl-blue-lt) !important;
+    color: var(--rl-blue) !important;
+}
+
+/* color per item */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--wallet  .vm-rl-action-item__icon { background:#dcfce7 !important; color:#16a34a !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--comm    .vm-rl-action-item__icon { background:#dbeafe !important; color:#2563eb !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--history .vm-rl-action-item__icon { background:#ede9fe !important; color:#7c3aed !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--dmt     .vm-rl-action-item__icon { background:#fce7f3 !important; color:#9d174d !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--whatsapp .vm-rl-action-item__icon { background:#dcfce7 !important; color:#16a34a !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--recharge .vm-rl-action-item__icon { background:#fff7ed !important; color:#c2410c !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--kyc     .vm-rl-action-item__icon { background:#fef9c3 !important; color:#92400e !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--unload  .vm-rl-action-item__icon { background:#f0fdf4 !important; color:#15803d !important; }
+
+/* ON/OFF badges in action items */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item__badge {
+    font-size: 0.6rem !important;
+    font-weight: 800 !important;
+    padding: 1px 6px !important;
+    border-radius: 5px !important;
+    line-height: 1.4 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--on .vm-rl-action-item__badge {
+    background: var(--rl-green-lt) !important;
+    color: var(--rl-green) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item--off .vm-rl-action-item__badge {
+    background: #fee2e2 !important;
+    color: var(--rl-red) !important;
+}
+
+/* ===============================================================
+   TOOLBAR CARD
+   =============================================================== */
+body.saas-admin-ui .retailerList_Page .vm-rl-history-panel {
+    background: #fff !important;
+    border: 1.5px solid var(--rl-border) !important;
+    border-radius: var(--rl-radius) !important;
+    box-shadow: var(--rl-shadow) !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern--card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f0f7ff 100%) !important;
+    border-bottom: 1.5px solid var(--rl-border) !important;
+    border-radius: calc(var(--rl-radius) - 2px) calc(var(--rl-radius) - 2px) 0 0 !important;
+    padding: 10px 14px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 7px !important;
+}
+
+/* Search group */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex: 1 1 200px !important;
+    min-width: 160px !important;
+    max-width: 280px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-control {
+    position: relative !important;
+    flex: 1 !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-control .vm-rl-tb-control__icon {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 0.72rem !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-input.form-control {
+    height: 34px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid var(--rl-border) !important;
+    font-size: 0.77rem !important;
+    padding-left: 30px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    transition: border-color .15s, box-shadow .15s !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-input.form-control:focus {
+    border-color: var(--rl-blue) !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1) !important;
+    outline: none !important;
+}
+
+/* Distributor select */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--dist {
+    flex: 1 1 160px !important;
+    min-width: 130px !important;
+    max-width: 220px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--select .vm-rl-tb-select.form-control {
+    height: 34px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid var(--rl-border) !important;
+    font-size: 0.77rem !important;
+    padding-left: 30px !important;
+    padding-right: 28px !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--select .vm-rl-tb-control__chevron {
+    position: absolute !important;
+    right: 9px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 0.65rem !important;
+    pointer-events: none !important;
+}
+
+/* Toolbar buttons */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn {
+    height: 34px !important;
+    border-radius: 9px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    padding: 0 13px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    border: none !important;
+    transition: opacity .14s, box-shadow .14s !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--primary {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,.25) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--demo {
+    background: linear-gradient(135deg, #0e7490, #0891b2) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(8,145,178,.22) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn:hover { opacity: .86 !important; }
+
+/* Chip buttons (Date, Area) */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
+    height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid var(--rl-border) !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.73rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    transition: all .14s !important;
+    white-space: nowrap !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip:hover {
+    border-color: #bfdbfe !important;
+    background: #eff6ff !important;
+    color: var(--rl-blue) !important;
+}
+
+/* Demo group */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex: 0 1 auto !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo .vm-rl-tb-input.form-control {
+    width: 130px !important;
+    min-width: 110px !important;
+    max-width: 150px !important;
+}
+
+/* Export buttons */
+body.saas-admin-ui .retailerList_Page .vm-rl-tb-exports {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ft-export-btn {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid var(--rl-border) !important;
+    background: #fff !important;
+    font-size: 0.82rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all .14s !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ft-export-btn--excel { color: #16a34a !important; }
+body.saas-admin-ui .retailerList_Page .vm-ft-export-btn--pdf   { color: #dc2626 !important; }
+body.saas-admin-ui .retailerList_Page .vm-ft-export-btn:hover  {
+    background: #f0f7ff !important;
+    border-color: #bfdbfe !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,.12) !important;
+}
+
+/* ===============================================================
+   TABLE — HEADER REDESIGN
+   =============================================================== */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+    border-radius: 0 !important;
+    border: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > thead > tr > th.vm-rl-th {
+    background: linear-gradient(180deg, #f0f5ff 0%, #e8f0fe 100%) !important;
+    color: #1e3a6e !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: .02em !important;
+    padding: 10px 12px !important;
+    border: none !important;
+    border-bottom: 2px solid #c7d7f9 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > thead > tr > th.vm-rl-th:first-child {
+    border-left: none !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead .vm-rl-th-sub {
+    display: block !important;
+    font-weight: 500 !important;
+    font-size: 0.59rem !important;
+    color: #6b82b4 !important;
+    margin-top: 1px !important;
+    letter-spacing: 0 !important;
+}
+
+/* ===============================================================
+   TABLE — ROW & CELL REDESIGN
+   =============================================================== */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td {
+    background: #fff !important;
+    border: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    vertical-align: middle !important;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+    color: var(--rl-slate) !important;
+}
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr:nth-child(even) td {
+    background: #fafbfd !important;
+}
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr:hover td {
+    background: #eff6ff !important;
+    border-bottom-color: #dbeafe !important;
+}
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.vm-rl-row--pending td {
+    background: #fffbeb !important;
+    border-left: 3px solid #f59e0b !important;
+}
+
+/* Sr column */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td.vm-rl-sr {
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    color: #b0bec5 !important;
+    min-width: 36px !important;
+    text-align: center !important;
+}
+
+/* ---- User Block ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__body {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__top {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__name {
+    font-weight: 700 !important;
+    font-size: 0.82rem !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 130px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__status {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    padding: 2px 7px !important;
+    border-radius: 5px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__status--on  { background: #dcfce7 !important; color: #16a34a !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__status--off { background: #fee2e2 !important; color: #dc2626 !important; }
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__firm {
+    font-size: 0.72rem !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+    margin-top: 2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 160px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-user-block__join {
+    font-size: 0.63rem !important;
+    color: #94a3b8 !important;
+    margin-top: 3px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* ---- Avatar ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-user-cell__avatar img,
+body.saas-admin-ui .retailerList_Page .vm-rl-avatar-img {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 10px !important;
+    object-fit: cover !important;
+    border: 2px solid #e2e8f0 !important;
+    background: #f1f5f9 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-avatar-fallback {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.05rem !important;
+    color: #3b82f6 !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+    border: 2px solid #e2e8f0 !important;
+}
+
+/* ---- Mobile cell ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-mobile-cell {
+    min-width: 120px !important;
+    text-align: center !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-mobile-cell__inner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-mobile-num {
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    color: #0f172a !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-status-dot {
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-status-dot--on  { background: #22c55e !important; box-shadow: 0 0 0 2px rgba(34,197,94,.18) !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-status-dot--off { background: #f87171 !important; box-shadow: 0 0 0 2px rgba(248,113,113,.18) !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-demo-badge {
+    display: inline-block !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fde68a !important;
+    border-radius: 5px !important;
+    padding: 1px 6px !important;
+    margin-top: 3px !important;
+}
+
+/* ---- Distributor cell ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-distributor-cell {
+    font-size: 0.77rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    min-width: 110px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-cell--flag {
+    border-left: 3px solid #f59e0b !important;
+}
+
+/* ---- Verification badges ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell {
+    min-width: 180px !important;
+    text-align: center !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell__inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 60px !important;
+    padding: 3px 9px !important;
+    border-radius: 6px !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    letter-spacing: .01em !important;
+    white-space: nowrap !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--done {
+    background: linear-gradient(135deg, #bbf7d0, #86efac) !important;
+    color: #14532d !important;
+    border: 1px solid #86efac !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-ml-status-badge--due {
+    background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+    color: #78350f !important;
+    border: 1px solid #fde68a !important;
+}
+
+/* ---- Wallet cell ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-wallet-cell {
+    text-align: center !important;
+    min-width: 90px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-wallet-amt {
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    color: #1e3a6e !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-cap-badge {
+    display: inline-block !important;
+    font-size: 0.6rem !important;
+    color: #dc2626 !important;
+    background: #fee2e2 !important;
+    border: 1px solid #fca5a5 !important;
+    border-radius: 5px !important;
+    padding: 1px 6px !important;
+    margin-top: 3px !important;
+    font-weight: 600 !important;
+}
+
+/* ---- Permission buttons ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell {
+    min-width: 180px !important;
+    text-align: center !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell__inner {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn {
+    height: 26px !important;
+    padding: 0 9px !important;
+    border-radius: 6px !important;
+    font-size: 0.63rem !important;
+    font-weight: 700 !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    cursor: pointer !important;
+    transition: opacity .14s, transform .12s !important;
+    white-space: nowrap !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn:hover { opacity: .82 !important; transform: translateY(-1px) !important; }
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.costom-on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 5px rgba(22,163,74,.25) !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn.custom-off {
+    background: linear-gradient(135deg, #e2e8f0, #f1f5f9) !important;
+    color: #64748b !important;
+}
+
+/* ---- KYC / Video KYC cells ---- */
+body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell,
+body.saas-admin-ui .retailerList_Page .vm-rl-video-kyc-cell {
+    text-align: center !important;
+    min-width: 80px !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell .vm-ml-ev-cell__inner {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 5px 10px !important;
+    border-radius: 8px !important;
+    transition: background .14s !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell:hover .vm-ml-ev-cell__inner {
+    background: #eff6ff !important;
+}
+body.saas-admin-ui .retailerList_Page .vm-rl-kyc-cell .vm-ml-ev-arrow {
+    color: var(--rl-blue) !important;
+    font-size: 0.65rem !important;
+}
+
+/* ===============================================================
+   MOBILE RESPONSIVE  (<=768px)
+   =============================================================== */
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head {
+        flex-wrap: wrap !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        flex-wrap: wrap !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search,
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--dist {
+        flex: 1 1 140px !important;
+        max-width: 100% !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo {
+        flex-wrap: wrap !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo .vm-rl-tb-input.form-control {
+        width: 110px !important;
+        min-width: 80px !important;
+    }
+    body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell__inner,
+    body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell__inner {
+        flex-wrap: wrap !important;
+    }
+}
+
+/* ================================================================
+   RETAILER LIST — v=46 REFINEMENTS
+   Action menu compact, modern page shell, mobile improvements
+   ================================================================ */
+
+/* Action menu - compact items */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+    gap: 5px !important;
+    padding: 8px 12px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+    padding: 5px 10px !important;
+    gap: 6px !important;
+    font-size: 0.72rem !important;
+    border-radius: 8px !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item__icon {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 6px !important;
+    font-size: 0.72rem !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-rl-action-item__label {
+    font-size: 0.71rem !important;
+    font-weight: 600 !important;
+}
+
+/* ---- Page shell — modern card layout ---- */
+body.saas-admin-ui .retailerList_Page .vm-ft-page-shell {
+    padding: 10px 15px !important;
+}
+
+/* Action menu header — tighter */
+body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head {
+    padding: 8px 14px !important;
+}
+
+/* Breadcrumb */
+body.saas-admin-ui .retailerList_Page .vm-ft-page-hero {
+    flex: 1 !important;
+}
+
+/* History panel — clean container */
+body.saas-admin-ui .retailerList_Page .vm-ft-layout-wrap {
+    padding: 0 !important;
+    margin-top: 10px !important;
+}
+
+/* Table scroll host — rounded bottom */
+body.saas-admin-ui .retailerList_Page .vm-rl-table-scroll-host {
+    border-radius: 0 0 calc(var(--rl-radius, 14px) - 2px) calc(var(--rl-radius, 14px) - 2px) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .retailerList_Page .retailer_list_container {
+    background: #fff !important;
+}
+
+body.saas-admin-ui .retailerList_Page .saas-acc-table-wrap {
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow-x: auto !important;
+}
+
+/* Slim scrollbar for table */
+body.saas-admin-ui .retailerList_Page .saas-acc-table-wrap::-webkit-scrollbar {
+    height: 5px !important;
+}
+body.saas-admin-ui .retailerList_Page .saas-acc-table-wrap::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+}
+body.saas-admin-ui .retailerList_Page .saas-acc-table-wrap::-webkit-scrollbar-thumb {
+    background: #bfdbfe !important;
+    border-radius: 5px !important;
+}
+
+/* Last row — no bottom border */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > tbody > tr.tr:last-child > td {
+    border-bottom: none !important;
+}
+
+/* ---- Loading spinner ---- */
+body.saas-admin-ui .retailerList_Page #loadingdiv {
+    padding: 20px !important;
+    background: #fff !important;
+}
+
+/* ================================================================
+   MOBILE  <=768px
+   ================================================================ */
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page .vm-ft-page-shell {
+        padding: 6px 8px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu {
+        border-radius: 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__head {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-ft-breadcrumb {
+        font-size: 0.72rem !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page #btnOpenCreateRetailer.vm-rl-tb-btn--create-retailer {
+        height: 30px !important;
+        font-size: 0.7rem !important;
+        padding: 0 12px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        gap: 4px !important;
+        padding: 7px 8px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        padding: 4px 9px !important;
+        font-size: 0.68rem !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item__icon {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.65rem !important;
+    }
+
+    /* Toolbar */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern--card {
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        gap: 5px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--dist {
+        flex: 1 1 calc(50% - 5px) !important;
+        max-width: calc(50% - 5px) !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--filter {
+        flex: 1 1 calc(50% - 5px) !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
+        flex: 1 1 calc(50% - 5px) !important;
+        justify-content: center !important;
+        height: 32px !important;
+        font-size: 0.7rem !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo {
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo .vm-rl-tb-input.form-control {
+        flex: 1 !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn {
+        height: 32px !important;
+        font-size: 0.7rem !important;
+        padding: 0 10px !important;
+    }
+
+    /* Table cells - tighter on mobile */
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table tbody tr.tr td {
+        padding: 8px 8px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-user-block__name {
+        max-width: 110px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-verify-cell__inner,
+    body.saas-admin-ui .retailerList_Page .vm-rl-permission-cell__inner {
+        flex-wrap: wrap !important;
+        gap: 3px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-ml-status-badge {
+        min-width: 52px !important;
+        font-size: 0.58rem !important;
+        padding: 2px 6px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-perm-btn {
+        height: 23px !important;
+        padding: 0 7px !important;
+        font-size: 0.58rem !important;
+    }
+}
+
+/* ================================================================
+   EXTRA SMALL  <=480px
+   ================================================================ */
+@media (max-width: 480px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--dist,
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--filter {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
+        flex: 1 1 calc(50% - 3px) !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-user-block {
+        gap: 7px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-avatar-fallback,
+    body.saas-admin-ui .retailerList_Page .vm-rl-user-cell__avatar img {
+        width: 34px !important;
+        height: 34px !important;
+    }
+}
+
+/* ================================================================
+   v=47 — MOBILE ACTION MENU: 2 items per row grid
+   ================================================================ */
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        flex-wrap: unset !important;
+        overflow-x: unset !important;
+        gap: 5px !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        width: 100% !important;
+        flex-shrink: unset !important;
+        justify-content: flex-start !important;
+        padding: 7px 10px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-menu__grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 4px !important;
+        padding: 7px 8px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-action-item {
+        padding: 6px 8px !important;
+        font-size: 0.67rem !important;
+    }
+}
+
+/* ================================================================
+   v=48 — MOBILE TOOLBAR COMPLETE FIX
+   ================================================================ */
+@media (max-width: 768px) {
+
+    /* Toolbar padding */
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern--card {
+        padding: 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        align-items: center !important;
+    }
+
+    /* Search group — full row */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        gap: 5px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search .vm-rl-tb-control {
+        flex: 1 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search .vm-rl-tb-btn--primary {
+        width: 38px !important;
+        min-width: 38px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--search .vm-rl-tb-btn--primary span {
+        display: none !important;
+    }
+
+    /* Distributor — full row */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--dist {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--select .vm-rl-tb-select.form-control {
+        width: 100% !important;
+    }
+
+    /* Filter button — half row */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--filter {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        justify-content: center !important;
+        height: 36px !important;
+    }
+
+    /* Date + Area chips — half each */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
+        flex: 1 1 calc(50% - 3px) !important;
+        justify-content: center !important;
+        height: 34px !important;
+        font-size: 0.72rem !important;
+    }
+
+    /* Demo group — full row, input + button in one line */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        gap: 5px !important;
+        align-items: center !important;
+    }
+
+    /* The Ajax form inside demo group */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo form,
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-group--demo > form {
+        display: flex !important;
+        flex: 1 !important;
+        gap: 5px !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-control--demo .vm-rl-tb-input.form-control {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 34px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--demo {
+        width: 38px !important;
+        min-width: 38px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        height: 34px !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--demo span {
+        display: none !important;
+    }
+
+    /* Export buttons — two icon squares side by side */
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-exports {
+        flex: 1 1 100% !important;
+        display: flex !important;
+        gap: 5px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-ft-export-btn {
+        flex: 1 !important;
+        width: auto !important;
+        height: 36px !important;
+        border-radius: 9px !important;
+        font-size: 0.9rem !important;
+        justify-content: center !important;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 400px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-chip {
+        font-size: 0.68rem !important;
+        padding: 0 8px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-tb-btn--filter {
+        font-size: 0.72rem !important;
+    }
+}
+
+/* ================================================================
+   v=49 — TABLE SCROLL FIX (all directions, mobile + desktop)
+   ================================================================ */
+
+/* Override the overflow:hidden that was blocking scroll */
+body.saas-admin-ui .retailerList_Page .vm-rl-table-scroll-host {
+    overflow: visible !important;
+    border-radius: 0 !important;
+}
+
+body.saas-admin-ui .retailerList_Page #vmRlTableScroll.vm-rl-table-scroll-host {
+    overflow: visible !important;
+}
+
+/* The actual scroll container */
+body.saas-admin-ui .retailerList_Page .retailer_list_container {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap,
+body.saas-admin-ui .retailerList_Page .saas-acc-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* History panel - no hidden overflow */
+body.saas-admin-ui .retailerList_Page .vm-rl-history-panel {
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .retailerList_Page .vm-ft-history-body,
+body.saas-admin-ui .retailerList_Page .vm-rl-history-body {
+    overflow: visible !important;
+}
+
+/* Table min-width so horizontal scroll kicks in */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+    min-width: 900px !important;
+    width: 100% !important;
+}
+
+/* Scrollbar visible & styled */
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap::-webkit-scrollbar {
+    height: 6px !important;
+    width: 6px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+    border-radius: 4px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap::-webkit-scrollbar-thumb {
+    background: #93c5fd !important;
+    border-radius: 4px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6 !important;
+}
+
+/* Mobile — ensure touch scroll works */
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page .vm-rl-history-panel {
+        overflow: visible !important;
+        border-radius: 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch !important;
+        display: block !important;
+        max-width: 100vw !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+        min-width: 780px !important;
+    }
+
+    /* Sticky header still works */
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table > thead > tr > th.vm-rl-th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 5 !important;
+    }
+}
+
+/* ================================================================
+   v=50 — TABLE ALL DATA + SCROLL FIX
+   ================================================================ */
+
+/* Table scroll host — let it expand naturally (window scroll handles infinite load) */
+body.saas-admin-ui .retailerList_Page #vmRlTableScroll.vm-rl-table-scroll-host {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+body.saas-admin-ui .retailerList_Page #Retailertablelist {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+/* Table horizontal scroll — only on the table wrap */
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap,
+body.saas-admin-ui .retailerList_Page .vm-ml-table-scroll {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+/* Table min-width for horizontal scroll */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+    min-width: 900px !important;
+}
+
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+        min-width: 820px !important;
+    }
+
+    /* Remove any max-height that cuts content */
+    body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel,
+    body.saas-admin-ui .retailerList_Page .vm-ft-history-body,
+    body.saas-admin-ui .retailerList_Page .vm-rl-history-body,
+    body.saas-admin-ui .retailerList_Page .vm-ft-layout-wrap,
+    body.saas-admin-ui .retailerList_Page .vm-ft-layout,
+    body.saas-admin-ui .retailerList_Page .vm-rl-history-col {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+/* ================================================================
+   v=51 — HORIZONTAL SCROLL DEFINITIVE FIX
+   Override all overflow:visible/hidden that blocks left-right scroll
+   ================================================================ */
+
+/* The actual scroll container — MUST have overflow-x: auto */
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm,
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap,
+body.saas-admin-ui .retailerList_Page #mmm.vm-ml-table-scroll,
+body.saas-admin-ui .retailerList_Page #mmm.table-responsive {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+
+/* Table must be wider than container to trigger scroll */
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+body.saas-admin-ui .retailerList_Page #mdList {
+    min-width: 900px !important;
+    width: max-content !important;
+    max-width: none !important;
+}
+
+/* All ancestor containers — must NOT clip overflow-x */
+body.saas-admin-ui .retailerList_Page #vmRlTableScroll,
+body.saas-admin-ui .retailerList_Page #_retailer_list,
+body.saas-admin-ui .retailerList_Page .retailer_list_container {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .retailerList_Page #Retailertablelist,
+body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-rl-table-host,
+body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-ml-table-host {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel,
+body.saas-admin-ui .retailerList_Page .vm-rl-history-body,
+body.saas-admin-ui .retailerList_Page .vm-ft-history-body {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+/* Styled scrollbar on the table wrap */
+body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar {
+    height: 6px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-track {
+    background: #f1f5f9 !important;
+    border-radius: 4px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-thumb {
+    background: #93c5fd !important;
+    border-radius: 4px !important;
+}
+body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-thumb:hover {
+    background: #2563eb !important;
+}
+
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+    body.saas-admin-ui .retailerList_Page #mdList {
+        min-width: 800px !important;
+    }
 }

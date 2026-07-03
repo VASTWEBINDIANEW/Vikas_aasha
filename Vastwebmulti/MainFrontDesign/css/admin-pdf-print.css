@@ -1,0 +1,169 @@
+/* ============================================================
+   admin-pdf-print.css
+   Shared styles for ADMIN PDF / Print views
+   (PDF_WhiteLabelUser, _PDFRetailerlist, _PDFDistibutorlist)
+   ============================================================ */
+
+@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #1e293b;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+table { page-break-inside: auto; border-collapse: collapse; }
+tr    { page-break-inside: avoid; page-break-after: auto; }
+thead { display: table-header-group; }
+
+/* ── Page wrapper ── */
+.vm-ml-pdf { width: 100%; }
+
+/* ── Header card ── */
+.vm-ml-pdf__header {
+    width: 100%;
+    margin-bottom: 14px;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ── Hero (blue gradient) — solid fallback first for wkhtmltopdf ── */
+.vm-ml-pdf__hero {
+    padding: 14px 20px;
+    background: #2563eb;                                            /* solid fallback */
+    background: -webkit-linear-gradient(135deg,#2563eb,#4f46e5);   /* webkit fallback */
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); /* modern */
+    color: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.vm-ml-pdf__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.vm-ml-pdf__subtitle {
+    margin: 4px 0 0;
+    font-size: 11px;
+    opacity: 0.92;
+}
+
+/* ── Meta strip (Generated On / Total Records etc.) ── */
+.vm-ml-pdf__meta { width: 100%; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.vm-ml-pdf__meta td {
+    padding: 9px 12px;
+    border-right: 1px solid #e2e8f0;
+    vertical-align: middle;
+}
+.vm-ml-pdf__meta td:last-child { border-right: none; }
+.vm-ml-pdf__meta-label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin-bottom: 2px;
+}
+.vm-ml-pdf__meta-value { font-size: 11px; font-weight: 700; color: #0f172a; }
+
+/* ── Table wrapper ── */
+.vm-ml-pdf__table-wrap {
+    width: 100%;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.vm-ml-pdf__table { width: 100%; border: none; }
+
+/* ── Table header ── */
+.vm-ml-pdf__table thead th {
+    padding: 10px 8px;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: #334155;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    border-bottom: 2px solid #1e293b;
+    white-space: nowrap;
+}
+
+/* ── Table body ── */
+.vm-ml-pdf__table tbody td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: middle;
+    font-size: 10px;
+    color: #334155;
+}
+.vm-ml-pdf__table tbody tr:nth-child(even) td { background: #f8fafc; }
+
+/* ── Cell helpers ── */
+.vm-ml-pdf__sr      { width: 34px; text-align: center; font-weight: 700; color: #64748b; }
+.vm-ml-pdf__firm    { font-weight: 700; color: #0f172a; }
+.vm-ml-pdf__mono    { font-family: 'Courier New', monospace; font-size: 9.5px; }
+.vm-ml-pdf__balance { font-weight: 700; color: #2563eb; white-space: nowrap; }
+.vm-ml-pdf__cap     { color: #7c3aed; font-weight: 600; }
+
+/* ── Status badges ── */
+.vm-ml-pdf__badge {
+    display: inline-block;
+    min-width: 46px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.vm-ml-pdf__badge--done { background: #ecfdf5; color: #047857; border: 1px solid #bbf7d0; }
+.vm-ml-pdf__badge--due  { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.vm-ml-pdf__badge--on   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.vm-ml-pdf__badge--off  { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+
+/* ── KYC pending row highlight ── */
+.vm-ml-pdf__table tbody tr.row-kyc-pending td {
+    background: #fefce8 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ── Empty state ── */
+.vm-ml-pdf__empty {
+    padding: 28px 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ── Footer ── */
+.vm-ml-pdf__footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dashed #dbe2ea;
+    font-size: 9px;
+    color: #94a3b8;
+    text-align: center;
+}
+
+/* ── Print media ── */
+@media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

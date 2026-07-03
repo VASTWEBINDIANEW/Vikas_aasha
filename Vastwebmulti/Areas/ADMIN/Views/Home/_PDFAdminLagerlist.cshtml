@@ -1,87 +1,112 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>
-
-
-    <div class="fullb">
-        <table border="1">
+@using System.Linq
+@{
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var rows = Model != null ? Model.OrderByDescending(x => x.Date).ToList() : new List<Vastwebmulti.Models.Retailer_Cr_Dr_Report_Result>();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admin Ledger Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__info-bar { margin-bottom:12px; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; }
+        .vm-ml-pdf__info-bar table { width:100%; background:#f8fafc; }
+        .vm-ml-pdf__info-bar th { padding:8px 12px; text-align:left; font-size:9px; background:#e2e8f0; color:#475569; border-right:1px solid #e2e8f0; white-space:nowrap; }
+        .vm-ml-pdf__info-bar td { padding:8px 12px; border-right:1px solid #e2e8f0; font-size:9.5px; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:8px 6px; text-align:left; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:7px 6px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__sr { width:28px; text-align:center; font-weight:700; color:#64748b; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:9px; }
+        .vm-ml-pdf__amt  { font-weight:700; color:#2563eb; white-space:nowrap; }
+        .vm-ml-pdf__cr   { font-weight:700; color:#047857; }
+        .vm-ml-pdf__dr   { font-weight:700; color:#b91c1c; }
+        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="vm-ml-pdf">
+    <div class="vm-ml-pdf__header">
+        <div class="vm-ml-pdf__hero">
+            <h1 class="vm-ml-pdf__title">Ledger Report</h1>
+            <p class="vm-ml-pdf__subtitle">Credit &amp; Debit ledger &mdash; Admin Panel</p>
+        </div>
+        <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
-                <th style="padding: 17px;">
-                    <span class="fullbodydycolorbg">Role</span>
-                </th>
-                <td style="padding: 17px;">
-                    <span>@ViewBag.role</span>
-                </td>
-                <th style="padding: 17px;">
-                    <span class="fullbodydycolorbg">Name</span>
-                </th>
-                <td style="padding: 17px;">
-                    <span>@ViewBag.name</span>
-                </td>
-                <th style="padding: 17px;">
-                    <span class="fullbodydycolorbg">Firm Name</span>
-                </th>
-                <td style="padding: 17px;">
-                    <span>@ViewBag.firmname</span>
-                </td>
-                <th style="padding: 17px;">
-                    <span class="fullbodydycolorbg">Reg Number</span>
-                </th>
-                <td style="padding: 17px;">
-                    <span>@ViewBag.number</span>
-                </td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
+                <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">Ledger (Cr/Dr)</span></td>
             </tr>
-
         </table>
     </div>
-
-<br />
-<br />
-
-<div class="table-responsive " style="position: inherit;">
-    <table class="table table-bordered " style="width:100%;" id="table2excel" data-tableName="Test Table 1" border="1">
-        <thead style="background-color:whitesmoke;">
+    <div class="vm-ml-pdf__info-bar">
+        <table cellpadding="0" cellspacing="0">
             <tr>
-                <th>Sr.&nbsp;No</th>
-                <th>Request&nbsp;Id</th>
-
-
-                <th>Particular&nbsp;Details</th>
-                <th>₹&nbsp;Amount</th>
-                <th>Credit</th>
-                <th>Debit</th>
-                <th>Balance</th>
-               
-                <th>Date&nbsp;&&nbsp;Time</th>
+                <th>Role</th><td>@ViewBag.role</td>
+                <th>Name</th><td>@ViewBag.name</td>
+                <th>Firm Name</th><td>@ViewBag.firmname</td>
+                <th>Reg Number</th><td>@ViewBag.number</td>
             </tr>
-        </thead>
-        <tbody id="mytable">
-            @{int i = 1;}
-            @foreach (var item in Model.OrderByDescending(x => x.Date))
-            {
-
-                <tr>
-                    <td>@i</td>
-                    <td>@Html.DisplayFor(modelItem => item.RequestId)</td>
-
-
-                    <td>@Html.DisplayFor(modelItem => item.Particulars)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.credit)</td>
-                    <td>@Html.DisplayFor(modelItem => item.debit)</td>
-
-                    @if (item.Role == "Whitelabel")
+        </table>
+    </div>
+    <div class="vm-ml-pdf__table-wrap">
+        @if (rows.Any())
+        {
+            <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="vm-ml-pdf__sr">SR</th>
+                        <th>Request ID</th>
+                        <th>Particular Details</th>
+                        <th>Amount ₹</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th>Balance</th>
+                        <th>Date &amp; Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var idx = 1; }
+                    @foreach (var item in rows)
                     {
-                        <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-                        <td>@Html.DisplayFor(modelItem => item.UserActualRemainAmount)</td>
+                        <tr>
+                            <td class="vm-ml-pdf__sr">@(idx++)</td>
+                            <td class="vm-ml-pdf__mono">@item.RequestId</td>
+                            <td>@item.Particulars</td>
+                            <td class="vm-ml-pdf__amt">@item.Amount</td>
+                            <td class="vm-ml-pdf__cr">@item.credit</td>
+                            <td class="vm-ml-pdf__dr">@item.debit</td>
+                            <td>@item.Balance</td>
+                            <td>@item.Date</td>
+                        </tr>
                     }
-                    else
-                    {
-                        <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-                        <td style="display:none;"></td>
-                    }
-                    <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                </tr>
-                i++;
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        }
+        else { <div class="vm-ml-pdf__empty">No records found.</div> }
+    </div>
+    <div class="vm-ml-pdf__footer">Ledger Report &mdash; @generatedOn</div>
 </div>
+</body>
+</html>

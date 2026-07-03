@@ -1,618 +1,183 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.walletunloadlimit>
-@using System;
-@using Vastwebmulti.Models;
+@using System
+@using Vastwebmulti.Models
 @{
-    ViewBag.Title = "wallet unload limit";
+    ViewBag.Title = "Wallet Unload Limit";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     VastwebmultiEntities db = new VastwebmultiEntities();
     var fg = 0;
+    var rowCount = Model != null ? Model.Count() : 0;
 }
 
-<link href="~/MainFrontDesign/css/financialreportcss-admin.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=62" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=40" rel="stylesheet" />
 
-<style>
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-        margin-top: 1px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-unloadlimit-page">
 
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .table > thead > tr > th {
-        font-size: 13px !important;
-        padding: 10px 4px !important;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    table.dataTable thead > tr > th, table.dataTable thead > tr > td {
-        padding-right: 10px;
-    }
-
-    .card {
-        margin-bottom: 0px;
-    }
-
-    .table-bordered tbody tr td span {
-        color: inherit;
-    }
-
-    .table-bordered tbody tr td {
-        font-size: 13px;
-        padding: 10px 4px;
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    .cltu {
-        width: 15%;
-    }
-
-    .money-tab-secondclass {
-        width: 30%;
-    }
-
-    .pdfresponsive-second {
-        width: auto;
-        float: right;
-    }
-
-    .white-successadmin-money span {
-        float: left;
-        line-height: normal;
-    }
-
-    .custom-date-icon.ner {
-        border-color: #e1dcdc !important;
-    }
-
-    .newfourdesign-admin .form-control {
-        background: transparent !important;
-    }
-
-        .newfourdesign-admin .form-control .btn {
-            background: transparent !important;
-        }
-
-    @@media screen and (max-width:1366px) {
-        .firsttimerespon-admin {
-            width: 100%;
-            float: left;
-            margin-bottom: 5px;
-        }
-
-        .marginleft-third-respon {
-            margin-left: 0 !important;
-        }
-
-        .exl-respo-third {
-            width: auto !important;
-        }
-    }
-
-    @@media only screen and (min-width:481px) and (max-width:992px) {
-        .fin2 {
-            width: 100% !important;
-            float: left;
-        }
-
-        .left-space-no {
-            margin-left: 0px !important;
-        }
-
-        .responcive-fify {
-            width: 49% !important;
-            float: left !important;
-            margin-bottom: 20px;
-        }
-
-            .responcive-fify button.btn.llpo {
-                width: 100%;
-                text-align: left;
-            }
-
-        .responcive-full {
-            width: 99% !important;
-            float: left;
-            margin-bottom: 10px;
-        }
-
-            .responcive-full .nrr3 {
-                width: 50% !important;
-                float: left;
-            }
-
-            .responcive-full input {
-                width: 49% !important;
-            }
-
-            .responcive-full .nrr3 input {
-                width: 100% !important;
-            }
-
-        .responcive-fify .web-white-filter {
-            width: 100%;
-        }
-
-        .fin3.responcive-fify {
-            position: absolute;
-            top: 170px;
-            right: 10px;
-        }
-
-        .fin1.gjut-ruty ul li {
-            width: 24.5%;
-            position: relative;
-        }
-
-            .fin1.gjut-ruty ul li img {
-                position: absolute;
-                left: 30%;
-            }
-
-        .col-md-1.cltu.for-width-r.responcive-full {
-            margin-bottom: 23px;
-        }
-
-        .white-success {
-            float: left !important;
-            width: auto !important;
-            right: 52% !important;
-        }
-
-        .col-md-12.classbottomo-third {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-        .col-md-2.exl-respo-third {
-            position: absolute;
-            top: inherit !important;
-            right: 42px;
-            bottom: 0;
-            width: auto !important;
-        }
-
-        .col-md-1.responcive-fify.respon-third-button {
-            width: auto !important;
-        }
-
-        .monalltab-resp-third ul {
-            display: flex;
-        }
-
-        .card.card-rel-third-respo {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .white-successadmin-money {
-            bottom: 10px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .fin1, .fin2 {
-            width: 100% !important;
-        }
-
-            .fin1 .kklo #custnav ul li a {
-                padding: 5px 15px;
-            }
-
-            .fin2 .col-md-2, .fin2 .cltu.col-md-1 {
-                width: 49% !important;
-                float: left;
-                margin-left: 0px !important;
-            }
-
-            .fin2 .col-md-1.cltu.for-width {
-                width: 49.2% !important;
-            }
-
-            .fin2 .col-md-1.cltu.for-width-r {
-                width: 48% !important;
-            }
-
-            .fin2 .col-md-3 {
-                width: 100% !important;
-                margin-bottom: 5px;
-            }
-
-                .fin2 .col-md-3 input {
-                    width: 49% !important;
-                }
-
-                .fin2 .col-md-3 .nrr3 {
-                    width: 48%;
-                }
-
-                    .fin2 .col-md-3 .nrr3 input {
-                        width: 100% !important;
-                    }
-
-        .cltu {
-            margin-bottom: 15px !important;
-        }
-
-        .llpo span {
-            display: inline-block;
-        }
-
-        .col-md-2.fin3 {
-            width: 55%;
-            right: 18px;
-            top: 151px;
-        }
-
-        .fin2 .col-md-1 {
-            width: 40% !important;
-        }
-
-            .fin2 .col-md-1 .button {
-                width: 100%;
-            }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-right: 1px solid var(--border-color);
-        }
-
-        .col-md-12.classbottomo-third {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-        .col-md-2.exl-respo-third {
-            position: absolute;
-            top: inherit !important;
-            right: 19px;
-            bottom: 0;
-            width: auto !important;
-        }
-
-        .card.card-rel-third-respo {
-            width: 100%;
-            float: left;
-            position: relative;
-        }
-
-        .fin2 .col-md-3 input {
-            width: 100% !important;
-        }
-    }
-</style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-<section class="content">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Financial Services</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Aeps Report</a></li>
-            </ul>
+        <!-- Top bar: breadcrumb + record count -->
+        <div class="vm-ul-topbar">
+            <ol class="vm-ul-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>Settings</li>
+                <li>Wallet Unload Limit</li>
+            </ol>
+            <span class="vm-ul-record-badge">
+                Records: <strong id="ulRecordCount">@rowCount</strong>
+            </span>
         </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
 
+        <!-- Main card -->
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-ul-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-ul-table-panel">
 
-        <div class="row clearfix">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-wallet" aria-hidden="true"></i>
+                        <span>Wallet Unload Limit</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-ul-info-badge">
+                            <i class="fas fa-info-circle" aria-hidden="true"></i> Click <strong>Edit</strong> to update a retailer's limit
+                        </span>
+                    </div>
+                </div>
 
-            <div class="col-md-12" style="margin-top: 10px;">
-                <div class="card">
-
-                    <div class="body" style="padding:0px;">
-                        <div class="table-responsive tableseconddes-admin" style="position:inherit;margin-top:0px;">
-                            <table id="Aeps" class="table table-bordered table-striped table-hover example-second thpadding-second whitetable-second" cellspacing="0" style="width:100%;background:#f5f5f5;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr style="color: black;font-size: 13px;">
-
-                                        <th>User</th>
-                                        <th>Limit</th>
-
-
-
-
+                <div class="vm-opr-table-wrap vm-ul-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="ulTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>SR</th>
+                                    <th>User (Firm &amp; Email)</th>
+                                    <th>Limit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ulTbody">
+                                @{int sr = 1;}
+                                @foreach (var item in Model)
+                                {
+                                    var cj = db.Retailer_Details.Where(s => s.RetailerId == item.userid).SingleOrDefault();
+                                    string limitVal = item.limit == null ? "0.00" : item.limit.ToString();
+                                    <tr class="vm-ul-row" id="vm-ul-row-@fg">
+                                        <td class="vm-ul-sr">@sr</td>
+                                        <td class="vm-ul-user">
+                                            @if (cj != null)
+                                            {
+                                                <div class="vm-ul-firm">@cj.Frm_Name</div>
+                                                <div class="vm-ul-email">@cj.Email</div>
+                                            }
+                                        </td>
+                                        <td class="vm-ul-limit-cell" id="vm-ul-display-@fg">
+                                            <span class="vm-ul-limit-value" id="vm-ul-val-@fg">@limitVal</span>
+                                        </td>
+                                        <td class="vm-ul-action-cell">
+                                            <!-- Display mode -->
+                                            <div class="vm-ul-display-mode" id="vm-ul-dmode-@fg">
+                                                <button type="button" class="vm-ul-btn vm-ul-btn--edit" onclick="ulEdit(@fg)">
+                                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit
+                                                </button>
+                                            </div>
+                                            <!-- Edit mode -->
+                                            <div class="vm-ul-edit-mode" id="vm-ul-emode-@fg" style="display:none;">
+                                                <div class="vm-ul-edit-wrap">
+                                                    <input type="number" step="0.01" class="vm-ul-input" id="vm-ul-inp-@fg" value="@limitVal" />
+                                                    <button type="button" class="vm-ul-btn vm-ul-btn--save" onclick="ulSave(@fg, '@item.userid')">
+                                                        <i class="fas fa-check" aria-hidden="true"></i> Save
+                                                    </button>
+                                                    <button type="button" class="vm-ul-btn vm-ul-btn--cancel" onclick="ulCancel(@fg)">
+                                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody id="trow" class="alin chnj">
-                                    @foreach (var item in Model)
-                                    {
-                                        var cj = db.Retailer_Details.Where(s => s.RetailerId == item.userid).SingleOrDefault();
-                                        <tr>
-                                            <td>@cj.Frm_Name => @cj.Email</td>
-                                            <td class="edith" style="width:40%">
-                                                @if (item.limit == null)
-                                                {
-                                                    <div class="saveunload1" style="float: left;">0.00</div><button style=" float: right; padding: 3px 19px;" onclick="hids(@fg)"> Edit </button>
-                                                }
-                                                else
-                                                {
-                                                    <div class="saveunload1" style="float: left;">
-                                                        @item.limit
-                                                    </div> <button style=" float: right; padding: 3px 19px;" onclick="hids(@fg)">Edit</button>
-
-                                                }
-                                            </td>
-                                            <td class="edits" style="display:none; width:40%">
-                                                @if (item.limit == null)
-                                                {
-                                                    <div><input class="saveunload" value="0.00" /> <button style=" float: right; padding: 3px 19px;" onclick="unllimsave(@fg, '@item.userid')">Save</button></div>
-                                                }
-                                                else
-                                                {
-                                                    <div>
-                                                        <input class="saveunload" value="@item.limit" /><button style=" float: right; padding: 3px 19px;" onclick="unllimsave(@fg, '@item.userid')">Save</button>
-                                                    </div>
-                                                }
-                                            </td>
-                                        </tr>
-                                        fg++;
-                                    }
-
-                                    @*@{
-
-                                            Html.RenderAction("_AepsReport", "Home", new { Model = Model });
-
-                                        }*@
-                                </tbody>
-                            </table>
-                            <script>
-                                function hids(s) {
-                                    var ch1 = document.getElementsByClassName('edith');
-                                    var ch2 = document.getElementsByClassName('edits');
-                                    ch1[s].style.display = "none";
-                                    ch2[s].style.display = "table-cell";
-                                    ch2[s].style.border = "none";
-
+                                    fg++;
+                                    sr++;
                                 }
-                                function unllimsave(s , user) {
-                                    var ch1 = document.getElementsByClassName('saveunload');
-                                    var ch2 = ch1[s].value;
-                                    $.ajax({
-                                     url: '@Url.Action("walletunloadlimitsave","Home")',
-                                      type: 'POST',
-                                        data: { RetailerId: user , limit : ch2},
-                                     cache: false,
-                                        success: function (response) {
-                                            if (response == "Success") {
-
-                                                var ch11 = document.getElementsByClassName('saveunload1');
-                                                ch11[s].innerHTML = ch2;
-                                                var ch12 = document.getElementsByClassName('edith');
-                                                var ch22 = document.getElementsByClassName('edits');
-                                                ch12[s].style.display = "table-cell";
-                                                ch12[s].style.border = "none";
-                                                ch22[s].style.display = "none";
-                                            }
-                                            else {
-                                                var ch121 = document.getElementsByClassName('edith');
-                                                var ch221 = document.getElementsByClassName('edits');
-                                                ch121[s].style.display = "table-cell";
-                                                ch121[s].style.border = "none";
-                                                ch221[s].style.display = "none";
-                                            }
-                                            alert(response);
-                                   }
-                                 });
-                                }
-                            </script>
-                            <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-                                <img src="~/img/ajax-loader.gif" />
-                            </div>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
             </div>
-
         </div>
-    </div>
 
+    </div>
 </section>
-<!--Refund Model-->
-<div class="modal fade" id="defaultModal1" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float:right; width:550px;">
-        <div class="modal-content">
-            <div class="modal-body" style="padding:5px;">
-                <div class="body">
-                    <div class="row clearfix">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding-right:5px;">
-                            <div>
-                                @Html.TextBox("txtrefidno", "", new { style = "display:none;" })
-                                @Html.TextBox("txtbankid", "", new { style = "display:none;" })
-                                @Html.TextBox("txtrecivername", "", new { style = "display:none;" })
-                                <div class="custom-district">
-                                    @Html.DropDownList("ddl_refund", new List<SelectListItem>
-                                           {
-                     new SelectListItem{ Text="Manual Failed",Value="Manual FAILED"},
-                     new SelectListItem{Text="Bank Server Down ",Value="Bank Server Down"},
-                   new SelectListItem{ Text="Failed Due To Invalid Choice",Value="Failed Due To Invalid Choice"},
-                  new SelectListItem{Text="Network Down",Value="Network Down"},
-                    new SelectListItem{Text="Unsupported Network",Value="Unsupported Network"},
-                 new SelectListItem{Text="Network issue",Value="Network issue"},
-                 new SelectListItem{Text="Insufficient Fund ",Value="Insufficient Fund"}
-                            }, new { @class = "btn-group bootstrap-select form-control show-tick dropup", @style = "height:32px;border: 1px solid #bbb;-webkit-appearance: none;" })
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding:0px;">
-                            <div>
-                                <div class="">
-                                    <input type="text" id="securitypass" name="securitypass" placeholder="Enter Security Password" style="box-shadow: none;border: 1px solid #bbb;height: 32px;width:220px;" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align:right;">
-                            <button type="submit" class="btn fullbodydycolorbg  waves-effect" style=" height:32px;padding: 0px 21px;margin-right: 18px;font-size: 15px;border: 0px;" onclick="Failed()">
-                                <span style="top:-1px;color:#fff;">Save</span>
-                            </button>
-                            <button type="button" class="btn  waves-effect" style=" height:32px;padding: 0px 10px;font-size: 20px;" data-dismiss="modal">
-                                <span style="top:0px;color:var(--main-bg-lcolor);">&#10006;</span>
-                            </button>
-                        </div>
-                    </div>
+<script>
+    /* ===== Edit toggle ===== */
+    function ulEdit(idx) {
+        document.getElementById('vm-ul-dmode-' + idx).style.display = 'none';
+        document.getElementById('vm-ul-emode-' + idx).style.display = '';
+        var inp = document.getElementById('vm-ul-inp-' + idx);
+        if (inp) { inp.focus(); inp.select(); }
+    }
 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Manual Success Model-->
-<div class="modal fade" id="defaultModal2" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float:right;width:550px;">
-        <div class="modal-content">
-            <div class="modal-body" style="padding:5px;">
-                <div>
-                    <div class="row clearfix">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <div class="">
-                                @Html.Hidden("idno")
-                                @Html.Hidden("trans_id")
-                                @Html.TextBox("BankRRN", "", new { style = "width:184px; height: 32px;padding: 0px 5px;border: 1px solid #ddd;box-shadow: none;", @required = "", @placeholder = "Enter Bank RRN" })
+    function ulCancel(idx) {
+        document.getElementById('vm-ul-emode-' + idx).style.display = 'none';
+        document.getElementById('vm-ul-dmode-' + idx).style.display = '';
+    }
 
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <div class="">
-                                @Html.TextBox("Remark", "", new { style = "width:214px; height: 32px;padding: 0px 5px;border: 1px solid #ddd;", @placeholder = "Enter Remark" })
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align:right;">
-                            <button type="submit" class="btn fullbodydycolorbg  waves-effect" style=" height:32px;padding: 0px 21px;margin-right: 10px;font-size: 15px;border: 0px;" onclick="success()">
-                                <span style="top:-1px;color:#fff;">Save</span>
-                            </button>
-                            <button type="button" class="btn  waves-effect" style=" height:32px;padding: 0px 10px;font-size: 20px;" data-dismiss="modal">
-                                <span style="top:0px;color:var(--main-bg-lcolor);">&#10006;</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    /* ===== Save limit via AJAX ===== */
+    function ulSave(idx, userId) {
+        var inp = document.getElementById('vm-ul-inp-' + idx);
+        var newVal = inp ? inp.value : '0.00';
+        var $saveBtn = $('#vm-ul-emode-' + idx + ' .vm-ul-btn--save');
+        $saveBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
 
-<div class="modal mastetr222Modal" id="defaultModal222" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="min-height:auto;">
-        <div id="loadredmodel" style="display:none;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);" class="loadingio-spinner-ripple-92ar2pfqk5j">
-            <div class="ldio-zdyd6mf6t5">
-                <div></div><div></div>
-            </div>
-        </div>
-        <div id="userinfodiv" class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left" style="background-color:#eee">
+        $.ajax({
+            url: '@Url.Action("walletunloadlimitsave", "Home")',
+            type: 'POST',
+            data: { RetailerId: userId, limit: newVal },
+            cache: false,
+            success: function (response) {
+                $saveBtn.prop('disabled', false).html('<i class="fas fa-check"></i> Save');
+                if (response === 'Success') {
+                    document.getElementById('vm-ul-val-' + idx).textContent = newVal;
+                    ulCancel(idx);
+                    showUlToast('Limit updated successfully.', 'success');
+                } else {
+                    ulCancel(idx);
+                    showUlToast('Update failed: ' + response, 'error');
+                }
+            },
+            error: function () {
+                $saveBtn.prop('disabled', false).html('<i class="fas fa-check"></i> Save');
+                ulCancel(idx);
+                showUlToast('Network error. Please try again.', 'error');
+            }
+        });
+    }
 
-                <div class="modal-back width100 float-left">
-                    <div class="form-group" style="float: left;margin: 0px;width:80%;">
+    /* ===== Toast notification ===== */
+    function showUlToast(msg, type) {
+        var existing = document.getElementById('vm-ul-toast');
+        if (existing) existing.remove();
+        var t = document.createElement('div');
+        t.id = 'vm-ul-toast';
+        t.className = 'vm-ul-toast vm-ul-toast--' + type;
+        t.innerHTML = '<i class="fas ' + (type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle') + '"></i> ' + msg;
+        document.body.appendChild(t);
+        setTimeout(function () { t.classList.add('vm-ul-toast--show'); }, 10);
+        setTimeout(function () { t.classList.remove('vm-ul-toast--show'); setTimeout(function () { t.remove(); }, 300); }, 3000);
+    }
 
-                        @Html.TextBox("MerchantTxnId", "", new { @class = "form-control", @style = "text-transform:uppercase;background: transparent;", @readonly = "readonly" })
-                    </div>
-                    <button type="button" class="btn waves-effect" data-dismiss="modal" style="padding: 0px;margin-top: 7px;background:transparent;">
-                        <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body width100 float-left">
-
-                <div class="float-left width100">
-
-                    <form class="first-form">
-                        @Html.Hidden("idno")
-
-
-                        <div class="row">
-
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Admin Pre</label>
-                                    @Html.TextBox("AdminPre", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Commission</label>
-                                    @Html.TextBox("Admincomm", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Post Amt</label>
-                                    @Html.TextBox("AdminPost", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Master Pre</label>
-                                    @Html.TextBox("MdPre", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Commission</label>
-                                    @Html.TextBox("Mdcomm", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Post Amt</label>
-                                    @Html.TextBox("MdPost", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Distributor Pre</label>
-                                    @Html.TextBox("DlmPre", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Commission</label>
-                                    @Html.TextBox("DlmComm", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Post Amt</label>
-                                    @Html.TextBox("DlmPost", "", new { @class = "form-control", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</div>
+    /* ===== Live search ===== */
+    $(document).ready(function () {
+        $(document).on('keyup', '#ulSearchInput', function () {
+            var val = this.value.toLowerCase();
+            $('#ulTbody tr.vm-ul-row').each(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1);
+            });
+        });
+    });
+</script>

@@ -20,7 +20,7 @@
 <link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=24" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=51" rel="stylesheet" />
 
 <style>
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
@@ -28,6 +28,12 @@
     .toast-top-right1 { top: 65px; left: 81%; }
     .retailerList_Page .onoffswitch { width: auto; min-width: 110px; height: 32px; margin: 0; }
     .retailerList_Page .costom-on, .retailerList_Page .custom-off { font-size: 11px !important; }
+
+    /* TABLE HORIZONTAL SCROLL — highest priority override */
+    #mmm { overflow-x: auto !important; overflow-y: visible !important; -webkit-overflow-scrolling: touch !important; display: block !important; width: 100% !important; }
+    #mdList { min-width: 920px !important; }
+    #vmRlTableScroll, #_retailer_list, #Retailertablelist, #vmRlHistoryPanel { overflow-x: visible !important; }
+    .vm-rl-history-body, .vm-ft-history-body { overflow-x: visible !important; }
 </style>
 
 <section class="content retailerList_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-master-list-page saas-fund-transfer-premium">
@@ -36,17 +42,17 @@
 
         
         <div class="vm-rl-action-menu">
-            <div class="vm-rl-action-menu__head">
-                
+            <div class="vm-rl-action-menu__head vm-rl-action-menu__head--with-cta">
                 <div class="vm-ft-page-hero">
-                    <div>
-                        <ol class="vm-ft-breadcrumb">
-                            <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
-                            <li>User's &amp; Account</li>
-                            <li>Retailer List</li>
-                        </ol>
-                    </div>
+                    <ol class="vm-ft-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        
+                        <li>Retailer List</li>
+                    </ol>
                 </div>
+                <button type="button" id="btnOpenCreateRetailer" class="vm-rl-tb-btn vm-rl-tb-btn--create-retailer">
+                    <i class="fas fa-user-plus" aria-hidden="true"></i><span>Create Retailer</span>
+                </button>
             </div>
             <nav class="vm-rl-action-menu__grid" aria-label="Retailer quick actions">
                 <a href="@Url.Action("Showclosingbalance", "Home")" class="vm-rl-action-item vm-rl-action-item--wallet" title="Show Opening Balance">
@@ -127,9 +133,17 @@
             }
         </script>
 
+        <!-- ======= Create Retailer Side Drawer ======= -->
+        <div id="vmRlCreateModal" class="vm-rl-create-drawer" aria-hidden="true">
+            <div class="vm-rl-create-drawer__backdrop" id="vmRlCreateBdrop"></div>
+            <div class="vm-rl-create-drawer__panel" id="vmRlCreatePanel">
+                <button type="button" class="vm-rl-create-drawer__close" id="vmRlCreateClose" aria-label="Close Create Retailer"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
         <div class="col-md-12 vm-ft-layout-wrap">
-            <div class="row clearfix vm-ft-layout vm-ft-layout--full vm-rl-equal-cols">
-                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full vm-rl-equal-cols vm-rl-single-col">
+                <div class="col-md-4 col-sm-12 vm-ft-form-col" id="vmRlFormColSource" aria-hidden="true">
                     <div class="fund-trasfer-left vm-ft-form-card" id="vmRlFormCard">
                         <div class="vm-ft-form-card-header">
                             <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-store"></i></div>
@@ -376,14 +390,16 @@
                     </div>
                 </div>
 
-                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col vm-rl-history-col">
+                <div class="col-md-12 col-sm-12 fund-transfer-main-admin vm-ft-history-col vm-rl-history-col vm-rl-history-col--full">
                     <div class="fund-trasfer-right vm-ft-history-panel vm-rl-history-panel" id="vmRlHistoryPanel">
                         <div class="vm-ft-history-body vm-rl-history-body">
                             <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium vm-ml-list-toolbar vm-rl-list-toolbar">
                                 <div class="vm-rl-toolbar-modern vm-rl-toolbar-modern--card">
                                     
 
-                                    <div class="vm-rl-toolbar-modern__row vm-rl-toolbar-modern__row--primary">
+                                    <div class="vm-rl-toolbar-modern__row vm-rl-toolbar-modern__row--unified">
+
+                                        
                                         <div class="vm-rl-tb-group vm-rl-tb-group--search">
                                         @using (Ajax.BeginForm("RetailerSearchBy", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
                                         {
@@ -396,6 +412,7 @@
                                             </button>
                                         }
                                         </div>
+
                                         <div class="vm-rl-tb-group vm-rl-tb-group--dist">
                                             <div class="vm-rl-tb-control vm-rl-tb-control--icon vm-rl-tb-control--select">
                                                 <i class="fas fa-user-tie vm-rl-tb-control__icon" aria-hidden="true"></i>
@@ -403,21 +420,14 @@
                                                 <i class="fas fa-chevron-down vm-rl-tb-control__chevron" aria-hidden="true"></i>
                                             </div>
                                         </div>
+
                                         <button type="button" id="btnsearchbtn" name="btnsearchbtn" class="vm-rl-tb-btn vm-rl-tb-btn--primary vm-rl-tb-btn--filter">
                                             <i class="fas fa-filter" aria-hidden="true"></i><span>Filter</span>
                                         </button>
-                                    </div>
 
-                                    <div class="vm-rl-toolbar-modern__row vm-rl-toolbar-modern__row--secondary vm-rl-toolbar-modern__row--actions">
-                                        <div class="vm-ft-history-toolbar__head vm-ml-list-toolbar__head vm-rl-tb-head-inline">
-                                            <i class="fas fa-list-alt" aria-hidden="true"></i>
-                                            <div class="vm-ml-list-toolbar__text">
-                                                <span class="vm-ft-history-toolbar__title">Retailer List</span>
-                                                <span class="vm-ft-history-toolbar__sub">View, search &amp; export retailer records</span>
-                                            </div>
-                                        </div>
                                         <button type="button" class="vm-rl-tb-chip" id="vmRlBtnDate"><i class="fas fa-calendar-alt" aria-hidden="true"></i><span>Date</span></button>
                                         <button type="button" class="vm-rl-tb-chip" id="sbarea"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Area</span></button>
+
                                         <div class="vm-rl-tb-group vm-rl-tb-group--demo">
                                         @using (Ajax.BeginForm("Make_Demo_Retailer", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
                                         {
@@ -430,11 +440,13 @@
                                             </button>
                                         }
                                         </div>
+
                                         <div class="vm-ft-export-group vm-ml-list-toolbar__exports vm-rl-tb-exports">
                                             <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel"><i class="fas fa-file-excel" aria-hidden="true"></i></button>
                                             <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF"><i class="fas fa-file-pdf" aria-hidden="true"></i></button>
                                             <iframe id="txtArea1" style="display:none"></iframe>
                                         </div>
+
                                     </div>
 
                                     <div id="vmRlDatePanel" class="vm-rl-filter-panel vm-rl-filter-panel--date">
@@ -1869,21 +1881,40 @@ function () {
     var NoMoredata = false;
     var inProgress = false;
 
+    function vmRlLoadMore() {
+        var dealer_selected = $('#RetailerFilterDealerID').val();
+        if (!NoMoredata && !inProgress && !dealer_selected) {
+            inProgress = true;
+            $("#loadingdiv").show();
+            $.post("@Url.Action("InfiniteScroll_retailer", "Home")",
+                { "pageindex": pageindex },
+                function (data) {
+                    pageindex = pageindex + 1;
+                    NoMoredata = data.NoMoredata;
+                    $("#body").append(data.HTMLString);
+                    $("#loadingdiv").hide();
+                    inProgress = false;
+                });
+        }
+    }
+
     function vmRlBindTableScroll() {
+        // Container scroll (desktop — when #vmRlTableScroll has fixed height)
         $('#vmRlTableScroll').off('scroll.vmRlInfinite').on('scroll.vmRlInfinite', function () {
-            var dealer_selected = $('#RetailerFilterDealerID').val();
-            if ($(this).scrollTop() > Number($("#mmm").height()) / 4 && !NoMoredata && !inProgress && !dealer_selected) {
-                inProgress = true;
-                $("#loadingdiv").show();
-                $.post("@Url.Action("InfiniteScroll_retailer", "Home")",
-                    { "pageindex": pageindex },
-                    function (data) {
-                        pageindex = pageindex + 1;
-                        NoMoredata = data.NoMoredata;
-                        $("#body").append(data.HTMLString);
-                        $("#loadingdiv").hide();
-                        inProgress = false;
-                    });
+            var el = this;
+            if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
+                vmRlLoadMore();
+            }
+        });
+
+        // Window scroll (mobile — when table stretches full page)
+        $(window).off('scroll.vmRlInfinite').on('scroll.vmRlInfinite', function () {
+            var $tableHost = $('#vmRlTableScroll');
+            if (!$tableHost.length) return;
+            var tableBottom = $tableHost.offset().top + $tableHost.outerHeight();
+            var windowBottom = $(window).scrollTop() + $(window).height();
+            if (windowBottom >= tableBottom - 150) {
+                vmRlLoadMore();
             }
         });
     }
@@ -1912,64 +1943,69 @@ function () {
 
     function vmRlSyncPanelHeight() {
         vmRlSyncTabPanelHeight();
-
-        var $form = $('#vmRlFormCard');
-        var $panel = $('#vmRlHistoryPanel');
-        var $scroll = $('#vmRlTableScroll');
+        // Form card is now inside the side drawer — clear any fixed heights so the
+        // full-width history panel stretches naturally with its content.
+        var $panel     = $('#vmRlHistoryPanel');
+        var $scroll    = $('#vmRlTableScroll');
         var $tableHost = $('#Retailertablelist');
-        if (!$form.length || !$panel.length) return;
-
-        if (window.innerWidth < 992) {
-            $panel.css({ height: '', maxHeight: '' });
-            $scroll.css({ height: '', maxHeight: '' });
-            $tableHost.css({ height: '', maxHeight: '' });
-            return;
-        }
-
-        var formH = Math.ceil($form.outerHeight());
-        if (formH <= 0) return;
-
-        $panel.css({ height: formH + 'px', maxHeight: formH + 'px' });
-
-        var toolbarH = $panel.find('.vm-rl-list-toolbar').outerHeight(true) || 0;
-        var scrollH = Math.max(formH - toolbarH, 140);
-
-        $tableHost.css({
-            height: scrollH + 'px',
-            maxHeight: scrollH + 'px'
-        });
-        $scroll.css({
-            height: scrollH + 'px',
-            maxHeight: scrollH + 'px'
-        });
+        $panel.css({ height: '', maxHeight: '' });
+        $scroll.css({ height: '', maxHeight: '' });
+        $tableHost.css({ height: '', maxHeight: '' });
     }
 
     function vmRlInitHeightSync() {
         vmRlSyncPanelHeight();
-        setTimeout(vmRlSyncPanelHeight, 100);
-        setTimeout(vmRlSyncPanelHeight, 350);
-        setTimeout(vmRlSyncPanelHeight, 800);
-
         $(window).off('load.vmRlSync resize.vmRlSync').on('load.vmRlSync resize.vmRlSync', function () {
             vmRlSyncPanelHeight();
         });
-
-        var formEl = document.getElementById('vmRlFormCard');
-        if (formEl && window.ResizeObserver) {
-            if (window._vmRlFormRo) {
-                window._vmRlFormRo.disconnect();
-            }
-            window._vmRlFormRo = new ResizeObserver(function () {
-                vmRlSyncPanelHeight();
-            });
-            window._vmRlFormRo.observe(formEl);
-        }
     }
 
     $(document).ready(function () {
         vmRlBindTableScroll();
         vmRlInitHeightSync();
     });
+</script>
+
+<script>
+    /* ===== Create Retailer Side Drawer ===== */
+    (function () {
+        var modal   = document.getElementById('vmRlCreateModal');
+        var panel   = document.getElementById('vmRlCreatePanel');
+        var backdrop = document.getElementById('vmRlCreateBdrop');
+        var closeBtn = document.getElementById('vmRlCreateClose');
+        var openBtn  = document.getElementById('btnOpenCreateRetailer');
+        var formCard = document.getElementById('vmRlFormCard');
+
+        // Move the form card into the drawer panel (DOM move - preserves all bindings)
+        if (formCard && panel) {
+            panel.appendChild(formCard);
+        }
+
+        function openDrawer() {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('vm-rl-modal-open');
+            // Scroll drawer to top on open
+            if (panel) panel.scrollTop = 0;
+        }
+
+        function closeDrawer() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('vm-rl-modal-open');
+        }
+
+        if (openBtn)   openBtn.addEventListener('click', openDrawer);
+        if (closeBtn)  closeBtn.addEventListener('click', closeDrawer);
+        if (backdrop)  backdrop.addEventListener('click', closeDrawer);
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+                closeDrawer();
+            }
+        });
+    })();
 </script>
 
 

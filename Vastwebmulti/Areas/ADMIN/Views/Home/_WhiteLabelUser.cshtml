@@ -1,1236 +1,758 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.Whitelabel_user
+﻿<style>
+/* ==============================
+   WHITE LABEL — Table Styles
+   ============================== */
+.wl-badge { display:inline-flex; align-items:center; justify-content:center; min-width:54px; padding:3px 8px; border-radius:6px; font-size:.63rem; font-weight:700; white-space:nowrap; }
+.wl-badge--done { background:linear-gradient(135deg,#bbf7d0,#86efac); color:#14532d; border:1px solid #86efac; }
+.wl-badge--due  { background:linear-gradient(135deg,#fef3c7,#fde68a); color:#78350f; border:1px solid #fde68a; }
+.wl-on-btn  { height:26px; padding:0 10px; border-radius:6px; font-size:.63rem; font-weight:700; border:none; cursor:pointer; background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; box-shadow:0 2px 5px rgba(22,163,74,.25); }
+.wl-off-btn { height:26px; padding:0 10px; border-radius:6px; font-size:.63rem; font-weight:700; border:none; cursor:pointer; background:linear-gradient(135deg,#e2e8f0,#f1f5f9); color:#64748b; }
+.wl-detail-btn { width:26px; height:26px; border-radius:7px; border:1.5px solid #bfdbfe; background:#eff6ff; color:#2563eb; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:.7rem; transition:all .14s; margin-left:4px; }
+.wl-detail-btn:hover { background:#dbeafe; }
 
-<style>
-    #defaultModal222 input:placeholder-shown {
-        border-color: red !important;
-    }
+/* ==============================
+   WHITE LABEL — Main Modal
+   ============================== */
+.wl-modal .modal-dialog { max-width:700px; margin:30px auto; }
+@@media(max-width:767px){ .wl-modal .modal-dialog { margin:8px; } }
+.wl-modal .modal-content { border:none; border-radius:16px; overflow:hidden; box-shadow:0 24px 64px rgba(15,23,42,.22); }
+
+/* Header */
+.wl-modal-header {
+    background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);
+    padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
+}
+.wl-modal-header__left { display:flex; align-items:center; gap:12px; }
+.wl-modal-header__icon { width:38px; height:38px; background:rgba(255,255,255,.18); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; color:#fff; }
+.wl-modal-header__label { font-size:.65rem; font-weight:600; color:#93c5fd; letter-spacing:.04em; text-transform:uppercase; }
+.wl-modal-header__balance { font-size:.95rem; font-weight:800; color:#fff; margin-top:1px; }
+.wl-modal-close { width:32px; height:32px; border-radius:9px; background:rgba(255,255,255,.15); border:none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.85rem; transition:.14s; flex-shrink:0; }
+.wl-modal-close:hover { background:rgba(255,255,255,.28); }
+
+/* Profile strip */
+.wl-modal-profile {
+    display:flex; align-items:center; gap:14px; padding:14px 20px;
+    background:linear-gradient(180deg,#f0f7ff,#f8fafc); border-bottom:1.5px solid #e2e8f0;
+}
+.wl-modal-avatar { width:50px; height:50px; border-radius:12px; object-fit:cover; border:2px solid #dbeafe; }
+.wl-modal-profile__info { flex:1; }
+.wl-modal-profile__name { font-size:.88rem; font-weight:700; color:#0f172a; margin-bottom:1px; }
+.wl-modal-profile__firm { font-size:.74rem; color:#475569; }
+.wl-modal-profile__date { font-size:.65rem; color:#94a3b8; margin-top:2px; }
+.wl-modal-profile__error { font-size:.73rem; color:#dc2626; font-weight:600; }
+
+/* Body */
+.wl-modal-body { padding:16px 20px 8px; max-height:62vh; overflow-y:auto; }
+.wl-modal-body::-webkit-scrollbar { width:5px; }
+.wl-modal-body::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:99px; }
+
+/* Form fields inside modal */
+.wl-modal-body .form-group { margin-bottom:8px; }
+.wl-modal-body .form-group label { font-size:.72rem; font-weight:600; color:#475569; margin-bottom:3px; display:block; }
+.wl-modal-body .form-control { height:34px !important; border-radius:8px !important; border:1.5px solid #e2e8f0 !important; font-size:.78rem !important; background:#f8fafc !important; color:#1e293b; transition:border-color .15s,box-shadow .15s; }
+.wl-modal-body .form-control:focus { border-color:#2563eb !important; box-shadow:0 0 0 3px rgba(37,99,235,.1) !important; background:#fff !important; outline:none; }
+.wl-modal-body textarea.form-control { height:auto !important; min-height:58px !important; }
+.wl-modal-body select.form-control { padding-right:28px; }
+
+/* Section divider inside body */
+.wl-modal-section-label { font-size:.68rem; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:.06em; margin:12px 0 8px; padding-bottom:4px; border-bottom:1.5px solid #dbeafe; }
+
+/* Document cards grid */
+.wl-doc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:4px; }
+@@media(max-width:576px){ .wl-doc-grid { grid-template-columns:1fr; } }
+.wl-doc-card { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:6px; transition:border-color .15s,background .15s; }
+.wl-doc-card:hover { border-color:#bfdbfe; background:#eff6ff; }
+.wl-doc-card__head { display:flex; align-items:center; gap:8px; }
+.wl-doc-card__icon { width:28px; height:28px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:.75rem; flex-shrink:0; }
+.wl-doc-card__icon--pan    { background:#dbeafe; color:#1d4ed8; }
+.wl-doc-card__icon--aadhar { background:#dcfce7; color:#166534; }
+.wl-doc-card__icon--gst    { background:#ede9fe; color:#6d28d9; }
+.wl-doc-card__icon--agr    { background:#fff7ed; color:#c2410c; }
+.wl-doc-card__title { font-size:.74rem; font-weight:700; color:#1e293b; }
+.wl-doc-card .form-control { margin-top:2px; }
+.wl-doc-card__actions { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.wl-doc-card__actions > div { display:contents; }
+.wl-doc-btn { height:27px; padding:0 9px; border-radius:7px; font-size:.65rem; font-weight:600; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:3px; transition:opacity .13s,transform .12s; white-space:nowrap; }
+.wl-doc-btn:active { transform:scale(.97); }
+.wl-doc-btn--view    { background:linear-gradient(135deg,#2563eb,#3b82f6); color:#fff; box-shadow:0 2px 5px rgba(59,130,246,.28); }
+.wl-doc-btn--delete  { background:linear-gradient(135deg,#dc2626,#ef4444); color:#fff; box-shadow:0 2px 5px rgba(220,38,38,.22); }
+.wl-doc-btn--approve { background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; box-shadow:0 2px 5px rgba(22,163,74,.25); }
+.wl-notfound-badge { display:inline-flex; align-items:center; gap:5px; font-size:.65rem; color:#92400e; background:#fef9c3; border:1px solid #fde68a; padding:2px 8px; border-radius:5px; font-weight:600; }
+
+/* Edit form — icon+input 2-column grid */
+.wl-edit-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+@@media(max-width:480px){ .wl-edit-grid { grid-template-columns:1fr; } }
+.wl-edit-field { display:flex; align-items:flex-start; gap:8px; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:8px 10px; transition:border-color .15s; }
+.wl-edit-field:hover { border-color:#bfdbfe; background:#f0f7ff; }
+.wl-edit-field--full { grid-column:1/-1; }
+.wl-edit-field__icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:.75rem; flex-shrink:0; margin-top:18px; }
+.wl-icon--blue   { background:#dbeafe; color:#1d4ed8; }
+.wl-icon--purple { background:#ede9fe; color:#6d28d9; }
+.wl-icon--green  { background:#dcfce7; color:#166534; }
+.wl-icon--orange { background:#fff7ed; color:#c2410c; }
+.wl-icon--teal   { background:#cffafe; color:#0e7490; }
+.wl-icon--red    { background:#fee2e2; color:#b91c1c; }
+.wl-icon--slate  { background:#f1f5f9; color:#475569; }
+.wl-edit-field__body { flex:1; min-width:0; }
+.wl-edit-field__body label { font-size:.68rem; font-weight:700; color:#475569; margin-bottom:3px; display:block; text-transform:uppercase; letter-spacing:.03em; }
+.wl-edit-field__body .form-control { height:32px !important; border-radius:7px !important; border:1.5px solid #e2e8f0 !important; font-size:.77rem !important; background:#fff !important; padding:3px 9px !important; }
+.wl-edit-field__body textarea.form-control { height:auto !important; min-height:50px !important; }
+.wl-edit-field__body .form-control:focus { border-color:#2563eb !important; box-shadow:0 0 0 3px rgba(37,99,235,.1) !important; outline:none; }
+.wl-edit-field__body select.form-control { padding-right:24px !important; }
+
+/* Modal footer */
+.wl-modal-footer { padding:10px 20px 14px; display:flex; align-items:center; gap:8px; border-top:1.5px solid #f1f5f9; background:#f8fafc; flex-wrap:wrap; }
+.wl-modal-footer ul { list-style:none; display:flex; flex-wrap:wrap; gap:7px; padding:0; margin:0; }
+.wl-mf-btn { height:34px; padding:0 14px; border-radius:8px; font-size:.74rem; font-weight:700; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:opacity .13s,transform .12s; white-space:nowrap; }
+.wl-mf-btn:hover { opacity:.88; }
+.wl-mf-btn:active { transform:scale(.97); }
+.wl-mf-btn--edit   { background:linear-gradient(135deg,#1d4ed8,#3b82f6); color:#fff; box-shadow:0 2px 8px rgba(37,99,235,.28); }
+.wl-mf-btn--save   { background:linear-gradient(135deg,#15803d,#22c55e); color:#fff; box-shadow:0 2px 8px rgba(22,163,74,.28); }
+.wl-mf-btn--verify { background:linear-gradient(135deg,#0e7490,#0891b2); color:#fff; box-shadow:0 2px 8px rgba(8,145,178,.22); }
+.wl-mf-btn--delete { background:linear-gradient(135deg,#b91c1c,#ef4444); color:#fff; box-shadow:0 2px 8px rgba(220,38,38,.22); }
+.wl-mf-btn--back   { background:#f1f5f9; color:#475569; border:1.5px solid #e2e8f0; }
+
+/* View form info rows */
+.wl-view-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+@@media(max-width:480px){ .wl-view-row { grid-template-columns:1fr; } }
+.wl-view-field { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:8px; padding:7px 11px; }
+.wl-view-field__label { font-size:.62rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
+.wl-view-field__val { font-size:.8rem; font-weight:600; color:#0f172a; word-break:break-word; }
 </style>
-<div class="">
-    <table class="table table-bordered table-due-second third-design-table" id="mdList">
-        <thead>
-            <tr>
-                <th>Sr</th>
-                <th>White&nbsp;label&nbsp;Firm</th>
-                <th>White&nbsp;label&nbsp;Name</th>
-                <th>Mobile&nbsp;No</th>
-                <th>PAN&nbsp;No</th>
-                <th>KYC</th>
-                <th>Email&nbsp;V/F</th>
-                <th>Robotic&nbsp;Api</th>
-            </tr>
-        </thead>
-        <tbody id="body">
-            @if (Model.White_labelUser != null)
+
+<!-- ===== Table (same design as DistibutorList) ===== -->
+<div class="table-responsive vm-ml-table-scroll saas-acc-table-wrap">
+<table class="table table-bordered saas-acc-table vm-ml-data-table third-design-table" id="mdList">
+    <thead>
+        <tr>
+            <th>Sr</th>
+            <th>White&nbsp;Label&nbsp;Firm</th>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>PAN&nbsp;No</th>
+            <th>KYC</th>
+            <th>Email&nbsp;V/F</th>
+            <th>Robotic&nbsp;API</th>
+        </tr>
+    </thead>
+    <tbody id="body">
+        @if (Model.White_labelUser != null)
+        {
+            int i = 0;
+            int id = 1;
+            foreach (var item in Model.White_labelUser)
             {
-                int i = 0;
-                int id = 1;
-                foreach (var item in Model.White_labelUser)
-                {
-                    var idno = "subTbl";
-                    idno = idno + i;
-
-                    var idshow = "subTblshow";
-                    idshow = idshow + i;
-
-                    var idhide = "subTblhide";
-                    idhide = idhide + i;
-
-                    <tr class="tr">
-                        <td>@id</td>
-                        <td>
-                            @*<i id="@idshow" class="fa fa-angle-double-down" aria-hidden="true" onclick="md_dlm_List('@item.RetailerId', '@i')">
-                                    @item.Frm_Name
-                                </i>
-                                <i id="@idhide" class="fa fa-angle-double-up" aria-hidden="true" style="display:none;" onclick="md_dlm_Listhide('@i')">
-                                    @item.Frm_Name
-                                </i>*@
-                            @item.FrmName
-                        </td>
-                        <td>@item.Name</td>
-                        <td>@item.Mobile</td>
-                        <td> @item.PanCardnumber</td>
-                        <td class="kyc-button">
-                            @if (item.PSAStatus == "Y" && item.AadhaarStatus == "Y")
+                <tr class="tr">
+                    <td>@id</td>
+                    <td><strong>@item.FrmName</strong></td>
+                    <td>@item.Name</td>
+                    <td style="font-weight:600;">@item.Mobile</td>
+                    <td>@item.PanCardnumber</td>
+                    <td>
+                        @if (item.PSAStatus == "Y" && item.AadhaarStatus == "Y")
+                        {
+                            <span class="wl-badge wl-badge--done"><i class="fas fa-check-circle" style="margin-right:3px;"></i>Done</span>
+                        }
+                        else
+                        {
+                            <span class="wl-badge wl-badge--due"><i class="fas fa-clock" style="margin-right:3px;"></i>Due</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.EmailConfirmed == true)
+                        {
+                            <span class="wl-badge wl-badge--done"><i class="fas fa-envelope-open" style="margin-right:3px;"></i>Done</span>
+                        }
+                        else
+                        {
+                            <span class="wl-badge wl-badge--due"><i class="fas fa-envelope" style="margin-right:3px;"></i>Due</span>
+                        }
+                    </td>
+                    <td>
+                        <span id="@item.WhiteLabelID" style="display:inline-flex;align-items:center;gap:4px;">
+                            @if (item.Allow_RoboticsApi == "Y")
                             {
-                                <button class="btn done-third" style="border:1px solid #bbb;font-size: 11px !important;padding: 4px 7px;height: 25px;border: 1px solid #bbb;">Done</button>
+                                <button class="wl-on-btn costom-on" onclick="ON_OFF('@item.WhiteLabelID')"><i class="fas fa-toggle-on"></i> ON</button>
                             }
                             else
                             {
-                                <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 8px;float:left; font-size: 11px;">&nbsp;Due&nbsp;</div>
+                                <button class="wl-off-btn custom-off" onclick="ON_OFF('@item.WhiteLabelID')"><i class="fas fa-toggle-off"></i> OFF</button>
                             }
-                            @*<button class="btn" style="background:yellow;"><img src="~/images/reportimage/wall-clock.svg" /></button>
-                                <button class="btn btn-danger"><img src="~/images/reportimage/close.svg" /></button>
-                                <button class="btn btn-success"><img src="~/images/reportimage/check.svg" /></button>*@
-
-
-
-                            @*@item.adharcard*@
-                        </td>
-
-                        <td>
-                            @if (item.EmailConfirmed == true)
-                            {
-                                <button class="btn due-done-second done-third" style="border:1px solid #bbb;font-size: 11px;padding: 4px 7px;height: 25px;border: 1px solid #bbb;">Done</button>
-                            }
-                            else
-                            {
-                                <center>
-                                    <div class="btn" style="background:var(--main-bg-lcolor);height: 25px;color:#fff; padding: 4px 8px;float:left; font-size: 11px;">&nbsp;Due&nbsp;</div>
-                                </center>
-                            }
-
-                        </td>
-                        <td>
-                            <span id="@item.WhiteLabelID">
-                                @if (item.Allow_RoboticsApi == "Y")
-                                {
-                                    <span class="onoffswitch costom-on-second" style="float: left;border:0px;">
-                                        <button class="costom-on" onclick="ON_OFF('@item.WhiteLabelID')" style="border:1px solid;"> ON</button>
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="onoffswitch costom-off-second" style="float: left;border:0px;">
-                                        <button class="custom-off" onclick="ON_OFF('@item.WhiteLabelID')" style="border:1px solid;"> OFF</button>
-                                    </span>
-                                }
-                                <span data-toggle="modal" data-target="#defaultModal222" onclick="mdActionBtn('@item.WhiteLabelID')"><img class="email-popup-second" src="~/ashok-images/rightaeps.svg" style="width: 11px;margin-top: 6px;float: right;"></span>
-                            </span>
-                        </td>
-
-                    </tr>
-
-                    @*<tr id="@i" style="display:none;background-color: rgb(245, 245, 245);">
-                            <td colspan="8">
-                                <div id="@idno">
-
-                                </div>
-                            </td>
-                        </tr>*@
-
-                    i++;
-                    id++;
-                }
-
+                            <button class="wl-detail-btn js-wl-open-modal" data-wlid="@item.WhiteLabelID" title="View Details">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+                i++;
+                id++;
             }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 </div>
 
-
-<div class="modal mastetr222Modal mastermodal-second-design" id="defaultModal222" tabindex="-1" role="dialog">
+<!-- ===== Main Detail Modal ===== -->
+<div class="modal fade wl-modal mastetr222Modal" id="defaultModal222" tabindex="-1" role="dialog" aria-labelledby="wlModalTitle">
     <div class="modal-dialog" role="document">
+        <div class="modal-content">
 
-        <div class="modal-content width100 float-left">
-            <div class="modal-header width100 float-left">
-                <div class="modal-back width100 float-left">
-
-
-                    <div class="sam" style="width:33%;">
-                        <h4 class="threeh">
-                            <label> Balance</label>
-                            <span class="first">&nbsp;&nbsp;<span id="Whitelabelremain" class="lastData">  </span> </span>
-                        </h4>
-
+            <!-- ── Header ── -->
+            <div class="wl-modal-header">
+                <div class="wl-modal-header__left">
+                    <div class="wl-modal-header__icon"><i class="fas fa-user-tag"></i></div>
+                    <div>
+                        <div class="wl-modal-header__label">White Label User</div>
+                        <div class="wl-modal-header__balance" id="wlModalTitle">
+                            <i class="fas fa-wallet" style="font-size:.75rem;margin-right:5px;opacity:.8;"></i>Balance:&nbsp;<span id="Whitelabelremain">—</span>
+                        </div>
                     </div>
-                    <button type="button" class="btn waves-effect" data-dismiss="modal" style="background:transparent;">
-                        <i class="fa fa-times fulltextbodycolor fullbodydycolorbg" aria-hidden="true"></i>
-                    </button>
                 </div>
-            </div><!--.modal-header-->
-            <div class="modal-body width100 float-left">
-                <div class="background-kk width100 float-left mastermodal-second">
-                    <div class="thisLeft float-left">
-                        <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User" />
+                <button type="button" class="wl-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- ── Profile strip ── -->
+            <div class="wl-modal-profile">
+                <img src="~/AdminDesign/images/user.png" class="wl-modal-avatar" alt="User" />
+                <div class="wl-modal-profile__info">
+                    <div class="wl-modal-profile__name"><span id="Names"></span></div>
+                    <div class="wl-modal-profile__firm"><i class="fas fa-building" style="margin-right:4px;color:#94a3b8;"></i><span id="FirmName"></span></div>
+                    <div class="wl-modal-profile__date"><i class="far fa-clock" style="margin-right:4px;"></i><span id="RegisteredDate"></span></div>
+                </div>
+                <span id="error" class="wl-modal-profile__error"></span>
+            </div>
+
+            <!-- ── Body ── -->
+            <div class="wl-modal-body">
+
+                <!-- VIEW form (read-only) -->
+                <form class="first-form">
+                    @Html.Hidden("WhiteLabelIDshow")
+
+                    <!-- Info grid -->
+                    <div class="wl-view-row">
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-envelope" style="margin-right:3px;"></i>Email</div>
+                            <div class="wl-view-field__val" id="view_Email">—</div>
+                            @Html.Hidden("Email11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-id-card" style="margin-right:3px;"></i>PAN Card</div>
+                            <div class="wl-view-field__val" id="view_Pan">—</div>
+                            @Html.Hidden("Pancard11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-fingerprint" style="margin-right:3px;"></i>Aadhaar</div>
+                            <div class="wl-view-field__val" id="view_Aadhar">—</div>
+                            @Html.Hidden("Aadhar11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-map-pin" style="margin-right:3px;"></i>Pin Code</div>
+                            <div class="wl-view-field__val" id="view_Pin">—</div>
+                            @Html.Hidden("pincode11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-percent" style="margin-right:3px;"></i>Margin (Offline)</div>
+                            <div class="wl-view-field__val" id="offmargine">—</div>
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-file-invoice" style="margin-right:3px;"></i>GST No</div>
+                            <div class="wl-view-field__val" id="view_GST">—</div>
+                            @Html.Hidden("GSTRegistrationNo11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-map" style="margin-right:3px;"></i>State</div>
+                            <div class="wl-view-field__val" id="view_State">—</div>
+                            @Html.Hidden("State11")
+                        </div>
+                        <div class="wl-view-field">
+                            <div class="wl-view-field__label"><i class="fas fa-city" style="margin-right:3px;"></i>District</div>
+                            <div class="wl-view-field__val" id="view_District">—</div>
+                            @Html.Hidden("District11")
+                        </div>
                     </div>
-                    <div class="thisRight">
-                        <ul class="float-left width100">
-                            <li>
-                                <span><b>Name:</b></span>
-                                <span><label id="Names"></label></span>
+                    <div class="wl-view-field" style="margin-top:6px;">
+                        <div class="wl-view-field__label"><i class="fas fa-location-arrow" style="margin-right:3px;"></i>Address</div>
+                        <div class="wl-view-field__val" id="view_Address">—</div>
+                        @Html.Hidden("address11")
+                    </div>
+
+                    <!-- View mode footer -->
+                    <div class="wl-modal-footer">
+                        <ul>
+                            <li class="one">
+                                <button type="button" value="Edit" class="wl-mf-btn wl-mf-btn--edit"><i class="fas fa-edit"></i> Edit</button>
                             </li>
-                            <li>
-                                <span><b>Firm:</b></span>
-                                <span><label id="FirmName"></label></span>
+                            <li class="One2" style="display:none;">
+                                <button type="button" value="SaveChange" class="wl-mf-btn wl-mf-btn--save special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-save"></i> Save</button>
                             </li>
-                            <li>
-                                <span><b>Registered Date:</b></span>
-                                <span><label id="RegisteredDate"></label></span>
+                            <li class="three">
+                                <button type="button" value="Email_Verify" class="wl-mf-btn wl-mf-btn--verify" onclick="EmailVerify()"><i class="fas fa-envelope-open-text"></i> Verify Email</button>
+                            </li>
+                            <li class="four">
+                                <button type="button" value="Delet" class="wl-mf-btn wl-mf-btn--delete" onclick="Deleteuser()"><i class="fas fa-trash-alt"></i> Delete</button>
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="float-left width100 input-border-third">
+                </form>
 
-                    <form class="first-form">
-                        @Html.Hidden("WhiteLabelIDshow")
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    @Html.TextBox("Email11", "", new { @class = "form-control", placeholder = "Enter Email", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                <!-- EDIT form -->
+                <div class="second-form" style="display:none;">
+                    @using (Ajax.BeginForm("Edit_WhiteLabel_List", "Home", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", UpdateTargetId = "whitelabelusertable", OnSuccess = "OnSuccess", OnBegin = "chkvalidation" }))
+                    {
+                        @Html.Hidden("WhiteLabelID")
+
+                        <div class="wl-modal-section-label"><i class="fas fa-user-edit" style="margin-right:5px;"></i>Basic Details</div>
+                        <!-- 2-column icon+input grid -->
+                        <div class="wl-edit-grid">
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--blue"><i class="fas fa-user"></i></div>
+                                <div class="wl-edit-field__body">
+                                    <label>Name</label>
+                                    @Html.TextBox("NameEdit", "", new { @class = "form-control", placeholder = "Enter Name", required = "required" })
                                 </div>
                             </div>
-                        </div><!--.row-->
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Pancard</label>
-                                    @Html.TextBox("Pancard11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--purple"><i class="fas fa-building"></i></div>
+                                <div class="wl-edit-field__body">
+                                    <label>Firm Name</label>
+                                    @Html.TextBox("FirmEdit", "", new { @class = "form-control", placeholder = "Enter Firm Name", required = "required" })
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>Aadhar Card</label>
-                                    @Html.TextBox("Aadhar11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Area Pin Code</label>
-                                    @Html.TextBox("pincode11", "", new { @class = "form-control", placeholder = "Enter Area Pin Code", maxlength = 6, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col">
-                                <div class="form-group">
-                                    <label>Margine(Offline)<span>%</span></label>
-                                    <span id="offmargine" style="background: #fff;border: 1px solid #ccc;height: 32px;display: inline-block;width: 100%;line-height: 30px;color: #555;padding-left: 10px"></span>
-
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col-2">
-                                <div class="form-group">
-                                    <label>GST Registration No</label>
-                                    @Html.TextBox("GSTRegistrationNo11", "", new { @class = "form-control", placeholder = "Enter Pancard No", maxlength = 10, @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-                                </div>
-                            </div>
-                        </div><!--.row-->
-
-
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                <div class="form-group">
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--green"><i class="fas fa-map"></i></div>
+                                <div class="wl-edit-field__body">
                                     <label>State</label>
-                                    @Html.TextBox("State11", "", new { @class = "form-control", placeholder = "Enter State", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-
-                                    @*     @Html.DropDownList("State11", new SelectList(ViewBag.state1, "Value", "Text"), "Select State", new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
+                                    <select id="StateEdit" onchange="Editstatechange()" name="StateEdit" class="form-control"><option>Select State</option></select>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                <div class="form-group">
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--orange"><i class="fas fa-city"></i></div>
+                                <div class="wl-edit-field__body">
                                     <label>District</label>
-                                    @Html.TextBox("District11", "", new { @class = "form-control", placeholder = "Enter District", @style = "text-transform:uppercase", required = "required", @readonly = "readonly" })
-
-                                    @*@Html.DropDownList("District11",
-                                        new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
-                                               "Select district",
-                                               new { @class = "form-control", data_live_search = "true", @disabled = "disabled" })*@
+                                    @Html.DropDownList("DistrictEdit", new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"), "Select district", new { @class = "form-control" })
                                 </div>
                             </div>
-                        </div><!--.row-->
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    @Html.TextArea("address11", "", new { @class = "form-control", placeholder = "Enter Enter Address", @style = "text-transform:uppercase;height:72px", required = "required", @readonly = "readonly" })
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--teal"><i class="fas fa-map-pin"></i></div>
+                                <div class="wl-edit-field__body">
+                                    <label>Pin Code</label>
+                                    @Html.TextBox("PinEdit", "", new { @class = "form-control", placeholder = "Enter Pin Code", required = "required" })
                                 </div>
                             </div>
-                        </div><!--.row-->
-                        <div class="modal-footer width100 float-left button-seconddesign">
-                            <ul class="width100 float-left">
+                            <div class="wl-edit-field">
+                                <div class="wl-edit-field__icon wl-icon--red"><i class="fas fa-percent"></i></div>
+                                <div class="wl-edit-field__body">
+                                    <label>Margin (Offline)</label>
+                                    @Html.TextBox("offmargineEdit", "", new { @class = "form-control", placeholder = "Enter Margin", required = "required", @onkeypress = "javascript:return isNumber(event)" })
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Address full-width -->
+                        <div class="wl-edit-field wl-edit-field--full" style="margin-top:6px;">
+                            <div class="wl-edit-field__icon wl-icon--slate"><i class="fas fa-location-arrow"></i></div>
+                            <div class="wl-edit-field__body">
+                                <label>Address</label>
+                                @Html.TextArea("AddressEdit", "", new { @class = "form-control", placeholder = "Enter Address", required = "required", rows = "2" })
+                            </div>
+                        </div>
+
+                        <div class="wl-modal-section-label"><i class="fas fa-file-shield" style="margin-right:5px;"></i>KYC Documents</div>
+                        <div class="wl-doc-grid">
+                            <!-- PAN -->
+                            <div class="wl-doc-card">
+                                <div class="wl-doc-card__head">
+                                    <span class="wl-doc-card__icon wl-doc-card__icon--pan"><i class="fas fa-id-card"></i></span>
+                                    <span class="wl-doc-card__title">PAN Card</span>
+                                </div>
+                                @Html.TextBox("pancardEdit", "", new { @class = "form-control", placeholder = "PAN No", @style = "text-transform:uppercase", maxlength = 10 })
+                                <div class="wl-doc-card__actions" id="pandocshow">
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--view" data-toggle="modal" data-target="#panviewdoc"><i class="fas fa-eye"></i> View</button>
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--delete" onclick="Rejected('pan')"><i class="fas fa-trash-alt"></i> Reject</button>
+                                    <div id="panapproved"><button type="button" class="wl-doc-btn wl-doc-btn--approve" onclick="Approved('pan')"><i class="fas fa-check-circle"></i> Approve</button></div>
+                                </div>
+                                <div id="pandocnotshow" style="display:none;"><span class="wl-notfound-badge"><i class="fas fa-exclamation-circle"></i> Doc Not Found</span></div>
+                            </div>
+                            <!-- Aadhaar -->
+                            <div class="wl-doc-card">
+                                <div class="wl-doc-card__head">
+                                    <span class="wl-doc-card__icon wl-doc-card__icon--aadhar"><i class="fas fa-fingerprint"></i></span>
+                                    <span class="wl-doc-card__title">Aadhaar Card</span>
+                                </div>
+                                @Html.TextBox("AadhaarEdit", "", new { @class = "form-control", placeholder = "Aadhaar No", onkeypress = "return isNumber(event)", maxlength = "12" })
+                                <div class="wl-doc-card__actions" id="aadhardocshow">
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--view" data-toggle="modal" data-target="#aadharviewdoc"><i class="fas fa-eye"></i> View</button>
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--delete" onclick="Rejected('aadhar')"><i class="fas fa-trash-alt"></i> Reject</button>
+                                    <div id="aadharapproved"><button type="button" class="wl-doc-btn wl-doc-btn--approve" onclick="Approved('aadhar')"><i class="fas fa-check-circle"></i> Approve</button></div>
+                                </div>
+                                <div id="aadhardocnotshow" style="display:none;"><span class="wl-notfound-badge"><i class="fas fa-exclamation-circle"></i> Doc Not Found</span></div>
+                            </div>
+                            <!-- GST -->
+                            <div class="wl-doc-card">
+                                <div class="wl-doc-card__head">
+                                    <span class="wl-doc-card__icon wl-doc-card__icon--gst"><i class="fas fa-file-invoice"></i></span>
+                                    <span class="wl-doc-card__title">GST Registration</span>
+                                </div>
+                                @Html.TextBox("gstEdit", "", new { @class = "form-control", placeholder = "GST No", @style = "text-transform:uppercase" })
+                                <div class="wl-doc-card__actions" id="gstdocshow">
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--view" data-toggle="modal" data-target="#gstviewdoc"><i class="fas fa-eye"></i> View</button>
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--delete" onclick="Rejected('gst')"><i class="fas fa-trash-alt"></i> Reject</button>
+                                    <div id="gstapproved"><button type="button" class="wl-doc-btn wl-doc-btn--approve" onclick="Approved('gst')"><i class="fas fa-check-circle"></i> Approve</button></div>
+                                </div>
+                                <div id="gstdocnotshow" style="display:none;"><span class="wl-notfound-badge"><i class="fas fa-exclamation-circle"></i> Doc Not Found</span></div>
+                            </div>
+                            <!-- Agreement -->
+                            <div class="wl-doc-card">
+                                <div class="wl-doc-card__head">
+                                    <span class="wl-doc-card__icon wl-doc-card__icon--agr"><i class="fas fa-file-contract"></i></span>
+                                    <span class="wl-doc-card__title">Farm Agreement</span>
+                                </div>
+                                <input type="text" id="frmagrEdit" name="frmagrEdit" readonly class="form-control" placeholder="Agreement Status" />
+                                <span id="alinks"></span>
+                                <div class="wl-doc-card__actions" id="frmagrdocshow">
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--view" data-toggle="modal" data-target="#frmagrviewdoc"><i class="fas fa-eye"></i> View</button>
+                                    <button type="button" class="wl-doc-btn wl-doc-btn--delete" onclick="Rejected('Aggrement')"><i class="fas fa-trash-alt"></i> Reject</button>
+                                    <div id="frmagrapproved"><button type="button" class="wl-doc-btn wl-doc-btn--approve" onclick="Approved('Aggrement')"><i class="fas fa-check-circle"></i> Approve</button></div>
+                                </div>
+                                <div id="frmagrdocnotshow" style="display:none;"><span class="wl-notfound-badge"><i class="fas fa-exclamation-circle"></i> Doc Not Found</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Edit form footer -->
+                        <div class="wl-modal-footer">
+                            <ul>
                                 <li class="one">
-                                    <button type="button" value="Edit" class="btn btn-first button-third"><span style="color:#777;">Edit</span></button>
+                                    <button type="button" value="Edit" class="wl-mf-btn wl-mf-btn--back"><i class="fas fa-arrow-left"></i> Back</button>
                                 </li>
-                                <li class="One2" style="display:none;">
-                                    <button type="button" value="SaveChange" class="btn special-iii btnssl2233 btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
+                                <li class="One2">
+                                    <button type="submit" value="SaveChange" class="wl-mf-btn wl-mf-btn--save special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-save"></i> Save Changes</button>
                                 </li>
-                                @*<li class="two">
-                                        <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                    </li>*@
-                                <li class="three">
-                                    <button type="button" value="Email_Verify" class="btn btn-first button-third" onclick="EmailVerify()"><span style="color:#777;">Email Verify</span></button>
-                                </li>
-                                <li class="four">
-                                    <button type="button" value="Delet" class="btn btn-first button-third-design" onclick="Deleteuser()"><span style="color:#777;">Delete User</span></button>
-                                </li>
-
                             </ul>
-                            <div>
-                                <span id="error" style="color:red;"></span>
-                            </div>
-                        </div><!--.modal-footer-->
-
-                    </form>
-
-                    <!--=============-->
-                    <div class="second-form tabcurrent-seconddesign" style="display:none;">
-                        @using (Ajax.BeginForm("Edit_WhiteLabel_List", "Home", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "POST", UpdateTargetId = "whitelabelusertable", OnSuccess = "OnSuccess", OnBegin = "chkvalidation" }))
-                        {
-                            @Html.Hidden("WhiteLabelID")
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        @Html.TextBox("NameEdit", "", new { @class = "form-control", placeholder = "Enter Name", required = "required" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Firm Name</label>
-                                        @Html.TextBox("FirmEdit", "", new { @class = "form-control", placeholder = "Enter FirmName", required = "required" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Pancard</label>
-                                        @Html.TextBox("pancardEdit", "", new { @class = "form-control", placeholder = "Enter Pancard No", @style = "text-transform:uppercase", maxlength = 10, })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="pandocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#panviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('pan')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="panapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('pan')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="pandocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Aadhar Card</label>
-                                        @Html.TextBox("AadhaarEdit", "", new { @class = "form-control", placeholder = "Enter Aadhaar Number", @style = "text-transform:uppercase", onkeypress = "return isNumber(event)", maxlength = "12" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="aadhardocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#aadharviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('aadhar')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="aadharapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('aadhar')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="aadhardocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>GST Registration No</label>
-                                        @Html.TextBox("gstEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="gstdocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#gstviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('gst')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="gstapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('gst')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="gstdocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group spspl">
-                                        <label>Farm Aggreement</label>
-                                        <input type="text" id="frmagrEdit" name="frmagrEdit" readonly style="height:32px;padding:5px;" />
-                                        @*@Html.TextBox("frmagrEdit", "", new { @class = "form-control", placeholder = "Enter GST Registration No", @style = "text-transform:uppercase" })*@
-                                        <div class="ss-right">
-                                            <div class="row">
-                                                <div id="frmagrdocshow">
-
-                                                    <button type="button" class="btn" data-toggle="modal" data-target="#frmagrviewdoc" value="view" title="View" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn" value="reject" title="Rejected" onclick="Rejected('Aggrement')" style="border:1px solid #bbb;float:left;margin-right:5px;">
-                                                        <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;" />
-                                                    </button>
-
-                                                    <div id="frmagrapproved">
-                                                        <button type="button" class="btn" value="view" title="Approved" onclick="Approved('Aggrement')" style="border:1px solid #bbb;padding: 0px 6px;float: left;">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green;top:1px;"></i>
-                                                        </button>
-                                                    </div>
-
-
-
-                                                </div>
-                                                <div id="frmagrdocnotshow">
-                                                    <div class="col-md-12">
-                                                        <button type="button" class="btn" value="Not Found" title="Document Not Found">
-                                                            Doc Not Found
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12 col">
-                                    <div class="form-group">
-                                        <label>State</label>
-                                        <div class="custom-district">
-                                            <select id="StateEdit" onchange="Editstatechange()" name="StateEdit">
-                                                <option>Select State</option>
-                                            </select>
-                                        </div>
-                                        @*@Html.DropDownList("StateEdit", new SelectList(ViewBag.state1, "Value", "Text"), "Select State", new { @class = "form-control", data_live_search = "true" })*@
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                                    <div class="form-group">
-                                        <label>District</label>
-                                        <div class="custom-district">
-                                            @Html.DropDownList("DistrictEdit",
-                                                new SelectList(Enumerable.Empty<SelectListItem>(), "Dist_id", "Dist_Desc"),
-                                                       "Select district",
-                                                       new { @class = "form-control", data_live_search = "true" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label>Address</label>
-                                        @Html.TextArea("AddressEdit", "", new { @class = "form-control", placeholder = "Enter Address", @style = "text-transform:uppercase", required = "required" })
-                                    </div>
-                                </div>
-                            </div><!--.row-->
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Pin Code</label>
-                                @Html.TextBox("PinEdit", "", new { @class = "form-control", placeholder = "Enter Pin Code", @style = "text-transform:uppercase", required = "required" })
-                            </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-2">
-                            <div class="form-group">
-                                <label>Margine <span style="color: #555;font-size: 11px;">(Offline)</span></label>
-                                @Html.TextBox("offmargineEdit", "", new { @class = "form-control", placeholder = "Enter Offline Margine Value", @style = "text-transform:uppercase", required = "required", @onkeypress = "javascript:return isNumber(event)" })
-                            </div>
-                        </div>
-
-                    </div><!--.row-->
-                            <div class="modal-footer width100 float-left button-seconddesign">
-                                <ul class="width100 float-left">
-                                    <li class="one">
-                                        <button type="button" value="Edit" class="btn btn-first"><span style="color:#777;">Edit</span></button>
-                                    </li>
-                                    <li class="One2" style="display:none;">
-                                        <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 btn-first" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><span style="color:#777;">Save Change</span></button>
-                                    </li>
-                                    @*<li class="two">
-                                            <button type="button" value="Change" class="btn special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Reset Password</button>
-                                        </li>
-                                        <li class="three">
-                                            <button type="button" value="Email_Verify" class="btn">Email Verify</button>
-                                        </li>
-                                        <li class="four">
-                                            <button type="button" value="Delet" class="btn">Delete MD</button>
-                                        </li>*@
-                                </ul>
-                            </div><!--.modal-footer-->
-                        }
-                    </div>
-
+                    }
                 </div>
-            </div><!--.modal-body-->
 
-
+            </div><!--/.wl-modal-body-->
         </div>
-
     </div>
 </div>
 
-
+<!-- Document view modals -->
 <div id="panviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Pan Card View</h4>
-            </div>
-            <div id="panmodal" class="modal-body">
-                <img id="panimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
+    <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">PAN Card</h4></div>
+        <div id="panmodal" class="modal-body"><img id="panimageshow" src="" style="max-width:100%;border-radius:8px;" /></div>
+    </div></div>
 </div>
 <div id="aadharviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Aadhar Card View</h4>
-            </div>
-            <div id="aadharmodal" class="modal-body">
-                <img id="aadharimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
+    <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Aadhaar Card</h4></div>
+        <div id="aadharmodal" class="modal-body"><img id="aadharimageshow" src="" style="max-width:100%;border-radius:8px;" /></div>
+    </div></div>
 </div>
 <div id="gstviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Gst View</h4>
-            </div>
-            <div id="gstmodal" class="modal-body">
-                <img id="gstimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
+    <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">GST Document</h4></div>
+        <div id="gstmodal" class="modal-body"><img id="gstimageshow" src="" style="max-width:100%;border-radius:8px;" /></div>
+    </div></div>
 </div>
 <div id="frmagrviewdoc" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">Certification View</h4>
-            </div>
-            <div id="gstmodal" class="modal-body">
-                <img id="frmagrimageshow" src="" style="width:550px;" />
-            </div>
-        </div>
-
-    </div>
+    <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Farm Agreement</h4></div>
+        <div class="modal-body"><img id="frmagrimageshow" src="" style="max-width:100%;border-radius:8px;" /></div>
+    </div></div>
 </div>
 <div id="otpmodal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="width:520px;float:right;margin:0px;">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 id="headershow" class="modal-title">
-                    <img src="~/MainFrontDesign/images/delete.svg" style="width:18px;margin-top:-4px;">&nbsp;One Time Password
-                </h4>
-            </div>
-            <div class="modal-body">
-                @using (Ajax.BeginForm("ConfirmDeleteWhiteLabelOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "whitelabelusertable", OnSuccess = "OnSuccessconfirm", OnFailure = "OnFailureotperror" }))
-                {
-                    @Html.Hidden("WhiteLabelIDdelete")
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <label>OTP</label>
-                                @Html.TextBox("Deleteotp", "", new { @class = "form-control", placeholder = "Enter OTP", required = "required", @style = "background: #f5f5f5;border: 1px solid #bbb;" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                            <span id="otpwrong" style="color:red"></span>
-                            <button type="submit" value="SaveChange" class="btn special-iii btnssl2233 fullbodydycolorbg btn-first" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="float: right;color: #fff;font-weight: 600;"><span style="color:#fff;">Delete User</span></button>
-                        </div>
-                    </div>
-
-
-                }
-            </div>
+    <div class="modal-dialog" style="width:420px;float:right;margin:0px;"><div class="modal-content">
+        <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title"><i class="fas fa-key" style="margin-right:6px;"></i>OTP Verification</h4></div>
+        <div class="modal-body">
+            @using (Ajax.BeginForm("ConfirmDeleteWhiteLabelOTP", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "whitelabelusertable", OnSuccess = "OnSuccessconfirm", OnFailure = "OnFailureotperror" }))
+            {
+                @Html.Hidden("WhiteLabelIDdelete")
+                <div class="form-group"><label>Enter OTP</label>@Html.TextBox("Deleteotp", "", new { @class = "form-control", placeholder = "Enter OTP", required = "required" })</div>
+                <span id="otpwrong" style="color:#dc2626;font-size:.78rem;"></span>
+                <div style="margin-top:10px;text-align:right;">
+                    <button type="submit" class="wl-mf-btn wl-mf-btn--delete special-iii btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fas fa-trash-alt"></i> Confirm Delete</button>
+                </div>
+            }
         </div>
-
-    </div>
+    </div></div>
 </div>
 
+<!-- All existing JS preserved below -->
 <script>
     function OnSuccessconfirm(data) {
-
         $('#whitelabelusertable').html(data);
-        $('#defaultModal222').hide();
-        $('#otpmodal').hide();
-        $(".modal-backdrop").hide();
+        $('#defaultModal222').modal('hide');
+        $('#otpmodal').modal('hide');
+        $('body').removeClass('modal-open');
+        $(".modal-backdrop").remove();
         ToastrMessage();
         toastr.success("Account Deleted Successfully");
     }
-
     function OnFailureotperror(data) {
         $('#otpmodal').modal('show');
-        //$('#otpwrong').text("otpmismatch");
-        //ToastrMessage();
-        //toastr.warning("OTP Mismatch , Please enter Correct OTP");
         $('#otpwrong').text("OTP Mismatch , Please enter Correct OTP");
     }
 </script>
 <script>
-    //$(document).ready(function () {
-    $('.mastetr222Modal button.btn[value="Edit"]').click(function () {
+    // Edit button — switch to edit form
+    $(document).on('click', '.mastetr222Modal button.wl-mf-btn[value="Edit"]', function () {
         $(".mastetr222Modal .first-form").hide();
         $(".mastetr222Modal .second-form").show();
-        $('.mastetr222Modal .modal-footer li.one').hide();
-        $('.mastetr222Modal .modal-footer li.One2').show();
     });
-    //});
+    // Back button in edit form
+    $(document).on('click', '.mastetr222Modal .second-form button.wl-mf-btn[value="Edit"]', function () {
+        $(".mastetr222Modal .second-form").hide();
+        $(".mastetr222Modal .first-form").show();
+    });
 </script>
 <script>
-    function OnSuccess() {
-        $(".modal-backdrop").hide();
-    }
-    $(document).ajaxComplete(function () {
-        ravi("select").select2();
-    })
+    function OnSuccess() { $(".modal-backdrop").hide(); }
+    $(document).ajaxComplete(function () { ravi("select").select2(); })
 </script>
 <script language="javascript" type="text/javascript">
-       function Editstatechange() {
-
-         var stid = $('#StateEdit').val()
-            GetDistrict11(stid)
-
+    function Editstatechange() {
+        var stid = $('#StateEdit').val();
+        GetDistrict11(stid);
     }
     function GetDistrict11(_stateId) {
-
-            var procemessage = "<option value='0'> Please wait...</option>";
-            $("#DistrictEdit").html(procemessage).show();
-            var url = '@Url.Action("DistrictList","Home")'
-            $.ajax({
-                url: url,
-                data: { Id: _stateId },
-                cache: false,
-                type: "POST",
-                success: function (data3) {
-                    ravi("#DistrictEdit").html("");
-                    for (var x = 0; x < data3.length; x++) {
-                        ravi("#DistrictEdit").append($('<option></option>').val(data3[x].Value).html(data3[x].Text));
-                    }
-                },
-
-            });
-        }
+        var procemessage = "<option value='0'> Please wait...</option>";
+        $("#DistrictEdit").html(procemessage).show();
+        var url = '@Url.Action("DistrictList","Home")'
+        $.ajax({
+            url: url, data: { Id: _stateId }, cache: false, type: "POST",
+            success: function (data3) {
+                ravi("#DistrictEdit").html("");
+                for (var x = 0; x < data3.length; x++) {
+                    ravi("#DistrictEdit").append($('<option></option>').val(data3[x].Value).html(data3[x].Text));
+                }
+            }
+        });
+    }
 </script>
 <script>
     function chkvalidation() {
-        $("#PinEdit").parent().next(".alert.alert-success").remove(); // remove it
-        var name = $('#NameEdit').val();
-        var FarmName = $('#FirmEdit').val();
-        var Email = $('#Email').val();
-        var Mb = $('#Mb').val();
-        var State = $('#StateEdit').val();
-        var District = $('#DistrictEdit').val();
-        var Address = $('#AddressEdit').val();
-        var Pincode = $('#PinEdit').val();
-        var adharcard = $('#AadhaarEdit').val();
-        var gst = $('#gstEdit').val();
-        var pancard = $('#pancardEdit').val();
-        if (name == null || name == '') {
-            $('#error').text('Master Distributor Name Required')
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong> Please Enter Name</div>");
-            RegisterSuccess.stopImmediatePropagation();
-            return false;
-
-        }
-        if (FarmName == null || FarmName == '') {
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong> Firm Name Required</div>");
-            RegisterSuccess.stopImmediatePropagation();
-            return false;
-        }
-
-
-        if (pancard.length != 0) {
-            var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
-            if (!regex.test(pancard.toUpperCase())) {
-                // $('#error').text('Invalid Pan No')
-                // return false;
-                $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>'Invalid Pan No'</div>");
-                RegisterSuccess.stopImmediatePropagation();
-
-                return false;
-            }
-
-
-        }
-        if (State == null || State == '') {
-            //   $('#error').text(' State Required')
-            //  return false;
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>'State Required'</div>");
-            RegisterSuccess.stopImmediatePropagation();
-
-            return false;
-        }
-        if (District == null || District == '') {
-            //  $('#error').text(' District Required')
-            //  return false;
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>' District Required'</div>");
-            RegisterSuccess.stopImmediatePropagation();
-
-            return false;
-        }
-        if (Address == null || Address == '') {
-            // $('#error').text(' Address Required')
-            //  return false;
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>' Address Required'</div>");
-            RegisterSuccess.stopImmediatePropagation();
-            return false;
-        }
-
-        if (adharcard.length != 0) {
-
-
-            if (validatesss(adharcard) == false) {
-                //  $('#error').text('Invalid Adhar No')
-                //    return false;
-                $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>'Invalid Adhar No'</div>");
-                RegisterSuccess.stopImmediatePropagation();
-                return false;
-            }
-
-
-        }
-        if (gst.length != 0) {
-            var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$$');
-            if (!gstinformat.test(gst)) {
-                //  $('#error').text('Invalid GST No')
-                //  return false;
-                $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>'Invalid GST No')'</div>");
-                RegisterSuccess.stopImmediatePropagation();
-                return false;
-            }
-
-
-        }
-        if (Pincode == null || Pincode == '') {
-            //  $('#error').text(' Pincode Required')
-            //  return false;
-            $("#PinEdit").parent().after("<div class='alert alert-success' style='color:red;margin-bottom: 20px;'><strong>Error!</strong>' Pincode Required')'</div>");
-            RegisterSuccess.stopImmediatePropagation();
-            return false;
-        }
+        $("#PinEdit").parent().next(".alert.alert-success").remove();
+        var name = $('#NameEdit').val(); var FarmName = $('#FirmEdit').val();
+        var State = $('#StateEdit').val(); var District = $('#DistrictEdit').val();
+        var Address = $('#AddressEdit').val(); var Pincode = $('#PinEdit').val();
+        var adharcard = $('#AadhaarEdit').val(); var gst = $('#gstEdit').val(); var pancard = $('#pancardEdit').val();
+        if (!name) { $("#PinEdit").parent().after("<div class='alert alert-danger'>Name Required</div>"); return false; }
+        if (!FarmName) { $("#PinEdit").parent().after("<div class='alert alert-danger'>Firm Name Required</div>"); return false; }
+        if (pancard.length > 0) { var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/; if (!regex.test(pancard.toUpperCase())) { $("#PinEdit").parent().after("<div class='alert alert-danger'>Invalid PAN No</div>"); return false; } }
+        if (!State) { $("#PinEdit").parent().after("<div class='alert alert-danger'>State Required</div>"); return false; }
+        if (!District) { $("#PinEdit").parent().after("<div class='alert alert-danger'>District Required</div>"); return false; }
+        if (!Address) { $("#PinEdit").parent().after("<div class='alert alert-danger'>Address Required</div>"); return false; }
+        if (!Pincode) { $("#PinEdit").parent().after("<div class='alert alert-danger'>Pincode Required</div>"); return false; }
     }
 </script>
 <script>
-    function OnFailure() {
-        $('#otpwrong').text("Otp MissMatch");
-    }
+    function OnFailure() { $('#otpwrong').text("Otp MissMatch"); }
 </script>
 <script>
     function Deleteuser() {
         var WhiteLabelID = $('#WhiteLabelID').val();
-          $.ajax({
-            url: '@Url.Action("DeleteWhiteLabeluserlist","Home")',
-            type: 'POST',
-            data: {WhiteLabelID:WhiteLabelID },
-             cache: false,
+        $.ajax({ url: '@Url.Action("DeleteWhiteLabeluserlist","Home")', type: 'POST', data: { WhiteLabelID: WhiteLabelID }, cache: false,
             success: function (response) {
-                if (response == "success") {
-                    $('#otpmodal').modal('show');
-                }
-                else {
-                    $('#error').text(response);
-                }
+                if (response == "success") { $('#otpmodal').modal('show'); }
+                else { $('#error').text(response); }
             }
         });
     }
 </script>
 <script>
-    $(document).ready(function () {
-
-        $("#defaultModal222").on('hide.bs.modal', function () {
-
-             $.ajax({
-            url: '@Url.Action("WhiteLabellistPart","Home")',
-            type: 'POST',
-            cache: false,
-            success: function (response) {
-                $('#whitelabelusertable').html(response);
-
-          }
+    /* Use event delegation so this keeps working after AJAX table refresh */
+    $(document).on('hide.bs.modal', '#defaultModal222', function () {
+        $.ajax({ url: '@Url.Action("WhiteLabellistPart","Home")', type: 'POST', cache: false,
+            success: function (response) { $('#whitelabelusertable').html(response); }
         });
-        });
-
     });
-      $("#defaultModal222").on('hide.bs.modal', function () {
-            $.ajax({
-            url: '@Url.Action("WhiteLabellistPart","Home")',
-            type: 'POST',
-            cache: false,
-            success: function (response) {
-                $('#whitelabelusertable').html(response);
-
-          }
-        });
-        });
+    /* Delegated click — works on dynamically refreshed table rows */
+    $(document).on('click', '.js-wl-open-modal', function () {
+        var wlid = $(this).data('wlid');
+        mdActionBtn(wlid);
+    });
 </script>
 <script>
     function Approved(val) {
         var WhiteLabelID = $('#WhiteLabelID').val();
-         $.ajax({
-            url: '@Url.Action("ApprovedWhiteLabelsts","Home")',
-            type: 'POST',
-            data: { val: val,WhiteLabelID:WhiteLabelID },
-             cache: false,
-             success: function (response) {
-
-                   if (response==='pan') {
-                     $('#panapproved').hide();
-
-
-                 }
-                 else if (response === 'aadhar') {
-                     $('#aadharapproved').hide();
-
-                 }
-                 else if (response === 'gst') {
-                     $('#gstapproved').hide();
-
-                 }
-                 else if (response==='Aggrement') {
-                     $('#frmagrapproved').hide();
-
-                 }
-
-                    if ($('#panapproved').css('display') == 'none' && $('#aadharapproved').css('display') == 'none' ) {
-                      $('#frmagrEdit').val('Aggrement Status Pending');
-
-
-                      $('#frmagrapproved').hide();
-
-                 }
-             //   $('#whitelabelusertable').html(response);
-              //      $(".modal-backdrop").hide();
-          }
+        $.ajax({ url: '@Url.Action("ApprovedWhiteLabelsts","Home")', type: 'POST', data: { val: val, WhiteLabelID: WhiteLabelID }, cache: false,
+            success: function (response) {
+                if (response === 'pan') { $('#panapproved').hide(); }
+                else if (response === 'aadhar') { $('#aadharapproved').hide(); }
+                else if (response === 'gst') { $('#gstapproved').hide(); }
+                else if (response === 'Aggrement') { $('#frmagrapproved').hide(); }
+                if ($('#panapproved').css('display') == 'none' && $('#aadharapproved').css('display') == 'none') {
+                    $('#frmagrEdit').val('Aggrement Status Pending'); $('#frmagrapproved').hide();
+                }
+            }
         });
     }
     function Rejected(val) {
-
         var WhiteLabelID = $('#WhiteLabelID').val();
-         $.ajax({
-            url: '@Url.Action("RejectedWhiteLabelsts","Home")',
-            type: 'POST',
-            data: { val: val,WhiteLabelID:WhiteLabelID },
-             cache: false,
-             success: function (response) {
-                 if (response === 'pan') {
-                   $("#pandocnotshow").show();
-                    $("#pandocshow").hide();
-
-                    $('#frmagrdocshow').hide();
-                    $("#frmagrdocnotshow").show();
-                     $('#frmagrEdit').val('KYC Due');
-                      $('#alinks').empty();
-
-                 }
-                 else if (response === 'aadhar') {
-                    $("#aadhardocnotshow").show();
-                     $("#aadhardocshow").hide();
-                      $('#alinks').empty();
-
-                    $('#frmagrdocshow').hide();
-                    $("#frmagrdocnotshow").show();
-                      $('#frmagrEdit').val('KYC Due');
-                 }
-                 else if (response === 'gst') {
-                     $("#gstdocnotshow").show();
-                    $("#gstdocshow").hide();
-                 }
-                 else if (response === 'Aggrement') {
-                    $("#frmagrdocnotshow").show();
-                    $('#frmagrdocshow').hide();
-                     if ($('#pandocnotshow').css('display') == 'block' || $('#aadhardocnotshow').css('display') == 'block') {
-                    $('#frmagrdocshow').hide();
-                     $("#frmagrdocnotshow").show();
-                    $('#frmagrEdit').val('KYC Due');
-                   // $('#frmagrEdit').val('Aggrement Status Pending');
-                    //if ($('#frmagrapproved').css('display') == 'none') {
-                    //    $('#frmagrEdit').val('Aggrement Status Pending');
-
-                    //    $('#alinks').empty();
-                    //}
-                    //else {
-                    //    $('#Edittxtlrole').hide();
-                    //    ravi("#DivEditddlrole").show();
-                    //    $('#frmagrdocshow').hide();
-                    //    $('#frmagrapproved').hide();
-                    //    $("#frmagrdocnotshow").show();
-                    //    $('#frmagrEdit').val('KYC Due');
-                    //    //  $('#frmagrEdit').val('Aggrement Status Pending');
-                    //}
-
-
-
-                }
-                else {
-                     $('#frmagrapproved').hide();
-                        $("#frmagrdocnotshow").show();
-                    $('#frmagrEdit').val('Aggrement Status Pending');
-                    $('#alinks').empty();
-                }
-
-                }
-          }
+        $.ajax({ url: '@Url.Action("RejectedWhiteLabelsts","Home")', type: 'POST', data: { val: val, WhiteLabelID: WhiteLabelID }, cache: false,
+            success: function (response) {
+                if (response === 'pan') { $("#pandocnotshow").show(); $("#pandocshow").hide(); $('#frmagrdocshow').hide(); $("#frmagrdocnotshow").show(); $('#frmagrEdit').val('KYC Due'); $('#alinks').empty(); }
+                else if (response === 'aadhar') { $("#aadhardocnotshow").show(); $("#aadhardocshow").hide(); $('#frmagrdocshow').hide(); $("#frmagrdocnotshow").show(); $('#frmagrEdit').val('KYC Due'); $('#alinks').empty(); }
+                else if (response === 'gst') { $("#gstdocnotshow").show(); $("#gstdocshow").hide(); }
+                else if (response === 'Aggrement') { $("#frmagrdocnotshow").show(); $('#frmagrdocshow').hide(); $('#frmagrEdit').val('KYC Due'); $('#alinks').empty(); }
+            }
         });
-    }
-</script>
-<script>
-    function OnSuccess() {
-        $(".modal-backdrop").hide();
     }
 </script>
 <script>
     function mdActionBtn(WhiteLabelID) {
-        $.ajax({
-            url: '@Url.Action("WhiteLabelUserIdSearch","Home")',
-            type: "POST",
-            data: { WhiteLabelID: WhiteLabelID },
-            cache: false,
+        $.ajax({ url: '@Url.Action("WhiteLabelUserIdSearch","Home")', type: "POST", data: { WhiteLabelID: WhiteLabelID }, cache: false,
             success: function (data2) {
                 var CCNValue = data2.list[0].aadharnumber;
                 CCNValue = CCNValue.substring(0, 8).replace(/\d/g, "X") + CCNValue.substring(8);
-
-                $('#error').text("");
-                var date = new Date(parseInt((data2.list[0].JoinDate).match(/\d+/)[0]))
+                var date = new Date(parseInt((data2.list[0].JoinDate).match(/\d+/)[0]));
                 var createddate = converttoDate(date);
+                $('#error').text("");
                 $("#WhiteLabelID").val(data2.list[0].WhiteLabelID);
                 $("#WhiteLabelIDdelete").val(data2.list[0].WhiteLabelID);
                 $("#WhiteLabelIDshow").val(data2.list[0].WhiteLabelID);
+                // Populate display name/firm/date in profile strip
                 $("#Names").text(data2.list[0].Name);
                 $("#NameEdit").val(data2.list[0].Name);
                 $("#FirmName").text(data2.list[0].FrmName);
                 $("#FirmEdit").val(data2.list[0].FrmName);
                 $("#RegisteredDate").text(createddate);
+                // View field values (modern info cards)
+                $("#view_Email").text(data2.list[0].EmailId || '—');
+                $("#view_Pan").text(data2.list[0].PanCardnumber || '—');
+                $("#view_Aadhar").text(CCNValue || '—');
+                $("#view_Pin").text(data2.list[0].Pincode || '—');
+                $("#view_GST").text(data2.list[0].GstNumber || '—');
+                $("#view_State").text(data2.list[0].State_name || '—');
+                $("#view_District").text(data2.list[0].Dist_Desc || '—');
+                $("#view_Address").text(data2.list[0].Address || '—');
+                // Hidden fields for form submission compatibility
                 $("#Email11").val(data2.list[0].EmailId);
                 $("#Pancard11").val(data2.list[0].PanCardnumber);
-                $("#pancardEdit").val(data2.list[0].PanCardnumber);
                 $("#Aadhar11").val(CCNValue);
-                $("#AadhaarEdit").val(data2.list[0].aadharnumber);
                 $("#GSTRegistrationNo11").val(data2.list[0].GstNumber);
-                $("#gstEdit").val(data2.list[0].GstNumber);
                 $("#pincode11").val(data2.list[0].Pincode);
-                $("#PinEdit").val(data2.list[0].Pincode);
-                $("#offmargine").text(data2.list[0].marginecomm);
-                $("#offmargineEdit").val(data2.list[0].marginecomm);
-
-                //$("#masterremain").html(data2[0].superremain);
-                //$("#dealerremain").html(data2[0].remaindlm);
-              //  $("#retailerremain").html(data2.list[0].White_label_remainbal);
-                  $("#Whitelabelremain").html(data2.list[0].remainbal);
                 $("#State11").val(data2.list[0].State_name);
                 $("#District11").val(data2.list[0].Dist_Desc);
                 $("#address11").val(data2.list[0].Address);
+                // Edit form fields
+                $("#pancardEdit").val(data2.list[0].PanCardnumber);
+                $("#AadhaarEdit").val(data2.list[0].aadharnumber);
+                $("#gstEdit").val(data2.list[0].GstNumber);
+                $("#PinEdit").val(data2.list[0].Pincode);
+                $("#offmargineEdit").val(data2.list[0].marginecomm);
+                // Balance + margin display
+                $("#offmargine").text(data2.list[0].marginecomm || '—');
+                $("#Whitelabelremain").html(data2.list[0].remainbal);
                 $("#AddressEdit").val(data2.list[0].Address);
-
-               $("#StateEdit").val(data2.list[0].state);
+                $("#StateEdit").val(data2.list[0].state);
                 var pancarddoc = data2.list[0].pancardPath;
                 var aadhardoc = data2.list[0].aadharcardPath;
                 var gstdoc = data2.list[0].frimregistrationPath;
-                  var frmagmnt=data2.list[0].Agreementpath;
-                if (pancarddoc == null) {
-                    $("#pandocnotshow").show();
-                    $("#pandocshow").hide();
-                }
-                else {
-                    $("#pandocnotshow").hide();
-                    $("#pandocshow").show();
-                    $('#panimageshow').attr('src', "../.." + pancarddoc);
-                }
-                 if (aadhardoc == null) {
-                    $("#aadhardocnotshow").show();
-                    $("#aadhardocshow").hide();
-                }
-                else {
-                    $("#aadhardocnotshow").hide();
-                    $("#aadhardocshow").show();
-                    $('#aadharimageshow').attr('src', "../.." + aadhardoc);
-                }
-                  if (gstdoc == null) {
-                    $("#gstdocnotshow").show();
-                    $("#gstdocshow").hide();
-                }
-                else {
-                    $("#gstdocnotshow").hide();
-                    $("#gstdocshow").show();
-                    $('#gstimageshow').attr('src', "../.." + gstdoc);
-                }
-
-                if (data2.list[0].PSAStatus == "Y") {
-                    $('#panapproved').hide();
-
-                }
-                else {
-                     $('#panapproved').show();
-                }
-                  if (data2.list[0].AadhaarStatus == "Y") {
-                        $('#aadharapproved').hide();
-                    }
-                else {
-
-                    $('#aadharapproved').show();
-                }
-                if (data2.list[0].gststatus == "Y") {
-                        $('#gstapproved').hide();
-                    }
-                else {
-
-                    $('#gstapproved').show();
-                }
-
-                   if (data2.list[0].PSAStatus == "Y" && data2.list[0].AadhaarStatus == "Y") {
-                    if (frmagmnt == null) {
-                        $('#frmagrEdit').val('Aggrement Status Pending');
-                        $("#frmagrdocnotshow").show();
-                        $('#frmagrdocshow').hide();
-                        $('#frmagrapproved').hide();
-
-                    }
-
+                var frmagmnt = data2.list[0].Agreementpath;
+                if (pancarddoc == null) { $("#pandocnotshow").show(); $("#pandocshow").hide(); }
+                else { $("#pandocnotshow").hide(); $("#pandocshow").show(); $('#panimageshow').attr('src', "../.." + pancarddoc); }
+                if (aadhardoc == null) { $("#aadhardocnotshow").show(); $("#aadhardocshow").hide(); }
+                else { $("#aadhardocnotshow").hide(); $("#aadhardocshow").show(); $('#aadharimageshow').attr('src', "../.." + aadhardoc); }
+                if (gstdoc == null) { $("#gstdocnotshow").show(); $("#gstdocshow").hide(); }
+                else { $("#gstdocnotshow").hide(); $("#gstdocshow").show(); $('#gstimageshow').attr('src', "../.." + gstdoc); }
+                $('#panapproved').toggle(data2.list[0].PSAStatus !== "Y");
+                $('#aadharapproved').toggle(data2.list[0].AadhaarStatus !== "Y");
+                $('#gstapproved').toggle(data2.list[0].gststatus !== "Y");
+                if (data2.list[0].PSAStatus == "Y" && data2.list[0].AadhaarStatus == "Y") {
+                    if (frmagmnt == null) { $('#frmagrEdit').val('Agreement Status Pending'); $("#frmagrdocnotshow").show(); $('#frmagrdocshow').hide(); $('#frmagrapproved').hide(); }
                     else {
-                         $('#frmagrEdit').val('Aggrement Status Pending');
-                        $('#frmagrapproved').show();
-                         $("#frmagrdocnotshow").hide();
-                    $("#frmagrdocshow").show();
-                    $('#frmagrimageshow').attr('src', "../.." + aadhardoc);
-
-
-                    }
-                         //
+                        $('#frmagrEdit').val('Agreement Status Pending'); $('#frmagrapproved').show(); $("#frmagrdocnotshow").hide(); $("#frmagrdocshow").show(); $('#frmagrimageshow').attr('src', "../.." + frmagmnt);
                         if (data2.list[0].IsAgreement === true) {
-                            $("#frmagrdocnotshow").hide();
-                            $('#frmagrapproved').hide();
-
-                            var link = $("<a>");
-                            link.attr("href", "http://www.google.com");
-                            link.attr("title", "Google.com");
-                            link.text("Certificate");
-                            link.addClass("link");
-                            $('#alinks').html(link);
-                            $('#frmagrimageshow').attr('src', "../.." + frmagmnt);
-                            $('#frmagrEdit').val('Agreement  Status Appoved Please Check Your Certificate.');
+                            $("#frmagrdocnotshow").hide(); $('#frmagrapproved').hide();
+                            var link = $("<a>").attr("href", "#").text("Certificate").addClass("link");
+                            $('#alinks').html(link); $('#frmagrimageshow').attr('src', "../.." + frmagmnt);
+                            $('#frmagrEdit').val('Agreement Approved - Check Certificate.');
                         }
-                        else {
-
-                        }
-
-
-
-
-
-                }
-               else {
-
-                               $('#frmagrdocshow').hide();
-                    $('#frmagrapproved').hide();
-                    $('#frmagrEdit').val('KYC Due');
-
-                }
-
-               ravi('#StateEdit').html('');
-                var options = '';
-                options += '<option value="">Select</option>';
-                var se;
+                    }
+                } else { $('#frmagrdocshow').hide(); $('#frmagrapproved').hide(); $('#frmagrEdit').val('KYC Due'); }
+                ravi('#StateEdit').html('');
+                var options = '<option value="">Select</option>';
                 for (var i = 0; i < data2.state.length; i++) {
-                    if (data2.state[i].Selected == true) {
-                        options += '<option selected  value="' + data2.state[i].Value + '">' + data2.state[i].Text + '</option>';
-                    }
-                    else {
-                         options += '<option  value="' + data2.state[i].Value + '">' + data2.state[i].Text + '</option>';
-                    }
-
+                    options += '<option' + (data2.state[i].Selected ? ' selected' : '') + ' value="' + data2.state[i].Value + '">' + data2.state[i].Text + '</option>';
                 }
-
-
                 ravi('#StateEdit').append(options);
                 GetDistrict11(data2.list[0].state);
                 var objSelect11 = document.getElementById("DistrictEdit");
                 binddistmdAction(data2.list[0].state, data2.list[0].district, objSelect11);
-
-          }
+                // Always open in view mode
+                $(".mastetr222Modal .first-form").show();
+                $(".mastetr222Modal .second-form").hide();
+                // Re-init modal every time so Bootstrap cache doesn't break re-open
+                var $m = $('#defaultModal222');
+                $m.removeData('bs.modal');
+                $m.modal({ backdrop: 'static', keyboard: true });
+                $m.modal('show');
+            }
         });
     }
     function converttoDate(str) {
-            var date = new Date(str),
-                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-                day = ("0" + date.getDate()).slice(-2),
-                Hrs = (date.getHours()),
-                mnts = (date.getMinutes()),
-                sec = (date.getSeconds());
-            return dd= [day, mnth, date.getFullYear()].join("-") + " " + [Hrs + ":" + mnts + ":" + sec];
-        }
+        var date = new Date(str), mnth = ("0" + (date.getMonth() + 1)).slice(-2), day = ("0" + date.getDate()).slice(-2);
+        return [day, mnth, date.getFullYear()].join("-") + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
     function binddistmdAction(staid, dist, objSelect11) {
-            var url = '@Url.Action("DistrictList","Home")'
-            $.ajax({
-                url: url,
-                data: { Id: staid },
-                cache: false,
-                type: "POST",
-                success: function (data1) {
-
-                    var markup = "<option value='0'>Select District</option>";
-                    for (var x = 0; x < data1.length; x++) {
-                        markup += "<option value=" + data1[x].Value + ">" + data1[x].Text + "</option>";
-                    }
-                    $("#DistrictEdit").html(markup).show();
-                    setSelectedValue(objSelect11, dist);
-                }
-
-            });
+        $.ajax({ url: '@Url.Action("DistrictList","Home")', data: { Id: staid }, cache: false, type: "POST",
+            success: function (data1) {
+                var markup = "<option value='0'>Select District</option>";
+                for (var x = 0; x < data1.length; x++) { markup += "<option value=" + data1[x].Value + ">" + data1[x].Text + "</option>"; }
+                $("#DistrictEdit").html(markup).show();
+                setSelectedValue(objSelect11, dist);
+            }
+        });
     }
     function setSelectedValue(selectObj, valueToSet) {
-            for (var i = 0; i < selectObj.options.length; i++) {
-                if (selectObj.options[i].value == valueToSet) {
-                    //alert(selectObj.options[i].value);
-                    selectObj.options[i].selected = true;
-                    return;
-                }
-            }
+        for (var i = 0; i < selectObj.options.length; i++) { if (selectObj.options[i].value == valueToSet) { selectObj.options[i].selected = true; return; } }
     }
-    function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-    return [year, month, day].join('-');
-}
 </script>
 <script>
     function EmailVerify() {
         var WhiteLabelID = $('#WhiteLabelID').val();
-         $.ajax({
-            url: '@Url.Action("emailverifyforWhiteLabel","Home")',
-            type: "POST",
-            data: { WhiteLabelID: WhiteLabelID },
-             cache: false,
-             dataType: "html",
-             success: function (data2) {
-                 $('#whitelabelusertable').html(data2);
-                $('#defaultModal222').hide();
-                 $(".modal-backdrop").hide();
-          }
+        $.ajax({ url: '@Url.Action("emailverifyforWhiteLabel","Home")', type: "POST", data: { WhiteLabelID: WhiteLabelID }, cache: false, dataType: "html",
+            success: function (data2) { $('#whitelabelusertable').html(data2); $('#defaultModal222').modal('hide'); $('body').removeClass('modal-open'); $(".modal-backdrop").remove(); }
         });
     }
 </script>
 <script>
     function isNumber(evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        return true;
+        evt = (evt) ? evt : window.event; var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) { return false; } return true;
     }
 </script>
 <script>
-    //Whitelabel Robotic Api Status
     function ON_OFF(whitelabelid) {
-        var url = '@Url.Action("W_RoboticApi", "Home")'
-        $.ajax({
-            url: url,
-            data: { WhiteLabelID: whitelabelid },
-            cache: false,
-            type: "POST",
+        $.ajax({ url: '@Url.Action("W_RoboticApi","Home")', data: { WhiteLabelID: whitelabelid }, cache: false, type: "POST",
             success: function (data) {
-                if (data.status === "Y") {
-                    btnOnOff = "<span class='onoffswitch costom-on-second' style='float: left;'><button class='costom-on' onclick=ON_OFF('" + data.WhiteLabelID + "') style = 'border:1px solid;'> ON</button ></span>";
-
-                }
-                else {
-                    btnOnOff = "<span class='onoffswitch costom-off-second' style='float: left;'><button class='custom-off' onclick=ON_OFF('" + data.WhiteLabelID + "') style = 'border:1px solid;'> OFF</button ></span>";
-                }
-                var actionBtn = "<span data-toggle='modal' data-target='#defaultModal222' onclick=mdActionBtn('" + data.WhiteLabelID +"')><img class='email-popup-second' src='../../ashok-images/rightaeps.svg' style='width: 11px;margin-top: 6px;float: right;'></span>";
+                var btnOnOff = data.status === "Y"
+                    ? "<button class='wl-on-btn costom-on' onclick=\"ON_OFF('" + data.WhiteLabelID + "')\"><i class='fas fa-toggle-on'></i> ON</button>"
+                    : "<button class='wl-off-btn custom-off' onclick=\"ON_OFF('" + data.WhiteLabelID + "')\"><i class='fas fa-toggle-off'></i> OFF</button>";
+                var actionBtn = "<button class='wl-detail-btn js-wl-open-modal' data-wlid='" + data.WhiteLabelID + "' title='View Details'><i class='fas fa-chevron-right'></i></button>";
                 $("#" + data.WhiteLabelID).html(btnOnOff + actionBtn);
             }
         });
     }
 </script>
-
 <script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
+    function myFunction() {
+        var input = document.getElementById("myInput");
+        if (!input) return;
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("mdList");
+        if (!table) return;
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 1; i < tr.length; i++) {
+            var tds = tr[i].getElementsByTagName("td");
+            var found = false;
+            for (var j = 0; j < tds.length; j++) {
+                if (tds[j].innerHTML.toUpperCase().indexOf(filter) > -1) { found = true; break; }
+            }
+            tr[i].style.display = found ? "" : "none";
+        }
+    }
 </script>

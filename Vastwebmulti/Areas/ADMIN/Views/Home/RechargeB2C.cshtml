@@ -1,144 +1,302 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.RechargeB2CStatus>
+@using System
+@using System.Linq
+@using Vastwebmulti.Models
+@{
+    ViewBag.Title = "Recharge B2C";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 
-<style>
-    .on {
-        padding: 0 22px;
-        color: white;
-        background: #1abd1a;
-    }
-    .off {
-        padding: 0 22px;
-        color: white;
-        background: #c82424;
-    }
-    .sures {
-        padding: 0 22px;
-        color: white;
-        background: #2b682b;
-    }
-    .budd {
-        text-align: center;
-    }
-</style>
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid ">
-        <div class="page-header-third">
+    var reports = Model ?? Enumerable.Empty<RechargeB2CStatus>();
+    var rowCount = reports.Count();
+    var onCount = reports.Count(i => i.Sts == true);
+    var offCount = rowCount - onCount;
+}
 
-            @using (Ajax.BeginForm("RechargeB2C", "Home", new AjaxOptions
-            {//GetPatients is name of method in PatientController
-                HttpMethod = "POST",
-                InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
-                UpdateTargetId = "patientList",
-                LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
-            }))
-            {
-                <select id="Dlmids" class="select-s form-control" style="width: 20%; float: left;" name="dlrid" onchange="remfindbydlm()" required>
-                    <option>ALL Dealer</option>
-                </select>
-                <select id="remid" name="remid" style="width: 20%; float: left; margin: 0 7px;" class="select-s form-control" required>
-                    <option>Retailer</option>
-                </select>
-                <input type="submit" class="btn input-back-second" style=" height: 32px; border: 1px solid #b1a6a638; background: #fff; margin-top: 1px; background: #f9f9f9; width: 7%;" value="Search" />
-            }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=58" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-recharge-b2c-page">
 
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Ajax.BeginForm("RechargeB2C", "Home", new AjaxOptions
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "rechargeB2cTableBody",
+            OnSuccess = "rechargeB2cOnSearchComplete"
+        }, new { id = "rechargeB2cForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Settings</li>
+                        <li>Recharge B2C</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line vm-recharge-b2c-filter-row">
+
+                        <div class="vm-opr-field vm-dmt-field vm-recharge-b2c-field vm-recharge-b2c-field--dealer">
+                            <select id="Dlmids" name="dlrid" class="vm-opr-select vm-dmt-select form-control" required>
+                                <option value="">ALL Dealer</option>
+                            </select>
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-recharge-b2c-field vm-recharge-b2c-field--retailer">
+                            <select id="remid" name="remid" class="vm-opr-select vm-dmt-select form-control" required>
+                                <option value="">Select Retailer</option>
+                            </select>
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-recharge-b2c-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-recharge-b2c-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                        <span>Recharge B2C status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="rechargeB2cRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-recharge-b2c-on-badge" title="B2C ON retailers">
+                            ON: <strong id="rechargeB2cOnCount">@onCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-recharge-b2c-off-badge" title="B2C OFF retailers">
+                            OFF: <strong id="rechargeB2cOffCount">@offCount</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-recharge-b2c-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="rechargeB2cTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Retailer</th>
+                                    <th>Dealer</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rechargeB2cTableBody">
+                                @Html.Partial("_RechargeB2C", Model)
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
-   
-    <div class="page-header-third">
-        <table class="table table-bordered table-striped table-hover table-background-second third-design-table">
-            <thead>
-                <tr>
-
-                    <th>Retailer</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="patientList">
-                @Html.Partial("_RechargeB2C", Model)
-                </tbody>
-        </table>
     </div>
-   </div>
 </section>
 
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
 <script>
-
-            var url = '@Url.Action("DealerALLNAME", "Home")';
-        $.ajax({
-   type: "GET",
-   url: url,
-  success: function (result) {
-
-
-
-      var selectElement = document.getElementById("Dlmids");
-      console.log(result.Dlmid.length);
-      for (var i = 0; i < result.Dlmid.length; i++) {
-
-          var newOption = document.createElement("option");
-
-          // Set the value and text of the new option based on your data
-          newOption.value = result.Dlmid[i];
-
-          newOption.text = result.dlmname[i];
-
-          // Append the new option to the select element
-          selectElement.add(newOption);
-      }
-      //// Set the value and text of the new option
-      //newOption.value = "newOption";
-      //newOption.text = "New Option";
-
-      //// Append the new option to the select element
-      //selectElement.add(newOption);
-   },
-
-        });
-</script>
-<script>
-    function remfindbydlm() {
-        var dlmiss = document.getElementById('Dlmids').value;
-        console.log(dlmiss);
-         var url = '@Url.Action("REtailerALLNAME", "Home")';
-        $.ajax({
-   type: "GET",
-            url: url,
-            data: { Dlmid: dlmiss},
-  success: function (result) {
-
-
-
-      var selectElement = document.getElementById("remid");
-      selectElement.innerHTML = "";
-      var newOption1 = document.createElement("option");
-      newOption1.value = "";
-
-      newOption1.text = "Retailer";
-
-      selectElement.add(newOption1);
-      console.log(result.Remid.length);
-      for (var i = 0; i < result.Remid.length; i++) {
-
-          var newOption = document.createElement("option");
-
-          // Set the value and text of the new option based on your data
-          newOption.value = result.Remid[i];
-
-          newOption.text = result.Remname[i];
-
-          // Append the new option to the select element
-          selectElement.add(newOption);
-      }
-      //// Set the value and text of the new option
-      //newOption.value = "newOption";
-      //newOption.text = "New Option";
-
-      //// Append the new option to the select element
-      //selectElement.add(newOption);
-   },
-
-        });
-
+    function refreshRechargeB2cSummary() {
+        var rows = document.querySelectorAll('#rechargeB2cTableBody tr.vm-recharge-b2c-row');
+        var onCount = 0;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].getAttribute('data-status') === 'on') {
+                onCount++;
+            }
+        }
+        $('#rechargeB2cRecordCount').text(rows.length);
+        $('#rechargeB2cOnCount').text(onCount);
+        $('#rechargeB2cOffCount').text(rows.length - onCount);
     }
+
+    function rechargeB2cOnSearchComplete() {
+        initRechargeB2cSelect2();
+        refreshRechargeB2cSummary();
+    }
+
+    function destroyRechargeB2cSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyRechargeB2cSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyRechargeB2cSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6,
+            dropdownParent: $('#rechargeB2cForm')
+        });
+    }
+
+    function syncRechargeB2cSelectWidth() {
+        $('.vm-recharge-b2c-field').css({ width: '100%', maxWidth: '100%' });
+        $('#rechargeB2cForm select').css({ width: '100%', maxWidth: '100%' });
+        $('#rechargeB2cForm .select2-container').css({ width: '100%', maxWidth: '100%' });
+    }
+
+    function initRechargeB2cSelect2() {
+        applyRechargeB2cSelect2($('#Dlmids'));
+        applyRechargeB2cSelect2($('#remid'));
+        window.setTimeout(syncRechargeB2cSelectWidth, 0);
+    }
+
+    function loadRechargeB2cDealers() {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("DealerALLNAME", "Home")',
+            cache: false,
+            success: function (result) {
+                var $dealer = $('#Dlmids');
+                destroyRechargeB2cSelect2($dealer);
+                $dealer.empty().append($('<option>', { value: '', text: 'ALL Dealer' }));
+                if (result && result.Dlmid && result.Dlmid.length) {
+                    for (var i = 0; i < result.Dlmid.length; i++) {
+                        $dealer.append($('<option>', {
+                            value: result.Dlmid[i],
+                            text: result.dlmname[i]
+                        }));
+                    }
+                }
+                applyRechargeB2cSelect2($dealer);
+                syncRechargeB2cSelectWidth();
+            }
+        });
+    }
+
+    function remfindbydlm() {
+        var dlmiss = $('#Dlmids').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("REtailerALLNAME", "Home")',
+            data: { Dlmid: dlmiss },
+            cache: false,
+            success: function (result) {
+                var $retailer = $('#remid');
+                destroyRechargeB2cSelect2($retailer);
+                $retailer.empty().append($('<option>', { value: '', text: 'Select Retailer' }));
+                if (result && result.Remid && result.Remid.length) {
+                    for (var i = 0; i < result.Remid.length; i++) {
+                        $retailer.append($('<option>', {
+                            value: result.Remid[i],
+                            text: result.Remname[i]
+                        }));
+                    }
+                }
+                applyRechargeB2cSelect2($retailer);
+                syncRechargeB2cSelectWidth();
+            }
+        });
+    }
+
+    /* ---- Status toggle via data attributes (no inline onclick) ---- */
+    function b2cGetCell(rowIndex) {
+        return $('.vm-recharge-b2c-status-cell[data-row-index="' + rowIndex + '"]');
+    }
+
+    function b2cShowConfirm($cell, uid, ridx, next) {
+        $cell.html(
+            '<button type="button" class="vm-recharge-b2c-confirm-btn"' +
+            ' data-uid="' + uid + '" data-ridx="' + ridx + '" data-confirm="' + next + '">' +
+            '<i class="fas fa-question-circle" aria-hidden="true"></i><span>Are you sure?</span></button>'
+        );
+    }
+
+    function b2cApplyStatus(uid, ridx, statusLabel) {
+        var $cell = b2cGetCell(ridx);
+        $cell.html('<span style="font-size:0.75rem;color:#64748b;"><i class="fas fa-spinner fa-spin"></i></span>');
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("B2Cupdatests", "Home")',
+            data: { Remid: uid, status: statusLabel },
+            cache: false,
+            success: function (result) {
+                if (!result || result.Message !== 'Done') {
+                    $cell.html('<span style="color:#dc2626;font-size:0.75rem;">Error</span>');
+                    return;
+                }
+
+                var isOn = statusLabel === 'ON';
+                $cell = b2cGetCell(ridx);
+                var $row = $cell.closest('tr');
+
+                if (isOn) {
+                    $cell.html(
+                        '<button type="button"' +
+                        ' class="vm-recharge-b2c-status-pill vm-recharge-b2c-status-pill--on vm-recharge-b2c-status-pill--btn"' +
+                        ' data-uid="' + uid + '" data-ridx="' + ridx + '" data-next="OFF">' +
+                        '<i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>'
+                    );
+                    $row.removeClass('vm-recharge-b2c-row--off').addClass('vm-recharge-b2c-row--on').attr('data-status', 'on');
+                } else {
+                    $cell.html(
+                        '<button type="button"' +
+                        ' class="vm-recharge-b2c-status-pill vm-recharge-b2c-status-pill--off vm-recharge-b2c-status-pill--btn"' +
+                        ' data-uid="' + uid + '" data-ridx="' + ridx + '" data-next="ON">' +
+                        '<i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>'
+                    );
+                    $row.removeClass('vm-recharge-b2c-row--on').addClass('vm-recharge-b2c-row--off').attr('data-status', 'off');
+                }
+
+                refreshRechargeB2cSummary();
+            },
+            error: function () {
+                $cell = b2cGetCell(ridx);
+                $cell.html('<span style="color:#dc2626;font-size:0.75rem;">Error</span>');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadRechargeB2cDealers();
+        initRechargeB2cSelect2();
+        refreshRechargeB2cSummary();
+
+        $('#Dlmids').off('change.rechargeB2c').on('change.rechargeB2c', function () {
+            remfindbydlm();
+        });
+
+        $(window).on('resize orientationchange', syncRechargeB2cSelectWidth);
+
+        /* ---- Event delegation for status pill buttons (handles dynamic content too) ---- */
+        $(document).on('click', '.vm-recharge-b2c-status-pill--btn', function () {
+            var uid  = $(this).data('uid');
+            var ridx = $(this).data('ridx');
+            var next = $(this).data('next');
+            var $cell = b2cGetCell(ridx);
+            b2cShowConfirm($cell, uid, ridx, next);
+        });
+
+        /* Confirm button click */
+        $(document).on('click', '.vm-recharge-b2c-confirm-btn', function () {
+            var uid    = $(this).data('uid');
+            var ridx   = $(this).data('ridx');
+            var status = $(this).data('confirm');
+            b2cApplyStatus(uid, ridx, status);
+        });
+    });
 </script>

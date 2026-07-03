@@ -1,191 +1,151 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.BlockUserViewModel
-
+@using System.Linq
 @{
     Layout = null;
+    var rows        = Model.WLoginHistory;
+    var recordCount = rows != null ? rows.Count() : 0;
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Web_Login_PDF_History</title>
-    <style>
-        .informaction {
-            width: 100%;
-            margin: 0;
-            margin-bottom: 0px;
-            float: left;
-            border: 2px solid #000;
-            padding: 0px 5px;
-            background: #fff8dc;
-            border-left: 0;
-            border-right: 0;
-        }
-
-        .informaction-left, .informaction-right {
-            width: auto;
-            float: left;
-            padding: 3px 0px;
-        }
-
-            .informaction-left span:first-child {
-                font-weight: 600;
-                padding-right: 5px;
-            }
-
-        .informaction span {
-            float: left;
-        }
-
-        .informaction h3 {
-            text-transform: uppercase;
-        }
-
-        .fullpdfsuccess {
-            width: 100%;
-            float: left;
-        }
-
-        .informaction-right {
-            float: right;
-        }
-
-        .fullpdfsuccess {
-            margin: 5px 0;
-            padding: 0 15px;
-            float: left;
-        }
-
-            .fullpdfsuccess span {
-                font-weight: 400 !important;
-                font-size: 14px;
-            }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        .table-responsive-webpdf-history table {
-            width: 100%;
-            float: left;
-            border: 0;
-        }
-
-        table tr th, table tr td, table tr, table {
-            border-color: #e0e0e0 !important;
-        }
-
-        .table-responsive-webpdf-history table th, .table-responsive-webpdf-history table td {
-            padding: 5px 5px;
-        }
-
-        table tr th, table tr td {
-            border-top: 0;
-            border-right: 0;
-        }
-
-        table {
-            border-right: 1px solid #888787 !important;
-        }
-
-        table {
-            page-break-inside: auto
-        }
-
-        tr {
-            page-break-inside: avoid;
-            page-break-after: auto
-        }
+    <meta charset="utf-8" />
+    <title>Web Login History Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:8px 6px; text-align:left; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:7px 6px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__sr { width:30px; text-align:center; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:9px; }
+        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
+        /* filter info card */
+        .pdf-info-card { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .pdf-info-card__header { background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:8px 14px; font-size:10px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:.06em; }
+        .pdf-info-card__grid { display:table; width:100%; border-collapse:collapse; }
+        .pdf-info-card__cell { display:table-cell; width:25%; padding:8px 14px; border-right:1px solid #e2e8f0; vertical-align:top; }
+        .pdf-info-card__cell:last-child { border-right:none; }
+        .pdf-info-card__label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#64748b; margin-bottom:2px; }
+        .pdf-info-card__value { font-size:11px; font-weight:700; color:#0f172a; word-break:break-all; }
     </style>
 </head>
 <body>
+    <div class="vm-ml-pdf">
 
-    <h3 style="text-align:center">Success Login History</h3>
-    <div class="" style="width:100%;float:left;padding:0 10px;">
-        <div class="informaction" style="overflow:hidden;">
-            <div class="fullpdfsuccess">
-                <div class="informaction-left">
-                    <span>User Role : </span>
-                    <span> @Model.LoginSearchUserRole </span>
+        <!-- Header -->
+        <div class="vm-ml-pdf__header">
+            <div class="vm-ml-pdf__hero">
+                <h1 class="vm-ml-pdf__title">Web Login History Report</h1>
+                <p class="vm-ml-pdf__subtitle">Success login sessions &mdash; Admin Panel</p>
+            </div>
+            <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@recordCount</span></td>
+                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Date Range</span><span class="vm-ml-pdf__meta-value">@Model.Fromdatesearch &mdash; @Model.Todatesearch</span></td>
+                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">User Role</span><span class="vm-ml-pdf__meta-value">@(string.IsNullOrEmpty(Model.LoginSearchUserRole) ? "All" : Model.LoginSearchUserRole)</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Filter Info Card -->
+        <div class="pdf-info-card">
+            <div class="pdf-info-card__header">Search / Filter Details</div>
+            <div class="pdf-info-card__grid">
+                <div class="pdf-info-card__cell">
+                    <span class="pdf-info-card__label">Firm Name</span>
+                    <span class="pdf-info-card__value">@(string.IsNullOrEmpty(Model.searchfrmname) ? "—" : Model.searchfrmname)</span>
                 </div>
-                <div class="informaction-right">
-
-                    <span>Farm Name : </span>
-                    <span> @Model.searchfrmname </span>
+                <div class="pdf-info-card__cell">
+                    <span class="pdf-info-card__label">Login Type</span>
+                    <span class="pdf-info-card__value">@(string.IsNullOrEmpty(Model.LoginType) ? "—" : Model.LoginType)</span>
+                </div>
+                <div class="pdf-info-card__cell">
+                    <span class="pdf-info-card__label">Registered Mobile</span>
+                    <span class="pdf-info-card__value">@(string.IsNullOrEmpty(Model.RegisteredMobile) ? "—" : Model.RegisteredMobile)</span>
+                </div>
+                <div class="pdf-info-card__cell">
+                    <span class="pdf-info-card__label">Email ID</span>
+                    <span class="pdf-info-card__value">@(string.IsNullOrEmpty(Model.searchEmailID) ? "—" : Model.searchEmailID)</span>
                 </div>
             </div>
-
-            <div class="fullpdfsuccess">
-                <div class="informaction-left">
-                    <span>User Type : </span>
-                    <span> @Model.LoginType </span>
+            <div class="pdf-info-card__grid" style="border-top:1px solid #e2e8f0;">
+                <div class="pdf-info-card__cell" style="width:50%;">
+                    <span class="pdf-info-card__label">Website URL</span>
+                    <span class="pdf-info-card__value">@(string.IsNullOrEmpty(Model.CompanyURL) ? "—" : Model.CompanyURL)</span>
                 </div>
-                <div class="informaction-right">
-
-                    <span>WebSiteURL : </span>
-                    <span> @Model.CompanyURL </span>
+                <div class="pdf-info-card__cell" style="width:25%;">
+                    <span class="pdf-info-card__label">From Date</span>
+                    <span class="pdf-info-card__value">@Model.Fromdatesearch</span>
                 </div>
-            </div>
-            <div class="fullpdfsuccess">
-                <div class="informaction-left">
-                    <span>Registered Mobile No : </span>
-                    <span> @Model.RegisteredMobile</span>
-                </div>
-                <div class="informaction-right">
-                    <span>Email Id : </span>
-                    <span> @Model.searchEmailID</span>
-                </div>
-            </div>
-            <div class="fullpdfsuccess">
-                <div class="informaction-left">
-                    <span>From Date : </span>
-                    <span> @Model.Fromdatesearch</span>
-                </div>
-                <div class="informaction-left">
-                    <span style="padding-left: 10px;">To Date : </span>
-                    <span> @Model.Todatesearch</span>
+                <div class="pdf-info-card__cell" style="width:25%;">
+                    <span class="pdf-info-card__label">To Date</span>
+                    <span class="pdf-info-card__value">@Model.Todatesearch</span>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="table-responsive table-responsive-webpdf-history" style="width:100%;float:left;padding:0 10px;">
-        <table class="table table-responsive" border="1" cellpadding="0" cellspacing="0">
-            <tr>
-                <th>Sr.&nbsp;No.</th>
-                <th>Registered&nbsp;User&nbsp;Id</th>
-                <th>IP&nbsp;Address</th>
-                <th>Browser</th>
-                <th>Lattitude</th>
-                <th>Longitude</th>
-                <th>Login Time </th>
-                <th>Address</th>
-            </tr>
-            @{ var i = 1;}
-            @foreach (var item in Model.WLoginHistory)
+        <!-- Table -->
+        <div class="vm-ml-pdf__table-wrap">
+            @if (recordCount > 0)
             {
-
-                <tr role="row" class="odd">
-                    <td>@i</td>
-                    <td>@item.UserId</td>
-
-                    <td>
-                        <p>@item.ModelNo</p>
-                        @item.IP_Address
-                    </td>
-                    <td>@item.browser</td>
-                    <td>@item.Latitude</td>
-                    <td>@item.Logitude</td>
-                    <td>@item.CurrentLoginTime</td>
-                    <td>
-                        @item.City<span>&nbsp;&nbsp; @item.Location</span>
-                    </td>
-                </tr>
-                i++;
+                <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="vm-ml-pdf__sr">SR</th>
+                            <th>User ID</th>
+                            <th>IP Address</th>
+                            <th>Device / Browser</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Login Time</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var id = 1; }
+                        @foreach (var item in rows)
+                        {
+                            <tr>
+                                <td class="vm-ml-pdf__sr">@(id++)</td>
+                                <td class="vm-ml-pdf__firm">@item.UserId</td>
+                                <td class="vm-ml-pdf__mono">@item.IP_Address<br/><span style="color:#94a3b8;font-size:9px;">@item.ModelNo</span></td>
+                                <td>@item.browser</td>
+                                <td class="vm-ml-pdf__mono">@item.Latitude</td>
+                                <td class="vm-ml-pdf__mono">@item.Logitude</td>
+                                <td>@item.CurrentLoginTime</td>
+                                <td>@item.City @item.Location</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
+            else
+            {
+                <div class="vm-ml-pdf__empty">No login history records found.</div>
+            }
+        </div>
 
-        </table>
+        <div class="vm-ml-pdf__footer">Web Login History Report &mdash; @generatedOn</div>
     </div>
 </body>
 </html>

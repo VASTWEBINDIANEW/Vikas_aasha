@@ -2,12 +2,11 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows = Model.Select_dealer_list;
-    var recordCount = rows != null ? rows.Count() : 0;
+    var rows         = Model.Select_dealer_list;
+    var recordCount  = rows != null ? rows.Count() : 0;
     var searchFilter = (Request.QueryString["usernm"] ?? "").Trim();
-    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var generatedOn  = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,98 +15,102 @@
     <style type="text/css">
         @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #1e293b; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        table { page-break-inside: auto; border-collapse: collapse; }
-        tr { page-break-inside: avoid; page-break-after: auto; }
-        thead { display: table-header-group; }
-        .vm-ml-pdf { width: 100%; }
-        .vm-ml-pdf__header { width: 100%; margin-bottom: 14px; border: 1px solid #dbe2ea; border-radius: 10px; overflow: hidden; }
-        .vm-ml-pdf__hero { padding: 14px 16px; background: #2563eb; background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); color: #fff; }
-        .vm-ml-pdf__title { margin: 0; font-size: 18px; font-weight: 700; }
-        .vm-ml-pdf__subtitle { margin: 4px 0 0; font-size: 11px; opacity: 0.92; }
-        .vm-ml-pdf__meta { width: 100%; border-top: 1px solid #e2e8f0; background: #f8fafc; }
-        .vm-ml-pdf__meta td { padding: 9px 12px; border-right: 1px solid #e2e8f0; vertical-align: middle; }
-        .vm-ml-pdf__meta td:last-child { border-right: none; }
-        .vm-ml-pdf__meta-label { display: block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin-bottom: 2px; }
-        .vm-ml-pdf__meta-value { font-size: 11px; font-weight: 700; color: #0f172a; }
-        .vm-ml-pdf__table-wrap { width: 100%; border: 1px solid #dbe2ea; border-radius: 10px; overflow: hidden; }
-        .vm-ml-pdf__table { width: 100%; border: none; }
-        .vm-ml-pdf__table thead th { padding: 10px 8px; text-align: left; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; background: #334155; border-bottom: 2px solid #1e293b; white-space: nowrap; }
-        .vm-ml-pdf__table tbody td { padding: 9px 8px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; font-size: 10px; color: #334155; }
-        .vm-ml-pdf__table tbody tr:nth-child(even) td { background: #f8fafc; }
-        .vm-ml-pdf__sr { width: 34px; text-align: center; font-weight: 700; color: #64748b; }
-        .vm-ml-pdf__firm { font-weight: 700; color: #0f172a; }
-        .vm-ml-pdf__balance { font-weight: 700; color: #2563eb; white-space: nowrap; }
-        .vm-ml-pdf__badge { display: inline-block; min-width: 46px; padding: 4px 10px; border-radius: 999px; font-size: 9px; font-weight: 700; text-align: center; line-height: 1.2; }
-        .vm-ml-pdf__badge--done { background: #ecfdf5; color: #047857; border: 1px solid #bbf7d0; }
-        .vm-ml-pdf__badge--due { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
-        .vm-ml-pdf__empty { padding: 28px 16px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; }
-        .vm-ml-pdf__footer { margin-top: 12px; padding-top: 8px; border-top: 1px dashed #dbe2ea; font-size: 9px; color: #94a3b8; text-align: center; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr    { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:14px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:18px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:4px 0 0; font-size:11px; opacity:.92; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:9px 12px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:11px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:10px 8px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:9px 8px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:10px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__sr { width:34px; text-align:center; font-weight:700; color:#64748b; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:'Courier New',monospace; font-size:9.5px; }
+        .vm-ml-pdf__balance { font-weight:700; color:#2563eb; white-space:nowrap; }
+        .vm-ml-pdf__badge { display:inline-block; min-width:46px; padding:4px 10px; border-radius:999px; font-size:9px; font-weight:700; text-align:center; line-height:1.2; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__badge--done { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
+        .vm-ml-pdf__badge--due  { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+        .vm-ml-pdf__empty { padding:28px 16px; text-align:center; color:#64748b; font-size:12px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:12px; padding-top:8px; border-top:1px dashed #dbe2ea; font-size:9px; color:#94a3b8; text-align:center; }
     </style>
 </head>
 <body>
-    <div class="vm-ml-pdf">
-        <div class="vm-ml-pdf__header">
-            <div class="vm-ml-pdf__hero">
-                <h1 class="vm-ml-pdf__title">Distributor List</h1>
-                <p class="vm-ml-pdf__subtitle">View, search and export distributor records</p>
-            </div>
-            <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
-                    <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@recordCount</span></td>
-                    <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Search Filter</span><span class="vm-ml-pdf__meta-value">@(string.IsNullOrEmpty(searchFilter) ? "All Distributors" : searchFilter)</span></td>
-                </tr>
-            </table>
+<div class="vm-ml-pdf">
+
+    <div class="vm-ml-pdf__header">
+        <div class="vm-ml-pdf__hero">
+            <h1 class="vm-ml-pdf__title">Distributor List</h1>
+            <p class="vm-ml-pdf__subtitle">View, search and export distributor records</p>
         </div>
-        <div class="vm-ml-pdf__table-wrap">
-            @if (recordCount > 0)
-            {
-                <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th class="vm-ml-pdf__sr">Sr</th>
-                            <th>Master Distributor Firm</th>
-                            <th>Distributor Firm</th>
-                            <th>Distributor Name</th>
-                            <th>Mobile No</th>
-                            <th>Balance</th>
-                            <th>KYC</th>
-                            <th>Email V/F</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{ var id = 1; }
-                        @foreach (var item in rows)
-                        {
-                            var kycDone = item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.pancardsts == "Y";
-                            var evDone = item.Emailconfirmed == true;
-                            <tr>
-                                <td class="vm-ml-pdf__sr">@(id++)</td>
-                                <td>@item.MasterEmail</td>
-                                <td><span class="vm-ml-pdf__firm">@item.FarmName</span></td>
-                                <td>@item.DealerName</td>
-                                <td>@item.Mobile</td>
-                                <td class="vm-ml-pdf__balance">@item.remaindlm</td>
-                                <td>
-                                    @if (kycDone) { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--done">Done</span> }
-                                    else { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--due">Due</span> }
-                                </td>
-                                <td>
-                                    @if (evDone) { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--done">Done</span> }
-                                    else { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--due">Due</span> }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <div class="vm-ml-pdf__empty">No distributor records found for the selected filter.</div>
-            }
-        </div>
-        <div class="vm-ml-pdf__footer">Distributor Report &mdash; @generatedOn</div>
+        <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@recordCount</span></td>
+                <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Search Filter</span><span class="vm-ml-pdf__meta-value">@(string.IsNullOrEmpty(searchFilter) ? "All Distributors" : searchFilter)</span></td>
+            </tr>
+        </table>
     </div>
+
+    <div class="vm-ml-pdf__table-wrap">
+        @if (recordCount > 0)
+        {
+            <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="vm-ml-pdf__sr">Sr</th>
+                        <th>Master Distributor Firm</th>
+                        <th>Distributor Firm</th>
+                        <th>Distributor Name</th>
+                        <th>Mobile No</th>
+                        <th>Balance</th>
+                        <th style="text-align:center;">KYC</th>
+                        <th style="text-align:center;">Email V/F</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var id = 1; }
+                    @foreach (var item in rows)
+                    {
+                        var kycDone = item.PSAStatus == "Y" && item.AadhaarStatus == "Y" && item.pancardsts == "Y";
+                        var evDone  = item.Emailconfirmed == true;
+                        <tr>
+                            <td class="vm-ml-pdf__sr">@(id++)</td>
+                            <td>@item.MasterEmail</td>
+                            <td><span class="vm-ml-pdf__firm">@item.FarmName</span></td>
+                            <td>@item.DealerName</td>
+                            <td class="vm-ml-pdf__mono">@item.Mobile</td>
+                            <td class="vm-ml-pdf__balance">@item.remaindlm</td>
+                            <td style="text-align:center;">
+                                @if (kycDone) { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--done">Done</span> }
+                                else          { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--due">Due</span>  }
+                            </td>
+                            <td style="text-align:center;">
+                                @if (evDone) { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--done">Done</span> }
+                                else         { <span class="vm-ml-pdf__badge vm-ml-pdf__badge--due">Due</span>  }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="vm-ml-pdf__empty">No distributor records found for the selected filter.</div>
+        }
+    </div>
+
+    <div class="vm-ml-pdf__footer">Distributor Report &mdash; @generatedOn</div>
+</div>
 </body>
 </html>

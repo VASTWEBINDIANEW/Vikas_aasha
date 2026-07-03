@@ -91541,17 +91541,26 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult RechargeB2C()
         {
-            var chek = db.RechargeB2CStatus.Where(s=>s.Sts == true).ToList();
+            var chek = db.RechargeB2CStatus.ToList();
             return View(chek);
         }
 
         [HttpPost]
-            
-        public ActionResult RechargeB2C(string dlrid , string remid)
+        public ActionResult RechargeB2C(string dlrid, string remid)
         {
-            
-        var chek = db.RechargeB2CStatus.Where(s => s.userid == remid).ToList();
-        return PartialView("_RechargeB2C", chek);
+            IQueryable<RechargeB2CStatus> query = db.RechargeB2CStatus;
+            if (!string.IsNullOrWhiteSpace(remid))
+                query = query.Where(s => s.userid == remid);
+            else if (!string.IsNullOrWhiteSpace(dlrid))
+            {
+                var retailerIds = db.Retailer_Details
+                    .Where(r => r.DealerId == dlrid)
+                    .Select(r => r.RetailerId)
+                    .ToList();
+                query = query.Where(s => retailerIds.Contains(s.userid));
+            }
+            var chek = query.ToList();
+            return PartialView("_RechargeB2C", chek);
         }
         public ActionResult B2Cupdatests(string Remid , string status)
         {

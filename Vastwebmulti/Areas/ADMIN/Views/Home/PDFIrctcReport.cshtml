@@ -1,66 +1,112 @@
 @model List<Vastwebmulti.Models.Rem_IRCTC_TokenPurchase_reports_Result>
+@using System.Linq
 @{
     Layout = null;
+    var rows = Model ?? new List<Vastwebmulti.Models.Rem_IRCTC_TokenPurchase_reports_Result>();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>PDF IRCTC Report</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; font-size: 10px; }
-        table, td, th { border: 1px solid #000; }
-        th { background: #f5f5f5; }
+    <meta charset="utf-8" />
+    <title>IRCTC Report</title>
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 12mm 8mm 14mm 8mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:9px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:7px 5px; text-align:left; font-size:7.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:6px 5px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:8.5px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:8px; }
+        .vm-ml-pdf__amt  { font-weight:700; color:#2563eb; white-space:nowrap; }
+        .vm-ml-pdf__badge { display:inline-block; min-width:44px; padding:2px 6px; border-radius:999px; font-size:7.5px; font-weight:700; text-align:center; line-height:1.2; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__badge--success { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
+        .vm-ml-pdf__badge--fail    { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
+        .vm-ml-pdf__badge--pending { background:#fef9c3; color:#854d0e; border:1px solid #fde68a; }
+        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
     </style>
 </head>
 <body>
-    <table cellspacing="0">
-        <thead>
+<div class="vm-ml-pdf">
+    <div class="vm-ml-pdf__header">
+        <div class="vm-ml-pdf__hero">
+            <h1 class="vm-ml-pdf__title">IRCTC Token Purchase Report</h1>
+            <p class="vm-ml-pdf__subtitle">IRCTC token purchase transactions &mdash; Admin Panel</p>
+        </div>
+        <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
-                <th>Status</th>
-                <th>Order&nbsp;ID</th>
-                <th>Retailer&nbsp;Name</th>
-                <th>Mobile</th>
-                <th>Secondary&nbsp;Mobile</th>
-                <th>Email</th>
-                <th>Secondary&nbsp;Email</th>
-                <th>Amount</th>
-                <th>Transection&nbsp;date</th>
-                <th>Expire&nbsp;time</th>
-                <th>Retailer&nbsp;OLD&nbsp;balance</th>
-                <th>Retailer&nbsp;Latest&nbsp;Balance</th>
-                <th>Distributor&nbsp;OLD&nbsp;balance</th>
-                <th>Distributor&nbsp;Latest&nbsp;Balance</th>
-                <th>MasterDistributor&nbsp;OLD&nbsp;balance</th>
-                <th>MasterDistributor&nbsp;Latest&nbsp;Balance</th>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
+                <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">IRCTC Token Purchase</span></td>
             </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
-            {
-                foreach (var item in Model)
-                {
+        </table>
+    </div>
+    <div class="vm-ml-pdf__table-wrap">
+        @if (rows.Any())
+        {
+            <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                <thead>
                     <tr>
-                        <td>@item.status</td>
-                        <td>@item.TxnID</td>
-                        <td>@item.RetailerName</td>
-                        <td>@item.remmobile</td>
-                        <td>@item.secondmobile</td>
-                        <td>@item.remEmail</td>
-                        <td>@item.secondemail</td>
-                        <td>@(item.amount.HasValue ? Math.Round(item.amount.Value, 2) : 0)</td>
-                        <td>@(item.txn_date.HasValue ? item.txn_date.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
-                        <td>@(item.expire_time.HasValue ? item.expire_time.Value.ToString("dd-MMM-yyyy HH:mm:ss") : "")</td>
-                        <td>@(item.remain_pre.HasValue ? Math.Round(item.remain_pre.Value, 2) : 0)</td>
-                        <td>@(item.remain.HasValue ? Math.Round(item.remain.Value, 2) : 0)</td>
-                        <td>@(item.dealer_remain_pre.HasValue ? Math.Round(item.dealer_remain_pre.Value, 2) : 0)</td>
-                        <td>@(item.dealerremain.HasValue ? Math.Round(item.dealerremain.Value, 2) : 0)</td>
-                        <td>@(item.master_remain_pre.HasValue ? Math.Round(item.master_remain_pre.Value, 2) : 0)</td>
-                        <td>@(item.masterremain.HasValue ? Math.Round(item.masterremain.Value, 2) : 0)</td>
+                        <th>Status</th>
+                        <th>Order ID</th>
+                        <th>Retailer</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Txn Date</th>
+                        <th>Expire Time</th>
+                        <th>Ret. Pre</th>
+                        <th>Ret. Post</th>
+                        <th>Dealer Pre</th>
+                        <th>Dealer Post</th>
+                        <th>MD Pre</th>
+                        <th>MD Post</th>
                     </tr>
-                }
-            }
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in rows)
+                    {
+                        string badgeCls = (item.status ?? "").Contains("Success") ? "vm-ml-pdf__badge--success" : (item.status ?? "").Contains("Pending") ? "vm-ml-pdf__badge--pending" : "vm-ml-pdf__badge--fail";
+                        <tr>
+                            <td><span class="vm-ml-pdf__badge @badgeCls">@item.status</span></td>
+                            <td class="vm-ml-pdf__mono">@item.TxnID</td>
+                            <td class="vm-ml-pdf__firm">@item.RetailerName</td>
+                            <td>@item.remmobile</td>
+                            <td>@item.remEmail</td>
+                            <td class="vm-ml-pdf__amt">@(item.amount.HasValue ? Math.Round(item.amount.Value, 2) : 0)</td>
+                            <td>@(item.txn_date.HasValue ? item.txn_date.Value.ToString("dd-MMM-yyyy HH:mm") : "")</td>
+                            <td>@(item.expire_time.HasValue ? item.expire_time.Value.ToString("dd-MMM-yyyy HH:mm") : "")</td>
+                            <td>@(item.remain_pre.HasValue ? Math.Round(item.remain_pre.Value, 2) : 0)</td>
+                            <td>@(item.remain.HasValue ? Math.Round(item.remain.Value, 2) : 0)</td>
+                            <td>@(item.dealer_remain_pre.HasValue ? Math.Round(item.dealer_remain_pre.Value, 2) : 0)</td>
+                            <td>@(item.dealerremain.HasValue ? Math.Round(item.dealerremain.Value, 2) : 0)</td>
+                            <td>@(item.master_remain_pre.HasValue ? Math.Round(item.master_remain_pre.Value, 2) : 0)</td>
+                            <td>@(item.masterremain.HasValue ? Math.Round(item.masterremain.Value, 2) : 0)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else { <div class="vm-ml-pdf__empty">No records found.</div> }
+    </div>
+    <div class="vm-ml-pdf__footer">IRCTC Token Purchase Report &mdash; @generatedOn</div>
+</div>
 </body>
 </html>

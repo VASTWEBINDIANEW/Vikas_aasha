@@ -1,179 +1,125 @@
 ﻿@model List<Vastwebmulti.Models.Aeps_Report_New_Result>
+@using System.Linq
 @{
     Layout = null;
+    var rows = Model ?? new List<Vastwebmulti.Models.Aeps_Report_New_Result>();
+    var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }
-
-
 <!DOCTYPE html>
-
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
     <title>AEPS Report</title>
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        table, td, th {
-            border: 1px solid black;
-        }
-
-        table {
-            page-break-inside: auto
-        }
-
-        tr {
-            page-break-inside: avoid;
-            page-break-after: auto
-        }
-        /*   thead {
-            display: table-header-group;
-        }*/
-
-        /*  tfoot {
-            display: table-header-group;
-        }*/
+    <style type="text/css">
+        @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
+        * { box-sizing: border-box; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        table { page-break-inside:auto; border-collapse:collapse; }
+        tr { page-break-inside:avoid; page-break-after:auto; }
+        thead { display:table-header-group; }
+        .vm-ml-pdf { width:100%; }
+        .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
+        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__meta td:last-child { border-right:none; }
+        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__table { width:100%; border:none; }
+        .vm-ml-pdf__table thead th { padding:8px 6px; text-align:left; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
+        .vm-ml-pdf__table tbody td { padding:7px 6px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; color:#334155; }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .vm-ml-pdf__table tfoot td { padding:7px 6px; font-weight:700; background:#f1f5f9; border-top:2px solid #334155; font-size:9.5px; }
+        .vm-ml-pdf__sr { width:28px; text-align:center; font-weight:700; color:#64748b; }
+        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:9px; }
+        .vm-ml-pdf__amt  { font-weight:700; color:#2563eb; white-space:nowrap; }
+        .vm-ml-pdf__badge { display:inline-block; min-width:44px; padding:3px 8px; border-radius:999px; font-size:8px; font-weight:700; text-align:center; line-height:1.2; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__badge--success { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
+        .vm-ml-pdf__badge--fail    { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
+        .vm-ml-pdf__badge--pending { background:#fef9c3; color:#854d0e; border:1px solid #fde68a; }
+        .vm-ml-pdf__badge--refund  { background:#ede9fe; color:#6d28d9; border:1px solid #ddd6fe; }
+        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
     </style>
 </head>
 <body>
-    <table cellspacing="0">
-
-        <tr>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Sr.&nbsp;</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Live&nbsp;Status</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Customer&nbsp;Bank&nbsp;Name</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">TXN&nbsp;ID</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Device Name&nbsp;&nbsp;Serial No</th>
-
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Aadhaar&nbsp;Number</th>
-            <th style="padding-left: 2px;padding-right: 2px;text-align:center;">Transfer</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">User Comm</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">User&nbsp;Credit&nbsp;</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">User&nbsp;Pre&nbsp;</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">User&nbsp;Post&nbsp;</th>
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Bank&nbsp;RRN&nbsp;</th>
-
-            <th style="padding-left:2px; padding-right:2px;text-align:center;">Request&nbsp;Date</th>
-
-
-        </tr>
-
-
-        @if (Model != null)
-        {
-            int i = 1;
-            foreach (var item in Model)
-            {
-
-
-                if (item.Status == "Success")
-                {
-                    item.Status = "Success";
-                }
-                if (item.Status == "Pending")
-                {
-                    item.Status = "Pending";
-
-                }
-                if (item.Status == "Failed")
-                {
-                    item.Status = "Failed";
-
-                }
-                if (item.Status == "Refund")
-                {
-                    item.Status = "Refund";
-
-                }
-                <tr>
-                    <td>@i</td>
-                    <td>@item.Status&nbsp;⇒ &nbsp;@item.Frm_Name</td>
-                    <td>@item.BankName</td>
-                    <td>@item.MerchantTxnId</td>
-                    <td>
-                        @if (item.devicename != null && item.devicename != "")
-                        {
-                            <p>@item.devicename&nbsp;@item.deviceserialno</p>
-                        }
-                        else
-                        {
-                            <p></p>
-                        }
-
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(@item.AccountHolderAadhaar))
-                        {
-                            var aadhar = item.AccountHolderAadhaar;
-                            var len = aadhar.Length;
-                            var last = aadhar.Substring(8, 4);
-                            var first = new String('x', 8);
-
-                            <p>
-                                @first@last
-                            </p>
-                        }
-                        else
-                        {
-                            <p></p>
-                        }
-
-
-
-                    </td>
-                    <td>@item.Amount</td>
-                    <td>@item.RemIncome</td>
-
-                    <td>
-                        @{
-                            decimal amount = 0;
-                            decimal remincome = 0;
-                            decimal usercredit = 0;
-                            if (item.Role == "Retailer")
-                            {
-                                amount = Convert.ToDecimal(item.Amount);
-                                remincome = Convert.ToDecimal(item.RemIncome);
-                                usercredit = (amount + remincome);
-                            }
-                            if (item.Role == "Whitelabelretailer")
-                            {
-                                amount = Convert.ToDecimal(item.Amount);
-                                remincome = Convert.ToDecimal(item.RemIncome);
-                                usercredit = (amount + remincome);
-                            }
-                        }
-
-                        <p style="font-size:12px;margin-left:-8px;margin-top:-2px;">&nbsp;@usercredit&nbsp;</p>
-
-                    </td>
-                    <td>@item.RemPre</td>
-                    <td>@item.RemPost</td>
-                    <td>@item.BankRRN</td>
-                    <td>@item.Txn_Date</td>
-
-
-                </tr>
-                i++;
-            }
+<div class="vm-ml-pdf">
+    <div class="vm-ml-pdf__header">
+        <div class="vm-ml-pdf__hero">
+            <h1 class="vm-ml-pdf__title">AEPS Report</h1>
+            <p class="vm-ml-pdf__subtitle">Aadhaar Enabled Payment System transactions &mdash; Admin Panel</p>
+        </div>
+        <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
-                <td>Total</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>@Model.Sum(aa => aa.Amount)</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Amount</span><span class="vm-ml-pdf__meta-value">@rows.Sum(a => a.Amount)</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">AEPS Transactions</span></td>
             </tr>
+        </table>
+    </div>
+    <div class="vm-ml-pdf__table-wrap">
+        @if (rows.Any())
+        {
+            <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="vm-ml-pdf__sr">SR</th>
+                        <th>Status / Firm</th>
+                        <th>Customer Bank</th>
+                        <th>TXN ID</th>
+                        <th>Device / Serial</th>
+                        <th>Aadhaar No</th>
+                        <th>Transfer</th>
+                        <th>User Comm</th>
+                        <th>User Credit</th>
+                        <th>Pre</th>
+                        <th>Post</th>
+                        <th>Bank RRN</th>
+                        <th>Request Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var id = 1; }
+                    @foreach (var item in rows)
+                    {
+                        string badgeCls = item.Status == "Success" ? "vm-ml-pdf__badge--success" : item.Status == "Refund" ? "vm-ml-pdf__badge--refund" : item.Status == "Pending" ? "vm-ml-pdf__badge--pending" : "vm-ml-pdf__badge--fail";
+                        decimal usercredit = 0;
+                        if (item.Role == "Retailer" || item.Role == "Whitelabelretailer") { usercredit = Convert.ToDecimal(item.Amount) + Convert.ToDecimal(item.RemIncome); }
+                        var maskedAadhar = !string.IsNullOrEmpty(item.AccountHolderAadhaar) && item.AccountHolderAadhaar.Length >= 12 ? new string('x', 8) + item.AccountHolderAadhaar.Substring(8, 4) : item.AccountHolderAadhaar;
+                        <tr>
+                            <td class="vm-ml-pdf__sr">@(id++)</td>
+                            <td><span class="vm-ml-pdf__badge @badgeCls">@item.Status</span> <span class="vm-ml-pdf__firm">@item.Frm_Name</span></td>
+                            <td>@item.BankName</td>
+                            <td class="vm-ml-pdf__mono">@item.MerchantTxnId</td>
+                            <td>@item.devicename @item.deviceserialno</td>
+                            <td class="vm-ml-pdf__mono">@maskedAadhar</td>
+                            <td class="vm-ml-pdf__amt">@item.Amount</td>
+                            <td>@item.RemIncome</td>
+                            <td class="vm-ml-pdf__amt">@usercredit</td>
+                            <td>@item.RemPre</td>
+                            <td>@item.RemPost</td>
+                            <td class="vm-ml-pdf__mono">@item.BankRRN</td>
+                            <td>@item.Txn_Date</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">Total</td>
+                        <td class="vm-ml-pdf__amt">@rows.Sum(aa => aa.Amount)</td>
+                        <td colspan="6"></td>
+                    </tr>
+                </tfoot>
+            </table>
         }
-
-    </table>
+        else { <div class="vm-ml-pdf__empty">No records found.</div> }
+    </div>
+    <div class="vm-ml-pdf__footer">AEPS Report &mdash; @generatedOn</div>
+</div>
 </body>
 </html>
-

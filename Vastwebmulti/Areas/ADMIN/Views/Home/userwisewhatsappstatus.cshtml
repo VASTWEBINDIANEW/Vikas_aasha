@@ -1,135 +1,296 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.retailerwise_whatsappsts>
-
-@using System;
-@using Vastwebmulti.Models;
+@using System
+@using System.Linq
+@using System.Collections.Generic
+@using Vastwebmulti.Models
 @{
-   
-    ViewBag.Title = "userwisewhatsappstatus";
+    ViewBag.Title = "WhatsApp Status User Wise";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     VastwebmultiEntities db = new VastwebmultiEntities();
+
+    var selectedRole = (Request["Role"] ?? "").Trim();
+    var selectedUser = (Request["user"] ?? "").Trim();
+    var reports = Model ?? Enumerable.Empty<retailerwise_whatsappsts>();
+    var rowCount = reports.Count();
+    var onCount = reports.Count(i => i.sts == true);
+    var offCount = rowCount - onCount;
+
+    var roleItems = (ViewBag.usersss as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+    var userItems = (ViewBag.userss as IEnumerable<SelectListItem>)?.ToList() ?? new List<SelectListItem>();
+
+    if (!string.IsNullOrEmpty(selectedRole))
+    {
+        foreach (var item in roleItems)
+        {
+            item.Selected = string.Equals(item.Value, selectedRole, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    if (!string.IsNullOrEmpty(selectedUser))
+    {
+        foreach (var item in userItems)
+        {
+            item.Selected = string.Equals(item.Value, selectedUser, StringComparison.OrdinalIgnoreCase);
+        }
+    }
 }
 
-<section class="content retailerList_Page fourdesign-section-admin">
-    <div class="container-fluid retailer-list-page">
-        <div>
-            @using (Html.BeginForm("userwisewhatsappstatus", "Home"))
-            {
-                @Html.DropDownList("Role", ViewBag.usersss as List<SelectListItem>
-   , "Select Retailer", new { @class = "form-control", style = " width: 20%; float: left;height: 34px;margin: 10px;" ,onchange = "rolewisefunction()" })
-               
-                <script>
-                    function rolewisefunction() {
-                        document.getElementById("setsubmit").click();
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=57" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=37" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-whatsapp-status-page">
 
-                    }
-                </script>
-                @Html.DropDownList("user", ViewBag.userss as List<SelectListItem>
-        , "Select Retailer", new { @class = "form-control", onchange = "rolewisefunction();", style = " width: 20%; float: left;height: 34px;margin: 10px;" })
-                <input type="submit" name="Submit" id="setsubmit" style="width: 6%; height: 33px; margin: 10px;display:none "  />
-            }
-        </div>
-        <table class="table table-bordered table-striped table-hover  sspl table-background-second example-second">
-            <tr>
-                <th>
-                    Users
-                </th>
-                <th>
-                    Status
-                </th>
-            </tr>
-            @if (Model != null)
-                        {
-                            var dd = 0;
-                            foreach (var i in Model)
-                            {
-                   
-                                
-                    <tr>
-                        <td>
-                            @if (i.userid != "ALL")
-                            {
-                                var user = db.Retailer_Details.Where(s => s.RetailerId == i.userid).ToList();
-                                var user1 = db.Dealer_Details.Where(s => s.DealerId == i.userid).ToList();
-                                var user2 = db.Superstokist_details.Where(s => s.SSId == i.userid).ToList();
-                                if (user.Count > 0)
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("userwisewhatsappstatus", "Home", FormMethod.Post, new { id = "whatsappStatusForm", @class = "vm-rpt-filters-panel__form" }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Settings</li>
+                        <li>WhatsApp Status</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line vm-whatsapp-status-filter-row">
+
+                        <div class="vm-opr-field vm-dmt-field vm-whatsapp-status-field vm-whatsapp-status-field--role">
+                            @Html.DropDownList("Role", roleItems, "Select Role", new { id = "whatsappRole", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-whatsapp-status-field vm-whatsapp-status-field--user">
+                            @Html.DropDownList("user", userItems, "Select User", new { id = "whatsappUser", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <button type="submit" name="Submit" id="whatsappStatusSubmit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-whatsapp-status-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-whatsapp-status-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span>WhatsApp status user wise</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="whatsappStatusRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-whatsapp-status-on-badge" title="WhatsApp ON users">
+                            ON: <strong id="whatsappStatusOnCount">@onCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total vm-whatsapp-status-off-badge" title="WhatsApp OFF users">
+                            OFF: <strong id="whatsappStatusOffCount">@offCount</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-whatsapp-status-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="whatsappStatusTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rowCount == 0)
                                 {
-                            <div> @user[0].RetailerName => @user[0].Email</div>
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="4">No records found for the selected filters.</td>
+                                    </tr>
                                 }
-                                else if(user1.Count > 0)
+                                else
                                 {
-                        <div> @user1[0].DealerName => @user1[0].Email</div>
-                                }
-                                else if (user2.Count > 0)
-                                {
-                        <div> @user2[0].SuperstokistName => @user2[0].Email</div>
-                                }
-                            }
-                            else
-                            {
-                            <div>ALL</div>
-                    }
-                        </td>
-                        <td class="whtsts">
-                            @if (i.sts == true)
+                                    var sr = 1;
+                                    var rowIndex = 0;
+                                    foreach (var item in reports)
+                                    {
+                                        var displayName = "ALL";
+                                        var displayEmail = "-";
+                                        var displayRole = !string.IsNullOrWhiteSpace(item.role) ? item.role : "-";
+
+                                        if (!string.IsNullOrWhiteSpace(item.userid) && item.userid != "ALL")
                                         {
-                                <button style=" width: 39%; background: green; color: white;"  onclick='updwhtsts(false,@dd, "@i.userid")'>On</button>
-                }
-                            else
-                            {
-                                <button style=" width: 39%; background: red; color: white;"  onclick='updwhtsts(true,@dd, "@i.userid")'>OFF</button>
-                            }
-                        </td>
-                    </tr>
-                    dd++;
-                }
-            }
-        </table>
+                                            var retailer = db.Retailer_Details.FirstOrDefault(s => s.RetailerId == item.userid);
+                                            var dealer = db.Dealer_Details.FirstOrDefault(s => s.DealerId == item.userid);
+                                            var master = db.Superstokist_details.FirstOrDefault(s => s.SSId == item.userid);
 
+                                            if (retailer != null)
+                                            {
+                                                displayName = !string.IsNullOrWhiteSpace(retailer.Frm_Name) ? retailer.Frm_Name : retailer.RetailerName;
+                                                displayEmail = retailer.Email ?? "-";
+                                                if (string.IsNullOrWhiteSpace(displayRole) || displayRole == "-") { displayRole = "Retailer"; }
+                                            }
+                                            else if (dealer != null)
+                                            {
+                                                displayName = !string.IsNullOrWhiteSpace(dealer.FarmName) ? dealer.FarmName : dealer.DealerName;
+                                                displayEmail = dealer.Email ?? "-";
+                                                if (string.IsNullOrWhiteSpace(displayRole) || displayRole == "-") { displayRole = "Dealer"; }
+                                            }
+                                            else if (master != null)
+                                            {
+                                                displayName = !string.IsNullOrWhiteSpace(master.FarmName) ? master.FarmName : master.SuperstokistName;
+                                                displayEmail = master.Email ?? "-";
+                                                if (string.IsNullOrWhiteSpace(displayRole) || displayRole == "-") { displayRole = "Master"; }
+                                            }
+                                            else
+                                            {
+                                                displayName = item.userid;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            displayRole = "ALL";
+                                        }
 
-        <script>
+                                        var isOn = item.sts == true;
+                                        var userId = item.userid ?? "";
 
-            function updwhtsts(s, d , u) {
-                 var url = '@Url.Action("Whatsaapupdateuser","Home")'
-        $.ajax({
-            url: url,
-            data: {sts:s ,user: u},
-            cache: false,
-            type: "POST",
-            success: function (data) {
-                console.log(data);
-                var upt = document.getElementsByClassName('whtsts');
-
-                if (data == true) {
-
-                    upt[d].innerHTML = "<button style=\" width: 39%; background: green; color: white;\" onclick='updwhtsts(false," + d + "," + "\"" + u + "\""+ ")'>On</button>";
-
-
-                }
-                else {
-                    upt[d].innerHTML = "<button style=\" width: 39%; background: red; color: white;\" onclick='updwhtsts(true," + d + "," + "\"" + u + "\"" + ")'>OFF</button>";
-
-                }
-            },
-
-        });
-
-
-
-
-
-
-
-            }
-
-
-
-
-
-        </script>
-
-
+                                        <tr class="vm-whatsapp-status-row @(isOn ? "vm-whatsapp-status-row--on" : "vm-whatsapp-status-row--off")" data-status="@(isOn ? "on" : "off")" data-user-id="@userId">
+                                            <td class="vm-whatsapp-status-sr">@sr</td>
+                                            <td>
+                                                <div class="vm-whatsapp-status-user">
+                                                    <strong class="vm-whatsapp-status-user__name">@displayName</strong>
+                                                    @if (!string.IsNullOrWhiteSpace(displayEmail) && displayEmail != "-")
+                                                    {
+                                                        <span class="vm-whatsapp-status-user__email">@displayEmail</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@displayRole</td>
+                                            <td class="vm-whatsapp-status-cell" data-row-index="@rowIndex">
+                                                @if (isOn)
+                                                {
+                                                    <button type="button" class="vm-whatsapp-status-pill vm-whatsapp-status-pill--on vm-whatsapp-status-pill--btn" onclick="whatsappStatusUpdate(false, @rowIndex, @Html.Raw(Json.Encode(userId)))"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-whatsapp-status-pill vm-whatsapp-status-pill--off vm-whatsapp-status-pill--btn" onclick="whatsappStatusUpdate(true, @rowIndex, @Html.Raw(Json.Encode(userId)))"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>
+                                                }
+                                            </td>
+                                        </tr>
+                                        sr++;
+                                        rowIndex++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </section>
 
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+<script>
+    function refreshWhatsappStatusSummary() {
+        var rows = document.querySelectorAll('#whatsappStatusTable tbody tr.vm-whatsapp-status-row');
+        var onCount = 0;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].getAttribute('data-status') === 'on') {
+                onCount++;
+            }
+        }
+        $('#whatsappStatusRecordCount').text(rows.length);
+        $('#whatsappStatusOnCount').text(onCount);
+        $('#whatsappStatusOffCount').text(rows.length - onCount);
+    }
+
+    function destroyWhatsappStatusSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyWhatsappStatusSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyWhatsappStatusSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6,
+            dropdownParent: $('#whatsappStatusForm')
+        });
+    }
+
+    function syncWhatsappStatusSelectWidth() {
+        $('.vm-whatsapp-status-field').css({ width: '100%', maxWidth: '100%' });
+        $('#whatsappStatusForm select').css({ width: '100%', maxWidth: '100%' });
+        $('#whatsappStatusForm .select2-container').css({ width: '100%', maxWidth: '100%' });
+    }
+
+    function initWhatsappStatusSelect2() {
+        applyWhatsappStatusSelect2($('#whatsappRole'));
+        applyWhatsappStatusSelect2($('#whatsappUser'));
+        window.setTimeout(syncWhatsappStatusSelectWidth, 0);
+        window.setTimeout(syncWhatsappStatusSelectWidth, 120);
+    }
+
+    function bindWhatsappStatusFilterEvents() {
+        $('#whatsappRole, #whatsappUser').off('change.whatsappStatus').on('change.whatsappStatus', function () {
+            $('#whatsappStatusSubmit').click();
+        });
+    }
+
+    function whatsappStatusUpdate(nextStatus, rowIndex, userId) {
+        $.ajax({
+            url: '@Url.Action("Whatsaapupdateuser", "Home")',
+            type: 'POST',
+            data: { sts: nextStatus, user: userId },
+            cache: false,
+            success: function (response) {
+                if (userId === 'ALL') {
+                    window.location.reload();
+                    return;
+                }
+
+                var isOn = response === true || response === 'true';
+                var $cell = $('.vm-whatsapp-status-cell[data-row-index="' + rowIndex + '"]');
+                var $row = $cell.closest('tr');
+
+                if (isOn) {
+                    $cell.html('<button type="button" class="vm-whatsapp-status-pill vm-whatsapp-status-pill--on vm-whatsapp-status-pill--btn" onclick="whatsappStatusUpdate(false, ' + rowIndex + ', ' + JSON.stringify(userId) + ')"><i class="fas fa-check-circle" aria-hidden="true"></i><span>ON</span></button>');
+                    $row.removeClass('vm-whatsapp-status-row--off').addClass('vm-whatsapp-status-row--on').attr('data-status', 'on');
+                } else {
+                    $cell.html('<button type="button" class="vm-whatsapp-status-pill vm-whatsapp-status-pill--off vm-whatsapp-status-pill--btn" onclick="whatsappStatusUpdate(true, ' + rowIndex + ', ' + JSON.stringify(userId) + ')"><i class="fas fa-times-circle" aria-hidden="true"></i><span>OFF</span></button>');
+                    $row.removeClass('vm-whatsapp-status-row--on').addClass('vm-whatsapp-status-row--off').attr('data-status', 'off');
+                }
+
+                refreshWhatsappStatusSummary();
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        initWhatsappStatusSelect2();
+        bindWhatsappStatusFilterEvents();
+        refreshWhatsappStatusSummary();
+        $(window).on('resize orientationchange', syncWhatsappStatusSelectWidth);
+    });
+</script>

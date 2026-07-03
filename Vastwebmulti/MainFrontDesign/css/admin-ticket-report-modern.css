@@ -1,4 +1,4 @@
-/* ADMIN — Flight Ticket Report v=7 */
+﻿/* ADMIN — Flight Ticket Report v=7 */
 
 
 
@@ -4339,4 +4339,853 @@ body.saas-admin-ui .saas-passby-retailer-dmt-page #passbyRetailerDmtTable.vm-opr
         width: 100% !important;
         justify-content: center !important;
     }
+}
+
+/* WhatsApp Status User Wise — same shell as By Pass DMT */
+body.saas-admin-ui .saas-whatsapp-status-page {
+    --whatsapp-status-filter-width: 200px;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field--role,
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field--user {
+    flex: 0 0 var(--whatsapp-status-filter-width) !important;
+    width: var(--whatsapp-status-filter-width) !important;
+    min-width: var(--whatsapp-status-filter-width) !important;
+    max-width: var(--whatsapp-status-filter-width) !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusForm .select2-dropdown {
+    z-index: 10050 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-opr-table-panel__title i.fa-whatsapp {
+    color: #25d366;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 720px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable thead th,
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable tbody td {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 160px;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-user__name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-user__email {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-sr {
+    color: #64748b;
+    font-weight: 600;
+    width: 48px;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-on-badge strong {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-off-badge strong {
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 72px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-pill i {
+    font-size: 0.82rem;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-pill--on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-pill--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24) !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-pill--btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable.vm-opr-data-table button.vm-whatsapp-status-pill {
+    padding: 0 14px !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    line-height: 1 !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field--role,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field--user {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-whatsapp-status-page #whatsappStatusTable.vm-opr-data-table {
+        min-width: 720px !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-radiant-inline-total {
+        flex: 1 1 calc(33.33% - 4px) !important;
+        min-width: calc(33.33% - 4px) !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-radiant-inline-filters > .vm-whatsapp-status-field {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field .select2-container,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field select,
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-field .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-whatsapp-status-page .vm-whatsapp-status-filter-row > .vm-dmt-filter-search-group .vm-opr-toolbar-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+/* Recharge B2C — same shell as By Pass DMT */
+body.saas-admin-ui .saas-recharge-b2c-page {
+    --recharge-b2c-filter-width: 200px;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field--dealer,
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field--retailer {
+    flex: 0 0 var(--recharge-b2c-filter-width) !important;
+    width: var(--recharge-b2c-filter-width) !important;
+    min-width: var(--recharge-b2c-filter-width) !important;
+    max-width: var(--recharge-b2c-filter-width) !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row .select2-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row .select2-container--default .select2-selection--single {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cForm .select2-dropdown {
+    z-index: 10050 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-opr-table-panel__title i.fa-mobile-alt {
+    color: #ea580c;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 720px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable thead th,
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable tbody td {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-user__firm {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-user__name {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-sr {
+    color: #64748b;
+    font-weight: 600;
+    width: 48px;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-on-badge strong {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-off-badge strong {
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-status-pill,
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 72px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-status-pill i,
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-confirm-btn i {
+    font-size: 0.82rem;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-status-pill--on {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-status-pill--off {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.24) !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-confirm-btn {
+    background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+    color: #fff !important;
+    min-width: 120px !important;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-status-pill--btn:hover,
+body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-confirm-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable.vm-opr-data-table button {
+    padding: 0 14px !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    line-height: 1 !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field--dealer,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field--retailer {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-recharge-b2c-page #rechargeB2cTable.vm-opr-data-table {
+        min-width: 720px !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-main-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-radiant-inline-total {
+        flex: 1 1 calc(33.33% - 4px) !important;
+        min-width: calc(33.33% - 4px) !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-radiant-inline-filters {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-radiant-inline-filters > .vm-recharge-b2c-field {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field .select2-container,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field select,
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-field .form-control {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row > .vm-dmt-filter-search-group {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-recharge-b2c-page .vm-recharge-b2c-filter-row > .vm-dmt-filter-search-group .vm-opr-toolbar-search {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
+
+
+/* ================================================================
+   RETAILER e-KYC PAGE  (saas-ekyc-page)   v=61
+   ================================================================ */
+
+body.saas-admin-ui .saas-ekyc-page { background: #f1f5f9 !important; }
+
+/* ============================================================
+   TOP BAR  (breadcrumb left + search/export right — ONE LINE)
+   ============================================================ */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    margin-bottom: 14px !important;
+}
+
+/* Breadcrumb */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb {
+    display: flex !important;
+    align-items: center !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    flex-shrink: 0 !important;
+    flex-wrap: wrap !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb li {
+    font-size: 0.8rem !important;
+    color: #64748b !important;
+    display: flex !important;
+    align-items: center !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb li + li::before {
+    content: "/" !important;
+    margin: 0 6px !important;
+    color: #cbd5e1 !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb a {
+    color: #3b82f6 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb a:hover { text-decoration: underline !important; }
+
+/* ============================================================
+   ACTIONS ROW — search + excel + pdf ALL IN ONE LINE
+   ============================================================ */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-actions-row {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Search wrap */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-wrap {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-icon {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 0.76rem !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-input {
+    width: 230px !important;
+    height: 38px !important;
+    padding: 0 10px 0 30px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.81rem !important;
+    color: #334155 !important;
+    background: #f8fafc !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transition: border-color .2s, background .2s !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-input:focus {
+    border-color: #3b82f6 !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.1) !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-input::placeholder { color: #94a3b8 !important; }
+
+/* Export buttons */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-export-btn {
+    height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    border: none !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: opacity .18s !important;
+    text-decoration: none !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-export-btn--excel {
+    background: linear-gradient(135deg,#16a34a,#22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(34,197,94,.28) !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-export-btn--pdf {
+    background: linear-gradient(135deg,#dc2626,#ef4444) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(239,68,68,.28) !important;
+}
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-export-btn:hover { opacity: .87 !important; }
+
+/* ============================================================
+   SUMMARY BADGES
+   ============================================================ */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-verified-badge   { background: linear-gradient(135deg,#dcfce7,#bbf7d0) !important; color: #166534 !important; border: 1px solid #86efac !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-unverified-badge { background: linear-gradient(135deg,#fee2e2,#fecaca) !important; color: #991b1b !important; border: 1px solid #fca5a5 !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-unreg-badge      { background: linear-gradient(135deg,#fef3c7,#fde68a) !important; color: #92400e !important; border: 1px solid #fbbf24 !important; }
+
+/* Table panel icon */
+body.saas-admin-ui .saas-ekyc-page .vm-opr-table-panel__title i.fa-fingerprint { background: linear-gradient(135deg,#e0e7ff,#dbeafe) !important; color: #4f46e5 !important; }
+
+/* ============================================================
+   TABLE — BLACK header
+   ============================================================ */
+body.saas-admin-ui .saas-ekyc-page #ekycTable.vm-opr-data-table { min-width: 1100px !important; }
+body.saas-admin-ui .saas-ekyc-page #ekycTable thead { background: #111827 !important; }
+body.saas-admin-ui .saas-ekyc-page #ekycTable thead th {
+    background: #111827 !important;
+    color: #f1f5f9 !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    padding: 11px 12px !important;
+    border-color: #374151 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+}
+body.saas-admin-ui .saas-ekyc-page #ekycTable tbody tr.vm-ekyc-row td {
+    font-size: 0.78rem !important;
+    vertical-align: middle !important;
+    padding: 9px 12px !important;
+    white-space: nowrap !important;
+}
+body.saas-admin-ui .saas-ekyc-page #ekycTable tbody tr.vm-ekyc-row:hover { background: #f0f7ff !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-sr   { text-align: center !important; font-weight: 700 !important; color: #64748b !important; width: 40px !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-firm { font-weight: 600 !important; color: #1e293b !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-date { color: #64748b !important; font-size: 0.73rem !important; }
+
+/* Status pills */
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-pill { display: inline-flex !important; align-items: center !important; gap: 4px !important; padding: 3px 10px !important; border-radius: 20px !important; font-size: 0.71rem !important; font-weight: 700 !important; white-space: nowrap !important; text-transform: capitalize !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-pill--verified   { background: linear-gradient(135deg,#dcfce7,#bbf7d0) !important; color: #166534 !important; border: 1px solid #86efac !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-pill--unverified { background: linear-gradient(135deg,#fee2e2,#fecaca) !important; color: #991b1b !important; border: 1px solid #fca5a5 !important; }
+body.saas-admin-ui .saas-ekyc-page .vm-ekyc-pill--unreg      { background: linear-gradient(135deg,#fef3c7,#fde68a) !important; color: #92400e !important; border: 1px solid #fbbf24 !important; }
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-topbar {
+        flex-wrap: wrap !important;
+        padding: 10px 12px !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-breadcrumb {
+        flex: 1 1 100% !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-actions-row {
+        flex: 1 1 100% !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-wrap {
+        flex: 1 1 100% !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-search-input {
+        width: 100% !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-ekyc-export-btn {
+        flex: 1 1 auto !important;
+        justify-content: center !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+    }
+    body.saas-admin-ui .saas-ekyc-page .vm-opr-table-panel__head {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+}
+/* ================================================================
+   WALLET UNLOAD LIMIT PAGE  (saas-unloadlimit-page)   v=1
+   ================================================================ */
+
+body.saas-admin-ui .saas-unloadlimit-page { background: #f1f5f9 !important; }
+
+/* ---- Top bar ---- */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 10px 16px !important;
+    background: #fff !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+    margin-bottom: 14px !important;
+}
+
+/* Breadcrumb */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-breadcrumb {
+    display: flex !important;
+    align-items: center !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    flex-wrap: wrap !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-breadcrumb li {
+    font-size: 0.8rem !important;
+    color: #64748b !important;
+    display: flex !important;
+    align-items: center !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-breadcrumb li + li::before {
+    content: "/" !important;
+    margin: 0 6px !important;
+    color: #cbd5e1 !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-breadcrumb a {
+    color: #3b82f6 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-breadcrumb a:hover { text-decoration: underline !important; }
+
+/* Record badge */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-record-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    padding: 4px 12px !important;
+    font-size: 0.78rem !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+}
+
+/* Info badge */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-info-badge {
+    font-size: 0.76rem !important;
+    color: #64748b !important;
+}
+
+/* Table panel icon */
+body.saas-admin-ui .saas-unloadlimit-page .vm-opr-table-panel__title i.fa-wallet {
+    background: linear-gradient(135deg,#ede9fe,#ddd6fe) !important;
+    color: #7c3aed !important;
+}
+
+/* ---- Table ---- */
+body.saas-admin-ui .saas-unloadlimit-page #ulTable.vm-opr-data-table { min-width: 480px !important; }
+
+/* thead — Light gray style (matching RechargeB2C) */
+body.saas-admin-ui .saas-unloadlimit-page #ulTable thead {
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5 !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page #ulTable thead th {
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    color: #334155 !important;
+    font-size: 0.73rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    padding: 12px 14px !important;
+    border: none !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* tbody */
+body.saas-admin-ui .saas-unloadlimit-page #ulTable tbody tr.vm-ul-row td {
+    font-size: 0.82rem !important;
+    vertical-align: middle !important;
+    padding: 10px 14px !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page #ulTable tbody tr.vm-ul-row:hover { background: #f8fafc !important; }
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-sr { text-align: center !important; font-weight: 700 !important; color: #94a3b8 !important; width: 46px !important; }
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-firm { font-weight: 600 !important; color: #1e293b !important; font-size: 0.83rem !important; }
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-email { font-size: 0.74rem !important; color: #64748b !important; margin-top: 2px !important; }
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-limit-cell { font-weight: 700 !important; color: #0f172a !important; font-size: 0.88rem !important; font-family: 'Courier New', monospace !important; }
+
+/* ---- Edit/Save buttons ---- */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn {
+    height: 32px !important;
+    padding: 0 14px !important;
+    border-radius: 7px !important;
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    border: none !important;
+    transition: opacity .18s !important;
+    white-space: nowrap !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn--edit {
+    background: linear-gradient(135deg,#3b82f6,#2563eb) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(59,130,246,.3) !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn--save {
+    background: linear-gradient(135deg,#16a34a,#22c55e) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(34,197,94,.28) !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn--cancel {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 0 10px !important;
+    box-shadow: none !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn:hover { opacity: .85 !important; }
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-btn:disabled { opacity: .6 !important; cursor: not-allowed !important; }
+
+/* Edit wrap */
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-edit-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+}
+body.saas-admin-ui .saas-unloadlimit-page .vm-ul-input {
+    height: 32px !important;
+    width: 120px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #3b82f6 !important;
+    font-size: 0.82rem !important;
+    color: #1e293b !important;
+    background: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.1) !important;
+}
+
+/* ---- Toast ---- */
+.vm-ul-toast {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    background: #1e293b !important;
+    color: #fff !important;
+    padding: 10px 20px !important;
+    border-radius: 10px !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    opacity: 0 !important;
+    transform: translateY(12px) !important;
+    transition: opacity .25s, transform .25s !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18) !important;
+}
+.vm-ul-toast--show { opacity: 1 !important; transform: translateY(0) !important; }
+.vm-ul-toast--success { background: #166534 !important; }
+.vm-ul-toast--error   { background: #991b1b !important; }
+
+/* ---- Mobile ---- */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-unloadlimit-page .vm-ul-topbar {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 10px 12px !important;
+    }
+    body.saas-admin-ui .saas-unloadlimit-page #ulTable.vm-opr-data-table { min-width: 400px !important; }
+    body.saas-admin-ui .saas-unloadlimit-page .vm-ul-input { width: 100px !important; }
+    body.saas-admin-ui .saas-unloadlimit-page .vm-ul-edit-wrap { flex-wrap: nowrap !important; }
+    body.saas-admin-ui .saas-unloadlimit-page .vm-dmt-table-panel__right { flex-wrap: wrap !important; gap: 5px !important; }
+    body.saas-admin-ui .saas-unloadlimit-page .vm-opr-table-panel__head { flex-wrap: wrap !important; gap: 8px !important; }
 }
