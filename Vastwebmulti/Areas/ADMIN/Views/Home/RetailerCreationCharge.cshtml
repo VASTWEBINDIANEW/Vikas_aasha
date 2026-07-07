@@ -1,1385 +1,1016 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.Token_PaidService_VM
 @using Vastwebmulti.Models;
 @{
-    ViewBag.Title = "Joining Charge";
+    ViewBag.Title = "SignUp Setting";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 @{
     int? all_cappingretailer = 0;
     VastwebmultiEntities db = new VastwebmultiEntities();
     var all_cappingretailer1 = db.All_Retailercapping.SingleOrDefault();
-    if (all_cappingretailer1 != null)
-    {
-        all_cappingretailer = all_cappingretailer1.All_Capping;
-
-    }
-    else
-    {
-        all_cappingretailer = 0;
-    }
-
+    if (all_cappingretailer1 != null) { all_cappingretailer = all_cappingretailer1.All_Capping; }
+    else { all_cappingretailer = 0; }
 }
+
 <script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment-with-locales.min.js"></script>
 
-<style>
-    /* new css */
-    .res_div {
-        float: right;
-        width: auto;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=7" rel="stylesheet" />
 
-    .bread-same-all-page {
-        width: auto;
-        float: left;
-    }
+<section class="content Retailer_Creation_Charge_Page New_Employee_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
 
-    .pageheader-margin-third {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+    <div class="container-fluid vm-ft-page-shell">
 
-    #refferalsetinpartial {
-        height: 29px;
-    }
-
-    .retalerrlist-add-button {
-        height: 29px;
-    }
-
-    .tmw-retailer-creaction-charge .ri-hist-itemsecond table, .tmw-retailer-creaction-charge .ri-hist-itemone table {
-        background: #fff;
-    }
-
-    .tmw-retailer-creaction-charge .left-sign-ups {
-        height: auto;
-    }
-
-    /* new css */
-
-    .reffael-fullseting {
-        width: 100%;
-        float: left;
-    }
-
-        .reffael-fullseting select.form-control {
-            width: 50%;
-            float: left;
-        }
-
-        .reffael-fullseting button.reffralactivedeacrt {
-            float: right;
-            padding: 7px 14px !important;
-            text-align: center;
-            border: 0;
-            font-weight: bold;
-        }
-
-    button.reffralactivedeacrt.reffralactivedeacrt-add span.reffralactive {
-        display: none;
-    }
-
-    button.reffralactivedeacrt.reffralactivedeacrt-add span.reffraldeactive {
-        display: block !important;
-    }
-
-    .classfullsavechange button {
-        width: 100%;
-        float: left;
-        margin-top: 30px;
-        border: 0 !important;
-        background: #d3d3d3;
-        width: 100%;
-        border-radius: 30px !important;
-        height: 40px !important;
-    }
-
-    .disablevalue {
-        padding: 7px 10px;
-        background: #ddd;
-        color: #555;
-    }
-
-    .disablevalue {
-        width: 50%;
-        float: left;
-    }
-
-    div#refferalsetinpartial button {
-        width: 137px;
-        height: 29px;
-        border: 1px solid #ddd;
-        text-align: end;
-        padding-right: 5px;
-        position: relative;
-    }
-
-    .butttuno_2 {
-        width: auto;
-        height: 22px;
-        float: left;
-        border: 1px #ddd solid;
-        margin-left: 5px;
-        margin-top: 3px;
-        text-align: center;
-        color: #000;
-        padding:0px 3px;
-    }
-
-    p.prag_1 {
-        font-size: 9px;
-        padding-right: 0px;
-        font-weight: 500;
-        padding-top: 2px;
-    }
-
-    p.prag_2 {
-        position: absolute;
-        top: 10px;
-        right: 7px;
-        font-size: 14px;
-        color: #000;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 1.4px;
-    }
-
-    p.prag_12_off {
-        width: 100%;
-        float: left;
-        margin-top: 5px;
-        font-weight: 600;
-        position: absolute;
-        right: 5px;
-    }
-
-    p.prag_2_3 {
-        position: absolute;
-        top: 10px;
-        right: 6px;
-        font-size: 13px;
-        color: red;
-        text-transform: uppercase;
-        font-weight: 600;
-    }
-
-    p.prag-14 {
-        font-size: 9px;
-        padding-right: 0px;
-        font-weight: 500;
-        padding-top: 2px;
-        margin: 0;
-    }
-
-    p.prag-16 {
-        position: absolute;
-        top: 13px;
-        left: 55px;
-        font-size: 10px;
-        color: #000;
-        text-transform: uppercase;
-        font-weight: 600;
-    }
-
-    @@media screen and (max-width:1366px) {
-        .retailercrection-first .left-sign-ups ul.tab-seconddesign li button {
-            font-weight: normal;
-            font-size: 12px;
-        }
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:991px) {
-
-        .padd-right {
-            padding-right: 15px !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:600px) {
-
-        .pageheader-margin-third {
-            display: block;
-            float: left;
-            width: 100%;
-        }
-
-        .bread-same-all-page {
-            width: 100%;
-            padding: 2px 0;
-        }
-
-        .res_div {
-            width: 100%;
-            padding: 2px 0;
-        }
-    }
-
-    @@media screen and (max-width:420px) {
-        .tmw-retailer-creaction-charge .left-sign-ups .user-registration-right .rightright .ririririr {
-            height: auto;
-        }
-
-        .web-white-filter.pdfexpoer-second.pdf-third-design {
-            width: 100%;
-            margin-top: 5px;
-        }
-
-        .retailercrection-first .left-sign-ups ul.tab-seconddesign li button {
-            font-weight: normal;
-            font-size: 11px;
-        }
-
-        div#refferalsetinpartial button {
-            width: 100%;
-            float: left;
-        }
-
-        #refferalsetinpartial {
-            width: 50%;
-            margin: 0;
-        }
-
-        #myModal123showdata1 {
-            width: 100% !important;
-            float: left;
-        }
-
-        .retalerrlist-add-button {
-            width: 50%;
-        }
-    }
-</style>
-
-<section class="content tmw-retailer-creaction-charge special-iii fourdesign-section-admin" style="position:fix;">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>SignUp Setting</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">SignUp Setting</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul class="padding-top-third">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            User&nbsp;Controller
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        SignUp Setting
-                    </li>
-                </ul>
+        <!-- ── Toolbar ── -->
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>SignUp Setting</li>
+                </ol>
             </div>
-
-            <div class="res_div">
-
-                @*<div class="web-white-filter pdfexpoer-second pdf-third-design" id="refferalsetinpartial" style="float: left;">
-
-                    @Html.Action("_RefferalSettingpage")
-
-
-                </div>*@
-
-                <div class="retalerrlist-add-button" style="float: left;">
-                    <button type="button" style="height: 29px; position: relative; background-color: #b1a6a638; width: 150px; border: 1px solid #ccc; margin: 0px 3px; " data-toggle="modal" id="myModal123showdata1" data-target="#myModalnew" onclick="travel_hideshow()">
-                    <div class="butttuno_2" style=" background-color: orange;">
-                        @all_cappingretailer
-                    </div> 
-                    <div>
-                        <p class="prag-14">Self SignUp Retailers </p>
-                        <br>
-                        <p class="prag-16">Default Capping</p>
-                    </div>
-                    
-                    </button>
-
-
-                </div>
-
-                <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: left;">
-                    <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                    <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
-                </div>
-
+            <div class="vm-ft-search-wrap">
+                <!-- Capping button -->
+                <button type="button" class="rc-capping-btn" data-toggle="modal" data-target="#myModalnew"
+                        onclick="travel_hideshow()" title="Self SignUp Retailers Capping">
+                    <span class="rc-capping-badge">@all_cappingretailer</span>
+                    <span class="rc-capping-text">Self SignUp Retailers<br><small>Default Capping</small></span>
+                </button>
+                <!-- Export buttons -->
+                <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel">
+                    <i class="fas fa-file-excel"></i>
+                </button>
+                <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
             </div>
-
         </div>
 
-        <div class="row clearfix tablefourdesign-admin">
-            <div class="col-md-4 col-sm-12 col-xs-12 padd-right retailercrection-first">
-                <div class="left-sign-ups left-sign-ups-second page-header-third">
-                    <ul class="tab-seconddesign tab-seconddesignclass tab-third-design" style="background:#a4a0a0;display:flex;">
-                        <li><button class="paid-serv fi-bu">Paid Services</button></li>
-                        <li><button class="sign-up" onclick="dlmSignUpRight();">Sign Up Rights</button></li>
-                        <li><button class="Token" onclick="AddToken();">Token's Price</button></li>
-                        @*<li><button class="Reffaralclass" onclick="Rerffaralse();">Reffral Setting</button></li>*@
-                    </ul>
+        <!-- ── Two-column layout ── -->
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
-                    <div class="body body-one" style="background:var(--second-bg-color);height: 75vh;">
-                        <div class="user-registration-right" id="SignUpSetting">
-                            @Html.Partial("_DlmSignUpRight")
+                <!-- ====== LEFT: Settings Panel ====== -->
+                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+                    <div class="fund-trasfer-left fund-user-left vm-ft-form-card">
 
+                        <!-- Card header -->
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon"><i class="fas fa-cog"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">SignUp Setting</span>
+                                <span class="vm-ft-form-card-header__sub">Configure retailer creation</span>
+                            </div>
                         </div>
-                        <div class="body table-responsive special-iii" id="_SetSignUpCharge" style="border-top:6px solid #fff;">
-                            @Html.Partial("_SetJoingChargeStatus")
+
+                        <!-- Left tabs -->
+                        <div class="au-tabs rc-left-tabs">
+                            <button type="button" class="au-tab-btn active" id="rc-ltab-paid"
+                                    onclick="rcLeftTab('rc-lpanel-paid','rc-ltab-paid')">
+                                <i class="fas fa-credit-card"></i> Paid Services
+                            </button>
+                            <button type="button" class="au-tab-btn" id="rc-ltab-signup"
+                                    onclick="rcLeftTab('rc-lpanel-signup','rc-ltab-signup'); dlmSignUpRight();">
+                                <i class="fas fa-user-check"></i> Sign Up Rights
+                            </button>
+                            <button type="button" class="au-tab-btn" id="rc-ltab-token"
+                                    onclick="rcLeftTab('rc-lpanel-token','rc-ltab-token')">
+                                <i class="fas fa-ticket-alt"></i> Token's Price
+                            </button>
                         </div>
-                    </div>
 
-                    <div class="body-two">
-                        <div class="row clearfix">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="body-two">
-                                    <div id="paidservicetbl" class="body table-responsive padding-topclass-third" style="background:#fff; height: 75vh;">
-                                        @Html.Partial("_PaidService")
-
-                                    </div>
+                        <!-- Tab Panel: Paid Services -->
+                        <div id="rc-lpanel-paid" class="rc-left-panel" style="display:block; overflow-y:auto; max-height:72vh;">
+                            <div class="rc-table-cover rc-table-cover--left">
+                                <div id="paidservicetbl" class="rc-table-scroll">
+                                    @Html.Partial("_PaidService")
                                 </div>
                             </div>
                         </div>
-                    </div><!--.body-two-->
 
-                    <div class="body-three special-iii" id="AddTokenVal">
-                        @Html.Partial("_AddTokenValue")
-                    </div><!--.body-three-->
-                    @using (Ajax.BeginForm("Refferal_Setting", new AjaxOptions() { HttpMethod = "Post", UpdateTargetId = "comments1234" }))
-                    {
-                        <div class="body-foure special-iii" id="" style="float: left; width: 100%; background: var(--second-bg-color); display: none; padding: 10px; height: 75vh;">
-                            <div class="reffael-fullseting">
-
-                                <div class="select-reffralcode">
-                                    <p><strong>Set Refferal Code Limit</strong></p>
-                                    <select class="form-control" id="limit123" name="limit123">
-                                        <option>--Select Limit--</option>
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                    </select>
-                                    <span class="disablevalue" id="showvalueid" style="display:none;"></span>
-                                    <div>
-                                        <input type="hidden" id="status123" name="status123" />
-                                    </div>
-                                    <button type="button" onclick="togglereferrel('N');" class="reffralactivedeacrt" id="active-reffrasl" name="active-reffrasl" style="background: #d3d3d3; padding: 7px 0;"><span class="reffralactive" style="color:green;">Active</span></button>
-                                    <button type="button" onclick="togglereferrel('Y');" class="reffralactivedeacrt" id="deactive-reffrasl" name="deactive-reffrasl" style="display:none;background: #d3d3d3; padding: 7px 0;"><span class="reffraldeactive" style="color:red;">Deactive</span></button>
-                                </div>
-                                <div class="classfullsavechange">
-                                    <button type="submit" id="tnSave" class="btn waves-effect btnssl2233 ees btn-first button-third" style="overflow:hidden;display:none;" value="Save" data-loading-text="">
-                                        <span class="loaderclick">Save Change</span>
-                                        <i class='fa fa-spinner fa-spin loaderclickspiner' style="display:none;"></i>
-                                    </button>
-                                    <button type="submit" id="Editbutton" class="btn waves-effect btnssl2233 ees btn-first button-third" style="overflow:hidden;" value="Save" data-loading-text="">
-                                        <span class="">Edit</span>
-                                        @*<i class='fa fa-spinner fa-spin loaderclickspiner' style="display:none;"></i>*@
-                                    </button>
-                                </div>
-
+                        <!-- Tab Panel: Sign Up Rights -->
+                        <div id="rc-lpanel-signup" class="rc-left-panel" style="display:none; overflow-y:auto; max-height:72vh;">
+                            <div class="user-registration-right" id="SignUpSetting">
+                                @Html.Partial("_DlmSignUpRight")
                             </div>
-                        </div><!--.body-four-->
-                    }
-                </div><!--.left-sign-ups-->
-            </div>
-            <div class="col-md-8 col-sm-12 col-xs-12">
-                <div class="right-history right-history-second page-header-third">
-                    <div class="right-hist-bottom">
+                            <div class="table-responsive" id="_SetSignUpCharge" style="border-top:3px solid #e2e8f0;">
+                                @Html.Partial("_SetJoingChargeStatus")
+                            </div>
+                        </div>
 
-                        <ul class="rrrr tab-seconddesign">
-                            <li class="active">
-                                <button class="rib1" onclick="dlm_ddlVal()">
-                                    Distributor Buy Token's History
-                                </button>
-                                <button type="button" class="btn fullbodydycolorbg plushbtn-second" data-toggle="modal" data-target="#defaultModal">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Token's</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button class="rib2" onclick="md_ddlVal()">
-                                    M/D Buy Token's History
-                                </button>
-                                <button type="button" class="btn fullbodydycolorbg plushbtn-second" data-toggle="modal" data-target="#defaultModal2">
-                                    <i class="fa fa-plus"></i>
-                                    <span>Token's</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button class="rib3" onclick="md_dlm_remainTkn()">Remain Token's</button>
-                            </li>
-                        </ul>
+                        <!-- Tab Panel: Token's Price -->
+                        <div id="rc-lpanel-token" class="rc-left-panel" style="display:none; overflow-y:auto; max-height:72vh;">
+                            <div id="AddTokenVal">
+                                @Html.Partial("_AddTokenValue")
+                            </div>
+                        </div>
 
                     </div>
-                    <div class="ri-hist-itemone">
+                </div>
+                <!-- ====== END LEFT ====== -->
 
-                        <div class="row clearfix">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="table-responsive" style="height: 75vh; background: var(--second-bg-color);">
+                <!-- ====== RIGHT: Token History (Tab layout) ====== -->
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
+                    <div class="fund-trasfer-right fund-user-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
 
-                                    <table id="DLM_BuyTokenHistory" class="table table-bordered example-second third-design-table" style="width:100%;">
-                                        <thead>
-                                            <tr id="dlmHeading">
-                                                <th class="select-th">
+                            <!-- Right tabs toolbar -->
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium vm-ml-list-toolbar">
+                                <div class="vm-ml-list-toolbar__row rc-right-toolbar-row">
+                                    <div class="rc-right-tabs">
+                                        <button type="button" class="au-tab-btn active" id="rc-rtab-dlm"
+                                                onclick="rcRightTab('rc-rpanel-dlm','rc-rtab-dlm','rc-add-dlm');">
+                                            <i class="fas fa-building"></i> Distributor Buy Token's History
+                                        </button>
+                                        <button type="button" class="au-tab-btn" id="rc-rtab-md"
+                                                onclick="rcRightTab('rc-rpanel-md','rc-rtab-md','rc-add-md'); md_ddlVal();">
+                                            <i class="fas fa-sitemap"></i> M/D Buy Token's History
+                                        </button>
+                                        <button type="button" class="au-tab-btn" id="rc-rtab-rem"
+                                                onclick="rcRightTab('rc-rpanel-rem','rc-rtab-rem',null); md_dlm_remainTkn();">
+                                            <i class="fas fa-coins"></i> Remain Token's
+                                        </button>
+                                    </div>
+                                    <div class="rc-right-actions">
+                                        <button type="button" id="rc-add-dlm" class="rc-token-add-btn"
+                                                data-toggle="modal" data-target="#defaultModal">
+                                            <i class="fas fa-plus"></i> Token's
+                                        </button>
+                                        <button type="button" id="rc-add-md" class="rc-token-add-btn"
+                                                data-toggle="modal" data-target="#defaultModal2" style="display:none;">
+                                            <i class="fas fa-plus"></i> Token's
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-                                                    <div class="btn-groupss">
-
-                                                        <button type="button" class="btnsam dropdown-toggle" data-toggle="dropdown">
-                                                            @Html.DropDownList("dlmId", ViewBag.ddlDealers as IEnumerable<SelectListItem>, "Select Distributor", new { @class = "selectpicker border-0", data_live_search = "true", @onchange = "dlm_ddlVal();" })
-                                                            <i class="fa fa-chevron-down tmw-total-color-one fullbodydycolorbg" aria-hidden="true" style="float:right;"></i>
-                                                        </button>
-                                                    </div>
-
-                                                </th>
-                                                <th title="Purched User Tokens">
-                                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                </th>
-                                                <th title="Token Price"><span class="table-header-text-black">Price</span></th>
-                                                <th title="Total Debit Amount">@*&nbsp;<i class="fa fa-inr" aria-hidden="true" style="float:left;margin-top:3px;"></i>&nbsp;*@Debit</th>
-                                                <th>Post&nbsp;Bal</th>
-                                                <th class="table-header-img">@*&nbsp;<i class="fa fa-tags" style="margin-right:3px;float:left;margin-top: 4px;"></i>*@<span class="table-header-text">Pre</span></th>
-                                                <th class="table-header-img">
-                                                    @*&nbsp;<i class="fa fa-tags" style="margin-right:3px;float:left;margin-top: 4px;"></i>*@<span class="table-header-text-green">Post</span>
-
-                                                </th>
-                                                <th>Purchased&nbsp;Date</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.RetailerCreationTokenVM != null)
-                                            {
-                                                foreach (var item in Model.RetailerCreationTokenVM)
+                            <!-- Tab 1: Distributor History -->
+                            <div id="rc-rpanel-dlm" class="rc-right-panel rc-right-panel--active">
+                                <div class="rc-table-cover">
+                                    <div class="rc-filter-bar">
+                                        @Html.DropDownList("dlmId", ViewBag.ddlDealers as IEnumerable<SelectListItem>, "All Distributors",
+                                            new { @class = "form-control rc-filter-select", @onchange = "dlm_ddlVal();" })
+                                    </div>
+                                    <div class="rc-table-scroll rc-table-scroll--tab">
+                                        <table id="DLM_BuyTokenHistory" class="table table-bordered rc-inner-table rc-token-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Distributor</th>
+                                                    <th title="Tokens"><i class="fas fa-ticket-alt"></i></th>
+                                                    <th>Price</th>
+                                                    <th>Debit</th>
+                                                    <th>Post&nbsp;Bal</th>
+                                                    <th>Pre</th>
+                                                    <th>Post</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.RetailerCreationTokenVM != null)
                                                 {
-                                                    <tr>
-                                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.Tokens)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.PerTokenValue)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.TotalDebit)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.DealerPost)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.pre)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.post)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.CteatedOn)</td>
-                                                    </tr>
-                                                }
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div><!--.row-->
-                    </div>
-                    <div class="ri-hist-itemsecond">
-                        <div class="row clearfix">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="table-responsive" style="height: 75vh; background: var(--second-bg-color);">
-                                    <table id="MD_BuyTokenHistory" class="table table-bordered" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th class="tht">
-                                                    @using (Html.BeginForm("RetailerCreationCharge", "Home", FormMethod.Post))
+                                                    foreach (var item in Model.RetailerCreationTokenVM)
                                                     {
-                                                        <div class="btn-groupss">
-
-                                                            <button type="button" class="btnsam dropdown-toggle" data-toggle="dropdown">
-                                                                @Html.DropDownList("masterId", ViewBag.ddlMaster as IEnumerable<SelectListItem>, "Select Master", new { @class = "selectpicker border-0", data_live_search = "true", @onchange = "md_ddlVal();" })
-                                                                <i class="fa fa-chevron-down tmw-total-color-one fullbodydycolorbg" aria-hidden="true" style="float:right;"></i>
-                                                            </button>
-
-                                                        </div>
+                                                        <tr>
+                                                            <td>@item.Email</td>
+                                                            <td>@item.Tokens</td>
+                                                            <td>@item.PerTokenValue</td>
+                                                            <td>@item.TotalDebit</td>
+                                                            <td>@item.DealerPost</td>
+                                                            <td>@item.pre</td>
+                                                            <td>@item.post</td>
+                                                            <td>@item.CteatedOn</td>
+                                                        </tr>
                                                     }
-                                                </th>
-                                                <th title="Purched User Tokens">
-                                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                </th>
-                                                <th title="Token Price"><span class="table-header-text-black">Price</span></th>
-                                                <th title="Total Debit Amount">@*&nbsp;<i class="fa fa-inr" aria-hidden="true" style="float:left;margin-top:3px;"></i>&nbsp;*@Debit</th>
-                                                <th>Post&nbsp;Bal</th>
-                                                <th>
-                                                    @*&nbsp;<i class="fa fa-tags" style="margin-right:3px;float:left;margin-top: 4px;"></i>&nbsp;Pre*@
-                                                    <span class="table-header-text">Pre</span>
-                                                </th>
-                                                <th>
-                                                    @*&nbsp;<i class="fa fa-tags" style="margin-right:3px;float:left;margin-top: 4px;"></i>&nbsp;Post*@
-                                                    <span class="table-header-text-green">Post</span>
-                                                </th>
-                                                <th>Purchased&nbsp;Date</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.DealerCreationTokenVM != null)
-                                            {
-                                                foreach (var item in Model.DealerCreationTokenVM)
-                                                {
-                                                    <tr>
-                                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.Tokens)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.PerTokenValue)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.TotalDebit)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.MasterPost)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.pre)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.post)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.CteatedOn)</td>
-                                                    </tr>
                                                 }
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Tab 2: M/D History -->
+                            <div id="rc-rpanel-md" class="rc-right-panel" style="display:none;">
+                                <div class="rc-table-cover">
+                                    <div class="rc-filter-bar">
+                                        @Html.DropDownList("masterId", ViewBag.ddlMaster as IEnumerable<SelectListItem>, "All Masters",
+                                            new { @class = "form-control rc-filter-select", @onchange = "md_ddlVal();" })
+                                    </div>
+                                    <div class="rc-table-scroll rc-table-scroll--tab">
+                                        @using (Html.BeginForm("RetailerCreationCharge", "Home", FormMethod.Post))
+                                        {
+                                            <table id="MD_BuyTokenHistory" class="table table-bordered rc-inner-table rc-token-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Master</th>
+                                                        <th title="Tokens"><i class="fas fa-ticket-alt"></i></th>
+                                                        <th>Price</th>
+                                                        <th>Debit</th>
+                                                        <th>Post&nbsp;Bal</th>
+                                                        <th>Pre</th>
+                                                        <th>Post</th>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.DealerCreationTokenVM != null)
+                                                    {
+                                                        foreach (var item in Model.DealerCreationTokenVM)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.Email</td>
+                                                                <td>@item.Tokens</td>
+                                                                <td>@item.PerTokenValue</td>
+                                                                <td>@item.TotalDebit</td>
+                                                                <td>@item.MasterPost</td>
+                                                                <td>@item.pre</td>
+                                                                <td>@item.post</td>
+                                                                <td>@item.CteatedOn</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 3: Remain Tokens -->
+                            <div id="rc-rpanel-rem" class="rc-right-panel" style="display:none;">
+                                <div class="rc-remain-grid">
+                                    <div class="rc-table-cover">
+                                        <div class="rc-remain-head"><i class="fas fa-sitemap"></i> Master Distributor Live Remain Token's</div>
+                                        <div id="rc-remain-md">
+                                            @Html.Partial("_MdRemainToken")
+                                        </div>
+                                    </div>
+                                    <div class="rc-table-cover">
+                                        <div class="rc-remain-head"><i class="fas fa-building"></i> Distributor Live Remain Token's</div>
+                                        <div id="rc-remain-dlm">
+                                            @Html.Partial("_DlmRemainToken")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-
-                    <div class="ri-hist-itemThree" style="height:75vh;">
-                        <div class="row" id="Md_dlm_RemainToken">
-                            @Html.Partial("_Md_dlm_RemainToken")
-                        </div>
-
-                    </div>
-
                 </div>
+                <!-- ====== END RIGHT ====== -->
+
             </div>
-        </div><!--.row-->
+        </div>
 
     </div>
 </section>
 
-@* Add Tokens Model *@
-<div class="modal fade tmw-joing-tokens custom-token-popup" id="defaultModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog model-height" role="document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    Sign Up Token (Distributor)
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="body">
-                    <form>
-                        <div class="row clearfix">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-8 col-sm-8 col-xs-12 sm-popup">
-                                        <label for="email_address_2">Select Distributr &</label>
-                                        <label for="email_address_2">
-                                            Enter Token <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                        </label>
-                                        <div class="form-group">
-
-                                            @Html.DropDownList("ddlDealer", ViewBag.ddlDealers as IEnumerable<SelectListItem>, new { @class = "selectpicker form-control", data_live_search = "true" })
-
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-12 enter-token">
-                                        <input type="hidden" name="tokenCount" id="tokenCount" value="1" />
-                                        <div class="form-group">
-                                            <ul class="jo-to-po-ul">
-                                                <li>
-                                                    <button type="button" id="btnChildMinus" class="btn  waves-effect btmPlusMinus" onclick="onPluseMinus(-1)" disabled="disabled">
-                                                        <i class="fa fa-minus" aria-hidden="true" style="font-size:10px;color:#757979;top:0px;"></i>
-                                                    </button>
-                                                </li>
-                                                <li><span id="showPhysicalCount">1</span></li>
-                                                <li>
-                                                    <button type="button" id="btnChildPlus" class="btn  waves-effect btmPlusMinus" onclick="onPluseMinus(1)">
-                                                        <i class="fa fa-plus" aria-hidden="true" style="font-size:10px;color:#757979;top:0px;"></i>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="modal-footer">
-                                            <label id="Lblmsg"></label>
-                                            <button type="button" class="btn waves-effect" data-dismiss="modal">
-                                                <span>Close</span>
-                                            </button>
-                                            <button type="button" id="DlmbtnSubmit" class="btn waves-effect btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <span>Verify & Sale Token</span>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@* =========================== *@
-<div class="modal fade tmw-joing-tokens custom-token-popup" id="defaultModal2" tabindex="-1" role="dialog">
-    <div class="modal-dialog model-height" role="document">
+<!-- ====== Modal: Add Token (Distributor) ====== -->
+<div class="modal fade wl-modal New_Employee_Page Retailer_Creation_Charge_Page" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="max-width:480px;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    Sign Up Token (Master Distributor)
-                </h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="body">
-                    <form>
-                        <div class="row clearfix">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-8 col-sm-8 col-xs-12">
-                                        <label for="email_address_2">Select Master &</label>
-                                        <label for="email_address_2">
-                                            Enter Token <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                                        </label>
-                                        <div class="form-group">
-                                            @Html.DropDownList("ddlMaster", ViewBag.ddlMaster as IEnumerable<SelectListItem>, new { @class = "selectpicker form-control", data_live_search = "true" })
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-4 col-xs-12 enter-token">
-                                        <input type="hidden" name="tokenCount2" id="tokenCount2" value="1" />
-                                        <div class="form-group">
-                                            <ul class="jo-to-po-ul">
-                                                <li>
-                                                    <button type="button" id="btnChildMinus2" class="btn  waves-effect btmPlusMinus2" onclick="onPluseMinuss(-1)" disabled="disabled">
-                                                        <i class="fa fa-minus" aria-hidden="true" style="font-size:10px;color:#757979;top:0px;"></i>
-                                                    </button>
-                                                </li>
-                                                <li><span id="showPhysicalCount2">1</span></li>
-                                                <li>
-                                                    <button type="button" id="btnChildPlus2" class="btn  waves-effect btmPlusMinus2" onclick="onPluseMinuss(1)">
-                                                        <i class="fa fa-plus" aria-hidden="true" style="font-size:10px;color:#757979;top:0px;"></i>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row ">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="modal-footer">
-                                            <label id="Lblmsg2"></label>
-                                            <button type="button" class="btn waves-effect" data-dismiss="modal">
-                                                <span>Close</span>
-                                            </button>
-                                            <button type="button" id="MdbtnSubmit" class="btn waves-effect btnssl2233 special-iii" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <span>Verify & Sale Token</span>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+            <div class="wl-modal-header">
+                <div class="wl-modal-header__left">
+                    <div class="wl-modal-header__icon"><i class="fas fa-ticket-alt"></i></div>
+                    <div>
+                        <div class="wl-modal-header__label">Distributor</div>
+                        <div class="wl-modal-header__balance">Sign Up Token</div>
+                    </div>
                 </div>
+                <button type="button" class="wl-modal-close" data-dismiss="modal"><i class="fas fa-times"></i></button>
             </div>
-
-        </div>
-    </div>
-</div>
-<!-- model default capping-->
-<div id="myModalnew" class="modal fade Wallet-To-Bank-Charge-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="float: right;margin: 0px;width:24%;">
-        <div class="modal-content">
-            <div class="modal-header" style="background: #bbb; padding: 0px 9px 8px 10px !important;">
-
-                <button type="button" class="btn waves-effect" id="closebtn" data-dismiss="modal" style="background: none;">
-                    <p style="float: left; font-size: 20px; font-weight: 800;">Reset/Change Retailer Capping<span style="float: right; color: var(--main-bg-lcolor); font-size: 30px; margin: 0; position: absolute;right: 19px;">x</span></p>
-
-                </button>
-            </div>
-            <div class="retailerlist-select" style="padding:20px;">
-                @using (Ajax.BeginForm("Add_RetailerCapping", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
-                {
-                    <div class="input-group classborder-thirddesign">
-                        <div class="ffjkt">
-                            <input name="Capping" type="text" maxlength="4" required placeholder="Default Capping Retailer" class="form-control" style="height: 27px !important; width: 242px; margin-left: 8px; padding: 12px; background: #f5f5f5; border: 1px solid #ccc; font-size: 12px; " onkeypress="return isNumber(event)" />
-                            <div class="retailerlist-search" style="float: left; padding-left: 5px;">
-                                <button type="submit" id="retailercapping" class="btn llpo input-back-second" title=@all_cappingretailer style="border: 1px solid #b1a6a638; background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important; color: white; height: 29px; font-size: 14px; padding: 2px 10px; ">
-                                    Save
-                                </button>
-                            </div>
+            <div class="modal-body wl-modal-body">
+                <form>
+                    <div class="form-group">
+                        <label><i class="fas fa-building" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Select Distributor</label>
+                        @Html.DropDownList("ddlDealer", ViewBag.ddlDealers as IEnumerable<SelectListItem>, "-- Select Distributor --",
+                            new { @class = "form-control rc-modal-select", id = "ddlDealer" })
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-ticket-alt" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Token Count</label>
+                        <input type="hidden" name="tokenCount" id="tokenCount" value="1" />
+                        <div class="rc-token-counter">
+                            <button type="button" id="btnChildMinus" class="rc-counter-btn" onclick="onPluseMinus(-1)" disabled="disabled">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="showPhysicalCount" class="rc-counter-value">1</span>
+                            <button type="button" id="btnChildPlus" class="rc-counter-btn" onclick="onPluseMinus(1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
                     </div>
+                    <div style="text-align:center;min-height:20px;margin-bottom:4px;">
+                        <label id="Lblmsg" style="font-size:.8rem;"></label>
+                    </div>
+                    <div class="ne-form-footer">
+                        <button type="button" class="ne-btn-reset" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                        <button type="button" id="DlmbtnSubmit" class="ne-btn-submit">
+                            <i class="fas fa-check"></i> Verify &amp; Sale Token
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- ====== Modal: Add Token (Master Distributor) ====== -->
+<div class="modal fade wl-modal New_Employee_Page Retailer_Creation_Charge_Page" id="defaultModal2" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="max-width:480px;">
+        <div class="modal-content">
+            <div class="wl-modal-header">
+                <div class="wl-modal-header__left">
+                    <div class="wl-modal-header__icon"><i class="fas fa-ticket-alt"></i></div>
+                    <div>
+                        <div class="wl-modal-header__label">Master Distributor</div>
+                        <div class="wl-modal-header__balance">Sign Up Token</div>
+                    </div>
+                </div>
+                <button type="button" class="wl-modal-close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body wl-modal-body">
+                <form>
+                    <div class="form-group">
+                        <label><i class="fas fa-sitemap" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Select Master Distributor</label>
+                        @Html.DropDownList("ddlMaster", ViewBag.ddlMaster as IEnumerable<SelectListItem>, "-- Select Master --",
+                            new { @class = "form-control rc-modal-select", id = "ddlMaster" })
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-ticket-alt" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Token Count</label>
+                        <input type="hidden" name="tokenCount2" id="tokenCount2" value="1" />
+                        <div class="rc-token-counter">
+                            <button type="button" id="btnChildMinus2" class="rc-counter-btn" onclick="onPluseMinuss(-1)" disabled="disabled">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="showPhysicalCount2" class="rc-counter-value">1</span>
+                            <button type="button" id="btnChildPlus2" class="rc-counter-btn" onclick="onPluseMinuss(1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div style="text-align:center;min-height:20px;margin-bottom:4px;">
+                        <label id="Lblmsg2" style="font-size:.8rem;"></label>
+                    </div>
+                    <div class="ne-form-footer">
+                        <button type="button" class="ne-btn-reset" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                        <button type="button" id="MdbtnSubmit" class="ne-btn-submit">
+                            <i class="fas fa-check"></i> Verify &amp; Sale Token
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ====== Modal: Retailer Capping ====== -->
+<div id="myModalnew" class="modal fade wl-modal New_Employee_Page Retailer_Creation_Charge_Page" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="max-width:420px;">
+        <div class="modal-content">
+            <div class="wl-modal-header">
+                <div class="wl-modal-header__left">
+                    <div class="wl-modal-header__icon"><i class="fas fa-users-cog"></i></div>
+                    <div>
+                        <div class="wl-modal-header__label">Default Capping</div>
+                        <div class="wl-modal-header__balance">Self SignUp Retailers</div>
+                    </div>
+                </div>
+                <button type="button" class="wl-modal-close" data-dismiss="modal" id="closebtn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body wl-modal-body">
+                @using (Ajax.BeginForm("Add_RetailerCapping", new AjaxOptions { HttpMethod = "Post", OnSuccess = "RetailerMobSearch", LoadingElementId = "div-loader" }))
+                {
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Default Capping (Retailers)</label>
+                        <input name="Capping" type="text" maxlength="4" required placeholder="Enter capping number"
+                               class="form-control" onkeypress="return isNumber(event)" />
+                    </div>
+                    <div class="ne-form-footer">
+                        <button type="button" class="ne-btn-reset" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" id="retailercapping" class="ne-btn-submit">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
                 }
             </div>
         </div>
     </div>
 </div>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
+<style>
+    /* ── Toolbar capping button ── */
+    .rc-capping-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 5px 12px; border-radius: 10px;
+        border: 1.5px solid #fed7aa; background: #fff7ed;
+        color: #9a3412; cursor: pointer; font-size: .76rem;
+        transition: background .14s;
+    }
+    .rc-capping-btn:hover { background: #ffedd5; }
+    .rc-capping-badge {
+        background: #f97316; color: #fff;
+        border-radius: 6px; padding: 2px 8px;
+        font-weight: 700; font-size: .8rem; min-width: 28px; text-align: center;
+    }
+    .rc-capping-text { line-height: 1.3; text-align: left; }
+    .rc-capping-text small { font-size: .68rem; color: #c2410c; display: block; }
+
+    /* ── Right panel tabs ── */
+    .rc-right-toolbar-row { flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px 0; }
+    .rc-right-tabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1 1 auto; }
+    .rc-right-tabs .au-tab-btn {
+        flex: 0 1 auto; height: 34px; padding: 0 12px; font-size: .72rem;
+        border-radius: 8px 8px 0 0; white-space: nowrap;
+    }
+    .rc-right-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+    .rc-right-panel { padding: 10px 14px 14px; display: none; }
+    .rc-right-panel--active { display: block; }
+
+    .rc-token-add-btn {
+        display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+        padding: 6px 14px; border-radius: 8px; border: none;
+        background: linear-gradient(135deg,#2563eb,#3b82f6); color: #fff;
+        font-size: .74rem; font-weight: 700; cursor: pointer; transition: opacity .14s;
+        box-shadow: 0 2px 8px rgba(37,99,235,.35);
+    }
+    .rc-token-add-btn:hover { opacity: .88; color: #fff; }
+
+    .rc-remain-grid { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+    .rc-remain-grid .rc-table-cover { width: 100%; }
+    .rc-remain-grid .rc-inner-table { min-width: 100% !important; width: 100% !important; table-layout: fixed; }
+    .rc-remain-grid .rc-inner-table th,
+    .rc-remain-grid .rc-inner-table td { white-space: normal; word-break: break-word; }
+    .rc-remain-grid .rc-table-scroll--remain { max-height: none; overflow: visible; }
+    .rc-remain-head {
+        padding: 9px 12px; background: linear-gradient(135deg,#0f766e,#0891b2);
+        color: #fff; font-size: .74rem; font-weight: 700;
+        display: flex; align-items: center; gap: 7px;
+        border-bottom: 1px solid #0891b2;
+    }
+
+    /* ── Table cover box (left + right) ── */
+    .rc-table-cover {
+        border: 1.5px solid #cbd5e1; border-radius: 10px;
+        background: #fff; overflow: hidden;
+        box-shadow: 0 1px 4px rgba(15,23,42,.06);
+    }
+    .rc-table-cover--left { margin: 0; }
+    .rc-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .rc-table-scroll--tab { max-height: 58vh; overflow-y: auto; }
+    .rc-table-scroll--remain { max-height: 42vh; overflow-y: auto; }
+
+    .rc-filter-bar { padding: 8px 10px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .rc-filter-select {
+        height: 32px !important; width: 100% !important;
+        border-radius: 8px !important; font-size: .76rem !important;
+        border: 1.5px solid #cbd5e1 !important; background: #fff !important;
+        color: #1e293b !important; padding: 4px 10px !important;
+    }
+
+    /* ── Inner tables (classic covered look) ── */
+    .Retailer_Creation_Charge_Page .rc-inner-table {
+        width: 100%; border-collapse: collapse; margin: 0 !important; min-width: 680px;
+        table-layout: auto;
+    }
+    .Retailer_Creation_Charge_Page .rc-inner-table thead tr { background: #64748b; }
+    .Retailer_Creation_Charge_Page .rc-inner-table thead th {
+        color: #fff; font-size: .7rem; font-weight: 600; padding: 7px 8px;
+        white-space: nowrap; border: 1px solid #94a3b8 !important;
+        text-transform: uppercase; letter-spacing: .02em; vertical-align: middle;
+    }
+    .Retailer_Creation_Charge_Page .rc-inner-table tbody td {
+        font-size: .74rem; padding: 7px 10px; color: #334155;
+        border: 1px solid #e2e8f0 !important; vertical-align: middle;
+        white-space: nowrap;
+    }
+    .Retailer_Creation_Charge_Page .rc-inner-table tbody td:first-child { white-space: normal; min-width: 120px; }
+    .Retailer_Creation_Charge_Page .rc-inner-table tbody tr:nth-child(even) td { background: #f8fafc; }
+    .Retailer_Creation_Charge_Page .rc-inner-table tbody tr:hover td { background: #eff6ff !important; }
+    .rc-live-th { text-align: center !important; }
+    .rc-live-label { color: #86efac; font-weight: 700; }
+    .rc-live-td { text-align: center; }
+    .rc-live-badge {
+        display: inline-block; min-width: 28px; padding: 2px 8px; border-radius: 6px;
+        font-size: .74rem; font-weight: 700; background: #f1f5f9; color: #64748b;
+    }
+    .rc-live-badge--on { background: #dcfce7; color: #166534; }
+    .rc-empty-row { text-align: center; padding: 16px !important; color: #94a3b8; font-size: .76rem; }
+
+    /* ── Legacy token table alias ── */
+    .Retailer_Creation_Charge_Page .vm-ml-data-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table thead tr { background: #1e293b; }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table thead th {
+        color: #fff; font-size: .72rem; font-weight: 600; padding: 8px 10px;
+        white-space: nowrap; border: none; text-transform: uppercase; letter-spacing: .03em;
+        vertical-align: middle;
+    }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table tbody tr:nth-child(even) { background: #f8fafc; }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table tbody tr:nth-child(odd)  { background: #fff; }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table tbody tr:hover td { background: #eff6ff !important; }
+    .Retailer_Creation_Charge_Page .vm-ml-data-table tbody td {
+        font-size: .78rem; padding: 7px 10px; color: #334155;
+        border-bottom: 1px solid #f1f5f9; vertical-align: middle;
+    }
+    .rc-filter-th { padding: 4px 6px !important; min-width: 160px; }
+    .rc-th-select {
+        height: 28px !important; border-radius: 6px !important; font-size: .72rem !important;
+        border: 1px solid #475569 !important; background: #334155 !important;
+        color: #f8fafc !important; padding: 2px 6px !important;
+    }
+
+    /* ── Token counter ── */
+    .rc-token-counter {
+        display: flex; align-items: center; gap: 0;
+        border: 1.5px solid #e2e8f0; border-radius: 8px; overflow: hidden;
+        width: fit-content; height: 34px;
+    }
+    .rc-counter-btn {
+        width: 36px; height: 100%; border: none; background: #f1f5f9;
+        color: #475569; cursor: pointer; font-size: .75rem; transition: background .12s;
+    }
+    .rc-counter-btn:hover:not(:disabled) { background: #e2e8f0; }
+    .rc-counter-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .rc-counter-value {
+        min-width: 50px; text-align: center; font-size: .88rem;
+        font-weight: 700; color: #1e293b;
+    }
+
+    /* ── Left panel tabs — single line text ── */
+    .Retailer_Creation_Charge_Page .rc-left-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+        padding: 8px 10px 0;
+        border-bottom: 1.5px solid #e2e8f0;
+    }
+    .Retailer_Creation_Charge_Page .rc-left-tabs .au-tab-btn {
+        flex: none;
+        width: 100%;
+        min-width: 0;
+        height: 32px;
+        padding: 0 6px;
+        font-size: .64rem;
+        white-space: nowrap;
+        border-radius: 8px !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        gap: 4px;
+    }
+    .Retailer_Creation_Charge_Page .rc-left-tabs .au-tab-btn i { font-size: .62rem; flex-shrink: 0; }
+
+    /* ── Left panel host ── */
+    .rc-left-panel { padding: 12px 14px; }
+
+    /* ── Paid Services table (from partial) ── */
+    .Retailer_Creation_Charge_Page #paidservicetbl { width: 100%; }
+    .Retailer_Creation_Charge_Page #paidservicetbl table {
+        width: 100%; border-collapse: collapse; margin: 0 !important; table-layout: auto;
+    }
+    .Retailer_Creation_Charge_Page #paidservicetbl table thead tr { background: #64748b; }
+    .Retailer_Creation_Charge_Page #paidservicetbl table thead th {
+        color: #fff; font-size: .7rem; font-weight: 600; padding: 8px 10px;
+        white-space: nowrap; border: 1px solid #94a3b8 !important;
+        text-transform: uppercase; letter-spacing: .02em;
+    }
+    .Retailer_Creation_Charge_Page #paidservicetbl table tbody td {
+        font-size: .76rem; padding: 7px 10px; color: #334155;
+        border: 1px solid #e2e8f0 !important; vertical-align: middle;
+        word-break: break-word;
+    }
+    .Retailer_Creation_Charge_Page #paidservicetbl table tbody tr:nth-child(even) td { background: #f8fafc; }
+    .Retailer_Creation_Charge_Page #paidservicetbl table tbody tr:nth-child(odd) td  { background: #fff; }
+    .Retailer_Creation_Charge_Page #paidservicetbl table tbody tr:hover td { background: #eff6ff !important; }
+    .Retailer_Creation_Charge_Page #paidservicetbl table tbody td:first-child { min-width: 110px; }
+
+    .rc-type-badge {
+        display: inline-block; padding: 2px 8px; border-radius: 5px;
+        font-size: .68rem; font-weight: 700;
+    }
+    .rc-type-badge--free { background: #dcfce7; color: #166534; }
+    .rc-type-badge--paid { background: #dbeafe; color: #1d4ed8; }
+
+    /* ── Edit button (in paid services table) ── */
+    .Retailer_Creation_Charge_Page .rc-ps-edit-btn {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 4px 12px; border-radius: 7px; font-size: .72rem; font-weight: 600;
+        border: 1.5px solid #3b82f6; color: #3b82f6; background: #eff6ff;
+        cursor: pointer; transition: all .14s; white-space: nowrap;
+    }
+    .Retailer_Creation_Charge_Page .rc-ps-edit-btn:hover { background: #3b82f6; color: #fff; }
+
+    /* ── Save button (inline edit row) ── */
+    .Retailer_Creation_Charge_Page .rc-ps-save-btn {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 4px 12px; border-radius: 7px; font-size: .72rem; font-weight: 600;
+        border: none; color: #fff; background: linear-gradient(135deg,#15803d,#22c55e);
+        cursor: pointer; transition: opacity .14s; white-space: nowrap;
+    }
+    .Retailer_Creation_Charge_Page .rc-ps-save-btn:hover { opacity: .85; }
+
+    /* ── Inline edit selects & inputs (in paid services edit row) ── */
+    .Retailer_Creation_Charge_Page #paidservicetbl select,
+    .Retailer_Creation_Charge_Page #paidservicetbl input[type="text"] {
+        height: 30px !important; padding: 2px 8px !important; font-size: .76rem !important;
+        border-radius: 6px !important; border: 1.5px solid #cbd5e1 !important;
+        background: #fff !important; color: #1e293b !important; min-width: 80px;
+    }
+    .Retailer_Creation_Charge_Page #paidservicetbl input[type="text"] { min-width: 70px; }
+
+    /* ── Select2 in modals ── */
+    .wl-modal .select2-container { width: 100% !important; z-index: 10060 !important; }
+    .wl-modal .select2-dropdown { z-index: 10061 !important; }
+    .wl-modal .wl-modal-body .select2-container--default .select2-selection--single {
+        height: 34px !important; border-radius: 8px !important;
+        border: 1.5px solid #e2e8f0 !important; background: #f8fafc !important;
+    }
+    .wl-modal .wl-modal-body .select2-selection--single .select2-selection__rendered {
+        line-height: 32px !important; font-size: .78rem !important; color: #334155 !important;
+        padding-left: 10px !important; padding-right: 28px !important;
+    }
+    .wl-modal .wl-modal-body .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 32px !important;
+    }
+
+    /* ── Mobile ── */
+    @@media (max-width: 991px) {
+        .Retailer_Creation_Charge_Page .vm-ft-layout { flex-direction: column !important; }
+        .Retailer_Creation_Charge_Page .vm-ft-form-col,
+        .Retailer_Creation_Charge_Page .vm-ft-history-col {
+            width: 100% !important; max-width: 100% !important;
+            float: none !important; padding-left: 0 !important; padding-right: 0 !important;
+        }
+        .Retailer_Creation_Charge_Page .fund-transfer-main-admin.vm-ft-history-col { margin-top: 14px; }
+    }
+    @@media (max-width: 767px) {
+        .Retailer_Creation_Charge_Page .vm-ft-page-toolbar { flex-direction: column !important; gap: 8px !important; align-items: flex-start !important; }
+        .Retailer_Creation_Charge_Page .vm-ft-search-wrap  { flex-wrap: wrap !important; width: 100% !important; gap: 6px !important; }
+        .Retailer_Creation_Charge_Page .rc-capping-btn { width: 100% !important; justify-content: center; }
+        .Retailer_Creation_Charge_Page .rc-left-tabs,
+        .Retailer_Creation_Charge_Page .rc-right-tabs { flex-direction: column; width: 100%; display: flex; }
+        .Retailer_Creation_Charge_Page .rc-left-tabs { display: flex; flex-direction: column; }
+        .Retailer_Creation_Charge_Page .rc-left-tabs .au-tab-btn,
+        .Retailer_Creation_Charge_Page .rc-right-tabs .au-tab-btn {
+            width: 100% !important; flex: 1 1 100% !important; border-radius: 8px !important;
+            justify-content: center; height: 36px; font-size: .72rem; white-space: nowrap;
+        }
+        .rc-right-toolbar-row { flex-direction: column; align-items: stretch; padding: 8px 10px 0 !important; }
+        .rc-right-actions { width: 100%; }
+        .rc-token-add-btn { width: 100%; justify-content: center; }
+        .rc-right-panel { padding: 8px 10px 12px; }
+        .rc-remain-grid .rc-inner-table { min-width: 100% !important; }
+        .rc-table-scroll--tab { max-height: 42vh; }
+        .Retailer_Creation_Charge_Page .rc-inner-table { min-width: 600px; }
+        .sur-btn-row { flex-direction: column; }
+        .sur-btn-row .sur-change-btn,
+        .sur-btn-row .ne-btn-submit,
+        .sur-btn-row .ne-btn-reset { width: 100%; justify-content: center; }
+        .sjc-edit-actions { flex-direction: column; }
+        .sjc-edit-actions .ne-btn-submit,
+        .sjc-edit-actions .ne-btn-reset { width: 100%; justify-content: center; }
+    }
+</style>
+
+<!-- Select2 -->
+<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
+<script src="~/select2/dist/js/select2.min.js"></script>
+<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script src="~/Swalalert/sweetalert-dev.js"></script>
 <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script>
-    function refferalsetup(numberee,statuss) {
-         $.ajax({
-            url: '@Url.Action("Refferal_Setting", "Home")',
-             type: 'POST',
-             data: { status123: statuss, limit123: numberee},
-            cache: false,
-            success: function (dlmresponse) {
 
-                $('#refferalsetinpartial').html(dlmresponse);
+<script>
+    var ravi = $.noConflict();
+
+    /* ── Select2 init (exclude filters + modal selects) ── */
+    function rcInitPageSelect2() {
+        ravi("select:not(.rc-th-select):not(.rc-filter-select):not(.rc-modal-select):not(.rc-sur-select)").each(function () {
+            if (!ravi(this).hasClass('select2-hidden-accessible')) {
+                ravi(this).select2({ width: '100%' });
             }
         });
     }
-</script>
 
-<script>
-    $('#retailercapping').click(function () {
-        location.reload();
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("button.shownextrow").click(function () {
-            $(this).closest("tr").next().show();
-            $(this).closest("tr").hide();
-            $('tr.act').show();
-            $('tr.top-tr').hide();
+    function rcInitModalSelect2(modalSel) {
+        var $modal = ravi(modalSel);
+        $modal.find('select.rc-modal-select').each(function () {
+            var $sel = ravi(this);
+            if ($sel.hasClass('select2-hidden-accessible')) {
+                $sel.select2('destroy');
+            }
+            $sel.select2({ width: '100%', dropdownParent: $modal });
         });
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-@*<script>
-        $(document).ready(function () {
-            $('.tmw-retailer-creaction-charge button#Change_Default').click(function () {
-                $(".tmw-retailer-creaction-charge .left-sign-ups .user-registration-right .lefts").hide();
-                $(".tmw-retailer-creaction-charge .left-sign-ups .user-registration-right .rights").show();
+    }
 
+    ravi(document).ready(function () {
+        rcInitPageSelect2();
+        ravi('#defaultModal, #defaultModal2, #myModalnew').appendTo('body');
+        ravi('#defaultModal').on('shown.bs.modal', function () { rcInitModalSelect2('#defaultModal'); });
+        ravi('#defaultModal2').on('shown.bs.modal', function () { rcInitModalSelect2('#defaultModal2'); });
+        ravi('#defaultModal, #defaultModal2').on('hidden.bs.modal', function () {
+            ravi(this).find('select.rc-modal-select').each(function () {
+                if (ravi(this).hasClass('select2-hidden-accessible')) {
+                    ravi(this).select2('destroy');
+                }
             });
         });
-    </script>*@
-<script>
-    $(document).ready(function () {
-        $(".tmw-retailer-creaction-charge button.paid-serv").click(function () {
-            $('.tmw-retailer-creaction-charge .body-one,.tmw-retailer-creaction-charge .body-three').hide();
-            $('.tmw-retailer-creaction-charge .body-two').show();
-            $('.tmw-retailer-creaction-charge .body-foure').hide();
-            $('.tmw-retailer-creaction-charge button.sign-up,.tmw-retailer-creaction-charge button.Token').removeClass('fi-bu');
-            $(this).addClass('fi-bu');
-            $('.tmw-retailer-creaction-charge button.Reffaralclass').removeClass("fi-bu");
-        });
-        $(".tmw-retailer-creaction-charge button.sign-up").click(function () {
-            $('.tmw-retailer-creaction-charge .body-one').show();
-            $('.tmw-retailer-creaction-charge .body-foure').hide();
-            $('.tmw-retailer-creaction-charge .body-two,.tmw-retailer-creaction-charge .body-three').hide();
-            $('.tmw-retailer-creaction-charge button.paid-serv,.tmw-retailer-creaction-charge button.Token').removeClass("fi-bu");
-            $(this).addClass('fi-bu');
-            $('.tmw-retailer-creaction-charge button.Reffaralclass').removeClass("fi-bu");
-
-        });
-        $(".tmw-retailer-creaction-charge button.Token").click(function () {
-            $('.tmw-retailer-creaction-charge .body-three').show();
-            $('.tmw-retailer-creaction-charge .body-foure').hide();
-            $('.tmw-retailer-creaction-charge .body-one').hide();
-            $('.tmw-retailer-creaction-charge .body-two').hide();
-            $('.tmw-retailer-creaction-charge button.paid-serv,.tmw-retailer-creaction-charge button.sign-up').removeClass("fi-bu");
-            $(this).addClass('fi-bu');
-            $('.tmw-retailer-creaction-charge button.Reffaralclass').removeClass("fi-bu");
-
-        });
-
-        $(".tmw-retailer-creaction-charge button.Reffaralclass").click(function () {
-            $('.tmw-retailer-creaction-charge .body-foure').show();
-            $('.tmw-retailer-creaction-charge .body-three').hide();
-
-            $('.tmw-retailer-creaction-charge .body-two').hide();
-            $('.tmw-retailer-creaction-charge .body-two').hide();
-            $('.tmw-retailer-creaction-charge button.paid-serv,.tmw-retailer-creaction-charge button.sign-up').removeClass("fi-bu");
-            $('.tmw-retailer-creaction-charge button.Token').removeClass("fi-bu");
-            $(this).addClass('fi-bu');
-
-        });
     });
-</script>
-@* Right Side Toggle *@
-<script>
-    $(document).ready(function () {
-        $(".tmw-retailer-creaction-charge .right-history button.rib2").click(function () {
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemone,.tmw-retailer-creaction-charge .right-history .ri-hist-itemThree").hide();
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemsecond").show();
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:nth-child(2)").addClass("active");
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:first-child,.tmw-retailer-creaction-charge .right-history ul.rrrr li:last-child").removeClass("active");
-        });
+    $(document).ajaxComplete(function () { rcInitPageSelect2(); });
 
-        $(".tmw-retailer-creaction-charge .right-history button.rib3").click(function () {
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemThree").show();
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemsecond,.tmw-retailer-creaction-charge .right-history .ri-hist-itemone").hide();
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:last-child").addClass("active");
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:nth-child(2),.tmw-retailer-creaction-charge .right-history ul.rrrr li:first-child").removeClass("active");
-        });
-
-        $(".tmw-retailer-creaction-charge .right-history button.rib1").click(function () {
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemone").show();
-            $(".tmw-retailer-creaction-charge .right-history .ri-hist-itemsecond,.tmw-retailer-creaction-charge .right-history .ri-hist-itemThree").hide();
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:first-child").addClass("active");
-            $(".tmw-retailer-creaction-charge .right-history ul.rrrr li:nth-child(2),.tmw-retailer-creaction-charge .right-history ul.rrrr li:last-child").removeClass("active");
-        });
-
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $(".dropdown-menu li a").click(function () {
-            $(".btnsam").html($(this).text());
-
-        });
-
-    });
-</script>
-@*==--------------    Paid Service Script   ------------=== *@
-
-<script>
-    function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 45 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
+    /* ── Left tab switching ── */
+    function rcLeftTab(panelId, btnId) {
+        document.querySelectorAll('.rc-left-tabs .au-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        var btn = document.getElementById(btnId);
+        if (btn) btn.classList.add('active');
+        document.querySelectorAll('.rc-left-panel').forEach(function (p) { p.style.display = 'none'; });
+        var panel = document.getElementById(panelId);
+        if (panel) panel.style.display = 'block';
     }
-</script>
-<!--Calendar Javascript-->
-<script>
-    window.onload = function () {
-        answers();
-        $('#date').bootstrapMaterialDatePicker
-             ({
-                 clearButton: false
-             });
-        $('#txt_to_date').bootstrapMaterialDatePicker
-        ({
-            weekStart: 0, format: 'DD/MM/YYYY'
+
+    /* ── Right tab switching ── */
+    function rcRightTab(panelId, btnId, addBtnId) {
+        document.querySelectorAll('.rc-right-tabs .au-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        var btn = document.getElementById(btnId);
+        if (btn) btn.classList.add('active');
+        document.querySelectorAll('.rc-right-panel').forEach(function (p) {
+            p.style.display = 'none';
+            p.classList.remove('rc-right-panel--active');
         });
-        $('#txt_frm_date').bootstrapMaterialDatePicker
-        ({
-            weekStart: 0, format: 'DD/MM/YYYY'
-        }).on('change', function (e, date) {
-            $('#txt_to_date').bootstrapMaterialDatePicker('setMinDate', date);
+        var panel = document.getElementById(panelId);
+        if (panel) {
+            panel.style.display = 'block';
+            panel.classList.add('rc-right-panel--active');
+        }
+        document.querySelectorAll('.rc-token-add-btn').forEach(function (b) { b.style.display = 'none'; });
+        if (addBtnId) {
+            var addBtn = document.getElementById(addBtnId);
+            if (addBtn) addBtn.style.display = 'inline-flex';
+        }
+        if (panelId === 'rc-rpanel-dlm' && typeof dlm_ddlVal === 'function') { dlm_ddlVal(); }
+        if (panelId === 'rc-rpanel-md' && typeof md_ddlVal === 'function') { md_ddlVal(); }
+    }
+
+    /* ── Remain tokens AJAX ── */
+    function md_dlm_remainTkn() {
+        $.ajax({
+            url: '@Url.Action("_Md_dlm_RemainToken","Home")',
+            type: 'GET', cache: false,
+            success: function (response) {
+                var $r = $('<div>').html(response);
+                var mdHtml = $r.find('#rc-remain-md-content').html();
+                var dlmHtml = $r.find('#rc-remain-dlm-content').html();
+                if (mdHtml)  { $('#rc-remain-md').html(mdHtml); }
+                if (dlmHtml) { $('#rc-remain-dlm').html(dlmHtml); }
+            }
         });
-
-        $('#min-date').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', minDate: new Date() });
-
-        var from = '@ViewBag.fromdate';
-        var to = '@ViewBag.todate';
-        if (from != "" && to != "") {
-            $('#txt_frm_date').val(from);
-            $('#txt_to_date').val(to);
-        }
-        else {
-            var month = new Array("Jan", "Feb", "Mar",
-   "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-   "Oct", "Nov", "Dec");
-            var d = new Date();
-            var curr_date = d.getDate();
-            var curr_month = d.getMonth();
-            var curr_year = d.getFullYear();
-
-            var tt = curr_date + "-" + month[curr_month]
-            + "-" + curr_year;
-            document.getElementById("txt_frm_date").value = tt;
-            document.getElementById("txt_to_date").value = tt;
-        }
-        answers();
     }
-</script>
-<script>
-    $(document).ready(function () {
-        $("button.shownextrow").click(function () {
-            $(this).closest("tr").next().show();
-            $(this).closest("tr").hide();
+    /* ── Sign Up Rights: Change Default Distributor ── */
+    function showSURChange() {
+        var ddl = document.getElementById('ddldealer11');
+        var saveBtn = document.getElementById('sur-save-btn');
+        var cancelBtn = document.getElementById('sur-cancel-btn');
+        var changeBtn = document.getElementById('Change_Default1');
+        var infoCard = document.getElementById('sur-infocard');
+        if (ddl) ddl.style.display = 'block';
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
+        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+        if (changeBtn) changeBtn.style.display = 'none';
+        if (infoCard) infoCard.style.display = 'none';
+        rcInitSurSelect2();
+    }
+
+    function cancelSURChange() {
+        var ddl = document.getElementById('ddldealer11');
+        var saveBtn = document.getElementById('sur-save-btn');
+        var cancelBtn = document.getElementById('sur-cancel-btn');
+        var changeBtn = document.getElementById('Change_Default1');
+        var infoCard = document.getElementById('sur-infocard');
+        if (ddl) ddl.style.display = 'none';
+        if (saveBtn) saveBtn.style.display = 'none';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+        if (changeBtn) changeBtn.style.display = 'inline-flex';
+        if (infoCard) infoCard.style.display = 'flex';
+        rcDestroySurSelect2();
+    }
+
+    function rcInitSurSelect2() {
+        var sel = ravi('#dealerId');
+        if (!sel.length) return;
+        if (sel.hasClass('select2-hidden-accessible')) sel.select2('destroy');
+        sel.select2({ width: '100%', dropdownAutoWidth: true });
+    }
+
+    function rcDestroySurSelect2() {
+        var sel = ravi('#dealerId');
+        if (sel.length && sel.hasClass('select2-hidden-accessible')) sel.select2('destroy');
+    }
+
+    function SETsignUpRight() {
+        var dlmid = ravi('#dealerId').val();
+        if (!dlmid) {
+            alert('Please select a distributor.');
+            return;
+        }
+        ravi('#sur-save-btn').prop('disabled', true);
+        ravi.ajax({
+            url: '@Url.Action("dealer_sts_default_Authorise","Home")',
+            type: 'GET',
+            data: { dealerid: dlmid },
+            cache: false,
+            success: function () {
+                ravi.ajax({
+                    url: '@Url.Action("_DlmSignUpRight","Home")',
+                    type: 'GET', cache: false,
+                    success: function (r) {
+                        ravi('#SignUpSetting').html(r);
+                        ravi('#sur-save-btn').prop('disabled', false);
+                    },
+                    error: function () {
+                        ravi('#sur-save-btn').prop('disabled', false);
+                        alert('Failed to refresh distributor info.');
+                    }
+                });
+            },
+            error: function () {
+                ravi('#sur-save-btn').prop('disabled', false);
+                alert('Failed to update default distributor.');
+            }
         });
-        var succ = '@ViewData["success"]';
-        var error = '@ViewData["error"]';
-        if (succ != null && succ != "") {
-           // swal("Good job!", succ, "success");
-        }
-        if (error != null && error != "") {
-            //swal("Oops!", error, "error");
-            $('#defaultModal').getElementById('#msg').value = "error";
-                $('#defaultModal').delay(5000).modal('hide');
-        }
-        var from = '@ViewBag.fromdate';
-        var to = '@ViewBag.todate';
-        fundreciveonload(from, to);
-
-    });
-    function OnSuccess(data) {
-        //alert("Success");
-        var respose = JSON.parse(data);
-        console.log(data);
-        if (respose.status == "Success") {
-            swal("Good job!", respose.Message, "success");
-
-        } else if (respose.status == "Failed") {
-            swal("Oops!", respose.Message, "error");
-        }
-        setTimeout(function () {
-            location.reload();
-        }, 2000);
     }
-    function OnFailed() {
-        swal("Oops!", "Failed to update.", "error");
 
-
+    function dlmSignUpRight() {
+        ravi.ajax({
+            url: '@Url.Action("_DlmSignUpRight","Home")',
+            type: 'GET', cache: false,
+            success: function (response) {
+                ravi("#SignUpSetting").html(response);
+            }
+        });
     }
-</script>
 
-
-@*======================     Joing Tokens Script     ============================= *@
-<script>
-    function onPluseMinus(v) {
-        //alert(v);
-        event.stopPropagation();
-        var digiCount = parseInt($('#tokenCount').val());
-        if (v >= 0) {
-            $('#tokenCount').val(digiCount + v);
-            $('#showPhysicalCount').html(digiCount + v);
-        } else {
-            $('#tokenCount').val(digiCount - 1);
-            $('#showPhysicalCount').html(digiCount - 1);
-        }
-        if (parseInt($('#tokenCount').val()) >= 1) {
-            $('#btnChildMinus').prop('disabled', false);
-        }
-        if (parseInt($('#tokenCount').val()) == 0) {
-            $('#btnChildMinus').prop('disabled', true);
-        }
-    }
-</script>
-
-<script>
-    function onPluseMinuss(v) {
-        //alert(v);
-        event.stopPropagation();
-        var digiCount = parseInt($('#tokenCount2').val());
-        if (v >= 0) {
-            $('#tokenCount2').val(digiCount + v);
-            $('#showPhysicalCount2').html(digiCount + v);
-        } else {
-            $('#tokenCount2').val(digiCount - 1);
-            $('#showPhysicalCount2').html(digiCount - 1);
-        }
-        if (parseInt($('#tokenCount2').val()) >= 1) {
-            $('#btnChildMinus2').prop('disabled', false);
-        }
-        if (parseInt($('#tokenCount2').val()) == 0) {
-            $('#btnChildMinus2').prop('disabled', true);
-        }
-    }
-</script>
-<!--==============-->
-<script>
-        function converttoDate(str) {
-            var date = new Date(str),
-                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-                day = ("0" + date.getDate()).slice(-2),
-                Hrs = (date.getHours()),
-                mnts = (date.getMinutes()),
-                sec = (date.getSeconds());
-            return dd= [day, mnth, date.getFullYear()].join("-") + " " + [Hrs + ":" + mnts +":"+sec];
-        }
-    //***************************************** DLM_BuyTokenHistory
+    /* ── Distributor token history ── */
     function dlm_ddlVal() {
         $.ajax({
             url: '@Url.Action("DLM_BuyTokenHistory","Home")',
             type: 'POST',
-            data: { dealerId: $("#dlmId").val() },
-            cache: false,
+            data: { dealerId: $("#dlmId").val() || '' }, cache: false,
             success: function (dlmresponse) {
-                var dlmtblHtml = "";
-                var i = 0;
-                $.each(dlmresponse, function (a, b) {
-                    dlmtblHtml += "<tr><td>" + b.Email + "</td>";
-                    dlmtblHtml += "<td>" + b.Tokens + "</td>";
-                    dlmtblHtml += "<td>" + b.PerTokenValue + "</td>";
-                    dlmtblHtml += "<td>" + b.TotalDebit + "</td>";
-                    dlmtblHtml += "<td>" + b.DealerPost + "</td>";
-                    dlmtblHtml += "<td>" + b.pre + "</td>";
-                    dlmtblHtml += "<td>" + b.post + "</td>";
-                    dlmtblHtml += "<td>" + converttoDate(eval(("new " + b.CteatedOn).replace(/\//g, ""))) + "</td></tr>";
-                    i++;
-                });
-                $('#DLM_BuyTokenHistory > tbody').html(dlmtblHtml);
+                var html = "";
+                if (dlmresponse && dlmresponse.length) {
+                    $.each(dlmresponse, function (a, b) {
+                        var dt = b.CteatedOn ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1')))) : (b.CteatedOn || '');
+                        html += "<tr><td>" + (b.Email || '') + "</td><td>" + b.Tokens + "</td><td>" + b.PerTokenValue +
+                                "</td><td>" + b.TotalDebit + "</td><td>" + b.DealerPost + "</td><td>" + b.pre +
+                                "</td><td>" + b.post + "</td><td>" + dt + "</td></tr>";
+                    });
+                } else {
+                    html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
+                }
+                $('#DLM_BuyTokenHistory > tbody').html(html);
             }
         });
     }
-    //***************************************** MD_BuyTokenHistory
+
+    /* ── Master token history ── */
     function md_ddlVal() {
         $.ajax({
             url: '@Url.Action("MD_BuyTokenHistory","Home")',
             type: 'POST',
-            data: { masterId: $("#masterId").val() },
-            cache: false,
+            data: { masterId: $("#masterId").val() || '' }, cache: false,
             success: function (mdresponse) {
-                var mdtblHtml = "";
-                var i = 0;
-                $.each(mdresponse, function (a, b) {
-                    mdtblHtml += "<tr><td>" + b.Email + "</td>";
-                    /*mdtblHtml += "<td>" Url Actionb.TokenUrl ★★ Action ActionActiontion + "</td>";*/
-                    mdtblHtml += "<td>" + b.Tokens + "</td>";
-                    mdtblHtml += "<td>" + b.PerTokenValue + "</td>";
-                    mdtblHtml += "<td>" + b.TotalDebit + "</td>";
-                    mdtblHtml += "<td>" + b.MasterPost + "</td>";
-                    mdtblHtml += "<td>" + b.pre + "</td>";
-                    mdtblHtml += "<td>" + b.post + "</td>";
-                    mdtblHtml += "<td>" + converttoDate(eval(("new " + mdresponse[i].CteatedOn).replace(/\//g, ""))) + "</td></tr>";
-                    i++;
-                });
-                $('#MD_BuyTokenHistory > tbody').html(mdtblHtml);
+                var html = "";
+                if (mdresponse && mdresponse.length) {
+                    $.each(mdresponse, function (a, b) {
+                        var dt = b.CteatedOn ? converttoDate(new Date(parseInt(String(b.CteatedOn).replace(/\/Date\((\d+)\)\//, '$1')))) : '';
+                        html += "<tr><td>" + (b.Email || '') + "</td><td>" + b.Tokens + "</td><td>" + b.PerTokenValue +
+                                "</td><td>" + b.TotalDebit + "</td><td>" + b.MasterPost + "</td><td>" + b.pre +
+                                "</td><td>" + b.post + "</td><td>" + dt + "</td></tr>";
+                    });
+                } else {
+                    html = '<tr><td colspan="8" class="rc-empty-row">No records found</td></tr>';
+                }
+                $('#MD_BuyTokenHistory > tbody').html(html);
+            },
+            error: function () {
+                $('#MD_BuyTokenHistory > tbody').html('<tr><td colspan="8" class="rc-empty-row">Failed to load data</td></tr>');
             }
         });
     }
-    //***************************************** Both Md_dlm_RemainToken
 
-    function md_dlm_remainTkn() {
-    $.ajax({
-            url: '@Url.Action("_Md_dlm_RemainToken","Home")',
-            type: 'GET',
-            cache: false,
-        success: function (response) {
-                $('#Md_dlm_RemainToken').html(response);
-                }
-        })
+    /* ── Date converter ── */
+    function converttoDate(str) {
+        var date = (str instanceof Date) ? str : new Date(str);
+        if (isNaN(date.getTime())) { return String(str || ''); }
+        var mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day  = ("0" + date.getDate()).slice(-2);
+        return [day, mnth, date.getFullYear()].join("-") + " " +
+               [date.getHours(), date.getMinutes(), date.getSeconds()].join(":");
     }
 
-    $('#DlmbtnSubmit').click(function () {
+    /* ── Token counter (Distributor) ── */
+    function onPluseMinus(v) {
+        event.stopPropagation();
+        var n = parseInt($('#tokenCount').val());
+        var newVal = v >= 0 ? n + v : n - 1;
+        $('#tokenCount').val(newVal);
+        $('#showPhysicalCount').html(newVal);
+        $('#btnChildMinus').prop('disabled', newVal <= 0);
+    }
 
+    /* ── Token counter (Master) ── */
+    function onPluseMinuss(v) {
+        event.stopPropagation();
+        var n = parseInt($('#tokenCount2').val());
+        var newVal = v >= 0 ? n + v : n - 1;
+        $('#tokenCount2').val(newVal);
+        $('#showPhysicalCount2').html(newVal);
+        $('#btnChildMinus2').prop('disabled', newVal <= 0);
+    }
+
+    /* ── Add Token: Distributor ── */
+    $('#DlmbtnSubmit').click(function () {
         $.ajax({
             url: '@Url.Action("addJoiningToken","Home")',
             type: 'POST',
-            data: { ddlDealer: $("#ddlDealer").val(), tokenCount: $("#tokenCount").val() },
-            cache: false,
+            data: { ddlDealer: $("#ddlDealer").val(), tokenCount: $("#tokenCount").val() }, cache: false,
             success: function (response) {
                 if (response == "Insufficient balance." || response == "Set the Dealer token Value." || response == "Token Can Not Be Negative") {
                     $("#Lblmsg").css("color", 'red').text(response);
-                    //$("#defaultModal").delay(1500).hide(0, function () {
-                    //    $("#Lblmsg").text('');
-                    //    $("#defaultModal").modal('hide');
-                    //});
-                }
-                else {
+                } else {
                     $("#Lblmsg").css("color", 'green').text("Credited Successfully.");
-                    $("#defaultModal").delay(1000).hide(0, function () {
-                        $("#Lblmsg").text('');
-                        $("#defaultModal").modal('hide');
-                    });
+                    setTimeout(function () { $("#Lblmsg").text(''); $("#defaultModal").modal('hide'); dlm_ddlVal(); md_dlm_remainTkn(); }, 1000);
                 }
-
-                var dlmtblHtml = "";
-                $.each(response, function (a, b) {
-                    var i = 0;
-                    dlmtblHtml += "<tr><td>" + b.Email + "</td>";
-                    dlmtblHtml += "<td>" + b.Tokens + "</td>";
-                    dlmtblHtml += "<td>" + b.PerTokenValue + "</td>";
-                    dlmtblHtml += "<td>" + b.TotalDebit + "</td>";
-                    dlmtblHtml += "<td>" + b.DealerPost + "</td>";
-                    dlmtblHtml += "<td>" + b.pre + "</td>";
-                    dlmtblHtml += "<td>" + b.post + "</td>";
-                    dlmtblHtml += "<td>" + converttoDate(eval(("new " + b.CteatedOn).replace(/\//g, ""))) + "</td></tr>";
-                    i++;
-                });
-                $("#DLM_BuyTokenHistory > tbody").html(dlmtblHtml);
             }
         });
+    });
 
-
-
-    })
-
-
-
+    /* ── Add Token: Master ── */
     $('#MdbtnSubmit').click(function () {
-
         $.ajax({
             url: '@Url.Action("addJoiningTokenMaster","Home")',
             type: 'POST',
-            data: { ddlMaster: $("#ddlMaster").val(), tokenCount: $("#tokenCount2").val() },
-            cache: false,
+            data: { ddlMaster: $("#ddlMaster").val(), tokenCount: $("#tokenCount2").val() }, cache: false,
             success: function (response) {
-                if (response == "Insufficient balance." || response == "Set the Dealer token Value." || response =="Token Can Not Be Negative") {
+                if (response == "Insufficient balance." || response == "Set the Dealer token Value." || response == "Token Can Not Be Negative") {
                     $("#Lblmsg2").css("color", 'red').text(response);
-                    //$("#defaultModal2").delay(1500).hide(0, function () {
-                    //    $("#Lblmsg2").text('');
-                    //    $("#defaultModal2").modal('hide');
-                    //});
-                }
-                else {
+                } else {
                     $("#Lblmsg2").css("color", 'green').text("Credited Successfully.");
-                    $("#defaultModal2").delay(1000).hide(0, function () {
-                        $("#Lblmsg2").text('');
-                        $("#defaultModal2").modal('hide');
-                    });
+                    setTimeout(function () { $("#Lblmsg2").text(''); $("#defaultModal2").modal('hide'); md_ddlVal(); md_dlm_remainTkn(); }, 1000);
                 }
-
-                var i = 0;
-                var mdtblHtml = "";
-                $.each(response, function (a, b) {
-                    mdtblHtml += "<tr><td>" + b.Email + "</td>";
-                    mdtblHtml += "<td>" + b.Tokens + "</td>";
-                    mdtblHtml += "<td>" + b.PerTokenValue + "</td>";
-                    mdtblHtml += "<td>" + b.TotalDebit + "</td>";
-                    mdtblHtml += "<td>" + b.MasterPost + "</td>";
-                    mdtblHtml += "<td>" + b.pre + "</td>";
-                    mdtblHtml += "<td>" + b.post + "</td>";
-                    mdtblHtml += "<td>" + converttoDate(eval(("new " + b.CteatedOn).replace(/\//g, ""))) + "</td></tr>";
-                    i++;
-                });
-                $('#MD_BuyTokenHistory > tbody').html(mdtblHtml);
             }
         });
-
-
-
-    })
-</script>
-
-<script>
-    function dlmSignUpRight() {
-        $.ajax({
-            url: '@Url.Action("_DlmSignUpRight","Home")',
-            type: 'GET',
-            cache: false,
-            success: function (response) {
-                $("#SignUpSetting").html(response);
-                $('#Change_Default1').show();
-            }
-        });
-    }
-</script>
-
-<script>
-    $(document).ready(function () {
-        $(".sweet-alert").addClass("fullbodydycolorbg");
     });
-</script>
-<script>
+
+    /* ── Retailer capping reload after save ── */
+    $('#retailercapping').click(function () { location.reload(); });
+
+    /* ── Paid service edit by ID ── */
     function Editmode(id) {
-
-          $.ajax({
+        $.ajax({
             url: '@Url.Action("PaidServicesChargeByID","Home")',
-              data: {id:id},
-
-              success: function (data) {
-                  $('#paidservicetbl').html(data);
-            }
+            data: { id: id },
+            success: function (data) { $('#paidservicetbl').html(data); }
         });
     }
 
-</script>
+    /* ── Referral setting ── */
+    function refferalsetup(numberee, statuss) {
+        $.ajax({
+            url: '@Url.Action("Refferal_Setting", "Home")',
+            type: 'POST', data: { status123: statuss, limit123: numberee }, cache: false,
+            success: function (dlmresponse) { $('#refferalsetinpartial').html(dlmresponse); }
+        });
+    }
 
-<script>
+    function isNumber(evt) {
+        var k = (evt.which) ? evt.which : evt.keyCode;
+        return !(k != 45 && k > 31 && (k < 48 || k > 57));
+    }
+
+    /* ── OnSuccess / OnFailed for Ajax.BeginForm ── */
+    function OnSuccess(data) {
+        var respose = JSON.parse(data);
+        if (respose.status == "Success") { swal("Good job!", respose.Message, "success"); }
+        else if (respose.status == "Failed") { swal("Oops!", respose.Message, "error"); }
+        setTimeout(function () { location.reload(); }, 2000);
+    }
+    function OnFailed() { swal("Oops!", "Failed to update.", "error"); }
+
+    /* ── On page load ── */
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
+        var from = '@ViewBag.fromdate';
+        var to   = '@ViewBag.todate';
+        if (typeof fundreciveonload === 'function') fundreciveonload(from, to);
+        if (typeof answers === 'function') answers();
     });
-
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-</script>
-
-<script>
-
-
-    $("#deactive-reffrasl").click(function () {
-        $('#status123').val("Y")
-        $("#active-reffrasl").show();
-        $(this).hide();
-    });
-    $("#active-reffrasl").click(function () {
-        $('#status123').val("N")
-        $("#deactive-reffrasl").show();
-        $(this).hide();
-    });
-
-    $("#limit123").change(function () {
-        var selectvalue = $(this).find(":selected").val();
-        $("#showvalueid").html(selectvalue);
-    });
-
-    $("#tnSave").click(function () {
-        $("#tnSave").hide();
-        $("#Editbutton").show();
-        $(".loaderclick").hide();
-        $(".loaderclickspiner").show();
-        setTimeout(function () { $(".loaderclick").show(); }, 3000);
-        setTimeout(function () { $(".loaderclickspiner").hide(); }, 3000);
-
-        $("#limit123").hide();
-        $("#showvalueid").show();
-
-    });
-    $("#Editbutton").click(function () {
-        $("#tnSave").show();
-        $("#Editbutton").hide();
-        $("#limit123").show();
-        $("#showvalueid").hide();
-
-
-    });
-    function togglereferrel(status) {
-        $.ajax({
-            url: '@Url.Action("Refferal_Status", "Home")',
-            method: 'GET',
-            data: {status123: status },
-            success: function ({ data }) {
-                $('#status123').val(data.status)
-          }
-        });
-    }
-
-    function Rerffaralse() {
-        $('.body.body-one').hide()
-        $.ajax({
-            url: '@Url.Action("ReferrelLimit", "Home")',
-            method: 'GET',
-            success: function ({ data }) {
-                if (!data) {
-                    data = { status: 'Y', limit : '3'};
-                }
-                if (!data?.status) data.status = 'Y';
-                if (!data?.limit) data.limit = '3';
-
-                $('#limit123').val(data.limit)
-
-                if (data.status == "Y") {
-                    $('#status123').val(data.status)
-                    $('#active-reffrasl').show()
-                    $('#deactive-reffrasl').hide();
-                    $('#showvalueid').show();
-                    $('#limit123').hide();
-                    $('#showvalueid').html(data.limit);
-                }
-                else {
-                    $('#status123').val(data.status)
-                    $('#active-reffrasl').hide()
-                    $('#deactive-reffrasl').show();
-                    $('#showvalueid').show();
-                    $('#limit123').hide();
-                    $('#showvalueid').html(data.limit);
-                }
-
-            }
-        })
-    }
-
-</script>
-<script>
-        function Edit() {
-        var mn = '@ViewBag.unload1';
-        $('#First').hide();
-        $('#Second').show();
-    }
-
-     $('#SaveChargeREM').click(function () {
-
-       $('#lblmsg').text('')
-        $.ajax({
-            url: '@Url.Action("Utilitycomm_Time", "Home")',
-            type: 'POST',
-            data: { commper: $("#RemMinAmt").val()},
-            success: function (response) {
-                console.log(response);
-                $('#dataresp123').html(response);
-                $('#First').show();
-                $('#Second').hide();
-            },
-            error: function (xhr, status, error) {
-                //alert(error);
-
-            }
-        });
-    })
 </script>

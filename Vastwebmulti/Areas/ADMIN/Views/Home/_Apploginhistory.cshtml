@@ -1,47 +1,33 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.BlockUserViewModel
 
-
-
-
-
 @{ var j = 1;}
 @foreach (var item in Model.Apploginhistory)
 {
-    var srs = "";
-    if(item.LoginFrom=="Web")
-    {
-        srs = "../../AdminDesign/images/desktop-l.svg";
-    }
-    else
-    {
-         srs = "../../AdminDesign/images/android-l.svg";
-    }
+    var badgeClass = item.LoginFrom == "Web" ? "wl-by-badge wl-by-badge--web" : "wl-by-badge wl-by-badge--app";
+    var badgeText = item.LoginFrom == "Web" ? "WEB" : "APP";
 
-    <tr role="row" class="odd">
+    <tr>
         <td>@j</td>
-        <td><span style="float:left;"><img src="@srs" style="width:40px;" /></span></td>
+        <td><span class="@badgeClass">@badgeText</span></td>
         <td>
-            <p>
-                <span style="float:left;"><span style="display:block;">@item.Role</span><span>@item.firmname</span></span>
-            </p>
-
+            <strong>@item.Role</strong><br />
+            <small>@item.firmname</small>
         </td>
         <td>
-
-            <p>@item.IP_Address</p>
-            <p>@item.browser</p>
+            @if (!string.IsNullOrEmpty(item.IP_Address)) { <div><small>IP:</small> @item.IP_Address</div> }
+            @if (!string.IsNullOrEmpty(item.browser)) { <div><small>Browser:</small> @item.browser</div> }
         </td>
         <td>
-            <p>@item.latitude</p>
-            <p>@item.Logitude</p>
+            @if (!string.IsNullOrEmpty(item.latitude)) { <div>@item.latitude</div> }
+            @if (!string.IsNullOrEmpty(item.Logitude)) { <div>@item.Logitude</div> }
         </td>
         <td>
-            <p  style="font-weight:800;">@item.LoginTime</p>
-
-            <p><span style="font-size:13px;background:#bbb;margin-right:4px;padding: 0px 2px;"> @item.city</span>@item.Location</p>
+            <strong>@item.LoginTime</strong>
+            @if (!string.IsNullOrEmpty(item.city) || !string.IsNullOrEmpty(item.Location))
+            {
+                <div><span class="wl-by-badge">@item.city</span> @item.Location</div>
+            }
         </td>
-        
-
     </tr>
     j++;
 }

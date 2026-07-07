@@ -1,326 +1,287 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.DeleteUser
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "DeleteUserReport";
+    ViewBag.Title = "Delete User Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var reports  = (Model != null && Model.Deleteuserall != null)
+                   ? Model.Deleteuserall.ToList()
+                   : new List<Vastwebmulti.Models.DeleteUserHistory>();
+    var rowCount = reports.Count;
+
+    decimal totalRecovery = reports.Sum(i => i.RecoveryAmount ?? 0m);
 }
 
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=42" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=27" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-delete-report-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <!-- ── Toolbar: Breadcrumb + Search + Export ── -->
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Report's</li>
+                    <li>Delete User Report</li>
+                </ol>
+
+                <div class="vm-dur-filter-right">
+                    <div class="vm-dur-search-field">
+                        <i class="fas fa-search vm-dur-search-icon"></i>
+                        <input id="myInput" type="text" placeholder="Search records..."
+                               class="vm-dur-search-input"
+                               onkeyup="durSearch()" autocomplete="off" />
+                    </div>
+                    <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                        <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                    </button>
+                    <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Main Card ── -->
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel">
+
+                <!-- Panel header -->
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-user-slash" aria-hidden="true"></i>
+                        <span>Delete User Report</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong>@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total recovery amount">
+                            Recovery: <strong>&#8377; @totalRecovery.ToString("N2")</strong>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="deleteUserReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr</th>
+                                    <th>User&nbsp;Role</th>
+                                    <th>Firm&nbsp;Name</th>
+                                    <th>User&nbsp;Name</th>
+                                    <th>Contact&nbsp;No</th>
+                                    <th>Register&nbsp;Email</th>
+                                    <th>Joining&nbsp;Date</th>
+                                    <th>Deleted&nbsp;Date</th>
+                                    <th>Recovery&nbsp;&#8377;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (reports.Any())
+                                {
+                                    int sr = 1;
+                                    foreach (var item in reports)
+                                    {
+                                        var roleClass = "vm-role-badge";
+                                        var role = (item.Role ?? "").ToLower();
+                                        if (role.Contains("admin"))       { roleClass += " vm-role-badge--admin"; }
+                                        else if (role.Contains("master")) { roleClass += " vm-role-badge--master"; }
+                                        else if (role.Contains("dealer") || role.Contains("distributor")) { roleClass += " vm-role-badge--dealer"; }
+                                        else if (role.Contains("retailer")) { roleClass += " vm-role-badge--retailer"; }
+                                        else if (role.Contains("white"))  { roleClass += " vm-role-badge--wl"; }
+                                        else                              { roleClass += " vm-role-badge--other"; }
+
+                                        <tr>
+                                            <td>@sr</td>
+                                            <td><span class="@roleClass">@item.Role</span></td>
+                                            <td>@item.FarmName</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.ContectNo</td>
+                                            <td>@item.Email</td>
+                                            <td>@(item.JoiningDate.HasValue ? item.JoiningDate.Value.ToString("dd-MM-yyyy") : "—")</td>
+                                            <td>@(item.DeleteDate.HasValue ? item.DeleteDate.Value.ToString("dd-MM-yyyy") : "—")</td>
+                                            <td>@(item.RecoveryAmount.HasValue ? item.RecoveryAmount.Value.ToString("N2") : "0.00")</td>
+                                        </tr>
+                                        sr++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="9" style="text-align:center;padding:36px;color:#94a3b8;">
+                                            <i class="fas fa-user-slash" style="font-size:2rem;display:block;margin-bottom:8px;opacity:.35;"></i>
+                                            No deleted user records found.
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
 
 <style>
+    /* ── Role Badges ── */
+    .vm-role-badge           { display:inline-flex; align-items:center; padding:2px 9px; border-radius:6px; font-size:.63rem; font-weight:700; white-space:nowrap; }
+    .vm-role-badge--admin    { background:#fef3c7; color:#78350f; border:1px solid #fde68a; }
+    .vm-role-badge--master   { background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe; }
+    .vm-role-badge--dealer   { background:#dcfce7; color:#14532d; border:1px solid #bbf7d0; }
+    .vm-role-badge--retailer { background:#f3e8ff; color:#581c87; border:1px solid #d8b4fe; }
+    .vm-role-badge--wl       { background:#fce7f3; color:#831843; border:1px solid #fbcfe8; }
+    .vm-role-badge--other    { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
 
-    /* new css */
-    .deleted-users {
-        height: auto;
-    }
-
-    .for-search.tablesearch-second {
-        float: left;
-        margin-right: 3px;
-    }
-
-    .bread-same-all-page {
-        width: auto;
-    }
-
-    .pageheader-margin-third {
+    /* ── Toolbar right group ── */
+    .vm-dur-filter-right {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-left: auto;
+        flex-shrink: 0;
     }
 
-    /* new css */
+    /* ── Modern Search Input ── */
+    .vm-dur-search-field {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-width: 220px;
+    }
+    .vm-dur-search-icon {
+        position: absolute;
+        left: 10px;
+        color: #94a3b8;
+        font-size: .75rem;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .vm-dur-search-input {
+        width: 100%;
+        height: 34px;
+        padding: 0 12px 0 30px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: .8rem;
+        color: #1e293b;
+        background: #f8fafc;
+        outline: none;
+        transition: border-color .15s, box-shadow .15s, background .15s;
+        box-shadow: 0 1px 3px rgba(15,23,42,.06);
+    }
+    .vm-dur-search-input:focus {
+        border-color: #0891b2;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(8,145,178,.12);
+    }
+    .vm-dur-search-input::placeholder { color: #94a3b8; }
 
-
-
-    .deleted-users .dataTables_filter, .deleted-users .dt-button.buttons-copy, .deleted-users .dt-button.buttons-csv, .deleted-users .dt-button.buttons-print {
-        display: none;
+    /* ── Table scroll on all screens ── */
+    .saas-delete-report-page .vm-opr-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .saas-delete-report-page .vm-opr-data-table {
+        min-width: 860px;
     }
 
-    .for-search input {
-        width: 250px;
-        border: 1px solid #dbdbdb;
-        padding: 3px 10px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
+    /* ── Mobile responsive ── */
+    @@media (max-width: 767px) {
+        /* page shell padding */
+        body.saas-admin-ui .saas-delete-report-page .vm-opr-page-shell {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
         }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
+        /* toolbar unified padding */
+        body.saas-admin-ui .saas-delete-report-page .vm-opr-toolbar-unified {
+            padding: 6px 8px 8px !important;
+            margin-bottom: 12px !important;
         }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:650px) {
-
-        .pageheader-margin-third {
-            display: block;
-            float: left;
+        /* right group fills full width */
+        .vm-dur-filter-right {
             width: 100%;
+            margin-left: 0;
+            flex-wrap: wrap;
         }
-
-        .bread-same-all-page {
-            width: 100%;
-            margin: 2px 0;
+        /* search takes full width */
+        .vm-dur-search-field {
+            flex: 1 1 100%;
+            min-width: 0;
         }
-
-        .web-white-filter {
-            width: 100%;
-            margin: 2px 0;
+        /* Excel + PDF buttons share a row */
+        .vm-dur-filter-right .saas-acc-btn {
+            flex: 1;
+            justify-content: center;
+            min-width: 0;
+        }
+        /* panel header: stack title above badges */
+        body.saas-admin-ui .saas-delete-report-page .vm-dmt-table-panel__head {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+        }
+        /* badge row: keep Records + Recovery side-by-side */
+        body.saas-admin-ui .saas-delete-report-page .vm-dmt-table-panel__right {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+            justify-content: flex-start !important;
+        }
+        /* override the width:100% applied via saas-security-report-page */
+        body.saas-admin-ui .saas-delete-report-page .vm-radiant-record-badge,
+        body.saas-admin-ui .saas-delete-report-page .vm-radiant-inline-total {
+            width: auto !important;
+            flex: 0 1 auto !important;
+            text-align: left !important;
+        }
+        /* main card clear-fix */
+        body.saas-admin-ui .saas-delete-report-page .vm-gift-report-main-card {
+            margin-top: 10px !important;
+            clear: both !important;
         }
     }
-
-    @@media only screen and (max-width:480px) {
-        .for-search.tablesearch-second {
-            width: 100%;
-            margin-right: 0px;
-            margin-bottom: 3px;
-        }
-
-        .for-search input {
-            width: 100%;
+    @@media (max-width: 480px) {
+        .vm-dur-filter-right {
+            gap: 6px;
         }
     }
 </style>
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Delete User Report</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Delete User Report</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Deleted User History
-                    </li>
-                </ul>
-            </div>
-            <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;">
-
-                <div class="for-search tablesearch-second">
-                    <div class="search-after-third">
-                        <input id="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" />
-                    </div>
-                </div>
-                <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
-            </div>
-
-
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="page-header-third">
-
-                    <div>
-                        <div class=" deleted-users table-responsive tablefourdesign-admin paddingboth-none-admin" style="position:inherit;padding:0px;scrollbar-width: thin;">
-                            <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%; ">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr</th>
-                                        <th>User&nbsp;Role</th>
-
-                                        <th>Firm&nbsp;Name</th>
-                                        <th>User&nbsp;Name</th>
-                                        <th>Contact&nbsp;No</th>
-                                        <th>Register&nbsp;Email</th>
-                                        <th>Joining&nbsp;Date</th>
-                                        <th>Deleted&nbsp;Date</th>
-                                        <th>Recovery&nbsp;&#8377;</th>
-
-
-                                    </tr>
-                                </thead>
-                                <tbody class="body">
-                                    @{
-                                        var i = 1;
-                                    }
-                                    @if (Model.Deleteuserall != null)
-                                    {
-                                        foreach (var item in Model.Deleteuserall)
-                                        {
-                                            <tr class="tr">
-                                                <td>@i</td>
-                                                <td>@item.Role</td>
-                                                <td>@item.FarmName</td>
-                                                <td>@item.Name</td>
-                                                <td>@item.ContectNo</td>
-                                                <td>@item.Email</td>
-                                                <td>@item.JoiningDate</td>
-                                                <td>@item.DeleteDate</td>
-                                                <td>@item.RecoveryAmount</td>
-
-
-                                            </tr>
-                                            i++;
-                                        }
-                                    }
-                                </tbody>
-                                @*<tfoot class="navbar" style="color:white;position:inherit;">
-                                        @if (Model.GSTAdmin != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size:18px;">Total</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="font-size:18px;">@Model.GSTAdmin.Sum(a => a.gst)</td>
-                                            </tr>
-                                        }
-                                        else if (Model.GSTMaster != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size:18px;">Total</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="font-size:18px;">@Model.GSTMaster.Sum(a => a.gst)</td>
-                                            </tr>
-                                        }
-                                        else if (Model.GSTDealer != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size:18px;">Total</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="font-size:18px;">@Model.GSTDealer.Sum(a => a.gst)</td>
-                                            </tr>
-                                        }
-                                        else if (Model.GSTRetailer != null)
-                                        {
-                                            <tr>
-                                                <td style="font-size:18px;">Total</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="font-size:18px;">@Model.GSTRetailer.Sum(a => a.gst)</td>
-                                            </tr>
-                                        }
-                                    </tfoot>*@
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
 <script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $(".body .tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+    function durSearch() {
+        var value = $("#myInput").val().toLowerCase();
+        $("#deleteUserReportTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
-    });
-</script>
+    }
 
-<script>
     $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-            paging: false
+        $('#btnExportA').on('click', function () {
+            location.href = '@Url.Action("Excel_DeleteUserReport", "Home")';
         });
-
-    });
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-</script>
-
-<script>
-    $("#btnExport").click(function () {
-        var url = '@Url.Action("Excel_DeleteUserReport", "Home")';
-        location.href = url;
-});
-</script>
-
-<script>
-    $("#btnPDF").click(function () {
-        var url = '@Url.Action("Pdf_DeleteUserReport", "Home")';
-        window.open(
-url,
-  '_blank' // <- This is what makes it open in a new window.
-);
+        $('#btnPDFA').on('click', function () {
+            window.open('@Url.Action("Pdf_DeleteUserReport", "Home")', '_blank');
+        });
     });
 </script>

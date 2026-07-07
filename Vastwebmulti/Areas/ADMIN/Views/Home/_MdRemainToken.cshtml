@@ -1,0 +1,34 @@
+@model Vastwebmulti.Areas.ADMIN.Models.Token_PaidService_VM
+
+<div class="rc-table-scroll rc-table-scroll--remain">
+    <table class="table table-bordered rc-inner-table">
+        <thead>
+            <tr>
+                <th>Firm Name</th>
+                <th>Contact Info</th>
+                <th class="rc-live-th"><span class="rc-live-label">Live</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.master_remain_token_report_Result != null && Model.master_remain_token_report_Result.Any())
+            {
+                foreach (var item in Model.master_remain_token_report_Result)
+                {
+                    <tr>
+                        <td>@item.FarmName</td>
+                        <td>@item.Mobile</td>
+                        <td class="rc-live-td">
+                            <span class="rc-live-badge @(item.Tokens > 0 ? "rc-live-badge--on" : "")">@item.Tokens</span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="rc-empty-row">No records found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

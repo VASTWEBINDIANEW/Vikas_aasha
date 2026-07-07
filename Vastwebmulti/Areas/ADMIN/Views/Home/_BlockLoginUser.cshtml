@@ -1,7 +1,5 @@
 ﻿@model List<Vastwebmulti.Areas.ADMIN.Models.BlockUserlistmodel>
 
-
-
 @if (Model != null)
 {
     int i = 0;
@@ -9,148 +7,105 @@
     {
         foreach (var item in Model)
         {
-            <tr class="tr">
-
-                <td>
-                    @item.Frmname
-                </td>
-                @*<td>
-                        <input type="button" value="View" class="btn " onclick="ViewDetailsByID('@item.Userid', '@item.ROLES')" />
-
-                    </td>*@
-                <td>
-                    @item.MOBILE
-                </td>
-
-                @*<td>
-                        @item.sts
-                    </td>*@
-                <td style="text-align:center;">
+            <tr class="tr wl-manage-row">
+                <td>@item.Frmname</td>
+                <td>@item.MOBILE</td>
+                <td class="wl-perm-col">
+                    <div class="wl-perm-actions">
                     @if (item.sts == "Y" && item.apploginsts == "Y" && item.NetOFFR == "Y")
                     {
-
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="BOTH LOGIN ON" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','OFF','@item.NetOFFR')">
-                                BOTH LOGIN ON
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="BOTH LOGIN ON" class="wl-perm-btn wl-perm-btn--both-on btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','OFF','@item.NetOFFR')">
+                                <i class="fas fa-check-double"></i> Both Login ON
                             </button>
                         </div>
-
-                        <div id="btnshow_@i" style="display: none; width: auto; float: left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </button>
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
-
-
-
-
-                        @*<input type="button" value="BOTH LOGIN ON" class="btn " onclick="StatusActive(this,'@item.Userid', '@item.ROLES','OFF')" />*@
-
-
-
-
                     }
                     else if (item.sts == "N" && item.apploginsts == "N" && item.NetOFFR == "Y")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="LOGIN OFF" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','WEB','@item.NetOFFR')">
-                                SELF LOGIN OFF
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="LOGIN OFF" class="wl-perm-btn wl-perm-btn--off btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','WEB','@item.NetOFFR')">
+                                <i class="fas fa-power-off"></i> Self Login OFF
                             </button>
-                            @*<input type="button" value="LOGIN OFF" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','WEB')" />*@
                         </div>
-
-                        <div id="btnshow_@i" style="display: none; width: auto; float: left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </button>
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
                     }
-
                     else if (item.sts == "Y" && item.NetOFFR == "Y")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="ONLY WEB LOGIN" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','APP','@item.NetOFFR')">
-                                ONLY WEB LOGIN
-                            </button>
-                            @*<input type="button" value="ONLY WEB LOGIN" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','APP')" />*@
-                        </div>
-
-                        <div id="btnshow_@i" style="display: none;width:auto;float:left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="ONLY WEB LOGIN" class="wl-perm-btn wl-perm-btn--web btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','APP','@item.NetOFFR')">
+                                <i class="fas fa-globe"></i> Only Web Login
                             </button>
                         </div>
-
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+                        </div>
                     }
                     else if (item.apploginsts == "Y" && item.NetOFFR == "Y")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="ONLY APP LOGIN" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTHOFF','@item.NetOFFR')">
-                                ONLY APP LOGIN
-                            </button>
-                            @*<input type="button" value="ONLY APP LOGIN" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','BOTH')" />*@
-
-                        </div>
-
-                        <div id="btnshow_@i" style="display: none;width:auto;float:left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="ONLY APP LOGIN" class="wl-perm-btn wl-perm-btn--app btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTHOFF','@item.NetOFFR')">
+                                <i class="fas fa-mobile-alt"></i> Only App Login
                             </button>
                         </div>
-
-
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+                        </div>
                     }
-
                     else if (item.sts == "N" && item.apploginsts == "N" && item.NetOFFR == "N")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="Net OFF" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTH','@item.NetOFFR')">
-                                ALL NETWORK OFF
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="Net OFF" class="wl-perm-btn wl-perm-btn--netoff btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTH','@item.NetOFFR')">
+                                <i class="fas fa-wifi"></i> All Network OFF
                             </button>
-                            @*<input type="button" value="LOGIN OFF" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','WEB')" />*@
                         </div>
-
-                        <div id="btnshow_@i" style="display: none; width: auto; float: left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </button>
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
                     }
-
 
                     @if (item.Block == "Y")
                     {
-                        <div id="btnhidecheck_@i" class="attemptblock-first" style="float:left;padding-left:5px;">
-                            <button class="btn has-spinner" onclick="unblockUser(@i,'@item.Userid', '@item.ROLES')">
-                                <span class="attemptblock"><i class="fa fa-ban" aria-hidden="true"></i> Attempt Blocked</span>
-                                Click To Activate
+                        <div id="btnhidecheck_@i" class="wl-perm-action attemptblock-first">
+                            <button type="button" class="wl-attempt-btn btn has-spinner" onclick="unblockUser(@i,'@item.Userid', '@item.ROLES')">
+                                <i class="fas fa-ban"></i>
+                                <span class="wl-attempt-btn__text"><strong>Attempt Blocked</strong><small>Click to activate</small></span>
                             </button>
                         </div>
-                        <div id="btnshowclick_@i" style="display: none; width: auto;float:left;padding-left:5px;">
-                            <strong class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </strong>
+                        <div id="btnshowclick_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
-
                     }
+                    </div>
                 </td>
-
-                <td class="set-city-up">
+                <td class="wl-city-col set-city-up">
                     @if (item.userlocationlistbyid.Count() > 0)
                     {
-
-                        <ul class="set-city-show">
-                            @foreach (var itemasdsad in item.userlocationlistbyid)
-                            {
-                                <li>@itemasdsad</li>
-                            }
-
-                            <li>  <input type="button" value="Edit CITY" onclick="EditLocation(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')" style="font-size: 0; float: left; width: 25px; height: 28px; border: 4px solid #eae9e9; background-image: url(~/AdminDesign/images/edit.svg); background-repeat: no-repeat; margin-bottom: -9px; background-size: contain;box-shadow: 0 0 0 1px #bbb;margin-left: 1px;padding: 0;" /> </li>
-                        </ul>
+                        <div class="wl-city-cell">
+                            <ul class="wl-city-chips set-city-show">
+                                @foreach (var itemasdsad in item.userlocationlistbyid)
+                                {
+                                    <li><span class="wl-city-chip">@itemasdsad</span></li>
+                                }
+                                <li>
+                                    <button type="button" class="wl-city-edit-btn" title="Edit City"
+                                            onclick="EditLocation(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     }
                     else
                     {
-                        <input type="button" value="FETCH CITY" onclick="GetLoginCityName(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')" />
+                        <button type="button" class="wl-fetch-city-btn"
+                                onclick="GetLoginCityName(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')">
+                            <i class="fas fa-map-marker-alt"></i> Fetch City
+                        </button>
                     }
                 </td>
             </tr>
@@ -161,131 +116,94 @@
     {
         foreach (var item in Model)
         {
-            <tr class="tr">
-
-                <td>
-                    @item.Frmname
-                </td>
-                @*<td>
-                        <input type="button" value="View" class="btn " onclick="ViewDetailsByID('@item.Userid', '@item.ROLES')" />
-
-                    </td>*@
-                <td>
-                    @item.MOBILE
-                </td>
-
-                @*<td>
-                        @item.sts
-                    </td>*@
-                <td style="text-align:center;">
+            <tr class="tr wl-manage-row">
+                <td>@item.Frmname</td>
+                <td>@item.MOBILE</td>
+                <td class="wl-perm-col">
+                    <div class="wl-perm-actions">
                     @if (item.sts == "Y" && item.apploginsts == "Y")
                     {
-
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="BOTH LOGIN ON" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','OFF')">
-                                BOTH LOGIN ON
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="BOTH LOGIN ON" class="wl-perm-btn wl-perm-btn--both-on btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','OFF')">
+                                <i class="fas fa-check-double"></i> Both Login ON
                             </button>
                         </div>
-
-                        <div id="btnshow_@i" style="display: none; width: auto; float: left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </button>
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
-
-
-
-
-                        @*<input type="button" value="BOTH LOGIN ON" class="btn " onclick="StatusActive(this,'@item.Userid', '@item.ROLES','OFF')" />*@
-
-
-
-
                     }
                     else if (item.sts == "N" && item.apploginsts == "N")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="LOGIN OFF" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','WEB')">
-                                BOTH LOGIN OFF
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="LOGIN OFF" class="wl-perm-btn wl-perm-btn--off btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','WEB')">
+                                <i class="fas fa-power-off"></i> Both Login OFF
                             </button>
-                            @*<input type="button" value="LOGIN OFF" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','WEB')" />*@
                         </div>
-
-                        <div id="btnshow_@i" style="display: none; width: auto; float: left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </button>
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
                     }
-
                     else if (item.sts == "Y")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="ONLY WEB LOGIN" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','APP')">
-                                ONLY WEB LOGIN
-                            </button>
-                            @*<input type="button" value="ONLY WEB LOGIN" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','APP')" />*@
-                        </div>
-
-                        <div id="btnshow_@i" style="display: none;width:auto;float:left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="ONLY WEB LOGIN" class="wl-perm-btn wl-perm-btn--web btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','APP')">
+                                <i class="fas fa-globe"></i> Only Web Login
                             </button>
                         </div>
-
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+                        </div>
                     }
                     else if (item.apploginsts == "Y")
                     {
-                        <div id="btnhide_@i" style="width:auto;float:left;">
-                            <button value="ONLY APP LOGIN" class="btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTH')">
-                                ONLY APP LOGIN
-                            </button>
-                            @*<input type="button" value="ONLY APP LOGIN" class="btn has-spinner" onclick="StatusActive(this,'@item.Userid', '@item.ROLES','BOTH')" />*@
-
-                        </div>
-
-                        <div id="btnshow_@i" style="display: none;width:auto;float:left;">
-                            <button class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
+                        <div id="btnhide_@i" class="wl-perm-action">
+                            <button type="button" value="ONLY APP LOGIN" class="wl-perm-btn wl-perm-btn--app btn has-spinner" onclick="StatusActive(@i,'@item.Userid', '@item.ROLES','BOTH')">
+                                <i class="fas fa-mobile-alt"></i> Only App Login
                             </button>
                         </div>
-
-
+                        <div id="btnshow_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
+                        </div>
                     }
 
                     @if (item.Block == "Y")
                     {
-                        <div id="btnhidecheck_@i" class="attemptblock-first" style="float:left;padding-left:5px;">
-                            <button class="btn has-spinner" onclick="unblockUser(@i,'@item.Userid', '@item.ROLES')">
-                                <span class="attemptblock"><i class="fa fa-ban" aria-hidden="true"></i> Attempt Blocked</span>
-                                Click To Activate
+                        <div id="btnhidecheck_@i" class="wl-perm-action attemptblock-first">
+                            <button type="button" class="wl-attempt-btn btn has-spinner" onclick="unblockUser(@i,'@item.Userid', '@item.ROLES')">
+                                <i class="fas fa-ban"></i>
+                                <span class="wl-attempt-btn__text"><strong>Attempt Blocked</strong><small>Click to activate</small></span>
                             </button>
                         </div>
-                        <div id="btnshowclick_@i" style="display: none; width: auto;float:left;padding-left:5px;">
-                            <strong class="btn has-spinner">
-                                <span style="top: -4px;margin-left: 5px;color: #555;"> <i class="fa fa-circle-o-notch fa-spin"></i></span>
-                            </strong>
+                        <div id="btnshowclick_@i" class="wl-perm-action wl-perm-action--loading" style="display:none;">
+                            <button type="button" class="wl-perm-btn wl-perm-btn--loading btn has-spinner"><i class="fa fa-circle-o-notch fa-spin"></i></button>
                         </div>
-
                     }
+                    </div>
                 </td>
-
-                <td class="set-city-up">
+                <td class="wl-city-col set-city-up">
                     @if (item.userlocationlistbyid.Count() > 0)
                     {
-
-                        <ul class="set-city-show">
-                            @foreach (var itemasdsad in item.userlocationlistbyid)
-                            {
-                                <li>@itemasdsad</li>
-                            }
-
-                            <li>  <input type="button" value="Edit CITY" onclick="EditLocation(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')" style="font-size: 0; float: left; width: 25px; height: 28px; border: 4px solid #eae9e9; background-image: url(~/AdminDesign/images/edit.svg); background-repeat: no-repeat; margin-bottom: -9px; background-size: contain;box-shadow: 0 0 0 1px #bbb;margin-left: 1px;padding: 0;" /> </li>
-                        </ul>
+                        <div class="wl-city-cell">
+                            <ul class="wl-city-chips set-city-show">
+                                @foreach (var itemasdsad in item.userlocationlistbyid)
+                                {
+                                    <li><span class="wl-city-chip">@itemasdsad</span></li>
+                                }
+                                <li>
+                                    <button type="button" class="wl-city-edit-btn" title="Edit City"
+                                            onclick="EditLocation(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     }
                     else
                     {
-                        <input type="button" value="FETCH CITY" onclick="GetLoginCityName(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')" />
+                        <button type="button" class="wl-fetch-city-btn"
+                                onclick="GetLoginCityName(this, '@item.ROLES', '@item.Userid'),ViewDetailsByID('@item.Userid', '@item.ROLES')">
+                            <i class="fas fa-map-marker-alt"></i> Fetch City
+                        </button>
                     }
                 </td>
             </tr>

@@ -2,8 +2,8 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows         = Model ?? Enumerable.Empty<Vastwebmulti.Models.retailer_Ekycreport_Result>();
-    var recordCount  = rows.Count();
+    var rows         = (Model ?? Enumerable.Empty<Vastwebmulti.Models.retailer_Ekycreport_Result>()).ToList();
+    var recordCount  = rows.Count;
     var verCount     = rows.Count(r => r.ekycstatus == true);
     var unverCount   = rows.Count(r => r.ekycstatus == false);
     var unreg        = recordCount - verCount - unverCount;

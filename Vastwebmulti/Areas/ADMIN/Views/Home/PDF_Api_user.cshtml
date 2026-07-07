@@ -2,8 +2,8 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows        = Model.ApiList;
-    var recordCount = rows != null ? rows.Count() : 0;
+    var rows        = (Model != null && Model.ApiList != null) ? Model.ApiList.ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.API_all_uesers_Result>();
+    var recordCount = rows.Count;
     var searchFilter = (Request.QueryString["usernm"] ?? "").Trim();
     var generatedOn  = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }

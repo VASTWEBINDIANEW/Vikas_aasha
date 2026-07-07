@@ -2,7 +2,9 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows = Model?.Deleteuserall ?? new List<Vastwebmulti.Areas.ADMIN.Models.DeleteUser>().Select(x => x).ToList();
+    var rows = (Model != null && Model.Deleteuserall != null)
+                  ? Model.Deleteuserall.ToList()
+                  : new List<Vastwebmulti.Areas.ADMIN.Models.DeleteUser>();
     var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
     var i = 1;
 }
@@ -50,13 +52,13 @@
         <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
-                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@(Model?.Deleteuserall?.Count ?? 0)</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
                 <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">Deleted Users</span></td>
             </tr>
         </table>
     </div>
     <div class="vm-ml-pdf__table-wrap">
-        @if (Model != null && Model.Deleteuserall != null && Model.Deleteuserall.Any())
+        @if (rows.Any())
         {
             <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
                 <thead>
@@ -73,7 +75,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Deleteuserall)
+                    @foreach (var item in rows)
                     {
                         <tr>
                             <td class="vm-ml-pdf__sr">@(i++)</td>

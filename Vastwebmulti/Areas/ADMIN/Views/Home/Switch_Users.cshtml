@@ -1,624 +1,426 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.SwitchUserModel
 @{
-    ViewBag.Title = "Switch_Users";
+    ViewBag.Title = "Switch Users";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-<style>
 
-    /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=7" rel="stylesheet" />
 
-    .fund-transfer-form {
-        background: #fff;
-    }
+<section class="content Switch_Users_Page New_Employee_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
 
-    .switch-history-table {
-        background: #fff;
-        height: auto;
-    }
+    <div class="container-fluid vm-ft-page-shell">
 
-    .for-search.tablesearch-second {
-        float: left;
-        margin-right: 3px;
-    }
-
-    .bread-same-all-page {
-        width: auto;
-    }
-
-    .pageheader-margin-third {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    /* new css */
-
-    .for-search input {
-        width: 250px;
-        border: 1px solid #dbdbdb;
-        padding: 3px 10px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .swichuser-reporttable table tbody {
-        border-top: 1px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:570px) {
-
-        .pageheader-margin-third {
-            display: block;
-            width: 100%;
-            float: left;
-        }
-
-        .bread-same-all-page {
-            width: 100%;
-            margin: 2px 0;
-        }
-
-        .web-white-filter {
-            width: 100%;
-            margin: 2px 0;
-        }
-
-
-        .switch-user-tab-left .fund-transfer-form {
-            padding-bottom: 20px;
-            height: auto;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .for-search.tablesearch-second {
-            width: 100%;
-            margin-right: 0px;
-            margin-bottom: 3px;
-        }
-
-        .for-search input {
-            width: 100%;
-        }
-
-        .switch-user-tab-left .nav-tabs > li > a {
-            font-size: 13px;
-        }
-    }
-</style>
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Switch Users</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Switch Users</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second four-noneclass-admin-only">
-                <ul>
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Switch User
-                    </li>
-                </ul>
+        <!-- ── Toolbar: Breadcrumb + Search ── -->
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li>User's &amp; Account</li>
+                    <li>Switch Users</li>
+                </ol>
             </div>
-            <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;">
-
-                <div class="for-search tablesearch-second">
-                    <div class="search-after-third">
-                        <input id="myInput" type="text" placeholder="Search..." onkeyup="myFunction()" />
-                    </div>
-                </div>
-
-                <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 11px;float: left; padding: 0px 4px;height:28px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
+            <div class="vm-ft-search-wrap">
+                <input class="form-control vm-ne-search" type="text" id="myInput"
+                       placeholder="Search switch history..." onkeyup="suSearchTable()" autocomplete="off" />
             </div>
-
-
         </div>
-    </div>
 
-    <div class="col-md-12">
+        <!-- ── Two-column layout ── -->
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
-        <div class="row clearfix ">
-            <div class="switch-user-tab">
-                <div class="col-md-4 switch-user-tab-left">
+                <!-- ====== LEFT: Switch User Form ====== -->
+                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+                    <div class="fund-trasfer-left fund-user-left vm-ft-form-card">
 
-                    <div class="page-header-third">
-
-                        <ul class="nav nav-tabs tab-seconddesign tab-third-design" id="tabs">
-                            <li class="tab-link active changetabeuser" data-tab="tab-1" data-href="@Url.Action("ChangeTabtype","Home",new { Utype="dealer"})"><a data-toggle="tab" href=".home" aria-expanded="false"> Distributor Switch</a></li>
-                            <li class="tab-link changetabeuser" data-tab="tab-2" data-href="@Url.Action("ChangeTabtype","Home",new { Utype="Retailer"})"><a data-toggle="tab" href=".menu1" aria-expanded="false">Retailer Switch</a></li>
-
-                        </ul>
-                        <div class="width100 home float-left tab-pane fade active in input-border-third">
-                            <div class="fund-transfer-form boxback-allpage-admin">
-                                <form id="frmdealtomd">
-                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                        <label>Select Distributor </label>
-                                        <div>
-                                            <div class="">
-                                                @Html.DropDownList("dealerid", new SelectList(ViewBag.dealerid, "Value", "Text"), "Select  Dealer Id", new { @class = "form-control", data_live_search = "true", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 col-sm-12 col-xs-12  ">
-                                        <div class="distributor-detail" style="display:none;">
-                                            <p>Distributor Name&nbsp;-&nbsp;&nbsp; <span id="DISNAME"></span></p>
-                                            <p>Firm Name&nbsp;-&nbsp;&nbsp; <span id="DISfrmname"></span></p>
-                                            <p>Mobile No.&nbsp;-&nbsp;&nbsp; <span id="DISmobile"></span></p>
-                                            <p>Email&nbsp;-&nbsp;&nbsp; <span id="DISEMAIL"></span></p>
-                                            <p>Address&nbsp;-&nbsp;&nbsp; <span id="DISADDRESS"></span></p>
-                                            <p>Current M/D&nbsp;-&nbsp;&nbsp; <span id="DISCRNTMD"> </span></p>
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="col-md-12 col-sm-12 col-xs-12  ">
-                                        <label>Select New M/D </label>
-                                        <div>
-                                            <div class="">
-                                                @Html.DropDownList("masterid", new SelectList(ViewBag.masterid, "Value", "Text"), "Select Master  Dealer Id", new { @class = "form-control", data_live_search = "true", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                                        <div>
-
-                                            <button id="btnshowdetails" class="fullbodydycolorbg btn-first button-third" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                <span style="color:#fff;position:relative;">Move User</span>
-                                            </button>
-                                            <button class="btn-second button-third-design" type="reset" style="color:#000;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;margin-right:10px;">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
+                        <!-- Card header -->
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon"><i class="fas fa-exchange-alt"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Switch Users</span>
+                                <span class="vm-ft-form-card-header__sub">Move user to new hierarchy</span>
                             </div>
-
                         </div>
-                        <div class="width100 menu1 float-left tab-pane fade input-border-third">
 
-                            <div class="fund-transfer-form boxback-allpage-admin">
-                                <form id="frmretdeal">
-                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                        <label>Select Retailer </label>
-                                        <div>
-                                            <div class="">
-                                                @Html.DropDownList("retailerid", new SelectList(ViewBag.Retailerids, "Value", "Text"), "Select Retailer Id", new { @class = "form-control", data_live_search = "true", @required = "required" })
-                                                @*<select onchange="masterdetailr(this)">
-                                                        <option value="1">Select Retailer</option>
-                                                        <option value="2">hgvghvrfdhrthty</option>
-                                                        <option value="3">hgvrerrfrvrfdhrthty</option>
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 col-sm-12 col-xs-12  ">
-                                        <div class="distributor-details" style="display:none;">
-                                            <p>Retailer Name&nbsp;-&nbsp;&nbsp; <span id="RETNAME"></span></p>
-                                            <p>Firm Name&nbsp;-&nbsp;&nbsp; <span id="RETfrmname"></span></p>
-                                            <p>Mobile No.&nbsp;-&nbsp;&nbsp; <span id="RETmobile"></span></p>
-                                            <p>Email&nbsp;-&nbsp;&nbsp; <span id="RETEMAIL"></span></p>
-                                            <p>Address&nbsp;-&nbsp;&nbsp; <span id="RETADDRESS"></span></p>
-                                            <p>Current Distributor&nbsp;-&nbsp;&nbsp; <span id="RETCRNTMD"> </span></p>
-                                        </div>
-                                    </div>
+                        <!-- Tabs -->
+                        <div class="au-tabs">
+                            <button type="button" class="au-tab-btn active" id="tab-btn-dist"
+                                    onclick="switchSUTab('panel-dist','@Url.Action("ChangeTabtype","Home",new { Utype="dealer"})',this)">
+                                <i class="fas fa-building"></i> Distributor Switch
+                            </button>
+                            <button type="button" class="au-tab-btn" id="tab-btn-ret"
+                                    onclick="switchSUTab('panel-ret','@Url.Action("ChangeTabtype","Home",new { Utype="Retailer"})',this)">
+                                <i class="fas fa-store"></i> Retailer Switch
+                            </button>
+                        </div>
 
+                        <!-- ── Tab Panel 1: Distributor Switch ── -->
+                        <div id="panel-dist" class="au-tab-content active su-tab-panel" style="display:block;padding:14px 16px;">
+                            <form id="frmdealtomd" class="fund-transfer-form">
 
+                                <div class="form-group">
+                                    <label><i class="fas fa-building" style="color:#3b82f6;margin-right:4px;font-size:.68rem;"></i> Select Distributor</label>
+                                    @Html.DropDownList("dealerid", new SelectList(ViewBag.dealerid, "Value", "Text"), "Select Dealer Id", new { @class = "form-control", @required = "required" })
+                                </div>
 
-                                    <div class="col-md-12 col-sm-12 col-xs-12  ">
-                                        <label>Select New Distributor </label>
-                                        <div>
-                                            <div class="">
-                                                @Html.DropDownList("dealerdetailsid", new SelectList(ViewBag.dealerid, "Value", "Text"), "Select  Dealer Id", new { @class = "form-control", data_live_search = "true", @required = "required" })
-                                                @*<select>
-                                                        <option value="1">Select Distributor</option>
-                                                        <option value="2">hgvghvrfdhrthty</option>
-                                                        <option value="3">hgvrerrfrvrfdhrthty</option>
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                    </div>
+                                <!-- Distributor detail info card -->
+                                <div class="distributor-detail su-detail-card" style="display:none;">
+                                    <div class="su-detail-row"><i class="fas fa-user su-detail-icon"></i><span class="su-detail-label">Name</span><span id="DISNAME" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-store su-detail-icon"></i><span class="su-detail-label">Firm</span><span id="DISfrmname" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-mobile-alt su-detail-icon"></i><span class="su-detail-label">Mobile</span><span id="DISmobile" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-envelope su-detail-icon"></i><span class="su-detail-label">Email</span><span id="DISEMAIL" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-map-marker-alt su-detail-icon"></i><span class="su-detail-label">Address</span><span id="DISADDRESS" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-sitemap su-detail-icon"></i><span class="su-detail-label">Current M/D</span><span id="DISCRNTMD" class="su-detail-value"></span></div>
+                                </div>
 
-                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
-                                        <div>
+                                <div class="form-group">
+                                    <label><i class="fas fa-sitemap" style="color:#3b82f6;margin-right:4px;font-size:.68rem;"></i> Select New M/D</label>
+                                    @Html.DropDownList("masterid", new SelectList(ViewBag.masterid, "Value", "Text"), "Select Master Dealer Id", new { @class = "form-control", @required = "required" })
+                                </div>
 
-                                            <button id="btnshowdetails" class="fullbodydycolorbg btn-first button-third" style="color:#fff;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;">
-                                                <span style="color:#fff;position:relative;">Move User</span>
-                                            </button>
-                                            <button class="btn-second button-third-design" type="reset" style="color:#000;float:right;padding: 6px 20px;border: 1px solid #bbb;margin-top: 10px;line-height: 22px;margin-right:10px;">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="ne-form-footer">
+                                    <button type="reset" class="ne-btn-reset">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                    <button type="submit" class="ne-btn-submit">
+                                        <i class="fas fa-exchange-alt"></i> Move User
+                                    </button>
+                                </div>
 
+                            </form>
+                        </div>
 
+                        <!-- ── Tab Panel 2: Retailer Switch ── -->
+                        <div id="panel-ret" class="au-tab-content su-tab-panel" style="display:none;padding:14px 16px;">
+                            <form id="frmretdeal" class="fund-transfer-form">
 
+                                <div class="form-group">
+                                    <label><i class="fas fa-store" style="color:#3b82f6;margin-right:4px;font-size:.68rem;"></i> Select Retailer</label>
+                                    @Html.DropDownList("retailerid", new SelectList(ViewBag.Retailerids, "Value", "Text"), "Select Retailer Id", new { @class = "form-control", @required = "required" })
+                                </div>
 
+                                <!-- Retailer detail info card -->
+                                <div class="distributor-details su-detail-card" style="display:none;">
+                                    <div class="su-detail-row"><i class="fas fa-user su-detail-icon"></i><span class="su-detail-label">Name</span><span id="RETNAME" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-store su-detail-icon"></i><span class="su-detail-label">Firm</span><span id="RETfrmname" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-mobile-alt su-detail-icon"></i><span class="su-detail-label">Mobile</span><span id="RETmobile" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-envelope su-detail-icon"></i><span class="su-detail-label">Email</span><span id="RETEMAIL" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-map-marker-alt su-detail-icon"></i><span class="su-detail-label">Address</span><span id="RETADDRESS" class="su-detail-value"></span></div>
+                                    <div class="su-detail-row"><i class="fas fa-building su-detail-icon"></i><span class="su-detail-label">Distributor</span><span id="RETCRNTMD" class="su-detail-value"></span></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fas fa-building" style="color:#3b82f6;margin-right:4px;font-size:.68rem;"></i> Select New Distributor</label>
+                                    @Html.DropDownList("dealerdetailsid", new SelectList(ViewBag.dealerid, "Value", "Text"), "Select Dealer Id", new { @class = "form-control", @required = "required" })
+                                </div>
+
+                                <div class="ne-form-footer">
+                                    <button type="reset" class="ne-btn-reset">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                    <button type="submit" class="ne-btn-submit">
+                                        <i class="fas fa-exchange-alt"></i> Move User
+                                    </button>
+                                </div>
+
+                            </form>
                         </div>
 
                     </div>
-
                 </div>
-                <div class="col-md-8 switch-user-tab-right">
+                <!-- ====== END LEFT ====== -->
 
-                    <div class="page-header-third">
+                <!-- ====== RIGHT: Switch History ====== -->
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
+                    <div class="fund-trasfer-right fund-user-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
 
+                            <!-- Panel toolbar header -->
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium vm-ml-list-toolbar">
+                                <div class="vm-ml-list-toolbar__row">
+                                    <div class="vm-ft-history-toolbar__head vm-ml-list-toolbar__head">
+                                        <i class="fas fa-history" aria-hidden="true"></i>
+                                        <div class="vm-ml-list-toolbar__text">
+                                            <span class="vm-ft-history-toolbar__title">Switch History</span>
+                                            <span class="vm-ft-history-toolbar__sub">View &amp; track user switch logs</span>
+                                        </div>
+                                    </div>
+                                    <div class="vm-ft-export-group vm-ml-list-toolbar__exports">
+                                        <button type="button" id="btnExport" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel">
+                                            <i class="fas fa-file-excel" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" id="btnPDF" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF">
+                                            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div id="home" class="width100 home float-left tab-pane fade active in">
-                            <div class="switch-history-table swichuser-reporttable boxback-allpage-admin tablefourdesign-admin" id="dlmd">
+                            <!-- Switch history table (AJAX target) -->
+                            <div id="dlmd" class="vm-ml-table-host" style="overflow-x:auto;overflow-y:auto;max-height:72vh;">
                                 @Html.Partial("_SwitchUsertable", Model)
                             </div>
                             <div id="loadingdiv" style="text-align:center;display:none;margin-bottom:20px;">
-
                                 <img src="~/img/ajax-loader.gif" />
                             </div>
+
                         </div>
-                        @*<div id="menu1" class="width100 menu1 float-left tab-pane fade">
-                                <div class="switch-history-table" id="RETdlm">
-                                    @Html.Partial("_SwitchUsertable", Model)
-                                </div>
-                                <div class="switch-history-table">
-
-
-                                </div>
-                            </div>*@
                     </div>
-
                 </div>
+                <!-- ====== END RIGHT ====== -->
+
             </div>
         </div>
+
     </div>
 </section>
 
+<style>
+    /* ── Select2 full width inside Switch Users form card ── */
+    .Switch_Users_Page .fund-transfer-form .select2-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+    .Switch_Users_Page .fund-transfer-form .select2-container--default .select2-selection--single {
+        height: 34px !important;
+        min-height: 34px !important;
+        border-radius: 8px !important;
+        border: 1px solid #dbe2ea !important;
+        background: #f8fafc !important;
+    }
+    .Switch_Users_Page .fund-transfer-form .select2-selection--single .select2-selection__rendered {
+        line-height: 32px !important;
+        font-size: 0.78rem !important;
+        color: #334155 !important;
+        padding-left: 10px !important;
+        padding-right: 28px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+    .Switch_Users_Page .fund-transfer-form .select2-selection__arrow {
+        height: 32px !important;
+        right: 6px !important;
+    }
+
+    /* ── Detail info card inside form ── */
+    .su-detail-card {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin: 4px 0 12px;
+    }
+    .su-detail-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 3px 0;
+        font-size: 0.76rem;
+        color: #0c4a6e;
+        border-bottom: 1px solid #e0f2fe;
+    }
+    .su-detail-row:last-child { border-bottom: none; }
+    .su-detail-icon  { color: #0891b2; font-size: .65rem; margin-top: 3px; flex-shrink: 0; width: 12px; }
+    .su-detail-label { color: #64748b; min-width: 72px; font-size: .72rem; }
+    .su-detail-value { font-weight: 600; color: #0c4a6e; word-break: break-word; }
+
+    /* ── Switch Users table scroll ── */
+    .Switch_Users_Page #dlmd { overflow-x: auto; overflow-y: auto; max-height: 72vh; }
+    .Switch_Users_Page .vm-ml-data-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .Switch_Users_Page .vm-ml-data-table thead tr { background: #1e293b; }
+    .Switch_Users_Page .vm-ml-data-table thead th {
+        color: #fff; font-size: .73rem; font-weight: 600; padding: 9px 10px;
+        white-space: nowrap; border: none; text-transform: uppercase; letter-spacing: .03em;
+    }
+    .Switch_Users_Page .vm-ml-data-table tbody tr:nth-child(even) { background: #f8fafc; }
+    .Switch_Users_Page .vm-ml-data-table tbody tr:nth-child(odd)  { background: #fff; }
+    .Switch_Users_Page .vm-ml-data-table tbody tr:hover td { background: #eff6ff !important; }
+    .Switch_Users_Page .vm-ml-data-table tbody td {
+        font-size: .78rem; padding: 8px 10px; color: #334155;
+        border-bottom: 1px solid #f1f5f9; vertical-align: middle;
+    }
+
+    /* ── Mobile: Switch Users ── */
+    @@media (max-width: 767px) {
+        .Switch_Users_Page .vm-ft-form-col,
+        .Switch_Users_Page .vm-ft-history-col  { width: 100% !important; float: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+        .Switch_Users_Page .vm-ft-layout       { flex-direction: column !important; }
+        .Switch_Users_Page .fund-transfer-main-admin.vm-ft-history-col { padding-left: 0 !important; margin-top: 14px; }
+        .Switch_Users_Page .vm-ft-page-toolbar { flex-direction: column !important; gap: 8px !important; align-items: flex-start !important; }
+        .Switch_Users_Page .vm-ft-search-wrap  { width: 100% !important; }
+        .Switch_Users_Page .vm-ne-search.form-control { width: 100% !important; }
+        .Switch_Users_Page .au-tabs            { flex-wrap: wrap; gap: 6px; }
+        .Switch_Users_Page .au-tab-btn         { border-radius: 8px !important; flex: 1 1 calc(50% - 6px); }
+        .Switch_Users_Page #dlmd               { overflow-x: auto !important; max-height: none; }
+        .Switch_Users_Page .vm-ml-data-table   { min-width: 640px; }
+        .su-detail-card { margin: 6px 0 10px; }
+    }
+    @@media (max-width: 480px) {
+        .Switch_Users_Page .au-tab-btn { flex: 1 1 100%; }
+        .Switch_Users_Page .ne-form-footer { flex-direction: column; }
+        .Switch_Users_Page .ne-btn-submit,
+        .Switch_Users_Page .ne-btn-reset  { width: 100%; justify-content: center; }
+    }
+</style>
+
+<!-- Select2 -->
 <link href="~/select2/dist/css/select2.css" rel="stylesheet" />
 <script src="~/select2/dist/js/select2.min.js"></script>
-
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-<script>
 
-    var pageindex = 1;
+<script>
+    var ravi = $.noConflict();
+
+    /* ── Select2 init ── */
+    ravi(document).ready(function () {
+        ravi("select").select2();
+    });
+    $(document).ajaxComplete(function () { ravi("select").select2(); });
+
+    /* ── Tab switching ── */
+    function switchSUTab(panelId, ajaxUrl, btn) {
+        /* toggle button active state */
+        document.querySelectorAll('.au-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        /* show/hide panels */
+        document.querySelectorAll('.su-tab-panel').forEach(function (p) {
+            p.style.display = 'none';
+            p.classList.remove('active');
+        });
+        var target = document.getElementById(panelId);
+        if (target) { target.style.display = 'block'; target.classList.add('active'); }
+
+        /* load matching history into right panel */
+        ravi.ajax({
+            url: ajaxUrl,
+            success: function (data) { ravi('#dlmd').html(data); }
+        });
+    }
+
+    /* ── Search history table ── */
+    function suSearchTable() {
+        var value = ravi("#myInput").val().toLowerCase();
+        ravi("#dlmd tbody tr").filter(function () {
+            ravi(this).toggle(ravi(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    }
+
+    /* ── Infinite scroll ── */
+    var pageindex  = 1;
     var NoMoredata = false;
     var inProgress = false;
-    $(window).scroll(function () {
-        if ($(window).scrollTop() > Number($("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
+    ravi(window).scroll(function () {
+        if (ravi(window).scrollTop() > Number(ravi("#tbldata").height()) / 4 && !NoMoredata && !inProgress) {
             inProgress = true;
-            $("#loadingdiv").show();
-            $.post($('#tbldata').attr('data-hrefscroll'),
-                { "pageindex": pageindex, txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
+            ravi("#loadingdiv").show();
+            ravi.post(ravi('#tbldata').attr('data-hrefscroll'),
+                { pageindex: pageindex },
                 function (data) {
-
-                    pageindex = pageindex + 1;
+                    pageindex++;
                     NoMoredata = data.NoMoredata;
-                    $("#dlmd").empty();
-                    $("#dlmd").append(data.HTMLString);
-                    $("#loadingdiv").hide();
+                    ravi("#dlmd").empty().append(data.HTMLString);
+                    ravi("#loadingdiv").hide();
                     inProgress = false;
                 });
         }
     });
-</script>
 
-<script>
-
-    var ravi = $.noConflict()
-    ravi(document).ready(function () {
-
-        // Initialize select2
-        ravi("select").select2();
-
-        // Read selected option
-
-    });
-
-</script>
-
-
-<script>
+    /* ── Fetch distributor details on change ── */
     ravi("#dealerid").on("change", function () {
-
-        var id = $(this).val();
-
-          $.ajax({
-
-                url:"@Url.Action("FetchDetails","Home")",
-                data: { id: id },
-                success: function (data) {
-
-                    if (data != null && data != '') {
-
-                        $('#DISNAME').text(data[0].Name)
-                        $('#DISfrmname').text(data[0].farmname)
-                        $('#DISmobile').text(data[0].mobile)
-                        $('#DISEMAIL').text(data[0].EMAIL)
-                        $('#DISADDRESS').text(data[0].ADDRESS)
-                        $('#DISCRNTMD').text(data[0].MDNAME)
-
-                        $('.distributor-detail').show();
-                    }
-                    else {
-                        $('.distributor-detail').hide();
-                    }
+        var id = ravi(this).val();
+        ravi.ajax({
+            url: "@Url.Action("FetchDetails","Home")",
+            data: { id: id },
+            success: function (data) {
+                if (data != null && data.length > 0) {
+                    ravi('#DISNAME').text(data[0].Name);
+                    ravi('#DISfrmname').text(data[0].farmname);
+                    ravi('#DISmobile').text(data[0].mobile);
+                    ravi('#DISEMAIL').text(data[0].EMAIL);
+                    ravi('#DISADDRESS').text(data[0].ADDRESS);
+                    ravi('#DISCRNTMD').text(data[0].MDNAME);
+                    ravi('.distributor-detail').show();
+                } else {
+                    ravi('.distributor-detail').hide();
                 }
-
-
-            })
+            }
+        });
     });
 
+    /* ── Fetch retailer details on change ── */
     ravi("#retailerid").on("change", function () {
-
-          var id = $(this).val();
-            $.ajax({
-
-                url:"@Url.Action("FetchRetailerDetails","Home")",
-                data: { id: id },
-                success: function (data) {
-                    if (data != null && data != '') {
-                        $('#RETNAME').text(data[0].Name)
-                        $('#RETfrmname').text(data[0].farmname)
-                        $('#RETmobile').text(data[0].mobile)
-                        $('#RETEMAIL').text(data[0].EMAIL)
-                        $('#RETADDRESS').text(data[0].ADDRESS)
-                        $('#RETCRNTMD').text(data[0].DealerNAME)
-
-                        $('.distributor-details').show();
-                    }
-                    else {
-                        $('.distributor-details').hide();
-                    }
-                }
-
-
-            })
-
-
-
-
-    })
-
-        @*$('#retailerid').change(function () {
-
-            var id = $('#retailerid').val();
-            $.ajax({
-
-                url:"@Url.Action("FetchRetailerDetails","Home")",
-                data: { id: id },
-                success: function (data) {
-                    if (data != null && data != '') {
-                        $('#RETNAME').text(data[0].Name)
-                        $('#RETfrmname').text(data[0].farmname)
-                        $('#RETmobile').text(data[0].mobile)
-                        $('#RETEMAIL').text(data[0].EMAIL)
-                        $('#RETADDRESS').text(data[0].ADDRESS)
-                        $('#RETCRNTMD').text(data[0].DealerNAME)
-
-                        $('.distributor-details').show();
-                    }
-                    else {
-                        $('.distributor-details').hide();
-                    }
-                }
-
-
-            })
-
-
-
-
-
-         })*@
-    ravi('.changetabeuser').click(function () {
-
-        $.ajax({
-
-            url: $(this).attr('data-href'),
+        var id = ravi(this).val();
+        ravi.ajax({
+            url: "@Url.Action("FetchRetailerDetails","Home")",
+            data: { id: id },
             success: function (data) {
-
-
-                $('#dlmd').html(data)
-
-
-
-
+                if (data != null && data.length > 0) {
+                    ravi('#RETNAME').text(data[0].Name);
+                    ravi('#RETfrmname').text(data[0].farmname);
+                    ravi('#RETmobile').text(data[0].mobile);
+                    ravi('#RETEMAIL').text(data[0].EMAIL);
+                    ravi('#RETADDRESS').text(data[0].ADDRESS);
+                    ravi('#RETCRNTMD').text(data[0].DealerNAME);
+                    ravi('.distributor-details').show();
+                } else {
+                    ravi('.distributor-details').hide();
+                }
             }
+        });
+    });
 
-
-
-
-        })
-
-
-
-
-
-    })
-
-      ravi('#frmretdeal').submit(    function(e){
-
-            e.preventDefault();
-           // var $frmdealtomd = $(this);
-
-          // check if the input is valid
-          //  if(! $form.valid()) return false;
-
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("dealer_retailer_Switch","Home")',
-                data: {remid: $('#retailerid').val(),dlmid:$('#dealerdetailsid').val()},
-                success: function (response) {
-                       $('#retailerid').val('')
-                      $('#dealerdetailsid').val('')
-                     $.ajax({
-
-            url:"@Url.Action("ChangeTabtype","Home",new { Utype="Retailer"})",
-            success: function (data) {
-
-                   $('.distributor-details').hide();
-                $('#dlmd').html(data)
-                ravi("#retailerid").select2().select2("val", null);
-                 ravi("#dealerdetailsid").select2().select2("val", null);
-
-
-
-
-
+    /* ── Form: Distributor → M/D switch ── */
+    ravi('#frmdealtomd').submit(function (e) {
+        e.preventDefault();
+        ravi.ajax({
+            type: 'POST',
+            url: '@Url.Action("DealerMD_switch","Home")',
+            data: { dealerid: ravi('#dealerid').val(), masterid: ravi('#masterid').val() },
+            success: function () {
+                ravi('#dealerid').val('');
+                ravi('#masterid').val('');
+                ravi('.distributor-detail').hide();
+                ravi.ajax({
+                    url: "@Url.Action("ChangeTabtype","Home",new { Utype="dealer"})",
+                    success: function (data) {
+                        ravi('#dlmd').html(data);
+                        ravi("#dealerid").select2().select2("val", null);
+                        ravi("#masterid").select2().select2("val", null);
+                    }
+                });
             }
-
-
-
-
-        })
-
-
-                }
-
-            });
         });
+    });
 
-        ravi('#frmdealtomd').submit(    function(e){
-
-            e.preventDefault();
-
-
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("DealerMD_switch","Home")',
-                data: {dealerid: $('#dealerid').val(),masterid:$('#masterid').val()},
-                success: function (response) {
-                    $('#dealerid').val('')
-                      $('#masterid').val('')
-                   $.ajax({
-
-            url:"@Url.Action("ChangeTabtype","Home",new { Utype="dealer"})",
-            success: function (data) {
-
-                 $('.distributor-detail').hide();
-                $('#dlmd').html(data)
-                  ravi("#dealerid").select2().select2("val", null);
-                 ravi("#masterid").select2().select2("val", null);
-
-      }
-
-
-  })
-                }
-
-            });
-        });
-
-        @*ravi('#dealerid').change(function () {
-
-            var id = $('#dealerid').val();
-            $.ajax({
-
-                url:"@Url.Action("FetchDetails","Home")",
-                data: { id: id },
-                success: function (data) {
-
-                    if (data != null && data != '') {
-
-                        $('#DISNAME').text(data[0].Name)
-                        $('#DISfrmname').text(data[0].farmname)
-                        $('#DISmobile').text(data[0].mobile)
-                        $('#DISEMAIL').text(data[0].EMAIL)
-                        $('#DISADDRESS').text(data[0].ADDRESS)
-                        $('#DISCRNTMD').text(data[0].MDNAME)
-
-                        $('.distributor-detail').show();
+    /* ── Form: Retailer → Distributor switch ── */
+    ravi('#frmretdeal').submit(function (e) {
+        e.preventDefault();
+        ravi.ajax({
+            type: 'POST',
+            url: '@Url.Action("dealer_retailer_Switch","Home")',
+            data: { remid: ravi('#retailerid').val(), dlmid: ravi('#dealerdetailsid').val() },
+            success: function () {
+                ravi('#retailerid').val('');
+                ravi('#dealerdetailsid').val('');
+                ravi('.distributor-details').hide();
+                ravi.ajax({
+                    url: "@Url.Action("ChangeTabtype","Home",new { Utype="Retailer"})",
+                    success: function (data) {
+                        ravi('#dlmd').html(data);
+                        ravi("#retailerid").select2().select2("val", null);
+                        ravi("#dealerdetailsid").select2().select2("val", null);
                     }
-                    else {
-                        $('.distributor-detail').hide();
-                    }
-                }
-
-
-            })
-
-
-
-
-
-        })*@
-
-    //        function masterdetail(value) {
-    //    var mas = $(value).val();
-    //    if (mas == 1) {
-    //        $('.distributor-detail').hide();
-
-    //    } else {
-    //        $('.distributor-detail').show();
-    //    }
-    //    }
-
-
-
-    //        function masterdetailr(value) {
-    //    var mas = $(value).val();
-    //    if (mas == 1) {
-    //        $('.distributor-details').hide();
-
-    //    } else {
-    //        $('.distributor-details').show();
-    //    }
-    //}
-</script>
-<script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $(".body .tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+                });
+            }
         });
     });
 </script>
-

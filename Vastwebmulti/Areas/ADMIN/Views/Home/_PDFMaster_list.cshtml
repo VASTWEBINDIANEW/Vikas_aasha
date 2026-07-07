@@ -2,8 +2,8 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows         = Model._Select_super_total_Result;
-    var recordCount  = rows != null ? rows.Count() : 0;
+    var rows         = (Model != null && Model._Select_super_total_Result != null) ? Model._Select_super_total_Result.ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.Select_super_total_Result>();
+    var recordCount  = rows.Count;
     var searchFilter = (Request.QueryString["usernm"] ?? "").Trim();
     var generatedOn  = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
 }

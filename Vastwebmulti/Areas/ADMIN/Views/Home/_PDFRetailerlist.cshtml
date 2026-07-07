@@ -2,9 +2,9 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows         = Model.select_retailer_details_paging;
-    var recordCount  = rows != null ? rows.Count() : 0;
-    var kycDoneAll   = rows != null ? rows.Count(x => x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y") : 0;
+    var rows         = (Model != null && Model.select_retailer_details_paging != null) ? Model.select_retailer_details_paging.ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.Select_Retailer_Details_all_paging_Result>();
+    var recordCount  = rows.Count;
+    var kycDoneAll   = rows.Count(x => x.PSAStatus == "Y" && x.AadhaarStatus == "Y" && x.ShopwithSalfieStatus == "Y");
     var kycDueAll    = recordCount - kycDoneAll;
     var searchFilter = (Request.QueryString["usernm"] ?? Request.QueryString["usernminput"] ?? "").Trim();
     var generatedOn  = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");

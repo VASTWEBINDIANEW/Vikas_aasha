@@ -1,56 +1,36 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.BlockUserViewModel
 
- 
-
 @{ var i = 1;}
 
 @foreach (var item in Model.WLoginHistory)
 {
-    var srs = "";
-    if(item.LoginFrom=="Web")
-    {
-        @*srs = "../../AdminDesign/images/desktop-l.svg";*@
-    srs = "WEB";
+    var badgeClass = item.LoginFrom == "Web" ? "wl-by-badge wl-by-badge--web" : "wl-by-badge wl-by-badge--app";
+    var badgeText = item.LoginFrom == "Web" ? "WEB" : "APP";
 
-}
-else
-{
-         @*srs = "../../AdminDesign/images/android-l.svg";*@
-    srs = "APP";
-}
-    <tr role="row" class="odd">
+    <tr>
         <td>@i</td>
-        @*<td><span style="float:left;"><img src="@srs" style="width:40px;" /></span></td>*@
-        <td><span style="float:left;background: #bbb; padding: 0 3px;">@srs</span></td>
+        <td><span class="@badgeClass">@badgeText</span></td>
         <td>
-            <p>
-                <span style="float: left;"><span style="display:block;">@item.Role</span><span>@item.firmname</span></span>
-            </p>
-
-        </td>
-
-        <td>
-            <p>@item.ImeiNo</p>
-            <p>@item.ModelNo</p>
-            <p>@item.IP_Address</p>
-            <p>@item.browser</p>
+            <strong>@item.Role</strong><br />
+            <small>@item.firmname</small>
         </td>
         <td>
-            <p>@item.Latitude</p>
-            <p>@item.Logitude</p>
+            @if (!string.IsNullOrEmpty(item.ImeiNo)) { <div><small>IMEI:</small> @item.ImeiNo</div> }
+            @if (!string.IsNullOrEmpty(item.ModelNo)) { <div><small>Model:</small> @item.ModelNo</div> }
+            @if (!string.IsNullOrEmpty(item.IP_Address)) { <div><small>IP:</small> @item.IP_Address</div> }
+            @if (!string.IsNullOrEmpty(item.browser)) { <div><small>Browser:</small> @item.browser</div> }
         </td>
-
-
         <td>
-            <p style="font-weight:800;">@item.CurrentLoginTime</p>
-
-            <p><span style="font-size:13px;background:#bbb;margin-right:4px;padding: 0px 2px;"> @item.City</span>@item.Location</p>
+            @if (!string.IsNullOrEmpty(item.Latitude)) { <div>@item.Latitude</div> }
+            @if (!string.IsNullOrEmpty(item.Logitude)) { <div>@item.Logitude</div> }
+        </td>
+        <td>
+            <strong>@item.CurrentLoginTime</strong>
+            @if (!string.IsNullOrEmpty(item.City) || !string.IsNullOrEmpty(item.Location))
+            {
+                <div><span class="wl-by-badge">@item.City</span> @item.Location</div>
+            }
         </td>
     </tr>
     i++;
 }
-
-
-
-
-

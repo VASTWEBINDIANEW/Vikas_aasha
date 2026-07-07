@@ -2,9 +2,9 @@
 @using System.Linq
 @{
     Layout = null;
-    var rows         = Model.White_labelUser;
-    var recordCount  = rows != null ? rows.Count() : 0;
-    var doneCount    = rows != null ? rows.Count(x => x.PSAStatus == "Y" && x.AadhaarStatus == "Y") : 0;
+    var rows         = (Model != null && Model.White_labelUser != null) ? Model.White_labelUser.ToList() : new System.Collections.Generic.List<Vastwebmulti.Models.WhiteLabel_Select_Details_Result>();
+    var recordCount  = rows.Count;
+    var doneCount    = rows.Count(x => x.PSAStatus == "Y" && x.AadhaarStatus == "Y");
     var dueCount     = recordCount - doneCount;
     var searchFilter = (Request.QueryString["usernm"] ?? "").Trim();
     var generatedOn  = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");

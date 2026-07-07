@@ -1,230 +1,169 @@
-﻿@model  Vastwebmulti.Areas.ADMIN.ViewModel.EmployeePermissionViewmodel
+﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.EmployeePermissionViewmodel
 @{
     ViewBag.Title = "ShowEmployeeWithPermission";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-<style>
-    section.content {
-        background-color: white;
-        margin: 29px 0px 0 164px;
-    }
 
-    select {
-        border: 1px solid var(--border-color) !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=42" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=10" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.css" rel="stylesheet" />
 
-    .showemployee-admin .col-md-3 select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background: url('../../AdminDesign/images/multimedia.svg')no-repeat;
-        padding: 0px 2px;
-        background-size: 10px;
-        background-position: 98% 50%;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-emp-permission-page">
 
-    .showemployee-admin .col-md-12.employclassadminnew {margin-top: 43px !important;}
+    @* ── The form wraps the entire page so checkboxes + hidden field are all submitted together ── *@
+    @using (Html.BeginForm("AddpermisionForServices", "Home", FormMethod.Post, new { id = "permissionSaveForm" }))
+    {
+        @* Hidden field updated by JS when employee is selected *@
+        <input type="hidden" id="EmployeeIDforpart" name="EmployeeIDforpart" value="" />
 
-    #space-after-right.space-after-right {
-        position: absolute;right: 185px;top: 0px;
-    }
-    .empolyresponsiveadmin #btnsubmit {height: 34px !important;}
+        <div class="container-fluid vm-opr-page-shell">
 
-    #div_Loader {
-        background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        left:0px;
-        z-index: 999999;
-    }
-    .loadingio-spinner-gear-94vo528ab8 {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-    }
-    .ldio-gs56nt525f {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
+            <!-- ── Toolbar: Breadcrumb + Employee Selector + Save Button ── -->
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
-        .ldio-gs56nt525f div {
-            box-sizing: content-box;
-        }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>User's &amp; Account</li>
+                        <li>Employee Permission</li>
+                    </ol>
 
-        .ldio-gs56nt525f > div {
-            transform-origin: 100px 100px;
-            animation: ldio-gs56nt525f 0.2s infinite linear;
-        }
-
-            .ldio-gs56nt525f > div div {
-                position: absolute;
-                width: 22px;
-                height: 152px;
-                background: var(--main-bg-lcolor);
-                left: 100px;
-                top: 100px;
-                transform: translate(-50%,-50%);
-            }
-
-                .ldio-gs56nt525f > div div:nth-child(1) {
-                    width: 120px;
-                    height: 120px;
-                    border-radius: 50%;
-                }
-
-                .ldio-gs56nt525f > div div:nth-child(6) {
-                    width: 80px;
-                    height: 80px;
-                    background: #fff;
-                    border-radius: 50%;
-                }
-
-                .ldio-gs56nt525f > div div:nth-child(3) {
-                    transform: translate(-50%,-50%) rotate(45deg)
-                }
-
-                .ldio-gs56nt525f > div div:nth-child(4) {
-                    transform: translate(-50%,-50%) rotate(90deg)
-                }
-
-                .ldio-gs56nt525f > div div:nth-child(5) {
-                    transform: translate(-50%,-50%) rotate(135deg)
-                }
-
-    @@keyframes ldio-gs56nt525f {
-        0% {
-            transform: rotate(0deg)
-        }
-
-        50% {
-            transform: rotate(22.5deg)
-        }
-
-        100% {
-            transform: rotate(45deg)
-        }
-    }
-
-
-        @@media screen and (max-width:766px) {
-            .col-md-12.employclassadminnew {
-                margin-top: 0px !important;width: 100% !important;
-            }
-
-            .showemployee-admin .col-md-3 {
-                width: 100% !important;float: left;padding: 0;
-            }
-
-            .showemployee-admin .col-md-12.employclassadminnew {padding: 0;}
-
-            .showemployee-admin .col-md-3 select {background-position: 99% 50%;}
-
-            .showemployee-admin .empolyresponsiveadmin input {text-transform: uppercase;}
-
-            .showemployee-admin .col-md-12.employclassadminnew {margin-top: 50px !important;}
-            #space-after-right.space-after-right.space-after-right-class {
-                position: static;width: 100% !important;float: left;
-            }
-        }
-</style>
-@*<h2>ShowEmployeeWithPermission</h2>*@
-<section class="content retailerList_Page">
-    <div class="container-fluid showemployee-admin">
-        <div class="page-header-third showemployee-header-third" style="width:100%;float:left;">
-            <div class="col-md-12 employclassadminnew" style="width:100%;float:left;margin-top: -9px;padding:0px;margin-bottom: 19px;">
-                <div class="col-md-3" style="width:auto;float:left;padding:0px;">
-                    <div class="bread-same-all-page" style="width:100%;float:left;">
-                        <ul class="" style="float: left;">
-                            <li class="smli" style="margin: 0;">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one" style="font-size: 14px;">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                                </a>
-                            </li>
-
-                            <li class="fullbodydycolorbg tmw-total-color-one" style="font-size: 14px;margin: 0;">
-                                Select Employee Name
-                            </li>
-                        </ul>
+                    <div class="vm-emp-toolbar-right">
+                        <div class="vm-emp-select-wrap">
+                            @Html.DropDownListFor(m => m.EmployeenameID, Model.Employeenames, "Select Employee",
+                                new { @class = "form-control vm-opr-select vm-dmt-select vm-emp-select-input", id = "EmployeenameID" })
+                        </div>
+                        <button type="submit" id="btnsubmit" class="vm-ep-save-btn">
+                            <i class="fas fa-save"></i> Save Permission
+                        </button>
                     </div>
 
                 </div>
+            </div>
 
-                <div id="space-after-right" class="col-md-3 space-after-right-class" style="float:right;padding: 0;">
-                    @Html.DropDownListFor(m => m.EmployeenameID, Model.Employeenames, "Select Employee", new { @class = "form-control", data_live_search = "true" })
+            <!-- ── Permission Cards Area ── -->
+            <div class="vm-opr-main-card vm-security-report-main-card vm-emp-permission-main-card">
+                <div class="vm-opr-table-panel vm-security-report-table-panel vm-emp-permission-panel">
+                    <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                        <div class="vm-opr-table-panel__title">
+                            <i class="fas fa-user-shield" aria-hidden="true"></i>
+                            <span>Employee Service Permissions</span>
+                        </div>
+                        <div class="vm-dmt-table-panel__right">
+                            <span class="vm-radiant-record-badge" id="emp-perm-name-badge" style="display:none;">
+                                <i class="fas fa-user" style="margin-right:4px;"></i>
+                                <strong id="emp-selected-name"></strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- AJAX target: permission cards rendered here (inside the form) -->
+                    <div id="tblpermission" class="vm-emp-perm-body">
+                        <div class="vm-emp-perm-empty">
+                            <i class="fas fa-user-shield"></i>
+                            <p>Select an employee above to manage their service permissions.</p>
+                        </div>
+                    </div>
 
                 </div>
             </div>
-        </div>
-
-
-
-        <div id="tblpermission" class="table-responsive table-responsive-forclass" style="width: 100%; float: left;">
-
-
-
-
 
         </div>
+    }
 
-        <div id="div_Loader" style="display:none;">
-            <div class="loadingio-spinner-gear-94vo528ab8">
-                <div class="ldio-gs56nt525f">
-                    <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
 </section>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Swalalert/sweetalert-dev.js">
-</script>
+<!-- Loading overlay -->
+<div id="div_Loader" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        <div class="loadingio-spinner-ripple-92ar2pfqk5j" style="background:transparent;">
+            <div class="ldio-zdyd6mf6t5"><div></div><div></div></div>
+        </div>
+    </div>
+</div>
 
+<style>
+    @@keyframes ldio-zdyd6mf6t5 {
+        0%   { top:96px;left:96px;width:0;height:0;opacity:1; }
+        100% { top:18px;left:18px;width:156px;height:156px;opacity:0; }
+    }
+    .ldio-zdyd6mf6t5 div { position:absolute;border-width:4px;border-style:solid;opacity:1;border-radius:50%;animation:ldio-zdyd6mf6t5 1s cubic-bezier(0,.2,.8,1) infinite;box-sizing:content-box; }
+    .ldio-zdyd6mf6t5 div:nth-child(1) { border-color:var(--main-bg-lcolor); }
+    .ldio-zdyd6mf6t5 div:nth-child(2) { border-color:#c7c7c7;animation-delay:-.5s; }
+    .loadingio-spinner-ripple-92ar2pfqk5j { width:200px;height:200px;display:inline-block;overflow:hidden; }
+    .ldio-zdyd6mf6t5 { width:100%;height:100%;position:relative;transform:translateZ(0) scale(1);backface-visibility:hidden;transform-origin:0 0; }
+
+    /* Empty state */
+    .vm-emp-perm-empty { display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;color:#94a3b8;text-align:center; }
+    .vm-emp-perm-empty i { font-size:2.8rem;margin-bottom:12px;opacity:.35; }
+    .vm-emp-perm-empty p { font-size:.85rem;font-weight:500; }
+    .vm-emp-perm-body { padding:16px 20px; }
+
+    /* Toolbar right — employee selector + save button side by side */
+    .vm-emp-toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+    @@media (max-width: 767px) {
+        .saas-emp-permission-page .vm-opr-toolbar-head { flex-direction: column !important; gap: 8px !important; align-items: flex-start !important; }
+        .vm-emp-toolbar-right { margin-left: 0 !important; width: 100%; flex-wrap: wrap; }
+        .vm-emp-select-wrap { flex: 1; min-width: 0; }
+        .vm-ep-save-btn { width: 100%; justify-content: center; }
+    }
+</style>
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.js"></script>
 <script>
-    $('#EmployeenameID').change(function () {
-        $("#div_Loader").show();
-        //var selectval = $('#EmployeenameID').val();
-        //if (selectval == "") {
-        //    $('#space-after-right').removeClass("space-after-right")
-        //}
-        //else {
-        //    $('#space-after-right').addClass("space-after-right")
-        //}
+    function loadEmployeePermissions(val, empName) {
+        if (!val) return;
+        /* update the hidden field so Save Permission knows which employee */
+        $('#EmployeeIDforpart').val(val);
+        $('#emp-selected-name').text(empName);
+        $('#emp-perm-name-badge').show();
+        $('#div_Loader').css('display', 'flex');
         $.ajax({
-            url: "@Url.Action("ShowAllServicesforpermission")",
-            data: { EId: $('#EmployeenameID').val() },
+            url: '@Url.Action("ShowAllServicesforpermission", "Home")',
+            data: { EId: val },
             cache: false,
-            type: "POST",
+            type: 'GET',
             success: function (data) {
-
-                $('#tblpermission').html(data)
-                $('#space-after-right').addClass("space-after-right")
-                $("#div_Loader").hide();
-              
+                $('#tblpermission').html(data);
+                $('#div_Loader').hide();
             },
-            error: function (reponse) {
-                alert("error : " + reponse);
+            error: function () {
+                $('#tblpermission').html('<div class="vm-emp-perm-empty"><i class="fas fa-exclamation-circle"></i><p>Failed to load permissions. Please try again.</p></div>');
+                $('#div_Loader').hide();
             }
         });
+    }
 
-
-
-    })
-
+    $(document).ready(function () {
+        if ($.fn.select2) {
+            $('#EmployeenameID').select2({ width: '100%', minimumResultsForSearch: 4 });
+            $('#EmployeenameID').on('select2:select', function (e) {
+                loadEmployeePermissions(e.params.data.id, e.params.data.text);
+            });
+            /* select2:unselect / clearing placeholder */
+            $('#EmployeenameID').on('select2:unselect', function () {
+                $('#EmployeeIDforpart').val('');
+                $('#emp-perm-name-badge').hide();
+            });
+        }
+        /* native change — fires when select2 is NOT loaded */
+        $('#EmployeenameID').on('change', function () {
+            if ($.fn.select2) return;
+            var val = $(this).val();
+            var empName = $(this).find('option:selected').text();
+            loadEmployeePermissions(val, empName);
+        });
+    });
 </script>

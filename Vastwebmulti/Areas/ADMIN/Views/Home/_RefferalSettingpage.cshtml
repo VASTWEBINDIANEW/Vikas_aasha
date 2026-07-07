@@ -1,42 +1,35 @@
 ﻿@model IEnumerable<Vastwebmulti.Models.token_limit>
 
-
 @foreach (var item in Model)
 {
-    if (item.limit == 1 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('2','Y')"><div class="butttuno_2" style=" background-color: green; border: 1px solid #ddd !important;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 2 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('3','Y')"><div class="butttuno_2" style=" background-color: green;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 3 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('4','Y')"><div class="butttuno_2" style=" background-color: green;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 4 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('5','Y')"><div class="butttuno_2" style=" background-color: green;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 5 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('10','Y')"><div class="butttuno_2" style=" background-color: green;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 10 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('15','Y')"><div class="butttuno_2" style=" background-color: yellow;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 15 && item.status == "Y")
-    {
-        <button type="button" style=" background-color: #b1a6a638;" onclick="refferalsetup('0','N')"><div class="butttuno_2" style=" background-color: orange;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2">Permission</p> </button>
-    }
-    else if (item.limit == 0 && item.status == "Y")
-    {
-        <button type="button" style="background-color: #b1a6a638 !important; " onclick="refferalsetup('1','Y')"><div class="butttuno_2" style="background-color: red; border: 1px solid #ddd !important;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2_3">Currently&nbsp;OFF</p> </button>
-    }
-    else if (item.status == "N")
-    {
-        <button type="button" style="background-color: #b1a6a638 !important; " onclick="refferalsetup('1','Y')"><div class="butttuno_2" style="background-color: red; border: 1px solid #ddd !important;">@item.limit</div> <p class="prag_1">Monthly Retailer Refferal</p><br /><p class="prag_2_3">Currently&nbsp;OFF</p> </button>
-    }
+    var nextLimit = "";
+    var nextStatus = "";
+    var tone = "green";
+    var statusText = "Active";
+    var isOff = false;
+
+    if (item.limit == 1 && item.status == "Y") { nextLimit = "2"; nextStatus = "Y"; }
+    else if (item.limit == 2 && item.status == "Y") { nextLimit = "3"; nextStatus = "Y"; }
+    else if (item.limit == 3 && item.status == "Y") { nextLimit = "4"; nextStatus = "Y"; }
+    else if (item.limit == 4 && item.status == "Y") { nextLimit = "5"; nextStatus = "Y"; }
+    else if (item.limit == 5 && item.status == "Y") { nextLimit = "10"; nextStatus = "Y"; }
+    else if (item.limit == 10 && item.status == "Y") { nextLimit = "15"; nextStatus = "Y"; tone = "yellow"; }
+    else if (item.limit == 15 && item.status == "Y") { nextLimit = "0"; nextStatus = "N"; tone = "orange"; }
+    else if (item.limit == 0 && item.status == "Y") { nextLimit = "1"; nextStatus = "Y"; tone = "red"; statusText = "OFF"; isOff = true; }
+    else if (item.status == "N") { nextLimit = "1"; nextStatus = "Y"; tone = "red"; statusText = "OFF"; isOff = true; }
+    else { continue; }
+
+    <button type="button"
+            class="sr-ref-btn sr-ref-btn--@tone@(isOff ? " sr-ref-btn--off" : "")"
+            onclick="refferalsetup('@nextLimit','@nextStatus')"
+            title="Monthly Retailer Referral — tap to change limit">
+        <span class="sr-ref-btn__icon"><i class="fas fa-users"></i></span>
+        <span class="sr-ref-btn__text">
+            <span class="sr-ref-btn__title">Monthly Retailer Referral</span>
+            <span class="sr-ref-btn__dot">·</span>
+            <span class="sr-ref-btn__status@(isOff ? " sr-ref-btn__status--off" : "")">@statusText</span>
+        </span>
+        <span class="sr-ref-btn__badge">@item.limit</span>
+        <i class="fas fa-chevron-right sr-ref-btn__chev"></i>
+    </button>
 }

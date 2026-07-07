@@ -1,214 +1,164 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.Token_PaidService_VM
 
-    
-        <table class="table">
-            <tbody>
-                @if (Model.RetailerCreationCharge != null)
-                {
-                    <tr class="top-tr">
-                        <td>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th><p class="dmlsing-seconddesign border-bottom-third"><i class="fa fa-user-plus" aria-hidden="true" style="margin-right:5px;"></i>Sign Up Fee!! Create By Admin</p></th>
-                                    </tr>
-                                    <tr class="by-admin-tr">
-                                        <td><i class="fa fa-inr" aria-hidden="true" style="margin-right:3px;"></i>@Html.DisplayFor(modelItem => modelItem.RetailerCreationCharge.SingleOrDefault().CreatedByAdminCharge)</td>
-                                        <td align="center">
-                                            @if (Model.RetailerCreationCharge.SingleOrDefault().CreatedByAdminIsFree)
-                                            {
-                                                <a onclick="SETsignUpChargeActive_CreateByAdmin();" class="ba btnssl2233 activeclass-second button-active-third" style="text-decoration:none;color:green;font-weight:bold;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Activated
-                                                </a>
+@if (Model.RetailerCreationCharge != null)
+{
+    var rec    = Model.RetailerCreationCharge.SingleOrDefault();
+    var admFee = rec != null ? rec.CreatedByAdminCharge : 0;
+    var suFee  = rec != null ? rec.CreatedBySignUpCharge : 0;
+    var admAct = rec != null && rec.CreatedByAdminIsFree;
+    var suAct  = rec != null && rec.CreatedBySignUpIsFree;
 
-                                            }
-                                            else
-                                            {
-                                                <a onclick="SETsignUpChargeDeActive_CreateByAdmin();" class="ba btnssl2233 deactiveclass-second button-deactive-third-second" style="text-decoration:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Deactivated
-                                                </a>
+    <!-- VIEW MODE -->
+    <div class="sjc-wrapper" id="sjc-view">
 
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><p class="dmlsing-seconddesign border-bottom-third"><i class="fa fa-sign-in" aria-hidden="true" style="margin-right:5px;"></i>Sign Up Fee!! Self Sign Up</p></th>
-                                    </tr>
-                                    <tr class="by-admin-tr">
-                                        <td><i class="fa fa-inr" aria-hidden="true" style="margin-right:3px;"></i>@Html.DisplayFor(modelItem => modelItem.RetailerCreationCharge.SingleOrDefault().CreatedBySignUpCharge)</td>
-                                        <td align="center">
-                                            @if (Model.RetailerCreationCharge.SingleOrDefault().CreatedBySignUpIsFree)
-                                            {
-                                                <a onclick="SETsignUpChargeActive_SelfSignUp();" class="ba btnssl2233 activeclass-second button-active-third" style="text-decoration:none;color:green;font-weight:bold;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Activated
-                                                </a>
+        <!-- Section heading -->
+        <div class="sjc-head">
+            <div class="sjc-head-icon"><i class="fas fa-rupee-sign"></i></div>
+            <span class="sjc-head-title">Sign Up Charge Settings</span>
+        </div>
 
-                                            }
-                                            else
-                                            {
-                                                <a onclick="SETsignUpChargeDeActive_SelfSignUp();" class="ba btnssl2233 deactiveclass-second button-deactive-third-second" style="text-decoration:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Deactivated
-                                                </a>
-                                            }
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td border="0" class="button-seconddesign">
-                                            <button type="button" id="btnEdit" class="btn waves-effect shownextrow122 btnssl2233 ees btn-first button-third-design" style="overflow:hidden;" value="Edit" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <span>Edit Sign Up Fee</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-
-
-                    <tr style="display:none;" class="act">
-                        <td>
-                            <table class="save-wtab">
-                                <tbody>
-
-                                    <tr class="one">
-                                        <th>
-                                            <p class="dmlsing-seconddesign border-bottom-third">
-                                                <i class="fa fa-user-plus" aria-hidden="true" style="margin-right:5px;"></i>Sign Up Fee!! Create By Admin
-                                            </p>
-                                        </th>
-                                    </tr>
-                                    @Html.HiddenFor(m => m.RetailerCreationCharge.SingleOrDefault().Idno, Model.RetailerCreationCharge.SingleOrDefault().Idno)
-                                    <tr class="by-admin-tr">
-                                        <td>@Html.EditorFor(m => m.RetailerCreationCharge.SingleOrDefault().CreatedByAdminCharge, Model.RetailerCreationCharge.SingleOrDefault().CreatedByAdminCharge)</td>
-                                        <td>
-                                            @if (Model.RetailerCreationCharge.SingleOrDefault().CreatedByAdminIsFree)
-                                            {
-                                                <a onclick="SETsignUpChargeActive_CreateByAdmin();" class="ba btnssl2233 activeclass-second button-active-third" style="color:green;text-decoration:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Activated
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a onclick="SETsignUpChargeDeActive_CreateByAdmin();" class="btnssl2233 ba deactiveclass-second deactiveclass-second button-deactive-third-second" style="text-decoration:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Deactivated
-                                                </a>
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr class="two">
-                                        <th>
-                                            <p class="border-bottom-third"><i class="fa fa-sign-in" aria-hidden="true" style="margin-right:5px;"></i>Sign Up Fee!! Self Sign Up</p>
-                                        </th>
-                                    </tr>
-                                    <tr class="by-admin-tr">
-                                        <td>@Html.EditorFor(m => m.RetailerCreationCharge.SingleOrDefault().CreatedBySignUpCharge, Model.RetailerCreationCharge.SingleOrDefault().CreatedBySignUpCharge)</td>
-                                        <td>
-                                            @if (Model.RetailerCreationCharge.SingleOrDefault().CreatedBySignUpIsFree)
-                                            {
-                                                <a onclick="SETsignUpChargeActive_SelfSignUp();" class="btnssl2233 ba activeclass-second button-active-third" style="text-decoration:none;color:green;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Activated
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a onclick="SETsignUpChargeActive_SelfSignUp();" class="btnssl2233 ba deactiveclass-second deactiveclass-second button-deactive-third-second" style="text-decoration:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                    Deactivated
-                                                </a>
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="button-seconddesign">
-                                            <button type="submit" id="btnSave" onclick="EditSiginUpFees();" class="btn waves-effect btnssl2233 ees btn-first button-third" style="overflow:hidden;" value="Save" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                <span>Save Change</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        
-
-        <script>
-    //SETsignUpChargeActive By Admin
-    function SETsignUpChargeActive_CreateByAdmin() {
-        $.ajax({
-            url: '@Url.Action("_SetJoingChargeStatus","Home")',
-            type: 'GET',
-            data: { CreationType: 'Admin',val:false },
-            cache: false,
-            success: function (response) {
-                $("#_SetSignUpCharge").html(response);
-          }
-        });
-    }
-
-    function SETsignUpChargeDeActive_CreateByAdmin() {
-        $.ajax({
-            url: '@Url.Action("_SetJoingChargeStatus","Home")',
-            type: 'GET',
-            data: { CreationType: 'Admin',val:true },
-            cache: false,
-            success: function (response) {
-                $("#_SetSignUpCharge").html(response);
-          }
-        });
-    }
-
-    //SETsignUpChargeActive By Self Sign Up
-    function SETsignUpChargeActive_SelfSignUp() {
-        $.ajax({
-            url: '@Url.Action("_SetJoingChargeStatus","Home")',
-            type: 'GET',
-            data: { CreationType: 'self',val:false },
-            cache: false,
-            success: function (response) {
-                $("#_SetSignUpCharge").html(response);
-          }
-        });
-    }
-
-    function SETsignUpChargeDeActive_SelfSignUp() {
-        $.ajax({
-            url: '@Url.Action("_SetJoingChargeStatus","Home")',
-            type: 'GET',
-            data: { CreationType: 'self',val:true },
-            cache: false,
-            success: function (response) {
-                $("#_SetSignUpCharge").html(response);
-          }
-        });
-    }
-
-    // Edit SiginUp Fees
-    function EditSiginUpFees() {
-
-        $.ajax({
-            url: '@Url.Action("EditSiginUpFees","Home")',
-            type: 'POST',
-            data: { CreatedByAdminCharge: $('#CreatedByAdminCharge').val(), CreatedBySignUpCharge: $('#CreatedBySignUpCharge').val() },
-            cache: false,
-            success: function (response) {
-                $("#_SetSignUpCharge").html(response);
-          }
-        });
+        <!-- Fee rows -->
+        <div class="sjc-fee-card">
+            <div class="sjc-fee-icon sjc-fee-icon--admin"><i class="fas fa-user-cog"></i></div>
+            <div class="sjc-fee-body">
+                <span class="sjc-fee-label">Create By Admin</span>
+                <span class="sjc-fee-amount">&#8377; @admFee</span>
+            </div>
+            @if (admAct)
+            {
+                <a href="javascript:void(0);" onclick="SETsignUpChargeDeActive_CreateByAdmin();" class="sjc-toggle sjc-toggle--active">
+                    <i class="fas fa-check-circle"></i> Activated
+                </a>
             }
+            else
+            {
+                <a href="javascript:void(0);" onclick="SETsignUpChargeActive_CreateByAdmin();" class="sjc-toggle sjc-toggle--inactive">
+                    <i class="fas fa-times-circle"></i> Deactivated
+                </a>
+            }
+        </div>
 
+        <div class="sjc-fee-card">
+            <div class="sjc-fee-icon sjc-fee-icon--self"><i class="fas fa-user-plus"></i></div>
+            <div class="sjc-fee-body">
+                <span class="sjc-fee-label">Self Sign Up</span>
+                <span class="sjc-fee-amount">&#8377; @suFee</span>
+            </div>
+            @if (suAct)
+            {
+                <a href="javascript:void(0);" onclick="SETsignUpChargeDeActive_SelfSignUp();" class="sjc-toggle sjc-toggle--active">
+                    <i class="fas fa-check-circle"></i> Activated
+                </a>
+            }
+            else
+            {
+                <a href="javascript:void(0);" onclick="SETsignUpChargeActive_SelfSignUp();" class="sjc-toggle sjc-toggle--inactive">
+                    <i class="fas fa-times-circle"></i> Deactivated
+                </a>
+            }
+        </div>
 
-       
-        </script>
+        <div class="sjc-action-row">
+            <button type="button" id="sjc-edit-btn" onclick="showSJCEdit();" class="sjc-edit-btn">
+                <i class="fas fa-edit"></i> Edit Sign Up Fee
+            </button>
+        </div>
+
+    </div>
+
+    <!-- EDIT MODE (hidden by default) -->
+    <div class="sjc-wrapper" id="sjc-edit" style="display:none;">
+
+        <div class="sjc-head">
+            <div class="sjc-head-icon" style="background:linear-gradient(135deg,#15803d,#22c55e);"><i class="fas fa-edit"></i></div>
+            <span class="sjc-head-title">Edit Sign Up Fees</span>
+        </div>
+
+        @Html.Hidden("RecIdno", rec != null ? rec.Idno : 0)
+
+        <div class="sjc-edit-field">
+            <label class="sjc-edit-label"><i class="fas fa-user-cog" style="color:#1d4ed8;margin-right:4px;"></i> Create By Admin Fee (&#8377;)</label>
+            @Html.TextBox("CreatedByAdminCharge", rec != null ? rec.CreatedByAdminCharge : (object)0,
+                new { @class = "form-control sjc-input", id = "CreatedByAdminCharge", placeholder = "Enter amount" })
+        </div>
+
+        <div class="sjc-edit-field">
+            <label class="sjc-edit-label"><i class="fas fa-user-plus" style="color:#15803d;margin-right:4px;"></i> Self Sign Up Fee (&#8377;)</label>
+            @Html.TextBox("CreatedBySignUpCharge", rec != null ? rec.CreatedBySignUpCharge : (object)0,
+                new { @class = "form-control sjc-input", id = "CreatedBySignUpCharge", placeholder = "Enter amount" })
+        </div>
+
+        <div class="sjc-edit-actions">
+            <button type="button" class="ne-btn-reset" onclick="hideSJCEdit();">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button type="button" id="btnSave" onclick="EditSiginUpFees();" class="ne-btn-submit">
+                <i class="fas fa-save"></i> Save Change
+            </button>
+        </div>
+
+    </div>
+}
+
+<style>
+    .sjc-wrapper { padding: 12px 16px; }
+    .sjc-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .sjc-head-icon { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg,#0e7490,#0891b2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .78rem; flex-shrink: 0; }
+    .sjc-head-title { font-size: .82rem; font-weight: 700; color: #0f172a; }
+
+    .sjc-fee-card { display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 9px 12px; margin-bottom: 8px; }
+    .sjc-fee-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .78rem; flex-shrink: 0; }
+    .sjc-fee-icon--admin { background: #dbeafe; color: #1d4ed8; }
+    .sjc-fee-icon--self  { background: #dcfce7; color: #15803d; }
+    .sjc-fee-body { flex: 1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .sjc-fee-label { font-size: .76rem; font-weight: 600; color: #334155; }
+    .sjc-fee-amount { font-size: .8rem; font-weight: 700; color: #0891b2; background: #cffafe; border-radius: 6px; padding: 2px 8px; }
+    .sjc-toggle { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; font-weight: 700; border-radius: 6px; padding: 3px 9px; text-decoration: none !important; cursor: pointer; transition: opacity .14s; flex-shrink: 0; }
+    .sjc-toggle--active   { background: #dcfce7; color: #15803d; }
+    .sjc-toggle--active:hover { background: #bbf7d0; }
+    .sjc-toggle--inactive { background: #fee2e2; color: #b91c1c; }
+    .sjc-toggle--inactive:hover { background: #fecaca; }
+
+    .sjc-action-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+    .sjc-edit-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 7px; font-size: .74rem; font-weight: 600; border: 1.5px solid #3b82f6; color: #3b82f6; background: #eff6ff; cursor: pointer; transition: all .14s; }
+    .sjc-edit-btn:hover { background: #3b82f6; color: #fff; }
+
+    .sjc-edit-field { margin-bottom: 8px; }
+    .sjc-edit-label { font-size: .72rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block; }
+    .sjc-input { height: 34px !important; border-radius: 8px !important; border: 1.5px solid #e2e8f0 !important; font-size: .78rem !important; background: #f8fafc !important; width: 100%; }
+    .sjc-input:focus { border-color: #0891b2 !important; outline: none; }
+    .sjc-edit-actions { display: flex; gap: 8px; justify-content: flex-end; padding-top: 6px; }
+</style>
 
 <script>
-           $('.shownextrow122').click(function () {
-            $('tr.act').css('display','block');
-            $(this).closest("tr.top-tr").hide();
-        });
+    function showSJCEdit() {
+        document.getElementById('sjc-view').style.display = 'none';
+        document.getElementById('sjc-edit').style.display = 'block';
+    }
+    function hideSJCEdit() {
+        document.getElementById('sjc-edit').style.display = 'none';
+        document.getElementById('sjc-view').style.display = 'block';
+    }
+
+    function SETsignUpChargeActive_CreateByAdmin() {
+        $.ajax({ url: '@Url.Action("_SetJoingChargeStatus","Home")', type: 'GET', data: { CreationType: 'Admin', val: false }, cache: false,
+            success: function (r) { $("#_SetSignUpCharge").html(r); } });
+    }
+    function SETsignUpChargeDeActive_CreateByAdmin() {
+        $.ajax({ url: '@Url.Action("_SetJoingChargeStatus","Home")', type: 'GET', data: { CreationType: 'Admin', val: true }, cache: false,
+            success: function (r) { $("#_SetSignUpCharge").html(r); } });
+    }
+    function SETsignUpChargeActive_SelfSignUp() {
+        $.ajax({ url: '@Url.Action("_SetJoingChargeStatus","Home")', type: 'GET', data: { CreationType: 'self', val: false }, cache: false,
+            success: function (r) { $("#_SetSignUpCharge").html(r); } });
+    }
+    function SETsignUpChargeDeActive_SelfSignUp() {
+        $.ajax({ url: '@Url.Action("_SetJoingChargeStatus","Home")', type: 'GET', data: { CreationType: 'self', val: true }, cache: false,
+            success: function (r) { $("#_SetSignUpCharge").html(r); } });
+    }
+    function EditSiginUpFees() {
+        $.ajax({ url: '@Url.Action("EditSiginUpFees","Home")', type: 'POST',
+            data: { CreatedByAdminCharge: $('#CreatedByAdminCharge').val(), CreatedBySignUpCharge: $('#CreatedBySignUpCharge').val() },
+            cache: false, success: function (r) { $("#_SetSignUpCharge").html(r); } });
+    }
 </script>
-
-
-

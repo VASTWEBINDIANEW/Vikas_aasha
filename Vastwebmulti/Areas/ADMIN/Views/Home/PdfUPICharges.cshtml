@@ -2,6 +2,9 @@
 @using System.Linq
 @{
     Layout = null;
+    var rows = (Model != null && Model.UPIREPORT != null)
+                  ? Model.UPIREPORT.ToList()
+                  : new System.Collections.Generic.List<Vastwebmulti.Models.show_upi_txn_details_Result>();
     decimal? TOTALAMOUNT = 0M;
     decimal? TOTALNET = 0M;
     decimal? TOTALCHARGE = 0M;
@@ -56,13 +59,13 @@
         <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
-                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@(Model?.UPIREPORT?.Count() ?? 0)</span></td>
+                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">@rows.Count</span></td>
                 <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">UPI Charges</span></td>
             </tr>
         </table>
     </div>
     <div class="vm-ml-pdf__table-wrap">
-        @if (Model != null && Model.UPIREPORT != null && Model.UPIREPORT.Any())
+        @if (rows.Any())
         {
             <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
                 <thead>
@@ -81,7 +84,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.UPIREPORT)
+                    @foreach (var item in rows)
                     {
                         var frmname = item.Frm_Name == null || item.Frm_Name == "" ? item.RetailerName : item.Frm_Name;
                         TOTALAMOUNT = item.amt + TOTALAMOUNT;

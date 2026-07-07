@@ -1,105 +1,92 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.Models.Token_PaidService_VM
 
-    <div class="button-right backg-border-thirddesign">
-        <div class="full-width-third">
-            <h3 class="dmlsing-seconddesign">Self User Registration Rights</h3>
-        </div>
-        <div class="left">
-            <img src="~/AdminDesign/images/user.png" width="100" height="100" class="img-circle" alt="User" />
-        </div>
-        <div class="rightright">
-            <div class="ririririr">
-                @if (Model.Select_dealer_list != null)
-                {
+<div class="sur-wrapper">
 
-                    <div class="combi-left-right">
-                        <div class="rights samright" style="display:none;" id="ddldealer11">
-                            <div class="fname custom-district">
-                                @Html.DropDownList("dealerId", ViewBag.SignUpddlDealers as IEnumerable<SelectListItem>, "Select Distributor", new { @class = "", data_live_search = "true" })
-                            </div>
+    <!-- Section heading -->
+    <div class="sur-section-head">
+        <div class="sur-section-icon"><i class="fas fa-user-shield"></i></div>
+        <div>
+            <div class="sur-section-title">Self User Registration Rights</div>
+            <div class="sur-section-sub">Default distributor for new retailer sign-up</div>
+        </div>
+    </div>
+
+    @if (Model.Select_dealer_list != null)
+    {
+        foreach (var item in Model.Select_dealer_list)
+        {
+            if (item.DefaultStatus == "Y")
+            {
+                <!-- Default distributor info card -->
+                <div class="sur-info-card" id="sur-infocard">
+                    <div class="sur-info-avatar"><i class="fas fa-building"></i></div>
+                    <div class="sur-info-body">
+                        <div class="sur-info-row">
+                            <i class="fas fa-building"></i>
+                            <span id="firmName">@item.FarmName</span>
                         </div>
-                        <div class="lefts samright">
-                            @foreach (var item in Model.Select_dealer_list)
-                            {
-                                if (item.DefaultStatus == "Y")
-                                {
-                                    <div class="fname fname-second" id="firmName">
-                                        <span>
-                                            <img src="~/img/house.svg" style="width:16px;" />
-                                            @item.FarmName
-                                        </span>
-                                    </div>
-                                    <div class="name fname-second" id="dlmName">
-                                        <span>
-                                            <img src="~/img/user-silhouette.svg" style="width:15px;" />
-                                            @item.DealerName
-                                        </span>
-                                    </div>
-                                    <div class="numbers fname-second" id="dlmNumber">
-                                        <span>
-                                            <img src="~/img/old-typical-phone.svg" style="width:15px;margin-top:1px;"/>
-                                            @item.Mobile
-                                        </span>
-                                    </div>
-                                }
-                            }
+                        <div class="sur-info-row">
+                            <i class="fas fa-user"></i>
+                            <span id="dlmName">@item.DealerName</span>
+                        </div>
+                        <div class="sur-info-row">
+                            <i class="fas fa-phone-alt"></i>
+                            <span id="dlmNumber">@item.Mobile</span>
                         </div>
                     </div>
-
-                }
-            </div>
-            <button type="button" id="Change_Default1" class="fullbodydycolorbg button-third-design">Change Default Distributor</button>
-            <button type="button" class="btnssl2233 fullbodydycolorbg button-third" id="submit" onclick="SETsignUpRight();" style="display:none;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Save Change</button>
-        </div>
-        </div>
-<script>
-    function SETsignUpRight() {
-        var dlmid = $("#dealerId").val();
-        if (dlmid != "") {
-            $.ajax({
-                url: '@Url.Action("dealer_sts_default_Authorise","Home")',
-                type: 'GET',
-                data: { dealerid: $("#dealerId").val() },
-                cache: false,
-                success: function (response) {
-
-                    $.ajax({
-                        url: '@Url.Action("_DlmSignUpRight","Home")',
-                        type: 'GET',
-                        cache: false,
-                        success: function (response) {
-                            $("#SignUpSetting").html(response);
-                        }
-                    });
-                }
-            });
-        }
-        else {
-            $.ajax({
-                       url: '@Url.Action("_DlmSignUpRight","Home")',
-                       type: 'GET',
-                       cache: false,
-                       success: function (response) {
-                       $("#SignUpSetting").html(response);
-                       }
-                });
+                </div>
+            }
         }
     }
 
-    $('#Change_Default1').click(function () {
-        $('#ddldealer11').show();
-        $('#submit').show();
-        $('#firmName').hide();
-        $('#Change_Default1').hide();
-    });
+    <!-- Dropdown (hidden by default, shown on Change click) -->
+    <div class="sur-change-row" id="ddldealer11" style="display:none;">
+        <div class="form-group" style="margin-bottom:0;width:100%;">
+            <label class="sur-label"><i class="fas fa-exchange-alt" style="color:#0891b2;margin-right:4px;font-size:.68rem;"></i> Select New Distributor</label>
+            @Html.DropDownList("dealerId", ViewBag.SignUpddlDealers as IEnumerable<SelectListItem>, "-- Select Distributor --",
+                new { @class = "form-control rc-sur-select", id = "dealerId" })
+        </div>
+    </div>
 
-</script>
-<script>
-    $('.btnssl2233').on('click', function () {
-        var $this = $(this);
-        $this.button('loading');
-        setTimeout(function () {
-            $this.button('reset');
-        }, 500);
-    });
-</script>
+    <!-- Action buttons -->
+    <div class="sur-btn-row">
+        <button type="button" id="Change_Default1" class="sur-change-btn" onclick="showSURChange();">
+            <i class="fas fa-exchange-alt"></i> Change Default Distributor
+        </button>
+        <button type="button" id="sur-save-btn" class="ne-btn-submit" onclick="SETsignUpRight();" style="display:none;">
+            <i class="fas fa-save"></i> Save Change
+        </button>
+        <button type="button" id="sur-cancel-btn" class="ne-btn-reset" onclick="cancelSURChange();" style="display:none;">
+            <i class="fas fa-times"></i> Cancel
+        </button>
+    </div>
+
+</div>
+
+<style>
+    .sur-wrapper { padding: 14px 16px 8px; }
+    .sur-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .sur-section-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,#0e7490,#0891b2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .9rem; flex-shrink: 0; }
+    .sur-section-title { font-size: .88rem; font-weight: 700; color: #0f172a; }
+    .sur-section-sub { font-size: .7rem; color: #64748b; margin-top: 1px; }
+
+    .sur-info-card { display: flex; align-items: flex-start; gap: 12px; background: linear-gradient(135deg,#f0fdff,#f8fafc); border: 1.5px solid #a5f3fc; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+    .sur-info-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg,#0891b2,#0e7490); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; flex-shrink: 0; }
+    .sur-info-body { flex: 1; }
+    .sur-info-row { display: flex; align-items: center; gap: 7px; font-size: .78rem; color: #1e293b; font-weight: 500; margin-bottom: 5px; }
+    .sur-info-row:last-child { margin-bottom: 0; }
+    .sur-info-row i { color: #0891b2; font-size: .72rem; width: 14px; text-align: center; }
+
+    .sur-change-row { background: #f0fdff; border: 1.5px dashed #a5f3fc; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+    .sur-label { font-size: .72rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block; }
+    .sur-change-row .form-control { height: 34px !important; border-radius: 8px !important; border: 1.5px solid #e2e8f0 !important; font-size: .78rem !important; background: #fff !important; }
+
+    .sur-btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .sur-change-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: .76rem; font-weight: 600; border: 1.5px solid #0891b2; color: #0891b2; background: #f0fdff; cursor: pointer; transition: all .14s; }
+    .sur-change-btn:hover { background: #0891b2; color: #fff; }
+
+    .sur-change-row .select2-container { width: 100% !important; }
+    .sur-change-row .select2-container--default .select2-selection--single { height: 34px !important; border-radius: 8px !important; border: 1.5px solid #e2e8f0 !important; background: #fff !important; }
+    .sur-change-row .select2-selection--single .select2-selection__rendered { line-height: 32px !important; font-size: .78rem !important; color: #334155 !important; }
+    .sur-change-row .select2-container--default .select2-selection--single .select2-selection__arrow { height: 32px !important; }
+</style>

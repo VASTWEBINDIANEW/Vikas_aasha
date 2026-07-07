@@ -108187,6 +108187,33 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tknn => tknn.MasterId, dlmn => dlmn.SSId, (tknn, dlmn) => new { tknn, dlmn });
             var dealerss = dealrss.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId }).ToList();
             ViewBag.ddlMaster = dealerss;
+            Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.Select(a => new DealerCreationTokenVM
+            {
+                Masterid = a.dlmn.SSId,
+                Email = a.dlmn.FarmName,
+                Idno = a.tknn.Idno,
+                Tokens = a.tknn.Tokens,
+                CteatedOn = a.tknn.CreatedOn,
+                pre = a.tknn.RemainTokenPre,
+                post = a.tknn.RemainTokenPost,
+                MasterPre = a.tknn.MasterPre,
+                MasterPost = a.tknn.MasterPost,
+                AdminPre = a.tknn.AdminPre,
+                AdminPost = a.tknn.AdminPost,
+                PerTokenValue = a.tknn.PerTokenValue,
+                TotalDebit = a.tknn.TotalDebit,
+            }).OrderByDescending(aa => aa.CteatedOn).ToList();
+            /**************End MD*******/
+
+            /* Remain tokens + Sign Up Rights data for initial page load */
+            Tkn_PaidSer.master_remain_token_report_Result = db.master_remain_token_report().ToList();
+            Tkn_PaidSer.dealer_remain_token_report_Result = db.dealer_remain_token_report().ToList();
+            var adminUser = db.Admin_details.SingleOrDefault();
+            if (adminUser != null)
+            {
+                Tkn_PaidSer.Select_dealer_list = db.Select_Dealer_total("ADMIN")
+                    .Where(x => x.masterid == adminUser.userid).ToList();
+            }
 
             return View(Tkn_PaidSer);
         }
@@ -108204,31 +108231,28 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
             var dealerss = dealrss.Select(a => new SelectListItem { Text = a.FarmName, Value = a.SSId }).ToList();
             ViewBag.ddlMaster = dealerss;
             /************End Fill DropDownList DLM and MD***************/
-            if (dealerId != null)
+            var JoinTokenentries = db.RetailerCreationTokensAssignHistories.Where(a => a.CommonId == "Admin").Join(db.Dealer_Details, tkn => tkn.DealerId, dlm => dlm.DealerId, (tkn, dlm) => new RetailerCreationTokenVM
             {
-                var JoinTokenentries = db.RetailerCreationTokensAssignHistories.Where(a => a.CommonId == "Admin").Join(db.Dealer_Details, tkn => tkn.DealerId, dlm => dlm.DealerId, (tkn, dlm) => new RetailerCreationTokenVM
-                {
-                    DealerId = dlm.DealerId,
-                    Email = dlm.FarmName,
-                    Idno = tkn.Idno,
-                    Tokens = tkn.Tokens,
-                    CteatedOn = tkn.CreatedOn,
-                    pre = tkn.RemainTokenPre,
-                    post = tkn.RemainTokenPost,
-                    DealerPre = tkn.DealerPre,
-                    DealerPost = tkn.DealerPost,
-                    AdminPre = tkn.AdminPre,
-                    AdminPost = tkn.AdminPost,
-                    PerTokenValue = tkn.PerTokenValue,
-                    TotalDebit = tkn.TotalDebit
-                }).OrderByDescending(aa => aa.CteatedOn);
+                DealerId = dlm.DealerId,
+                Email = dlm.FarmName,
+                Idno = tkn.Idno,
+                Tokens = tkn.Tokens,
+                CteatedOn = tkn.CreatedOn,
+                pre = tkn.RemainTokenPre,
+                post = tkn.RemainTokenPost,
+                DealerPre = tkn.DealerPre,
+                DealerPost = tkn.DealerPost,
+                AdminPre = tkn.AdminPre,
+                AdminPost = tkn.AdminPost,
+                PerTokenValue = tkn.PerTokenValue,
+                TotalDebit = tkn.TotalDebit
+            }).OrderByDescending(aa => aa.CteatedOn);
 
-                if (!string.IsNullOrWhiteSpace(dealerId) && dealerId != "ALL")
-                {
-                    JoinTokenentries = JoinTokenentries.Where(a => a.DealerId == dealerId).OrderByDescending(aa => aa.CteatedOn);
-                }
-                Tkn_PaidSer.RetailerCreationTokenVM = JoinTokenentries.ToList();
+            if (!string.IsNullOrWhiteSpace(dealerId) && dealerId != "ALL")
+            {
+                JoinTokenentries = JoinTokenentries.Where(a => a.DealerId == dealerId).OrderByDescending(aa => aa.CteatedOn);
             }
+            Tkn_PaidSer.RetailerCreationTokenVM = JoinTokenentries.ToList();
             /******End DLM*******/
 
             Tkn_PaidSer.dealer_remain_token_report_Result = db.dealer_remain_token_report().ToList();
@@ -108251,30 +108275,27 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
 
             /**************Start MD*******/
-            if (masterId != null)
+            var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tkn => tkn.MasterId, dlm => dlm.SSId, (tkn, dlm) => new DealerCreationTokenVM
             {
-                var TokenAssignEntriess = db.DealerCreationTokensAssignHistories.Join(db.Superstokist_details, tkn => tkn.MasterId, dlm => dlm.SSId, (tkn, dlm) => new DealerCreationTokenVM
-                {
-                    Masterid = dlm.SSId,
-                    Email = dlm.FarmName,
-                    Idno = tkn.Idno,
-                    Tokens = tkn.Tokens,
-                    CteatedOn = tkn.CreatedOn,
-                    pre = tkn.RemainTokenPre,
-                    post = tkn.RemainTokenPost,
-                    MasterPre = tkn.MasterPre,
-                    MasterPost = tkn.MasterPost,
-                    AdminPre = tkn.AdminPre,
-                    AdminPost = tkn.AdminPost,
-                    PerTokenValue = tkn.PerTokenValue,
-                    TotalDebit = tkn.TotalDebit
-                }).OrderByDescending(aa => aa.CteatedOn);
-                if (!string.IsNullOrWhiteSpace(masterId) && masterId != "ALL")
-                {
-                    TokenAssignEntriess = TokenAssignEntriess.Where(a => a.Masterid == masterId).OrderByDescending(aa => aa.CteatedOn);
-                }
-                Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.ToList();
+                Masterid = dlm.SSId,
+                Email = dlm.FarmName,
+                Idno = tkn.Idno,
+                Tokens = tkn.Tokens,
+                CteatedOn = tkn.CreatedOn,
+                pre = tkn.RemainTokenPre,
+                post = tkn.RemainTokenPost,
+                MasterPre = tkn.MasterPre,
+                MasterPost = tkn.MasterPost,
+                AdminPre = tkn.AdminPre,
+                AdminPost = tkn.AdminPost,
+                PerTokenValue = tkn.PerTokenValue,
+                TotalDebit = tkn.TotalDebit
+            }).OrderByDescending(aa => aa.CteatedOn);
+            if (!string.IsNullOrWhiteSpace(masterId) && masterId != "ALL")
+            {
+                TokenAssignEntriess = TokenAssignEntriess.Where(a => a.Masterid == masterId).OrderByDescending(aa => aa.CteatedOn);
             }
+            Tkn_PaidSer.DealerCreationTokenVM = TokenAssignEntriess.ToList();
             /**************End MD*******/
             Tkn_PaidSer.master_remain_token_report_Result = db.master_remain_token_report().ToList();
 
@@ -108581,7 +108602,7 @@ aa => aa.Operator_type == "Broadband" || aa.Operator_type == "Electricity"
 
             Token_PaidService_VM Tkn_PaidSer = new Token_PaidService_VM();
             var Details = db.Select_Dealer_total("ADMIN").Where(x => x.masterid == db.Admin_details.SingleOrDefault().userid).ToList();
-            Tkn_PaidSer.Select_dealer_list = Details.Where(aa => aa.DefaultStatus == "Y");
+            Tkn_PaidSer.Select_dealer_list = Details;
 
             return PartialView("_DlmSignUpRight", Tkn_PaidSer);
         }

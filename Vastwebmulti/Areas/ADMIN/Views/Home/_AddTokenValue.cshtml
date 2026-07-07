@@ -1,78 +1,70 @@
-﻿    <div class="Tokens-model input-border-third" id="defaultModalToken" tabindex="-1" role="dialog">
-                <div class="row clearfix">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label for="email_address_2" class="user-token-bg dmlsing-seconddesign border-bottom-third">User Token Price To Master Distributor</label>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group tabcurrent-seconddesign">
-                            <div class="">
-                                <input type="text" id="txtmastervalue" name="txtmastervalue" onkeyup="apna(this)" onkeypress='validate(event)' class="form-control" required="" placeholder="Enter User (New Token Price)" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-xs-12">
-                        <ul>
-                            <li>
-                                <label for="email_address_2" class="">User Token Old Fixed Price is Rs.</label>
-                                <label for="email_address_2" class="">@ViewBag.mastervalue.00 Only</label>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-                <div class="row clearfix mt-10"style="padding-top: 15px;">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label for="email_address_2" class="user-token-bg dmlsing-seconddesign border-bottom-third">User Token Price To Distributor</label>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group tabcurrent-seconddesign">
-                            <div class="">
-                                <input type="text" id="txtdealervalue" name="txtdealervalue" onkeyup="apna(this)" onkeypress='validate(event)' class="form-control" required="" placeholder="Enter Distributor Charge Token Price" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="padding-bottom:12px;">
-                    <div class="col-md-12 col-xs-12">
-                        <ul>
-                            <li>
-                                <label for="email_address_2">Old Distributor Token Price Rs.</label>
-                                <label for="email_address_2">@ViewBag.dealervalue.00 Only</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row clearfix mt-10">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="modal-footer button-seconddesign" style="margin-top:10px;">
-                            <button type="submit" id="start_button" class="btn waves-effect btnssl2233 btn-first button-third" style="overflow:hidden;" onclick="AddToken()" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled>
-                                <span>Save Change</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+﻿<div class="atv-wrapper">
+    <div class="atv-section-head">
+        <div class="atv-section-icon"><i class="fas fa-tags"></i></div>
+        <div>
+            <div class="atv-section-title">Token's Price Setting</div>
+            <div class="atv-section-sub">Set token price for Master &amp; Distributor</div>
+        </div>
     </div>
 
+    <div class="atv-field-card">
+        <label class="atv-label"><i class="fas fa-sitemap"></i> Master Distributor Token Price</label>
+        <input type="text" id="txtmastervalue" name="txtmastervalue" class="form-control atv-input"
+               placeholder="Enter Master token price" onkeyup="rcTokenPriceInput()" onkeypress="return rcTokenNumOnly(event)" />
+        <div class="atv-old-price">Old Fixed Price: <strong>&#8377; @ViewBag.mastervalue.00</strong></div>
+    </div>
+
+    <div class="atv-field-card">
+        <label class="atv-label"><i class="fas fa-building"></i> Distributor Token Price</label>
+        <input type="text" id="txtdealervalue" name="txtdealervalue" class="form-control atv-input"
+               placeholder="Enter Distributor token price" onkeyup="rcTokenPriceInput()" onkeypress="return rcTokenNumOnly(event)" />
+        <div class="atv-old-price">Old Fixed Price: <strong>&#8377; @ViewBag.dealervalue.00</strong></div>
+    </div>
+
+    <div class="atv-btn-row">
+        <button type="button" id="start_button" class="ne-btn-submit" disabled onclick="AddToken();">
+            <i class="fas fa-save"></i> Save Change
+        </button>
+    </div>
+</div>
+
+<style>
+    .atv-wrapper { padding: 14px 16px; }
+    .atv-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .atv-section-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,#2563eb,#4f46e5); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .9rem; }
+    .atv-section-title { font-size: .88rem; font-weight: 700; color: #0f172a; }
+    .atv-section-sub { font-size: .7rem; color: #64748b; margin-top: 1px; }
+    .atv-field-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+    .atv-label { font-size: .74rem; font-weight: 600; color: #334155; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .atv-label i { color: #2563eb; font-size: .72rem; }
+    .atv-input { height: 34px !important; border-radius: 8px !important; font-size: .78rem !important; border: 1.5px solid #cbd5e1 !important; background: #fff !important; }
+    .atv-old-price { font-size: .7rem; color: #64748b; margin-top: 6px; }
+    .atv-old-price strong { color: #0891b2; }
+    .atv-btn-row { display: flex; justify-content: flex-end; padding-top: 4px; }
+</style>
+
 <script>
+    function rcTokenNumOnly(evt) {
+        var k = evt.which ? evt.which : evt.keyCode;
+        return (k >= 48 && k <= 57) || k === 46 || k === 8 || k === 9;
+    }
+    function rcTokenPriceInput() {
+        var m = $.trim($('#txtmastervalue').val());
+        var d = $.trim($('#txtdealervalue').val());
+        $('#start_button').prop('disabled', !(m.length && d.length));
+    }
     function AddToken() {
+        var m = $.trim($('#txtmastervalue').val());
+        var d = $.trim($('#txtdealervalue').val());
+        if (!m || !d) return;
         $.ajax({
             url: '@Url.Action("_AddTokenValue","Home")',
             type: 'POST',
-            data: { txtmastervalue: $('#txtmastervalue').val(), txtdealervalue: $('#txtdealervalue').val() },
+            data: { txtmastervalue: m, txtdealervalue: d },
             cache: false,
             success: function (response) {
-                setTimeout(function(){ $("#AddTokenVal").html(response); }, 500);
-          }
+                $("#AddTokenVal").html(response);
+            }
         });
     }
-       $('.btnssl2233').on('click', function () {
-                    var $this = $(this);
-                    $this.button('loading');
-                    setTimeout(function () {
-                        $this.button('reset');
-                    }, 500);
-                });
 </script>

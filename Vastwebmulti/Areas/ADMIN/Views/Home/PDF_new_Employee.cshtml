@@ -1,101 +1,188 @@
 ﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.GeltALLEmployee
+@using System.Linq
 @{
     Layout = null;
     var generatedOn = DateTime.Now.ToString("dd MMM yyyy, hh:mm tt");
+    var empList = (Model != null && Model.Emplist != null)
+                  ? Model.Emplist.ToList()
+                  : new System.Collections.Generic.List<Vastwebmulti.Models.Select_all_employee_Result>();
+    var totalCount    = empList.Count;
+    var activeCount   = empList.Count(e => e.Status == true);
+    var inactiveCount = empList.Count(e => e.Status != true);
+    var verifiedCount = empList.Count(e => e.EmailConfirmed == true);
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Employee Report</title>
+    <title>Employee List Report</title>
     <style type="text/css">
         @@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }
         * { box-sizing: border-box; }
-        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:10px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
         table { page-break-inside:auto; border-collapse:collapse; }
-        tr { page-break-inside:avoid; page-break-after:auto; }
+        tr    { page-break-inside:avoid; page-break-after:auto; }
         thead { display:table-header-group; }
+
+        /* ── Wrapper ── */
         .vm-ml-pdf { width:100%; }
+
+        /* ── Header card ── */
         .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
-        .vm-ml-pdf__hero { padding:12px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-        .vm-ml-pdf__title { margin:0; font-size:16px; font-weight:700; }
-        .vm-ml-pdf__subtitle { margin:3px 0 0; font-size:10px; opacity:.9; }
-        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; }
-        .vm-ml-pdf__meta td { padding:7px 10px; border-right:1px solid #e2e8f0; vertical-align:middle; }
+        .vm-ml-pdf__hero {
+            padding:14px 20px;
+            background:#1e3a8a;
+            background:-webkit-linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);
+            background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);
+            color:#fff;
+            -webkit-print-color-adjust:exact; print-color-adjust:exact;
+        }
+        .vm-ml-pdf__title    { margin:0; font-size:18px; font-weight:700; }
+        .vm-ml-pdf__subtitle { margin:4px 0 0; font-size:11px; opacity:.9; }
+
+        /* ── Meta row ── */
+        .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+        .vm-ml-pdf__meta td { padding:9px 12px; border-right:1px solid #e2e8f0; vertical-align:middle; }
         .vm-ml-pdf__meta td:last-child { border-right:none; }
-        .vm-ml-pdf__meta-label { display:block; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
-        .vm-ml-pdf__meta-value { font-size:10px; font-weight:700; color:#0f172a; }
-        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
+        .vm-ml-pdf__meta-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
+        .vm-ml-pdf__meta-value { font-size:11px; font-weight:700; color:#0f172a; }
+
+        /* ── Table wrapper ── */
+        .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; margin-bottom:10px; }
         .vm-ml-pdf__table { width:100%; border:none; }
-        .vm-ml-pdf__table thead th { padding:8px 6px; text-align:left; font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }
-        .vm-ml-pdf__table tbody td { padding:7px 6px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:9.5px; color:#334155; }
-        .vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; }
-        .vm-ml-pdf__firm { font-weight:700; color:#0f172a; }
-        .vm-ml-pdf__mono { font-family:"Courier New",monospace; font-size:9px; }
-        .vm-ml-pdf__badge { display:inline-block; min-width:44px; padding:3px 8px; border-radius:999px; font-size:8px; font-weight:700; text-align:center; line-height:1.2; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-        .vm-ml-pdf__badge--done { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
-        .vm-ml-pdf__badge--due  { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
-        .vm-ml-pdf__empty { padding:24px 16px; text-align:center; color:#64748b; font-size:11px; font-weight:600; }
-        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:8.5px; color:#94a3b8; text-align:center; }
+        .vm-ml-pdf__table thead th {
+            padding:9px 6px; text-align:left; font-size:8.5px; font-weight:700;
+            text-transform:uppercase; letter-spacing:.05em;
+            color:#fff; background:#1e293b;
+            -webkit-print-color-adjust:exact; print-color-adjust:exact;
+            border-bottom:2px solid #0f172a; white-space:nowrap;
+        }
+        .vm-ml-pdf__table tbody td {
+            padding:7px 6px; border-bottom:1px solid #e2e8f0;
+            vertical-align:middle; font-size:9.5px; color:#334155;
+            word-break:break-word;
+        }
+        .vm-ml-pdf__table tbody tr:nth-child(even) td {
+            background:#f8fafc;
+            -webkit-print-color-adjust:exact; print-color-adjust:exact;
+        }
+        .vm-ml-pdf__table tbody tr:nth-child(odd) td { background:#fff; }
+
+        /* ── Cell helpers ── */
+        .vm-ml-pdf__sr      { width:28px; text-align:center; font-weight:700; color:#64748b; font-size:9px; }
+        .vm-ml-pdf__firm    { font-weight:700; color:#0f172a; }
+        .vm-ml-pdf__mono    { font-family:'Courier New',monospace; font-size:9px; letter-spacing:.03em; }
+        .vm-ml-pdf__muted   { color:#64748b; }
+        .vm-ml-pdf__blue    { font-weight:700; color:#2563eb; }
+
+        /* ── Badges ── */
+        .vm-ml-pdf__badge {
+            display:inline-block; min-width:46px; padding:3px 8px;
+            border-radius:999px; font-size:8.5px; font-weight:700;
+            text-align:center; line-height:1.3; white-space:nowrap;
+            -webkit-print-color-adjust:exact; print-color-adjust:exact;
+        }
+        .vm-ml-pdf__badge--active   { background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; }
+        .vm-ml-pdf__badge--inactive { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
+        .vm-ml-pdf__badge--done     { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
+        .vm-ml-pdf__badge--due      { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+
+        /* ── Empty state ── */
+        .vm-ml-pdf__empty { padding:28px 16px; text-align:center; color:#64748b; font-size:12px; font-weight:600; }
+
+        /* ── Footer ── */
+        .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:9px; color:#94a3b8; text-align:center; }
     </style>
 </head>
 <body>
 <div class="vm-ml-pdf">
+
+    <!-- ── Report Header ── -->
     <div class="vm-ml-pdf__header">
         <div class="vm-ml-pdf__hero">
             <h1 class="vm-ml-pdf__title">Employee List Report</h1>
-            <p class="vm-ml-pdf__subtitle">All employees with KYC &amp; status details &mdash; Admin Panel</p>
+            <p class="vm-ml-pdf__subtitle">Complete employee details &mdash; Admin Panel</p>
         </div>
         <table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0">
             <tr>
-                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
-                <td style="width:25%;"><span class="vm-ml-pdf__meta-label">Total Employees</span><span class="vm-ml-pdf__meta-value">@(Model?.Emplist?.Count ?? 0)</span></td>
-                <td style="width:50%;"><span class="vm-ml-pdf__meta-label">Report Type</span><span class="vm-ml-pdf__meta-value">Employee List</span></td>
+                <td style="width:22%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">@generatedOn</span></td>
+                <td style="width:18%;"><span class="vm-ml-pdf__meta-label">Total Employees</span><span class="vm-ml-pdf__meta-value">@totalCount</span></td>
+                <td style="width:15%;"><span class="vm-ml-pdf__meta-label">Active</span><span class="vm-ml-pdf__meta-value">@activeCount</span></td>
+                <td style="width:15%;"><span class="vm-ml-pdf__meta-label">Inactive</span><span class="vm-ml-pdf__meta-value">@inactiveCount</span></td>
+                <td style="width:30%;"><span class="vm-ml-pdf__meta-label">Email Verified</span><span class="vm-ml-pdf__meta-value">@verifiedCount</span></td>
             </tr>
         </table>
     </div>
+
+    <!-- ── Data Table ── -->
     <div class="vm-ml-pdf__table-wrap">
-        @if (Model != null && Model.Emplist != null && Model.Emplist.Any())
+        @if (empList.Any())
         {
             <table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Employee Name</th>
-                        <th>Address</th>
-                        <th>Pincode</th>
-                        <th>Mobile No</th>
-                        <th>Joining Date</th>
-                        <th>Date of Birth</th>
-                        <th>Email ID</th>
-                        <th>Aadhar No</th>
-                        <th>PAN No</th>
-                        <th>Email V/F</th>
+                        <th class="vm-ml-pdf__sr">#</th>
+                        <th style="width:7%;">Status</th>
+                        <th style="width:11%;">Employee Name</th>
+                        <th style="width:8%;">Mobile No</th>
+                        <th style="width:13%;">Email ID</th>
+                        <th style="width:12%;">Address</th>
+                        <th style="width:6%;">City</th>
+                        <th style="width:5%;">Pincode</th>
+                        <th style="width:8%;">Joining Date</th>
+                        <th style="width:8%;">Date of Birth</th>
+                        <th style="width:8%;">Aadhaar No</th>
+                        <th style="width:6%;">PAN No</th>
+                        <th style="width:7%; text-align:center;">Email V/F</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Emplist)
+                    @{ int sr = 1; }
+                    @foreach (var item in empList)
                     {
+                        var aadhar = item.AadharCard ?? "";
+                        if (!string.IsNullOrEmpty(aadhar) && aadhar.Length >= 10)
+                        {
+                            aadhar = "XXXX-XXXX-" + aadhar.Substring(aadhar.Length - 4, 4);
+                        }
                         <tr>
-                            <td><span class="vm-ml-pdf__badge @(item.Status == true ? "vm-ml-pdf__badge--done" : "vm-ml-pdf__badge--due")">@(item.Status == true ? "Active" : "Inactive")</span></td>
+                            <td class="vm-ml-pdf__sr">@sr</td>
+                            <td>
+                                <span class="vm-ml-pdf__badge @(item.Status == true ? "vm-ml-pdf__badge--active" : "vm-ml-pdf__badge--inactive")">
+                                    @(item.Status == true ? "Active" : "Inactive")
+                                </span>
+                            </td>
                             <td class="vm-ml-pdf__firm">@item.Employee_name</td>
-                            <td>@item.Address</td>
+                            <td class="vm-ml-pdf__mono">@item.Mobile</td>
+                            <td class="vm-ml-pdf__muted" style="font-size:8.5px;">@item.E_mail</td>
+                            <td class="vm-ml-pdf__muted">@item.Address</td>
+                            <td>@item.city</td>
                             <td>@item.Pincode</td>
-                            <td>@item.Mobile</td>
-                            <td>@item.JoinDate</td>
-                            <td>@item.DOB</td>
-                            <td>@item.E_mail</td>
-                            <td class="vm-ml-pdf__mono">@item.AadharCard</td>
+                            <td class="vm-ml-pdf__muted">@(item.JoinDate.HasValue ? item.JoinDate.Value.ToString("dd MMM yyyy") : "-")</td>
+                            <td class="vm-ml-pdf__muted">@(item.DOB.HasValue ? item.DOB.Value.ToString("dd MMM yyyy") : "-")</td>
+                            <td class="vm-ml-pdf__mono">@aadhar</td>
                             <td class="vm-ml-pdf__mono">@item.PanCard</td>
-                            <td><span class="vm-ml-pdf__badge @(item.EmailConfirmed == true ? "vm-ml-pdf__badge--done" : "vm-ml-pdf__badge--due")">@(item.EmailConfirmed == true ? "Done" : "Due")</span></td>
+                            <td style="text-align:center;">
+                                <span class="vm-ml-pdf__badge @(item.EmailConfirmed == true ? "vm-ml-pdf__badge--done" : "vm-ml-pdf__badge--due")">
+                                    @(item.EmailConfirmed == true ? "Verified" : "Pending")
+                                </span>
+                            </td>
                         </tr>
+                        sr++;
                     }
                 </tbody>
             </table>
         }
-        else { <div class="vm-ml-pdf__empty">No records found.</div> }
+        else
+        {
+            <div class="vm-ml-pdf__empty">No employee records found.</div>
+        }
     </div>
-    <div class="vm-ml-pdf__footer">Employee List Report &mdash; @generatedOn</div>
+
+    <div class="vm-ml-pdf__footer">
+        Employee List Report &nbsp;&bull;&nbsp; Generated: @generatedOn &nbsp;&bull;&nbsp; Total: @totalCount employees
+    </div>
+
 </div>
 </body>
 </html>

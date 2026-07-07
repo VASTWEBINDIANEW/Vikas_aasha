@@ -1,0 +1,57 @@
+@foreach (var item in ViewBag.setting)
+{
+    if (item.highsecurity == true)
+    {
+        <div class="wl-sec-card2 wl-sec-card2--high wl-sec-card2--active firstf fff">
+            <div class="wl-sec-card2__head">
+                <span class="wl-sec-card2__icon"><i class="fas fa-shield-alt"></i></span>
+                <span class="wl-sec-card2__title">High Security</span>
+                <span class="wl-sec-card2__badge wl-sec-card2__badge--on">Active</span>
+            </div>
+            <button data-id="@item.idno" onclick="SecurityChange()" type="button" class="wl-sec-card2__action">
+                <span class="wl-sec-card2__ring wl-sec-card2__ring--on"><i class="fas fa-check"></i></span>
+                <span class="wl-sec-card2__status">Active</span>
+            </button>
+            <p class="wl-sec-card2__desc"><i class="fas fa-envelope"></i> Email verification is required for high security</p>
+        </div>
+        <div class="wl-sec-card2 wl-sec-card2--low wl-sec-card2--inactive secondf sss">
+            <div class="wl-sec-card2__head">
+                <span class="wl-sec-card2__icon"><i class="fas fa-unlock-alt"></i></span>
+                <span class="wl-sec-card2__title">Low Security</span>
+                <span class="wl-sec-card2__badge wl-sec-card2__badge--off">Off</span>
+            </div>
+            <button data-id="@item.idno" onclick="SecurityChange()" type="button" class="wl-sec-card2__action">
+                <span class="wl-sec-card2__ring wl-sec-card2__ring--off"><i class="fas fa-times"></i></span>
+                <span class="wl-sec-card2__status">Deactive</span>
+            </button>
+            <p class="wl-sec-card2__desc"><i class="fas fa-mobile-alt"></i> No more security required, then send password to mobile</p>
+        </div>
+    }
+    if (item.highsecurity == false)
+    {
+        <div class="wl-sec-card2 wl-sec-card2--high wl-sec-card2--inactive secondf fff secondf-custom">
+            <div class="wl-sec-card2__head">
+                <span class="wl-sec-card2__icon"><i class="fas fa-shield-alt"></i></span>
+                <span class="wl-sec-card2__title">High Security</span>
+                <span class="wl-sec-card2__badge wl-sec-card2__badge--off">Off</span>
+            </div>
+            <button data-id="@item.idno" onclick="SecurityChange()" type="button" class="wl-sec-card2__action">
+                <span class="wl-sec-card2__ring wl-sec-card2__ring--off"><i class="fas fa-times"></i></span>
+                <span class="wl-sec-card2__status">Deactive</span>
+            </button>
+            <p class="wl-sec-card2__desc"><i class="fas fa-envelope"></i> Email verification is required for high security</p>
+        </div>
+        <div class="wl-sec-card2 wl-sec-card2--low wl-sec-card2--active firstf sss firstf-custom">
+            <div class="wl-sec-card2__head">
+                <span class="wl-sec-card2__icon"><i class="fas fa-unlock-alt"></i></span>
+                <span class="wl-sec-card2__title">Low Security</span>
+                <span class="wl-sec-card2__badge wl-sec-card2__badge--on">Active</span>
+            </div>
+            <button data-id="@item.idno" onclick="SecurityChange()" type="button" class="wl-sec-card2__action">
+                <span class="wl-sec-card2__ring wl-sec-card2__ring--on"><i class="fas fa-check"></i></span>
+                <span class="wl-sec-card2__status">Active</span>
+            </button>
+            <p class="wl-sec-card2__desc"><i class="fas fa-mobile-alt"></i> No more security required, then send password to mobile</p>
+        </div>
+    }
+}
