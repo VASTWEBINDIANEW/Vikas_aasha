@@ -8143,6 +8143,17 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             catch { return Json("Failed", JsonRequestBehavior.AllowGet); }
         }
+        private static void AppendTermConditionRow(StringBuilder html, string termText, int termId)
+        {
+            html.Append("<tr>");
+            html.Append("<td>").Append(termText).Append("</td>");
+            html.Append("<td class='st-term-delete-cell target-history-button'>");
+            html.Append("<div class='st-action-group'>");
+            html.Append("<button type='button' class='st-btn-delete button-for-click onclk'>Delete</button>");
+            html.Append("<button type='button' class='st-btn-sure button-for-sure st-btn-hidden' hidden onclick='SureDeleteAddterm(event,").Append(termId).Append(")'>Sure?</button>");
+            html.Append("</div></td></tr>");
+        }
+
         public ActionResult AddTermCondotionFor(string termcondition, string conditionfor)
         {
             StringBuilder html = new StringBuilder();
@@ -8156,12 +8167,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
                 if (count > 0)
                 {
-                    html.Append("<tr>");
-                    html.Append("<td>" + terms.termConditiopn + "</td>");
-                    html.Append("<td class='target-history-button'>");
-                    html.Append("<button type='button' onclick='moveconfirmsure(event)' class='btn btn-default waves-effect button-for-click' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;'>Delete</button><button type='button' class='btn btn-default waves-effect fullbodydycolorbg button-for-sure' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;color:#fff;display:none;' onclick='SureDeleteAddterm(event," + terms.termid + ")'> Sure ?</button>");
-                    html.Append("</td>");
-                    html.Append("</tr>");
+                    AppendTermConditionRow(html, terms.termConditiopn, terms.termid);
                 }
                 else
                 {
@@ -8180,13 +8186,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             {
                 foreach (var terms in db.tblAddTermCoditions.Where(x => x.termfor == conditionfor))
                 {
-
-                    html.Append("<tr>");
-                    html.Append("<td>" + terms.termConditiopn + "</td>");
-                    html.Append("<td class='target-history-button'>");
-                    html.Append("<button type='button' onclick='moveconfirmsure(event)' class='btn btn-default waves-effect button-for-click' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;'>Delete</button><button type='button' class='btn btn-default waves-effect fullbodydycolorbg button-for-sure' style='background-color:transparent; border:none; border: 1px solid #c7c2c2;color:#fff;display:none;' onclick='SureDeleteAddterm(event," + terms.termid + ")'> Sure ?</button>");
-                    html.Append("</td>");
-                    html.Append("</tr>");
+                    AppendTermConditionRow(html, terms.termConditiopn, terms.termid);
                 }
                 return Json(html.ToString(), JsonRequestBehavior.AllowGet);
             }

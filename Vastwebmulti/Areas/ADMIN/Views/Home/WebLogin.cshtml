@@ -18,8 +18,8 @@
 <link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=21" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-web-login-mobile.css?v=1" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-web-login-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-web-login-mobile.css?v=3" rel="stylesheet" />
 
 <section class="content WebLogin_Page web_login_page New_Employee_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page">
     <div class="container-fluid vm-ft-page-shell">
@@ -1174,8 +1174,31 @@
         .WebLogin_Page .wl-toolbar-status-group { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; width: 100% !important; }
         .WebLogin_Page .rc-left-tabs { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 6px !important; }
         .WebLogin_Page .rc-left-tabs .au-tab-btn { width: 100% !important; height: 38px !important; border-radius: 8px !important; justify-content: center; font-size: .72rem !important; }
-        .WebLogin_Page .rc-right-tabs { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; width: 100% !important; gap: 6px !important; }
-        .WebLogin_Page .rc-right-tabs .au-tab-btn { flex: 0 0 auto !important; width: auto !important; height: 36px !important; font-size: .64rem !important; white-space: nowrap !important; border-radius: 8px !important; }
+        .WebLogin_Page .rc-right-tabs {
+            display: flex !important;
+            flex-direction: column !important;
+            flex-wrap: nowrap !important;
+            overflow: visible !important;
+            width: 100% !important;
+            gap: 8px !important;
+            padding: 0 0 8px !important;
+        }
+        .WebLogin_Page .rc-right-tabs .au-tab-btn {
+            flex: 1 1 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            height: 40px !important;
+            font-size: .72rem !important;
+            white-space: normal !important;
+            border-radius: 10px !important;
+            justify-content: center !important;
+            text-align: center !important;
+            padding: 0 12px !important;
+        }
+        .WebLogin_Page .rc-right-toolbar-row,
+        .WebLogin_Page .vm-ft-history-toolbar,
+        .WebLogin_Page .wl-history-wrap { overflow: visible !important; }
         .WebLogin_Page .rc-right-toolbar-row { padding: 8px 10px 0 !important; }
         .WebLogin_Page .rc-right-panel { padding: 8px 8px 12px !important; }
         .WebLogin_Page .wl-history-table-wrap .vm-opr-table-scroll { max-height: 45vh !important; overflow: auto !important; }
@@ -2141,19 +2164,67 @@
  // alert( "Handler for .blur() called." );
 });
 
-    function SecurityChange() {
+    var wlSecurityBusy = false;
 
-         $.ajax({
-                type: 'POST',
-                url: '@Url.Action("ChangeSecuritySetting","Home")',
-                success: function (data) {
-                 $('#Statussetting').html(data)
+    function SecurityChange(mode) {
+        if (wlSecurityBusy) return false;
 
+        var isHighActive = document.querySelector('.WebLogin_Page .wl-sec-card2--high.wl-sec-card2--active') !== null;
+        var wantHigh = (mode === 'high');
 
-                },
+        if (wantHigh && isHighActive) {
+            swal('Already Active', 'High Security is already enabled.', 'info');
+            return false;
+        }
+        if (!wantHigh && !isHighActive) {
+            swal('Already Active', 'Low Security is already enabled.', 'info');
+            return false;
+        }
 
-            });
+        var title = wantHigh ? 'Activate High Security?' : 'Activate Low Security?';
+        var text = wantHigh
+            ? 'Email verification will be required for high security login.'
+            : 'No extra security required. Password will be sent to registered mobile.';
+        var confirmText = wantHigh ? 'Yes, Activate High' : 'Yes, Activate Low';
 
+        swal({
+            title: title,
+            text: text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2563eb',
+            cancelButtonColor: '#94a3b8',
+            confirmButtonText: confirmText,
+            cancelButtonText: 'Cancel',
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            if (!isConfirm) return;
+            wlDoSecurityChange(wantHigh);
+        });
+
+        return false;
+    }
+
+    function wlDoSecurityChange(wantHigh) {
+        wlSecurityBusy = true;
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ChangeSecuritySetting","Home")',
+            success: function (data) {
+                $('#Statussetting').html(data);
+                var msg = wantHigh
+                    ? 'High Security is now Active.'
+                    : 'Low Security is now Active.';
+                swal('Success!', msg, 'success');
+            },
+            error: function () {
+                swal('Failed!', 'Could not update security setting. Please try again.', 'error');
+            },
+            complete: function () {
+                wlSecurityBusy = false;
+            }
+        });
     }
 
 

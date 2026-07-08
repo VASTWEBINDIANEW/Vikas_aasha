@@ -7,188 +7,509 @@
     DateTime todaysDate = DateTime.Now.Date;
 
 }
-<style>
-
-      /* new css */
-    .bread-same-all-page li {
-        margin: 6px 0px;
-    }
-    .slab-first-tab {
-        background: #fff;
-    }
-        .slab-first-tab ul li {
-            background: #f1f1f1;
-        }
-    .set-target-left {
-        background: #fff !important;
-    }
-    .set-target-right .tab-content {
-        background: #fff;
-        overflow: scroll;
-    }
-    .table-responsive {
-        height: 500px;
-    }
-    #target4 .table-responsive {
-        overflow: auto;
-    }
-
-    .target-tab-inner {
-        background: #fff;
-    }
-    .slab-first-tab .nav.nav-tabs.set-target-left {
-        width: 100%;
-    }
-    .col-md-2.slab-first-tab {
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
-      
-      /* new css */
-
-    .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child, .table-responsive > .table-bordered > thead > tr > th:last-child {
-        border-left: 1px solid var(--border-color);
-        border-right: 1px solid var(--border-color);
-    }
-
-    .toast-top-right1 {top: 65px;left: 81%;}
-    .for-custom-select-icon.custom-district::after{display:none;}
-
-    .target-achived select, .target-achived button {
-        border: 1px solid #aaa4a4;background: #fff;padding: 5px 2px;
-    }
-    .target-achived button {padding: 5px 10px;line-height:normal;}
-    .target-achived {
-        float: left;margin-top: 6px;margin-bottom: 6px;display:flex;
-    }
-    .target-achived select {margin-right: 4px;}
-
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:992px){
-        .col-md-10.slab-first-tab-content.set-target-right {
-            width: 100%;float: left;margin-top: 15px;
-        }
-        .set-target-left {
-            height: inherit !important;width: 100%;float: left;padding: 25px 10px;
-        }
-        .col-md-2.slab-first-tab {width: 100%;float: left;}
-        .target-achived {width: 100% !important;float: left;}
-    }
-
-    @@media screen and (max-width:767px){
-        .col-md-10.slab-first-tab-content {
-            padding-right: 15px;
-            padding-left: 15px;
-        }
-        .target-achived select {width: 40%;float: left;margin-right: 0.5%;}
-        .target-achived button {width: 20%;}
-        
-    }
-   
-
-
-</style>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-set-target-page.css?v=13" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<section class="content">
-    <div class="container-fluid" style="height:auto !important;min-height:inherit !important;">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    window.stTargetBtn = {
+        hide: function (el) {
+            if (!el) return;
+            var node = el.jquery ? el[0] : el;
+            if (!node) return;
+            node.classList.add('st-btn-hidden');
+            node.setAttribute('hidden', 'hidden');
+            node.style.removeProperty('display');
+        },
+        show: function (el) {
+            if (!el) return;
+            var node = el.jquery ? el[0] : el;
+            if (!node) return;
+            node.classList.remove('st-btn-hidden');
+            node.removeAttribute('hidden');
+            node.style.removeProperty('display');
+        },
+        toggleEditSave: function (editEl, showSave) {
+            var edit = editEl && editEl.jquery ? editEl[0] : editEl;
+            if (!edit) return;
+            var save = edit.nextElementSibling;
+            if (save && !save.classList.contains('save-target') && !save.classList.contains('save-dealer') && !save.classList.contains('save-Super') && !save.classList.contains('save-API')) {
+                save = edit.parentNode ? edit.parentNode.querySelector('.save-target, .save-dealer, .save-Super, .save-API') : null;
+            }
+            if (showSave) {
+                window.stTargetBtn.hide(edit);
+                window.stTargetBtn.show(save);
+            } else {
+                window.stTargetBtn.hide(save);
+                window.stTargetBtn.show(edit);
+            }
+        },
+        toggleDeleteSure: function (deleteEl, showSure) {
+            var del = deleteEl && deleteEl.jquery ? deleteEl[0] : deleteEl;
+            if (!del) return;
+            var $group = $(del).closest('.st-action-group, .target-history-button, td');
+            var sure = del.nextElementSibling;
+            if (!sure || (!sure.classList.contains('button-for-sure') && !sure.classList.contains('st-btn-sure'))) {
+                sure = $group.find('.button-for-sure, .st-btn-sure')[0];
+            }
+            if (showSure) {
+                $('.Set_target_Page tr.st-delete-pending').each(function () {
+                    var $pendingDel = $(this).find('.button-for-click, .st-btn-delete').first();
+                    if ($pendingDel.length && $pendingDel[0] !== del) {
+                        $(this).removeClass('st-delete-pending');
+                        window.stTargetBtn.toggleDeleteSure($pendingDel[0], false);
+                    }
+                });
+                $(del).closest('tr').addClass('st-delete-pending');
+                window.stTargetBtn.hide(del);
+                window.stTargetBtn.show(sure);
+            } else {
+                $(del).closest('tr').removeClass('st-delete-pending');
+                window.stTargetBtn.hide(sure);
+                window.stTargetBtn.show(del);
+            }
+        },
+        initTermDeleteButtons: function (root) {
+            var $root = root ? $(root) : $('#target7');
+            $root.find('.button-for-sure, .st-btn-sure').each(function () {
+                window.stTargetBtn.hide(this);
+            });
+            $root.find('.button-for-click, .st-btn-delete').each(function () {
+                window.stTargetBtn.show(this);
+            });
+            $root.find('tr').removeClass('st-delete-pending');
+        },
+        syncRowOfferMode: function (row) {
+            var $row = $(row);
+            if (!$row.length || $row.attr('id') === 'beforload' || $row.attr('id') === 'AfterLoding') return;
+            var displayVal = ($row.find('.ddloffertypeDisplay').val() || '').toString();
+            var offer = ($row.find('.ddloffertype').val() || displayVal || '').toString().toLowerCase();
+            if (displayVal) {
+                var $sel = $row.find('.ddloffertype');
+                if (displayVal.toLowerCase().indexOf('gift') >= 0) {
+                    $sel.val('Giftitem');
+                    offer = 'giftitem';
+                } else {
+                    $sel.val('Fixrupees');
+                    offer = 'fixrupees';
+                }
+            }
+            if (offer.indexOf('gift') >= 0) {
+                $row.addClass('st-row-gift').removeClass('st-row-fix');
+            } else {
+                $row.addClass('st-row-fix').removeClass('st-row-gift');
+            }
+        },
+        buildRowView: function (row) {
+            var $row = $(row);
+            var rowId = $row.attr('id');
+            if (!$row.length || rowId === 'beforload' || rowId === 'AfterLoding') return;
+            $row.find('td').each(function (idx) {
+                if (idx === 0) return;
+                var $td = $(this);
+                if ($td.hasClass('last-target') || $td.hasClass('st-status-cell') || $td.hasClass('st-edit-cell') || $td.find('.onoffswitch, .st-status-pill').length) return;
+                if (!$td.find('input, select').length) return;
+                if (!$td.children('.st-view-val').length) {
+                    $td.prepend('<span class="st-view-val"></span>');
+                }
+            });
+            this.refreshRowView(row);
+        },
+        refreshRowView: function (row) {
+            var $row = $(row);
+            var isGift = $row.hasClass('st-row-gift');
+            $row.find('td').each(function () {
+                var $td = $(this);
+                var $view = $td.children('.st-view-val');
+                if (!$view.length) return;
+                var text = '—';
+                if ($td.find('.txtsettarget').length) {
+                    text = $td.find('.txtsettarget').val();
+                } else if ($td.find('.ddloffertype, .ddloffertypeDisplay').length) {
+                    text = $td.find('.ddloffertypeDisplay').val() || $row.find('.ddloffertype option:selected').text();
+                } else if (isGift && $td.find('select').length) {
+                    text = $td.find('select option:selected').text() || $td.find('select').val();
+                } else {
+                    text = $td.find('input[type=text]').first().val();
+                }
+                if (text === undefined || text === null || String(text).trim() === '') {
+                    text = '—';
+                }
+                $view.text(text);
+            });
+        },
+        enterEditRow: function (btn) {
+            var $tr = $(btn).closest('tr');
+            $tr.addClass('st-row-editing');
+            $tr.find('input[type=text]').removeAttr('readonly');
+            $tr.find('select').removeAttr('disabled');
+            this.syncRowOfferMode($tr[0]);
+            this.toggleEditSave(btn, true);
+        },
+        exitEditRow: function ($tr, $saveBtn) {
+            $tr.find('select').prop('disabled', true);
+            $tr.find('input[type=text]').prop('readonly', 'readonly');
+            $tr.removeClass('st-row-editing');
+            this.syncRowOfferMode($tr[0]);
+            this.refreshRowView($tr[0]);
+            if ($saveBtn && $saveBtn.length) {
+                this.hide($saveBtn[0]);
+                this.show($tr.find('.edit-target')[0]);
+            }
+        },
+        saveTargetRow: function ($btn) {
+            var self = this;
+            var $tr = $btn.closest('tr');
+            $.ajax({
+                url: $btn.attr('data-href'),
+                data: {
+                    settarget: $tr.find('.txtsettarget').val(),
+                    offertype: $tr.find('.ddloffertype').val(),
+                    txt60achive: $tr.find('.txt60achive').val(),
+                    txt70achive: $tr.find('.txt70achive').val(),
+                    txt80achive: $tr.find('.txt80achive').val(),
+                    txt90achive: $tr.find('.txt90achive').val(),
+                    txt100achive: $tr.find('.txt100achive').val(),
+                    ddl60achive: $tr.find('.ddl60achive').val(),
+                    ddl70achive: $tr.find('.ddl70achive').val(),
+                    ddl80achive: $tr.find('.ddl80achive').val(),
+                    ddl90achive: $tr.find('.ddl90achive').val(),
+                    ddl100achive: $tr.find('.ddl100achive').val()
+                },
+                success: function (data) {
+                    if (data === 'Success') {
+                        var offerText = $tr.find('.ddloffertype option:selected').text();
+                        $tr.find('.ddloffertypeDisplay').val(offerText);
+                        $tr.find('.for-custom-select-icon').removeClass('custom-district');
+                        self.exitEditRow($tr, $btn);
+                    }
+                    if (typeof swal === 'function') {
+                        swal(data);
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+        },
+        initTables: function () {
+            var self = this;
+            $('.Set_target_Page .edit-target-table table tbody tr').each(function () {
+                self.syncRowOfferMode(this);
+                self.buildRowView(this);
+            });
+        },
+        tabLoaded: {
+            gift: false,
+            history: false,
+            terms: false,
+            top100: false
+        },
+        top100ScrollBound: false,
+        loadTabContent: function (tabId) {
+            if (tabId === '#target4' && !this.tabLoaded.gift) {
+                this.tabLoaded.gift = true;
+                if (typeof ShowProductGift === 'function') ShowProductGift();
+            } else if (tabId === '#target5' && !this.tabLoaded.history) {
+                this.tabLoaded.history = true;
+                if (typeof AchivedHistory === 'function') AchivedHistory('CurrentMonth', 'Retailer', null, null);
+            } else if (tabId === '#target7' && !this.tabLoaded.terms) {
+                this.tabLoaded.terms = true;
+                if (typeof ShowAllRecord === 'function') ShowAllRecord('Retailer');
+            } else if (tabId === '#target6' && !this.tabLoaded.top100) {
+                this.tabLoaded.top100 = true;
+                if (typeof fillUserRetailerTBL === 'function') fillUserRetailerTBL();
+                if (typeof showalldatabymonthAPI === 'function') showalldatabymonthAPI();
+                this.bindTop100Scroll();
+            }
+        },
+        bindTop100Scroll: function () {
+            if (this.top100ScrollBound) return;
+            this.top100ScrollBound = true;
+            var self = this;
+            $(window).on('scroll.stTargetTop100', function () {
+                if (!$('#target6').hasClass('active')) return;
+                if ($(window).scrollTop() >= $(document).height() - $(window).height() - 2) {
+                    if (typeof fillUserRetailerTBL === 'function') fillUserRetailerTBL();
+                    if (typeof showalldatabymonthAPI === 'function') showalldatabymonthAPI();
+                }
+            });
+        },
+        syncTabPanes: function () {
+            $('.Set_target_Page .st-main-tab-content > .tab-pane').each(function () {
+                var $pane = $(this);
+                if ($pane.hasClass('active')) {
+                    $pane.addClass('in').css({ display: '', visibility: '', opacity: '' });
+                } else {
+                    $pane.removeClass('in').css({ display: '', visibility: '', opacity: '' });
+                }
+            });
+            $('.Set_target_Page .target-tab-inner > .tab-pane, .Set_target_Page .top-target-tab-inner > .tab-pane').each(function () {
+                var $pane = $(this);
+                if ($pane.hasClass('active')) {
+                    $pane.addClass('in').css({ display: '', visibility: '', opacity: '' });
+                } else {
+                    $pane.removeClass('in').css({ display: '', visibility: '', opacity: '' });
+                }
+            });
+        },
+        activateMainTab: function (href) {
+            if (!href) return;
+            var $pane = $(href);
+            if (!$pane.length) return;
+            $('ul.set-target-left li').removeClass('active');
+            $('ul.set-target-left a[href="' + href + '"]').closest('li').addClass('active');
+            $('.Set_target_Page .st-main-tab-content > .tab-pane').removeClass('active in').css({ display: '', visibility: '', opacity: '' });
+            $pane.addClass('active in').css({ display: '', visibility: '', opacity: '' });
+            this.loadTabContent(href);
+            this.initTables();
+        },
+        onSetTargetRoleChange: function (roleKey) {
+            if (typeof fillAllDropdownlist === 'function') {
+                fillAllDropdownlist();
+            }
+            if (roleKey === 'Retailer' && typeof fillAddEditTarget === 'function') {
+                fillAddEditTarget();
+            } else if (roleKey === 'Distributor' && typeof fillDealerAddEditTarget === 'function') {
+                fillDealerAddEditTarget();
+            } else if (roleKey === 'Super' && typeof fillSuperStockkistAddEditTarget === 'function') {
+                fillSuperStockkistAddEditTarget();
+            } else if (roleKey === 'API' && typeof fillAPIAddEditTarget === 'function') {
+                fillAPIAddEditTarget();
+            }
+            if (typeof ShowProductGift === 'function') {
+                ShowProductGift();
+            }
+        },
+        activateInnerTab: function ($link) {
+            var href = $link.attr('href');
+            if (!href || href.charAt(0) !== '#') return;
+            var $nav = $link.closest('ul.nav-tabs');
+            var $inner = $nav.closest('.target-tab-inner, .top-target-tab-inner');
+            if (!$inner.length) return;
+            var $pane = $inner.children(href);
+            if (!$pane.length) return;
+            $nav.find('li').removeClass('active');
+            $link.closest('li').addClass('active');
+            $inner.children('.tab-pane').removeClass('active in').css({ display: '', visibility: '', opacity: '' });
+            $pane.addClass('active in').css({ display: '', visibility: '', opacity: '' });
+            if ($nav.hasClass('st-role-tab-nav')) {
+                $nav.find('a[role="tab"]').attr('aria-selected', 'false');
+                $link.attr('aria-selected', 'true');
+                this.onSetTargetRoleChange($link.closest('li').data('href'));
+            }
+            this.initTables();
+        },
+        initTabNav: function () {
+            var self = this;
+            self.syncTabPanes();
+            $(document).on('click', 'ul.set-target-left a[data-toggle="tab"]', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                self.activateMainTab($(this).attr('href'));
+            });
+            $(document).on('click', '.Set_target_Page .st-role-tab-nav a[href^="#add-target-"]', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                self.activateInnerTab($(this));
+            });
+            $(document).on('click', '.Set_target_Page .tab-seconddesign.tab-third-design:not(.st-role-tab-nav) a[data-toggle="tab"]', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                self.activateInnerTab($(this));
+            });
+        },
+        applyStatusUI: function ($btn, isOn) {
+            $btn.toggleClass('st-status-pill--on', isOn).toggleClass('st-status-pill--off', !isOn);
+            $btn.attr('aria-pressed', isOn ? 'true' : 'false');
+            $btn.find('.st-status-pill__label').text(isOn ? 'ON' : 'OFF');
+        },
+        toggleStatus: function (btn) {
+            var $btn = $(btn);
+            if ($btn.hasClass('st-status-pill--readonly') || $btn.prop('disabled')) return;
+            var targetId = $btn.data('target-id');
+            var userRole = $btn.data('user-role');
+            if (!targetId || !userRole) return;
+            $btn.prop('disabled', true).addClass('st-status-pill--busy');
+            var self = this;
+            $.ajax({
+                url: '@Url.Action("TargetAchiveStatus", "Home")',
+                data: { targetId: targetId, userRole: userRole },
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    self.applyStatusUI($btn, data === true);
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).removeClass('st-status-pill--busy');
+                }
+            });
+        },
+        monthMap: {
+            retailer: {
+                CurrentMonth: '#DivCurrentMonth',
+                NextMonth: '#DivNextMonth',
+                LastMonth: '#DivLastMonth',
+                pane: '#add-target-one',
+                url: '@Url.Action("ShowRetailerMonthWiseSetTarget", "Home")'
+            },
+            dealer: {
+                CurrentMonth: '#DivDlmCurrentMonth',
+                NextMonth: '#DivDlmNextMonth',
+                LastMonth: '#DivDlmLastMonth',
+                pane: '#add-target-two',
+                url: '@Url.Action("ShowDealerMonthWiseSetTarget", "Home")'
+            },
+            master: {
+                CurrentMonth: '#DivmdCurrentMonth',
+                NextMonth: '#DivmdNextMonth',
+                LastMonth: '#DivmdLastMonth',
+                pane: '#add-target-three',
+                url: '@Url.Action("ShowMasterMonthWiseSetTarget", "Home")'
+            },
+            api: {
+                CurrentMonth: '#DivApiCurrentMonth',
+                NextMonth: '#DivApiNextMonth',
+                LastMonth: '#DivApiLastMonth',
+                pane: '#add-target-four',
+                url: '@Url.Action("ShowApiMonthWiseSetTarget", "Home")'
+            }
+        },
+        setMonthButtonActive: function ($tabPane, monthVal) {
+            if (!$tabPane || !$tabPane.length) return;
+            var map = {
+                LastMonth: '.view-target-one-left',
+                CurrentMonth: '.view-target-one-middle',
+                NextMonth: '.view-target-one-right'
+            };
+            $tabPane.find('.view-target-one-left, .view-target-one-middle, .view-target-one-right').removeClass('st-month-active');
+            if (map[monthVal]) {
+                $tabPane.find(map[monthVal]).addClass('st-month-active');
+            }
+        },
+        switchMonthInstant: function (roleKey, monthVal) {
+            var cfg = this.monthMap[roleKey];
+            if (!cfg || !cfg[monthVal]) return;
+            var showSel = cfg[monthVal];
+            [cfg.CurrentMonth, cfg.NextMonth, cfg.LastMonth].forEach(function (sel) {
+                $(sel).hide();
+            });
+            $(showSel).show();
+            this.setMonthButtonActive($(cfg.pane), monthVal);
+            this.initTables();
+        },
+        refreshMonthData: function (roleKey, monthVal) {
+            var cfg = this.monthMap[roleKey];
+            if (!cfg || !cfg[monthVal]) return;
+            var self = this;
+            var $target = $(cfg[monthVal]);
+            $.ajax({
+                url: cfg.url,
+                data: { monthVal: monthVal },
+                success: function (response) {
+                    $target.html(response);
+                    self.initTables();
+                }
+            });
+        },
+        initMonthSwitchers: function () {
+            var self = this;
+            $(document).on('click', '.Set_target_Page .st-month-btn', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var role = $(this).data('st-role');
+                var month = $(this).data('st-month');
+                if (!role || !month) return;
+                self.switchMonthInstant(role, month);
+                self.refreshMonthData(role, month);
+            });
+        }
+    };
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Set Target</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Basic Setting 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Set Target</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
+    $(function () {
+        stTargetBtn.initTables();
+        stTargetBtn.initTabNav();
+        stTargetBtn.initMonthSwitchers();
+        $(document).on('click', '.Set_target_Page .edit-target', function (e) {
+            e.preventDefault();
+            stTargetBtn.enterEditRow(this);
+        });
+        $(document).on('click', '.Set_target_Page .save-target', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            stTargetBtn.saveTargetRow($(this));
+            return false;
+        });
+        $(document).on('click', '.Set_target_Page .st-status-pill:not(.st-status-pill--readonly)', function (e) {
+            e.preventDefault();
+            stTargetBtn.toggleStatus(this);
+        });
+    });
+</script>
 
-        <div class="page-header-third pageheader-margin-third four-noneclass-admin-only">
+<section class="content Set_target_Page Api_user_Page Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
 
+    <div class="container-fluid vm-ft-page-shell">
 
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="padding-top-third padding-top-thirdclass" style="margin:0px;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Set Target
-                    </li>
-                </ul>
-
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero" style=" padding: 10px 0 !important;">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Set Target</li>
+                </ol>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-12" style="padding:0;">
-        <div class="col-md-2 slab-first-tab">
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
-            <ul class="page-header-third nav nav-tabs set-target-left">
+                <div class="col-md-4 col-sm-12 vm-ft-form-col st-nav-col">
+                    <div class="fund-trasfer-left fund-user-left vm-ft-form-card st-nav-card">
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon"><i class="fas fa-bullseye"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Set Target</span>
+                                <span class="vm-ft-form-card-header__sub">Manage targets, gifts &amp; history</span>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs set-target-left st-side-nav">
                 <li class="active fillAddEditTargetclass" data-href="AddEditTarget"><a data-toggle="tab" href="#target2">SET&nbsp;/&nbsp;Edit&nbsp;Target</a></li>
 
                 <li><a data-toggle="tab" href="#target4">Add Items image</a></li>
-                <li><a data-toggle="tab" href="#target5" onclick="AchivedHistory('CurrentMonth','Retailer',null,null)">Achieved History</a></li>
+                <li><a data-toggle="tab" href="#target5">Achieved History</a></li>
                 <li><a data-toggle="tab" href="#target6">Top 100 Users</a></li>
                 <li><a data-toggle="tab" href="#target7">Add&nbsp;Term&nbsp;&&nbsp;Cond.</a></li>
 
             </ul>
-        </div>
-        <div class="col-md-10 slab-first-tab-content set-target-right">
-            <div class="tab-content page-header-third">
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col st-content-col set-target-right">
+                    <div class="fund-trasfer-right fund-user-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
+                            <div class="tab-content st-main-tab-content">
                 <div id="target2" class="tab-pane  fade in active">
-                    <div class="target-tab-inner">
-                        <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designclass">
-                            <li class="active tablechangecategorytype" data-href="Retailer"><a data-toggle="tab" href="#add-target-one">Retailer</a></li>
-                            <li class="tablechangecategorytype" data-href="Distributor" onclick="dlmGetCateMonthWise('CurrentMonth')"><a data-toggle="tab" href="#add-target-two">Distributor</a></li>
-                            <li class="tablechangecategorytype" data-href="Super" onclick="mdGetCateMonthWise('CurrentMonth')"><a data-toggle="tab" href="#add-target-three">Master Distributor</a></li>
-                            <li class="tablechangecategorytype" data-href="API" onclick="ApiGetCateMonthWise('CurrentMonth')"><a data-toggle="tab" href="#add-target-four">Api user</a></li>
+                    <div class="target-tab-inner tabcurrent-seconddesign">
+                        <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designclass st-role-tab-nav">
+                            <li class="active tablechangecategorytype" data-href="Retailer"><a href="#add-target-one" role="tab" aria-selected="true">Retailer</a></li>
+                            <li class="tablechangecategorytype" data-href="Distributor"><a href="#add-target-two" role="tab" aria-selected="false">Distributor</a></li>
+                            <li class="tablechangecategorytype" data-href="Super"><a href="#add-target-three" role="tab" aria-selected="false">Master Distributor</a></li>
+                            <li class="tablechangecategorytype" data-href="API"><a href="#add-target-four" role="tab" aria-selected="false">Api user</a></li>
 
                         </ul>
                         <div id="add-target-one" class="tab-pane  fade active in">
-                            <div class="view-target-one-right" onclick="GetCateMonthWise('NextMonth')"><button><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-right st-month-btn" data-st-role="retailer" data-st-month="NextMonth"><button type="button"><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-middle" onclick="GetCateMonthWise('CurrentMonth')"><button><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
+                            <div class="view-target-one-middle st-month-btn st-month-active" data-st-role="retailer" data-st-month="CurrentMonth"><button type="button"><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-left" onclick="GetCateMonthWise('LastMonth')"><button><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-left st-month-btn" data-st-role="retailer" data-st-month="LastMonth"><button type="button"><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
 
                             <div class="table-responsive edit-target-table " id="DivCurrentMonth" style="width:100%;">
                                 @Html.Partial("_CurrentAndNextMonth")
@@ -201,11 +522,11 @@
                             </div>
                         </div>
                         <div id="add-target-two" class="tab-pane  fade ">
-                            <div class="view-target-one-right" onclick="dlmGetCateMonthWise('NextMonth')"><button><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-right st-month-btn" data-st-role="dealer" data-st-month="NextMonth"><button type="button"><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-middle" onclick="dlmGetCateMonthWise('CurrentMonth')"><button><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
+                            <div class="view-target-one-middle st-month-btn st-month-active" data-st-role="dealer" data-st-month="CurrentMonth"><button type="button"><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-left" onclick="dlmGetCateMonthWise('LastMonth')"><button><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-left st-month-btn" data-st-role="dealer" data-st-month="LastMonth"><button type="button"><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
 
                             <div class="table-responsive edit-target-table " id="DivDlmCurrentMonth" style="width:100%;">
                                 @Html.Partial("_dlmCurrentAndNextMonth")
@@ -219,11 +540,11 @@
                         </div>
                         <div id="add-target-three" class="tab-pane  fade ">
 
-                            <div class="view-target-one-right" onclick="mdGetCateMonthWise('NextMonth')"><button><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-right st-month-btn" data-st-role="master" data-st-month="NextMonth"><button type="button"><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-middle" onclick="mdGetCateMonthWise('CurrentMonth')"><button><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
+                            <div class="view-target-one-middle st-month-btn st-month-active" data-st-role="master" data-st-month="CurrentMonth"><button type="button"><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-left" onclick="mdGetCateMonthWise('LastMonth')"><button><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-left st-month-btn" data-st-role="master" data-st-month="LastMonth"><button type="button"><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
 
                             <div class="table-responsive edit-target-table " id="DivmdCurrentMonth" style="width:100%;">
                                 @Html.Partial("_mdCurrentAndNextMonth")
@@ -238,11 +559,11 @@
                         </div>
                         <div id="add-target-four" class="tab-pane  fade ">
 
-                            <div class="view-target-one-right" onclick="ApiGetCateMonthWise('NextMonth')"><button><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-right st-month-btn" data-st-role="api" data-st-month="NextMonth"><button type="button"><span>Next month</span>@todaysDate.AddMonths(1).ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-middle" onclick="ApiGetCateMonthWise('CurrentMonth')"><button><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
+                            <div class="view-target-one-middle st-month-btn st-month-active" data-st-role="api" data-st-month="CurrentMonth"><button type="button"><span>Current month</span> @todaysDate.ToString("MMMM")</button></div>
 
-                            <div class="view-target-one-left" onclick="ApiGetCateMonthWise('LastMonth')"><button><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
+                            <div class="view-target-one-left st-month-btn" data-st-role="api" data-st-month="LastMonth"><button type="button"><span>Last month</span> @todaysDate.AddMonths(-1).ToString("MMMM")</button></div>
 
                             <div class="table-responsive edit-target-table " id="DivApiCurrentMonth" style="width:100%;">
                                 @Html.Partial("_ApiCurrentAndNextMonth")
@@ -258,77 +579,47 @@
 
                     </div>
                 </div>
-                <div id="target4" class="tab-pane fade ">
-
-                    <div class="card">
-                        <div class="logo-change" style="margin-top:0px;">
-                            <h2>
-                                ADD (GIFT) ITEM
-                                <img src="~/AdminDesign/images/play-arrow.svg" style="width:14px;margin-top: -3px;" />
-                            </h2>
-
-                            <form action="" method="POST" id="Addgiftitem" role="form">
-                                <div class="image-upload tabcurrent-seconddesign">
-                                    <input type="text" name="productname" id="productname" required class="form-control formcontrol-second" placeholder="Enter Product Name" style="float: left;width: 200px;height: 32px;margin-right: 2px;background:#f0f0f0;border:1px solid #555;">
-                                    <input type="file" name="Productfile" id="Productfile" required class="form-control">
-
-                                    <button type="submit" class="btn bg-grey waves-effect input-back-second">
-                                        <span>Save Item</span>
-                                    </button>
-
-                                </div>
-                            </form>
-
-                        </div>
-                        <div class="body">
-
-                            <div class="table-responsive" style="position:inherit;margin-top:-20px;">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable ">
-                                    <thead>
-                                        <tr>
-                                            <th>SR No.</th>
-                                            <th>Product (Gift) Name</th>
-                                            <th>Product (Gift) Image <p style="float: right;color:red;margin:0px;">(Best Size 312 * 200 PXL)</p></th>
-                                            <th>Action</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tableproductgift">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Header</td>
-                                            <td> <img id="LogoHeaderImg" src="/Outside_logo/35cf4cb3-d60c-4a31-b8e2-1a795dce5b7a_24OnlinePay.png" width="100" height="70"></td>
-                                            <td>
-
-                                                <div style="float:right;clear:both;">
-
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;margin-right:4px;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;margin-right:4px;">
-                                                        Sure ?
-                                                    </button>
-
-
-
-                                                    <a href="#" target="_blank">
-                                                        <button type="button" class="btn btn-default waves-effect" style="border:1px solid #c7c2c2;">Open Link In New Tab</button>
-                                                    </a>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                <div id="target4" class="tab-pane fade">
+                    <div class="target-tab-inner st-gift-panel">
+                        <div class="st-section-header">
+                            <div class="st-section-header__icon"><i class="fas fa-gift"></i></div>
+                            <div>
+                                <h3 class="st-section-header__title">Add Gift Item</h3>
+                                <p class="st-section-header__sub">Product name and image — best size 312 × 200 px</p>
                             </div>
+                        </div>
 
+                        <form action="" method="POST" id="Addgiftitem" class="st-gift-form" role="form">
+                            <div class="st-gift-form__grid">
+                                <input type="text" name="productname" id="productname" required class="st-gift-input" placeholder="Enter product name" />
+                                <input type="file" name="Productfile" id="Productfile" required class="st-gift-file" accept="image/*" />
+                                <button type="submit" class="st-btn-submit">
+                                    <i class="fas fa-save"></i> Save Item
+                                </button>
+                            </div>
+                        </form>
 
+                        <div class="table-responsive st-gift-table-wrap">
+                            <table class="table table-bordered table-striped table-hover st-gift-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Product (Gift) Name</th>
+                                        <th>Product (Gift) Image</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableproductgift">
+                                    <tr class="st-gift-placeholder">
+                                        <td colspan="4">Open this tab to load gift items…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
                 </div>
                 <div id="target5" class="tab-pane fade ">
-                    <div class="target-tab-inner">
+                    <div class="target-tab-inner tabcurrent-seconddesign">
                         <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designclass">
                             <li class="active"><a data-toggle="tab" href="#achived-target-one" onclick="AchivedHistory('CurrentMonth','Retailer',null,null)">Retailer</a></li>
                             <li><a data-toggle="tab" href="#achived-target-two" onclick="AchivedHistory('CurrentMonth','Dealer',null,null)">Distributor</a></li>
@@ -501,7 +792,7 @@
                     </div>
                 </div>
                 <div id="target6" class="tab-pane fade">
-                    <div class="target-tab-inner top-target-tab-inner">
+                    <div class="target-tab-inner tabcurrent-seconddesign top-target-tab-inner">
                         <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designclass">
                             <li class="active" style="width:50%;"><a data-toggle="tab" href="#top-user-target-one">Retailer</a></li>
                             @*<li><a data-toggle="tab" href="#top-user-target-two">Distributor</a></li>*@
@@ -757,7 +1048,7 @@
                 <div id="target7" class="tab-pane fade">
                     <div class="target-tab-inner tabcurrent-seconddesign">
                         <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designclass">
-                            <li class="active tabchangessterm" onclick="ShowAllRecord(" Retailer")" data-href="Retailer"><a data-toggle="tab" href="#term-target-one">Retailer</a></li>
+                            <li class="active tabchangessterm" onclick="ShowAllRecord('Retailer')" data-href="Retailer"><a data-toggle="tab" href="#term-target-one">Retailer</a></li>
                             <li class="tabchangessterm" data-href="Dealer"><a data-toggle="tab" href="#term-target-two">Distributor</a></li>
                             <li class="tabchangessterm" data-href="Master"><a data-toggle="tab" href="#term-target-three">Master Distributor</a></li>
                             <li class="tabchangessterm" data-href="API"><a data-toggle="tab" href="#term-target-four">Api user</a></li>
@@ -833,12 +1124,8 @@
                                                 <td>1</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -846,12 +1133,8 @@
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
 
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -859,36 +1142,24 @@
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
 
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>4</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>5</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>*@
 
@@ -917,12 +1188,8 @@
                                                 <td>1</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -930,12 +1197,8 @@
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
 
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -943,36 +1206,24 @@
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
 
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>4</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>5</td>
                                                 <td>fiuhkjhiu uhf y e ew efygfh ye yefhg e egehb egfh y </td>
                                                 <td class="target-history-button">
-                                                    <button type="button" class="btn btn-default waves-effect button-for-click" style="background-color:transparent; border:none;border:1px solid #c7c2c2;">
-                                                        Delete
-                                                    </button>
-                                                    <button type="button" class="btn btn-default waves-effect fullbodydycolorbg button-for-sure" style="background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;">
-                                                        Sure ?
-                                                    </button>
+                                                    <button type="button" class="st-btn-delete button-for-click onclk">Delete</button>
+                                                    <button type="button" class="st-btn-sure button-for-sure st-btn-hidden" hidden>Sure?</button>
                                                 </td>
                                             </tr>*@
 
@@ -984,6 +1235,10 @@
                     </div>
                 </div>
 
+            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1172,8 +1427,7 @@
     if (!e)
         e = window.event;
     var sender = e.srcElement || e.target;
-          $(sender).hide();
-        $(sender).next().show();
+          stTargetBtn.toggleDeleteSure(sender, true);
 }
 
      function SureDeleteAddterm(e,idno) {
@@ -1191,8 +1445,7 @@
                      sender.parentNode.parentNode.remove();
                  }
                  else {
-                      $(sender).hide();
-                       $(sender).prev().show();
+                      stTargetBtn.toggleDeleteSure(sender, false);
                     // sender.innerText=''
                  }
 
@@ -1223,6 +1476,7 @@
             success: function (data) {
 
                 $('#tbltermcond').html(data);
+                stTargetBtn.initTermDeleteButtons('#tbltermcond');
             }
 
         })
@@ -1238,15 +1492,19 @@
 
                 if (value == 'Retailer') {
                      $('#tbltermcond').html(data);
+                     stTargetBtn.initTermDeleteButtons('#tbltermcond');
                 }
                   if (value == 'Dealer') {
                       $('#tbldealer').html(data);
+                      stTargetBtn.initTermDeleteButtons('#tbldealer');
                 }
                   if (value == 'Master') {
                       $('#mastertbl').html(data);
+                      stTargetBtn.initTermDeleteButtons('#mastertbl');
                 }
                   if (value == 'API') {
                      $('#APIrtbl').html(data);
+                     stTargetBtn.initTermDeleteButtons('#APIrtbl');
                 }
 
             }
@@ -1264,6 +1522,7 @@
                 success: function (data) {
 
                     $('#tbltermcond').append(data);
+                    stTargetBtn.initTermDeleteButtons('#tbltermcond tr:last');
 
                 }
 
@@ -1287,6 +1546,7 @@
                 success: function (data) {
 
                     $('#tbldealer').append(data);
+                    stTargetBtn.initTermDeleteButtons('#tbldealer tr:last');
                 }
 
             })
@@ -1312,6 +1572,7 @@
                 success: function (data) {
 
                     $('#mastertbl').append(data);
+                    stTargetBtn.initTermDeleteButtons('#mastertbl tr:last');
                 }
 
 
@@ -1336,6 +1597,7 @@
                 success: function (data) {
 
                     $('#APIrtbl').append(data);
+                    stTargetBtn.initTermDeleteButtons('#APIrtbl tr:last');
                 }
 
             })
@@ -1346,27 +1608,7 @@
 </script>
 
 <script>
-    $('.tablechangecategorytype').click(function () {
-
-        fillAllDropdownlist();
-
-        var tabname = $(this).attr('data-href');
-        if (tabname == 'Retailer') {
-            fillAddEditTarget();
-        }
-        else if (tabname == 'Distributor') {
-            fillDealerAddEditTarget();
-        }
-        else if (tabname == 'Super') {
-            fillSuperStockkistAddEditTarget();
-        }
-        else if (tabname == 'API') {
-            fillAPIAddEditTarget();
-        }
-
-        ShowProductGift();
-
-    })
+    /* Role tab fill handled by stTargetBtn.onSetTargetRoleChange via st-role-tab-nav */
 </script>
 
 <script>
@@ -1401,8 +1643,8 @@
        // $(this).closest('tr').find('select').addAttr('disabled');
          currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
           currentid.closest('tr').find('.for-custom-select-icon-other').removeClass('custom-district');
-        currentid.css('display', 'none');
-        currentid.prev('.edit-API').css('display', 'block');
+        stTargetBtn.hide(currentid[0]);
+        stTargetBtn.show(currentid.prev('.edit-API')[0]);
 
 
 
@@ -1420,8 +1662,8 @@
         $(this).closest('tr').find('select').removeAttr('disabled');
         $(this).closest('tr').find('.for-custom-select-icon').addClass('custom-district');
 
-        $(this).css('display', 'none');
-        $(this).next('.save-API').css('display', 'block');
+        stTargetBtn.hide(this);
+        stTargetBtn.show($(this).next('.save-API')[0]);
         });
 
     
@@ -1622,8 +1864,8 @@
        // $(this).closest('tr').find('select').addAttr('disabled');
          currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
           currentid.closest('tr').find('.for-custom-select-icon-other').removeClass('custom-district');
-        currentid.css('display', 'none');
-        currentid.prev('.edit-Super').css('display', 'block');
+        stTargetBtn.hide(currentid[0]);
+        stTargetBtn.show(currentid.prev('.edit-Super')[0]);
 
 
 
@@ -1641,8 +1883,8 @@
         $(this).closest('tr').find('select').removeAttr('disabled');
         $(this).closest('tr').find('.for-custom-select-icon').addClass('custom-district');
 
-        $(this).css('display', 'none');
-        $(this).next('.save-Super').css('display', 'block');
+        stTargetBtn.hide(this);
+        stTargetBtn.show($(this).next('.save-Super')[0]);
         });
 
      function fillSuperStockkistAddEditTarget() {
@@ -1824,8 +2066,8 @@
         $(this).closest('tr').find('select').removeAttr('disabled');
         $(this).closest('tr').find('.for-custom-select-icon').addClass('custom-district');
 
-        $(this).css('display', 'none');
-        $(this).next('.save-dealer').css('display', 'block');
+        stTargetBtn.hide(this);
+        stTargetBtn.show($(this).next('.save-dealer')[0]);
         });
 
       $("#dealertbl1233").on("click",".save-dealer", function(){
@@ -1851,8 +2093,8 @@
           currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
            currentid.closest('tr').find('.for-custom-select-icon-other').removeClass('custom-district');
 
-        currentid.css('display', 'none');
-      currentid.prev('.edit-dealer').css('display', 'block');
+        stTargetBtn.hide(currentid[0]);
+      stTargetBtn.show(currentid.prev('.edit-dealer')[0]);
   });
 
     $('.save-dealer').click(function () {
@@ -1884,8 +2126,8 @@
          currentid.closest('tr').find('input[type=text]').prop("readonly", "readonly");
        // $(this).closest('tr').find('select').addAttr('disabled');
         currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
-        currentid.css('display', 'none');
-        currentid.prev('.edit-dealer').css('display', 'block');
+        stTargetBtn.hide(currentid[0]);
+        stTargetBtn.show(currentid.prev('.edit-dealer')[0]);
 
 
 
@@ -2101,16 +2343,7 @@
     var pageIndex = 0;
 
     $(document).ready(function () {
-        fillUserRetailerTBL();
-        showalldatabymonthAPI();
-
-        $(window).scroll(function () {
-            if ($(window).scrollTop() ==
-                $(document).height() - $(window).height()) {
-                fillUserRetailerTBL();
-                showalldatabymonthAPI();
-            }
-        });
+        /* Top 100 data loads when target6 tab opens — see stTargetBtn.initTabNav */
     });
 
 
@@ -2218,6 +2451,7 @@ $(document).ready(function() {
   });
 });
  function ShowProductGift() {
+        $('#tableproductgift').html('<tr class="st-gift-placeholder"><td colspan="4">Loading gift items…</td></tr>');
         $.ajax({
 
       url: "@Url.Action("FillProductGiftTable","Home")",
@@ -2226,15 +2460,18 @@ $(document).ready(function() {
              var htmls = "";
              var i = 1;
              $('#tableproductgift').html('');
-             var newtab = "";
+             if (!data || !data.length) {
+                 $('#tableproductgift').html('<tr class="st-gift-empty"><td colspan="4">No gift items found.</td></tr>');
+                 return;
+             }
              $.each(data,function(a,b){
                  htmls += "<tr>";
                  htmls += "<td>"+i+"</td>";
                  htmls += "<td>"+b.ProductName+"</td>";
-                 htmls += "<td><img id='LogoHeaderImg' src=../../images/" + b.ProductImages + " width='100' height='70'></td>";
+                 htmls += "<td><img class='st-gift-thumb' src='../../images/" + b.ProductImages + "' alt='" + b.ProductName + "' /></td>";
                  htmls += "<td>";
-                 htmls += "<div style='float:right;clear:both;'><button onclick='move(event)' type='button' class='btn btn-default waves-effect button-for-click onclk' style='background-color:transparent; border:none;border:1px solid #c7c2c2;margin-right:4px;'>Delete</button><button type='button' class='btn btn-default waves-effect fullbodydycolorbg button-for-sure' style='background-color:transparent; border:none;border:1px solid #c7c2c2;color:#fff;display:none;margin-right:4px;'  onclick='SureDeleteData(event," + b.productId + ")'>  Sure ?  </button>";
-                 htmls += "<a href=../../images/" + b.ProductImages + " target='_blank'><button type='button' class='btn btn-default waves-effect' style='border:1px solid #c7c2c2;'>Open Link In New Tab</button></a>";
+                 htmls += "<div class='st-action-group'><button onclick='move(event)' type='button' class='st-btn-delete button-for-click onclk'>Delete</button><button type='button' class='st-btn-sure button-for-sure st-btn-hidden' hidden onclick='SureDeleteData(event," + b.productId + ")'>Sure?</button>";
+                 htmls += "<a href='../../images/" + b.ProductImages + "' target='_blank' class='st-btn-link-wrap'><button type='button' class='st-btn-link'>Open Link</button></a>";
                  htmls += "</div>";
                  htmls += "</td>";
                  htmls += "</tr>";
@@ -2250,8 +2487,7 @@ $(document).ready(function() {
     if (!e)
         e = window.event;
     var sender = e.srcElement || e.target;
-          $(sender).hide();
-        $(sender).next().show();
+          stTargetBtn.toggleDeleteSure(sender, true);
 }
 
 
@@ -2274,8 +2510,7 @@ $(document).ready(function() {
                      toastr.warning('Product has been deleted Successfully !!!');
                  }
                  else {
-                       $(sender).hide();
-                       $(sender).prev().show();
+                       stTargetBtn.toggleDeleteSure(sender, false);
                        ToastrMessage();
                        toastr.error('This Product is already SET or Assigned to Users.');
                     // sender.innerText=''
@@ -2300,11 +2535,7 @@ $(document).ready(function() {
 }
 
     $(document).ready(function () {
-
-        ShowAllRecord();
         fillAddEditTarget();
-        ShowProductGift();
-
     });
 
 
@@ -2351,23 +2582,15 @@ $(document).ready(function() {
 
 <script>
     function changeachive(value) {
-        var res = $(value).val();
-        if (res == 'Giftitem') {
-            $(value).closest('tr').find('td:not(:lt(2))').find('select').css('display', 'block');
-            $(value).closest('tr').find('.for-custom-select-icon-other').addClass('custom-district');
-            $(value).closest('tr').find('td:not(:lt(2))').find('input').css('display', 'none');
-        }
-        else {
-            $(value).closest('tr').find('td:not(:lt(3))').find('select').css('display', 'none');
-            $(value).closest('tr').find('td:not(:lt(3))').find('.for-custom-select-icon-other').removeClass('custom-district');
-            $(value).closest('tr').find('td:not(:lt(2))').find('input').css('display', 'block');
-        }
+        var $row = $(value).closest('tr');
+        stTargetBtn.syncRowOfferMode($row[0]);
     }
 </script>
 <script>
-    $('.button-for-click').click(function () {
-        $(this).hide();
-        $(this).next().show();
+    $(document).on('click', '.Set_target_Page #target7 .button-for-click.onclk, .Set_target_Page #target4 .button-for-click.onclk', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        stTargetBtn.toggleDeleteSure(this, true);
     });
 </script>
 
@@ -2412,129 +2635,20 @@ $(document).ready(function() {
 
 <script>
     function GetCateMonthWise(monthVal) {
-       $.ajax({
-          url: "@Url.Action("ShowRetailerMonthWiseSetTarget")",
-           data: { monthVal: monthVal },
-           success: function (response) {
-               if (monthVal === "LastMonth") {
-                   $('#DivNextMonth').hide();
-                   $('#DivCurrentMonth').hide();
-                   $('#DivLastMonth').show();
-
-                   $('#DivLastMonth').html(response)
-               }
-               else if (monthVal === "NextMonth") {
-                   $('#DivLastMonth').hide();
-                   $('#DivCurrentMonth').hide();
-                   $('#DivNextMonth').show();
-
-                   $('#DivNextMonth').html(response)
-
-               }
-               else if (monthVal === "CurrentMonth") {
-                   $('#DivLastMonth').hide();
-                   $('#DivNextMonth').hide();
-                   $('#DivCurrentMonth').show();
-
-                   $('#DivCurrentMonth').html(response)
-               }
-            }
-
-        })
+        stTargetBtn.switchMonthInstant('retailer', monthVal);
+        stTargetBtn.refreshMonthData('retailer', monthVal);
     }
     function dlmGetCateMonthWise(monthVal) {
-       $.ajax({
-          url: "@Url.Action("ShowDealerMonthWiseSetTarget")",
-           data: { monthVal: monthVal },
-           success: function (response) {
-               if (monthVal === "LastMonth") {
-                   $('#DivDlmNextMonth').hide();
-                   $('#DivDlmCurrentMonth').hide();
-
-                   $('#DivDlmLastMonth').html(response)
-                   $('#DivDlmLastMonth').show();
-               }
-               else if (monthVal === "NextMonth") {
-                   $('#DivDlmLastMonth').hide();
-                   $('#DivDlmCurrentMonth').hide();
-
-                   $('#DivDlmNextMonth').html(response)
-                   $('#DivDlmNextMonth').show();
-                   //$('#DivDlmNextMonth').load(location.href + " #DivDlmNextMonth");
-
-               }
-               else if (monthVal === "CurrentMonth") {
-                   $('#DivDlmLastMonth').hide();
-                   $('#DivDlmNextMonth').hide();
-
-                   $('#DivDlmCurrentMonth').html(response)
-                   $('#DivDlmCurrentMonth').show();
-               }
-            }
-
-        })
+        stTargetBtn.switchMonthInstant('dealer', monthVal);
+        stTargetBtn.refreshMonthData('dealer', monthVal);
     }
     function mdGetCateMonthWise(monthVal) {
-       $.ajax({
-          url: "@Url.Action("ShowMasterMonthWiseSetTarget")",
-           data: { monthVal: monthVal },
-           success: function (response) {
-               if (monthVal === "LastMonth") {
-                   $('#DivmdNextMonth').hide();
-                   $('#DivmdCurrentMonth').hide();
-                   $('#DivmdLastMonth').show();
-
-                   $('#DivmdLastMonth').html(response)
-               }
-               else if (monthVal === "NextMonth") {
-                   $('#DivmdLastMonth').hide();
-                   $('#DivmdCurrentMonth').hide();
-                   $('#DivmdNextMonth').show();
-
-                   $('#DivmdNextMonth').html(response)
-
-               }
-               else if (monthVal === "CurrentMonth") {
-                   $('#DivmdLastMonth').hide();
-                   $('#DivmdNextMonth').hide();
-                   $('#DivmdCurrentMonth').show();
-
-                   $('#DivmdCurrentMonth').html(response)
-               }
-            }
-
-        })
+        stTargetBtn.switchMonthInstant('master', monthVal);
+        stTargetBtn.refreshMonthData('master', monthVal);
     }
     function ApiGetCateMonthWise(monthVal) {
-       $.ajax({
-          url: "@Url.Action("ShowApiMonthWiseSetTarget")",
-           data: { monthVal: monthVal },
-           success: function (response) {
-               if (monthVal === "LastMonth") {
-                   $('#DivApiNextMonth').hide();
-                   $('#DivApiCurrentMonth').hide();
-                   $('#DivApiLastMonth').show();
-
-                   $('#DivApiLastMonth').html(response)
-               }
-               else if (monthVal === "NextMonth") {
-                   $('#DivApiLastMonth').hide();
-                   $('#DivApiCurrentMonth').hide();
-                   $('#DivApiNextMonth').show();
-
-                   $('#DivApiNextMonth').html(response)
-
-               }
-               else if (monthVal === "CurrentMonth") {
-                   $('#DivApiLastMonth').hide();
-                   $('#DivApiNextMonth').hide();
-                   $('#DivApiCurrentMonth').show();
-
-                   $('#DivApiCurrentMonth').html(response)
-               }
-            }
-
-        })
+        stTargetBtn.switchMonthInstant('api', monthVal);
+        stTargetBtn.refreshMonthData('api', monthVal);
     }
 </script>
 <script>

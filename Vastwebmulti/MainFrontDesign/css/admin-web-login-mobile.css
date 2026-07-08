@@ -244,11 +244,46 @@
         justify-content: center !important;
     }
 
-    /* Right tabs — horizontal scroll compact */
+    /* Right history tabs — full-width stack on mobile */
+    body.saas-admin-ui .WebLogin_Page .vm-ft-history-toolbar,
+    body.saas-admin-ui .WebLogin_Page .vm-ml-list-toolbar,
+    body.saas-admin-ui .WebLogin_Page .vm-ml-list-toolbar__row,
+    body.saas-admin-ui .WebLogin_Page .rc-right-toolbar-row,
+    body.saas-admin-ui .WebLogin_Page .wl-history-wrap,
+    body.saas-admin-ui .WebLogin_Page .fund-trasfer-right.vm-ft-history-panel {
+        overflow: visible !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .rc-right-tabs {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 8px !important;
+        padding: 0 0 10px !important;
+    }
+
     body.saas-admin-ui .WebLogin_Page .rc-right-tabs .au-tab-btn {
-        height: 36px !important;
-        font-size: .64rem !important;
-        padding: 0 10px !important;
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        padding: 0 14px !important;
+        font-size: .72rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        white-space: normal !important;
+        text-align: center !important;
+        justify-content: center !important;
+        border-radius: 10px !important;
+        border: 1.5px solid #e2e8f0 !important;
+        box-sizing: border-box !important;
     }
 
     body.saas-admin-ui .WebLogin_Page .rc-right-panel {
@@ -440,6 +475,114 @@
     }
 }
 
+/* ── Date field icon alignment (override global datepicker mobile rules) ── */
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field,
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .wl-hf-date {
+    display: block !important;
+    flex-direction: row !important;
+    position: relative !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-label {
+    display: none !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-icon {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    z-index: 2 !important;
+    color: #64748b !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-icon i {
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-input,
+body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field .form-control.saas-acc-dp-input {
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    line-height: 38px !important;
+    padding: 0 10px 0 34px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field,
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .wl-hf-date {
+        height: 40px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-icon {
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-input,
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field .form-control.saas-acc-dp-input {
+        height: 40px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+        line-height: 40px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field,
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .wl-hf-date {
+        width: 100% !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-icon {
+        left: 12px !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
+        font-size: 15px !important;
+    }
+
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-input,
+    body.saas-admin-ui .WebLogin_Page .wl-history-filter-grid .saas-acc-dp-field .form-control.saas-acc-dp-input {
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+        line-height: 42px !important;
+        padding: 0 12px 0 38px !important;
+        font-size: 14px !important;
+    }
+}
+
 /* ── Touch devices — prevent iOS zoom on inputs ── */
 @media (max-width: 767px) {
     body.saas-admin-ui .WebLogin_Page input.form-control,
@@ -454,3 +597,4 @@
         font-size: 14px !important;
     }
 }
+

@@ -1,4 +1,4 @@
-﻿
+
 @model Vastwebmulti.Areas.ADMIN.ViewModel.TargetSetviewmodel
 @{
 
@@ -11,7 +11,7 @@
         background: transparent;
     }
 </style>
-<table class="table table-bordered table-striped table-hover third-design-table third-design-table table-input-color-third" id="categoryList">
+<table class="st-target-table table table-bordered table-striped table-hover third-design-table third-design-table table-input-color-third" id="categoryList">
     <thead>
         <tr>
             <th style="text-align: center;">Category</th>
@@ -28,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr id="beforload" style="display:none">
+        <tr id="beforload" hidden>
             <td colspan="10"><div class="loader"></div></td>
         </tr>
         <tr id="AfterLoding">
@@ -44,7 +44,7 @@
                         <td>
                             <div class="for-custom-select-icon">
                                 <input type="text" class="ddloffertypeDisplay third-tr-color" disabled="true" value="@item.OfferType" />
-                                <select class="ddloffertype" disabled="true" onchange="changeachive(this)" style="display:none;">
+                                <select class="ddloffertype" disabled="true" onchange="changeachive(this)">
                                     <option value="Fixrupees">Fix Rupees</option>
                                     <option value="Giftitem">Gift Item</option>
                                 </select>
@@ -53,7 +53,7 @@
                         <td>
                             <input type="text" class="txt60achive" value="@item.Achived60" readonly="readonly" />
                             <div class="for-custom-select-icon-other">
-                                <select class="ddl60achive" style="display:none;">
+                                <select class="ddl60achive">
                                     @foreach (var Giftitem in Model.tblproductlist)
                                     {
                                         <option value="@Giftitem.Text">@Giftitem.Text</option>
@@ -65,7 +65,7 @@
                         <td>
                             <input type="text" class="txt70achive" value="@item.Achived70" readonly="readonly" />
                             <div class="for-custom-select-icon-other">
-                                <select class="ddl70achive" style="display:none;">
+                                <select class="ddl70achive">
                                     @foreach (var Giftitem in Model.tblproductlist)
                                     {
                                         <option value="@Giftitem.Text">@Giftitem.Text</option>
@@ -77,7 +77,7 @@
                         <td>
                             <input type="text" class="txt80achive" value="@item.Achived80" readonly="readonly" />
                             <div class="for-custom-select-icon-other">
-                                <select class="ddl80achive" style="display:none;">
+                                <select class="ddl80achive">
                                     @foreach (var Giftitem in Model.tblproductlist)
                                     {
                                         <option value="@Giftitem.Text">@Giftitem.Text</option>
@@ -89,7 +89,7 @@
                         <td>
                             <input type="text" class="txt90achive" value="@item.Achived90" readonly="readonly" />
                             <div class="for-custom-select-icon-other">
-                                <select class="ddl90achive" style="display:none;">
+                                <select class="ddl90achive">
                                     @foreach (var Giftitem in Model.tblproductlist)
                                     {
                                         <option value="@Giftitem.Text">@Giftitem.Text</option>
@@ -101,7 +101,7 @@
                         <td>
                             <input type="text" class="txt100achive" value="@item.Achived100" readonly="readonly" />
                             <div class="for-custom-select-icon-other">
-                                <select class="ddl100achive" style="display:none;">
+                                <select class="ddl100achive">
                                     @foreach (var Giftitem in Model.tblproductlist)
                                     {
                                         <option value="@Giftitem.Text">@Giftitem.Text</option>
@@ -110,27 +110,20 @@
                                 </select>
                             </div>
                         </td>
-                        <td>
-                            @if (item.Status == true)
-                            {
-                                <div class="onoffswitch onoffswitch-secondclass">
-                                    <span class="costom-on custom-on-secondbutton" id="@item.targetID" onclick="RetailerStatus(@item.targetID)">on</span>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="onoffswitch onoffswitch-secondclass">
-                                    <span class="custom-off custom-off-secondbutton" id="@item.targetID" onclick="RetailerStatus(@item.targetID)">off</span>
-                                </div>
-                            }
-
+                        <td class="st-status-cell">
+                            <button type="button"
+                                    class="st-status-pill @(item.Status == true ? "st-status-pill--on" : "st-status-pill--off")"
+                                    data-target-id="@item.targetID"
+                                    data-user-role="retailer"
+                                    aria-pressed="@(item.Status == true ? "true" : "false")">
+                                <span class="st-status-pill__dot" aria-hidden="true"></span>
+                                <span class="st-status-pill__label">@(item.Status == true ? "ON" : "OFF")</span>
+                            </button>
                         </td>
-                        <td class="last-target">
-                            <button class="edit-target deletebuttoback-second third-tr-color">Edit</button>
-                            <button class="save-target third-tr-color" 
-                                    @*onclick="handleSubmit('@item.targetID', '@item.settarget','@item.OfferType','@item.Achived60','@item.Achived70','@item.Achived80','@item.Achived90','@item.Achived100')"*@
-                                    data-href="@Url.Action("UpdateSetTargerRetailer", "Home", new { targetID = @item.targetID })"
-                                    style="display:none;">
+                        <td class="last-target st-edit-cell">
+                            <button type="button" class="st-btn-edit edit-target"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
+                            <button type="button" class="st-btn-save save-target st-btn-hidden third-tr-color" hidden
+                                    data-href="@Url.Action("UpdateSetTargerRetailer", "Home", new { targetID = @item.targetID })">
                                 Save
                             </button>
                         </td>
@@ -145,19 +138,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
-    $('.edit-target').click(function () {
-
-        $(this).closest('tr').find('input[type=text]').removeAttr('readonly');
-        $(this).closest('tr').find('select').removeAttr('disabled');
-        $(this).closest('tr').find('select.ddloffertype').css('display', 'block');
-        $(this).closest('tr').find('.ddloffertypeDisplay').css('display', 'none');
-        //$(this).closest('tr').find('.for-custom-select-icon').addClass('custom-district');
-        $(this).css('display', 'none');
-        $(this).next('.save-target').css('display', 'block');
-
-    });
-
-    @*function handleSubmit(
+@*function handleSubmit(
         targetID,
         settarget,
         offertype,
@@ -213,90 +194,15 @@
                     currentid.closest('tr').find('select').prop("disabled", true);
                     currentid.closest('tr').find('input[type=text]').attr("readonly");
                     currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
-                    currentid.css('display', 'none');
-                    currentid.prev('.edit-target').css('display', 'block');
+                    stTargetBtn.hide(currentid[0]);
+                    stTargetBtn.show(currentid.prev('.edit-target')[0]);
+                    currentid.closest('tr').removeClass('st-row-editing');
+                    stTargetBtn.syncRowOfferMode(currentid.closest('tr')[0]);
                 }
                 swal(data);
              /*   alert(data);*/
             })
     }*@
-
-    $('.save-target').click(function () {
-
-        var currentid = $(this);
-        var settarget = $(this).closest('tr').find('.txtsettarget').val()
-        var offertype = $(this).closest('tr').find('.ddloffertype').val()
-        var txt60achive = $(this).closest('tr').find('.txt60achive').val()
-        var txt70achive = $(this).closest('tr').find('.txt70achive').val()
-        var txt80achive = $(this).closest('tr').find('.txt80achive').val()
-        var txt90achive = $(this).closest('tr').find('.txt90achive').val()
-        var txt100achive = $(this).closest('tr').find('.txt100achive').val()
-        var ddl60achive = $(this).closest('tr').find('.ddl60achive').val()
-        var ddl70achive = $(this).closest('tr').find('.ddl70achive').val()
-        var ddl80achive = $(this).closest('tr').find('.ddl80achive').val()
-        var ddl90achive = $(this).closest('tr').find('.ddl90achive').val()
-        var ddl100achive = $(this).closest('tr').find('.ddl100achive').val()
-
-        $.ajax({
-            url: $(this).attr('data-href'),
-            data: { settarget: settarget, offertype: offertype, txt60achive: txt60achive, txt70achive: txt70achive, txt80achive: txt80achive, txt90achive: txt90achive, txt100achive: txt100achive, ddl60achive: ddl60achive, ddl70achive: ddl70achive, ddl80achive: ddl80achive, ddl90achive: ddl90achive, ddl100achive: ddl100achive },
-            success: function (data) {
-
-
-                if (data == 'Success') {
-                    currentid.closest('tr').find('select').prop("disabled", true);
-                    currentid.closest('tr').find('input[type=text]').attr("readonly");
-                    currentid.closest('tr').find('.for-custom-select-icon').removeClass('custom-district');
-                    currentid.css('display', 'none');
-                    currentid.prev('.edit-target').css('display', 'block');
-                }
-                swal(data);
-
-            }
-        })
-    });
-
-    function RetailerStatus(targetID) {
-        $.ajax({
-            url: "@Url.Action("TargetAchiveStatus")",
-            data: { targetId: targetID, userRole: "retailer" },
-            dataType: "Json",
-            cache: false,
-            success: function data(data) {
-                if (data === false) {
-                    $('#' + targetID).addClass('custom-off custom-off-secondbutton');
-                    $('#' + targetID).removeClass('costom-on custom-on-secondbutton');
-                    $('#' + targetID).text('OFF');
-                }
-                else {
-                    $('#' + targetID).removeClass('custom-off custom-off-secondbutton');
-                    $('#' + targetID).addClass('costom-on custom-on-secondbutton');
-                    $('#' + targetID).text('ON');
-                }
-            }
-        })
-        }
-
-           function RetailerStatus(targetID) {
-        $.ajax({
-            url: "@Url.Action("TargetAchiveStatus")",
-            data: { targetId: targetID, userRole: "retailer" },
-            dataType: "Json",
-            cache: false,
-            success: function data(data) {
-                if (data === false) {
-                    $('#' + targetID).addClass('custom-off custom-off-secondbutton');
-                    $('#' + targetID).removeClass('costom-on custom-on-secondbutton');
-                    $('#' + targetID).text('OFF');
-                }
-                else {
-                    $('#' + targetID).removeClass('custom-off custom-off-secondbutton');
-                    $('#' + targetID).addClass('costom-on custom-on-secondbutton');
-                    $('#' + targetID).text('ON');
-                }
-            }
-        })
-    }
     </script>
 
 
@@ -318,4 +224,5 @@
             $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
             $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
         });
+        if (window.stTargetBtn) { stTargetBtn.initTables(); }
     </script>
