@@ -1,4 +1,4 @@
-﻿
+
 @using Microsoft.AspNet.Identity
 @using Vastwebmulti.Models;
 <!DOCTYPE html>
@@ -336,7 +336,7 @@
             padding: 6px 0px;
         }
 
-        /* Legacy api-model-top floats — exclude API Live Balance drawer (modern layout in admin-modal-modern.css) */
+        /* Legacy api-model-top floats ? exclude API Live Balance drawer (modern layout in admin-modal-modern.css) */
         .api-model-top:not(#Api-bal .saas-api-balance-item) {
             width: 100%;
             float: left;
@@ -1166,7 +1166,7 @@
             --admin-sidebar-width: 200px;
         }
 
-        /* ADMIN left sidebar — layout-scoped premium navigation */
+        /* ADMIN left sidebar ? layout-scoped premium navigation */
         #leftsidebar.admin-sidebar-shell {
             width: var(--admin-sidebar-width, 200px);
             position: fixed;
@@ -1424,7 +1424,7 @@
             }
         }
 
-        /* ADMIN top header — premium pill toolbar */
+        /* ADMIN top header ? premium pill toolbar */
         body.saas-admin-ui .search-bar {
             display: none !important;
             visibility: hidden !important;
@@ -1816,7 +1816,7 @@
     <link href="~/MainFrontDesign/css/admin-modal-fix.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-renewal-modal.css" rel="stylesheet" />
-    <link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=scroll1" rel="stylesheet" />
+    <link href="~/MainFrontDesign/css/admin-account-page-modern.css?v=split5" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-report-page-responsive.css?v=2" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
     <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
@@ -2281,7 +2281,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                                 <h5 class="saas-api-balance-name">@item.apiname</h5>
                                                 <div class="saas-api-balance-value-row">
                                                     <span class="saas-api-balance-value-label">Live balance</span>
-                                                    <span class="saas-api-balance-value" data-empty="true">—</span>
+                                                    <span class="saas-api-balance-value" data-empty="true">?</span>
                                                 </div>
                                             </div>
                                             <div class="saas-api-balance-action">
@@ -2387,7 +2387,7 @@ OnSuccess = "ONSUCCESSGETDATA"
                                 </div>
                             </div>
                             <div id="webpaymentnotallow" class="saas-renewal-empty first-form-bot">
-                                <span class="saas-renewal-empty-icon" aria-hidden="true">⚠</span>
+                                <span class="saas-renewal-empty-icon" aria-hidden="true">?</span>
                                 <label>Sorry!</label>
                                 <label id="txtwebmsg"></label>
                             </div>
@@ -2483,9 +2483,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                         <div id="website1qr" class="saas-renewal-checkout first-form-button" style="display:none;">
                             <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p><span>Net amount</span><strong>₹ <label id="qramt1"></label></strong></p>
-                                <p><span>GST</span><strong>₹ <label id="qrgst1"></label></strong></p>
-                                <p><span>Total</span><strong>₹ <label id="qrtotal1"></label></strong></p>
+                                <p><span>Net amount</span><strong>? <label id="qramt1"></label></strong></p>
+                                <p><span>GST</span><strong>? <label id="qrgst1"></label></strong></p>
+                                <p><span>Total</span><strong>? <label id="qrtotal1"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
                                 <div class="comfirsmclasscss">
@@ -2505,9 +2505,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                         <div id="website2qr" class="saas-renewal-checkout first-form-button" style="display:none;">
                             <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p><span>Net amount</span><strong>₹ <label id="qramt2"></label></strong></p>
-                                <p><span>GST</span><strong>₹ <label id="qrgst2"></label></strong></p>
-                                <p><span>Total</span><strong>₹ <label id="qrtotal2"></label></strong></p>
+                                <p><span>Net amount</span><strong>? <label id="qramt2"></label></strong></p>
+                                <p><span>GST</span><strong>? <label id="qrgst2"></label></strong></p>
+                                <p><span>Total</span><strong>? <label id="qrtotal2"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
                                 <div class="comfirsmclasscss">
@@ -2527,9 +2527,9 @@ OnSuccess = "ONSUCCESSGETDATA"
                         <div id="website3qr" class="saas-renewal-checkout first-form-button" style="display:none;">
                             <button type="button" class="first-form-close-button" aria-label="Close">&#10006;</button>
                             <div class="first-form-button-left">
-                                <p><span>Net amount</span><strong>₹ <label id="qramt3"></label></strong></p>
-                                <p><span>GST</span><strong>₹ <label id="qrgst3"></label></strong></p>
-                                <p><span>Total</span><strong>₹ <label id="qrtotal3"></label></strong></p>
+                                <p><span>Net amount</span><strong>? <label id="qramt3"></label></strong></p>
+                                <p><span>GST</span><strong>? <label id="qrgst3"></label></strong></p>
+                                <p><span>Total</span><strong>? <label id="qrtotal3"></label></strong></p>
                             </div>
                             <div class="first-form-button-right">
                                 <div class="comfirsmclasscss">
@@ -3541,14 +3541,14 @@ OnSuccess = "ONSUCCESSGETDATA"
         var $value = $card.find('.saas-api-balance-value');
         var loadingHtml = '<span class="saas-api-balance-btn-loading"><i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i></span>';
         $card.removeClass('saas-api-balance-item--loaded').addClass('saas-api-balance-item--loading');
-        $value.attr('data-empty', 'true').text('Loading…');
+        $value.attr('data-empty', 'true').text('Loading?');
         $btn.prop('disabled', true).removeClass('saas-api-balance-btn--loaded').html(loadingHtml);
         $.ajax({
             type: 'POST',
             url: '@Url.Action("getapibal","Home")',
             data: { apinm: apinm },
             success: function (data) {
-                var amt = (data === null || data === undefined) ? '—' : String(data).trim();
+                var amt = (data === null || data === undefined) ? '?' : String(data).trim();
                 $card.removeClass('saas-api-balance-item--loading').addClass('saas-api-balance-item--loaded');
                 $value.attr('data-empty', 'false').html('<i class="fas fa-inr" aria-hidden="true"></i> ' + $('<div/>').text(amt).html());
                 $btn.prop('disabled', false)
@@ -3567,7 +3567,7 @@ OnSuccess = "ONSUCCESSGETDATA"
 
     function resetApiBalanceModal() {
         $('#Api-bal .saas-api-balance-item').removeClass('saas-api-balance-item--loading saas-api-balance-item--loaded');
-        $('#Api-bal .saas-api-balance-value').attr('data-empty', 'true').text('—');
+        $('#Api-bal .saas-api-balance-value').attr('data-empty', 'true').text('?');
         $('#Api-bal .saas-api-balance-btn').each(function () {
             $(this).prop('disabled', false).removeClass('saas-api-balance-btn--loaded')
                 .html('<span class="saas-api-balance-btn-label"><i class="fas fa-wallet" aria-hidden="true"></i> Fetch</span>');

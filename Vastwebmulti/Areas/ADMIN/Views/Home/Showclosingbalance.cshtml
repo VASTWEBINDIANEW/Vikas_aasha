@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.closingbalance>
+@model IEnumerable<Vastwebmulti.Models.closingbalance>
 @using System
 @using System.Linq
 @using System.Collections.Generic
@@ -104,7 +104,7 @@
                             Records: <strong id="closingBalanceRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total opening balance for current filter">
-                            Total: <strong id="closingBalanceInlineTotal">₹ @totalBalance.ToString("N2")</strong>
+                            Total: <strong id="closingBalanceInlineTotal">? @totalBalance.ToString("N2")</strong>
                         </span>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                                             </td>
                                             <td>@dealerName</td>
                                             <td>@masterName</td>
-                                            <td class="vm-closing-balance-amount">₹ @balance.ToString("N2")</td>
+                                            <td class="vm-closing-balance-amount">? @balance.ToString("N2")</td>
                                             <td class="vm-closing-balance-date">@dateText</td>
                                         </tr>
                                         sr++;
@@ -203,7 +203,7 @@
         }
 
         $('#closingBalanceRecordCount').text(rows.length);
-        $('#closingBalanceInlineTotal').text('₹ ' + formatClosingBalanceAmount(total));
+        $('#closingBalanceInlineTotal').text('? ' + formatClosingBalanceAmount(total));
     }
 
     function destroyClosingBalanceSelect2($el) {

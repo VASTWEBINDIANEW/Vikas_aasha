@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.daywisecomm>
+@model IEnumerable<Vastwebmulti.Models.daywisecomm>
 @using System
 @using System.Linq
 @using System.Collections.Generic
@@ -106,13 +106,13 @@
                             Records: <strong id="daywiseCommHistoryRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total vm-daywise-comm-history-total-badge" title="Total retailer commission">
-                            Comm: <strong id="daywiseCommHistoryTotalComm">₹ @totalComm.ToString("N2")</strong>
+                            Comm: <strong id="daywiseCommHistoryTotalComm">? @totalComm.ToString("N2")</strong>
                         </span>
                         <span class="vm-radiant-inline-total vm-daywise-comm-history-dlm-badge" title="Total distributor commission">
-                            Dist: <strong id="daywiseCommHistoryTotalDlm">₹ @totalDlmComm.ToString("N2")</strong>
+                            Dist: <strong id="daywiseCommHistoryTotalDlm">? @totalDlmComm.ToString("N2")</strong>
                         </span>
                         <span class="vm-radiant-inline-total vm-daywise-comm-history-md-badge" title="Total master commission">
-                            MD: <strong id="daywiseCommHistoryTotalMd">₹ @totalMdComm.ToString("N2")</strong>
+                            MD: <strong id="daywiseCommHistoryTotalMd">? @totalMdComm.ToString("N2")</strong>
                         </span>
                     </div>
                 </div>
@@ -178,15 +178,15 @@
                                                     }
                                                 </div>
                                             </td>
-                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--comm">₹ @comm.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @remainPre.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @remainPost.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--dlm">₹ @dlmComm.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @dlmPre.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @dlmPost.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--md">₹ @mdComm.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @mdPre.ToString("N2")</td>
-                                            <td class="vm-daywise-comm-history-amount">₹ @mdPost.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--comm">? @comm.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @remainPre.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @remainPost.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--dlm">? @dlmComm.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @dlmPre.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @dlmPost.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount vm-daywise-comm-history-amount--md">? @mdComm.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @mdPre.ToString("N2")</td>
+                                            <td class="vm-daywise-comm-history-amount">? @mdPost.ToString("N2")</td>
                                             <td class="vm-daywise-comm-history-date">@dateText</td>
                                         </tr>
                                         sr++;
@@ -229,9 +229,9 @@
         }
 
         $('#daywiseCommHistoryRecordCount').text(rows.length);
-        $('#daywiseCommHistoryTotalComm').text('₹ ' + formatDaywiseCommHistoryAmount(totalComm));
-        $('#daywiseCommHistoryTotalDlm').text('₹ ' + formatDaywiseCommHistoryAmount(totalDlm));
-        $('#daywiseCommHistoryTotalMd').text('₹ ' + formatDaywiseCommHistoryAmount(totalMd));
+        $('#daywiseCommHistoryTotalComm').text('? ' + formatDaywiseCommHistoryAmount(totalComm));
+        $('#daywiseCommHistoryTotalDlm').text('? ' + formatDaywiseCommHistoryAmount(totalDlm));
+        $('#daywiseCommHistoryTotalMd').text('? ' + formatDaywiseCommHistoryAmount(totalMd));
     }
 
     function destroyDaywiseCommHistorySelect2($el) {

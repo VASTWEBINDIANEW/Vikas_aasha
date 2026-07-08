@@ -1,4 +1,4 @@
-ï»¿@model Vastwebmulti.Areas.ADMIN.Models.RchModelcs
+@model Vastwebmulti.Areas.ADMIN.Models.RchModelcs
 @{
     var actionname = "";
     if (ViewBag.actionname != null)
@@ -94,7 +94,7 @@
             <!-- Body -->
             <div class="wl-modal-body">
 
-                <!-- Shared hidden field â€” accessible from both view and edit form -->
+                <!-- Shared hidden field — accessible from both view and edit form -->
                 <input type="hidden" id="rch_id_shared" value="" />
 
                 <!-- VIEW form (read-only) -->
@@ -105,32 +105,32 @@
                     <div class="wl-view-row">
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-envelope" style="margin-right:3px;"></i>Email</div>
-                            <div class="wl-view-field__val" id="view_Email">â€”</div>
+                            <div class="wl-view-field__val" id="view_Email">—</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-id-card" style="margin-right:3px;"></i>PAN Card</div>
-                            <div class="wl-view-field__val" id="view_Pan">â€”</div>
+                            <div class="wl-view-field__val" id="view_Pan">—</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-fingerprint" style="margin-right:3px;"></i>Aadhaar</div>
-                            <div class="wl-view-field__val" id="view_Aadhar">â€”</div>
+                            <div class="wl-view-field__val" id="view_Aadhar">—</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map-pin" style="margin-right:3px;"></i>Pin Code</div>
-                            <div class="wl-view-field__val" id="view_Pin">â€”</div>
+                            <div class="wl-view-field__val" id="view_Pin">—</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map" style="margin-right:3px;"></i>State</div>
-                            <div class="wl-view-field__val" id="view_State">â€”</div>
+                            <div class="wl-view-field__val" id="view_State">—</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-city" style="margin-right:3px;"></i>District</div>
-                            <div class="wl-view-field__val" id="view_District">â€”</div>
+                            <div class="wl-view-field__val" id="view_District">—</div>
                         </div>
                     </div>
                     <div class="wl-view-field" style="margin-top:8px;">
                         <div class="wl-view-field__label"><i class="fas fa-location-arrow" style="margin-right:3px;"></i>Address</div>
-                        <div class="wl-view-field__val" id="view_Address">â€”</div>
+                        <div class="wl-view-field__val" id="view_Address">—</div>
                     </div>
 
                     <!-- View mode footer -->
@@ -258,19 +258,19 @@
     </div></div>
 </div>
 
-<!-- JS â€” namespaced events prevent duplicate binding on AJAX reload -->
+<!-- JS — namespaced events prevent duplicate binding on AJAX reload -->
 <script>
-    // Edit button â€” switch to edit form
+    // Edit button — switch to edit form
     $(document).off('click.rchedit').on('click.rchedit', '.mastetr222Modal button.wl-mf-btn[value="Edit"]', function () {
         $(".mastetr222Modal .first-form").hide();
         $(".mastetr222Modal .second-form").show();
     });
-    // Back button â€” return to view form
+    // Back button — return to view form
     $(document).off('click.rchBack').on('click.rchBack', '.mastetr222Modal .js-rch-back', function () {
         $(".mastetr222Modal .second-form").hide();
         $(".mastetr222Modal .first-form").show();
     });
-    // Chevron button â€” open modal immediately, then load user data
+    // Chevron button — open modal immediately, then load user data
     $(document).off('click.rchOpenModal').on('click.rchOpenModal', '.js-rch-open-modal', function (e) {
         e.stopPropagation();
         var rchid = $(this).data('rchid');
@@ -302,7 +302,7 @@
     }
     function OnFailureotperror(data) {
         $('#otpmodal').modal('show');
-        $('#otpwrong').text("OTP Mismatch â€” Please enter Correct OTP");
+        $('#otpwrong').text("OTP Mismatch — Please enter Correct OTP");
     }
     function OnSuccess() { $(".modal-backdrop").hide(); }
     function OnFailure() { ToastrMessage(); toastr.error("OTP Mismatch"); }
@@ -433,17 +433,17 @@
                 $('#RCHIdshow').val(d.RCHId);
                 $('#rch_id_shared').val(d.RCHId);
                 $('#Names').text(d.RCHName || '');
-                $('#FirmNamesss').text(d.FarmName || 'â€”');
+                $('#FirmNamesss').text(d.FarmName || '—');
                 $('#RegisteredDate').text(createddate);
 
                 // View fields
-                $('#view_Email').text(d.Email || 'â€”');
-                $('#view_Pan').text(d.pancard || 'â€”');
-                $('#view_Aadhar').text(CCNValue || 'â€”');
-                $('#view_Pin').text(d.Pincode || 'â€”');
-                $('#view_State').text(d.State_name || 'â€”');
-                $('#view_District').text(d.Dist_Desc || 'â€”');
-                $('#view_Address').text(d.Address || 'â€”');
+                $('#view_Email').text(d.Email || '—');
+                $('#view_Pan').text(d.pancard || '—');
+                $('#view_Aadhar').text(CCNValue || '—');
+                $('#view_Pin').text(d.Pincode || '—');
+                $('#view_State').text(d.State_name || '—');
+                $('#view_District').text(d.Dist_Desc || '—');
+                $('#view_Address').text(d.Address || '—');
 
                 // Edit fields
                 $('#NameEdit').val(d.RCHName);

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.Show_MicroAtM_UnholdHistory_Result>
+@model IEnumerable<Vastwebmulti.Models.Show_MicroAtM_UnholdHistory_Result>
 @using System.Linq
 @{
     ViewBag.Title = "Micro ATM Unhold History";
@@ -67,7 +67,7 @@
                 <h3>Unhold history</h3>
                 <span class="saas-acc-row-count">
                     <i class="fas fa-list" aria-hidden="true"></i> @rows.Count records
-                    <span class="saas-pan-report-meta"> · @frmDate to @toDate · ₹@totalAmount.ToString("N2")</span>
+                    <span class="saas-pan-report-meta"> � @frmDate to @toDate � ?@totalAmount.ToString("N2")</span>
                 </span>
             </div>
             <div class="saas-acc-table-wrap table-responsive">
@@ -131,9 +131,9 @@
             total += parseFloat(String($(this).text()).replace(/,/g, '')) || 0;
         });
         if (typeof swal === 'function') {
-            swal('Total amount', '₹ ' + total.toFixed(2), 'info');
+            swal('Total amount', '? ' + total.toFixed(2), 'info');
         } else {
-            alert('Total: ₹ ' + total.toFixed(2));
+            alert('Total: ? ' + total.toFixed(2));
         }
     });
 

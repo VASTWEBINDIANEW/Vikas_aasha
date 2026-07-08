@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.Show_MicroAtm_Unload_report_Result>
+@model IEnumerable<Vastwebmulti.Models.Show_MicroAtm_Unload_report_Result>
 @using System.Linq
 @{
     ViewBag.Title = "Micro ATM Unhold Report";
@@ -30,7 +30,7 @@
                         <i class="fas fa-sliders-h" aria-hidden="true"></i> Max limit
                     </a>
                     <button type="button" class="saas-acc-btn saas-acc-btn--search" id="btnMicroUnholdTotal" title="Sum amounts">
-                        <i class="fas fa-calculator" aria-hidden="true"></i> Total ₹@totalAmount.ToString("N2")
+                        <i class="fas fa-calculator" aria-hidden="true"></i> Total ?@totalAmount.ToString("N2")
                     </button>
                     <div class="saas-acc-export-group saas-pan-export-group">
                         <button type="button" class="saas-acc-btn saas-acc-btn--excel saas-pan-export-btn" id="btnExport">
@@ -167,9 +167,9 @@
             total += v;
         });
         if (typeof swal === 'function') {
-            swal('Total amount', '₹ ' + total.toFixed(2), 'info');
+            swal('Total amount', '? ' + total.toFixed(2), 'info');
         } else {
-            alert('Total amount: ₹ ' + total.toFixed(2));
+            alert('Total amount: ? ' + total.toFixed(2));
         }
     });
 

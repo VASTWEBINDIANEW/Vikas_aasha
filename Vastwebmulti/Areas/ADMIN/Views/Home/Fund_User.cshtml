@@ -1,4 +1,4 @@
-﻿@using Vastwebmulti.Models;
+@using Vastwebmulti.Models;
 @model Vastwebmulti.Areas.ADMIN.ViewModel.FundUserViewModel
 @{
     ViewBag.Title = "Fund_User";
@@ -58,13 +58,13 @@
                         </div>
                         <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs" id="tabs">
                             <li class="tab-link tabChangeType vm-ft-role-tab-li vm-ft-role-tab-li--active current active" data-tabname="Master" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Master"})" data-tab="tab-1" role="presentation">
-                                <a href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">M/D → Distributor</a>
+                                <a href="#home" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">M/D ? Distributor</a>
                             </li>
                             <li class="tab-link tabChangeType vm-ft-role-tab-li vm-ft-role-tab-li--inactive" data-tabname="Dealer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Dealer"})" data-tab="tab-1" role="presentation">
-                                <a href="#menu1" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Distributor → Retailer</a>
+                                <a href="#menu1" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Distributor ? Retailer</a>
                             </li>
                             <li class="tab-link tabChangeType vm-ft-role-tab-li vm-ft-role-tab-li--inactive" data-tabname="Retailer" data-href="@Url.Action("MDTODealer","Home",new { tabtype="Retailer"})" data-tab="tab-1" role="presentation">
-                                <a href="#menu2" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Retailer → Retailer</a>
+                                <a href="#menu2" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Retailer ? Retailer</a>
                             </li>
                         </ul>
 
@@ -1608,13 +1608,13 @@ window.open(
 
          if (res != '' && res != null) {
 
-            $("#formRetailer .errorss1").text('✅  ' + result);
+            $("#formRetailer .errorss1").text('?  ' + result);
             $("#formRetailer .errorss1").css('padding', '5px');
              $(" .errorss").hide();
               $('#formRetailer .errorss1').show();
         }
         else {
-            $("#formRetailer .errorss").text('⚠️  ' + result);
+            $("#formRetailer .errorss").text('??  ' + result);
             $("#formRetailer .errorss").css('padding', '5px');
             $("#formRetailer .errorss").show();
             $('#formRetailer .errorss1').hide();
@@ -1788,13 +1788,13 @@ $('#btnRetailerInform').click(function () {
 
         if (res != '' && res != null) {
 
-            $("#frmdata1 .errorss1").text('✅  ' + result);
+            $("#frmdata1 .errorss1").text('?  ' + result);
             $("#frmdata1 .errorss1").css('padding', '5px');
             $("#frmdata1 .errorss").hide();
             $('#frmdata1 .errorss1').show();
         }
         else {
-            $("#frmdata1 .errorss").text('⚠️  ' + result);
+            $("#frmdata1 .errorss").text('??  ' + result);
             $("#frmdata1 .errorss").css('padding', '5px');
             $("#frmdata1 .errorss").show();
             $('#frmdata1 .errorss1').hide();
@@ -2343,14 +2343,14 @@ $('#btnRetailerInform').click(function () {
          var res = result.match(/Balance Transfer SuccessFully./);
 
         if (res != '' && res != null) {
-              $("#frmdata .errorss1").text('✅  ' + result);
+              $("#frmdata .errorss1").text('?  ' + result);
             $("#frmdata .errorss1").css('padding', '5px');
               $("#frmdata .errorss").hide();
             $('#frmdata .errorss1').show();
 
         }
         else {
-             $("#frmdata .errorss").text('⚠️  ' + result);
+             $("#frmdata .errorss").text('??  ' + result);
             $("#frmdata .errorss").css('padding', '5px');
              $("#frmdata .errorss").show();
            $('#frmdata .errorss1').hide();

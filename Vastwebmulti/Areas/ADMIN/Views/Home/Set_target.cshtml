@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.TargetSetviewmodel
+@model Vastwebmulti.Areas.ADMIN.ViewModel.TargetSetviewmodel
 @{
     ViewBag.Title = "Set_target";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -10,11 +10,11 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-set-target-page.css?v=13" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-set-target-page.css?v=14" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -129,7 +129,7 @@
                 var $td = $(this);
                 var $view = $td.children('.st-view-val');
                 if (!$view.length) return;
-                var text = '—';
+                var text = '?';
                 if ($td.find('.txtsettarget').length) {
                     text = $td.find('.txtsettarget').val();
                 } else if ($td.find('.ddloffertype, .ddloffertypeDisplay').length) {
@@ -140,7 +140,7 @@
                     text = $td.find('input[type=text]').first().val();
                 }
                 if (text === undefined || text === null || String(text).trim() === '') {
-                    text = '—';
+                    text = '?';
                 }
                 $view.text(text);
             });
@@ -585,7 +585,7 @@
                             <div class="st-section-header__icon"><i class="fas fa-gift"></i></div>
                             <div>
                                 <h3 class="st-section-header__title">Add Gift Item</h3>
-                                <p class="st-section-header__sub">Product name and image — best size 312 × 200 px</p>
+                                <p class="st-section-header__sub">Product name and image ? best size 312 ? 200 px</p>
                             </div>
                         </div>
 
@@ -611,7 +611,7 @@
                                 </thead>
                                 <tbody id="tableproductgift">
                                     <tr class="st-gift-placeholder">
-                                        <td colspan="4">Open this tab to load gift items…</td>
+                                        <td colspan="4">Open this tab to load gift items?</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2343,7 +2343,7 @@
     var pageIndex = 0;
 
     $(document).ready(function () {
-        /* Top 100 data loads when target6 tab opens — see stTargetBtn.initTabNav */
+        /* Top 100 data loads when target6 tab opens ? see stTargetBtn.initTabNav */
     });
 
 
@@ -2451,7 +2451,7 @@ $(document).ready(function() {
   });
 });
  function ShowProductGift() {
-        $('#tableproductgift').html('<tr class="st-gift-placeholder"><td colspan="4">Loading gift items…</td></tr>');
+        $('#tableproductgift').html('<tr class="st-gift-placeholder"><td colspan="4">Loading gift items?</td></tr>');
         $.ajax({
 
       url: "@Url.Action("FillProductGiftTable","Home")",

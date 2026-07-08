@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.Vandorlist
+@model Vastwebmulti.Areas.ADMIN.Models.Vandorlist
 @{
     ViewBag.Title = "Vendor Details";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -12,8 +12,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=10" rel="stylesheet" />
 
@@ -21,7 +21,7 @@
 
     <div class="container-fluid vm-ft-page-shell">
 
-        <!-- ── Toolbar: Breadcrumb + Search ── -->
+        <!-- -- Toolbar: Breadcrumb + Search -- -->
         <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
             <div class="vm-ft-page-hero">
                 <ol class="vm-ft-breadcrumb">
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <!-- ── Two-column layout ── -->
+        <!-- -- Two-column layout -- -->
         <div class="col-md-12 vm-ft-layout-wrap">
             <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
 
-                            <!-- Vendor list AJAX target — no overflow here so modal inside is not clipped -->
+                            <!-- Vendor list AJAX target � no overflow here so modal inside is not clipped -->
                             <div id="vendorlisttable" class="vm-ml-table-host">
                                 @Html.Partial("_VendorlistPartial")
                             </div>
@@ -288,15 +288,15 @@
         if (!$('#Pincode').val())  return showErr('Pincode Required');
         if (pancard.length > 0) {
             var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
-            if (!regex.test(pancard.toUpperCase())) return showErr('☒ Invalid PAN Card No');
+            if (!regex.test(pancard.toUpperCase())) return showErr('? Invalid PAN Card No');
         }
         if (aadhar.length > 0 && !validatesss(aadhar)) {
             event.preventDefault();
-            return showErr('☒ Invalid AADHAR No');
+            return showErr('? Invalid AADHAR No');
         }
         if (gst.length > 0) {
             var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$$');
-            if (!gstinformat.test(gst)) return showErr('☒ Invalid GST No');
+            if (!gstinformat.test(gst)) return showErr('? Invalid GST No');
         }
     }
 </script>
@@ -307,10 +307,10 @@
         var sts = data.type;
         if (data.msg === "Register SuccessFully.") {
             ToastrMessage(); toastr.success('Account created successfully');
-            $('#ne-msg-success').text('✅ Account created successfully').show();
+            $('#ne-msg-success').text('? Account created successfully').show();
             $('#ne-msg-error').hide();
         } else {
-            $('#ne-msg-error').text('☒ ' + data.msg).show();
+            $('#ne-msg-error').text('? ' + data.msg).show();
             $('#ne-msg-success').hide();
             ToastrMessage(); toastr.error(data.msg);
         }

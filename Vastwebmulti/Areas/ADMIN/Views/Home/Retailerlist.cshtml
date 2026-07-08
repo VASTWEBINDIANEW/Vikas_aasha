@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.RetailerDetalsModel
+@model Vastwebmulti.Areas.ADMIN.Models.RetailerDetalsModel
 @using System;
 @using Vastwebmulti.Models;
 @{
@@ -17,7 +17,7 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=24" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=24" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-retailer-list-modern.css?v=51" rel="stylesheet" />
@@ -29,7 +29,7 @@
     .retailerList_Page .onoffswitch { width: auto; min-width: 110px; height: 32px; margin: 0; }
     .retailerList_Page .costom-on, .retailerList_Page .custom-off { font-size: 11px !important; }
 
-    /* TABLE HORIZONTAL SCROLL — highest priority override */
+    /* TABLE HORIZONTAL SCROLL � highest priority override */
     #mmm { overflow-x: auto !important; overflow-y: visible !important; -webkit-overflow-scrolling: touch !important; display: block !important; width: 100% !important; }
     #mdList { min-width: 920px !important; }
     #vmRlTableScroll, #_retailer_list, #Retailertablelist, #vmRlHistoryPanel { overflow-x: visible !important; }
@@ -1387,7 +1387,7 @@ window.open(
             if (res == false) {
                 $('#lblerror').show();
 
-                $('#lblmsg').text('☒ Invalid AADHAR No')
+                $('#lblmsg').text('? Invalid AADHAR No')
                 event.preventDefault();
                 RegisterSuccess.stopImmediatePropagation();
                 return false;
@@ -1404,7 +1404,7 @@ window.open(
                 //  return false;
                 $('#lblerror').show();
 
-                 $('#lblmsg').text('☒ Invalid GST No')
+                 $('#lblmsg').text('? Invalid GST No')
 
                 event.preventDefault();
                 RegisterSuccess.stopImmediatePropagation();
@@ -1480,11 +1480,11 @@ window.open(
         vmRlHideFormFeedback();
         var sts = data.type;
         if (sts === "Success") {
-            vmRlShowFormSuccess('✅ Congratulations Account successfully Created');
+            vmRlShowFormSuccess('? Congratulations Account successfully Created');
             ToastrMessage();
             toastr.success('Congratulations Account successfully Created');
         } else {
-            vmRlShowFormError('☒ ' + (data.msg || 'Unable to create account'));
+            vmRlShowFormError('? ' + (data.msg || 'Unable to create account'));
             ToastrMessage();
             toastr.error(data.msg);
         }
@@ -1899,7 +1899,7 @@ function () {
     }
 
     function vmRlBindTableScroll() {
-        // Container scroll (desktop — when #vmRlTableScroll has fixed height)
+        // Container scroll (desktop � when #vmRlTableScroll has fixed height)
         $('#vmRlTableScroll').off('scroll.vmRlInfinite').on('scroll.vmRlInfinite', function () {
             var el = this;
             if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
@@ -1907,7 +1907,7 @@ function () {
             }
         });
 
-        // Window scroll (mobile — when table stretches full page)
+        // Window scroll (mobile � when table stretches full page)
         $(window).off('scroll.vmRlInfinite').on('scroll.vmRlInfinite', function () {
             var $tableHost = $('#vmRlTableScroll');
             if (!$tableHost.length) return;
@@ -1943,7 +1943,7 @@ function () {
 
     function vmRlSyncPanelHeight() {
         vmRlSyncTabPanelHeight();
-        // Form card is now inside the side drawer — clear any fixed heights so the
+        // Form card is now inside the side drawer � clear any fixed heights so the
         // full-width history panel stretches naturally with its content.
         var $panel     = $('#vmRlHistoryPanel');
         var $scroll    = $('#vmRlTableScroll');

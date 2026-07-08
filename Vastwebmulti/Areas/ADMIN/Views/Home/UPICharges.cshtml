@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.upiChargeAndgateway
+@model Vastwebmulti.Areas.ADMIN.Models.upiChargeAndgateway
 @using System.Linq
 @using System.Collections.Generic
 @{
@@ -248,7 +248,7 @@
                                         srIndex++;
                                         var frmname = string.IsNullOrWhiteSpace(item.Frm_Name) ? item.RetailerName : item.Frm_Name;
                                         var bankRrn = string.IsNullOrWhiteSpace(item.ApprovalRefNo) || item.ApprovalRefNo == "null" ? item.BankRRN : item.ApprovalRefNo;
-                                        var txnTime = item.txndate.HasValue ? item.txndate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "—";
+                                        var txnTime = item.txndate.HasValue ? item.txndate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "�";
                                         var isPending = string.Equals(item.status, "Pending", StringComparison.OrdinalIgnoreCase) || string.Equals(item.status, "PENDING", StringComparison.OrdinalIgnoreCase);
                                         var statusBadge = item.status ?? "";
                                         if (string.Equals(statusBadge, "Rejected", StringComparison.OrdinalIgnoreCase)

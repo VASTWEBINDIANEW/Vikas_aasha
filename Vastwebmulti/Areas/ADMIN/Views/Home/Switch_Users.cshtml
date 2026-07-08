@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.SwitchUserModel
+@model Vastwebmulti.Areas.ADMIN.ViewModel.SwitchUserModel
 @{
     ViewBag.Title = "Switch Users";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -7,8 +7,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=7" rel="stylesheet" />
 
@@ -16,7 +16,7 @@
 
     <div class="container-fluid vm-ft-page-shell">
 
-        <!-- ── Toolbar: Breadcrumb + Search ── -->
+        <!-- -- Toolbar: Breadcrumb + Search -- -->
         <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
             <div class="vm-ft-page-hero">
                 <ol class="vm-ft-breadcrumb">
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <!-- ── Two-column layout ── -->
+        <!-- -- Two-column layout -- -->
         <div class="col-md-12 vm-ft-layout-wrap">
             <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
@@ -60,7 +60,7 @@
                             </button>
                         </div>
 
-                        <!-- ── Tab Panel 1: Distributor Switch ── -->
+                        <!-- -- Tab Panel 1: Distributor Switch -- -->
                         <div id="panel-dist" class="au-tab-content active su-tab-panel" style="display:block;padding:14px 16px;">
                             <form id="frmdealtomd" class="fund-transfer-form">
 
@@ -96,7 +96,7 @@
                             </form>
                         </div>
 
-                        <!-- ── Tab Panel 2: Retailer Switch ── -->
+                        <!-- -- Tab Panel 2: Retailer Switch -- -->
                         <div id="panel-ret" class="au-tab-content su-tab-panel" style="display:none;padding:14px 16px;">
                             <form id="frmretdeal" class="fund-transfer-form">
 
@@ -182,7 +182,7 @@
 </section>
 
 <style>
-    /* ── Select2 full width inside Switch Users form card ── */
+    /* -- Select2 full width inside Switch Users form card -- */
     .Switch_Users_Page .fund-transfer-form .select2-container {
         width: 100% !important;
         max-width: 100% !important;
@@ -210,7 +210,7 @@
         right: 6px !important;
     }
 
-    /* ── Detail info card inside form ── */
+    /* -- Detail info card inside form -- */
     .su-detail-card {
         background: #f0f9ff;
         border: 1px solid #bae6fd;
@@ -232,7 +232,7 @@
     .su-detail-label { color: #64748b; min-width: 72px; font-size: .72rem; }
     .su-detail-value { font-weight: 600; color: #0c4a6e; word-break: break-word; }
 
-    /* ── Switch Users table scroll ── */
+    /* -- Switch Users table scroll -- */
     .Switch_Users_Page #dlmd { overflow-x: auto; overflow-y: auto; max-height: 72vh; }
     .Switch_Users_Page .vm-ml-data-table { width: 100%; border-collapse: collapse; min-width: 640px; }
     .Switch_Users_Page .vm-ml-data-table thead tr { background: #1e293b; }
@@ -248,7 +248,7 @@
         border-bottom: 1px solid #f1f5f9; vertical-align: middle;
     }
 
-    /* ── Mobile: Switch Users ── */
+    /* -- Mobile: Switch Users -- */
     @@media (max-width: 767px) {
         .Switch_Users_Page .vm-ft-form-col,
         .Switch_Users_Page .vm-ft-history-col  { width: 100% !important; float: none !important; padding-left: 0 !important; padding-right: 0 !important; }
@@ -279,13 +279,13 @@
 <script>
     var ravi = $.noConflict();
 
-    /* ── Select2 init ── */
+    /* -- Select2 init -- */
     ravi(document).ready(function () {
         ravi("select").select2();
     });
     $(document).ajaxComplete(function () { ravi("select").select2(); });
 
-    /* ── Tab switching ── */
+    /* -- Tab switching -- */
     function switchSUTab(panelId, ajaxUrl, btn) {
         /* toggle button active state */
         document.querySelectorAll('.au-tab-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -306,7 +306,7 @@
         });
     }
 
-    /* ── Search history table ── */
+    /* -- Search history table -- */
     function suSearchTable() {
         var value = ravi("#myInput").val().toLowerCase();
         ravi("#dlmd tbody tr").filter(function () {
@@ -314,7 +314,7 @@
         });
     }
 
-    /* ── Infinite scroll ── */
+    /* -- Infinite scroll -- */
     var pageindex  = 1;
     var NoMoredata = false;
     var inProgress = false;
@@ -334,7 +334,7 @@
         }
     });
 
-    /* ── Fetch distributor details on change ── */
+    /* -- Fetch distributor details on change -- */
     ravi("#dealerid").on("change", function () {
         var id = ravi(this).val();
         ravi.ajax({
@@ -356,7 +356,7 @@
         });
     });
 
-    /* ── Fetch retailer details on change ── */
+    /* -- Fetch retailer details on change -- */
     ravi("#retailerid").on("change", function () {
         var id = ravi(this).val();
         ravi.ajax({
@@ -378,7 +378,7 @@
         });
     });
 
-    /* ── Form: Distributor → M/D switch ── */
+    /* -- Form: Distributor ? M/D switch -- */
     ravi('#frmdealtomd').submit(function (e) {
         e.preventDefault();
         ravi.ajax({
@@ -401,7 +401,7 @@
         });
     });
 
-    /* ── Form: Retailer → Distributor switch ── */
+    /* -- Form: Retailer ? Distributor switch -- */
     ravi('#frmretdeal').submit(function (e) {
         e.preventDefault();
         ravi.ajax({

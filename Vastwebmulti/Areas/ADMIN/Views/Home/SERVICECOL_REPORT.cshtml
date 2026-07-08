@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Models.ServiceReport
+@model Vastwebmulti.Models.ServiceReport
     @using Vastwebmulti.Models;
 
 <style>
@@ -145,10 +145,10 @@
                         {
                             if (!string.IsNullOrEmpty(type[j]))
                             {
-                                sd = sd + type[j] + "म";
+                                sd = sd + type[j] + "?";
                             }
                         }
-                        var sp = Convert.ToChar("म");
+                        var sp = Convert.ToChar("?");
                         sd1 = sd.Split(sp);
                         types = "Dropdown";
 
@@ -395,15 +395,15 @@
 
                         for (var l = 0; l < upds.length; l++) {
                             if (upds[l].value != "") {
-                                save11 = save11 + upds[l].value + 'मोनिका'
+                                save11 = save11 + upds[l].value + '??????'
                             }
                         }
-                        save = save + sdd + 'स' + sdd1 + 'स';
-                        save1 = save1 + sdd2 + 'मोनिका' + save11 + 'स';
+                        save = save + sdd + '?' + sdd1 + '?';
+                        save1 = save1 + sdd2 + '??????' + save11 + '?';
                     }
                     else {
-                        save = save + sdd + 'स' + sdd1 + 'स';
-                        save1 = save1 + sdd2 + 'स';
+                        save = save + sdd + '?' + sdd1 + '?';
+                        save1 = save1 + sdd2 + '?';
                     }
             }
             console.log(save1);

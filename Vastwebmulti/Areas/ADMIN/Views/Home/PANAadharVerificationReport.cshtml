@@ -1,4 +1,4 @@
-ï»¿@model IEnumerable<Vastwebmulti.Models.PanAadharReportViewModel>
+@model IEnumerable<Vastwebmulti.Models.PanAadharReportViewModel>
 @using Vastwebmulti.Models
 @using System.Linq
 @using System.Collections.Generic
@@ -70,7 +70,7 @@
                 <h3>Charge report</h3>
                 <span class="saas-acc-row-count">
                     <i class="fas fa-receipt" aria-hidden="true"></i> @rows.Count entries
-                    <span class="saas-pan-report-meta"> Â· @frmDate to @toDate</span>
+                    <span class="saas-pan-report-meta"> · @frmDate to @toDate</span>
                 </span>
             </div>
             <div class="saas-acc-table-wrap table-responsive">
@@ -105,13 +105,13 @@
                                 var typeKey = (item.ChargeType ?? "").Trim().ToUpperInvariant();
                                 <tr>
                                     <td data-label="#">@sr</td>
-                                    <td data-label="Retailer">@(string.IsNullOrWhiteSpace(item.RetailerName) ? "â€”" : item.RetailerName)</td>
-                                    <td data-label="Firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "â€”" : item.Frm_Name)</td>
-                                    <td data-label="Email">@(string.IsNullOrWhiteSpace(item.Email) ? "â€”" : item.Email)</td>
-                                    <td data-label="Mobile">@(string.IsNullOrWhiteSpace(item.Mobile) ? "â€”" : item.Mobile)</td>
-                                    <td data-label="Txn ID" class="saas-pan-txn-id">@(string.IsNullOrWhiteSpace(item.TransactionId) ? "â€”" : item.TransactionId)</td>
-                                    <td data-label="PAN charge" class="text-right saas-pan-amount">â‚¹@item.PanCharge.ToString("N2")</td>
-                                    <td data-label="Aadhar charge" class="text-right saas-pan-amount">â‚¹@item.AadharCharge.ToString("N2")</td>
+                                    <td data-label="Retailer">@(string.IsNullOrWhiteSpace(item.RetailerName) ? "—" : item.RetailerName)</td>
+                                    <td data-label="Firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "—" : item.Frm_Name)</td>
+                                    <td data-label="Email">@(string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email)</td>
+                                    <td data-label="Mobile">@(string.IsNullOrWhiteSpace(item.Mobile) ? "—" : item.Mobile)</td>
+                                    <td data-label="Txn ID" class="saas-pan-txn-id">@(string.IsNullOrWhiteSpace(item.TransactionId) ? "—" : item.TransactionId)</td>
+                                    <td data-label="PAN charge" class="text-right saas-pan-amount">?@item.PanCharge.ToString("N2")</td>
+                                    <td data-label="Aadhar charge" class="text-right saas-pan-amount">?@item.AadharCharge.ToString("N2")</td>
                                     <td data-label="Type">
                                         @if (typeKey.Contains("PAN") && typeKey.Contains("AADHAR"))
                                         {
@@ -127,10 +127,10 @@
                                         }
                                         else
                                         {
-                                            <span class="saas-set-badge-pending">@(string.IsNullOrWhiteSpace(item.ChargeType) ? "â€”" : item.ChargeType)</span>
+                                            <span class="saas-set-badge-pending">@(string.IsNullOrWhiteSpace(item.ChargeType) ? "—" : item.ChargeType)</span>
                                         }
                                     </td>
-                                    <td data-label="Date">@(string.IsNullOrWhiteSpace(item.CreatedAt) ? "â€”" : item.CreatedAt)</td>
+                                    <td data-label="Date">@(string.IsNullOrWhiteSpace(item.CreatedAt) ? "—" : item.CreatedAt)</td>
                                 </tr>
                             }
                         }
@@ -140,8 +140,8 @@
                         <tfoot>
                             <tr class="saas-pan-tfoot-row">
                                 <td colspan="6" class="text-right"><strong>Total</strong></td>
-                                <td class="text-right saas-pan-amount"><strong>â‚¹@totalPan.ToString("N2")</strong></td>
-                                <td class="text-right saas-pan-amount"><strong>â‚¹@totalAadhar.ToString("N2")</strong></td>
+                                <td class="text-right saas-pan-amount"><strong>?@totalPan.ToString("N2")</strong></td>
+                                <td class="text-right saas-pan-amount"><strong>?@totalAadhar.ToString("N2")</strong></td>
                                 <td colspan="2"></td>
                             </tr>
                         </tfoot>

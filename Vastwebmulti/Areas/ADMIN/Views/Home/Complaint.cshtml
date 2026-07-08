@@ -1,4 +1,4 @@
-ï»¿@model Vastwebmulti.Areas.ADMIN.Models.ChattingModel
+@model Vastwebmulti.Areas.ADMIN.Models.ChattingModel
 @using System.Linq
 @{
     ViewBag.Title = "Complaint";
@@ -47,7 +47,7 @@
                             }
                             <div class="saas-complaint-user-meta">
                                 <strong>@item.Email</strong>
-                                <span>@item.Name Â· @item.Role</span>
+                                <span>@item.Name · @item.Role</span>
                             </div>
                             <span class="saas-complaint-badge @(item.count == 0 ? "is-zero" : "")">@item.count</span>
                         </li>
@@ -69,7 +69,7 @@
                         if (item.rdate != null)
                         {
                             <div class="saas-chat-bubble saas-chat-bubble--in clearfix">
-                                <div class="saas-chat-bubble-head"><strong>@item.Email</strong> Â· @item.rdate</div>
+                                <div class="saas-chat-bubble-head"><strong>@item.Email</strong> · @item.rdate</div>
                                 <div class="saas-chat-bubble-body">@item.complant</div>
                             </div>
                             if (item.resdate == null)
@@ -85,7 +85,7 @@
                         if (item.resdate != null)
                         {
                             <div class="saas-chat-bubble saas-chat-bubble--out clearfix">
-                                <div class="saas-chat-bubble-head"><strong>Admin</strong> Â· @item.resdate</div>
+                                <div class="saas-chat-bubble-head"><strong>Admin</strong> · @item.resdate</div>
                                 <div class="saas-chat-bubble-body">@item.response</div>
                             </div>
                         }

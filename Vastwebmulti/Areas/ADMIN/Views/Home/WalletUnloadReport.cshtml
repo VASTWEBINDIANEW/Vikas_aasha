@@ -1,4 +1,4 @@
-ï»¿@model IEnumerable<Vastwebmulti.Models.WalletUnloadReportAdmin_Result>
+@model IEnumerable<Vastwebmulti.Models.WalletUnloadReportAdmin_Result>
 @using System.Linq
 @using System.Collections.Generic
 @{
@@ -178,7 +178,7 @@
                             Records: <strong id="walletUnloadRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong id="walletUnloadInlineTotal">â‚¹ @totalAmount.ToString("N2")</strong>
+                            Total: <strong id="walletUnloadInlineTotal">? @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-wallet-unload-totals-btn" onclick="findWalletUnloadTotals()" title="Show totals" aria-expanded="false" aria-controls="walletUnloadTotalsPanel">
@@ -353,19 +353,19 @@
                 <div class="vm-wallet-unload-confirm-grid">
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Firm name</span>
-                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionFirm">â€”</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionFirm">—</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Bank</span>
-                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionBank">â€”</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionBank">—</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Amount</span>
-                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--money" id="walletUnloadActionAmount">â€”</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--money" id="walletUnloadActionAmount">—</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Request ID</span>
-                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--mono" id="walletUnloadActionRequestId">â€”</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--mono" id="walletUnloadActionRequestId">—</strong>
                     </div>
                 </div>
                 <div class="vm-wallet-unload-confirm-note" id="walletUnloadActionNote">
@@ -396,17 +396,17 @@
     function formatWalletUnloadDisplayAmount(value) {
         var num = parseFloat(value);
         if (isNaN(num)) {
-            return value || 'â€”';
+            return value || '—';
         }
-        return 'â‚¹ ' + num.toFixed(2);
+        return '? ' + num.toFixed(2);
     }
 
     function openWalletUnloadActionModal(btn) {
         var $btn = $(btn);
         var action = ($btn.data('action') || '').toString();
         var reqId = ($btn.data('request-id') || '').toString();
-        var firm = ($btn.data('firm') || 'â€”').toString();
-        var bank = ($btn.data('bank') || 'â€”').toString();
+        var firm = ($btn.data('firm') || '—').toString();
+        var bank = ($btn.data('bank') || '—').toString();
         var amount = $btn.data('amount');
 
         walletUnloadPendingAction.reqId = reqId;
@@ -415,7 +415,7 @@
         $('#walletUnloadActionFirm').text(firm);
         $('#walletUnloadActionBank').text(bank);
         $('#walletUnloadActionAmount').text(formatWalletUnloadDisplayAmount(amount));
-        $('#walletUnloadActionRequestId').text(reqId || 'â€”');
+        $('#walletUnloadActionRequestId').text(reqId || '—');
 
         var $header = $('#walletUnloadActionModalHeader');
         var $confirmBtn = $('#walletUnloadActionConfirmBtn');
@@ -582,7 +582,7 @@
         }
 
         $('#walletUnloadRecordCount').text(count);
-        $('#walletUnloadInlineTotal').text('â‚¹ ' + formatWalletUnloadAmount(total));
+        $('#walletUnloadInlineTotal').text('? ' + formatWalletUnloadAmount(total));
         $('#walletUnloadTotalSuccess').text(formatWalletUnloadAmount(success));
         $('#walletUnloadTotalRejected').text(formatWalletUnloadAmount(rejected));
         $('#walletUnloadTotalPending').text(formatWalletUnloadAmount(pending));

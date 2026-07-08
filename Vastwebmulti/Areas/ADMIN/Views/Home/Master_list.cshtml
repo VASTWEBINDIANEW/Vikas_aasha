@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
+@model Vastwebmulti.Areas.ADMIN.Models.MasterDistributerModel
 @{
     ViewBag.Title = "Master_list";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -12,8 +12,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=21" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=11" rel="stylesheet" />
 
 <style>
@@ -965,16 +965,16 @@ window.open(
 
         var message = '@(TempData["msgrem"] != null ? TempData["msgrem"].ToString().Replace("'", "\\'") : "")';
         if (message) {
-            vmMlShowFormError('☒ ' + message);
+            vmMlShowFormError('? ' + message);
         }
         var mobileconfrimation = '@(TempData["mobileno"] != null ? TempData["mobileno"].ToString().Replace("'", "\\'") : "")';
         if (mobileconfrimation) {
-            vmMlShowFormError('☒ ' + mobileconfrimation);
+            vmMlShowFormError('? ' + mobileconfrimation);
         }
 
         var mailconfrimation = '@(TempData["emailconfrim"] != null ? TempData["emailconfrim"].ToString().Replace("'", "\\'") : "")';
         if (mailconfrimation) {
-            vmMlShowFormError('☒ ' + mailconfrimation);
+            vmMlShowFormError('? ' + mailconfrimation);
         }
         //Edit Message
         var editdata = '@TempData["edit"]'
@@ -982,11 +982,11 @@ window.open(
             swal("Good job!", editdata, "success");
         }
 
-        var mobileuser = '☒ @TempData["alerdymobile"]';
+        var mobileuser = '? @TempData["alerdymobile"]';
         if (mobileuser != "" && mobileuser != null) {
             swal("Oops...", mobileuser, "error1");
         }
-        var errormessage = '☒ @TempData["Error"]'
+        var errormessage = '? @TempData["Error"]'
         if (errormessage != "" && errormessage != null) {
             swal("Oops...", errormessage, "error1");
         }
@@ -1053,7 +1053,7 @@ window.open(
             var res = validatesss(aadhar)
 
             if (res == false) {
-                vmMlShowFormError('☒ Invalid AADHAR No.');
+                vmMlShowFormError('? Invalid AADHAR No.');
                 event.preventDefault();
                 RegisterSuccess.stopImmediatePropagation();
                 return false;
@@ -1114,7 +1114,7 @@ window.open(
     function vmMlShowFormError(msg) {
         vmMlHideFormFeedback();
         var text = (msg || '').toString().trim();
-        if (!text || text === '☒') {
+        if (!text || text === '?') {
             return;
         }
         $('#error1').text(text);
@@ -1136,7 +1136,7 @@ window.open(
 
         if (reg.test(emailField) == false)
         {
-            vmMlShowFormError('☒ Invalid Email-ID');
+            vmMlShowFormError('? Invalid Email-ID');
             return false;
         }
 
@@ -1161,15 +1161,15 @@ window.open(
         var gst = $('#gst').val();
         var pancard = $('#pancard').val();
         if (name == null || name == '') {
-            vmMlShowFormError('☒ Master Distributor Name Required');
+            vmMlShowFormError('? Master Distributor Name Required');
               return false;
         }
         if (FarmName == null || FarmName == '') {
-            vmMlShowFormError('☒ Firm Name Required');
+            vmMlShowFormError('? Firm Name Required');
             return false;
         }
         if (Email == null || Email == '') {
-            vmMlShowFormError('☒ Email-ID Required');
+            vmMlShowFormError('? Email-ID Required');
             return false;
         }
         if (validateEmail(Email) == false) {
@@ -1177,36 +1177,36 @@ window.open(
               return false;
         }
         if (Mb == null || Mb == '') {
-            vmMlShowFormError('☒ Mobile No. Required');
+            vmMlShowFormError('? Mobile No. Required');
             return false;
         }
         if (Mb.length < 9) {
-            vmMlShowFormError('☒ Mobile No. Should be 10');
+            vmMlShowFormError('? Mobile No. Should be 10');
             return false;
         }
         if (pancard.length != 0) {
               var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
             if (!regex.test(pancard.toUpperCase())) {
-                vmMlShowFormError('☒ Invalid Pan No');
+                vmMlShowFormError('? Invalid Pan No');
                 return false;
             }
 
 
         }
         if (ddlrole == null || ddlrole == '') {
-            vmMlShowFormError('☒ Role Required');
+            vmMlShowFormError('? Role Required');
             return false;
         }
         if (State == null || State == '') {
-            vmMlShowFormError('☒ State Required');
+            vmMlShowFormError('? State Required');
             return false;
         }
         if (District == null || District == '') {
-            vmMlShowFormError('☒ District Required');
+            vmMlShowFormError('? District Required');
             return false;
         }
         if (Address == null || Address == '') {
-            vmMlShowFormError('☒ Address Required');
+            vmMlShowFormError('? Address Required');
             return false;
         }
 
@@ -1214,7 +1214,7 @@ window.open(
 
 
               if (validatesss(adharcard) == false) {
-                vmMlShowFormError('☒ Invalid Adhar No');
+                vmMlShowFormError('? Invalid Adhar No');
                 return false;
             }
 
@@ -1224,18 +1224,18 @@ window.open(
 
               var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
             if (!gstinformat.test($('#gst').val())) {
-                vmMlShowFormError('☒ Invalid GST No');
+                vmMlShowFormError('? Invalid GST No');
                 return false;
             }
 
    }
 
         if (Pincode == null || Pincode == '') {
-            vmMlShowFormError('☒ Pincode Required');
+            vmMlShowFormError('? Pincode Required');
             return false;
         }
         if (Address.length < 15) {
-            vmMlShowFormError('☒ Minimium Character 32');
+            vmMlShowFormError('? Minimium Character 32');
             return false;
         }
         $('.div-loader').show();
@@ -1252,10 +1252,10 @@ window.open(
                  if (sts=== "Success") {
                      ToastrMessage();
                      toastr.success('Congratulations Account successfully Created');
-                     vmMlShowFormSuccess('✅ Congratulations Account successfully Created');
+                     vmMlShowFormSuccess('? Congratulations Account successfully Created');
                  }
                  else {
-                     vmMlShowFormError('☒ ' + (data.message || 'Unable to create account'));
+                     vmMlShowFormError('? ' + (data.message || 'Unable to create account'));
                     ToastrMessage();
                     toastr.error(data.message);
                  }

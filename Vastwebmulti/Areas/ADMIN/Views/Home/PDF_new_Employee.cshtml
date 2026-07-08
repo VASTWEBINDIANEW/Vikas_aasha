@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.GeltALLEmployee
+@model Vastwebmulti.Areas.ADMIN.ViewModel.GeltALLEmployee
 @using System.Linq
 @{
     Layout = null;
@@ -24,10 +24,10 @@
         tr    { page-break-inside:avoid; page-break-after:auto; }
         thead { display:table-header-group; }
 
-        /* ── Wrapper ── */
+        /* -- Wrapper -- */
         .vm-ml-pdf { width:100%; }
 
-        /* ── Header card ── */
+        /* -- Header card -- */
         .vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }
         .vm-ml-pdf__hero {
             padding:14px 20px;
@@ -40,14 +40,14 @@
         .vm-ml-pdf__title    { margin:0; font-size:18px; font-weight:700; }
         .vm-ml-pdf__subtitle { margin:4px 0 0; font-size:11px; opacity:.9; }
 
-        /* ── Meta row ── */
+        /* -- Meta row -- */
         .vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
         .vm-ml-pdf__meta td { padding:9px 12px; border-right:1px solid #e2e8f0; vertical-align:middle; }
         .vm-ml-pdf__meta td:last-child { border-right:none; }
         .vm-ml-pdf__meta-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#64748b; margin-bottom:2px; }
         .vm-ml-pdf__meta-value { font-size:11px; font-weight:700; color:#0f172a; }
 
-        /* ── Table wrapper ── */
+        /* -- Table wrapper -- */
         .vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; margin-bottom:10px; }
         .vm-ml-pdf__table { width:100%; border:none; }
         .vm-ml-pdf__table thead th {
@@ -68,14 +68,14 @@
         }
         .vm-ml-pdf__table tbody tr:nth-child(odd) td { background:#fff; }
 
-        /* ── Cell helpers ── */
+        /* -- Cell helpers -- */
         .vm-ml-pdf__sr      { width:28px; text-align:center; font-weight:700; color:#64748b; font-size:9px; }
         .vm-ml-pdf__firm    { font-weight:700; color:#0f172a; }
         .vm-ml-pdf__mono    { font-family:'Courier New',monospace; font-size:9px; letter-spacing:.03em; }
         .vm-ml-pdf__muted   { color:#64748b; }
         .vm-ml-pdf__blue    { font-weight:700; color:#2563eb; }
 
-        /* ── Badges ── */
+        /* -- Badges -- */
         .vm-ml-pdf__badge {
             display:inline-block; min-width:46px; padding:3px 8px;
             border-radius:999px; font-size:8.5px; font-weight:700;
@@ -87,17 +87,17 @@
         .vm-ml-pdf__badge--done     { background:#ecfdf5; color:#047857; border:1px solid #bbf7d0; }
         .vm-ml-pdf__badge--due      { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
 
-        /* ── Empty state ── */
+        /* -- Empty state -- */
         .vm-ml-pdf__empty { padding:28px 16px; text-align:center; color:#64748b; font-size:12px; font-weight:600; }
 
-        /* ── Footer ── */
+        /* -- Footer -- */
         .vm-ml-pdf__footer { margin-top:10px; padding-top:7px; border-top:1px dashed #dbe2ea; font-size:9px; color:#94a3b8; text-align:center; }
     </style>
 </head>
 <body>
 <div class="vm-ml-pdf">
 
-    <!-- ── Report Header ── -->
+    <!-- -- Report Header -- -->
     <div class="vm-ml-pdf__header">
         <div class="vm-ml-pdf__hero">
             <h1 class="vm-ml-pdf__title">Employee List Report</h1>
@@ -114,7 +114,7 @@
         </table>
     </div>
 
-    <!-- ── Data Table ── -->
+    <!-- -- Data Table -- -->
     <div class="vm-ml-pdf__table-wrap">
         @if (empList.Any())
         {

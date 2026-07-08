@@ -1,4 +1,4 @@
-ï»¿@using Vastwebmulti.Models
+@using Vastwebmulti.Models
 @model IEnumerable<Vastwebmulti.Models.User_number_status>
 @using System.Linq
 @using System.Collections.Generic
@@ -7,7 +7,7 @@
     ViewBag.Title = "User Mobile No. Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.User_number_status>();
-    var retailers = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "â€”");
+    var retailers = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "—");
     var retailerList = db.Retailer_Details.OrderBy(r => r.Frm_Name).ToList();
     var onCount = rows.Count(r => r.NumberStatus == true);
 }
@@ -62,7 +62,7 @@
                         @{ var rowIndex = 0; }
                         @foreach (var i in rows)
                         {
-                            var name = retailers.ContainsKey(i.Userid) ? retailers[i.Userid] : "â€”";
+                            var name = retailers.ContainsKey(i.Userid) ? retailers[i.Userid] : "—";
                             <tr>
                                 <td data-label="Retailer">@name</td>
                                 <td class="num-status-cell" data-row-index="@rowIndex">
@@ -95,7 +95,7 @@
             </div>
             <div class="saas-set-otp-msg" id="tstsmessage">OTP sent successfully.</div>
             <div class="modal-body">
-                <input type="text" id="tops" placeholder="Enter OTP (3â€“4 digits)" maxlength="4" inputmode="numeric" autocomplete="one-time-code" />
+                <input type="text" id="tops" placeholder="Enter OTP (3–4 digits)" maxlength="4" inputmode="numeric" autocomplete="one-time-code" />
             </div>
             <div class="modal-footer" id="chkdss">
                 <button type="button" class="saas-set-btn-primary" id="userNoSaveBtn">Save changes</button>

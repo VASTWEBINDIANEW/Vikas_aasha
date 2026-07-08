@@ -1,4 +1,4 @@
-﻿@using Vastwebmulti.Models
+@using Vastwebmulti.Models
 @model IEnumerable<Vastwebmulti.Models.User_wise_comm_report_Result>
 @{
     ViewBag.Title = "User_wise_operator_comm";
@@ -475,7 +475,7 @@ $("#alldealer").change(function () {
                 $retailer.selectpicker('refresh');
             },
             error: function (xhr) {
-                console.log("❌ Error:", xhr.status, xhr.responseText);
+                console.log("? Error:", xhr.status, xhr.responseText);
             }
         });
     }
@@ -494,9 +494,9 @@ $("#alldealer").change(function () {
             type: "GET",
             data: { retailerId: retailerId },
             success: function (data) {
-                console.log("Response:", data); // ✅ console pe print
+                console.log("Response:", data); // ? console pe print
 
-                // ✅ Page par print
+                // ? Page par print
                 $("#debugArea").text(JSON.stringify(data, null, 2));
 
                 var $service = $("#Servicelist_Main");
@@ -522,18 +522,18 @@ $("#alldealer").change(function () {
 
 
 
-        // Retailer → Service
+        // Retailer ? Service
         @*$("#retailerlist_Main").change(function () {
             var retailerId = $(this).val();
-            console.log("Selected RetailerId:", retailerId); // ✅ check ho raha hai?
+            console.log("Selected RetailerId:", retailerId); // ? check ho raha hai?
 
             if (retailerId) {
                 $.ajax({
-                    url: '@Url.Action("GetServiceListByRetailer", "Home")', // सही controller name डालो
+                    url: '@Url.Action("GetServiceListByRetailer", "Home")', // ??? controller name ????
                     type: "GET",
                     data: { retailerId: retailerId },
                     success: function (data) {
-                        console.log("Response:", data); // ✅ check response
+                        console.log("Response:", data); // ? check response
                         var $service = $("#Servicelist_Main");
                         $service.empty();
                         $service.append($('<option>', { value: "", text: "Service List" }));

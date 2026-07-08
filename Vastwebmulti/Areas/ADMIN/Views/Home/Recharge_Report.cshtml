@@ -1,4 +1,4 @@
-ï»¿@model Vastwebmulti.Areas.ADMIN.Models.recharge_report
+@model Vastwebmulti.Areas.ADMIN.Models.recharge_report
 @{
     ViewBag.Title = "Recharge_Report";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -192,12 +192,12 @@
                                                 <th>Transaction&nbsp;Information</th>
                                                 <th>Request&nbsp;Date</th>
                                                 <th>&nbsp;Users&nbsp;&nbsp;Registration&nbsp;Information&nbsp;</th>
-                                                <th><span>User&nbsp;Role</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                                <th><span>User&nbsp;Role</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">¦</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">¦</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
                                                 <th>Operator&nbsp;Id</th>
-                                                <th><span>Master&nbsp;Net&nbsp;INC</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
-                                                <th><span>Dealer&nbsp;Net&nbsp;INC</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                                <th><span>Master&nbsp;Net&nbsp;INC</span><span style="padding-left:2px;">¦</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                                <th><span>Dealer&nbsp;Net&nbsp;INC</span><span style="padding-left:2px;">¦</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
                                                 <th>
-                                                    <span style="padding-left:8px;">Whitelabel&nbsp;Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">â”‚</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
+                                                    <span style="padding-left:8px;">Whitelabel&nbsp;Pre&nbsp;Amt&nbsp;</span><span style="padding-left:2px;">¦</span><span style="padding-left:3px;">Net&nbsp;INC</span><span style="padding-left:2px;">¦</span><span style="padding-left:2px;">Post&nbsp;Amt</span></th>
                                                 <th>Response&nbsp;Time</th>
 
                                             </tr>
@@ -298,23 +298,23 @@
                                                     <tr>
                                                         <td><p style="font-size:13px;"><span>@item.idno</span>&nbsp;&nbsp;<i class="@rchtypeicon" style="font-size:12px;"></i></p></td>
                                                         <td><p style="font-size:11px;"><span style="color:@color;font-weight:@fontweight;">@item.rstatus</span></p></td>
-                                                        <td><p style="font-size:13px;"><span>&nbsp;â‚¹&nbsp;@item.amount</span>&nbsp;â‡’&nbsp;@item.mobile&nbsp;<i class="@icon"></i>&nbsp;@item.Operator_name</p></td>
+                                                        <td><p style="font-size:13px;"><span>&nbsp;?&nbsp;@item.amount</span>&nbsp;?&nbsp;@item.mobile&nbsp;<i class="@icon"></i>&nbsp;@item.Operator_name</p></td>
                                                         <td><p style="font-size:13px;">&nbsp;@String.Format("{0:dd-MMM-yy HH:mm:ss}", item.Rch_time)</p></td>
-                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;â‡’&nbsp;@emailid</p></td>
+                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;?&nbsp;@emailid</p></td>
 
                                                         <td>
 
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                            <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                            <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
                                                             {
-                                                            <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                            <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
                                                             }
                                                             else if (item.Roles == "API")
                                                             {
-                                                            <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                            <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
                                                             }
 
                                                         </td>
@@ -323,7 +323,7 @@
                                                         <td>
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                            <p><span style="padding-left:3px;">@item.masterincome</span><span style="padding-left:59px;">â”‚</span><span>@item.masterremain</span></p>
+                                                            <p><span style="padding-left:3px;">@item.masterincome</span><span style="padding-left:59px;">¦</span><span>@item.masterremain</span></p>
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
@@ -340,7 +340,7 @@
                                                         <td>
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                            <p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">â”‚</span><span>@item.dealerremain</span></p>
+                                                            <p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">¦</span><span>@item.dealerremain</span></p>
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
@@ -359,12 +359,12 @@
                                                             {
                                                                 <p></p>
                                                                 <p></p>
-                                                                @*<p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">â”‚</span><span>@item.dealerremain</span></p>*@
+                                                                @*<p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">¦</span><span>@item.dealerremain</span></p>*@
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
                                                             {
-                                                                <p><span style="padding-left:8px;">@item.whitelabelremainpost</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.whitelabelincome</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.whitelabelremain</span></p>
+                                                                <p><span style="padding-left:8px;">@item.whitelabelremainpost</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.whitelabelincome</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.whitelabelremain</span></p>
                                                             }
                                                             else if (item.Roles == "API")
                                                             {
@@ -487,27 +487,27 @@
                                                     <tr>
                                                         <td><p style="font-size:13px;"><span>@item.idno</span>&nbsp;&nbsp;<i class="@rchtypeicon" style="font-size:12px;"></i></p></td>
                                                         <td><p style="font-size:11px;"><span style="color:@color;font-weight:@fontweight;">@item.rstatus</span></p></td>
-                                                        <td><p style="font-size:13px;"><span>&nbsp;â‚¹&nbsp;@item.amount</span>&nbsp;â‡’&nbsp;@item.mobile&nbsp;<i class="@icon"></i>&nbsp;@item.Operator_name</p></td>
+                                                        <td><p style="font-size:13px;"><span>&nbsp;?&nbsp;@item.amount</span>&nbsp;?&nbsp;@item.mobile&nbsp;<i class="@icon"></i>&nbsp;@item.Operator_name</p></td>
                                                         <td><p style="font-size:13px;">&nbsp;@String.Format("{0:dd-MMM-yy HH:mm:ss}", item.Rch_time)</p></td>
-                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;â‡’&nbsp;@emailid</p></td>
+                                                        <td><p style="font-size:11px;"><span>&nbsp;<i class="fa fa-user-circle-o"></i>&nbsp;@framname</span>&nbsp;?&nbsp;@emailid</p></td>
 
                                                         <td>
 
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                                <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                                <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
 
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
                                                             {
-                                                                <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                                <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
 
                                                             }
 
                                                             else if (item.Roles == "API")
                                                             {
-                                                                <p><span>@rolename</span><span style="padding-left:4px;">â‡’</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.remain</span></p>
+                                                                <p><span>@rolename</span><span style="padding-left:4px;">?</span><span style="padding-left:8px;">@item.user_remain</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.income</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.remain</span></p>
 
 
                                                             }
@@ -518,7 +518,7 @@
                                                         <td>
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                                <p><span style="padding-left:3px;">@item.masterincome</span><span style="padding-left:59px;">â”‚</span><span>@item.masterremain</span></p>
+                                                                <p><span style="padding-left:3px;">@item.masterincome</span><span style="padding-left:59px;">¦</span><span>@item.masterremain</span></p>
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
@@ -535,7 +535,7 @@
                                                         <td>
                                                             @if (item.Roles == "Retailer")
                                                             {
-                                                                <p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">â”‚</span><span>@item.dealerremain</span></p>
+                                                                <p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">¦</span><span>@item.dealerremain</span></p>
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
@@ -554,12 +554,12 @@
                                                             {
                                                                 <p></p>
                                                                 <p></p>
-                                                                @*<p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">â”‚</span><span>@item.dealerremain</span></p>*@
+                                                                @*<p><span style="padding-left:3px;">@item.dealerincome</span><span style="padding-left:59px;">¦</span><span>@item.dealerremain</span></p>*@
 
                                                             }
                                                             else if (item.Roles == "Whitelabelretailer")
                                                             {
-                                                                <p><span style="padding-left:8px;">@item.whitelabelremainpost</span><span style="padding-left:18px;">â”‚</span><span style="padding-left:3px;">@item.whitelabelincome</span><span style="padding-left:14px;">â”‚</span><span style="padding-left:9px;">@item.whitelabelremain</span></p>
+                                                                <p><span style="padding-left:8px;">@item.whitelabelremainpost</span><span style="padding-left:18px;">¦</span><span style="padding-left:3px;">@item.whitelabelincome</span><span style="padding-left:14px;">¦</span><span style="padding-left:9px;">@item.whitelabelremain</span></p>
                                                             }
                                                             else if (item.Roles == "API")
                                                             {

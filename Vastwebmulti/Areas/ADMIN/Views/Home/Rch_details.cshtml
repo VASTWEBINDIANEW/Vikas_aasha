@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.RchModelcs
+@model Vastwebmulti.Areas.ADMIN.Models.RchModelcs
 @using Vastwebmulti.Areas.ADMIN.Models
 @{
     ViewBag.Title = "Rch_details";
@@ -13,8 +13,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=8" rel="stylesheet" />
 
@@ -22,7 +22,7 @@
 
     <div class="container-fluid vm-ft-page-shell">
 
-        <!-- ── Toolbar: Breadcrumb + Search ── -->
+        <!-- -- Toolbar: Breadcrumb + Search -- -->
         <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
             <div class="vm-ft-page-hero">
                 <ol class="vm-ft-breadcrumb">
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <!-- ── Two-column layout ── -->
+        <!-- -- Two-column layout -- -->
         <div class="col-md-12 vm-ft-layout-wrap">
             <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
@@ -181,7 +181,7 @@
                                 </div>
                             </div>
 
-                            <!-- RCH list AJAX target — no overflow here so the modal inside is not clipped -->
+                            <!-- RCH list AJAX target � no overflow here so the modal inside is not clipped -->
                             <div id="RECTable" class="vm-ml-table-host">
                                 @Html.Partial("_REC_DetailsPartialview")
                             </div>
@@ -255,7 +255,7 @@
         if (!Address)  return showErr('Address Required');
         if (adharcard.length != 0 && !validateaadhar(adharcard)) {
             event.preventDefault();
-            return showErr('☒ Invalid AADHAR No');
+            return showErr('? Invalid AADHAR No');
         }
         if (pancard.length != 0) {
             var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
@@ -309,10 +309,10 @@
         var sts = data.type;
         if (data.msg === "Register SuccessFully.") {
             ToastrMessage(); toastr.success('Account created successfully');
-            $('#ne-msg-success').text('✅ Account created successfully').show();
+            $('#ne-msg-success').text('? Account created successfully').show();
             $('#ne-msg-error').hide();
         } else {
-            $('#ne-msg-error').text('☒ ' + data.msg).show();
+            $('#ne-msg-error').text('? ' + data.msg).show();
             $('#ne-msg-success').hide();
             ToastrMessage(); toastr.error(data.msg);
         }

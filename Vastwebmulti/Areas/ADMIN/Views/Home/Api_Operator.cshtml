@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.select_api_info_Test_Result>
+@model IEnumerable<Vastwebmulti.Models.select_api_info_Test_Result>
 @{
     ViewBag.Title = "Api_Operator";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -530,7 +530,7 @@
                                         <th>Operator</th>
                                         <th>My&nbsp;Code</th>
                                         <th>Api&nbsp;Code</th>
-                                        <th>Purchase&nbsp;(₹)</th>
+                                        <th>Purchase&nbsp;(?)</th>
                                         <th><center>Status</center></th>
                                         <th><center>Edit</center></th>
                                     </tr>
@@ -541,7 +541,7 @@
                                         var text = "";
                                         if (item.purchasetype == "Rupees")
                                         {
-                                            text = " (₹)";
+                                            text = " (?)";
                                         }
                                         if (item.purchasetype == "Percentage")
                                         {
@@ -693,7 +693,7 @@
                                                 <div class="" style="border:1px solid #dddddd;">
                                                     <select id="purchasetype" name="purchasetype" class="form-control" required="">
                                                         <option value="">Select Type</option>
-                                                        <option value="Rupees">Flat Rupees (₹)</option>
+                                                        <option value="Rupees">Flat Rupees (?)</option>
                                                         <option value="Percentage">Percantage (%)</option>
                                                     </select>
                                                 </div>

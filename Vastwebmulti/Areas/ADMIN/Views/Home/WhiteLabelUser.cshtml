@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.Whitelabel_user
+@model Vastwebmulti.Areas.ADMIN.Models.Whitelabel_user
 @{
     ViewBag.Title = "WhiteLabelUser";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -12,8 +12,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 
 
@@ -21,7 +21,7 @@
     body.stop-scrolling { overflow: inherit; overflow-x: hidden; }
     .toast-top-right1 { top: 65px; left: 81%; }
 
-    /* ── Form field spacing compact ── */
+    /* -- Form field spacing compact -- */
     .White_label_user_Page .vm-ft-form-card .row.clearfix { margin-bottom: 0 !important; margin-top: 0 !important; }
     .White_label_user_Page .vm-ft-form-card .row { margin-bottom: 0 !important; }
     .White_label_user_Page .vm-ft-form-card .form-group { margin-bottom: 6px !important; margin-top: 0 !important; }
@@ -33,27 +33,27 @@
     /* hide empty validation spans (they add phantom height) */
     .White_label_user_Page .vm-ft-form-card .text-danger:empty { display: none !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
 
-    /* ── Form card inner padding ── */
+    /* -- Form card inner padding -- */
     .White_label_user_Page .vm-ft-form-card .vm-ml-create-form.fund-transfer-form,
     .White_label_user_Page .vm-ft-form-card .left-four-tabs { padding: 8px 12px !important; }
 
-    /* ── Form actions ── */
+    /* -- Form actions -- */
     .White_label_user_Page .vm-ml-form-actions { padding: 10px 14px 14px !important; border-top: 1px solid #e2e8f0; display: flex !important; gap: 8px !important; justify-content: flex-end !important; }
     .White_label_user_Page .vm-ml-btn-submit { background: linear-gradient(135deg,#16a34a,#22c55e) !important; color:#fff !important; border:none !important; height:36px !important; padding:0 18px !important; border-radius:8px !important; font-weight:700 !important; font-size:0.78rem !important; box-shadow:0 2px 8px rgba(22,163,74,.3) !important; }
     .White_label_user_Page .vm-ml-btn-reset  { background:#f1f5f9 !important; color:#475569 !important; border:1.5px solid #e2e8f0 !important; height:36px !important; padding:0 14px !important; border-radius:8px !important; font-weight:600 !important; font-size:0.78rem !important; }
 
-    /* ── Alert messages — hidden by default, shown via JS ── */
+    /* -- Alert messages � hidden by default, shown via JS -- */
     .White_label_user_Page #lblmsg1 { display:none; padding:6px 12px; border-radius:8px; font-size:0.8rem; background:#dcfce7 !important; color:#14532d !important; margin-bottom:8px; border:1px solid #bbf7d0; font-weight:600; width:100%; box-sizing:border-box; }
     .White_label_user_Page #lblmsg  { display:none; padding:6px 12px; border-radius:8px; font-size:0.8rem; background:#fee2e2 !important; color:#7f1d1d !important; margin-bottom:8px; border:1px solid #fecaca; font-weight:600; width:100%; box-sizing:border-box; }
 
-    /* ── Right panel: table scrollable ── */
+    /* -- Right panel: table scrollable -- */
     .White_label_user_Page .vm-ft-history-panel { background:#fff; border-radius:14px; box-shadow:0 2px 16px rgba(15,23,42,.06); border:1.5px solid #e2e8f0; overflow:hidden; }
     .White_label_user_Page .vm-ft-history-body  { overflow-x:auto !important; overflow-y:visible !important; height:auto !important; }
 
-    /* ── Search input in toolbar ── */
+    /* -- Search input in toolbar -- */
     .White_label_user_Page .vm-wl-search.form-control { height:34px !important; border-radius:9px !important; border:1.5px solid #e2e8f0 !important; font-size:0.78rem !important; min-width:220px !important; }
 
-    /* ── Mobile responsive ── */
+    /* -- Mobile responsive -- */
     @@media (max-width: 767px) {
         .White_label_user_Page .vm-ft-form-col,
         .White_label_user_Page .vm-ft-history-col { width: 100% !important; float: none !important; }
@@ -336,14 +336,14 @@
         if (pancard.length > 0) {
             var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
             if (!regex.test(pancard.toUpperCase())) {
-                wlShowMsg('error', '✗ Invalid PAN No.');
+                wlShowMsg('error', '? Invalid PAN No.');
                 return false;
             }
         }
 
         if (aadhar.length > 0) {
             if (validatesss(aadhar) === false) {
-                wlShowMsg('error', '✗ Invalid Aadhaar No.');
+                wlShowMsg('error', '? Invalid Aadhaar No.');
                 if (event) event.preventDefault();
                 return false;
             }
@@ -352,7 +352,7 @@
         if (gst.length > 0) {
             var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$$');
             if (!gstinformat.test(gst)) {
-                wlShowMsg('error', '✗ Invalid GST No.');
+                wlShowMsg('error', '? Invalid GST No.');
                 if (event) event.preventDefault();
                 return false;
             }
@@ -399,11 +399,11 @@
     function RegisterSuccess(data) {
         var sts = data.type;
         if (data.msg === "Register SuccessFully.") {
-            wlShowMsg('success', '✅ Account successfully Created');
+            wlShowMsg('success', '? Account successfully Created');
             ToastrMessage();
             toastr.success('Congratulations! Account successfully Created');
         } else {
-            wlShowMsg('error', '✗ ' + data.msg);
+            wlShowMsg('error', '? ' + data.msg);
             ToastrMessage();
             toastr.error(data.msg);
         }

@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.Models.DeleteUser
+@model Vastwebmulti.Areas.ADMIN.Models.DeleteUser
 @using System.Linq
 @using System.Collections.Generic
 @{
@@ -25,7 +25,7 @@
 
     <div class="container-fluid vm-opr-page-shell">
 
-        <!-- ── Toolbar: Breadcrumb + Search + Export ── -->
+        <!-- -- Toolbar: Breadcrumb + Search + Export -- -->
         <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
             <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
 
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <!-- ── Main Card ── -->
+        <!-- -- Main Card -- -->
         <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card">
             <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel">
 
@@ -112,8 +112,8 @@
                                             <td>@item.Name</td>
                                             <td>@item.ContectNo</td>
                                             <td>@item.Email</td>
-                                            <td>@(item.JoiningDate.HasValue ? item.JoiningDate.Value.ToString("dd-MM-yyyy") : "—")</td>
-                                            <td>@(item.DeleteDate.HasValue ? item.DeleteDate.Value.ToString("dd-MM-yyyy") : "—")</td>
+                                            <td>@(item.JoiningDate.HasValue ? item.JoiningDate.Value.ToString("dd-MM-yyyy") : "�")</td>
+                                            <td>@(item.DeleteDate.HasValue ? item.DeleteDate.Value.ToString("dd-MM-yyyy") : "�")</td>
                                             <td>@(item.RecoveryAmount.HasValue ? item.RecoveryAmount.Value.ToString("N2") : "0.00")</td>
                                         </tr>
                                         sr++;
@@ -140,7 +140,7 @@
 </section>
 
 <style>
-    /* ── Role Badges ── */
+    /* -- Role Badges -- */
     .vm-role-badge           { display:inline-flex; align-items:center; padding:2px 9px; border-radius:6px; font-size:.63rem; font-weight:700; white-space:nowrap; }
     .vm-role-badge--admin    { background:#fef3c7; color:#78350f; border:1px solid #fde68a; }
     .vm-role-badge--master   { background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe; }
@@ -149,7 +149,7 @@
     .vm-role-badge--wl       { background:#fce7f3; color:#831843; border:1px solid #fbcfe8; }
     .vm-role-badge--other    { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
 
-    /* ── Toolbar right group ── */
+    /* -- Toolbar right group -- */
     .vm-dur-filter-right {
         display: flex;
         align-items: center;
@@ -159,7 +159,7 @@
         flex-shrink: 0;
     }
 
-    /* ── Modern Search Input ── */
+    /* -- Modern Search Input -- */
     .vm-dur-search-field {
         position: relative;
         display: flex;
@@ -194,7 +194,7 @@
     }
     .vm-dur-search-input::placeholder { color: #94a3b8; }
 
-    /* ── Table scroll on all screens ── */
+    /* -- Table scroll on all screens -- */
     .saas-delete-report-page .vm-opr-table-scroll {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -203,7 +203,7 @@
         min-width: 860px;
     }
 
-    /* ── Mobile responsive ── */
+    /* -- Mobile responsive -- */
     @@media (max-width: 767px) {
         /* page shell padding */
         body.saas-admin-ui .saas-delete-report-page .vm-opr-page-shell {

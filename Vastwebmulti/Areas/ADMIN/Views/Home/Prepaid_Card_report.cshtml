@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.prepaid_card_Transaction>
+@model IEnumerable<Vastwebmulti.Models.prepaid_card_Transaction>
 @using System.Linq
 @using System.Collections.Generic
 @{
@@ -128,7 +128,7 @@
                             Records: <strong id="prepaidRecordCount">@rowCount</strong>
                         </span>
                         <span class="vm-radiant-inline-total" title="Total amount for current filter">
-                            Total: <strong id="prepaidInlineTotal">₹ @totalAmount.ToString("N2")</strong>
+                            Total: <strong id="prepaidInlineTotal">? @totalAmount.ToString("N2")</strong>
                         </span>
                         <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
                             <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-prepaid-totals-btn" onclick="findtotalA()" title="Show totals" aria-expanded="false" aria-controls="prepaidCardTotalsPanel">
@@ -234,7 +234,7 @@
         }
 
         $('#prepaidRecordCount').text(count);
-        $('#prepaidInlineTotal').text('₹ ' + formatPrepaidAmount(total));
+        $('#prepaidInlineTotal').text('? ' + formatPrepaidAmount(total));
         $('#prepaidTotalSuccess').text(formatPrepaidAmount(success));
         $('#prepaidTotalFailed').text(formatPrepaidAmount(failed));
         $('#prepaidTotalPending').text(formatPrepaidAmount(pending));

@@ -1,4 +1,4 @@
-﻿
+
 @model Vastwebmulti.Areas.ADMIN.Models.DealerModel
 @{
     ViewBag.Title = "DistibutorList";
@@ -14,8 +14,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 
 <style>
@@ -28,14 +28,14 @@
     .vm-dl-recharge-seller-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 9px; border: 1px solid #dbe2ea; background: #fff; color: #2563eb; font-size: 0.78rem; font-weight: 700; text-decoration: none !important; white-space: nowrap; }
     .vm-dl-recharge-seller-link:hover { background: #eff6ff; color: #1d4ed8; }
 
-    /* ── Form field spacing compact ── */
+    /* -- Form field spacing compact -- */
     .DistibutorList_page .vm-ft-form-card .row.clearfix { margin-bottom: 0 !important; }
     .DistibutorList_page .vm-ft-form-card .form-group { margin-bottom: 8px !important; }
     .DistibutorList_page .vm-ft-form-card label { margin-bottom: 3px !important; font-size: 0.75rem !important; font-weight: 600 !important; color: #475569 !important; display: block !important; }
     .DistibutorList_page .vm-ft-form-card .form-control { height: 36px !important; font-size: 0.8rem !important; border-radius: 8px !important; }
     .DistibutorList_page .vm-ft-form-card textarea.form-control { height: auto !important; min-height: 70px !important; }
 
-    /* ── Tab buttons (Create Distributor / Bulk Users) medium height ── */
+    /* -- Tab buttons (Create Distributor / Bulk Users) medium height -- */
     .DistibutorList_page .vm-ft-role-tab-li { flex: 1 !important; }
     .DistibutorList_page .vm-ft-role-tab {
         height: 38px !important;
@@ -907,7 +907,7 @@ window.open(
         if (pancard.length > 0) {
             var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
             if (!regex.test(pancard.toUpperCase())) {
-                vmDlShowFormError('☒ Invalid PAN No');
+                vmDlShowFormError('? Invalid PAN No');
                 RegisterSuccess.stopImmediatePropagation();
                 return false;
             }
@@ -916,7 +916,7 @@ window.open(
         if (aadhar.length > 0) {
             var res = validatesss(aadhar)
             if (res == false) {
-                vmDlShowFormError('☒ Invalid AADHAR No.');
+                vmDlShowFormError('? Invalid AADHAR No.');
                 RegisterSuccess.stopImmediatePropagation();
                 return false;
             }
@@ -925,7 +925,7 @@ window.open(
         if (gst.length > 0) {
             var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
             if (!gstinformat.test($('#gst').val())) {
-                vmDlShowFormError('☒ Invalid GST No');
+                vmDlShowFormError('? Invalid GST No');
                 RegisterSuccess.stopImmediatePropagation();
                 return false;
             }
@@ -1003,7 +1003,7 @@ window.open(
     function vmDlShowFormError(msg) {
         vmDlHideFormFeedback();
         var text = (msg || '').toString().trim();
-        if (!text || text === '☒') { return; }
+        if (!text || text === '?') { return; }
         $('#lblmsg').text(text);
         $('#lblerror').removeAttr('hidden').addClass('vm-ml-form-alert--show');
     }
@@ -1042,11 +1042,11 @@ window.open(
         var sts = data.type;
         if (data.type === "Success") {
             ToastrMessage();
-            vmDlShowFormSuccess('✅ Congratulations Account successfully Created');
+            vmDlShowFormSuccess('? Congratulations Account successfully Created');
             toastr.success('Congratulations Account successfully Created');
         }
         else {
-            vmDlShowFormError('☒ ' + (data.msg || 'Unable to create account'));
+            vmDlShowFormError('? ' + (data.msg || 'Unable to create account'));
             ToastrMessage();
             toastr.error(data.msg);
         }

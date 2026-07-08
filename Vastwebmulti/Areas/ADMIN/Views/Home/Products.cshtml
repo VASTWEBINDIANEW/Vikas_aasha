@@ -1,4 +1,4 @@
-﻿@using System.Net.Mime
+@using System.Net.Mime
 @using Vastwebmulti.Models
 @model List<Vastwebmulti.Models.show_vendor_product_details_Result>
 @{
@@ -136,8 +136,8 @@
                                             <td style="padding:3px;">@item.VendorName</td>
                                             <td style="padding:3px;">@item.Name</td>
                                             <td style="padding:3px;">@item.SubCatName</td>
-                                            <td style="padding:3px;">₹&nbsp;@String.Format("{0:N}", item.StandardPrice)</td>
-                                            <td style="padding:3px;">₹&nbsp;@String.Format("{0:N}", item.ListPrice)</td>
+                                            <td style="padding:3px;">?&nbsp;@String.Format("{0:N}", item.StandardPrice)</td>
+                                            <td style="padding:3px;">?&nbsp;@String.Format("{0:N}", item.ListPrice)</td>
                                             <td style="padding:3px;">@item.stock</td>
                                             <td style="padding:3px;">
                                                 @if(item.IsActive == true)
@@ -156,7 +156,7 @@
                                                     <img src="@Url.Content("~"+item.Photo)" height="60px" width="60px" />
                                                 </td>
                                           
-                                            <td style="padding:3px;">₹&nbsp;@String.Format("{0:N}", item.AdminComm)</td>
+                                            <td style="padding:3px;">?&nbsp;@String.Format("{0:N}", item.AdminComm)</td>
                                             @if(item.IsApproved == 0)
                                             {
                                             <td style="padding: 3px;">
@@ -221,7 +221,7 @@
                         <form>
                             <div class="row clearfix">
                                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5 form-control-label">
-                                    <label for="MDComm">Master&nbsp;Commission&nbsp;(₹)</label>
+                                    <label for="MDComm">Master&nbsp;Commission&nbsp;(?)</label>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                     <div class="form-group">
@@ -234,7 +234,7 @@
                             </div>
                             <div class="row clearfix">
                                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5 form-control-label">
-                                    <label for="DEComm">Distributor&nbsp;Commission&nbsp;(₹)</label>
+                                    <label for="DEComm">Distributor&nbsp;Commission&nbsp;(?)</label>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                     <div class="form-group">
@@ -247,7 +247,7 @@
                             </div>
                             <div class="row clearfix">
                                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5 form-control-label">
-                                    <label for="REMComm">Retailer&nbsp;Commission&nbsp;(₹)</label>
+                                    <label for="REMComm">Retailer&nbsp;Commission&nbsp;(?)</label>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                     <div class="form-group">
@@ -260,7 +260,7 @@
                             </div>
                             <div class="row clearfix">
                                 <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5 form-control-label">
-                                    <label for="WLComm">White&nbsp;Label&nbsp;Commission&nbsp;(₹)</label>
+                                    <label for="WLComm">White&nbsp;Label&nbsp;Commission&nbsp;(?)</label>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                     <div class="form-group">

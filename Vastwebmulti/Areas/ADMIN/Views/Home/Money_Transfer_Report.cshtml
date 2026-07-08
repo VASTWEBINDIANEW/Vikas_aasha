@@ -1,4 +1,4 @@
-﻿
+
 @using Newtonsoft.Json;
 @{
     ViewBag.Title = "Money_Transfer_Report";
@@ -52,15 +52,15 @@
                     <div class="vm-opr-totals-grid vm-dmt-totals-grid">
                         <div class="vm-opr-total-card vm-opr-total-card--success">
                             <span class="vm-opr-total-card__label">Success</span>
-                            <strong class="vm-opr-total-card__value" id="successtotal">—</strong>
+                            <strong class="vm-opr-total-card__value" id="successtotal">�</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--failed">
                             <span class="vm-opr-total-card__label">Failed</span>
-                            <strong class="vm-opr-total-card__value" id="Failedtotal">—</strong>
+                            <strong class="vm-opr-total-card__value" id="Failedtotal">�</strong>
                         </div>
                         <div class="vm-opr-total-card vm-opr-total-card--pending">
                             <span class="vm-opr-total-card__label">Pending</span>
-                            <strong class="vm-opr-total-card__value" id="Pendingtotal">—</strong>
+                            <strong class="vm-opr-total-card__value" id="Pendingtotal">�</strong>
                         </div>
                     </div>
                 </div>
@@ -182,9 +182,9 @@
                             <th>Sender&nbsp;Number</th>
                             <th>Beneficiary&nbsp;A/C</th>
                             <th>Net&nbsp;T/F&nbsp;</th>
-                            <th>User&nbsp;Pre&nbsp;₹&nbsp;</th>
-                            <th>Debit&nbsp;₹&nbsp;</th>
-                            <th>User&nbsp;Post&nbsp;₹</th>
+                            <th>User&nbsp;Pre&nbsp;?&nbsp;</th>
+                            <th>Debit&nbsp;?&nbsp;</th>
+                            <th>User&nbsp;Post&nbsp;?</th>
                             <th>Api&nbsp;Bal</th>
                             <th>Request&nbsp;Time</th>
                             <th>Bank&nbsp;UTR</th>
@@ -413,7 +413,7 @@
                         <div>
                             <h4 class="modal-title saas-admin-modal-title" id="defaultModalLabel">Confirm refund</h4>
                             <p class="saas-admin-modal-sub">
-                                <span id="StatusTitle"></span> · <span id="BenTitle"></span> · <span id="NetAmtTitle"></span>
+                                <span id="StatusTitle"></span> � <span id="BenTitle"></span> � <span id="NetAmtTitle"></span>
                             </p>
                         </div>
                     </div>
@@ -582,9 +582,9 @@
                 "allapiuser": allapiuser
             },
             function (data) {
-                $('#successtotal').text("₹ " + data.success);
-                $('#Failedtotal').text("₹ " + data.failed);
-                $('#Pendingtotal').text("₹ " + data.pending);
+                $('#successtotal').text("? " + data.success);
+                $('#Failedtotal').text("? " + data.failed);
+                $('#Pendingtotal').text("? " + data.pending);
             });
     }
 </script>
@@ -773,7 +773,7 @@ function confirmSuccess() {
         },
         success: function (response) {
 
-            Swal.close(); // ✅ loader close here
+            Swal.close(); // ? loader close here
 
             if (response.Status) {
                 Swal.fire({
@@ -1229,16 +1229,16 @@ function (isConfirm) {
 
                 if (type == "Admin")
                 {
-                    document.getElementById("admin").innerText = "₹ " + data.Adminincome;
+                    document.getElementById("admin").innerText = "? " + data.Adminincome;
 
                   }
                 else if (type == "GST")
                 {
-                    document.getElementById("gst").innerText = "₹ " + data.Gst;
+                    document.getElementById("gst").innerText = "? " + data.Gst;
                    }
               //  else if (type == "TDS")
               //  {
-              //      document.getElementById("tds").innerText = "₹ " + data.Tds;
+              //      document.getElementById("tds").innerText = "? " + data.Tds;
               //}
 
 
@@ -1266,12 +1266,12 @@ function (isConfirm) {
                 var type = data.Type;
                 if (type == "Verify")
                 {
-                    document.getElementById("countverify").innerText = "ⓥ " + data.VerifyCount;
+                    document.getElementById("countverify").innerText = "? " + data.VerifyCount;
 
                   }
                 else if (type == "IMPS")
                 {
-                    document.getElementById("countimps").innerText = "⇗ " + data.Impscount;
+                    document.getElementById("countimps").innerText = "? " + data.Impscount;
               }
 
               }

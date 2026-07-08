@@ -1,4 +1,4 @@
-﻿@using System.Net.Mime
+@using System.Net.Mime
 @using Vastwebmulti.Models
 @model List<Vastwebmulti.Models.proc_ProductList_Result>
 @{
@@ -51,8 +51,8 @@
                                         <tr>
                                             <td>@item.Name</td>
                                             <td>@item.SubCatName</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.StandardPrice)</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.ListPrice)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.StandardPrice)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.ListPrice)</td>
                                            
                                             @*<td style="padding:3px;">@item.IsActive</td>*@
                                             @if (!string.IsNullOrWhiteSpace(item.Photo))
@@ -62,11 +62,11 @@
                                                     <img src="@Url.Content("~" + item.Photo)" height="60px" width="60px"/>
                                                 </td>
                                             }
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.AdminComm)</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.MDComm)</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.DEComm)</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.RemComm)</td>
-                                            <td>₹&nbsp;@String.Format("{0:N}", item.WhiteLabelComm)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.AdminComm)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.MDComm)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.DEComm)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.RemComm)</td>
+                                            <td>?&nbsp;@String.Format("{0:N}", item.WhiteLabelComm)</td>
                                             <td>@item.UpdatedOn</td>
                                         </tr>
                                     }

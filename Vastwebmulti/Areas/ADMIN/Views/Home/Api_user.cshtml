@@ -1,4 +1,4 @@
-﻿@*@model Vastwebmulti.Areas.ADMIN.Models.APIModel*@
+@*@model Vastwebmulti.Areas.ADMIN.Models.APIModel*@
 @{
     ViewBag.Title = "Api_user";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -12,8 +12,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
 
@@ -254,7 +254,7 @@
         $('.au-tab-content').removeClass('active');
         $('#' + tab).addClass('active');
     });
-    // File upload — enable submit + show filename
+    // File upload � enable submit + show filename
     $(document).on('change', '#FileUpload1', function () {
         var hasFile = !!$(this).val();
         $('#auUploadBtn').prop('disabled', !hasFile);
@@ -310,12 +310,12 @@
         var pancard = $('#txtpancard').val();
         if (pancard.length > 0) {
             var regex = /([A-Z]){5}([0-9]){4}([A-Z]){1}$/;
-            if (!regex.test(pancard.toUpperCase())) { auShowMsg('error', '✗ Invalid PAN No.'); return false; }
+            if (!regex.test(pancard.toUpperCase())) { auShowMsg('error', '? Invalid PAN No.'); return false; }
         }
-        if (aadhar.length > 0 && validatesss(aadhar) === false) { auShowMsg('error', '✗ Invalid Aadhaar No.'); if (event) event.preventDefault(); return false; }
+        if (aadhar.length > 0 && validatesss(aadhar) === false) { auShowMsg('error', '? Invalid Aadhaar No.'); if (event) event.preventDefault(); return false; }
         if (gst.length > 0) {
             var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-5])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$$');
-            if (!gstinformat.test(gst)) { auShowMsg('error', '✗ Invalid GST No.'); if (event) event.preventDefault(); return false; }
+            if (!gstinformat.test(gst)) { auShowMsg('error', '? Invalid GST No.'); if (event) event.preventDefault(); return false; }
         }
     }
 
@@ -329,10 +329,10 @@
     function RegisterSuccess(data) {
         var sts = data.type;
         if (data.msg === "Register SuccessFully.") {
-            auShowMsg('success', '✅ Account successfully Created');
+            auShowMsg('success', '? Account successfully Created');
             ToastrMessage(); toastr.success('Congratulations! Account successfully Created');
         } else {
-            auShowMsg('error', '✗ ' + data.msg);
+            auShowMsg('error', '? ' + data.msg);
             ToastrMessage(); toastr.error(data.msg);
         }
         if (sts === "Success") {
@@ -414,7 +414,7 @@
     $("#btnPDFA").click(function () { window.open('@Url.Action("PDF_Api_user", "Home")', '_blank'); });
 </script>
 
-<!-- Bulk Upload Error Log modal — modern design -->
+<!-- Bulk Upload Error Log modal � modern design -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

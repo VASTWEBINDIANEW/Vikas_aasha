@@ -1,4 +1,4 @@
-﻿@model Vastwebmulti.Areas.ADMIN.ViewModel.RegisternewEmployeeViewModel
+@model Vastwebmulti.Areas.ADMIN.ViewModel.RegisternewEmployeeViewModel
 @{
     ViewBag.Title = "new_Employee";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
@@ -12,8 +12,8 @@
 <link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=22" rel="stylesheet" />
-<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=22" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
 <link href="~/MainFrontDesign/css/admin-api-user-page.css?v=7" rel="stylesheet" />
 
@@ -21,7 +21,7 @@
 
     <div class="container-fluid vm-ft-page-shell">
 
-        <!-- ── Toolbar: Breadcrumb + Actions ── -->
+        <!-- -- Toolbar: Breadcrumb + Actions -- -->
         <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
             <div class="vm-ft-page-hero">
                 <ol class="vm-ft-breadcrumb">
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <!-- ── Two-column layout ── -->
+        <!-- -- Two-column layout -- -->
         <div class="col-md-12 vm-ft-layout-wrap">
             <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
@@ -197,12 +197,12 @@
 <script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
 
 <script>
-    /* ── Select2 ── */
+    /* -- Select2 -- */
     var ravi = $.noConflict();
     ravi(document).ready(function () { ravi("select").select2(); });
     $(document).ajaxComplete(function () { ravi("select").select2(); });
 
-    /* ── Table search ── */
+    /* -- Table search -- */
     function neSearchTable() {
         var value = $("#myInput").val().toLowerCase();
         $("#Employeelist_tbl tbody .tr").filter(function () {
@@ -210,28 +210,28 @@
         });
     }
 
-    /* ── Exports ── */
+    /* -- Exports -- */
     function neExcel() { location.href = '@Url.Action("Excel_new_Employee","Home")'; }
     function nePDF()   { window.open('@Url.Action("PDF_new_Employee","Home")', '_blank'); }
 
-    /* ── PAN uppercase ── */
+    /* -- PAN uppercase -- */
     $(document).on('keyup', '.upper-case', function () {
         $(this).val($(this).val().toUpperCase());
     });
 
-    /* ── Number only ── */
+    /* -- Number only -- */
     function isNumber(evt) {
         var k = (evt.which) ? evt.which : evt.keyCode;
         if (k != 46 && k > 31 && (k < 48 || k > 57)) return false;
         return true;
     }
 
-    /* ── State → District cascade ── */
+    /* -- State ? District cascade -- */
     ravi(function () {
         ravi('#State1').change(function () {
             var stid = ravi('#State1').val();
             if (!stid) return;
-            ravi("#District1").html("<option value='0'>Please wait…</option>").show();
+            ravi("#District1").html("<option value='0'>Please wait�</option>").show();
             ravi.ajax({
                 url: '@Url.Action("DistrictList","Home")',
                 data: { Id: stid }, cache: false, type: "POST",
@@ -247,7 +247,7 @@
         });
     });
 
-    /* ── Status toggle (AJAX) ── */
+    /* -- Status toggle (AJAX) -- */
     function statusIsActive(eid) {
         var btn = $('button.ne-sts-btn[onclick*="' + eid + '"]');
         btn.prop('disabled', true);
@@ -259,7 +259,7 @@
         });
     }
 
-    /* ── Email verify (AJAX) ── */
+    /* -- Email verify (AJAX) -- */
     function clickVerifyEmail(eid) {
         $.ajax({
             url: '@Url.Action("emailverifyforEmployee")',
@@ -269,7 +269,7 @@
         });
     }
 
-    /* ── TempData messages on load ── */
+    /* -- TempData messages on load -- */
     $(document).ready(function () {
         @{
             var msgrem   = TempData["msgrem"]   as string ?? "";

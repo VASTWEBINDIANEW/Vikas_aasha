@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
+@model IEnumerable<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>
 @{
     Layout = null;
     var items = Model == null ? new List<Vastwebmulti.Models.PAN_CARD_IPAY_Token_report_paging_Result>() : Model.ToList();
@@ -38,7 +38,7 @@
             statusLabel = "Pending";
         }
         var userType = !string.IsNullOrWhiteSpace(item.UserType) ? item.UserType : "User";
-        var userName = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : "—";
+        var userName = !string.IsNullOrWhiteSpace(item.Frm_Name) ? item.Frm_Name : "�";
         var sd = item.ProcessingFees - item.RetailerIncome;
         <tr class="vm-dmt-row vm-dmt-row--@statusTone">
             <td class="vm-dmt-sr-cell">
