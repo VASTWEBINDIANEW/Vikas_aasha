@@ -94,7 +94,7 @@
             <!-- Body -->
             <div class="wl-modal-body">
 
-                <!-- Shared hidden field — accessible from both view and edit form -->
+                <!-- Shared hidden field ï¿½ accessible from both view and edit form -->
                 <input type="hidden" id="rch_id_shared" value="" />
 
                 <!-- VIEW form (read-only) -->
@@ -105,32 +105,32 @@
                     <div class="wl-view-row">
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-envelope" style="margin-right:3px;"></i>Email</div>
-                            <div class="wl-view-field__val" id="view_Email">—</div>
+                            <div class="wl-view-field__val" id="view_Email">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-id-card" style="margin-right:3px;"></i>PAN Card</div>
-                            <div class="wl-view-field__val" id="view_Pan">—</div>
+                            <div class="wl-view-field__val" id="view_Pan">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-fingerprint" style="margin-right:3px;"></i>Aadhaar</div>
-                            <div class="wl-view-field__val" id="view_Aadhar">—</div>
+                            <div class="wl-view-field__val" id="view_Aadhar">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map-pin" style="margin-right:3px;"></i>Pin Code</div>
-                            <div class="wl-view-field__val" id="view_Pin">—</div>
+                            <div class="wl-view-field__val" id="view_Pin">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map" style="margin-right:3px;"></i>State</div>
-                            <div class="wl-view-field__val" id="view_State">—</div>
+                            <div class="wl-view-field__val" id="view_State">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-city" style="margin-right:3px;"></i>District</div>
-                            <div class="wl-view-field__val" id="view_District">—</div>
+                            <div class="wl-view-field__val" id="view_District">ï¿½</div>
                         </div>
                     </div>
                     <div class="wl-view-field" style="margin-top:8px;">
                         <div class="wl-view-field__label"><i class="fas fa-location-arrow" style="margin-right:3px;"></i>Address</div>
-                        <div class="wl-view-field__val" id="view_Address">—</div>
+                        <div class="wl-view-field__val" id="view_Address">ï¿½</div>
                     </div>
 
                     <!-- View mode footer -->
@@ -258,19 +258,19 @@
     </div></div>
 </div>
 
-<!-- JS — namespaced events prevent duplicate binding on AJAX reload -->
+<!-- JS ï¿½ namespaced events prevent duplicate binding on AJAX reload -->
 <script>
-    // Edit button — switch to edit form
+    // Edit button ï¿½ switch to edit form
     $(document).off('click.rchedit').on('click.rchedit', '.mastetr222Modal button.wl-mf-btn[value="Edit"]', function () {
         $(".mastetr222Modal .first-form").hide();
         $(".mastetr222Modal .second-form").show();
     });
-    // Back button — return to view form
+    // Back button ï¿½ return to view form
     $(document).off('click.rchBack').on('click.rchBack', '.mastetr222Modal .js-rch-back', function () {
         $(".mastetr222Modal .second-form").hide();
         $(".mastetr222Modal .first-form").show();
     });
-    // Chevron button — open modal immediately, then load user data
+    // Chevron button ï¿½ open modal immediately, then load user data
     $(document).off('click.rchOpenModal').on('click.rchOpenModal', '.js-rch-open-modal', function (e) {
         e.stopPropagation();
         var rchid = $(this).data('rchid');
@@ -302,7 +302,7 @@
     }
     function OnFailureotperror(data) {
         $('#otpmodal').modal('show');
-        $('#otpwrong').text("OTP Mismatch — Please enter Correct OTP");
+        $('#otpwrong').text("OTP Mismatch ï¿½ Please enter Correct OTP");
     }
     function OnSuccess() { $(".modal-backdrop").hide(); }
     function OnFailure() { ToastrMessage(); toastr.error("OTP Mismatch"); }
@@ -433,17 +433,17 @@
                 $('#RCHIdshow').val(d.RCHId);
                 $('#rch_id_shared').val(d.RCHId);
                 $('#Names').text(d.RCHName || '');
-                $('#FirmNamesss').text(d.FarmName || '—');
+                $('#FirmNamesss').text(d.FarmName || 'ï¿½');
                 $('#RegisteredDate').text(createddate);
 
                 // View fields
-                $('#view_Email').text(d.Email || '—');
-                $('#view_Pan').text(d.pancard || '—');
-                $('#view_Aadhar').text(CCNValue || '—');
-                $('#view_Pin').text(d.Pincode || '—');
-                $('#view_State').text(d.State_name || '—');
-                $('#view_District').text(d.Dist_Desc || '—');
-                $('#view_Address').text(d.Address || '—');
+                $('#view_Email').text(d.Email || 'ï¿½');
+                $('#view_Pan').text(d.pancard || 'ï¿½');
+                $('#view_Aadhar').text(CCNValue || 'ï¿½');
+                $('#view_Pin').text(d.Pincode || 'ï¿½');
+                $('#view_State').text(d.State_name || 'ï¿½');
+                $('#view_District').text(d.Dist_Desc || 'ï¿½');
+                $('#view_Address').text(d.Address || 'ï¿½');
 
                 // Edit fields
                 $('#NameEdit').val(d.RCHName);

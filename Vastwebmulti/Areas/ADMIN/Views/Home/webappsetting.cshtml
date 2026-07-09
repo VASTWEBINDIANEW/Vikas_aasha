@@ -7,7 +7,7 @@
     ViewBag.Title = "Retailer Login Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.appwebloginsetting>();
-    var retailers = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "—");
+    var retailers = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "ï¿½");
     var retailerList = db.Retailer_Details.OrderBy(r => r.Frm_Name).ToList();
     var webOn = rows.Count(r => r.webLoginoff == true);
     var appOn = rows.Count(r => r.appLoginoff == true);
@@ -66,7 +66,7 @@
                         @{ var rowIndex = 0; }
                         @foreach (var i in rows)
                         {
-                            var name = retailers.ContainsKey(i.Retailerid) ? retailers[i.Retailerid] : "—";
+                            var name = retailers.ContainsKey(i.Retailerid) ? retailers[i.Retailerid] : "ï¿½";
                             <tr>
                                 <td data-label="Retailer">@name</td>
                                 <td class="websss" data-row-index="@rowIndex">

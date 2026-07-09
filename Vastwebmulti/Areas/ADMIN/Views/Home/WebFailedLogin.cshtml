@@ -1,84 +1,91 @@
+@using System.Linq
 @model IEnumerable<Vastwebmulti.Models.Failed_Login_info>
 @{
     ViewBag.Title = "WebFailedLogin";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = (ViewBag.chk as string) == "post" ? "post" : "get";
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Models.Failed_Login_info>();
 }
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-</style>
-<section class="content">
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="col-md-6">
-                        <div style="margin-left:-13px;">
-                            @Html.Partial("_Loginmenu")
-                        </div>
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-login-history-modern.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-login-history-mobile.css?v=4" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-app-login-report-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("WebFailedLogin", "Home", FormMethod.Post, new { id = "webFailedLoginForm", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Login Reports</li>
+                        <li>Web Failed Login</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row vm-login-report-nav-row">
+                        @Html.Partial("_loginReportNav")
                     </div>
-                    <div class="col-md-6">
-                        @using (Html.BeginForm("WebFailedLogin", "Home", FormMethod.Post))
-                        {
-                            <div class="row">
-                                <div class="col-md-2">
+                </div>
 
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="input-daterange input-group">
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-exchange"></i>
-                                            </span>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <center>
-                                        <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;">
-                                            <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                            <span style="top:-2px;color:black;">Search</span>
-                                        </button>
-                                    </center>
-                                </div>
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-app-login-filter-row vm-rpt-filters-panel__bar">
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-                        }
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-26px;">
-                <div class="card">
-                    <div class="">
-                        <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                            <li class="active" style="color:#9E9E9E; font-size:12px;">ALL WEB FAILED LOGIN HISTORY&nbsp;></li>
-                        </ol>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        <span>All web failed login history</span>
                     </div>
-                    <div class="body" style="margin-top:-28px;padding:7px;">
-                        <div class="table-responsive" style="position:inherit;margin-top:-20px;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable " style="width:100%;">
-                                <thead  style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.&nbsp;No.</th>
-                                        <th>Registered&nbsp;User&nbsp;ID</th>
-                                        <th>Password</th>
-                                        <th>IP&nbsp;Address</th>
-                                        <th>Browser</th>
-                                        <th>Login&nbsp;Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ var i = 1;}
-                                    @foreach (var item in Model)
+                    <span class="vm-opr-table-panel__hint">Export via table toolbar · scroll on mobile</span>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="example" class="table table-bordered table-striped table-hover vm-opr-data-table vm-app-login-data-table vm-web-failed-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.&nbsp;No.</th>
+                                    <th>Registered&nbsp;User&nbsp;ID</th>
+                                    <th>Password</th>
+                                    <th>IP&nbsp;Address</th>
+                                    <th>Browser</th>
+                                    <th>Login&nbsp;Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rows.Any())
+                                {
+                                    var i = 1;
+                                    foreach (var item in rows)
                                     {
-                                        <tr role="row" class="odd">
+                                        <tr>
                                             <td>@i</td>
                                             <td>@item.EmailId</td>
                                             <td>@item.pwd</td>
@@ -88,51 +95,23 @@
                                         </tr>
                                         i++;
                                     }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="6" class="vm-opr-table-empty">
+                                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                                            <span>No failed login records for selected date range.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-
-
+<script src="~/MainFrontDesign/js/admin-app-login-history.js?v=3"></script>

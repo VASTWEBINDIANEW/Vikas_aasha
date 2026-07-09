@@ -353,19 +353,19 @@
                 <div class="vm-wallet-unload-confirm-grid">
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Firm name</span>
-                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionFirm">—</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionFirm">ï¿½</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Bank</span>
-                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionBank">—</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value" id="walletUnloadActionBank">ï¿½</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Amount</span>
-                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--money" id="walletUnloadActionAmount">—</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--money" id="walletUnloadActionAmount">ï¿½</strong>
                     </div>
                     <div class="vm-wallet-unload-confirm-field">
                         <span class="vm-wallet-unload-confirm-field__label">Request ID</span>
-                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--mono" id="walletUnloadActionRequestId">—</strong>
+                        <strong class="vm-wallet-unload-confirm-field__value vm-wallet-unload-confirm-field__value--mono" id="walletUnloadActionRequestId">ï¿½</strong>
                     </div>
                 </div>
                 <div class="vm-wallet-unload-confirm-note" id="walletUnloadActionNote">
@@ -396,7 +396,7 @@
     function formatWalletUnloadDisplayAmount(value) {
         var num = parseFloat(value);
         if (isNaN(num)) {
-            return value || '—';
+            return value || 'ï¿½';
         }
         return '? ' + num.toFixed(2);
     }
@@ -405,8 +405,8 @@
         var $btn = $(btn);
         var action = ($btn.data('action') || '').toString();
         var reqId = ($btn.data('request-id') || '').toString();
-        var firm = ($btn.data('firm') || '—').toString();
-        var bank = ($btn.data('bank') || '—').toString();
+        var firm = ($btn.data('firm') || 'ï¿½').toString();
+        var bank = ($btn.data('bank') || 'ï¿½').toString();
         var amount = $btn.data('amount');
 
         walletUnloadPendingAction.reqId = reqId;
@@ -415,7 +415,7 @@
         $('#walletUnloadActionFirm').text(firm);
         $('#walletUnloadActionBank').text(bank);
         $('#walletUnloadActionAmount').text(formatWalletUnloadDisplayAmount(amount));
-        $('#walletUnloadActionRequestId').text(reqId || '—');
+        $('#walletUnloadActionRequestId').text(reqId || 'ï¿½');
 
         var $header = $('#walletUnloadActionModalHeader');
         var $confirmBtn = $('#walletUnloadActionConfirmBtn');

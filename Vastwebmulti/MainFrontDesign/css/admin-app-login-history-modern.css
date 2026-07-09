@@ -1,0 +1,371 @@
+/* ADMIN — App Login History (TicketReport-style shell) */
+
+body.saas-admin-ui .saas-app-login-report-page {
+    --app-login-accent: #2563eb;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-login-report-nav-row {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-login-nav-wrap {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-login-report-nav {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    float: none !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__list > li {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    width: 100% !important;
+    min-height: 34px !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__link:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__link.is-active {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #login-report-nav .vm-fin-nav__ico {
+    font-size: 0.78rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* Filters — dates + search only */
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-filter-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 6px 8px !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-filter-row .vm-dmt-filter-search-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-filter-row .vm-dmt-field--date,
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-filter-row .saas-acc-dp-field {
+    flex: 0 0 138px !important;
+    width: 138px !important;
+    min-width: 128px !important;
+    margin: 0 !important;
+}
+
+/* Table */
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table {
+    min-width: 980px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table thead th,
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table tbody td {
+    padding: 10px 12px !important;
+    font-size: 0.78rem !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table thead th {
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table tbody td:nth-child(2),
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table tbody td:nth-child(7) {
+    text-align: left !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    width: auto !important;
+    min-width: 160px !important;
+    max-width: none !important;
+}
+
+/* Registered User ID — header + override global 44px first-col rule on sibling tables */
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table:not(.vm-unlocked-data-table):not(.vm-web-failed-data-table) thead th:nth-child(2),
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table:not(.vm-unlocked-data-table):not(.vm-web-failed-data-table) tbody td:nth-child(2) {
+    width: auto !important;
+    min-width: 160px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    text-align: left !important;
+}
+
+/* Sr. No. — keep compact on app login / web failed only */
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table:not(.vm-unlocked-data-table) thead th:first-child,
+body.saas-admin-ui .saas-app-login-report-page #example.vm-app-login-data-table:not(.vm-unlocked-data-table) tbody td:first-child,
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table thead th:first-child,
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table tbody td:first-child {
+    width: auto !important;
+    min-width: 48px !important;
+    max-width: 72px !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-loc-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    min-height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #bfdbfe !important;
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background 0.15s, border-color 0.15s !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-loc-btn:hover {
+    background: #dbeafe !important;
+    border-color: #93c5fd !important;
+    color: #1e40af !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-empty {
+    text-align: center !important;
+    padding: 36px 16px !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-empty i {
+    display: block;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}
+
+/* DataTables toolbar inside panel */
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dataTables_wrapper {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dataTables_wrapper .dt-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin: 0 0 10px !important;
+    padding: 10px 12px 0 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dt-buttons .dt-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dt-buttons .buttons-excel {
+    border-color: #bbf7d0 !important;
+    background: #f0fdf4 !important;
+    color: #15803d !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dt-buttons .buttons-pdf {
+    border-color: #fecaca !important;
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dataTables_length,
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dataTables_filter {
+    padding: 8px 12px !important;
+    font-size: 0.76rem !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-opr-table-wrap .dataTables_filter input {
+    height: 34px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    padding: 0 10px !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-app-login-location-body {
+    font-size: 0.84rem !important;
+    line-height: 1.5 !important;
+    color: #334155 !important;
+    word-break: break-word !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-unlock-user-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    min-height: 30px !important;
+    padding: 0 12px !important;
+    border-radius: 7px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #15803d, #22c55e) !important;
+    color: #fff !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.28) !important;
+    transition: opacity 0.15s, transform 0.12s !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page .vm-unlock-user-btn:hover {
+    opacity: 0.92 !important;
+    transform: translateY(-1px) !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-unlocked-data-table {
+    min-width: 860px !important;
+}
+
+/* UserId — override global vm-opr-data-table 44px first-column lock */
+body.saas-admin-ui .saas-app-login-report-page #example.vm-unlocked-data-table thead th:first-child,
+body.saas-admin-ui .saas-app-login-report-page #example.vm-unlocked-data-table tbody td:first-child {
+    width: auto !important;
+    min-width: 180px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-unlocked-data-table tbody td:nth-child(2),
+body.saas-admin-ui .saas-app-login-report-page #example.vm-unlocked-data-table tbody td:nth-child(3) {
+    text-align: left !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    width: auto !important;
+    min-width: 120px !important;
+    max-width: none !important;
+}
+
+/* Web failed login table */
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table {
+    min-width: 920px !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table tbody td:nth-child(2) {
+    text-align: left !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    width: auto !important;
+    min-width: 180px !important;
+    max-width: none !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table thead th:nth-child(2),
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table tbody td:nth-child(2) {
+    width: auto !important;
+    min-width: 180px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table tbody td:nth-child(4),
+body.saas-admin-ui .saas-app-login-report-page #example.vm-web-failed-data-table tbody td:nth-child(5) {
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+
+/* Transaction password gate (Web Failed) — embedded in report shell */
+body.saas-admin-ui .saas-web-failed-pass-page .vm-web-failed-pass-main {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-web-failed-pass-page .vm-web-failed-pass-shell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 16px 36px;
+    min-height: 320px;
+}
+
+body.saas-admin-ui .saas-web-failed-pass-page .vm-web-failed-pass-card {
+    width: min(440px, 100%);
+    margin: 0 auto;
+}
+
+body.saas-admin-ui .saas-web-failed-pass-page .vm-hs-gate-loader {
+    position: fixed;
+}

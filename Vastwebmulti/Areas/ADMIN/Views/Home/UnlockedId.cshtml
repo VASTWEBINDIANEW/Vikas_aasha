@@ -1,163 +1,143 @@
+@using System.Linq
 @model IEnumerable<Vastwebmulti.Models.User>
 @{
     ViewBag.Title = "UnlockedId";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    var dateMode = (ViewBag.chk as string) == "post" ? "post" : "get";
+    var rows = Model ?? Enumerable.Empty<Vastwebmulti.Models.User>();
 }
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
-</style>
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-<div class="col-md-12">
-    <div class="card">
-        <div class="col-md-6">
-            <div style="margin-left:-13px;">
-                @Html.Partial("_Loginmenu")
-            </div>
 
-        </div>
-        <div class="col-md-6">
-            @using (Html.BeginForm("UnlockedId", "Home", FormMethod.Post))
-            {
-                <div class="row">
-                    <div class="col-md-2">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-login-history-modern.css?v=4" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-app-login-history-mobile.css?v=4" rel="stylesheet" />
 
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group" style="margin-bottom:0px;">
-                            <div class="input-daterange input-group">
-                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                                <span class="input-group-addon">
-                                    <i class="fa fa-exchange"></i>
-                                </span>
-                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; margin-top:4px;", autocomplete = "off" })
-                            </div>
-                            <!-- /.input group -->
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <center>
-                            <button type="submit" class="btn bg-grey waves-effect" style="margin-top: 4px; margin-left: -3px; height:34px;">
-                                <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>
-                                <span style="top:-2px;color:black;">Search</span>
-                            </button>
-                        </center>
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-app-login-report-page">
+    <div class="container-fluid vm-opr-page-shell">
+
+        @using (Html.BeginForm("UnlockedId", "Home", FormMethod.Post, new { id = "unlockedIdForm", data_date_mode = dateMode, data_frm_date = frmDate, data_to_date = toDate }))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified">
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line">
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Login Reports</li>
+                        <li>Locked Users</li>
+                    </ol>
+                    <div class="vm-dmt-fin-nav-row vm-login-report-nav-row">
+                        @Html.Partial("_loginReportNav")
                     </div>
                 </div>
-            }
-        </div>
 
-    </div>
-</div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:-7px;">
-                <div class="card">
-                       <div class="body" style="padding:7px;margin-top:-10px;">
-                        <div class="table-responsive" style="position:inherit;margin-top:-1px;">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable " style="width:100%;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>UserId</th>
-                                        <th>Register&nbsp;Number</th>
-                                        <th>Register&nbsp;Email</th>
-                                        <th>Lock&nbsp;Out&nbsp;DateTime</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model.Count() >0)
+                <div class="vm-rpt-filters-panel">
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-app-login-filter-row vm-rpt-filters-panel__bar">
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="vm-opr-main-card">
+            <div class="vm-opr-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-lock" aria-hidden="true"></i>
+                        <span>Locked user accounts</span>
+                    </div>
+                    <span class="vm-opr-table-panel__hint">Click unlock to restore access · export via toolbar</span>
+                </div>
+                <div class="vm-opr-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="example" class="table table-bordered table-striped table-hover vm-opr-data-table vm-app-login-data-table vm-unlocked-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>UserId</th>
+                                    <th>Register&nbsp;Number</th>
+                                    <th>Register&nbsp;Email</th>
+                                    <th>Lock&nbsp;Out&nbsp;DateTime</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rows.Any())
+                                {
+                                    foreach (var item in rows)
                                     {
-                                        foreach (var item in Model)
-                                        {
-                                      <tr>
+                                        <tr>
                                             <td>@item.Email</td>
                                             <td>@item.PhoneNumber</td>
                                             <td>@item.UserName</td>
-                                          <td>@item.LockoutEndDateUtc</td>
+                                            <td>@item.LockoutEndDateUtc</td>
                                             <td>
-                                                <button class="btn btn default" id="DeleteBtn" onclick="RenivalId('@item.UserId')" style="background-color:transparent; border:none;border:1px solid #c7c2c2; padding:2px 11px 1px 11px;margin-top:2px;" title="Click to Unlock Userid">
-                                                    Click To Unlock
+                                                <button type="button" class="vm-unlock-user-btn" data-user-id="@item.UserId" title="Click to unlock user">
+                                                    <i class="fas fa-unlock-alt" aria-hidden="true"></i>
+                                                    <span>Click To Unlock</span>
                                                 </button>
-                                    </td>
+                                            </td>
                                         </tr>
-                                        }
                                     }
-                                    else
-                                    {
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td><p style="font-size:22px;margin-top:20px;text-align:center;color:#e0dddd;font-weight:700;">No Data Found !</p></td>
-                                        <td></td>
-                                        <td></td>
+                                }
+                                else
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="5" class="vm-opr-table-empty">
+                                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                                            <span>No locked users found for selected date range.</span>
+                                        </td>
                                     </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-               
     </div>
 </section>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
 
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
+<script src="~/MainFrontDesign/js/admin-app-login-history.js?v=2"></script>
 <script>
-    function RenivalId(userid)
-    {
-        var r = confirm("Are You Sure!");
-        if (r == true)
-        {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("Unlockuserid", "Home")',
-                cache: false,
-                dataType: 'json',
-                data:{userid:userid},
-                async: true,
-                success: function (data) {
-                    var sts = data.Status;
-                    var message = data.Message;
-                    if (sts == "Success") {
-                        swal({ title: "UnLock !", text: message, type: "success" },
-                             function () {
-                                                 location.reload();
-                              }
-                          );
-                       }
-                }
-            });
-            return true;
-        }
-        else {
-      
+    function RenivalId(userid) {
+        if (!confirm('Are you sure you want to unlock this user?')) {
             return false;
         }
-    }
-</script>
-<script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Unlockuserid", "Home")',
+            cache: false,
+            dataType: 'json',
+            data: { userid: userid },
+            async: true,
+            success: function (data) {
+                var sts = data.Status;
+                var message = data.Message;
+                if (sts === 'Success') {
+                    swal({ title: 'UnLock !', text: message, type: 'success' }, function () {
+                        location.reload();
+                    });
+                }
+            }
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
+        return true;
+    }
 </script>

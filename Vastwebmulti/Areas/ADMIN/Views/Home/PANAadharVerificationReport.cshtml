@@ -70,7 +70,7 @@
                 <h3>Charge report</h3>
                 <span class="saas-acc-row-count">
                     <i class="fas fa-receipt" aria-hidden="true"></i> @rows.Count entries
-                    <span class="saas-pan-report-meta"> · @frmDate to @toDate</span>
+                    <span class="saas-pan-report-meta"> ï¿½ @frmDate to @toDate</span>
                 </span>
             </div>
             <div class="saas-acc-table-wrap table-responsive">
@@ -105,11 +105,11 @@
                                 var typeKey = (item.ChargeType ?? "").Trim().ToUpperInvariant();
                                 <tr>
                                     <td data-label="#">@sr</td>
-                                    <td data-label="Retailer">@(string.IsNullOrWhiteSpace(item.RetailerName) ? "—" : item.RetailerName)</td>
-                                    <td data-label="Firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "—" : item.Frm_Name)</td>
-                                    <td data-label="Email">@(string.IsNullOrWhiteSpace(item.Email) ? "—" : item.Email)</td>
-                                    <td data-label="Mobile">@(string.IsNullOrWhiteSpace(item.Mobile) ? "—" : item.Mobile)</td>
-                                    <td data-label="Txn ID" class="saas-pan-txn-id">@(string.IsNullOrWhiteSpace(item.TransactionId) ? "—" : item.TransactionId)</td>
+                                    <td data-label="Retailer">@(string.IsNullOrWhiteSpace(item.RetailerName) ? "ï¿½" : item.RetailerName)</td>
+                                    <td data-label="Firm">@(string.IsNullOrWhiteSpace(item.Frm_Name) ? "ï¿½" : item.Frm_Name)</td>
+                                    <td data-label="Email">@(string.IsNullOrWhiteSpace(item.Email) ? "ï¿½" : item.Email)</td>
+                                    <td data-label="Mobile">@(string.IsNullOrWhiteSpace(item.Mobile) ? "ï¿½" : item.Mobile)</td>
+                                    <td data-label="Txn ID" class="saas-pan-txn-id">@(string.IsNullOrWhiteSpace(item.TransactionId) ? "ï¿½" : item.TransactionId)</td>
                                     <td data-label="PAN charge" class="text-right saas-pan-amount">?@item.PanCharge.ToString("N2")</td>
                                     <td data-label="Aadhar charge" class="text-right saas-pan-amount">?@item.AadharCharge.ToString("N2")</td>
                                     <td data-label="Type">
@@ -127,10 +127,10 @@
                                         }
                                         else
                                         {
-                                            <span class="saas-set-badge-pending">@(string.IsNullOrWhiteSpace(item.ChargeType) ? "—" : item.ChargeType)</span>
+                                            <span class="saas-set-badge-pending">@(string.IsNullOrWhiteSpace(item.ChargeType) ? "ï¿½" : item.ChargeType)</span>
                                         }
                                     </td>
-                                    <td data-label="Date">@(string.IsNullOrWhiteSpace(item.CreatedAt) ? "—" : item.CreatedAt)</td>
+                                    <td data-label="Date">@(string.IsNullOrWhiteSpace(item.CreatedAt) ? "ï¿½" : item.CreatedAt)</td>
                                 </tr>
                             }
                         }

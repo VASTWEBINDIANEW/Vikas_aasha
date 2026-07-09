@@ -1,0 +1,40 @@
+@{
+    var loginPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    var isWebSuccess = loginPath.IndexOf("WebLogin", StringComparison.OrdinalIgnoreCase) >= 0
+        && loginPath.IndexOf("WebFailedLogin", StringComparison.OrdinalIgnoreCase) < 0;
+    var isWebFailed = loginPath.IndexOf("WebFailedLogin", StringComparison.OrdinalIgnoreCase) >= 0
+        || loginPath.IndexOf("tran_pass_webloginFailed", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isAppSuccess = loginPath.IndexOf("AppLoginHistory", StringComparison.OrdinalIgnoreCase) >= 0;
+    var isLocked = loginPath.IndexOf("UnlockedId", StringComparison.OrdinalIgnoreCase) >= 0;
+}
+
+<nav class="vm-login-nav-wrap" aria-label="Login report navigation">
+    <div id="login-report-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-login-report-nav">
+        <ul class="vm-fin-nav__list" id="login-report-nav-list">
+            <li>
+                <a class="vm-fin-nav__link@(isWebSuccess ? " is-active" : "")" data-vm-login-key="web-success" href="@Url.Action("WebLogin", "Home")" title="Web success login">
+                    <i class="fas fa-globe vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Web Success</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link@(isWebFailed ? " is-active" : "")" data-vm-login-key="web-failed" href="@Url.Action("WebFailedLogin", "Home")" title="Web failed login">
+                    <i class="fas fa-exclamation-triangle vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Web Failed</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link@(isAppSuccess ? " is-active" : "")" data-vm-login-key="app-success" href="@Url.Action("AppLoginHistory", "Home")" title="Apps success login">
+                    <i class="fas fa-mobile-alt vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Apps Success</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link@(isLocked ? " is-active" : "")" data-vm-login-key="locked" href="@Url.Action("UnlockedId", "Home")" title="Locked users">
+                    <i class="fas fa-lock vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Locked User</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

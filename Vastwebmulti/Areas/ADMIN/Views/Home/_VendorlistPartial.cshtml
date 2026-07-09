@@ -104,36 +104,36 @@
                     <div class="wl-view-row">
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-envelope" style="margin-right:3px;"></i>Email</div>
-                            <div class="wl-view-field__val" id="view_Email">—</div>
+                            <div class="wl-view-field__val" id="view_Email">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-id-card" style="margin-right:3px;"></i>PAN Card</div>
-                            <div class="wl-view-field__val" id="view_Pan">—</div>
+                            <div class="wl-view-field__val" id="view_Pan">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-fingerprint" style="margin-right:3px;"></i>Aadhaar</div>
-                            <div class="wl-view-field__val" id="view_Aadhar">—</div>
+                            <div class="wl-view-field__val" id="view_Aadhar">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-hashtag" style="margin-right:3px;"></i>GST No</div>
-                            <div class="wl-view-field__val" id="view_GST">—</div>
+                            <div class="wl-view-field__val" id="view_GST">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map-pin" style="margin-right:3px;"></i>Pin Code</div>
-                            <div class="wl-view-field__val" id="view_Pin">—</div>
+                            <div class="wl-view-field__val" id="view_Pin">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-map" style="margin-right:3px;"></i>State</div>
-                            <div class="wl-view-field__val" id="view_State">—</div>
+                            <div class="wl-view-field__val" id="view_State">ï¿½</div>
                         </div>
                         <div class="wl-view-field">
                             <div class="wl-view-field__label"><i class="fas fa-city" style="margin-right:3px;"></i>District</div>
-                            <div class="wl-view-field__val" id="view_District">—</div>
+                            <div class="wl-view-field__val" id="view_District">ï¿½</div>
                         </div>
                     </div>
                     <div class="wl-view-field" style="margin-top:8px;">
                         <div class="wl-view-field__label"><i class="fas fa-location-arrow" style="margin-right:3px;"></i>Address</div>
-                        <div class="wl-view-field__val" id="view_Address">—</div>
+                        <div class="wl-view-field__val" id="view_Address">ï¿½</div>
                     </div>
 
                     <!-- View mode footer -->
@@ -331,7 +331,7 @@
                 $('.mastetr222Modal .second-form').hide();
 
                 var row = data2.list[0];
-                var createddate = '—';
+                var createddate = 'ï¿½';
                 if (row.joindate) {
                     var date = new Date(parseInt(row.joindate.match(/\d+/)[0]));
                     createddate = converttoDate(date);
@@ -349,14 +349,14 @@
                 $('#RegisteredDate').text(createddate);
 
                 /* View mode divs */
-                $('#view_Email').text(row.emailid || '—');
-                $('#view_Pan').text(row.pancardnumber || '—');
-                $('#view_Aadhar').text(row.aadharnumber || '—');
-                $('#view_GST').text(row.gstnumber || '—');
-                $('#view_Pin').text(row.pin || '—');
-                $('#view_State').text(row.State_name || '—');
-                $('#view_District').text(row.Dist_Desc || '—');
-                $('#view_Address').text(row.address || '—');
+                $('#view_Email').text(row.emailid || 'ï¿½');
+                $('#view_Pan').text(row.pancardnumber || 'ï¿½');
+                $('#view_Aadhar').text(row.aadharnumber || 'ï¿½');
+                $('#view_GST').text(row.gstnumber || 'ï¿½');
+                $('#view_Pin').text(row.pin || 'ï¿½');
+                $('#view_State').text(row.State_name || 'ï¿½');
+                $('#view_District').text(row.Dist_Desc || 'ï¿½');
+                $('#view_Address').text(row.address || 'ï¿½');
 
                 /* Edit mode inputs */
                 $('#NameEdit').val(row.Name);
@@ -471,7 +471,7 @@
         }
     }
 
-    /* -- Edit success — hide modal, refresh list -- */
+    /* -- Edit success ï¿½ hide modal, refresh list -- */
     function OnSuccess() {
         $('#defaultModal222').modal('hide');
         $(".modal-backdrop").remove();
@@ -509,7 +509,7 @@
 
     function OnFailureotperror() {
         $('#otpmodal').modal('show');
-        $('#otpwrong').text("OTP Mismatch – please enter correct OTP");
+        $('#otpwrong').text("OTP Mismatch ï¿½ please enter correct OTP");
         if (typeof ToastrMessage === 'function') { ToastrMessage(); }
         toastr.warning("OTP Mismatch, Please enter Correct OTP");
     }

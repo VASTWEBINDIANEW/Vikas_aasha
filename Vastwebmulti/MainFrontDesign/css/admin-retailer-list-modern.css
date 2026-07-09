@@ -1015,7 +1015,8 @@ body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel.vm-rl-history-panel {
     flex-direction: column !important;
     width: 100% !important;
     min-height: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 12px !important;
     background: #fff !important;
@@ -1027,9 +1028,10 @@ body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel .vm-rl-history-body {
     flex-direction: column !important;
     flex: 1 1 auto !important;
     min-height: 0 !important;
-    max-height: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
 }
 
 body.saas-admin-ui .retailerList_Page .vm-rl-list-toolbar {
@@ -1042,15 +1044,17 @@ body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-rl-table-host {
     display: flex !important;
     flex-direction: column !important;
     min-height: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
     padding: 0 !important;
 }
 
 body.saas-admin-ui .retailerList_Page #vmRlTableScroll.vm-rl-table-scroll-host {
     flex: 1 1 auto !important;
     min-height: 0 !important;
-    overflow-x: auto !important;
-    overflow-y: auto !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch !important;
     border-top: 1px solid #eef2f7 !important;
     background: #fff !important;
@@ -1059,9 +1063,10 @@ body.saas-admin-ui .retailerList_Page #vmRlTableScroll.vm-rl-table-scroll-host {
 body.saas-admin-ui .retailerList_Page #Retailertablelist .vm-rl-table-scroll-host {
     flex: 1 1 auto !important;
     min-height: 0 !important;
-    max-height: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch !important;
     border-top: 1px solid #eef2f7 !important;
     background: #fff !important;
@@ -1096,14 +1101,27 @@ body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table thead th.vm-rl-th
     }
 
     body.saas-admin-ui .retailerList_Page #Retailertablelist .vm-rl-table-scroll-host {
-        min-height: 360px !important;
-        max-height: 65vh !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search,
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 140px !important;
+        max-width: 100% !important;
     }
 }
 
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
-    width: 100% !important;
-    min-width: 1180px !important;
+    width: max-content !important;
+    min-width: 1600px !important;
+    max-width: none !important;
     table-layout: auto !important;
     border-collapse: collapse !important;
     border-spacing: 0 !important;
@@ -2373,9 +2391,16 @@ body.saas-admin-ui .retailerList_Page #Retailertablelist .retailer_list_containe
     min-height: min-content !important;
 }
 
-body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.vm-ml-table-scroll {
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.vm-ml-table-scroll,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.saas-acc-table-wrap,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm {
     max-height: none !important;
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
     border: none !important;
     border-radius: 0 !important;
 }
@@ -4581,7 +4606,9 @@ body.saas-admin-ui .retailerList_Page .vm-ft-layout-wrap {
 /* Table scroll host — rounded bottom */
 body.saas-admin-ui .retailerList_Page .vm-rl-table-scroll-host {
     border-radius: 0 0 calc(var(--rl-radius, 14px) - 2px) calc(var(--rl-radius, 14px) - 2px) !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 body.saas-admin-ui .retailerList_Page .retailer_list_container {
@@ -4973,10 +5000,11 @@ body.saas-admin-ui .retailerList_Page .vm-rl-history-body {
     overflow: visible !important;
 }
 
-/* Table min-width so horizontal scroll kicks in */
+/* Table wider than panel — enables horizontal scroll */
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
-    min-width: 900px !important;
-    width: 100% !important;
+    width: max-content !important;
+    min-width: 1600px !important;
+    max-width: none !important;
 }
 
 /* Scrollbar visible & styled */
@@ -5050,9 +5078,12 @@ body.saas-admin-ui .retailerList_Page .vm-ml-table-scroll {
     display: block !important;
 }
 
-/* Table min-width for horizontal scroll */
-body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
-    min-width: 900px !important;
+/* Table min-width — only on tablet/mobile to enable horizontal scroll */
+@media (max-width: 1199px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table {
+        min-width: 920px !important;
+        max-width: none !important;
+    }
 }
 
 @media (max-width: 768px) {
@@ -5091,12 +5122,14 @@ body.saas-admin-ui .retailerList_Page #mmm.table-responsive {
     display: block !important;
 }
 
-/* Table must be wider than container to trigger scroll */
+/* Table scroll — wrapper only */
+body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table,
 body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
 body.saas-admin-ui .retailerList_Page #mdList {
-    min-width: 900px !important;
     width: max-content !important;
+    min-width: 1600px !important;
     max-width: none !important;
+    table-layout: auto !important;
 }
 
 /* All ancestor containers — must NOT clip overflow-x */
@@ -5106,6 +5139,7 @@ body.saas-admin-ui .retailerList_Page .retailer_list_container {
     overflow-x: visible !important;
     overflow-y: visible !important;
     width: 100% !important;
+    max-width: 100% !important;
 }
 
 body.saas-admin-ui .retailerList_Page #Retailertablelist,
@@ -5113,13 +5147,62 @@ body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-rl-table-host,
 body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-ml-table-host {
     overflow-x: visible !important;
     overflow-y: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel,
 body.saas-admin-ui .retailerList_Page .vm-rl-history-body,
-body.saas-admin-ui .retailerList_Page .vm-ft-history-body {
-    overflow-x: visible !important;
-    overflow-y: visible !important;
+body.saas-admin-ui .retailerList_Page .vm-ft-history-body,
+body.saas-admin-ui .retailerList_Page .vm-rl-history-col--full,
+body.saas-admin-ui .retailerList_Page .vm-ft-layout-wrap,
+body.saas-admin-ui .retailerList_Page .vm-ft-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+    body.saas-admin-ui .retailerList_Page #mdList {
+        min-width: 1280px !important;
+        width: max-content !important;
+        max-width: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+    body.saas-admin-ui .retailerList_Page #mdList {
+        min-width: 820px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified {
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
+        padding: 8px 10px !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search,
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--search .vm-rl-tb-control,
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--dist .vm-rl-tb-control {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-group--demo {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .retailerList_Page .vm-rl-toolbar-modern__row--unified .vm-rl-tb-exports {
+        margin-left: auto !important;
+    }
 }
 
 /* Styled scrollbar on the table wrap */
@@ -5138,9 +5221,79 @@ body.saas-admin-ui .retailerList_Page #mmm::-webkit-scrollbar-thumb:hover {
     background: #2563eb !important;
 }
 
-@media (max-width: 768px) {
+/* ================================================================
+   v=54 — scroll-friendly table (no 100% width lock)
+   ================================================================ */
+body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel.vm-rl-history-panel,
+body.saas-admin-ui .retailerList_Page #vmRlHistoryPanel .vm-rl-history-body,
+body.saas-admin-ui .retailerList_Page #Retailertablelist.vm-rl-table-host,
+body.saas-admin-ui .retailerList_Page #vmRlTableScroll.vm-rl-table-scroll-host {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    max-height: none !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap > table#mdList.vm-rl-full-table,
+body.saas-admin-ui .retailerList_Page #mmm.saas-acc-table-wrap > table#mdList,
+body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table.saas-acc-table,
+body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
+body.saas-admin-ui .retailerList_Page #mdList {
+    width: max-content !important;
+    min-width: 1600px !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList tbody td {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+body.saas-admin-ui .retailerList_Page #mdList tbody td.vm-rl-user-cell,
+body.saas-admin-ui .retailerList_Page #mdList tbody td.vm-rl-permission-cell,
+body.saas-admin-ui .retailerList_Page #mdList tbody td.vm-rl-verify-cell,
+body.saas-admin-ui .retailerList_Page #mdList tbody td.vm-rl-kyc-cell {
+    overflow: visible !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table,
     body.saas-admin-ui .retailerList_Page #mdList.vm-ml-data-table,
     body.saas-admin-ui .retailerList_Page #mdList {
-        min-width: 800px !important;
+        table-layout: auto !important;
+        min-width: 1280px !important;
+        width: max-content !important;
+        max-width: none !important;
     }
+
+    body.saas-admin-ui .retailerList_Page #mdList thead th[class*="vm-rl-th--"] {
+        width: auto !important;
+    }
+}
+
+/* ================================================================
+   v=55 — HORIZONTAL SCROLL (highest priority at file end)
+   ================================================================ */
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.vm-rl-hscroll-box,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.vm-ml-table-scroll,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.saas-acc-table-wrap,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm.table-responsive,
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm {
+    overflow-x: scroll !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .retailerList_Page #Retailertablelist #mmm table#mdList,
+body.saas-admin-ui .retailerList_Page #mdList.vm-rl-full-table,
+body.saas-admin-ui .retailerList_Page #mdList {
+    width: max-content !important;
+    min-width: 1600px !important;
+    max-width: none !important;
+    table-layout: auto !important;
 }

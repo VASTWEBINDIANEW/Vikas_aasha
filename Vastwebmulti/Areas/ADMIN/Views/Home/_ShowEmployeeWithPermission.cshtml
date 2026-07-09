@@ -1,12 +1,12 @@
 @model Vastwebmulti.Areas.ADMIN.ViewModel.EmployeePermissionViewmodel
 @{
-    /* Materialise once — prevents double-enumeration of IEnumerable */
+    /* Materialise once ï¿½ prevents double-enumeration of IEnumerable */
     var services = (Model != null && Model.ServicelistALL != null)
                    ? Model.ServicelistALL.ToList()
                    : new List<Vastwebmulti.Models.tbl_permission_Services>();
 }
 
-@* NOTE: No <form> here — the main page wraps #tblpermission in the form.
+@* NOTE: No <form> here ï¿½ the main page wraps #tblpermission in the form.
          The hidden EmployeeIDforpart field is also on the main page. *@
 
 <!-- -- Permission Cards Grid -- -->
@@ -80,7 +80,7 @@ else
 </div>
 
 <script>
-    /* Checkbox visual toggle — delegated so it works after AJAX injection */
+    /* Checkbox visual toggle ï¿½ delegated so it works after AJAX injection */
     $(document).off('change.vmEpChk').on('change.vmEpChk', '.vm-ep-chk input[type="checkbox"]', function () {
         var $lbl = $(this).closest('.vm-ep-chk');
         $lbl.toggleClass('vm-ep-chk--checked', $(this).is(':checked'));

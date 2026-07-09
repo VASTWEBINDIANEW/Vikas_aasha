@@ -7,7 +7,7 @@
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
     VastwebmultiEntities db = new VastwebmultiEntities();
     var rows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.loanrequest>();
-    var retailerNames = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "—");
+    var retailerNames = db.Retailer_Details.ToDictionary(r => r.RetailerId, r => r.Frm_Name ?? "ï¿½");
     var pendingCount = rows.Count(r => r.status == "Pending");
     var updateUrl = Url.Action("LoanreqUpdate", "Home");
 }
@@ -52,8 +52,8 @@
                         @{ var rowIdx = 0; }
                         @foreach (var i in rows)
                         {
-                            var frm = retailerNames.ContainsKey(i.userid) ? retailerNames[i.userid] : "—";
-                            var lastDate = i.minserverloandate != null ? Convert.ToDateTime(i.minserverloandate).ToString("dd-MM-yyyy") : "—";
+                            var frm = retailerNames.ContainsKey(i.userid) ? retailerNames[i.userid] : "ï¿½";
+                            var lastDate = i.minserverloandate != null ? Convert.ToDateTime(i.minserverloandate).ToString("dd-MM-yyyy") : "ï¿½";
                             <tr>
                                 <td data-label="Status">
                                     @if (i.status == "Pending")
