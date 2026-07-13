@@ -1,421 +1,279 @@
 @model IEnumerable<Vastwebmulti.Models.admin_income_report_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Actual_Admin_income";
+    ViewBag.Title = "My Day Book";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var reports = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.admin_income_report_Result>();
+    var rowCount = reports.Count;
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+
+    decimal totalAmount = reports.Sum(x => x.amount ?? 0m);
+    decimal totalPurchase = reports.Sum(x => x.purchase ?? 0m);
+    decimal totalIncome = reports.Sum(x => x.income ?? 0m);
 }
-<style>
 
-    /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=35" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-actual-daybook-modern.css?v=10" rel="stylesheet" />
 
-    .all-type-third {
-        float: right;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-actual-daybook-page">
 
-        .all-type-third .responcive-fifty {
-            width: auto;
+    <div class="container-fluid vm-opr-page-shell">
+
+        @{
+            var dayBookFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "actualDayBookForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("Actual_Admin_income", "Home", FormMethod.Post, dayBookFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    /* new css */
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-adb-toolbar-one-line">
 
-    .table-bordered tbody tr td, .table-bordered tbody tr th {
-        padding: 10px;
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-adb-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account</li>
+                        <li>Day Book</li>
+                    </ol>
 
-    .form-iconmy {
-        position: absolute;
-        z-index: 9;
-        top: 0px;
-        bottom: 0px;
-        padding: 6px 5px;
-        border-right: 1px solid #bbb;
-        height: 32px;
-    }
+                    <div class="vm-adb-nav-row-shell vm-daybook-nav-row">
+                        @Html.Partial("~/Areas/ADMIN/Views/Home/_DayBookNav.cshtml")
+                    </div>
 
-    #custnav ul li a {
-        font-size: 13px;
-    }
-
-    .newfourdesign-admin .col-md-5 {
-        padding-right: 0;
-    }
-
-    .newfourdesign-admin .col-md-4.spanpdfback-third.actulpdf-third {
-        padding-right: 0;
-    }
-
-    .ner i, .ner2 i {
-        left: 5px !important;
-    }
-
-    @@media screen and (max-width:1366px) {
-        .actul-none-third {
-            display: none;
-        }
-
-        .actul-search-third {
-            width: 23%;
-        }
-
-        .actulpdf-third {
-            width: 35%;
-            padding-right: 5px;
-        }
-
-        .newfourdesign-admin .col-md-8.up-up-up.up-third-design.active-nav-third {
-            padding-right: 0;
-        }
-
-            .newfourdesign-admin .col-md-8.up-up-up.up-third-design.active-nav-third #custnav ul li a {
-                font-size: 13px;
-            }
-
-        .responcive-fifty.date-actul-third input, .responcive-fifty.date-actul-third button {
-            font-size: 13px;
-        }
-
-        .newfourdesign-admin #custnav ul li a {
-            font-size: 12px;
-        }
-
-        .newfourdesign-admin .responcive-fifty.date-actul-third input, .newfourdesign-admin .responcive-fifty.date-actul-third button {
-            font-size: 12px;
-        }
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:991px) {
-
-        .all-type-third .responcive-fifty {
-            float: left;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .up-up-up #custnav li {
-            width: 33.333%;
-            margin: 0;
-            padding: 3px;
-        }
-
-        .responcive-fifty button {
-            width: 100%;
-            text-align: left;
-        }
-
-        .responcive-fifty div {
-            padding-bottom: 0px !important;
-        }
-
-        .actul-search-third {
-            width: auto;
-        }
-
-        .actulpdf-third {
-            width: auto;
-            float: right;
-        }
-
-        #custnav ul li:nth-child(3n) {
-            margin-right: 0 !important;
-        }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .all-type-third {
-            width: 100%;
-            float: left;
-            padding: 0 !important;
-        }
-
-        .admin-day-book .col-md-5 {
-            width: 38%;
-            padding-left: 15px !important;
-            float: left;
-        }
-
-            .admin-day-book .col-md-5 input {
-                padding-left: 15px;
-            }
-
-        .admin-day-book .col-md-2 {
-            width: 50%;
-            float: left;
-            margin-top: 3px;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child,
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .responcive-fifty.date-actul-third {
-            width: 100%;
-            float: left;
-        }
-
-            .responcive-fifty.date-actul-third .nrr3 {
-                width: 98%;
-            }
-
-        .newfourdesign-admin .onlymargin-third .col-md-12 {
-            padding-right: 0;
-        }
-
-        .newfourdesign-admin #custnav #ul li {
-            width: 49%;
-        }
-
-        #custnav ul li:nth-child(2n) {
-            margin-right: 0 !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        #custnav #ul li {
-            width: 50%;
-            margin: 0;
-        }
-    }
-</style>
-<section class="content">
-    <div class="container-fluid">
-
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Day Book</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                @*<li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>*@
-                <li><a href="javascript:void(0);">Day Book</a></li>
-            </ul>
-        </div>
-
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix margin-bottom-third cardbackg-thirdclass onlymargin-third">
-            <div class="col-md-12">
-                <div class="card back-transparent-third" style=" ">
-                    <div class="row" style="margin: 0;">
-                        <div class="col-md-7 up-up-up up-third-design active-nav-third page-header-third" style="width: auto; float: left;">
-                            <div>
-                                @Html.Partial("DayBookPartialView")
-                            </div>
+                    <div class="vm-dmt-filter-search-group vm-adb-filter-search-group">
+                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                         </div>
+                        <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                            @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                        </div>
+                        <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn vm-adb-search-btn" title="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                        </button>
+                    </div>
 
-                        <div class="col-md-5 page-header-third" style="width: auto; float: right;">
+                </div>
 
-                            <div class="col-md-4 spanpdfback-third actulpdf-third" style="padding:0px;width:auto;float:right;">
-                                <div class="rechargepdfexal pdfexport-span-second" style="float:right;">
-                                    <span><img src="~/ashok-images/pdf.png"><input type="button" onclick="Export()" id="btnPDF" value="PDF" style="border:0px;background:transparent"></span>
-                                    <span>
-                                        <img src="~/ashok-images/xls.png"><input type="submit" name="btnExport" id="btnExport" value="Export" style="border:0px;background:transparent;">
-                                    </span>
-                                </div>
-                            </div>
-
-
-
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="actualDayBookTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Day book totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideActualDayBookTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--primary">
+                            <span class="vm-opr-total-card__label">Total Amount</span>
+                            <strong class="vm-opr-total-card__value" id="adbTotalAmount">@totalAmount.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Total Purchase</span>
+                            <strong class="vm-opr-total-card__value" id="adbTotalPurchase">@totalPurchase.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Total Income</span>
+                            <strong class="vm-opr-total-card__value" id="adbTotalIncome">@totalIncome.ToString("N2")</strong>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>
 
-        <div class="row clearfix" id="tblpdf">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-                    <div>
-                        @using (Html.BeginForm("Actual_Admin_income", "Home", FormMethod.Post))
-                        {
-                            <div class="row admin-day-book" style="margin: 0;">
-                                @*<div class="col-md-1 actul-none-third"></div>*@
-                                <div class="all-type-third">
-                                    <div class="col-md-6 responcive-fifty date-actul-third" style="padding:0px 5px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="custom-date-icon ner" style="border-color:#ddd !important;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ddd; height:32px;text-align:right;" })
-                                            <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
+            <input type="hidden" name="btnExport" id="hdnBtnExport" value="" />
+        }
 
-                                            </span>
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner2" style="border-color:#ddd !important;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ddd; height:32px;text-align:right;" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 responcive-fifty actul-search-third" style="padding:0px;">
-
-                                        <button type="submit" class="btn waves-effect input-back-second" style="height:32px;background:transparent;border-color:#ddd;">
-                                            <i class="fa fa-search" style="top:1px;font-size:16px;color:black;"></i>
-                                            <span style="top:0px;color:black;">Search</span>
-                                        </button>
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        }
+        <div class="vm-opr-main-card vm-prepaid-report-main-card" id="tblpdf">
+            <div class="vm-opr-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-adb-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-book-open" aria-hidden="true"></i>
+                        <span>My day book</span>
                     </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="adbRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total income for current filter">
+                            Income: <strong id="adbInlineIncome">@totalIncome.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-adb-totals-btn" onclick="findActualDayBookTotals()" title="Show totals" aria-expanded="false" aria-controls="actualDayBookTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                    <div style="width: 100%; float: left; margin-top: 5px;">
-                        <div class="table-responsive tableseconddes-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped table-hover example-second third-design-table" style="width:100%;background:#eae9e9;">
-                                <thead style="background-color:whitesmoke;">
-                                    <tr>
-                                        <th>Sr.&nbsp;No</th>
-                                        <th>Type</th>
-                                        <th>Amount</th>
-                                        <th>Purchase</th>
-                                        <th>Retailer Comm</th>
-                                        <th>Dealer Comm</th>
-                                        <th>Master Comm</th>
-                                        <th>Income</th>
+                <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-adb-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="actualDayBookTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Sr.&nbsp;No</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Purchase</th>
+                                    <th>Retailer&nbsp;Comm</th>
+                                    <th>Dealer&nbsp;Comm</th>
+                                    <th>Master&nbsp;Comm</th>
+                                    <th>Income</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (rowCount == 0)
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="8" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                                            <span>No data found.</span>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @{int i = 1;}
-                                    @foreach (var item in Model)
+                                }
+                                else
+                                {
+                                    int srNo = 1;
+                                    foreach (var item in reports)
                                     {
                                         <tr>
-                                            <td>@i</td>
-                                            <td>@Html.DisplayFor(modelItem => item.trntype)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.amount)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.purchase)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.retailerfinal)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.dealerfinal)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.mdfinal)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.income)</td>
+                                            <td class="vm-adb-num">@srNo</td>
+                                            <td class="vm-adb-text">@item.trntype</td>
+                                            <td class="vm-adb-num">@item.amount</td>
+                                            <td class="vm-adb-num">@item.purchase</td>
+                                            <td class="vm-adb-num">@item.retailerfinal</td>
+                                            <td class="vm-adb-num">@item.dealerfinal</td>
+                                            <td class="vm-adb-num">@item.mdfinal</td>
+                                            <td class="vm-adb-num">@item.income</td>
                                         </tr>
-                                        i++;
+                                        srNo++;
                                     }
-                                    <tr>
-                                        <td><p style="font-size:17px;margin-left:-8px;">Total</p></td>
+                                    <tr class="vm-adb-row-total">
+                                        <td class="vm-adb-text"><strong>Total</strong></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td><p style="font-size:18px;margin-left:-8px;">@Model.Sum(a => a.income)</p></td>
+                                        <td class="vm-adb-num vm-adb-num--income"><strong>@totalIncome.ToString("N2")</strong></td>
                                     </tr>
-                                </tbody>
-
-
-
-
-                            </table>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-
-
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=1"></script>
+<script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=2"></script>
 
-<script src="~/Swalalert/sweetalert-dev.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script>
-$(document).ready(function(){
+    function hideActualDayBookTotals() {
+        var $panel = $('#actualDayBookTotalsPanel');
+        var $btn = $('.vm-adb-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-     $('.input-daterange').datepicker({
-                format: "yyyy-mm-dd",
-                todayHighlight: true,
-                autoclose: true,
-                orientation: "bottom auto",
+    function findActualDayBookTotals() {
+        var $panel = $('#actualDayBookTotalsPanel');
+        var $btn = $('.vm-adb-totals-btn');
+        if ($panel.is(':visible')) {
+            hideActualDayBookTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-            });
-            var val = '@ViewBag.chk';
-            if (val != "post") {
-                $("#txt_frm_date").datepicker("setDate", new Date());
-                $("#txt_to_date").datepicker("setDate", new Date());
-            }
-    });
-</script>
+    function initActualDayBookDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initActualDayBookDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#actualDayBookForm');
+        }
+    }
 
+    function exportActualDayBookExcel() {
+        var table = document.getElementById('actualDayBookTable');
+        if (!table || typeof window.openAdminModernReportExcel !== 'function') {
+            return;
+        }
 
-<script type="text/javascript">
-    function Export() {
-        html2canvas(document.getElementById('tblpdf'), {
-            onrendered: function (canvas) {
-                var data = canvas.toDataURL();
-                var docDefinition = {
-                    content: [{
-                        image: data,
-                        width: 500
-                    }]
-                };
-                pdfMake.createPdf(docDefinition).download("Admin_income.pdf");
-            }
+        window.openAdminModernReportExcel({
+            table: table,
+            title: 'My Day Book',
+            subtitle: 'Actual admin income day book report',
+            fromDate: document.getElementById('txt_frm_date') ? document.getElementById('txt_frm_date').value : '',
+            toDate: document.getElementById('txt_to_date') ? document.getElementById('txt_to_date').value : '',
+            recordCount: parseInt((document.getElementById('adbRecordCount') || {}).textContent, 10) || 0,
+            filePrefix: 'DayBook_MyBook',
+            sheetName: 'My Day Book'
         });
     }
-</script>
 
+    function exportActualDayBookPdf() {
+        var table = document.getElementById('actualDayBookTable');
+        if (!table || typeof window.openAdminModernReportPdf !== 'function') {
+            return;
+        }
 
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-            paging: false
+        window.openAdminModernReportPdf({
+            table: table,
+            title: 'My Day Book',
+            subtitle: 'Actual admin income day book report',
+            fromDate: document.getElementById('txt_frm_date') ? document.getElementById('txt_frm_date').value : '',
+            toDate: document.getElementById('txt_to_date') ? document.getElementById('txt_to_date').value : '',
+            orientation: 'landscape',
+            recordCount: parseInt((document.getElementById('adbRecordCount') || {}).textContent, 10) || 0
         });
-    });
+    }
 
+    $(document).ready(function () {
+        initActualDayBookDatepickers();
+
+        $('#actualDayBookForm button[type="submit"]').on('click', function () {
+            $('#hdnBtnExport').val('');
+        });
+
+        $('#btnExportA').on('click', exportActualDayBookExcel);
+        $('#btnPDFA').on('click', exportActualDayBookPdf);
+    });
 </script>

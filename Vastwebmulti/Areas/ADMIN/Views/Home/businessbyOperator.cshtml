@@ -2,587 +2,241 @@
 @{
     ViewBag.Title = "businessbyOperator";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
 }
-<style type="text/css">
 
-    /* new css */
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=38" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-business-by-operator-modern.css?v=3" rel="stylesheet" />
 
-    .gross-business-date {
-        width: 100%;
-        margin: 0;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page saas-prepaid-card-report-page saas-business-by-operator-page">
 
-    .dis_set {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .gross-business-date {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .two.five {
-        margin-right: 0%;
-        float: right;
-    }
-
-    .second-success {
-        z-index: 999;
-    }
-
-    /* new css */
-
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
+        @{
+            var bboFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "businessByOperatorForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate }
+            };
         }
+        @using (Html.BeginForm("businessbyOperator", "Home", FormMethod.Get, bboFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line" style="margin:0 !important;">
 
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account</li>
+                        <li>Business By Operator</li>
+                    </ol>
 
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: #e90c59
-        }
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line">
 
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #46dff0;
-            animation-delay: -0.5s;
-        }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-</style>
-<style>
-    .tmw-dashaboard .card .table.dash-table tbody tr td {
-        padding: 12px 10px;
-    }
-
-    .nav-tabs > li {
-        margin-bottom: 0px;
-    }
-
-    .info-box-4 {
-        height: 46px;
-    }
-
-        .info-box-4 .content .text {
-            margin-top: 0px;
-        }
-
-    .nav-tabs + .tab-content {
-        padding: 0px 0;
-    }
-
-    .table tbody tr td, .table tbody tr th {
-        padding: 2px 2px 2px 7px;
-        /*padding:5px;*/
-        border-top: none;
-    }
-
-    .table {
-        margin-bottom: 16px;
-    }
-
-    .dash-table thead {
-        background: var(--second-bg-color);
-    }
-
-    .dash-table tbody {
-        background: var(--second-bg-color);
-    }
-
-    .gross-business-date li {
-        width: 19%;
-        float: left;
-        margin-right: 3px;
-    }
-
-    .form-iconmy {
-        position: absolute;
-        z-index: 99;
-        top: 0px;
-        bottom: 0px;
-        padding: 6px 5px;
-        border-right: 1px solid #bbb;
-        height: 32px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        .gross-business-date {
-            width: 100%;
-            display: block;
-        }
-
-            .gross-business-date li:first-child {
-                width: 100% !important;
-                margin-bottom: 10px;
-            }
-
-            .gross-business-date li {
-                width: 50% !important;
-                float: left;
-                margin-right: 0px;
-                padding: 2px;
-            }
-
-                .gross-business-date li button {
-                    width: 100%;
-                    text-align: left;
-                    margin-bottom: 10px;
-                }
-
-        .tmw-dashaboard .gross-business li {
-            width: 50%;
-        }
-
-            .tmw-dashaboard .gross-business li:nth-child(2), .tmw-dashaboard .gross-business li:nth-child(6), .tmw-dashaboard .gross-business li:nth-child(10), .tmw-dashaboard .gross-business li:nth-child(14), .tmw-dashaboard .gross-business li:nth-child(18) {
-                border-right: 1px solid var(--border-color);
-            }
-    }
-
-    @@media only screen and (max-width:520px) {
-
-        .gross-business-date li {
-            width: 100% !important;
-        }
-
-            .gross-business-date li button {
-                width: 100%;
-                text-align: left;
-                margin-bottom: 0px;
-            }
-
-        .gross-business-date {
-            margin-bottom: 0px;
-        }
-
-        .gross-business-total li.five {
-            width: 100%;
-        }
-
-        .gross-business-date li:first-child {
-            width: 100% !important;
-        }
-
-        .gross-business-total li.five {
-            width: 100%;
-            margin-right: 0% !important;
-        }
-
-        .second-success {
-            width: 92% !important;
-            right: 19px !important;
-            top: 184px !important;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-
-        .tmw-dashaboard .gross-business li {
-            width: 100%;
-        }
-
-        .second-success {
-            top: 249px !important;
-            z-index: 999;
-        }
-    }
-</style>
-<section class="content tmw-dashaboard fourdesign-section-admin">
-    <div class="container-fluid">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Business By Operator</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Business By Operator</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div>
-
-            <div class="page-header-third dis_set">
-                <ul class="float-left  gross-business-date">
-                    <li>
-                        <div style="position:relative;margin-top:4px;">
-                            <p style="margin: 0px;font-size: 19px;line-height: 21px;text-transform: uppercase;">by operator</p>
-                            <p class="fullbodydycolorbg fulltextbodycolor" style="margin: 0px;font-size: 8px;line-height: 9px;margin-left:2px; text-transform:uppercase;">Individual Operator Reports</p>
-                            <i class="fa fa-caret-down" aria-hidden="true" style="transform : rotate(-90deg);position: absolute;top: -18px;left: 126px;font-size: 44px;line-height: 65px;color: var(--main-bg-lcolor);"></i>
+                        <div class="vm-opr-field vm-dmt-field vm-bbo-field--quick">
+                            <button type="button" class="vm-bbo-quick-btn" id="bboTodayBtn" onclick="grossbusiness1('today')" title="Today business">
+                                <i class="fas fa-sun" aria-hidden="true"></i><span>Today</span>
+                            </button>
                         </div>
-                    </li>
 
+                        <div class="vm-opr-field vm-dmt-field vm-bbo-field--quick">
+                            <button type="button" class="vm-bbo-quick-btn" id="bboYesterdayBtn" onclick="grossbusiness1('lastday')" title="Yesterday business">
+                                <i class="fas fa-history" aria-hidden="true"></i><span>Yesterday</span>
+                            </button>
+                        </div>
 
-                    <li class="four">
-                        <button onclick="grossbusiness1('today')">
-                            <img src="~/AdminDesign/images/calendartoday.png" style="width:23px;margin-left: 10px;display: inline-block;margin-top: -4px;" />&nbsp;Today Business
-                        </button>
-                    </li>
-                    <li class="two" style="width:23%;">
-                        <button onclick="grossbusiness1('lastday')">
-                            <img src="~/AdminDesign/images/calendaryes.png" style="width:23px;margin-left: 3px;display: inline-block;margin-top: -4px;" />&nbsp;Yesterday Business
-                        </button>
-                    </li>
-                    <li class="two">
-                        <div class="input-daterange input-group">
-                            <div class="form-iconmy">
-                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg" aria-hidden="true"></i>
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date vm-bbo-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "Date", title = "Business date" })
                             </div>
-                            <input autocomplete="off" class="form-control txt_frm_date" id="txt_frm_date" name="txt_frm_date" required="required" type="text" value="" style="border: 1px solid #dddddd;">
+                            <button type="button" onclick="grossbusiness1('date')" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
-                    </li>
 
-                    <li class="two five" style="width:15%;">
-                        <button type="button" onclick="grossbusiness1('date')" class="btn btnssl2233 special-iii input-back-second" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><i class="fa fa-search" aria-hidden="true" style="font-size:14px;margin-right:4px;"></i>Search</button>
-                    </li>
-                </ul>
+                    </div>
+
+                </div>
 
             </div>
+        }
 
-            <div id="busn_show" class="page-header-third">
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-prepaid-report-main-card vm-bbo-results-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>Business by operator</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Selected date">
+                            Date: <strong id="bboSelectedDate">@frmDate</strong>
+                        </span>
+                    </div>
+                </div>
 
+                <div class="vm-opr-table-wrap vm-prepaid-table-wrap">
+                    <div id="busn_show"></div>
+                </div>
             </div>
-
         </div>
+
     </div>
+
+    <div class="vm-bbo-page-loader" id="bboPageLoader" aria-hidden="true">
+        <div class="vm-bbo-page-loader__spinner" role="status" aria-label="Loading"></div>
+    </div>
+
 </section>
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/Swalalert/sweetalert.min.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<!--For Custum Chart-->
-<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
-<script src="https://www.amcharts.com/lib/3/serial.js"></script>
-<div id="loader" style="position: absolute;right: 34%;top: 50%;display:none; transform: translate(-24%,-50%);">
-    <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-        <div class="ldio-zdyd6mf6t5">
-            <div></div><div></div>
-        </div>
-    </div>
-</div>
+
 <script>
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
+    function bboShowLoader(show) {
+        var $loader = $('#bboPageLoader');
+        if (show) {
+            $loader.addClass('is-visible').attr('aria-hidden', 'false');
+        } else {
+            $loader.removeClass('is-visible').attr('aria-hidden', 'true');
+        }
+    }
+
+    function bboUpdateSelectedDate() {
+        var dateVal = $('#txt_frm_date').val() || '';
+        $('#bboSelectedDate').text(dateVal);
+    }
+
+    function bboSetQuickActive(mode) {
+        $('#bboTodayBtn, #bboYesterdayBtn').removeClass('is-active');
+        if (mode === 'today') {
+            $('#bboTodayBtn').addClass('is-active');
+        } else if (mode === 'lastday') {
+            $('#bboYesterdayBtn').addClass('is-active');
+        }
+    }
+
+    function initBboDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initBboDatepickers, 50);
+            return;
+        }
+
+        var $form = $('#businessByOperatorForm');
+        var $input = $('#txt_frm_date');
+        if (!$input.length) {
+            return;
+        }
+
+        $('.saas-business-by-operator-page .saas-acc-dp-field').each(function () {
+            var $field = $(this);
+            if ($field.data('datepicker')) {
+                $field.datepicker('destroy');
+            }
+            $field.find('.datepicker-inline').remove();
+        });
+
+        if ($input.data('datepicker')) {
+            $input.datepicker('destroy');
+        }
+
+        $input.datepicker({
+            format: 'yyyy-mm-dd',
             todayHighlight: true,
             autoclose: true,
-            orientation: "bottom auto",
-
+            orientation: 'bottom auto',
+            container: 'body',
+            forceParse: false
         });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date,.txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+
+        var frmVal = ($form.attr('data-frm-date') || '').trim();
+        if (frmVal) {
+            $input.datepicker('update', frmVal);
+        } else {
+            $input.datepicker('setDate', new Date());
         }
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#loader').show();
-        ////loaderstart
+
+        $input.off('changeDate.bbo show.bbo').on('changeDate.bbo', function () {
+            bboUpdateSelectedDate();
+            bboSetQuickActive('');
+        });
+
+        $input.siblings('.saas-acc-dp-icon').off('click.bboDate').on('click.bboDate', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $input.datepicker('show');
+        });
+
+        $input.off('click.bboDate').on('click.bboDate', function (e) {
+            e.preventDefault();
+            $input.datepicker('show');
+        });
+
+        bboUpdateSelectedDate();
+    }
+
+    function grossbusiness1(out) {
+        if (out === 'date') {
+            out = $('#txt_frm_date').val();
+            bboSetQuickActive('');
+        } else if (out === 'today') {
+            $('#txt_frm_date').datepicker('setDate', new Date());
+            bboSetQuickActive('today');
+        } else if (out === 'lastday') {
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            $('#txt_frm_date').datepicker('setDate', yesterday);
+            bboSetQuickActive('lastday');
+        }
+
+        bboUpdateSelectedDate();
+        bboShowLoader(true);
+
+        var url = '@Url.Action("_business", "Home")';
+        $.post(url, { data: out }, function (data) {
+            bboShowLoader(false);
+            $('#busn_show').html(data);
+            bindBboTotalsToggle();
+        }).fail(function () {
+            bboShowLoader(false);
+        });
+    }
+
+    function bindBboTotalsToggle() {
+        /* Summary tiles are always visible in the modern grid layout */
+    }
+
+    function loadBusinessByOperatorInitial() {
+        bboShowLoader(true);
         var url = '@Url.Action("_business", "Home")';
         $.post(url, function (data) {
-            $('#loader').hide();
-            $("#busn_show").html(data);
-
-        })
-    });
-</script>
-<script>
-    $(function () {
-        var url = document.URL;
-        var hash = url.substring(url.indexOf('#'));
-        if (hash == "#setting") {
-            $('#tab1click').removeClass("current2");
-            $('#tab2click').addClass("current2");
-            $('#tab-1').removeClass("current2");
-            $('#tab-2').addClass("current2");
-
-        }
-        else if (hash == "#useraccount") {
-            $('#tab2click').removeClass("current2");
-            $('#tab1click').addClass("current2");
-            $('#tab-2').removeClass("current2");
-            $('#tab-1').addClass("current2");
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        var succ = '@ViewData["sucess"]';
-        var error = '@ViewData["error"]';
-        if (succ != "" && succ != null) {
-            //swal("Good job!", succ, "success");
-        }
-        if (error != "" && error != null) {
-            //swal("Ooops!", error, "error");
-        }
-        document.getElementById("Todaybusiness").style.display = "none";
-        document.getElementById("rch").style.marginBottom = "22px";
-        //initDonutChart();
-    });
-</script>
-
-<script>
-    function Alltab() {
-        document.getElementById("Todaybusiness").style.display = "none";
-        document.getElementById("rch").style.marginBottom = "22px";
-    }
-</script>
-<script>
-    function today(a)
-    {
-        document.getElementById("Todaybusiness").style.display = "block";
-        $("#tabletoday").empty();
-
-        var x = a.id;
-        //call ajax
-        $.ajax({
-            url: '@Url.Action("Show_All_Recharge", "Home")',
-            type: 'POST',
-            dataType: "html",
-            data: { type: x },
-            success: function (data) {
-                var  x = JSON.parse(data);
-
-                    var newRow =
-                "<tr>" +
-               " <td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-desktop' style='color:#E91E63;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>Recharge & bill</p></td>" +
-               "<td><p style='padding-top:3px;'> " + x.Recharge + "</p></td>" + "</tr>" +
-               "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-university' style='color:#2196F3;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>Financial Services</p> </td>" +
-               "<td><p style='padding-top:3px;'>" + x.Moneytransfer + "</p></td>" + "</tr>" +
-                 "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='material-icons' style='color:#FF9800;'>fingerprint</i></p></td>" +
-               "<td><p style='padding-top:3px;'>Aeps Services</p> </td>" +
-               "<td><p style='padding-top:3px;'>" + x.Aeps + "</p></td>" + "</tr>" +
-                "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-id-card' aria-hidden='true' style='color:#000000;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>Pancard</p> </td>" +
-               "<td><p style='padding-top:3px;'>" + x.Pancard + "</p></td>" + "</tr>" +
-                "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-plane' style='color:#4CAF50;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>Travel</p> </td>" +
-               "<td><p style='padding-top:3px;'>" + 0.00+ "</p></td>" + "</tr>" +
-                "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-gift' style='color:#F44336;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>Gift Cards </p></td>" +
-               "<td><p style='padding-top:3px;'>" + 0.00 + "</p></td>"
-                 + "</tr>" +
-                "<tr>" +
-                "<td style='border-right:1px solid #cccccc;'><p style='font-size:20px;'><i class='fa fa-cart-plus' style='color:#555;'></i></p></td>" +
-               "<td><p style='padding-top:3px;'>E-Commerce</p> </td>" +
-                 "<td><p style='padding-top:3px;'>" + 0.00 + "</p></td>"
-                 + "</tr>";
-                    $('#tabletoday').append(newRow);
-                    $("#donut_chart").empty();
-                    var rechargebillamt = x.Recharge;
-                    var moneytransferamt = x.Moneytransfer;
-                    var Aepsamt = x.Aeps;
-                    var pancardamount = x.Pancard;
-                    initDonutChart(rechargebillamt, moneytransferamt, Aepsamt, pancardamount);
-
-
-            },
-            error: function (data) {
-
-            }
+            bboShowLoader(false);
+            $('#busn_show').html(data);
+            bindBboTotalsToggle();
+        }).fail(function () {
+            bboShowLoader(false);
         });
-        return true;
-
-     }
-</script>
-<!-- Doughnut Chart -->
-<script type="text/javascript">
-    function initDonutChart(rechargebill, moneytrasfer, Aepsamt, pancardamount) {
-
-        var rechargeandbill = rechargebill;
-        var Financial = moneytrasfer;
-        var aeps = Aepsamt;
-        var Pancard = pancardamount;
-        var Travel = 0.00
-        var GiftCards = 0.00
-        var ECommerce = 0.00
-
-        Morris.Donut({
-            element: 'donut_chart',
-
-            data: [
-                {
-                    label: 'Recharge & bill',
-                    value: rechargeandbill,
-                },
-                {
-                    label: 'Financial',
-                    value: Financial
-                },
-                {
-                    label: 'Aeps',
-                    value: aeps
-                },
-                {
-                    label: 'Pancard',
-                    value: Pancard
-                },
-                {
-                    label: 'Travels',
-                    value: Travel
-                },
-                {
-                    label: 'Gift Cards',
-                    value: GiftCards,
-                },
-                {
-                    label: 'E-Commerce',
-                    value: ECommerce
-                }
-            ],
-
-            colors: [
-                'rgb(233, 30, 99)',
-                'rgb(0, 128, 255)',
-                'rgb(255, 152, 0)',
-                'rgb(0, 0, 0)',
-                'rgb(76, 175, 80)',
-                'rgb(255, 0, 0)',
-                'rgb(128, 128, 128)'],
-
-            formatter: function (y) {
-                return y
-            }
-        });
-
     }
-</script>
 
-
-<script>
-    function fillval() {
-
-        var virtual = $("#virval").val();
-        $("#txtvirtual").val(virtual);
-        $("#myModal").modal('show');
-
-    }
-</script>
-
-<!--  ==   Script For tabs3  ==--->
-<script type="text/javascript">
     $(document).ready(function () {
+        initBboDatepickers();
+        bboSetQuickActive('today');
+        loadBusinessByOperatorInitial();
 
-        $('ul.tabs3 li').click(function () {
-            var tab_id = $(this).attr('data-tab');
-
-            $('ul.tabs3 li').removeClass('current3');
-            $('.tab-content3').removeClass('current3');
-
-            $(this).addClass('current3');
-            $("#" + tab_id).addClass('current3');
-        })
-
-    })
+        $('#txt_frm_date').off('change.bbo changeDate.bbo').on('changeDate.bbo change.bbo', function () {
+            bboUpdateSelectedDate();
+            bboSetQuickActive('');
+        });
+    });
 </script>
-<!--For Cuatom Chart -->
-<script>
-    function grossbusiness1(out) {
-
-        if (out == "date") {
-            out = $('#txt_frm_date').val();
-        }
-        else if (out == "today") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-        }
-        else if (out == "lastday") {
-        const today = new Date()
-        const tomorrow = new Date(today)
-          tomorrow.setDate(tomorrow.getDate() - 1)
-           $("#txt_frm_date").datepicker("setDate",tomorrow);
-        }
-         var url = '@Url.Action("_business", "Home")';
-        $.post(url, { data: out }, function (data) {
-
-                    $("#busn_show").html(data);
-             })
-    }
-</script>
-
-
-
-
-

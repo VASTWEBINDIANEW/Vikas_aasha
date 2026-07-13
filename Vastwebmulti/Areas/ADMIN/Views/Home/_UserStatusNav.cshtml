@@ -1,0 +1,39 @@
+@{
+    var statusPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    Func<string, bool> isStatusActive = name => statusPath.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0;
+}
+
+<nav class="vm-ticket-nav-wrap vm-daybook-nav-wrap" aria-label="User status navigation">
+    <div id="daybook-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-daybook-nav">
+        <ul class="vm-fin-nav__list" id="user-status-nav-list">
+            <li>
+                <a class="vm-fin-nav__link @(isStatusActive("All_Retailer_Status") ? "is-active" : "")"
+                   href="@Url.Action("All_Retailer_Status", "Home")" title="Retailer Status">
+                    <i class="fas fa-store vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Retailer</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isStatusActive("All_Dealer_Status") ? "is-active" : "")"
+                   href="@Url.Action("All_Dealer_Status", "Home")" title="Distributor Status">
+                    <i class="fas fa-sitemap vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Distributor</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isStatusActive("All_MD_Status") ? "is-active" : "")"
+                   href="@Url.Action("All_MD_Status", "Home")" title="M/D Status">
+                    <i class="fas fa-user-tie vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>M/D</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isStatusActive("All_Api_Status") ? "is-active" : "")"
+                   href="@Url.Action("All_Api_Status", "Home")" title="API Users Status">
+                    <i class="fas fa-plug vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>API</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,173 @@
+/* Admin Income — table + extra filters only (toolbar shell = Prepaid Card shared CSS) */
+/* Toolbar — white card with padding (same as Prepaid Card Report screenshot) */
+body.saas-admin-ui .saas-admin-income-page .saas-acc-toolbar.vm-opr-toolbar-unified {
+    background: var(--acc-surface, #ffffff) !important;
+    border: 1px solid var(--acc-border, #e2e8f0) !important;
+    border-radius: var(--acc-radius, 16px) !important;
+    box-shadow: var(--acc-shadow, 0 8px 30px rgba(15, 23, 42, 0.07)) !important;
+    padding: 14px 18px !important;
+    margin-bottom: 18px !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page .saas-acc-toolbar--stacked .saas-acc-toolbar-top .saas-acc-filter-bar,
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line,
+body.saas-admin-ui .saas-admin-income-page .vm-ecomm-filter-row--one-line {
+    padding-top: 0 !important;
+    border-top: none !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page {
+    --ai-filter-extra-width: 128px;
+    --ai-filter-operator-width: 148px;
+}
+
+/* Extra API / Port filters when MACHINE or API selected */
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-filter-extra {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-filter-extra.is-visible {
+    display: flex !important;
+    flex: 0 0 var(--ai-filter-extra-width) !important;
+    width: var(--ai-filter-extra-width) !important;
+    min-width: var(--ai-filter-extra-width) !important;
+    max-width: var(--ai-filter-extra-width) !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--category {
+    flex: 0 0 132px !important;
+    width: 132px !important;
+    min-width: 132px !important;
+    max-width: 132px !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--operator,
+body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-gift-field--operator {
+    flex: 0 0 var(--ai-filter-operator-width) !important;
+    width: var(--ai-filter-operator-width) !important;
+    min-width: var(--ai-filter-operator-width) !important;
+    max-width: var(--ai-filter-operator-width) !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-opr-table-panel__title i.fa-chart-bar {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable.vm-opr-data-table {
+    width: max-content !important;
+    min-width: 1960px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable thead th {
+    white-space: nowrap;
+    font-size: 0.74rem;
+    vertical-align: middle;
+    text-align: center;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 8px 6px;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable tbody td {
+    white-space: nowrap;
+    font-size: 0.76rem;
+    vertical-align: middle;
+    padding: 7px 8px;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable tbody td.vm-ai-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable tbody td.vm-ai-text {
+    text-align: left;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge--rate {
+    background: #16a34a;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge--pct {
+    background: #94a3b8;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge--comm {
+    background: var(--main-bg-lcolor, #0ea5e9);
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge--income {
+    background: #2563eb;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-admin-income-page .vm-ai-head-badge--success {
+    background: #16a34a;
+    color: #fff;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable tbody tr.vm-ai-row-total td {
+    background: #eff6ff;
+    font-weight: 700;
+    color: #1e3a8a;
+    border-top: 2px solid #93c5fd;
+}
+
+body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable tbody tr.vm-ai-row-negative td {
+    background: #dc2626 !important;
+    color: #fff !important;
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--category,
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--operator {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: calc(50% - 4px) !important;
+        max-width: calc(50% - 4px) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-income-page #adminIncomeReportTable.vm-opr-data-table {
+        min-width: 1960px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-dmt-field:not(.vm-opr-filter-extra),
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-opr-filter-extra.is-visible,
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--category,
+    body.saas-admin-ui .saas-admin-income-page .vm-gift-filter-row--one-line > .vm-ai-field--operator {
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}

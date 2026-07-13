@@ -1,0 +1,484 @@
+/* Admin Ledger — matches Prepaid Card report layout */
+/* v7 — POS ledger page (matches CMS ledger layout) */
+
+body.saas-admin-ui .saas-admin-ledger-page {
+    --al-ledger-link-bg: #eff6ff;
+    --al-ledger-link-border: #bfdbfe;
+    --al-ledger-link-color: #1d4ed8;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-toolbar-one-line {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-toolbar-one-line .saas-acc-breadcrumb {
+    flex: 0 0 auto;
+    margin: 0 !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-toolbar-one-line .saas-acc-filter-bar {
+    flex: 1 1 auto;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-top: none !important;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .saas-acc-toolbar--stacked .saas-acc-toolbar-top {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-filter-row--one-line {
+    flex-wrap: nowrap !important;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--type {
+    flex: 0 1 150px;
+    min-width: 130px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--user {
+    flex: 0 1 160px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--prev {
+    flex: 0 1 120px;
+    min-width: 110px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-opr-filter-extra[hidden] {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-opr-filter-extra.is-visible {
+    display: flex !important;
+    flex-direction: column;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-quick-links {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-quick-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--al-ledger-link-border);
+    background: var(--al-ledger-link-bg);
+    color: var(--al-ledger-link-color) !important;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.15s, transform 0.15s;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-quick-link:hover {
+    background: #dbeafe;
+    transform: translateY(-1px);
+    color: #1e3a8a !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-dmt-filter-search-group {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-report-main-card,
+body.saas-admin-ui .saas-admin-ledger-page .vm-opr-table-panel,
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-wrap,
+body.saas-admin-ui .saas-admin-ledger-page .vm-prepaid-report-table-panel {
+    max-width: 100% !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll,
+body.saas-admin-ui .saas-admin-ledger-page .table-responsive.vm-opr-table-scroll {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 #f1f5f9;
+    padding-bottom: 8px;
+    border-radius: 0 0 12px 12px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll::-webkit-scrollbar,
+body.saas-admin-ui .saas-admin-ledger-page .table-responsive.vm-opr-table-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll::-webkit-scrollbar-thumb,
+body.saas-admin-ui .saas-admin-ledger-page .table-responsive.vm-opr-table-scroll::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 999px;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable.vm-opr-data-table,
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable.vm-opr-data-table,
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable.vm-opr-data-table.saas-acc-table--ledger,
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable.vm-opr-data-table.saas-acc-table--ledger,
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable.vm-opr-data-table.saas-acc-table--ledger {
+    min-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-admin-cms-ledger-page .vm-cms-field--retailer,
+body.saas-admin-ui .saas-admin-pos-ledger-page .vm-pos-field--retailer {
+    flex: 0 1 200px;
+    min-width: 170px;
+}
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(1),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(1) { width: 5%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(2),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(2) { width: 12%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(3),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(3) { width: 22%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(4),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(4) { width: 9%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(5),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(5),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(6),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(6) { width: 8%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(7),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(7),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(8),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(8) { width: 10%; }
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th:nth-child(9),
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td:nth-child(9) { width: 14%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(1),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(1) { width: 14%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(2),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(2) { width: 11%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(3),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(3),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(10),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(10) { width: 9%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(4),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(4),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(5),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(5),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(6),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(6),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(7),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(7),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(8),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(8),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(9),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(9) { width: 7%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th:nth-child(11),
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td:nth-child(11) { width: 12%; }
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td.col-particulars {
+    text-align: left !important;
+    white-space: normal !important;
+    line-height: 1.4;
+    font-weight: 500 !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td.col-amount,
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td.col-balance {
+    font-weight: 700 !important;
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th,
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td {
+    vertical-align: middle !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(1),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(1) {
+    width: 5%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(2),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(2) {
+    width: 10%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(3),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(3) {
+    width: 24%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(4),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(4) {
+    width: 8%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(5),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(5),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(6),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(6) {
+    width: 8%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(7),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(7),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(8),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(8) {
+    width: 9%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(9),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(9) {
+    width: 14%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th:nth-child(10),
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td:nth-child(10) {
+    width: 7%;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead {
+    position: static !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th {
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td.col-particulars {
+    text-align: left !important;
+    max-width: none !important;
+    white-space: normal !important;
+    line-height: 1.4;
+    font-weight: 500 !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td.col-amount,
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td.col-balance {
+    font-weight: 700 !important;
+    color: #2563eb !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody tr.saas-acc-row-mismatch td {
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody tr.saas-acc-row-mismatch td.col-diff {
+    background: #dc2626 !important;
+    color: #fff !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-report-main-card {
+    margin-top: 0;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-opr-table-panel__title i.fa-book {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-wrap {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .dataTables_wrapper .dataTables_filter {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-admin-ledger-page .dataTables_wrapper .dataTables_length {
+    display: none !important;
+}
+
+@media (max-width: 1400px) {
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-toolbar-one-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-filter-row--one-line {
+        flex-wrap: wrap !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-toolbar-one-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-filter-row--one-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-report-main-card,
+    body.saas-admin-ui .saas-admin-ledger-page .vm-opr-main-card {
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-wrap {
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 4px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll,
+    body.saas-admin-ui .saas-admin-ledger-page .table-responsive.vm-opr-table-scroll {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-bottom: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll::-webkit-scrollbar,
+    body.saas-admin-ui .saas-admin-ledger-page .table-responsive.vm-opr-table-scroll::-webkit-scrollbar {
+        height: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-table-scroll::after {
+        content: "Swipe table left / right";
+        display: block;
+        margin-top: 6px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #64748b;
+        text-align: center;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable.vm-opr-data-table,
+    body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable.vm-opr-data-table,
+    body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable.vm-opr-data-table {
+        width: auto !important;
+        min-width: 1120px !important;
+        max-width: none !important;
+        table-layout: auto !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable thead th,
+    body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody td,
+    body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable thead th,
+    body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody td,
+    body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable thead th,
+    body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody td {
+        width: auto !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-dmt-table-panel__head {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-dmt-table-panel__right {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-radiant-record-badge,
+    body.saas-admin-ui .saas-admin-ledger-page .vm-radiant-inline-total {
+        width: auto !important;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-dmt-table-actions .saas-acc-btn {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--type,
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--user,
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-field--prev {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-ledger-quick-links {
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable.vm-opr-data-table,
+    body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable.vm-opr-data-table,
+    body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable.vm-opr-data-table {
+        min-width: 1040px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable.vm-opr-data-table {
+        min-width: 1280px !important;
+    }
+
+    body.saas-admin-ui .saas-admin-cms-ledger-page .vm-cms-field--retailer,
+    body.saas-admin-ui .saas-admin-pos-ledger-page .vm-pos-field--retailer {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-admin-ledger-page .vm-dmt-totals-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody tr.vm-opr-table-empty-row td,
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody tr.vm-opr-table-empty-row td,
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody tr.vm-opr-table-empty-row td {
+    padding: 36px 16px !important;
+    text-align: center !important;
+    color: #64748b !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+    white-space: normal !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-admin-cms-ledger-page #cmsLedgerTable tbody tr.vm-opr-table-empty-row td i,
+body.saas-admin-ui .saas-admin-pos-ledger-page #posLedgerTable tbody tr.vm-opr-table-empty-row td i,
+body.saas-admin-ui .saas-admin-ledger-page #adminLedgerTable tbody tr.vm-opr-table-empty-row td i {
+    display: block;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}

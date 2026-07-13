@@ -1,453 +1,260 @@
 @model IEnumerable<Vastwebmulti.Models.pos_ledger_report_Result>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "RetailerLedgerPOS";
+    ViewBag.Title = "POS Ledger";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var selectedRetailer = Request["RetailerIdpos"] ?? "";
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
-<!-- CSS only -->
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
 
-    .table.dataTable thead th, table.dataTable thead td {
-        padding: 8px 4px 6px 4px;
-    }
-
-    .table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px 6px 4px;
-    }
-
-
-    table.dataTable tbody th, table.dataTable tbody td {
-        padding: 8px 4px;
-    }
-
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #eee !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .form-iconmy {
-        position: absolute;
-        z-index: 99;
-        top: 0px;
-        bottom: 0px;
-        padding: 6px 5px;
-        border-right: 1px solid #bbb;
-        height: 32px;
-    }
-
-    .data-show .col-md-3 span:first-child {
-        width: 40%;
-        float: left;
-        color: #fff;
-        text-align: center;
-        padding: 3px 5px;
-    }
-
-    .data-show .col-md-3 span:last-child {
-        width: 60%;
-        float: left;
-        text-align: right;
-        background: var(--second-bg-color);
-        padding: 3px 5px;
-    }
-
-    @@media (max-width:1300px) {
-        .col-md-2.ytr-okpli.padd-left-thirddesign {
-            padding-left: 86px !important;
-        }
-    }
-
-    @@media only screen and (max-width:992px) {
-        .responcive-fifty {
-            width: 50%;
-            float: left;
-            margin-bottom: 10px;
-            padding: 0 2px !important;
-        }
-
-            .responcive-fifty button {
-                width: 100%;
-                text-align: left;
-            }
-
-        .admin-income-page {
-            margin: 0 15px;
-        }
-
-        .responcive-fifty div {
-            padding-bottom: 0px !important;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .date-respon-third {
-            width: 50% !important;
-        }
-
-        .third-design .widthauto-search-thi {
-            width: auto;
-        }
-
-        .adminledger-adminpage .col-md-1.responcive-fifty.padding-left-third {
-            width: 100%;
-            float: left;
-        }
-
-        .adminledger-adminpage .row.admin-ledger-page {
-            margin: 0;
-        }
-
-        .adminledger-adminpage .col-md-1.admin-ledger-page-btn.responcive-fifty {
-            width: auto;
-            float: left;
-            padding-right: 0 !important;
-        }
-
-        .adminledger-adminpage .col-md-2.responcive-fifty.spanpdfback-third {
-            width: auto;
-        }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .admin-ledger-page .col-md-2, .admin-ledger-page .col-md-1 {
-            padding: 0px 15px !important;
-            margin-top: 5px;
-        }
-
-        .admin-ledger-page .admin-ledger-page-btn {
-            width: 50%;
-            float: left;
-        }
-
-        .data-show .col-md-3 {
-            padding: 0px 0px !important;
-            margin-bottom: 4px;
-            width: 100%;
-            float: left;
-        }
-
-        .data-show {
-            padding-top: 5px !important;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child,
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-left: 1px solid var(--border-color);
-        }
-
-        .adminledger-adminpage .responcive-fifty {
-            padding: 0px 3px !important;
-        }
-    }
-
-
-    .breadcrumb-arrows
-    li {
-        display: inline-block;
-        line-height: 32px;
-        position: relative;
-        margin-right: 10px;
-    }
-
-    .breadcrumb-arrows:after {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        right: -2px;
-        border-style: solid;
-        border-width: 15px 15px 17px 0px;
-        border-color: transparent #fff transparent transparent;
-        z-index: 0;
-    }
-
-    .breadcrumb-arrows:first-child:after {
-        border-color: transparent;
-    }
-
-    .breadcrumb-arrows a:before {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        left: -15px;
-        border-style: solid;
-        border-width: 15px 15px 17px 0px;
-        border-color: transparent var(--main-bg-lcolor) !important;
-        transparent transparent;
-        z-index: 10;
-    }
-
-    .breadcrumb-arrows a:after {
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        right: 0px;
-        border-style: solid;
-        border-width: 15px 15px 17px 0px;
-        border-color: transparent #fff transparent transparent;
-        z-index: 10;
-    }
-
-    .breadcrumb-arrows .active a {
-        background: var(--main-bg-lcolor) !important;
-        z-index: 100;
-        padding-right: 35px !important;
-    }
-
-        .breadcrumb-arrows .active a:before {
-            border-right-color: var(--main-bg-lcolor) !important;
-        }
-
-    .breadcrumb-arrows a {
-        display: block;
-        background: var(--main-bg-lcolor) !important;
-        padding: 0 20px;
-        padding-right: 35px !important;
-    }
-
-    .breadcrumb-arrows {
-        background: var(--main-bg-lcolor) !important;
-    }
-
-        .breadcrumb-arrows a:hover:before {
-            border-color: transparent #dca167;
-            transparent transparent;
-        }
-
-    .breadcrumb-arrows {
-        background: var(--main-bg-lcolor) !important;
-    }
-
-        .breadcrumb-arrows a:hover {
-            text-decoration: none !important;
-            font-weight: inherit;
-        }
-
-    .btn:not(.btn-link):not(.btn-circle), .form-group .form-control {
-        /* border: 1px solid #bfbebe; */
-        height: 32px;
-        border: 1px solid #dddddd !important;
-    }
-
-    span.dropdown_icons {
-        height: 26px;
-        position: absolute;
-        top: 1px;
-        right: 1px;
-        width: 20px;
-        z-index: 99999999999;
-    }
-
-    #nicho {
-        height: 26px;
-        position: absolute;
-        top: 8px;
-        right: -11px;
-        width: 26px;
-        z-index: 99999999999;
-        border-color: #888 transparent transparent transparent;
-    }
-</style>
-
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid adminledger-adminpage">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Ledger Book</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Ledger Book</a></li>
-
-            </ul>
-        </div>
-
-
-
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="row clearfix page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass">
-
-
-                <div class="col-lg-10 col-md-10 gift-card-top all-type-third selecthotel-third onlypadding-right-admin-four" style="width:100%;float:left;">
-                    <div class="card third-card-res-full" style="width: 100%; margin: auto;">
-
-                        <div class="">
-                            <!--Four-Design-Admin-page-Header-Section-End-->
-
-                            <div class="page-header-third pageheader-margin-third retailerlist-header-resp" style="width:98%;float:left;margin:auto;">
-                                <div class="col-md-4 respo-upup bread-same-all-page breadsameall-second four-noneclass-admin-only" style="width: auto;">
-
-                                    @*<li class="smli">
-                                            <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                            </a>
-                                        </li>*@
-                                    @*<li class="smli">
-                                            <a href="@Url.Action("FaceAPIFilter", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                                FaceAPIFilter&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                            </a>
-                                        </li>*@
-                                    @*<li class="fullbodydycolorbg tmw-total-color-one">
-                                            Adminpasledgershow
-                                        </li>*@
-                                    <ul class="breadcrumb-arrows" style="background-color: #dca167 !important; margin-left: 15px;">
-                                        <li class="active"><a href="@Url.Action("Dashboard", "Home")">Dashboard</a></li>
-                                        <li><a href="@Url.Action("AdminLedger", "Home")">Back&nbsp;To&nbsp;Main&nbsp;Ledger</a></li>
-                                    </ul>
-
-
-                                </div>
-                                <div class="col-md-2 respo-upup" style="margin-top: 1px; padding: 0px; padding-left: 3px;  ">
-                                    @Html.DropDownList("RetailerIdpos", (IEnumerable<SelectListItem>)ViewBag.RetailerId11, "Select Retailer", new { @class = "selectpicker form-control", data_live_search = "true" })
-                                    <span class="dropdown_icons"><i id="nicho" class="fa fa-caret-down" aria-hidden="true"></i></span>
-                                </div>
-                                <div class="col-md-3 respo-upup" style="margin-top: 1px; padding: 0px; padding-left: 3px; ">
-                                    <div class="">
-                                        <div class="">
-                                            <div class="form-group" style="margin-bottom: 0px; width: fit-content;">
-                                                <div class="input-daterange input-group">
-                                                    <div class="custom-date-icon ner" style="border-color: #ddd !important;">
-                                                        <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                    </div>
-                                                    @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; height:32px;    width: fit-content;", autocomplete = "off" })
-                                                    <span class="input-group-addon" style="padding:0px;min-width:3px;">
-
-                                                    </span>
-                                                    <div style="position: relative; width: fit-content;">
-                                                        <div class="custom-date-icon ner" style="border-color: #ddd !important;">
-                                                            <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                        </div>
-                                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #dddddd; ;height:32px;    width: fit-content;", autocomplete = "off" })
-                                                    </div>
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 ytr-okpli padd-left-thirddesign" style="">
-                                    <button type="submit" id="RetailerPOSMAINSearch" class="btn  waves-effect btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" style="background: #fff; top: 1px; left:1rem; height: 32px; border: 1px solid #dddddd ">
-                                        <i class="fa fa-search" style="font-size: 16px; position: relative; top: 0px;"></i>
-                                        <span class="search_1_">Search</span>
-                                    </button>
-                                </div>
-
-                                <div class="col-md-1 re-treyop pdf-lastclass-third pdf-lastclass-third-responsive" style="float:right;width:auto;">
-                                    <div class="header" style="margin-top:0;padding:0px;width:100%;float:left;border:0px;">
-
-
-
-                                        <div class="white-l-search-nine pdfexpoer-second totalbutton-secondclas" style="width:100%;float:left;">
-
-                                            <div class="web-white-filter fil" style="float: left;margin-right: 5px;">
-                                                <input type="button" id="btnExport" value="Export" style=" margin-right: -32px; margin-left: 0px; padding: 0px 4px; height: 32px; border: 1px solid #b1a6a638; background: #b1a6a638; background-image: url(../../images/reportimage/xls.png); background-repeat: no-repeat; background-position: 4px center; padding-left: 20px;position:absolute;right:5px;top:1px;">
-
-
-
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ledger-modern.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-admin-ledger-page saas-admin-pos-ledger-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            <div id="posLedgerForm"
+                 class="vm-rpt-filters-panel__form"
+                 data-date-mode="@dateMode"
+                 data-frm-date="@frmDate"
+                 data-to-date="@toDate">
+
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line vm-ledger-toolbar-one-line">
+
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account</li>
+                        <li>POS Ledger</li>
+                    </ol>
+
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line vm-ledger-filter-row--one-line">
+
+                        <div class="vm-ledger-quick-links">
+                            <a href="@Url.Action("AdminLedger", "Home")" class="vm-ledger-quick-link">
+                                <i class="fas fa-book" aria-hidden="true"></i> Main Ledger
+                            </a>
+                            <a href="@Url.Action("CMSLedger", "Home")" class="vm-ledger-quick-link">
+                                <i class="fas fa-file-invoice" aria-hidden="true"></i> CMS Ledger
+                            </a>
+                        </div>
+
+                        <div class="vm-opr-field vm-dmt-field vm-ledger-field--user vm-pos-field--retailer">
+                            @Html.DropDownList("RetailerIdpos", new SelectList(ViewBag.RetailerId11 as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>(), "Value", "Text", selectedRetailer), "Select Retailer", new { @id = "RetailerIdpos", @class = "vm-opr-select vm-dmt-select form-control" })
+                        </div>
+
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
                             </div>
-
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="button" id="RetailerPOSMAINSearch" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
 
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="card">
-                                <div>
-                                    <div class="table-responsive tableseconddes-admin" style="position: inherit;">
-                                        <div id="RetailerPOSSearchList">
-                                            @Html.Action("POS_Retailer_MAINWallet", Model)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </div>
 
+            </div>
+
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="posLedgerTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>POS ledger totals</span>
+                    </div>
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hidePosLedgerTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Total Credit</span>
+                        <strong class="vm-opr-total-card__value" id="posTotalCredit">0.00</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--failed">
+                        <span class="vm-opr-total-card__label">Total Debit</span>
+                        <strong class="vm-opr-total-card__value" id="posTotalDebit">0.00</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">Records</span>
+                        <strong class="vm-opr-total-card__value" id="posTotalRecords">0</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="vm-opr-main-card vm-ledger-report-main-card vm-prepaid-report-main-card">
+            <div class="vm-opr-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-cash-register" aria-hidden="true"></i>
+                        <span>POS retailer ledger</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="posRecordCount">0</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total credit for current filter">
+                            Credit: <strong id="posInlineCredit">0.00</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-pos-totals-btn" onclick="findPosLedgerTotals()" title="Show totals" aria-expanded="false" aria-controls="posLedgerTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExport" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-opr-table-wrap vm-ledger-table-wrap vm-prepaid-table-wrap">
+                    <div id="RetailerPOSSearchList">
+                        @Html.Action("POS_Retailer_MAINWallet", "Home")
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
 
-
-
 <script>
-       $('#RetailerPOSMAINSearch').click(function () {
+    (function ($) {
 
-        $.ajax({
-            url: '@Url.Action("POS_Retailer_MAINWallet", "Home")',
-            type: 'POST',
-            data: { RetailerId: $("#RetailerIdpos").val(), txt_frm_date: $('#txt_frm_date').val(), txt_to_date: $('#txt_to_date').val() },
-            success: function (response) {
-                $('#RetailerPOSSearchList').html(response);
-
-
-                }
-        })
-    })
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+        function hidePosLedgerTotals() {
+            $('#posLedgerTotalsPanel').hide().attr('aria-hidden', 'true');
+            $('.vm-pos-totals-btn').attr('aria-expanded', 'false');
         }
 
-        answers();
-    });
+        window.findPosLedgerTotals = function () {
+            var $panel = $('#posLedgerTotalsPanel');
+            if ($panel.is(':visible')) {
+                hidePosLedgerTotals();
+                return;
+            }
+            $panel.show().attr('aria-hidden', 'false');
+            $('.vm-pos-totals-btn').attr('aria-expanded', 'true');
+        };
 
-</script>
+        window.hidePosLedgerTotals = hidePosLedgerTotals;
 
-<script>
-    $("#btnExport").click(function () {
-        var RetailerIdpos = $('#RetailerIdpos').val();
-        var txt_frm_date = $('#txt_frm_date').val();
-        var txt_to_date = $('#txt_to_date').val();
-        var url = '@Url.Action("ExcelAdminposreport", "Home")?RetailerIdpos=' + RetailerIdpos + '&txt_frm_date=' + txt_frm_date + '&txt_to_date=' + txt_to_date ;
-        location.href = url;
-});
+        function formatPosAmount(value) {
+            var num = parseFloat(value);
+            if (isNaN(num)) {
+                return '0.00';
+            }
+            return num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function updatePosLedgerSummary() {
+            var $root = $('#posLedgerPartialRoot');
+            if (!$root.length) {
+                return;
+            }
+
+            var records = parseInt($root.attr('data-record-count'), 10) || 0;
+            var credit = $root.attr('data-total-credit') || '0';
+            var debit = $root.attr('data-total-debit') || '0';
+
+            $('#posRecordCount').text(records);
+            $('#posTotalRecords').text(records);
+            $('#posInlineCredit').text(formatPosAmount(credit));
+            $('#posTotalCredit').text(formatPosAmount(credit));
+            $('#posTotalDebit').text(formatPosAmount(debit));
+        }
+
+        function applyPosSelect2($el) {
+            if (!$el || !$el.length || !$.fn.select2) {
+                return;
+            }
+            if ($el.data('select2')) {
+                $el.select2('destroy');
+            }
+            $el.select2({
+                width: '100%',
+                minimumResultsForSearch: 6
+            });
+        }
+
+        function initPosLedgerDatepickers() {
+            if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+                window.setTimeout(initPosLedgerDatepickers, 50);
+                return;
+            }
+            if (typeof window.initAdminReportDateForm === 'function') {
+                window.initAdminReportDateForm('#posLedgerForm');
+            }
+        }
+
+        function buildPosExportUrl() {
+            return '@Url.Action("ExcelAdminposreport", "Home")'
+                + '?RetailerIdpos=' + encodeURIComponent($('#RetailerIdpos').val())
+                + '&txt_frm_date=' + encodeURIComponent($('#txt_frm_date').val())
+                + '&txt_to_date=' + encodeURIComponent($('#txt_to_date').val());
+        }
+
+        function searchPosLedger() {
+            var $btn = $('#RetailerPOSMAINSearch');
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: '@Url.Action("POS_Retailer_MAINWallet", "Home")',
+                type: 'POST',
+                data: {
+                    RetailerId: $('#RetailerIdpos').val(),
+                    txt_frm_date: $('#txt_frm_date').val(),
+                    txt_to_date: $('#txt_to_date').val()
+                },
+                success: function (response) {
+                    $('#RetailerPOSSearchList').html(response);
+                    updatePosLedgerSummary();
+                },
+                complete: function () {
+                    $btn.prop('disabled', false);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            applyPosSelect2($('#RetailerIdpos'));
+            initPosLedgerDatepickers();
+            $('#posLedgerForm .select2-container').css('width', '100%');
+
+            updatePosLedgerSummary();
+
+            $('#RetailerPOSMAINSearch').on('click', searchPosLedger);
+
+            $('#btnExport').on('click', function () {
+                window.location.href = buildPosExportUrl();
+            });
+        });
+    })(jQuery);
 </script>

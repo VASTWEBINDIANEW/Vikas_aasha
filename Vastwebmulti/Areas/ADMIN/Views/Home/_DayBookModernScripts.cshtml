@@ -1,0 +1,100 @@
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=2"></script>
+<script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=4"></script>
+<script>
+    function hideDayBookTotals(panelId) {
+        var $panel = $('#' + panelId);
+        var $btn = $('[aria-controls="' + panelId + '"]');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function toggleDayBookTotals(panelId) {
+        var $panel = $('#' + panelId);
+        var $btn = $('[aria-controls="' + panelId + '"]');
+        if ($panel.is(':visible')) {
+            hideDayBookTotals(panelId);
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function initDayBookDatepicker(formSelector) {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(function () { initDayBookDatepicker(formSelector); }, 50);
+            return;
+        }
+        var $form = jQuery(formSelector);
+        var $input = $form.find('#txt_frm_date');
+        if (!$input.length) {
+            return;
+        }
+        if (!$input.data('datepicker')) {
+            $input.datepicker({
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                autoclose: true
+            });
+            $input.siblings('.saas-acc-dp-icon').on('click', function (e) {
+                e.preventDefault();
+                $input.datepicker('show');
+            });
+        }
+        var mode = ($form.attr('data-date-mode') || 'get').toLowerCase();
+        var frmVal = $form.attr('data-frm-date') || '';
+        if ((mode === 'post' || frmVal) && frmVal) {
+            $input.datepicker('update', frmVal);
+        } else if (mode !== 'post') {
+            $input.datepicker('setDate', new Date());
+        }
+    }
+
+    function exportDayBookExcel(cfg) {
+        var table = document.getElementById(cfg.tableId);
+        if (!table || typeof window.openAdminModernReportExcel !== 'function') {
+            return;
+        }
+        var dateVal = document.getElementById(cfg.dateInputId || 'txt_frm_date');
+        window.openAdminModernReportExcel({
+            table: table,
+            mode: 'clone',
+            theme: 'gray',
+            title: cfg.title,
+            subtitle: cfg.subtitle,
+            fromDate: dateVal ? dateVal.value : '',
+            toDate: dateVal ? dateVal.value : '',
+            recordCount: parseInt((document.getElementById(cfg.recordCountId) || {}).textContent, 10) || 0,
+            filePrefix: cfg.filePrefix,
+            sheetName: cfg.sheetName
+        });
+    }
+
+    function exportDayBookPdf(cfg) {
+        var table = document.getElementById(cfg.tableId);
+        if (!table || typeof window.openAdminModernReportPdf !== 'function') {
+            return;
+        }
+        var dateVal = document.getElementById(cfg.dateInputId || 'txt_frm_date');
+        window.openAdminModernReportPdf({
+            table: table,
+            theme: 'gray',
+            title: cfg.title,
+            subtitle: cfg.subtitle,
+            fromDate: dateVal ? dateVal.value : '',
+            toDate: dateVal ? dateVal.value : '',
+            orientation: 'landscape',
+            recordCount: parseInt((document.getElementById(cfg.recordCountId) || {}).textContent, 10) || 0
+        });
+    }
+
+    function bindDayBookPage(cfg) {
+        $(document).ready(function () {
+            initDayBookDatepicker('#' + cfg.formId);
+            $('#' + cfg.formId + ' button[type="submit"]').on('click', function () {
+                $('#hdnBtnExport').val('');
+            });
+            $('#btnExportA').on('click', function () { exportDayBookExcel(cfg); });
+            $('#btnPDFA').on('click', function () { exportDayBookPdf(cfg); });
+        });
+    }
+</script>

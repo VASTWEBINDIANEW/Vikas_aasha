@@ -1,260 +1,344 @@
 @model Vastwebmulti.Areas.ADMIN.Models.activeinactive
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "All_Retailer_Status";
+    ViewBag.Title = "Retailer Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var activeList = Model != null && Model.active != null
+        ? Model.active.ToList()
+        : new List<Vastwebmulti.Models.show_all_active_inactive_rem_list_Result>();
+    var inactiveList = Model != null && Model.inactive != null
+        ? Model.inactive.ToList()
+        : new List<Vastwebmulti.Models.show_all_active_inactive_rem_list_Result>();
+
+    var activeCount = activeList.Count;
+    var inactiveCount = inactiveList.Count;
+    var totalCount = activeCount + inactiveCount;
 }
-<style>
-    .dropdown-menu {
-        margin-top: 81px !important;
-    }
 
-    .table-bordered tbody tr td, .table-bordered tbody tr th {
-        padding: 8px;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=35" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-actual-daybook-modern.css?v=10" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-user-status-modern.css?v=3" rel="stylesheet" />
 
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-actual-daybook-page saas-user-status-page">
 
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media only screen and (max-width:1280px) {
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-adb-toolbar-one-line">
 
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-adb-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account</li>
+                    <li>User's Book</li>
+                </ol>
 
-    @@media only screen and (max-width:1169px) {
+                <div class="vm-adb-nav-row-shell vm-daybook-nav-row">
+                    @Html.Partial("~/Areas/ADMIN/Views/Home/_UserStatusNav.cshtml")
+                </div>
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
+            </div>
 
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .allretailerstatus-admin .col-md-6 {
-            width: 100%;
-            float: left;
-        }
-
-            .allretailerstatus-admin .col-md-6 .for-retailer-status {
-                padding-top: 15px;
-            }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .for-retailer-status p {
-            position: static !important;
-            float: left;
-            margin-top: 5px;
-            margin-bottom: 0px;
-        }
-
-        .for-retailer-status {
-            border-bottom: 0px !important;
-            padding-bottom: 0px !important;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child,
-        .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-left: 1px solid var(--border-color);
-        }
-    }
-</style>
-<link href="~/AdminDesign/css/themes/all-themes.css" rel="stylesheet" />
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid All_Retailer_Status allstatus-adminsamclass">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>User's Book</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's Book</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix" style="margin-top:3px;">
-            <div class="col-md-12">
-                <div class="card ">
-
-                    <div class="page-header-third">
-                        <div class="row clearfix">
-                            <div class="col-md-6">
-                                @Html.Partial("Index_patrial_view")
-                            </div>
-                            <div class="col-md-6">
-                                <div class="for-retailer-status" style="border-bottom:8px solid red;padding-bottom:15px;width:100%;float:left;">
-                                    <div class="web-white-filter fil pdfexpoer-second" style="float:right;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;">
-                                    </div>
-                                    <p style="position: absolute;right: 164px;left: 15px;font-size: 11px;background: #eee;padding-left:5px;">A user doing business within the current 15 days is considered an <span style="color:green;">active user</span>, no new user appears to be active until he or she starts the business.</p>
-                                </div>
-                            </div>
-                        </div>
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="retailerStatusTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>Retailer status totals</span>
                     </div>
-
-
-                    <div class="row clearfix tablefourdesign-admin">
-
-
-                        <div class="col-md-6">
-                            <div class="page-header-third">
-
-                                <div class="">
-                                    <div class="table-responsive tableseconddes-admin" style="position:inherit;">
-                                        <table class="table table-bordered table-striped table-hover third-design-table" style="width:100%;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <td>Sr</td>
-                                                    <th>Firm&nbsp;Name&nbsp;"ACTIVE&nbsp;USER"</th>
-                                                    <th>Mobile</th>
-                                                    <th>Active</th>
-                                                    <th>Day's</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @{
-                                                    int i = 1;
-                                                }
-                                                @foreach (var item in Model.active)
-                                                {
-
-                                                    <tr>
-                                                        <td>@i</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.frm_name) </td>
-                                                        <td>@Html.DisplayFor(modelItem => item.mobile)</td>
-                                                        <td>@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.todays) </td>
-                                                        <td>@Html.DisplayFor(modelItem => item.type) </td>
-                                                    </tr>
-                                                    i++;
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-6">
-
-                            <div class="page-header-third">
-                                <div class="">
-                                    <div class=" table-responsive tableseconddes-admin" style="position:inherit;">
-
-                                        <table class="table table-bordered table-striped table-hover example-second" style="width:100%;">
-                                            <thead style="background-color:whitesmoke;">
-                                                <tr>
-                                                    <th>Sr</th>
-                                                    <th>Firm&nbsp;Name&nbsp;"INACTIVE&nbsp;USER"</th>
-                                                    <th>Mobile</th>
-                                                    <th>InActive</th>
-                                                    <th>Day's</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @{
-                                                    int i1 = 1;
-                                                }
-                                                @foreach (var item in Model.inactive)
-                                                {
-
-                                                    <tr>
-                                                        <td>@i1</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.frm_name) </td>
-                                                        <td>@Html.DisplayFor(modelItem => item.mobile)</td>
-                                                        <td>@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
-                                                        <td>@Html.DisplayFor(modelItem => item.todays) </td>
-                                                        <td>@Html.DisplayFor(modelItem => item.type) </td>
-                                                    </tr>
-                                                    i1++;
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideRetailerStatusTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">Active Users</span>
+                        <strong class="vm-opr-total-card__value" id="ustActiveCount">@activeCount</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                        <span class="vm-opr-total-card__label">Inactive Users</span>
+                        <strong class="vm-opr-total-card__value" id="ustInactiveCount">@inactiveCount</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Total Users</span>
+                        <strong class="vm-opr-total-card__value" id="ustTotalCount">@totalCount</strong>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="vm-ust-info-banner" role="note">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            <span>A user doing business within the current 15 days is considered an <strong>active user</strong>. No new user appears as active until they start business.</span>
+        </div>
+
+        <div class="vm-opr-main-card vm-prepaid-report-main-card" id="tblpdf">
+            <div class="vm-opr-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-adb-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-id-badge" aria-hidden="true"></i>
+                        <span>Retailer status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge vm-ust-badge--active" title="Active users">
+                            Active: <strong id="ustInlineActive">@activeCount</strong>
+                        </span>
+                        <span class="vm-radiant-record-badge vm-ust-badge--inactive" title="Inactive users">
+                            Inactive: <strong id="ustInlineInactive">@inactiveCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total users">
+                            Total: <strong id="ustInlineTotal">@totalCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ust-totals-btn" onclick="findRetailerStatusTotals()" title="Show totals" aria-expanded="false" aria-controls="retailerStatusTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vm-ust-grid">
+
+                    <div class="vm-ust-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head" style="padding: 0 0 10px;">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-user-check" aria-hidden="true"></i>
+                                <span>Active users</span>
+                            </div>
+                        </div>
+                        <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-adb-table-wrap">
+                            <div class="table-responsive vm-opr-table-scroll">
+                                <table id="retailerActiveTable" class="table vm-opr-data-table vm-ust-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr</th>
+                                            <th>Firm Name</th>
+                                            <th>Mobile</th>
+                                            <th>Active</th>
+                                            <th>Day's</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (activeCount == 0)
+                                        {
+                                            <tr class="vm-opr-table-empty-row">
+                                                <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                    <span>No data found.</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            int i = 1;
+                                            foreach (var item in activeList)
+                                            {
+                                                <tr>
+                                                    <td class="vm-adb-num">@i</td>
+                                                    <td class="vm-adb-text">@Html.DisplayFor(modelItem => item.frm_name)</td>
+                                                    <td class="vm-adb-num">@Html.DisplayFor(modelItem => item.mobile)</td>
+                                                    <td class="vm-adb-num">@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
+                                                    <td class="vm-adb-num">@Html.DisplayFor(modelItem => item.todays)</td>
+                                                    <td>
+                                                        <span class="vm-ust-status-pill vm-ust-status-pill--active">@Html.DisplayFor(modelItem => item.type)</span>
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vm-ust-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head" style="padding: 0 0 10px;">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-user-slash" aria-hidden="true"></i>
+                                <span>Inactive users</span>
+                            </div>
+                        </div>
+                        <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-adb-table-wrap">
+                            <div class="table-responsive vm-opr-table-scroll">
+                                <table id="retailerInactiveTable" class="table vm-opr-data-table vm-ust-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr</th>
+                                            <th>Firm Name</th>
+                                            <th>Mobile</th>
+                                            <th>InActive</th>
+                                            <th>Day's</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (inactiveCount == 0)
+                                        {
+                                            <tr class="vm-opr-table-empty-row">
+                                                <td colspan="6" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                    <span>No data found.</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            int i1 = 1;
+                                            foreach (var item in inactiveList)
+                                            {
+                                                <tr>
+                                                    <td class="vm-adb-num">@i1</td>
+                                                    <td class="vm-adb-text">@Html.DisplayFor(modelItem => item.frm_name)</td>
+                                                    <td class="vm-adb-num">@Html.DisplayFor(modelItem => item.mobile)</td>
+                                                    <td class="vm-adb-num">@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
+                                                    <td class="vm-adb-num">@Html.DisplayFor(modelItem => item.todays)</td>
+                                                    <td>
+                                                        <span class="vm-ust-status-pill vm-ust-status-pill--inactive">@Html.DisplayFor(modelItem => item.type)</span>
+                                                    </td>
+                                                </tr>
+                                                i1++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                @* Combined table for Excel / PDF export *@
+                <table id="retailerStatusExportTable" class="table vm-ust-export-table" aria-hidden="true">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Firm Name</th>
+                            <th>Mobile</th>
+                            <th>Last Activity</th>
+                            <th>Day's</th>
+                            <th>Status</th>
+                            <th>User Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (totalCount == 0)
+                        {
+                            <tr>
+                                <td colspan="7">No data found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int ex = 1;
+                            foreach (var item in activeList)
+                            {
+                                <tr>
+                                    <td>@ex</td>
+                                    <td>@item.frm_name</td>
+                                    <td>@item.mobile</td>
+                                    <td>@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
+                                    <td>@item.todays</td>
+                                    <td>@item.type</td>
+                                    <td>Active</td>
+                                </tr>
+                                ex++;
+                            }
+                            foreach (var item in inactiveList)
+                            {
+                                <tr>
+                                    <td>@ex</td>
+                                    <td>@item.frm_name</td>
+                                    <td>@item.mobile</td>
+                                    <td>@String.Format("{0:dd-MM-yyyy}", item.Rch_time)</td>
+                                    <td>@item.todays</td>
+                                    <td>@item.type</td>
+                                    <td>Inactive</td>
+                                </tr>
+                                ex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
     </div>
 </section>
 
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=2"></script>
+<script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=4"></script>
+
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
+    function hideRetailerStatusTotals() {
+        var $panel = $('#retailerStatusTotalsPanel');
+        var $btn = $('.vm-ust-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function findRetailerStatusTotals() {
+        var $panel = $('#retailerStatusTotalsPanel');
+        var $btn = $('.vm-ust-totals-btn');
+        if ($panel.is(':visible')) {
+            hideRetailerStatusTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function exportRetailerStatusExcel() {
+        var table = document.getElementById('retailerStatusExportTable');
+        if (!table || typeof window.openAdminModernReportExcel !== 'function') {
+            return;
+        }
+
+        window.openAdminModernReportExcel({
+            table: table,
+            title: 'Retailer Status',
+            subtitle: 'Active and inactive retailer users (15-day business rule)',
+            recordCount: @totalCount,
+            filePrefix: 'Retailer_Status',
+            sheetName: 'Retailer Status',
+            theme: 'gray'
         });
-    });
-</script>
+    }
 
+    function exportRetailerStatusPdf() {
+        var table = document.getElementById('retailerStatusExportTable');
+        if (!table || typeof window.openAdminModernReportPdf !== 'function') {
+            return;
+        }
 
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
+        window.openAdminModernReportPdf({
+            table: table,
+            title: 'Retailer Status',
+            subtitle: 'Active and inactive retailer users (15-day business rule)',
+            orientation: 'landscape',
+            recordCount: @totalCount,
+            theme: 'gray'
         });
-    });
+    }
 
-</script>
-<script>
-    $("#btnExport").click(function () {
-        var url = '@Url.Action("Excel_All_Retailer_Status", "Home")';
-        location.href = url;
-});
+    $(document).ready(function () {
+        $('#btnExportA').on('click', exportRetailerStatusExcel);
+        $('#btnPDFA').on('click', exportRetailerStatusPdf);
+    });
 </script>

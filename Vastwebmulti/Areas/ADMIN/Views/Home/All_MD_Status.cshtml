@@ -1,253 +1,296 @@
-@model Vastwebmulti.Models.Superstokist_details
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "All_MD_Status";
+    ViewBag.Title = "M/D Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var activeList = ViewBag.md != null
+        ? ((IEnumerable<Vastwebmulti.Models.Superstokist_details>)ViewBag.md).ToList()
+        : new List<Vastwebmulti.Models.Superstokist_details>();
+    var inactiveList = new List<Vastwebmulti.Models.Superstokist_details>();
+
+    var activeCount = activeList.Count;
+    var inactiveCount = inactiveList.Count;
+    var totalCount = activeCount + inactiveCount;
 }
-<style>
-    .table-bordered tbody tr td, .table-bordered tbody tr th {
-        padding: 8px;
-    }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-nav.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=35" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-actual-daybook-modern.css?v=10" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-user-status-modern.css?v=3" rel="stylesheet" />
 
-    @@media only screen and (max-width:1280px) {
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-actual-daybook-page saas-user-status-page">
 
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    @@media only screen and (max-width:1169px) {
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-adb-toolbar-one-line">
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-adb-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account</li>
+                    <li>User's Book</li>
+                </ol>
 
-    @@media only screen and (max-width:1024px) {
+                <div class="vm-adb-nav-row-shell vm-daybook-nav-row">
+                    @Html.Partial("~/Areas/ADMIN/Views/Home/_UserStatusNav.cshtml")
+                </div>
 
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
+            </div>
 
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-        .All_MD_Status .col-md-6 {
-            width: 100%;
-            float: left;
-        }
-
-            .All_MD_Status .col-md-6 .for-retailer-status {
-                padding-top: 15px;
-            }
-    }
-
-    @@media only screen and (max-width:520px) {
-        .for-retailer-status p {
-            position: static !important;
-            float: left;
-            margin-top: 5px;
-            margin-bottom: 0px;
-        }
-
-        .for-retailer-status {
-            border-bottom: 0px !important;
-            padding-bottom: 0px !important;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child, .table-responsive > .table-bordered > thead > tr > td:first-child,
-        .table-responsive > .table-bordered > thead > tr > th:last-child, .table-responsive > .table-bordered > thead > tr > th:last-child {
-            border-left: 1px solid var(--border-color);
-        }
-    }
-</style>
-<link href="~/AdminDesign/css/themes/all-themes.css" rel="stylesheet" />
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid All_MD_Status allstatus-adminsamclass">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>All Master Distributor Status</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's Book&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">All MD Status</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <div>
-
-                    <div class="page-header-third">
-                        <div class="row clearfix" style="margin-top:3px;">
-                            <div class="col-md-6">
-                                @Html.Partial("Index_patrial_view")
-                            </div>
-                            <div class="col-md-6">
-                                <div class="for-retailer-status" style="border-bottom:8px solid red;padding-bottom:15px;width:100%;float:left;">
-                                    <div class="web-white-filter fil pdfexpoer-second" style="float:right;">
-                                        <input type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;">
-                                        <input type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;">
-                                    </div>
-                                    <p style="position: absolute;right: 164px;left: 15px;font-size: 11px;background: #eee;padding-left:5px;">A user doing business within the current 15 days is considered an <span style="color:green;">active user</span>, no new user appears to be active until he or she starts the business.</p>
-                                </div>
-                            </div>
-                        </div>
+            <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="userStatusTotalsPanel" style="display:none;" aria-hidden="true">
+                <div class="vm-dmt-totals-head">
+                    <div class="vm-dmt-totals-head__title">
+                        <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        <span>M/D status totals</span>
                     </div>
-
-                    <div class="row clearfix ">
-
-                        <div class="col-md-6">
-                            <div class="body page-header-third">
-                                <div class="table-responsive tableseconddes-admin" style="position:inherit;">
-                                    <table class="table table-bordered table-striped table-hover third-design-table" style="width:100%;">
-                                        <thead style="background-color:whitesmoke;">
-                                            <tr>
-                                                <th>Sr</th>
-                                                <th>Firm&nbsp;Name&nbsp;&nbsp;"<span style="color:var(--main-bg-lcolor);">ACTIVE USER</span>"</th>
-                                                <th>Mobile</th>
-                                                <th>Active</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{
-                                                int i = 1;
-                                            }
-                                            @foreach (var item in ViewBag.md)
-                                            {
-                                                <tr>
-                                                    <td>@i</td>
-                                                    <td>@item.FarmName</td>
-                                                    <td>@item.Mobile</td>
-                                                    <td>@ViewData["Act_master"] </td>
-                                                    <td>@ViewData["total_master"] </td>
-
-                                                </tr>
-                                                i++;
-
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="body page-header-third">
-                                <div class="table-responsive tableseconddes-admin" style="position:inherit;">
-
-
-                                    <table class="table table-bordered table-striped table-hover  example-second" style="width:100%;">
-                                        <thead style="background-color:whitesmoke;">
-                                            <tr>
-                                                <th>Sr</th>
-                                                <th>Firm&nbsp;Name&nbsp;&nbsp;"<span style="color:var(--main-bg-rcolor);">INACTIVE&nbsp;USER</span>"</th>
-                                                <th>Mobile</th>
-                                                <th>InActive</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{
-                                                int i1 = 1;
-                                            }
-                                            @foreach (var item in ViewBag.md)
-                                            {
-                                                @*<tr>
-                                                        <td>@i1</td>
-                                                        <td>@item.FarmName</td>
-                                                        <td>@item.Mobile</td>
-                                                        <td>@ViewData["Act_master"] </td>
-                                                        <td>@ViewData["total_master"]</td>
-                                                    </tr>
-                                                    i1++;*@
-
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                    <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideUserStatusTotals()" title="Hide totals" aria-label="Hide totals">
+                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                        <span class="vm-opr-total-card__label">Active Users</span>
+                        <strong class="vm-opr-total-card__value">@activeCount</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                        <span class="vm-opr-total-card__label">Inactive Users</span>
+                        <strong class="vm-opr-total-card__value">@inactiveCount</strong>
+                    </div>
+                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                        <span class="vm-opr-total-card__label">Total Users</span>
+                        <strong class="vm-opr-total-card__value">@totalCount</strong>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="background: #fff;margin: 0px;float: right;">
 
+        <div class="vm-ust-info-banner" role="note">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            <span>A user doing business within the current 15 days is considered an <strong>active user</strong>. No new user appears as active until they start business.</span>
+        </div>
 
-        <div class="modal-content" style="box-shadow:none !important;">
-            <button data-dismiss="modal" style="background:transparent;border:0px;font-size: 32px;float:right;margin:0px 10px 0px 0px;opacity: .4;"> &#10006;</button>
-            <div style="width:100%;float:left;padding:0px 10px;">
-                <h3>Active user definition </h3>
+        <div class="vm-opr-main-card vm-prepaid-report-main-card" id="tblpdf">
+            <div class="vm-opr-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-adb-table-panel__head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-user-tie" aria-hidden="true"></i>
+                        <span>Master distributor status</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge vm-ust-badge--active" title="Active users">
+                            Active: <strong>@activeCount</strong>
+                        </span>
+                        <span class="vm-radiant-record-badge vm-ust-badge--inactive" title="Inactive users">
+                            Inactive: <strong>@inactiveCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total users">
+                            Total: <strong>@totalCount</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-ust-totals-btn" onclick="findUserStatusTotals()" title="Show totals" aria-expanded="false" aria-controls="userStatusTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                <p>A user doing business within the current 15 days is considered an active user, no new user appears to be active until he or she starts the business.</p>
+                <div class="vm-ust-grid">
+
+                    <div class="vm-ust-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head" style="padding: 0 0 10px;">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-user-check" aria-hidden="true"></i>
+                                <span>Active users</span>
+                            </div>
+                        </div>
+                        <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-adb-table-wrap">
+                            <div class="table-responsive vm-opr-table-scroll">
+                                <table id="mdActiveTable" class="table vm-opr-data-table vm-ust-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr</th>
+                                            <th>Firm Name</th>
+                                            <th>Mobile</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (activeCount == 0)
+                                        {
+                                            <tr class="vm-opr-table-empty-row">
+                                                <td colspan="4" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                    <span>No data found.</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            int i = 1;
+                                            foreach (var item in activeList)
+                                            {
+                                                <tr>
+                                                    <td class="vm-adb-num">@i</td>
+                                                    <td class="vm-adb-text">@item.FarmName</td>
+                                                    <td class="vm-adb-num">@item.Mobile</td>
+                                                    <td>
+                                                        <span class="vm-ust-status-pill vm-ust-status-pill--active">Active</span>
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vm-ust-panel">
+                        <div class="vm-opr-table-panel__head vm-dmt-table-panel__head" style="padding: 0 0 10px;">
+                            <div class="vm-opr-table-panel__title">
+                                <i class="fas fa-user-slash" aria-hidden="true"></i>
+                                <span>Inactive users</span>
+                            </div>
+                        </div>
+                        <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-adb-table-wrap">
+                            <div class="table-responsive vm-opr-table-scroll">
+                                <table id="mdInactiveTable" class="table vm-opr-data-table vm-ust-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr</th>
+                                            <th>Firm Name</th>
+                                            <th>Mobile</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="vm-opr-table-empty-row">
+                                            <td colspan="4" class="vm-opr-table-empty vm-dmt-table-empty">
+                                                <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                <span>No data found.</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <table id="userStatusExportTable" class="table vm-ust-export-table" aria-hidden="true">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Firm Name</th>
+                            <th>Mobile</th>
+                            <th>Status</th>
+                            <th>User Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (totalCount == 0)
+                        {
+                            <tr>
+                                <td colspan="5">No data found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int ex = 1;
+                            foreach (var item in activeList)
+                            {
+                                <tr>
+                                    <td>@ex</td>
+                                    <td>@item.FarmName</td>
+                                    <td>@item.Mobile</td>
+                                    <td>Active</td>
+                                    <td>Active</td>
+                                </tr>
+                                ex++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
             </div>
-
         </div>
 
     </div>
-</div>
-<!-- Jquery Core Js -->
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-<script src="~/AdminDesign/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+</section>
+
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=2"></script>
+<script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=4"></script>
+
 <script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
+    function hideUserStatusTotals() {
+        var $panel = $('#userStatusTotalsPanel');
+        var $btn = $('.vm-ust-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
+
+    function findUserStatusTotals() {
+        var $panel = $('#userStatusTotalsPanel');
+        var $btn = $('.vm-ust-totals-btn');
+        if ($panel.is(':visible')) {
+            hideUserStatusTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
+
+    function exportUserStatusExcel() {
+        var table = document.getElementById('userStatusExportTable');
+        if (!table || typeof window.openAdminModernReportExcel !== 'function') {
+            return;
+        }
+
+        window.openAdminModernReportExcel({
+            table: table,
+            title: 'Master Distributor Status',
+            subtitle: 'Active and inactive master distributor users',
+            recordCount: @totalCount,
+            filePrefix: 'MD_Status',
+            sheetName: 'MD Status',
+            theme: 'gray'
         });
-    });
-</script>
+    }
 
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
+    function exportUserStatusPdf() {
+        var table = document.getElementById('userStatusExportTable');
+        if (!table || typeof window.openAdminModernReportPdf !== 'function') {
+            return;
+        }
 
-
-            paging: false
+        window.openAdminModernReportPdf({
+            table: table,
+            title: 'Master Distributor Status',
+            subtitle: 'Active and inactive master distributor users',
+            orientation: 'landscape',
+            recordCount: @totalCount,
+            theme: 'gray'
         });
+    }
+
+    $(document).ready(function () {
+        $('#btnExportA').on('click', exportUserStatusExcel);
+        $('#btnPDFA').on('click', exportUserStatusPdf);
     });
-
-</script>
-
-<script>
-    $("#btnExport").click(function () {
-        var url = '@Url.Action("Excel_All_MD_Status", "Home")';
-        location.href = url;
-});
 </script>

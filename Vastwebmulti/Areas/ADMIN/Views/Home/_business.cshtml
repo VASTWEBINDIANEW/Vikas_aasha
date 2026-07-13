@@ -1,118 +1,37 @@
 @model IEnumerable<Vastwebmulti.Models.total_bussiness_dashboard_Result>
+@using System.Linq
 
+@{
+    var totalSuccess = Model.Where(aa => aa.Rstaus.ToUpper() == "SUCCESS").Sum(aa => aa.total);
+    var totalPending = Model.Where(aa => aa.Rstaus.ToUpper() == "PENDING").Sum(aa => aa.total);
+    var totalFailed = Model.Where(aa => aa.Rstaus.ToUpper() == "FAILED").Sum(aa => aa.total);
+}
 
-<style type="text/css">
+<div class="vm-bbo-ajax-content">
 
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: #e90c59
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #46dff0;
-            animation-delay: -0.5s;
-        }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: #fff;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-
-    .for-count-b {
-        position: relative;
-    }
-
-        .for-count-b::before {
-            content: '';
-            border-left: 1px solid #000;
-            position: absolute;
-            width: 2px;
-            height: 20px;
-            right: 7px;
-            top: 5px;
-        }
-</style>
-
-<ul class="gross-business-total">
-
-    <li class="five" style="margin-right:0px;">
-        <div class="clickevent">
-            <button type="button" class="btn first-success btnssl2233 special-iii" data-loading-text="<i class='fa fa-spinner fa-spin'></i>"><img src="~/AdminDesign/images/plus.svg" style="width:11px;margin-right:4px;margin-top: -2px;">Total Business</button>
+<div class="vm-bbo-summary-bar">
+    <div class="vm-bbo-summary-grid">
+        <div class="vm-bbo-summary-tile vm-bbo-summary-tile--total">
+            <button type="button" class="vm-bbo-summary-tile__btn first-success btnssl2233 special-iii" title="Total business overview">
+                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                <span class="vm-bbo-summary-tile__label">Total Business</span>
+            </button>
         </div>
-            </li>
+        <div class="vm-bbo-summary-tile vm-bbo-summary-tile--success">
+            <span class="vm-bbo-summary-tile__label">Success</span>
+            <strong class="vm-bbo-summary-tile__value">@totalSuccess</strong>
+        </div>
+        <div class="vm-bbo-summary-tile vm-bbo-summary-tile--pending">
+            <span class="vm-bbo-summary-tile__label">Pending</span>
+            <strong class="vm-bbo-summary-tile__value">@totalPending</strong>
+        </div>
+        <div class="vm-bbo-summary-tile vm-bbo-summary-tile--failed">
+            <span class="vm-bbo-summary-tile__label">Failed</span>
+            <strong class="vm-bbo-summary-tile__value">@totalFailed</strong>
+        </div>
+    </div>
+</div>
 
-</ul>
-<button class="second-success" style="width: 312px;position: absolute;right: 14px;top: 74px;display:none;">
-    <p style="width: 40%;float: left;margin:0px;background:#fff;padding: 0px 5px;">
-        <span style="width: 100%;float: left;text-align: left;font-size: 9px;line-height: 8px;margin-bottom:6px;">Success</span>
-        <span style="width: 100%;float: left;text-align: left;font-size: 12px;line-height: 14px;">
-            @{
-                var chk = Model.Where(aa => aa.Rstaus.ToUpper() == "SUCCESS").Sum(aa => aa.total);
-            }
-            @chk
-        </span>
-    </p>
-    <p style="width: 30%;float: left;margin:0px;background:#f7f7c9;padding: 0px 5px;">
-        <span style="width: 100%;float: left;text-align: left;font-size: 9px;line-height: 8px;margin-bottom:6px;">pending</span>
-        <span style="width: 100%;float: left;text-align: left;font-size: 12px;line-height: 14px;">
-            @{
-                var chk1 = Model.Where(aa => aa.Rstaus.ToUpper() == "PENDING").Sum(aa => aa.total);
-            }
-            @chk1
-        </span>
-    </p>
-    <p style="width: 30%;float: left;margin:0px;background:#f9b4b4;padding: 0px 5px;">
-        <span style="width: 100%;float: left;text-align: left;font-size: 9px;line-height: 8px;margin-bottom:6px;">Failed</span>
-        <span style="width: 100%;float: left;text-align: left;font-size: 12px;line-height: 14px;">
-            @{
-                var chk2 = Model.Where(aa => aa.Rstaus.ToUpper() == "FAILED").Sum(aa => aa.total);
-            }
-            @chk2
-        </span>
-    </p>
-</button>
 <div class="gross-business-first">
     <ul class="gross-business gross-business-seconddesign">
         <li onclick="show('prepaid')">
@@ -1841,55 +1760,35 @@
 
 <div id="business_s" class="gross-business-second">
 
-</div><!--#tab-5-->
-<div id="loader" style="position: absolute;right: 34%;top: 50%;display:none; transform: translate(-34%,-50%);">
-    <div class="loadingio-spinner-ripple-92ar2pfqk5j">
-        <div class="ldio-zdyd6mf6t5">
-            <div></div><div></div>
-        </div>
-    </div>
 </div>
-@*<script>
-    $('.first-success').click(function () {
 
-        $('.second-success').fadeIn();
-    });
+</div><!-- vm-bbo-ajax-content -->
 
-
-    $(document).click(function () {
-        if ($('.second-success'))
-            $('.second-success').hide(); //hide the button
-
-    });
-
-
-
-</script>*@
-
-<script type="text/javascript">
-    $(document).mouseup(function (e) {
-       
-        if ($(e.target).closest(".clickevent").length === 0) {
-          
-              $('.second-success').hide();
-        }
-        else {
-              $('.second-success').fadeIn();
-             //alert('in')
-        }
-    });
-</script>
 <script>
     function show(data) {
-         $('#loader').show();
-        var date = $('#txt_frm_date').val();
-            var url = '@Url.Action("_business_Operator", "Home")';
-        $.post(url, { data: data, frmdate: date }, function (data) {
-                            $('#loader').hide();
-                     $('.gross-business-first').hide();
-                     $('.gross-business-second').show();
-                  $("#business_s").html(data);
+        if (typeof bboShowLoader === 'function') {
+            bboShowLoader(true);
+        }
 
-             })
+        var date = $('#txt_frm_date').val();
+        var url = '@Url.Action("_business_Operator", "Home")';
+
+        $.post(url, { data: data, frmdate: date }, function (response) {
+            if (typeof bboShowLoader === 'function') {
+                bboShowLoader(false);
+            }
+
+            $('.gross-business-first').hide();
+            $('.gross-business-second').show();
+            $('#business_s').html(response);
+
+            if (typeof bindBboTotalsToggle === 'function') {
+                bindBboTotalsToggle();
+            }
+        }).fail(function () {
+            if (typeof bboShowLoader === 'function') {
+                bboShowLoader(false);
+            }
+        });
     }
 </script>

@@ -1,0 +1,53 @@
+@{
+    var dayBookPath = (Request.Url != null ? Request.Url.AbsolutePath : "") ?? "";
+    Func<string, bool> isDayBookActive = name => dayBookPath.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0;
+}
+
+<nav class="vm-ticket-nav-wrap vm-daybook-nav-wrap" aria-label="Day book navigation">
+    <div id="daybook-nav" class="vm-fin-nav vm-fin-nav--pill vm-fin-nav--single-line vm-daybook-nav">
+        <ul class="vm-fin-nav__list" id="daybook-nav-list">
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("Actual_Admin_income") ? "is-active" : "")"
+                   href="@Url.Action("Actual_Admin_income", "Home")" title="My Book">
+                    <i class="fas fa-book-open vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>My Book</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("DaybookRetailer") ? "is-active" : "")"
+                   href="@Url.Action("DaybookRetailer", "Home")" title="Retailer's Book">
+                    <i class="fas fa-store vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Retailer</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("DayBookDealer") ? "is-active" : "")"
+                   href="@Url.Action("DayBookDealer", "Home")" title="Distributor's Book">
+                    <i class="fas fa-sitemap vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Distributor</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("DayBookMaster") ? "is-active" : "")"
+                   href="@Url.Action("DayBookMaster", "Home")" title="Master's Book">
+                    <i class="fas fa-user-tie vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>Master</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("DayBookAPI") ? "is-active" : "")"
+                   href="@Url.Action("DayBookAPI", "Home")" title="API User's Book">
+                    <i class="fas fa-plug vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>API</span>
+                </a>
+            </li>
+            <li>
+                <a class="vm-fin-nav__link @(isDayBookActive("DayBookWhitelabel") ? "is-active" : "")"
+                   href="@Url.Action("DayBookWhitelabel", "Home")" title="White Label's Book">
+                    <i class="fas fa-tag vm-fin-nav__ico" aria-hidden="true"></i>
+                    <span>White Label</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

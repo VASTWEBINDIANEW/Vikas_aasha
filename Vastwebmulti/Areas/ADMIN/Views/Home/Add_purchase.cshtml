@@ -1,442 +1,990 @@
 
+
 @{
-    ViewBag.Title = "Add_purchase";
+
+    ViewBag.Title = "Add Purchase";
+
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var apToday = DateTime.Now.ToString("yyyy-MM-dd");
+
 }
 
-<style>
-    /*  new css */
-    .add-pur-first {
-        background: #fff;
-    }
-
-    .add-purchase-page-right {
-        background: #fff;
-    }
-
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    /*  new css */
-
-    .select2-container--default .select2-selection--single {
-        border-radius: 0px !important;
-    }
-
-    .select2-container .select2-selection--single {
-        height: 32px !important;
-        border-color: #bbb !important;
-    }
-
-    .table-bordered thead tr th {
-        padding: 5px 10px;
-    }
-
-    .purchase-historyheightclass {
-        height: auto !important;
-    }
-
-    .height-classnewadmin select {
-        height: 32px !important;
-    }
-
-    .inputnumber-arrownone input[type="number"] {
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-    }
-
-    .addpurchase-pageadmin .add-purchase-page-right ul {
-        display: flex;
-    }
-
-        .addpurchase-pageadmin .add-purchase-page-right ul li:last-child {
-            border-right: 0px;
-        }
-
-    .addpurchase-pageadmin .addpurchase-firstclass ul {
-        display: flex;
-    }
-
-        .addpurchase-pageadmin .addpurchase-firstclass ul li {
-            width: 50% !important;
-            float: left;
-        }
-
-    .height-classnewadmin select {
-        padding-left: 2px;
-    }
 
 
-    @@media screen and (max-width:1366px) {
-        .forminput-third .height-classnewadmin {
-            width: 23%;
-        }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
 
-        .forminput-third .tablesearch-third {
-            width: 15%;
-        }
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
 
-        .forminput-third .col-md-4 {
-            width: 39%;
-        }
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
 
-        .tablesearch-third button {
-            background: #fff;
-        }
-    }
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+
+<link href="~/MainFrontDesign/css/admin-add-purchase-modern.css?v=7" rel="stylesheet" />
 
 
-    @@media only screen and (max-width:1280px) {
 
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
+<section class="content Add_Purchase_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
 
-    @@media only screen and (max-width:1169px) {
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
 
-    @@media only screen and (max-width:1024px) {
+    <div class="container-fluid vm-ft-page-shell">
 
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
 
-    @@media only screen and (max-width:991px) {
-        .forminput-third {
-            float: left;
-            width: 100%;
-        }
 
-        #idseller_id {
-            float: left;
-            width: 100%;
-        }
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
 
-        .forminput-third .height-classnewadmin {
-            width: 50%;
-            float: left;
-            margin-bottom: 5px;
-        }
+            <div class="vm-ft-page-hero">
 
-        .forminput-third .col-md-4 {
-            width: 100%;
-            float: left;
-        }
+                <ol class="vm-ft-breadcrumb">
 
-        .tablesearch-third {
-            float: left;
-            margin: 6px 0;
-            width: 30%;
-        }
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
 
-        .forminput-third .nrr3 {
-            width: 100%;
-            float: left;
-        }
-    }
+                    <li>Account</li>
 
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
+                    <li>Add Purchase</li>
 
-    @@media screen and (max-width:766px) {
-        .forminput-third .height-classnewadmin {
-            width: 50%;
-            float: left;
-            margin-bottom: 5px;
-        }
-
-        .forminput-third .col-md-4 {
-            width: 100%;
-            float: left;
-        }
-
-        .tablesearch-third {
-            float: left;
-            margin: 6px 0;
-            width: 30%;
-        }
-
-        .forminput-third .nrr3 {
-            width: 100%;
-            float: left;
-        }
-
-        .clear-thirddesign {
-            clear: both !important;
-        }
-
-        .divacc-third-respon {
-            clear: both;
-        }
-
-        .addpurchase-third {
-            width: 100%;
-            float: left;
-            margin-bottom: 15px;
-        }
-
-        .addpurchase-pageadmin .addpurchase-firstclass {
-            margin-top: 5px;
-        }
-
-        .addpurchase-pageadmin table {
-            border-left: 1px solid #aaa4a4 !important;
-        }
-
-        .addpurchase-pageadmin .addpurchase-firstclass .add-pur-first {
-            height: auto;
-        }
-
-        .addpurchase-pageadmin .add-purchase-page-right .purchase-history {
-            height: auto;
-        }
-
-        .addpurchase-pageadmin .add-purchase-page-right {
-            height: auto;
-        }
-
-            .addpurchase-pageadmin .add-purchase-page-right .table-responsive {
-                height: auto !important;
-            }
-    }
-
-    @@media screen and (max-width:420px) {
-        .forminput-third .tablesearch-third {
-            width: 40%;
-        }
-
-        .bread-same-all-page {
-            display: block;
-        }
-
-        .res_div {
-            width: 100% !important;
-            float: left !important;
-            padding: 2px 0 !important;
-        }
-    }
-
-    @@media screen and (max-width:360px) {
-        .tab-third-design-respo li {
-            font-size: 12px;
-        }
-    }
-</style>
-<section class="content add-purchase-page fourdesign-section-admin">
-    <div class="container-fluid addpurchase-pageadmin">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Add Purchase</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Add Purchase</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second" style="width:100%;float:left;">
-                <ul class="padding-top-third four-noneclass-admin-only res_div" style="width: auto; float: left; margin: 0;">
-                    <li class="smli">
-                        <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one" style="line-height: 22px;">
-                        Add Purchase
-                    </li>
-                </ul>
-                <div class="col-md-2 tre4 pdf-lastclass-third widthautposit-third-respon res_div" style="padding: 0;width:auto;float:right;">
-                    <div class="white-l-search-nine pdfexpoer-second totalbutton-secondclas">
-                        <div class="web-white-filter" style="float: right;">
-                            <input type="button" id="btnExportA" value="Export" style="margin-left:0px;font-size: 14px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                            <input type="button" id="btnPDFA" value="PDF" style="margin-left:2px;font-size: 14px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                            <button class="white-success-button" style="height:32px;font-size:14px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: left;margin-left: 2px;background: #b1a6a638;" onclick="findtotalA()">Total</button>
-                        </div>
-                    </div>
-                </div>
+                </ol>
 
             </div>
+
+            <div class="vm-ft-search-wrap">
+
+                <input class="form-control" type="text" value="" id="txtsearch" placeholder="Search API name, account, amount..." name="txtsearch" autocomplete="off" />
+
+            </div>
+
         </div>
 
 
-        <div class="row clearfix">
-            <div class="col-md-4 addpurchase-third addpurchase-firstclass">
-                <div class="left-first-tabs width100 float-left Masterlist-page page-header-third">
-                    <ul class="tabs width100 float-left tab-seconddesign tab-third-design ulli-width-third">
-                        <li class="tab-link current" data-tab="tab-5">+ Purchase</li>
-                        @*<li class="tab-link" data-tab="tab-6">+ Manualy Purchase</li>*@
-                        <li class="tab-link" data-tab="tab-7">
-                            <img src="~/AdminDesign/images/productivity.svg" style="width:17px;" /> Schedule
-                        </li>
-                    </ul>
-                    <div class="add-pur-first inputnumber-arrownone">
-                        <div id="tab-5" class="tab-content current">
-                            @Html.Action("_Add_purchase")
+
+        <div class="col-md-12 vm-ft-layout-wrap">
+
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+
+
+
+                <!-- LEFT: Purchase / Schedule forms -->
+
+                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+
+                    <div class="fund-trasfer-left vm-ft-form-card">
+
+
+
+                        <div class="vm-ft-form-card-header">
+
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-cart-plus"></i></div>
+
+                            <div>
+
+                                <span class="vm-ft-form-card-header__title">Add Purchase</span>
+
+                                <span class="vm-ft-form-card-header__sub">Manage seller accounts &amp; schedules</span>
+
+                            </div>
+
                         </div>
-                        <div id="tab-7" class="tab-content input-border-third beforenone-third">
-                            @Html.Action("_Scheduler_add")
+
+
+
+                        <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs" id="tabs">
+
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active ap-left-tab" data-tab="tab-5" role="presentation">
+
+                                <a href="#tab-5" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Purchase</a>
+
+                            </li>
+
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive ap-left-tab" data-tab="tab-7" role="presentation">
+
+                                <a href="#tab-7" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Schedule</a>
+
+                            </li>
+
+                        </ul>
+
+
+
+                        <div class="width100 float-left tabcurrent-seconddesign input-border-third">
+
+                            <div id="tab-5" class="width100 float-left tab-pane vm-ft-left-tab-pane active in ap-tab-panel">
+
+                                @Html.Action("_Add_purchase")
+
+                            </div>
+
+                            <div id="tab-7" class="width100 float-left tab-pane vm-ft-left-tab-pane ap-tab-panel" style="display:none;">
+
+                                @Html.Action("_Scheduler_add")
+
+                            </div>
+
                         </div>
+
+
+
                     </div>
+
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="add-purchase-page-right page-header-third">
 
-                    <ul class="tabs3 width100 float-left tab-seconddesign ulflex-second ulflex-third tab-third-design tab-third-design-respo">
-                        <li class="tab-link current3" data-tab="tab-8">Bank Info</li>
-                        <li id="tab9" class="tab-link" data-tab="tab-9">Schedule Details</li>
-                        <li id="tab10" class="tab-link" data-tab="tab-10">Seller Fund</li>
 
-                    </ul>
-                    <div id="tab-8" class="tab-content3 current3">
-                        @Html.Action("_add_Purchase_Bank")
-                    </div>
-                    <div id="tab-9" class="tab-content3">
-                        @Html.Action("_Scheduler_History")
-                    </div>
-                    <div id="tab-10" class="tab-content3">
-                        <div class="purchase-history purchase-history-second purchase-historyheightclass">
 
-                            <div class="col-md-12 padding-none-second select-design-second colmd-second-padd forminput-third" style="margin-bottom:10px;padding:0px;">
-                                @using (Ajax.BeginForm("_Seller_fund", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "idseller_id" }))
-                                {
-                                    <div class="col-md-2 height-classnewadmin" style="padding-left: 0; padding-right: 5px;">
-                                        @Html.DropDownList("SearchApinm", new SelectList(ViewBag.apinm11, "Value", "Text"), "Select Api Name", new { @class = "form-control", data_live_search = "true" })
+                <!-- RIGHT: Bank / Schedule history / Seller fund -->
+
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
+
+                    <div class="fund-trasfer-right vm-ft-history-panel">
+
+                        <div id="tab-1" class="vm-ft-history-body">
+
+
+
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium ap-history-head">
+
+                                <div class="vm-ft-history-toolbar__head">
+
+                                    <i class="fas fa-list-alt" aria-hidden="true"></i>
+
+                                    <div>
+
+                                        <span class="vm-ft-history-toolbar__title" id="apRightPanelTitle">Bank Info</span>
+
+                                        <span class="vm-ft-history-toolbar__sub">Seller bank accounts &amp; fund history</span>
 
                                     </div>
-                                    <div class="col-md-2 height-classnewadmin" style="padding-left: 0; padding-right: 5px;">
-                                        @Html.DropDownList("Searchsts", new List<SelectListItem>
-                                                 {
-                                                    new SelectListItem{Text="Success", Value="Success"},
-                                                    new SelectListItem{Text="Failed", Value="Failed"},
-                                                    new SelectListItem{Text="Pending", Value="Pending"}
-                                                 }, "Select Status", new { @class = "form-control", data_live_search = "true" })
-                                    </div>
-                                    <div class="col-md-4" style="padding-left: 0; padding-right: 5px;">
-                                        <div class="input-daterange input-group" style="margin-left:0px;width:100%;">
-                                            <div class="custom-date-icon ner" style="border-color:#ccc !important;">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc; height:32px;" })
-                                            <span class="input-group-addon" style="padding: 0px !important;min-width: 3px;">
 
-                                            </span>
-                                            <div class="nrr3">
-                                                <div class="custom-date-icon ner2" style="border-color:#ccc !important;">
-                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                </div>
-                                                @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #ccc; height:32px;" })
-                                            </div>
+                                </div>
+
+                            </div>
+
+
+
+                            <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs ap-right-role-tabs" id="ap-right-tabs">
+
+                                <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active ap-right-tab" data-tab="tab-8" data-title="Bank Info" role="presentation">
+
+                                    <a href="#tab-8" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Bank Info</a>
+
+                                </li>
+
+                                <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive ap-right-tab" id="tab9" data-tab="tab-9" data-title="Schedule Details" role="presentation">
+
+                                    <a href="#tab-9" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Schedule Details</a>
+
+                                </li>
+
+                                <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive ap-right-tab" id="tab10" data-tab="tab-10" data-title="Seller Fund" role="presentation">
+
+                                    <a href="#tab-10" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Seller Fund</a>
+
+                                </li>
+
+                            </ul>
+
+
+
+                            <div class="vm-ft-history-toolbar__filters vm-ft-history-filters-row ap-seller-filter-toolbar" id="apSellerFilters">
+
+                                    @using (Ajax.BeginForm("_Seller_fund", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "idseller_id" }, new { @id = "apSellerFilterForm", @class = "ap-seller-filter-form", data_report_date_form = "", data_date_mode = "set", data_frm_date = apToday, data_to_date = apToday }))
+
+                                    {
+
+                                        <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--user">
+
+                                            @Html.DropDownList("SearchApinm", new SelectList(ViewBag.apinm11, "Value", "Text"), "Select Api Name", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", data_live_search = "true" })
+
                                         </div>
+
+                                        <div class="vm-opr-field vm-dmt-field vm-ft-history-field vm-ft-history-field--mode">
+
+                                            @Html.DropDownList("Searchsts", new List<SelectListItem>
+
+                                            {
+
+                                                new SelectListItem{Text="Success", Value="Success"},
+
+                                                new SelectListItem{Text="Failed", Value="Failed"},
+
+                                                new SelectListItem{Text="Pending", Value="Pending"}
+
+                                            }, "Select Status", new { @class = "for-select2 vm-opr-select vm-dmt-select form-control", data_live_search = "true" })
+
+                                        </div>
+
+                                        <div class="vm-dmt-filter-search-group vm-ft-date-search-group">
+
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+
+                                                @Html.TextBox("txt_frm_date", apToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", placeholder = "From", title = "From date" })
+
+                                            </div>
+
+                                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+
+                                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+
+                                                @Html.TextBox("txt_to_date", apToday, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", placeholder = "To", title = "To date" })
+
+                                            </div>
+
+                                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-ft-search-btn">
+
+                                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+
+                                            </button>
+
+                                        </div>
+
+                                    }
+
+                                    <div class="vm-ft-export-group ap-export-group">
+
+                                        <button type="button" id="btnExportA" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel">
+
+                                            <i class="fas fa-file-excel" aria-hidden="true"></i>
+
+                                        </button>
+
+                                        <button type="button" id="btnPDFA" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Export PDF">
+
+                                            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+
+                                        </button>
+
+                                        <button type="button" class="vm-ft-export-btn ap-total-btn" onclick="apShowTotal()" title="Show total">
+
+                                            <i class="fas fa-calculator" aria-hidden="true"></i>
+
+                                        </button>
+
                                     </div>
-                                    <div class="col-md-2 tablesearch-third" style="padding-left: 0; padding-right: 5px;">
-                                        <button class="input-back-second" style="width:100%;float:left;height:32px;border:1px solid #ccc;">Search</button>
+
+                                </div>
+
+
+
+                            <div id="tab-8" class="ap-tab-panel active current3">
+
+                                <div class="vm-ft-table-wrap ap-panel-body">
+
+                                    <div id="apBankTableHost" class="vm-ml-table-host">
+
+                                        @Html.Action("_add_Purchase_Bank")
+
                                     </div>
-                                }
+
+                                </div>
+
                             </div>
-                            <div class="col-md-12 padding-none-second padding-top-secondclass clear-thirddesign" id="idseller_id" style="padding:0px;">
-                                @Html.Action("_Seller_fund")
+
+                            <div id="tab-9" class="ap-tab-panel" style="display:none;">
+
+                                <div class="vm-ft-table-wrap ap-panel-body">
+
+                                    <div id="apScheduleTableHost" class="vm-ml-table-host">
+
+                                        @Html.Action("_Scheduler_History")
+
+                                    </div>
+
+                                </div>
+
                             </div>
+
+                            <div id="tab-10" class="ap-tab-panel" style="display:none;">
+
+                                <div class="vm-ft-table-wrap ap-panel-body">
+
+                                    <div id="idseller_id" class="vm-ml-table-host">
+
+                                        @Html.Action("_Seller_fund")
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
                         </div>
 
                     </div>
+
                 </div>
+
+
+
             </div>
+
         </div>
+
+
+
     </div>
+
 </section>
 
 
-<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
-<script src="~/select2/dist/js/select2.min.js"></script>
+
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+
 
 <script>
-    $('.for-select').select2();
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('ul.tabs li').click(function () {
-            var tab_id = $(this).attr('data-tab');
-            $('ul.tabs li').removeClass('current');
-            $('.tab-content').removeClass('current');
-            $(this).addClass('current');
-            $("#" + tab_id).addClass('current');
-        })
-    });
-</script>
 
-<script>
-    $('.for-list-button').click(function () {
-        $('.for-seller-account').hide();
-        $('.for-account-list').show();
-        $('.for-account-list-show').hide();
-    });
+    (function ($) {
 
-    $('.for-account-button').click(function () {
-        $('.for-seller-account').show();
-        $('.for-account-list').hide();
-        $('.for-account-list-show').hide();
-    });
+        function refreshAddPurchaseSelect2($scope) {
 
-    $('.for-account-list-hide').click(function () {
-        $('.for-account-list-show').show();
-        $('.for-account-list').hide();
-    });
+            if (!window.jQuery || !$.fn.select2) {
 
-    $('.reset').click(function () {
+                return;
 
+            }
 
-        $('.all_fields').val('');
+            var $targets = $scope && $scope.length ? $scope.find('.for-select2') : $('.Add_Purchase_Page .for-select2');
 
-    });
-</script>
+            $targets.each(function () {
 
-<script type="text/javascript">
-    $(document).ready(function () {
+                var $el = $(this);
 
-        $('ul.tabs3 li').click(function () {
-            var tab_id = $(this).attr('data-tab');
+                if ($el.hasClass('select2-hidden-accessible')) {
 
-            $('ul.tabs3 li').removeClass('current3');
-            $('.tab-content3').removeClass('current3');
+                    $el.select2('destroy');
 
-            $(this).addClass('current3');
-            $("#" + tab_id).addClass('current3');
-        });
+                }
 
-    })
-</script>
-@*<script src="https://jonthornton.github.io/Datepair.js/dist/datepair.js"></script>
-    <script src="https://jonthornton.github.io/Datepair.js/dist/jquery.datepair.js"></script>*@
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true
-        });
-        var val = '';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
+                $el.select2({
+
+                    width: '100%',
+
+                    dropdownAutoWidth: false
+
+                });
+
+            });
+
         }
-    });
+
+
+
+        function apActivateRoleTabs($tabs, tabId) {
+
+            $tabs.find('li').removeClass('active current vm-ft-role-tab-li--active').addClass('vm-ft-role-tab-li--inactive');
+
+            var $activeLi = $tabs.find('li[data-tab="' + tabId + '"]');
+
+            $activeLi.removeClass('vm-ft-role-tab-li--inactive').addClass('active current vm-ft-role-tab-li--active');
+
+            $tabs.find('li a').attr({ 'aria-selected': 'false', 'aria-expanded': 'false' });
+
+            $activeLi.find('a').attr({ 'aria-selected': 'true', 'aria-expanded': 'true' });
+
+        }
+
+
+
+        function apSwitchLeftTab(tabId) {
+
+            apActivateRoleTabs($('#tabs'), tabId);
+
+            $('#tab-5, #tab-7').removeClass('active in').hide();
+
+            var $panel = $('#' + tabId);
+
+            $panel.addClass('active in').show();
+
+        }
+
+
+
+        function apSwitchRightTab(tabId, $btn) {
+
+            apActivateRoleTabs($('#ap-right-tabs'), tabId);
+
+            $('#tab-8, #tab-9, #tab-10').removeClass('active current3').hide();
+
+            var $panel = $('#' + tabId);
+
+            $panel.addClass('active current3').show();
+
+
+
+            var title = $btn ? ($btn.data('title') || 'Details') : 'Details';
+
+            $('#apRightPanelTitle').text(title);
+
+
+
+            if (tabId === 'tab-10') {
+
+                $('#apSellerFilters').addClass('is-visible');
+
+                setTimeout(function () { apInitDatepickers(true); }, 80);
+
+            } else {
+
+                $('#apSellerFilters').removeClass('is-visible');
+
+            }
+
+            apFilterActiveTable($('#txtsearch').val());
+
+        }
+
+
+
+        function apFilterActiveTable(term) {
+
+            var q = (term || '').toLowerCase().trim();
+
+            var $panel = $('#tab-8.ap-tab-panel:visible, #tab-9.ap-tab-panel:visible, #tab-10.ap-tab-panel:visible');
+
+            if (!$panel.length) {
+
+                $panel = $('.ap-tab-panel.active, .ap-tab-panel.current3').filter(':visible').first();
+
+            }
+
+            $panel.find('table tbody tr').each(function () {
+
+                if ($(this).hasClass('ap-empty-row')) {
+
+                    return;
+
+                }
+
+                var text = $(this).text().toLowerCase();
+
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+
+            });
+
+        }
+
+
+
+        function apTodayStr() {
+
+            var d = new Date();
+
+            var m = ('0' + (d.getMonth() + 1)).slice(-2);
+
+            var day = ('0' + d.getDate()).slice(-2);
+
+            return d.getFullYear() + '-' + m + '-' + day;
+
+        }
+
+
+
+        function apInitDatepickers(forceRebind) {
+
+            if (typeof window.initAdminReportDateForm === 'function') {
+
+                window.initAdminReportDateForm('#apSellerFilterForm', '#txt_frm_date', '#txt_to_date', !!forceRebind);
+
+                return;
+
+            }
+
+            if (!$.fn.datepicker) {
+
+                return;
+
+            }
+
+
+
+            var dateOpts = {
+
+                format: 'yyyy-mm-dd',
+
+                todayHighlight: true,
+
+                autoclose: true,
+
+                orientation: 'bottom auto',
+
+                forceParse: false,
+
+                enableOnReadonly: true,
+
+                container: 'body'
+
+            };
+
+
+
+            var $frm = $('#txt_frm_date');
+
+            var $to = $('#txt_to_date');
+
+            if (!$frm.length || !$to.length) {
+
+                return;
+
+            }
+
+
+
+            if (forceRebind || $frm.data('datepicker')) { $frm.datepicker('destroy'); }
+
+            if (forceRebind || $to.data('datepicker')) { $to.datepicker('destroy'); }
+
+
+
+            var today = apTodayStr();
+
+            if (!$frm.val()) { $frm.val(today); }
+
+            if (!$to.val()) { $to.val(today); }
+
+
+
+            $frm.prop('readonly', true).datepicker(dateOpts);
+
+            $to.prop('readonly', true).datepicker(dateOpts);
+
+
+
+            $frm.off('click.apdp focus.apdp').on('click.apdp focus.apdp', function (e) {
+
+                e.preventDefault();
+
+                $(this).datepicker('show');
+
+            });
+
+            $to.off('click.apdp focus.apdp').on('click.apdp focus.apdp', function (e) {
+
+                e.preventDefault();
+
+                $(this).datepicker('show');
+
+            });
+
+
+
+            $frm.off('show.apdp hide.apdp changeDate.apdp')
+
+                .on('show.apdp', function () {
+
+                    $(this).closest('.saas-acc-dp-field').addClass('is-active');
+
+                })
+
+                .on('hide.apdp changeDate.apdp', function () {
+
+                    $(this).closest('.saas-acc-dp-field').removeClass('is-active');
+
+                });
+
+
+
+            $to.off('show.apdp hide.apdp changeDate.apdp')
+
+                .on('show.apdp', function () {
+
+                    $(this).closest('.saas-acc-dp-field').addClass('is-active');
+
+                })
+
+                .on('hide.apdp changeDate.apdp', function () {
+
+                    $(this).closest('.saas-acc-dp-field').removeClass('is-active');
+
+                });
+
+
+
+            $frm.datepicker('setDate', $frm.val() || today);
+
+            $to.datepicker('setDate', $to.val() || today);
+
+        }
+
+
+
+        $(document).ready(function () {
+
+            refreshAddPurchaseSelect2();
+
+            apInitDatepickers();
+
+
+
+            /* default left sub-tab: Seller Account List */
+
+            $('#post1, #post2, #divaccountlist').hide();
+
+            $('#divaccountlistadd').show();
+
+
+
+            $('#tabs .ap-left-tab a').on('click', function (e) {
+
+                e.preventDefault();
+
+                apSwitchLeftTab($(this).closest('li').data('tab'));
+
+            });
+
+
+
+            $('#ap-right-tabs .ap-right-tab a').on('click', function (e) {
+
+                e.preventDefault();
+
+                apSwitchRightTab($(this).closest('li').data('tab'), $(this).closest('li'));
+
+            });
+
+
+
+            $('#tab-7').hide();
+
+            $('#tab-9, #tab-10').hide();
+
+
+
+            $('#txtsearch').on('input', function () {
+
+                apFilterActiveTable($(this).val());
+
+            });
+
+        });
+
+
+
+        $(document).on('click', '.Add_Purchase_Page .saas-acc-dp-field .saas-acc-dp-input, .Add_Purchase_Page .saas-acc-dp-icon', function (e) {
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            var $input = $(this).is('input') ? $(this) : $(this).closest('.saas-acc-dp-field').find('.saas-acc-dp-input');
+
+            if (!$input.length) { return; }
+
+            if (!$input.data('datepicker')) {
+
+                apInitDatepickers(true);
+
+            }
+
+            if ($input.data('datepicker')) {
+
+                $input.datepicker('show');
+
+            }
+
+        });
+
+
+
+        $(document).ajaxComplete(function () {
+
+            refreshAddPurchaseSelect2();
+
+            apFilterActiveTable($('#txtsearch').val());
+
+        });
+
+
+
+        window.apOpenRightTab = function (tabId) {
+
+            var $btn = $('.ap-right-tab[data-tab="' + tabId + '"]');
+
+            apSwitchRightTab(tabId, $btn);
+
+        };
+
+
+
+        $(document).on('click', '#tab9', function (e) {
+
+            if ($(this).is('li')) {
+
+                e.preventDefault();
+
+                apOpenRightTab('tab-9');
+
+            }
+
+        });
+
+        $(document).on('click', '#tab10', function (e) {
+
+            if ($(this).is('li')) {
+
+                e.preventDefault();
+
+                apOpenRightTab('tab-10');
+
+            }
+
+        });
+
+
+
+        window.apShowTotal = function () {
+
+            var $rows = $('#idseller_id table tbody tr:visible');
+
+            var total = 0;
+
+            $rows.each(function () {
+
+                var amtText = $(this).find('td').eq(6).text().replace(/[^0-9.\-]/g, '');
+
+                var amt = parseFloat(amtText);
+
+                if (!isNaN(amt)) { total += amt; }
+
+            });
+
+            alert('Total Amount: ' + total.toFixed(2));
+
+        };
+
+
+
+        /* Seller sub-mode segment buttons */
+
+        function apSetSegmentMode($btn) {
+
+            $('#ap-sub-tabs .ap-segment-btn').removeClass('active').attr('aria-selected', 'false');
+
+            $btn.addClass('active').attr('aria-selected', 'true');
+
+        }
+
+
+
+        $(document).on('click', '#ap-sub-tabs .for-list-button', function (e) {
+
+            e.preventDefault();
+
+            apSetSegmentMode($(this));
+
+            $('.for-seller-account, .for-seller-account1').hide();
+
+            $('.for-account-list').show();
+
+            $('.for-account-list-show').hide();
+
+            $('#byapi2').prop('checked', true);
+
+            if (typeof show1 === 'function') { show1('sell'); }
+
+        });
+
+
+
+        $(document).on('click', '#ap-sub-tabs .for-account-button', function (e) {
+
+            e.preventDefault();
+
+            apSetSegmentMode($(this));
+
+            $('.for-account-list, .for-account-list-show').hide();
+
+            $('.for-seller-account').show();
+
+            $('#bysim2').prop('checked', true);
+
+            if (typeof show1 === 'function') { show1('add'); }
+
+            if (typeof refreshAddPurchaseSelect2 === 'function') { refreshAddPurchaseSelect2(); }
+
+        });
+
+
+
+        /* Table actions — delegated so AJAX reload keeps working */
+
+        $(document).on('click', '.Add_Purchase_Page [data-action="bank-status"]', function (e) {
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            if ($btn.prop('disabled')) { return; }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+
+                url: '@Url.Action("UpdateBankSts", "Home")',
+
+                type: 'POST',
+
+                data: { Apinm: $btn.data('apinm') },
+
+                cache: false,
+
+                success: function (data2) {
+
+                    $('#apBankTableHost').html(data2);
+
+                    apFilterActiveTable($('#txtsearch').val());
+
+                },
+
+                complete: function () { $btn.prop('disabled', false); }
+
+            });
+
+        });
+
+
+
+        $(document).on('click', '.Add_Purchase_Page [data-action="bank-delete"]', function (e) {
+
+            e.preventDefault();
+
+            if (!confirm('Delete this bank account?')) { return; }
+
+            var $btn = $(this);
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+
+                url: '@Url.Action("delbankinfo", "Home")',
+
+                type: 'POST',
+
+                data: { Apinm: $btn.data('apinm') },
+
+                cache: false,
+
+                success: function (data2) {
+
+                    $('#apBankTableHost').html(data2);
+
+                    apFilterActiveTable($('#txtsearch').val());
+
+                },
+
+                complete: function () { $btn.prop('disabled', false); }
+
+            });
+
+        });
+
+
+
+        $(document).on('click', '.Add_Purchase_Page [data-action="sch-status"]', function (e) {
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            if ($btn.prop('disabled')) { return; }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+
+                url: '@Url.Action("Update_sch_sts", "Home")',
+
+                type: 'POST',
+
+                data: { Apinm: $btn.data('apinm'), mode: $btn.data('mode') },
+
+                cache: false,
+
+                success: function (data2) {
+
+                    $('#apScheduleTableHost').html(data2);
+
+                    apFilterActiveTable($('#txtsearch').val());
+
+                },
+
+                complete: function () { $btn.prop('disabled', false); }
+
+            });
+
+        });
+
+
+
+        $(document).on('click', '.Add_Purchase_Page [data-action="sch-delete"]', function (e) {
+
+            e.preventDefault();
+
+            if (!confirm('Delete this schedule?')) { return; }
+
+            var $btn = $(this);
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+
+                url: '@Url.Action("del_schinfo", "Home")',
+
+                type: 'POST',
+
+                data: { Apinm: $btn.data('apinm'), mode: $btn.data('mode') },
+
+                cache: false,
+
+                success: function (data2) {
+
+                    $('#apScheduleTableHost').html(data2);
+
+                    apFilterActiveTable($('#txtsearch').val());
+
+                },
+
+                complete: function () { $btn.prop('disabled', false); }
+
+            });
+
+        });
+
+
+
+        $(document).on('click', '.for-account-list-hide', function () {
+
+            $('.for-account-list-show').show();
+
+            $('.for-account-list').hide();
+
+        });
+
+
+
+        $(document).on('click', '.reset, #resetform', function () {
+
+            $('.all_fields').val('');
+
+        });
+
+
+
+        window.refreshAddPurchaseSelect2 = refreshAddPurchaseSelect2;
+
+
+
+    })(jQuery);
+
 </script>
 

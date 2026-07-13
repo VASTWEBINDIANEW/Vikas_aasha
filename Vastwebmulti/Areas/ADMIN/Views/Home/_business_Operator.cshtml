@@ -1,61 +1,77 @@
 @model IEnumerable<Vastwebmulti.Models.total_bussiness_operatorwise_Result>
+@using System.Linq
 
-<style>
-    .table tbody tr td{padding:3px 10px;}
-</style>
-<div class="gross-business-second-top">
-    <h2>@ViewBag.chk&nbsp;Transaction</h2>
-    <div onclick="hide()" class="gross-business-second-hide">
-        &#10006;
+@{
+    var operatorLabel = (ViewBag.chk ?? "Operator").ToString();
+    var rowCount = Model != null ? Model.Count() : 0;
+}
+
+<div class="vm-bbo-detail-panel">
+    <div class="gross-business-second-top vm-bbo-detail-head">
+        <h2><i class="fas fa-list-ul" aria-hidden="true"></i> @operatorLabel Transaction</h2>
+        <button type="button" onclick="hideBboOperatorDetail()" class="gross-business-second-hide" title="Back to operators" aria-label="Back to operators">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
     </div>
-</div>
-<div class=" table-responsive" style="width:100%;">
-    <div class="col-xs-12" style="padding:0px;">
-        <table class="table table-bordered">
+
+    <div class="vm-bbo-detail-wrap table-responsive vm-opr-table-scroll">
+        <table id="businessOperatorDetailTable" class="table vm-opr-data-table vm-bbo-detail-table" cellspacing="0">
             <thead>
-                <tr>
-                    <th rowspan="2">Operator Name</th>
-                    <th rowspan="2">Total&nbsp;Transcation</th>
-                    <th colspan="2">Success&nbsp;Transcation</th>
-                
-                    <th colspan="2">Failed&nbsp;Transcation</th>
-             
-                    <th colspan="2">Pending&nbsp;Transcation</th>
-          
+                <tr class="vm-bbo-detail-group-row">
+                    <th rowspan="2" class="vm-bbo-th-operator">Operator Name</th>
+                    <th rowspan="2" class="vm-bbo-th-total">Total Transaction</th>
+                    <th colspan="2" class="vm-bbo-th-group vm-bbo-th-group--success">Success Transaction</th>
+                    <th colspan="2" class="vm-bbo-th-group vm-bbo-th-group--failed">Failed Transaction</th>
+                    <th colspan="2" class="vm-bbo-th-group vm-bbo-th-group--pending">Pending Transaction</th>
                 </tr>
-                <tr>
-                    <th>Amount</th>
-                    <th>Count</th>
-                    <th>Amount</th>
-                    <th>Count</th>
-                    <th>Pending</th>
-                    <th>Amount</th>
+                <tr class="vm-bbo-detail-sub-row">
+                    <th class="vm-bbo-th-sub">Amount</th>
+                    <th class="vm-bbo-th-sub">Count</th>
+                    <th class="vm-bbo-th-sub">Amount</th>
+                    <th class="vm-bbo-th-sub">Count</th>
+                    <th class="vm-bbo-th-sub">Amount</th>
+                    <th class="vm-bbo-th-sub">Count</th>
                 </tr>
             </thead>
             <tbody>
-
-
-
-                @foreach (var item in Model)
+                @if (Model != null && Model.Any())
                 {
-                    <tr>
-                        <td>@item.operator_Name</td>
-                        <td>@item.amountall</td>
-                        <td>@item.totalsuccess</td>
-                        <td>@item.countsuccess</td>
-                        <td>@item.totalfailed</td>
-                        <td>@item.countfailed</td>
-                        <td>@item.totalpending</td>
-                        <td>@item.countpending</td>
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="vm-bbo-text" data-label="Operator Name">@item.operator_Name</td>
+                            <td class="vm-bbo-num" data-label="Total Transaction">@item.amountall</td>
+                            <td class="vm-bbo-num" data-label="Success Amount">@item.totalsuccess</td>
+                            <td class="vm-bbo-num" data-label="Success Count">@item.countsuccess</td>
+                            <td class="vm-bbo-num" data-label="Failed Amount">@item.totalfailed</td>
+                            <td class="vm-bbo-num" data-label="Failed Count">@item.countfailed</td>
+                            <td class="vm-bbo-num" data-label="Pending Amount">@item.totalpending</td>
+                            <td class="vm-bbo-num" data-label="Pending Count">@item.countpending</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="vm-bbo-empty-row">
+                        <td colspan="8">No transaction records found for selected date.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    <div class="vm-bbo-detail-meta">
+        Records: <strong>@rowCount</strong>
+    </div>
 </div>
+
 <script>
-    function hide() {
+    function hideBboOperatorDetail() {
         $('.gross-business-first').show();
         $('.gross-business-second').hide();
+    }
+
+    if (typeof hide === 'function') {
+        hide = hideBboOperatorDetail;
     }
 </script>

@@ -1,78 +1,65 @@
 @model IEnumerable<Vastwebmulti.Models.pos_ledger_report_Result>
-<style>
-    .action-design table tr td:last-child button::after {
-        display: none;
-    }
+@using System.Linq
+@using System.Collections.Generic
+@{
+    var posRows = Model != null ? Model.ToList() : new List<Vastwebmulti.Models.pos_ledger_report_Result>();
+    var rowCount = posRows.Count;
+    decimal totalCredit = posRows.Sum(x => x.cr ?? 0m);
+    decimal totalDebit = posRows.Sum(x => x.dr ?? 0m);
+}
 
-    .action-design .btn:not(.btn-link):not(.btn-circle) i {
-        top: 0px;
-    }
+<div id="posLedgerPartialRoot"
+     data-record-count="@rowCount"
+     data-total-credit="@totalCredit.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)"
+     data-total-debit="@totalDebit.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)">
 
-    .Un-rwls-modal .modal-body label + span {
-        min-height: 30px;
-    }
-    .table-responsive {
-        min-height: .01%;
-        overflow-x: hidden !important;
-    }
-</style>
-<div class="row clearfix">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card tablefourdesign-admin">
-
-            @*<div class="">
-                    <ol class="breadcrumb breadcrumb-col-blue-grey" style="margin-left:5px;margin-top:9px;">
-                        <li class="active" style="color:#9E9E9E; font-size:12px;">WALLET TO BANK TRANSFER REPORT&nbsp;></li>
-                    </ol>
-                </div>*@
-
-            <div class="body" style="padding:0;float:left;width:100%;">
-
-
-                <!-- Static Data Start-->
-                <div class="table-responsive action-design" style="height: 100vh !important; background: var(--second-bg-color) !important; overflow-x: hidden !important; margin: auto; width: 98%;">
-                    <table class="table table-bordered third-design-table" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Details</th>
-                                <th>Firm&nbsp;Name</th>
-                                <th>Remain&nbsp;Pre</th>
-                                <th>Cr</th>
-                                <th>Dr</th>
-                                <th>Amount</th>
-                                <th>Comm</th>
-                                <th>Gst</th>
-                                <th>Tds</th>
-                                <th>Remain&nbsp;Post</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-
-                                <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.Details)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Frm_Name)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.remainpre)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.cr)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.dr)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.comm)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.gst)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.tds)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.remainpost)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.ledgerdate)</td>
-                                </tr>
-
-                            }
-                          
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Static Data End-->
-                <!-- Table for modal -->
-            </div>
-        </div>
+    <div id="posLedgerTableScroll" class="table-responsive vm-opr-table-scroll vm-ledger-table-scroll">
+        <table id="posLedgerTable" class="table vm-opr-data-table saas-acc-table saas-acc-table--ledger vm-pos-ledger-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Firm&nbsp;Name</th>
+                    <th>Remain&nbsp;Pre</th>
+                    <th>Cr</th>
+                    <th>Dr</th>
+                    <th>?&nbsp;Amount</th>
+                    <th>Comm</th>
+                    <th>Gst</th>
+                    <th>Tds</th>
+                    <th>Remain&nbsp;Post</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="posLedgerTableBody">
+                @if (rowCount == 0)
+                {
+                    <tr class="vm-opr-table-empty-row">
+                        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                            <span>No data found.</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in posRows)
+                    {
+                        <tr>
+                            <td class="col-particulars">@item.Details</td>
+                            <td>@item.Frm_Name</td>
+                            <td class="col-balance">@item.remainpre</td>
+                            <td>@item.cr</td>
+                            <td>@item.dr</td>
+                            <td class="col-amount">@item.Amount</td>
+                            <td>@item.comm</td>
+                            <td>@item.gst</td>
+                            <td>@item.tds</td>
+                            <td class="col-balance">@item.remainpost</td>
+                            <td>@item.ledgerdate</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -1,0 +1,248 @@
+/* User Status pages (All_Retailer_Status etc.) — match Day Book modern UI */
+/* v3 — shared export class + all status pages */
+
+body.saas-admin-ui .saas-user-status-page {
+    --adb-accent: #2563eb;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-info-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+    color: #334155;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    font-weight: 500;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-info-banner i {
+    color: #2563eb;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-info-banner strong {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel {
+    min-width: 0;
+}
+
+/* Fixed 600px table area with vertical + horizontal scroll */
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-adb-table-wrap {
+    height: 600px !important;
+    max-height: 600px !important;
+    min-height: 600px !important;
+    overflow: hidden !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-adb-table-wrap .table-responsive.vm-opr-table-scroll {
+    height: 100% !important;
+    max-height: 600px !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-ust-table.vm-opr-data-table {
+    min-width: 720px !important;
+    width: 100% !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-opr-table-panel__title i.fa-user-check {
+    color: #16a34a;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-opr-table-panel__title i.fa-user-slash {
+    color: #dc2626;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-badge--active {
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    border-color: #86efac !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-badge--inactive {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    border-color: #fca5a5 !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-status-pill--active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-status-pill--inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    font-size: 0.76rem !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th {
+    white-space: nowrap !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    color: #475569 !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-bottom: 2px solid #dbe4f0 !important;
+    padding: 10px 8px !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(2),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td.vm-adb-text {
+    text-align: left !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td {
+    vertical-align: middle !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 8px 8px !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td.vm-adb-text {
+    white-space: normal !important;
+    word-break: break-word;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody tr:nth-child(even):not(.vm-opr-table-empty-row) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody tr.vm-opr-table-empty-row td {
+    text-align: center !important;
+    white-space: normal !important;
+    padding: 36px 16px !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody tr.vm-opr-table-empty-row td i {
+    display: block !important;
+    font-size: 1.4rem !important;
+    color: #94a3b8 !important;
+    margin: 0 auto 12px !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(1),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(1) { width: 10%; }
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(2),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(2) { width: 28%; }
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(3),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(3) { width: 16%; }
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(4),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(4) { width: 16%; }
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(5),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(5) { width: 12%; }
+
+body.saas-admin-ui .saas-user-status-page .vm-ust-table thead th:nth-child(6),
+body.saas-admin-ui .saas-user-status-page .vm-ust-table tbody td:nth-child(6) { width: 18%; }
+
+body.saas-admin-ui .saas-user-status-page #retailerStatusExportTable,
+body.saas-admin-ui .saas-user-status-page .vm-ust-export-table {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-adb-toolbar-one-line {
+    overflow: visible !important;
+}
+
+/* No date filter on user-status pages — nav uses remaining width */
+body.saas-admin-ui .saas-user-status-page .vm-adb-nav-row-shell {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-dmt-table-panel__right {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .saas-user-status-page .vm-opr-main-card {
+    padding-bottom: 8px;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-user-status-page .vm-ust-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    body.saas-admin-ui .saas-user-status-page .vm-ust-panel .vm-ust-table.vm-opr-data-table {
+        min-width: 720px !important;
+        table-layout: auto !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-user-status-page .vm-ust-info-banner {
+        font-size: 0.72rem;
+        padding: 10px 12px;
+    }
+
+    body.saas-admin-ui .saas-user-status-page .vm-dmt-table-actions {
+        width: 100% !important;
+        display: flex !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-user-status-page .vm-dmt-table-actions .saas-acc-btn {
+        flex: 1 1 0 !important;
+        justify-content: center !important;
+    }
+}

@@ -1,0 +1,72 @@
+@using System.Collections.Generic
+@{
+    var formAction = (ViewBag.DayBookFormAction as string) ?? "DaybookRetailer";
+    var formId = (ViewBag.DayBookFormId as string) ?? "dayBookForm";
+    var frmDate = (ViewBag.DayBookFrmDate as string) ?? DateTime.Today.ToString("yyyy-MM-dd");
+    var dateMode = (ViewBag.DayBookDateMode as string) ?? "get";
+    var totalsPanelId = (ViewBag.DayBookTotalsPanelId as string) ?? "dayBookTotalsPanel";
+    var totalOpeningId = (ViewBag.DayBookTotalOpeningId as string) ?? "adbTotalOpening";
+    var totalClosingId = (ViewBag.DayBookTotalClosingId as string) ?? "adbTotalClosing";
+    var totalDiffId = (ViewBag.DayBookTotalDiffId as string) ?? "adbTotalDiff";
+    var totalOpening = (ViewBag.DayBookTotalOpening as string) ?? "0.00";
+    var totalClosing = (ViewBag.DayBookTotalClosing as string) ?? "0.00";
+    var totalDiff = (ViewBag.DayBookTotalDiff as string) ?? "0.00";
+    var dayBookFormAttrs = new Dictionary<string, object>
+    {
+        { "id", formId },
+        { "class", "vm-rpt-filters-panel__form" },
+        { "data-date-mode", dateMode },
+        { "data-frm-date", frmDate },
+        { "data-to-date", frmDate }
+    };
+}
+@using (Html.BeginForm(formAction, "Home", FormMethod.Post, dayBookFormAttrs))
+{
+    <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+        <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-adb-toolbar-one-line">
+            <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb vm-adb-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li>Account</li>
+                <li>Day Book</li>
+            </ol>
+            <div class="vm-adb-nav-row-shell vm-daybook-nav-row">
+                @Html.Partial("~/Areas/ADMIN/Views/Home/_DayBookNav.cshtml")
+            </div>
+            <div class="vm-dmt-filter-search-group vm-adb-filter-search-group vm-adb-filter-search-group--single">
+                <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                    <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                    @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "Date", title = "Report date" })
+                </div>
+                <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn vm-adb-search-btn" title="Search">
+                    <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                </button>
+            </div>
+        </div>
+        <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="@totalsPanelId" style="display:none;" aria-hidden="true">
+            <div class="vm-dmt-totals-head">
+                <div class="vm-dmt-totals-head__title">
+                    <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                    <span>Day book totals</span>
+                </div>
+                <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideDayBookTotals('@totalsPanelId')" title="Hide totals" aria-label="Hide totals">
+                    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                <div class="vm-opr-total-card vm-opr-total-card--primary">
+                    <span class="vm-opr-total-card__label">Total Opening</span>
+                    <strong class="vm-opr-total-card__value" id="@totalOpeningId">@totalOpening</strong>
+                </div>
+                <div class="vm-opr-total-card vm-opr-total-card--pending">
+                    <span class="vm-opr-total-card__label">Total Closing</span>
+                    <strong class="vm-opr-total-card__value" id="@totalClosingId">@totalClosing</strong>
+                </div>
+                <div class="vm-opr-total-card vm-opr-total-card--success">
+                    <span class="vm-opr-total-card__label">Total Diff</span>
+                    <strong class="vm-opr-total-card__value" id="@totalDiffId">@totalDiff</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="btnExport" id="hdnBtnExport" value="" />
+}

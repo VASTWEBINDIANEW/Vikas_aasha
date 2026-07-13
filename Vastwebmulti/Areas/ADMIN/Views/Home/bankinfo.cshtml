@@ -1,494 +1,677 @@
 @model Vastwebmulti.Areas.ADMIN.Models.BankInfoList
 @{
-    ViewBag.Title = "bankinfo";
+    ViewBag.Title = "Bank Info";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<style>
 
-    /* new css  */
-    .col-md-8.bankinfo.bankinfo-respon-third {
-        background: #fff !important;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-bankinfo-modern.css?v=4" rel="stylesheet" />
 
-    .col-md-4.bank-info-left.bank-firstresp-third.bankadminfirstclass {
-        background: #fff !important;
-    }
+<section class="content Bankinfo_Page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-transfer-premium">
 
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+    <div class="container-fluid vm-ft-page-shell">
 
-    /* new css  */
-
-    .tabbb ul li {
-        list-style: none;
-        float: left;
-        width: 50%;
-        text-align: center;
-    }
-
-    .tbistn1 span {
-        color: #555;
-        font-size: 16px;
-        width: 100%;
-        float: left;
-        display: block;
-        font-weight: bold;
-    }
-
-    .tbistn1 input {
-        width: 100%;
-        float: left;
-        height: 32px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        padding: 0px 7px;
-    }
-
-    .tbistn1 select {
-        height: 32px;
-        margin-bottom: 14px;
-        width: 100%;
-    }
-
-    .Masterlist-page #tab-6 form {
-        border-bottom: none;
-    }
-
-    .tbistn1 button {
-        border: 0px;
-        margin-top: 10px;
-        float: right;
-        font-size: 19px;
-        padding: 5px 20px;
-        color: #fff;
-    }
-
-    .tbistn1 {
-        padding: 15px;
-    }
-
-    .bankinfo .nav.nav-tabs li {
-        width: 50%;
-        float: left;
-        text-align: center;
-        margin-bottom: 0px;
-    }
-
-    .bankinfo .nav-tabs > li > a {
-        color: #fff !important;
-        padding: 6px 10px;
-    }
-
-        .bankinfo .nav-tabs > li > a::before {
-            display: none;
-        }
-
-    .bankinfo .nav-tabs {
-        border-bottom: none;
-        background: var(--nav-tab-bg);
-    }
-
-        .bankinfo .nav-tabs li.active a, .bankinfo .nav-tabs li.active a:focus, .bankinfo .nav-tabs li.active a:hover {
-            background-image: linear-gradient(to right, var(--main-bg-lcolor), var(--main-bg-rcolor)) !important;
-            color: #fff !important;
-        }
-
-    .bankinfo-admin-page .table-responsive table td, .bankinfo-admin-page .table-responsive table th {
-        padding: 5px 2px;
-    }
-
-    @@media screen and (max-width:1366px) {
-        .bankinfo-admin-page .bankadminfirstclass {
-            min-height: 80vh !important;
-            height: auto !important;
-            margin-bottom: 15px;
-        }
-    }
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:992px) {
-
-        .bank-info-left {
-            width: 100% !important;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-
-    @@media screen and (max-width:766px) {
-        .bankinfo-respon-third {
-            width: 100%;
-            float: left;
-        }
-
-        .bank-firstresp-third {
-            width: 100% !important;
-            float: left !important;
-            height: auto !important;
-            margin-bottom: 10px;
-        }
-
-        .table-resp-padd-third tr th, .table-resp-padd-third tr td {
-            padding: 5px 5px;
-            white-space: nowrap;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .bank-info-left {
-            width: auto !important;
-        }
-
-        .bread-same-all-page {
-            display: block;
-        }
-
-        .four-noneclass-admin-only {
-            width: 100% !important;
-            float: left !important;
-            padding: 2px 0;
-        }
-
-        .widthautposit-third-respon {
-            width: 100% !important;
-            float: left !important;
-            margin: 2px 0;
-        }
-
-        .col-md-8.bankinfo {
-            width: 100%;
-            margin-top: 15px;
-        }
-    }
-</style>
-
-
-
-<section class="content Masterlist-page fourdesign-section-admin">
-    <div class="container-fluid bankinfo-admin-page">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Add A/C & Wallet</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Add A/C & Wallet</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third">
-            <div class="bread-same-all-page breadsameall-second bankinfo-classmargin" style="width:100%;float:left;">
-                <ul class="padding-top-third four-noneclass-admin-only" style="width: auto; float: left; margin: 0;">
-                    <li class="smli">
-                        <a href="~/ADMIN/Home" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;">
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one" style="line-height: 22px;">
-                        Bank Info
-                    </li>
-                </ul>
-                <div class="col-md-2 tre4 pdf-lastclass-third widthautposit-third-respon" style="padding: 0;width:auto;float:right;">
-                    <div class="white-l-search-nine pdfexpoer-second totalbutton-secondclas">
-                        <div class="web-white-filter" style="float: right;">
-                            <input type="button" id="btnExportA" value="Export" style="margin-left:0px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                            <input type="button" id="btnPDFA" value="PDF" style="margin-left:2px;font-size: 11px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;" />
-                            <button class="white-success-button" style="height:32px;font-size: 11px;padding: 0px 4px;height: 32px;border: 1px solid #b1a6a638;float: left;margin-left: 2px;background: #b1a6a638;" onclick="findtotalA()">Total</button>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Account</li>
+                    <li>Add A/C &amp; Wallet</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap">
+                <input class="form-control" type="text" value="" id="txtsearch" placeholder="Search bank, wallet, account..." name="txtsearch" autocomplete="off" />
             </div>
         </div>
 
-        <div class="col-md-4 bank-info-left bank-firstresp-third bankadminfirstclass" style="background: var(--second-bg-color);padding: 0px;height: 80vh;float: left;width: 32%;">
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
-            <div class="page-header-third">
+                <!-- LEFT: Add Bank / Add Wallet -->
+                <div class="col-md-4 col-sm-12 vm-ft-form-col">
+                    <div class="fund-trasfer-left vm-ft-form-card">
 
-
-                <div class="tabbb">
-                    <ul class="tabs width100 float-left tab-seconddesign tab-third-design">
-                        <li class="tab-link current" data-tab="tab-5">Add Bank Account</li>
-                        <li class="tab-link" data-tab="tab-6">Add Wallet</li>
-                    </ul>
-                </div>
-
-                <div id="tab-5" class="tab-content current tbistn1 tabcurrent-seconddesign input-border-third inputspanborder-third">
-                    @using (Html.BeginForm("AddBank", "Home", FormMethod.Post))
-                    {
-                        <span>Bank Name</span>
-                        @Html.TextBox("Banknm", "", new { @class = "form-input", Placeholder = "Enter Bank Name", required = true })
-                        <span>Branch Name</span>
-                        @Html.TextBox("BranchName", "", new { @class = "form-input", Placeholder = "Enter Branch Name", required = true })
-                        <span>IFSC CODE</span>
-                        @Html.TextBox("ifsccode", "", new { @class = "form-input", Placeholder = "Enter Ifsc Code", required = true })
-                        <span>Account Number</span>
-                        @Html.TextBox("accountno", "", new { @class = "form-input", Placeholder = "Enter Account Number", required = true })
-                        <span>Account Type</span>
-                        @Html.TextBox("accounttype", "", new { @class = "form-input", Placeholder = "Enter Account Type", required = true })
-                        <span>Account Holder Name</span>
-                        @Html.TextBox("accountholder", "", new { @class = "form-input", Placeholder = "Enter Account Holder Name", required = true })
-                        <span>City / Town</span>
-                        @Html.TextBox("City", "", new { @class = "form-input", Placeholder = "Enter City", required = true })
-                        <input type="submit" class="fullbodydycolorbg button-third" value="Save" style="color:white;float: right;
-width: 100px;" />
-                    }
-                </div>
-
-                <div id="tab-6" class="tab-content tbistn1 tabcurrent-seconddesign input-border-third inputspanborder-third">
-                    @using (Html.BeginForm("AddWallet", "Home", FormMethod.Post))
-                    {
-                        <span>Wallet Name</span>
-                        @Html.TextBox("walletnm", "", new { @class = "form-input", Placeholder = "Wallet Name", required = true })
-                        <span>Wallet No</span>
-                        @Html.TextBox("walletno", "", new { @class = "form-input", Placeholder = "Wallet No", required = true })
-                        <span>Wallet Holder Name</span>
-                        @Html.TextBox("walletholdername", "", new { @class = "form-input", Placeholder = "Wallet Holder Name", required = true })
-                        <input type="submit" class="fullbodydycolorbg button-third" value="Save" style="color:white;float: right;
-width: 100px;" />
-                    }
-                </div>
-
-
-            </div>
-
-        </div>
-
-        <div class="col-md-8 bankinfo bankinfo-respon-third" style="background: var(--second-bg-color);padding: 0px;height: 80vh;float: right;">
-
-            <div class="page-header-third">
-                <div class="tabbba">
-                    <ul class="nav nav-tabs tab-seconddesign tab-third-design tab-third-designactivea">
-                        <li class="active"><a data-toggle="tab" href="#home">Bank Details</a></li>
-                        <li><a data-toggle="tab" href="#menu1">Wallets Details</a></li>
-
-                    </ul>
-
-                </div>
-                <div class="tab-content padding-top-second" style="display:block;">
-                    <div id="home" class="tab-pane fade in active">
-
-
-
-                        <div class="col-md-12" style="padding: 0px;">
-                            <div class="table-responsive tableseconddes-admin">
-                                <table class="third-design-table table-resp-padd-third" style="margin-top:5px;width: 100%;margin-bottom:5px; float:left;" border="1">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width:220px; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);background-color:whitesmoke;">
-                                                Bank&nbsp;Name
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;   height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Branch&nbsp;Name
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;  height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                IFSC&nbsp;CODE
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Account&nbsp;Number
-                                            </th>
-                                            <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Account&nbsp;Type
-                                            </th>
-                                            <th style="width:220px; height: 42px;background-color:whitesmoke; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);">
-                                                Account&nbsp;Holder&nbsp;Name
-                                            </th>
-                                            <th style="width:220px; background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                City&nbsp;/&nbsp;Town
-                                            </th>
-
-                                            <th style="width:220px; background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Action
-                                            </th>
-
-                                        </tr>
-                                        @if (Model.bankinfo != null)
-                                        {
-                                            foreach (var item in Model.bankinfo)
-                                            {
-                                                <tr>
-                                                    <td style="width:320px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.banknm
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.branch_nm
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.ifsccode
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.acno
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial; text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.actype
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.holdername
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.address
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        <button class="first-del done-third" style="width: auto; padding: 4px 4px;"><i style="font-size:24px;color:red;" class="fa" aria-hidden="true">?</i></button>
-                                                        <button onclick="deletebank('@item.idno')" class="fullbodydycolorbg second-del done-third" style="display:none;width: auto;height: auto;padding: 2px 2px;color:#fff;font-size: 12px;background: var(--main-bg-lcolor) !important;border: 1px solid var(--main-bg-rcolor);">Sure<br />?</button>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
+                        <div class="vm-ft-form-card-header">
+                            <div class="vm-ft-form-card-header__icon" aria-hidden="true"><i class="fas fa-university"></i></div>
+                            <div>
+                                <span class="vm-ft-form-card-header__title">Add A/C &amp; Wallet</span>
+                                <span class="vm-ft-form-card-header__sub">Register bank accounts and wallets</span>
                             </div>
                         </div>
 
+                        <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs" id="tabs">
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active bi-left-tab" data-tab="tab-5" role="presentation">
+                                <a href="#tab-5" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Add Bank Account</a>
+                            </li>
+                            <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive bi-left-tab" data-tab="tab-6" role="presentation">
+                                <a href="#tab-6" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Add Wallet</a>
+                            </li>
+                        </ul>
 
-                    </div>
-                    <div id="menu1" class="tab-pane fade">
+                        <div class="width100 float-left tabcurrent-seconddesign input-border-third">
 
-
-                        <div class="col-md-12" style="padding: 0px;">
-                            <div class="table-responsive tableseconddes-admin">
-                                <table class="third-design-table" style="margin-top:5px;width: 100%;margin-bottom:5px; float:left;" border="1">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width:220px; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black; position:initial;border:1px solid var(--border-color);background-color:whitesmoke;">
-                                                Company Name
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;   height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Wallet No.
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke;  height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Wallet Holder
-                                            </th>
-                                            <th style="width:220px;background-color:whitesmoke; height: 42px; font-size:14px;  font-family:Arial; font-weight:300; text-align:center; color:black;position:initial;border:1px solid var(--border-color);">
-                                                Action
-                                            </th>
-                                        </tr>
-
-                                        @if (Model.walletinfo != null)
-                                        {
-
-                                            foreach (var item in Model.walletinfo)
-                                            {
-                                                <tr>
-                                                    <td style="width:320px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletname
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px;padding: 10px;  font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletno
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-                                                        @item.walletholdername
-                                                    </td>
-                                                    <td style="width:160px;  font-size:14px; padding: 10px; font-family:Arial;  text-align:center; color:#585858;border:1px solid var(--border-color);">
-
-
-                                                        <button class="first-del done-third" style="width: auto; padding: 4px 4px;"><i style="font-size:24px;color:red;" class="fa" aria-hidden="true">?</i></button>
-                                                        <button onclick="deleteWallet('@item.walletid')" class="fullbodydycolorbg second-del done-third" style="display:none;width: auto;height: auto;padding: 2px 2px;color:#fff;font-size: 12px;background: var(--main-bg-lcolor) !important;border: 1px solid var(--main-bg-rcolor);">Sure<br />?</button>
-                                                    </td>
-                                                </tr>
-                                            }
-
-                                        }
-
-
-                                    </tbody>
-
-                                </table>
+                            <div id="tab-5" class="width100 float-left tab-pane vm-ft-left-tab-pane active in ap-tab-panel">
+                                <div class="fund-transfer-form" id="frmBank">
+                                    @using (Html.BeginForm("AddBank", "Home", FormMethod.Post))
+                                    {
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Bank Name</label>
+                                            <div>@Html.TextBox("Banknm", "", new { @class = "form-control", placeholder = "Enter Bank Name", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Branch Name</label>
+                                            <div>@Html.TextBox("BranchName", "", new { @class = "form-control", placeholder = "Enter Branch Name", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>IFSC Code</label>
+                                            <div>@Html.TextBox("ifsccode", "", new { @class = "form-control", placeholder = "Enter IFSC Code", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Account Number</label>
+                                            <div>@Html.TextBox("accountno", "", new { @class = "form-control", placeholder = "Enter Account Number", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Account Type</label>
+                                            <div>@Html.TextBox("accounttype", "", new { @class = "form-control", placeholder = "Enter Account Type", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Account Holder Name</label>
+                                            <div>@Html.TextBox("accountholder", "", new { @class = "form-control", placeholder = "Enter Account Holder Name", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>City / Town</label>
+                                            <div>@Html.TextBox("City", "", new { @class = "form-control", placeholder = "Enter City", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12 ne-form-footer">
+                                            <button type="submit" class="ne-btn-submit">
+                                                <i class="fas fa-save" aria-hidden="true"></i> Save Bank
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
                             </div>
+
+                            <div id="tab-6" class="width100 float-left tab-pane vm-ft-left-tab-pane ap-tab-panel" style="display:none;">
+                                <div class="fund-transfer-form" id="frmWallet">
+                                    @using (Html.BeginForm("AddWallet", "Home", FormMethod.Post))
+                                    {
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Wallet Name</label>
+                                            <div>@Html.TextBox("walletnm", "", new { @class = "form-control", placeholder = "Wallet Name", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Wallet No</label>
+                                            <div>@Html.TextBox("walletno", "", new { @class = "form-control", placeholder = "Wallet No", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label>Wallet Holder Name</label>
+                                            <div>@Html.TextBox("walletholdername", "", new { @class = "form-control", placeholder = "Wallet Holder Name", required = true })</div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12 ne-form-footer">
+                                            <button type="submit" class="ne-btn-submit">
+                                                <i class="fas fa-save" aria-hidden="true"></i> Save Wallet
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
                         </div>
-
-
-
                     </div>
                 </div>
 
+                <!-- RIGHT: Bank / Wallet lists -->
+                <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
+                    <div class="fund-trasfer-right vm-ft-history-panel">
+                        <div class="vm-ft-history-body">
+
+                            <div class="vm-ft-history-toolbar vm-ft-history-toolbar--premium bi-history-head">
+                                <div class="bi-toolbar-top-row">
+                                    <div class="vm-ft-history-toolbar__head">
+                                        <i class="fas fa-list-alt" aria-hidden="true"></i>
+                                        <div>
+                                            <span class="vm-ft-history-toolbar__title" id="biRightPanelTitle">Bank Details</span>
+                                            <span class="vm-ft-history-toolbar__sub">Manage saved bank accounts &amp; wallets</span>
+                                        </div>
+                                    </div>
+                                    <div class="vm-ft-export-group bi-export-toolbar">
+                                        <button type="button" id="btnExportA" class="vm-ft-export-btn vm-ft-export-btn--excel" title="Export Excel">
+                                            <i class="fas fa-file-excel" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" id="btnPDFA" class="vm-ft-export-btn vm-ft-export-btn--pdf" title="Print / PDF">
+                                            <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" id="biTotalsBtn" class="vm-ft-export-btn ap-total-btn" title="Show total" aria-expanded="false" aria-controls="biTotalsPanel">
+                                            <i class="fas fa-calculator" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="vm-opr-totals-panel vm-dmt-totals-panel bi-totals-panel" id="biTotalsPanel" aria-hidden="true">
+                                <div class="vm-dmt-totals-head">
+                                    <div class="vm-dmt-totals-head__title">
+                                        <i class="fas fa-calculator" aria-hidden="true"></i>
+                                        <span id="biTotalsPanelTitle">Record Summary</span>
+                                    </div>
+                                    <button type="button" class="vm-dmt-totals-hide-btn" id="biTotalsHideBtn" title="Hide totals" aria-label="Hide totals">
+                                        <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="vm-opr-totals-grid vm-dmt-totals-grid bi-totals-grid">
+                                    <div class="vm-opr-total-card vm-opr-total-card--primary">
+                                        <span class="vm-opr-total-card__label">Total Records</span>
+                                        <strong class="vm-opr-total-card__value" id="biTotalCount">0</strong>
+                                    </div>
+                                    <div class="vm-opr-total-card vm-opr-total-card--success">
+                                        <span class="vm-opr-total-card__label">Visible (Filtered)</span>
+                                        <strong class="vm-opr-total-card__value" id="biVisibleCount">0</strong>
+                                    </div>
+                                    <div class="vm-opr-total-card vm-opr-total-card--pending">
+                                        <span class="vm-opr-total-card__label">Active Section</span>
+                                        <strong class="vm-opr-total-card__value bi-total-section" id="biActiveSection">Bank Details</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ul class="nav nav-tabs fullbodydycolorbg1 tab-seconddesign tab-third-design vm-ft-role-tabs" id="bi-right-tabs">
+                                <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--active current active bi-right-tab" data-tab="bi-home-panel" data-title="Bank Details" role="presentation">
+                                    <a href="#bi-home-panel" class="vm-ft-role-tab" aria-expanded="true" aria-selected="true">Bank Details</a>
+                                </li>
+                                <li class="tab-link vm-ft-role-tab-li vm-ft-role-tab-li--inactive bi-right-tab" data-tab="bi-menu1-panel" data-title="Wallets Details" role="presentation">
+                                    <a href="#bi-menu1-panel" class="vm-ft-role-tab" aria-expanded="false" aria-selected="false">Wallets Details</a>
+                                </li>
+                            </ul>
+
+                            <div id="bi-home-panel" class="ap-tab-panel active in">
+                                <div class="vm-ft-table-wrap bi-panel-body">
+                                    <div class="vm-ml-table-host">
+                                        <table class="table vm-ml-data-table" id="biBankTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Bank Name</th>
+                                                    <th>Branch Name</th>
+                                                    <th>IFSC Code</th>
+                                                    <th>Account Number</th>
+                                                    <th>Account Type</th>
+                                                    <th>Account Holder</th>
+                                                    <th>City / Town</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{ var hasBankRows = false; }
+                                                @if (Model.bankinfo != null)
+                                                {
+                                                    foreach (var item in Model.bankinfo)
+                                                    {
+                                                        hasBankRows = true;
+                                                        <tr>
+                                                            <td>@item.banknm</td>
+                                                            <td>@item.branch_nm</td>
+                                                            <td>@item.ifsccode</td>
+                                                            <td>@item.acno</td>
+                                                            <td>@item.actype</td>
+                                                            <td>@item.holdername</td>
+                                                            <td>@item.address</td>
+                                                            <td class="ap-col-action">
+                                                                <button type="button" class="ap-icon-del" data-action="bank-delete" data-id="@item.idno" title="Delete bank account" aria-label="Delete bank account">
+                                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                @if (!hasBankRows)
+                                                {
+                                                    <tr class="bi-empty-row">
+                                                        <td colspan="8">No bank accounts added yet.</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="bi-menu1-panel" class="ap-tab-panel" style="display:none;">
+                                <div class="vm-ft-table-wrap bi-panel-body">
+                                    <div class="vm-ml-table-host">
+                                        <table class="table vm-ml-data-table" id="biWalletTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Company Name</th>
+                                                    <th>Wallet No.</th>
+                                                    <th>Wallet Holder</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{ var hasWalletRows = false; }
+                                                @if (Model.walletinfo != null)
+                                                {
+                                                    foreach (var item in Model.walletinfo)
+                                                    {
+                                                        hasWalletRows = true;
+                                                        <tr>
+                                                            <td>@item.walletname</td>
+                                                            <td>@item.walletno</td>
+                                                            <td>@item.walletholdername</td>
+                                                            <td class="ap-col-action">
+                                                                <button type="button" class="ap-icon-del" data-action="wallet-delete" data-id="@item.walletid" title="Delete wallet" aria-label="Delete wallet">
+                                                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                @if (!hasWalletRows)
+                                                {
+                                                    <tr class="bi-empty-row">
+                                                        <td colspan="4">No wallets added yet.</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
         </div>
-
 
     </div>
-
-
-
 </section>
 
 <script>
-    function deletebank(idno) {
-        var url = '@Url.Action("Deletebank", "Home")';
-        $.ajax({
-            url: url,
-            data: { id: idno},
-            cache: false,
-            type: "GET",
-            success: function (data) {
-                var url = '@Url.Action("bankinfo", "Home")';
-                window.location=url;
+    (function ($) {
+
+        function biActivateRoleTabs($tabs, tabId) {
+            $tabs.find('li').removeClass('active current vm-ft-role-tab-li--active').addClass('vm-ft-role-tab-li--inactive');
+            var $activeLi = $tabs.find('li[data-tab="' + tabId + '"]');
+            $activeLi.removeClass('vm-ft-role-tab-li--inactive').addClass('active current vm-ft-role-tab-li--active');
+            $tabs.find('li a').attr({ 'aria-selected': 'false', 'aria-expanded': 'false' });
+            $activeLi.find('a').attr({ 'aria-selected': 'true', 'aria-expanded': 'true' });
+        }
+
+        function biSwitchLeftTab(tabId) {
+            biActivateRoleTabs($('#tabs'), tabId);
+            $('#tab-5, #tab-6').removeClass('active in').hide();
+            $('#' + tabId).addClass('active in').show();
+        }
+
+        function biSwitchRightTab(tabId, $btn) {
+            biActivateRoleTabs($('#bi-right-tabs'), tabId);
+            $('#bi-home-panel, #bi-menu1-panel').removeClass('active in').hide();
+            $('#' + tabId).addClass('active in').show();
+            var title = $btn ? ($btn.data('title') || 'Details') : 'Details';
+            $('#biRightPanelTitle').text(title);
+            biFilterActiveTable($('#txtsearch').val());
+            biHideTotals();
+        }
+
+        function biGetActiveTableTitle() {
+            var $active = $('#bi-right-tabs li.active, #bi-right-tabs li.current').first();
+            return $active.data('title') || 'Bank Details';
+        }
+
+        function biFilterActiveTable(term) {
+            var q = (term || '').toLowerCase().trim();
+            var $panel = $('#bi-home-panel:visible, #bi-menu1-panel:visible').first();
+            if (!$panel.length) {
+                $panel = $('.ap-tab-panel.active, .ap-tab-panel.in').filter(':visible').first();
             }
-        })
-    }
-     function deleteWallet(idno) {
-        var url = '@Url.Action("Deletewallet", "Home")';
-        $.ajax({
-            url: url,
-            data: { id: idno},
-            cache: false,
-            type: "GET",
-            success: function (data) {
-                var url = '@Url.Action("bankinfo", "Home")';
-                window.location=url;
+            $panel.find('table tbody tr').each(function () {
+                if ($(this).hasClass('bi-empty-row')) {
+                    return;
+                }
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(q === '' || text.indexOf(q) > -1);
+            });
+        }
+
+        function biGetActivePanel() {
+            var $panel = $('#bi-home-panel:visible, #bi-menu1-panel:visible').first();
+            if (!$panel.length) {
+                $panel = $('.ap-tab-panel.active, .ap-tab-panel.in').filter(':visible').first();
             }
-        })
-    }
-</script>
-<script>
-    $('.first-del').click(function () {
-        $(this).hide();
-        $(this).next('.second-del').show();
-    });
-</script>
-<script>
-    $("#btnExportA").click(function () {
-        var title = $('.active')[2].children[0].text
-            var url = '@Url.Action("Excelbankinfo", "Home")' + '?title=' + title;
-            location.href = url;
+            return $panel;
+        }
+
+        function biUpdateTotalsData() {
+            var $panel = biGetActivePanel();
+            var title = biGetActiveTableTitle();
+            var total = $panel.find('table tbody tr:not(.bi-empty-row)').length;
+            var visible = $panel.find('table tbody tr:not(.bi-empty-row):visible').length;
+            $('#biTotalCount').text(total);
+            $('#biVisibleCount').text(visible);
+            $('#biActiveSection').text(title);
+            $('#biTotalsPanelTitle').text(title + ' — Summary');
+        }
+
+        function biHideTotals() {
+            $('#biTotalsPanel').removeClass('is-open').attr('aria-hidden', 'true');
+            $('#biTotalsBtn').removeClass('is-active').attr('aria-expanded', 'false');
+        }
+
+        function biToggleTotals() {
+            var $panel = $('#biTotalsPanel');
+            if ($panel.hasClass('is-open')) {
+                biHideTotals();
+                return;
+            }
+            biUpdateTotalsData();
+            $panel.addClass('is-open').attr('aria-hidden', 'false');
+            $('#biTotalsBtn').addClass('is-active').attr('aria-expanded', 'true');
+        }
+
+        window.findtotalA = biToggleTotals;
+
+        function biFormatPreviewDate() {
+            var d = new Date();
+            return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) +
+                ' ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function biEscapeHtml(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function biGetPdfStyles() {
+            return '@@page { size: A4 landscape; margin: 12mm 10mm 14mm 10mm; }'
+                + '* { box-sizing: border-box; }'
+                + 'body { margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#1e293b; background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+                + 'table { page-break-inside:auto; border-collapse:collapse; }'
+                + 'tr { page-break-inside:avoid; page-break-after:auto; }'
+                + 'thead { display:table-header-group; }'
+                + '.vm-ml-pdf { width:100%; }'
+                + '.vm-ml-pdf__header { width:100%; margin-bottom:14px; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }'
+                + '.vm-ml-pdf__hero { padding:14px 20px; background:#2563eb; background:-webkit-linear-gradient(135deg,#2563eb,#4f46e5); background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%); color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+                + '.vm-ml-pdf__title { margin:0; font-size:18px; font-weight:700; color:#fff; }'
+                + '.vm-ml-pdf__subtitle { margin:4px 0 0; font-size:11px; opacity:0.92; color:#fff; }'
+                + '.vm-ml-pdf__meta { width:100%; border-top:1px solid #e2e8f0; background:#f8fafc; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+                + '.vm-ml-pdf__meta td { padding:9px 12px; border-right:1px solid #e2e8f0; vertical-align:middle; }'
+                + '.vm-ml-pdf__meta td:last-child { border-right:none; }'
+                + '.vm-ml-pdf__meta-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; margin-bottom:2px; }'
+                + '.vm-ml-pdf__meta-value { font-size:11px; font-weight:700; color:#0f172a; }'
+                + '.vm-ml-pdf__table-wrap { width:100%; border:1px solid #dbe2ea; border-radius:10px; overflow:hidden; }'
+                + '.vm-ml-pdf__table { width:100%; border:none; }'
+                + '.vm-ml-pdf__table thead th { padding:10px 8px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#fff; background:#334155; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-bottom:2px solid #1e293b; white-space:nowrap; }'
+                + '.vm-ml-pdf__table tbody td { padding:9px 8px; border-bottom:1px solid #e2e8f0; vertical-align:middle; font-size:10px; color:#334155; }'
+                + '.vm-ml-pdf__table tbody tr:nth-child(even) td { background:#f8fafc; -webkit-print-color-adjust:exact; print-color-adjust:exact; }'
+                + '.vm-ml-pdf__empty { padding:28px 16px; text-align:center; color:#64748b; font-size:12px; font-weight:600; background:#f8fafc; }'
+                + '.vm-ml-pdf__footer { margin-top:12px; padding-top:8px; border-top:1px dashed #dbe2ea; font-size:9px; color:#94a3b8; text-align:center; }';
+        }
+
+        function biCollectExportData($table) {
+            var headers = [];
+            $table.find('thead th').each(function () {
+                if ($(this).text().trim().toLowerCase() === 'action') {
+                    return;
+                }
+                headers.push($(this).text().trim());
+            });
+
+            var rows = [];
+            $table.find('tbody tr:visible').each(function () {
+                if ($(this).hasClass('bi-empty-row')) {
+                    return;
+                }
+                var cells = [];
+                $(this).find('td').each(function () {
+                    if ($(this).hasClass('ap-col-action')) {
+                        return;
+                    }
+                    cells.push($(this).text().trim());
+                });
+                if (cells.length) {
+                    rows.push(cells);
+                }
+            });
+
+            return { headers: headers, rows: rows };
+        }
+
+        function biBuildPrintTableHtml($table) {
+            var data = biCollectExportData($table);
+            var headers = data.headers;
+            var rows = data.rows;
+
+            if (!headers.length || !rows.length) {
+                return '';
+            }
+
+            var theadHtml = '<tr>';
+            for (var h = 0; h < headers.length; h++) {
+                theadHtml += '<th>' + biEscapeHtml(headers[h]) + '</th>';
+            }
+            theadHtml += '</tr>';
+
+            var tbodyHtml = '';
+            for (var r = 0; r < rows.length; r++) {
+                tbodyHtml += '<tr>';
+                for (var c = 0; c < rows[r].length; c++) {
+                    tbodyHtml += '<td>' + biEscapeHtml(rows[r][c]) + '</td>';
+                }
+                tbodyHtml += '</tr>';
+            }
+
+            return '<table class="vm-ml-pdf__table" cellpadding="0" cellspacing="0">'
+                + '<thead>' + theadHtml + '</thead>'
+                + '<tbody>' + tbodyHtml + '</tbody>'
+                + '</table>';
+        }
+
+        function biBuildExcelDocumentHtml(title, printedOn, rowCount, headers, rows) {
+            var colCount = headers.length || 1;
+            var metaSpan = Math.max(1, Math.ceil(colCount / 3));
+            var metaSpanLast = Math.max(1, colCount - (metaSpan * 2));
+            var heroStyle = 'background-color:#2563eb;color:#ffffff;font-size:18px;font-weight:bold;padding:14px 16px;font-family:Arial,Helvetica,sans-serif;';
+            var subStyle = 'font-size:11px;font-weight:normal;color:#ffffff;';
+            var metaCellStyle = 'padding:10px 12px;border:1px solid #e2e8f0;background-color:#f8fafc;font-family:Arial,Helvetica,sans-serif;vertical-align:top;';
+            var metaLabelStyle = 'display:block;font-size:9px;font-weight:bold;text-transform:uppercase;color:#64748b;margin-bottom:2px;';
+            var metaValueStyle = 'font-size:11px;font-weight:bold;color:#0f172a;';
+            var thStyle = 'background-color:#334155;color:#ffffff;padding:10px 8px;font-size:9px;font-weight:bold;text-transform:uppercase;border:1px solid #1e293b;font-family:Arial,Helvetica,sans-serif;text-align:left;';
+            var tdStyle = 'padding:9px 8px;border:1px solid #e2e8f0;color:#334155;font-size:10px;font-family:Arial,Helvetica,sans-serif;background-color:#ffffff;';
+            var tdAltStyle = 'padding:9px 8px;border:1px solid #e2e8f0;color:#334155;font-size:10px;font-family:Arial,Helvetica,sans-serif;background-color:#f8fafc;';
+            var footerStyle = 'padding:10px 12px;border-top:1px dashed #dbe2ea;color:#94a3b8;font-size:9px;text-align:center;font-family:Arial,Helvetica,sans-serif;';
+
+            var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">'
+                + '<head><meta charset="utf-8">'
+                + '<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>'
+                + '<x:Name>Bank Info</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>'
+                + '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->'
+                + '</head><body>';
+
+            html += '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:8px;">';
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#2563eb" style="' + heroStyle + '">'
+                + biEscapeHtml(title) + '<br/><span style="' + subStyle + '">Add A/C &amp; Wallet Report &mdash; Admin Panel</span></td></tr>';
+            html += '<tr bgcolor="#f8fafc">';
+            html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Generated On</span><span style="' + metaValueStyle + '">' + biEscapeHtml(printedOn) + '</span></td>';
+            html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Total Records</span><span style="' + metaValueStyle + '">' + rowCount + '</span></td>';
+            html += '<td colspan="' + metaSpanLast + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Section</span><span style="' + metaValueStyle + '">' + biEscapeHtml(title) + '</span></td>';
+            html += '</tr></table>';
+
+            html += '<table border="1" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">';
+            if (headers.length) {
+                html += '<tr>';
+                for (var h = 0; h < headers.length; h++) {
+                    html += '<th bgcolor="#334155" style="' + thStyle + '">' + biEscapeHtml(headers[h]) + '</th>';
+                }
+                html += '</tr>';
+            }
+
+            if (!rows.length) {
+                html += '<tr><td colspan="' + colCount + '" bgcolor="#f8fafc" style="padding:28px 16px;text-align:center;color:#64748b;font-size:12px;font-weight:bold;background-color:#f8fafc;">No records found for this section.</td></tr>';
+            } else {
+                for (var r = 0; r < rows.length; r++) {
+                    var cellStyle = r % 2 === 0 ? tdStyle : tdAltStyle;
+                    var rowBg = r % 2 === 1 ? ' bgcolor="#f8fafc"' : '';
+                    html += '<tr' + rowBg + '>';
+                    for (var c = 0; c < rows[r].length; c++) {
+                        html += '<td style="' + cellStyle + '">' + biEscapeHtml(rows[r][c]) + '</td>';
+                    }
+                    html += '</tr>';
+                }
+            }
+            html += '</table>';
+
+            html += '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:10px;">';
+            html += '<tr><td colspan="' + colCount + '" style="' + footerStyle + '">' + biEscapeHtml(title) + ' &mdash; ' + biEscapeHtml(printedOn) + '</td></tr>';
+            html += '</table></body></html>';
+
+            return html;
+        }
+
+        function biExportExcel() {
+            var $panel = biGetActivePanel();
+            if (!$panel.length) { return; }
+
+            var title = biGetActiveTableTitle();
+            var printedOn = biFormatPreviewDate();
+            var $table = $panel.find('table').first();
+            var data = biCollectExportData($table);
+            var rowCount = $table.find('tbody tr:visible:not(.bi-empty-row)').length;
+            var excelHtml = biBuildExcelDocumentHtml(title, printedOn, rowCount, data.headers, data.rows);
+            var stamp = new Date().toISOString().slice(0, 10);
+            var safeTitle = title.replace(/[^a-z0-9]+/gi, '_');
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'BankInfo_' + safeTitle + '_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        function biExportPdfPrint() {
+            var $panel = biGetActivePanel();
+            if (!$panel.length) { return; }
+
+            var title = biGetActiveTableTitle();
+            var printedOn = biFormatPreviewDate();
+            var $table = $panel.find('table').first();
+            var tableHtml = biBuildPrintTableHtml($table);
+            var rowCount = $table.find('tbody tr:visible:not(.bi-empty-row)').length;
+            var tableContent = tableHtml || '<div class="vm-ml-pdf__empty">No records found for this section.</div>';
+
+            var printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('Please allow popups to export PDF.');
+                return;
+            }
+
+            var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + biEscapeHtml(title) + '</title>'
+                + '<style type="text/css">' + biGetPdfStyles() + '</style></head><body>'
+                + '<div class="vm-ml-pdf">'
+                + '<div class="vm-ml-pdf__header">'
+                + '<div class="vm-ml-pdf__hero">'
+                + '<h1 class="vm-ml-pdf__title">' + biEscapeHtml(title) + '</h1>'
+                + '<p class="vm-ml-pdf__subtitle">Add A/C &amp; Wallet Report &mdash; Admin Panel</p>'
+                + '</div>'
+                + '<table class="vm-ml-pdf__meta" cellpadding="0" cellspacing="0"><tr>'
+                + '<td style="width:33%;"><span class="vm-ml-pdf__meta-label">Generated On</span><span class="vm-ml-pdf__meta-value">' + biEscapeHtml(printedOn) + '</span></td>'
+                + '<td style="width:33%;"><span class="vm-ml-pdf__meta-label">Total Records</span><span class="vm-ml-pdf__meta-value">' + rowCount + '</span></td>'
+                + '<td style="width:34%;"><span class="vm-ml-pdf__meta-label">Section</span><span class="vm-ml-pdf__meta-value">' + biEscapeHtml(title) + '</span></td>'
+                + '</tr></table></div>'
+                + '<div class="vm-ml-pdf__table-wrap">' + tableContent + '</div>'
+                + '<div class="vm-ml-pdf__footer">' + biEscapeHtml(title) + ' &mdash; ' + biEscapeHtml(printedOn) + '</div>'
+                + '</div></body></html>';
+
+            printWin.document.open();
+            printWin.document.write(html);
+            printWin.document.close();
+
+            var biTriggerPrint = function () {
+                if (printWin._biPrinted) { return; }
+                printWin._biPrinted = true;
+                printWin.focus();
+                printWin.print();
+            };
+
+            printWin.onload = biTriggerPrint;
+            window.setTimeout(biTriggerPrint, 400);
+        }
+
+        $(document).ready(function () {
+            $('#tab-6').hide();
+
+            $('#tabs .bi-left-tab a').on('click', function (e) {
+                e.preventDefault();
+                biSwitchLeftTab($(this).closest('li').data('tab'));
+            });
+
+            $('#bi-right-tabs .bi-right-tab a').on('click', function (e) {
+                e.preventDefault();
+                biSwitchRightTab($(this).closest('li').data('tab'), $(this).closest('li'));
+            });
+
+            $('#txtsearch').on('input', function () {
+                biFilterActiveTable($(this).val());
+                if ($('#biTotalsPanel').hasClass('is-open')) {
+                    biUpdateTotalsData();
+                }
+            });
+
+            $('#biTotalsBtn').on('click', biToggleTotals);
+            $('#biTotalsHideBtn').on('click', biHideTotals);
+
+            $('#btnExportA').on('click', biExportExcel);
+
+            $('#btnPDFA').on('click', biExportPdfPrint);
         });
+
+        $(document).on('click', '.Bankinfo_Page [data-action="bank-delete"]', function (e) {
+            e.preventDefault();
+            if (!confirm('Delete this bank account?')) { return; }
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+            $.ajax({
+                url: '@Url.Action("Deletebank", "Home")',
+                data: { id: $btn.data('id') },
+                cache: false,
+                type: 'GET',
+                success: function () {
+                    window.location.href = '@Url.Action("bankinfo", "Home")';
+                },
+                error: function () {
+                    alert('Unable to delete bank account.');
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+        $(document).on('click', '.Bankinfo_Page [data-action="wallet-delete"]', function (e) {
+            e.preventDefault();
+            if (!confirm('Delete this wallet?')) { return; }
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+            $.ajax({
+                url: '@Url.Action("Deletewallet", "Home")',
+                data: { id: $btn.data('id') },
+                cache: false,
+                type: 'GET',
+                success: function () {
+                    window.location.href = '@Url.Action("bankinfo", "Home")';
+                },
+                error: function () {
+                    alert('Unable to delete wallet.');
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+    })(jQuery);
 </script>

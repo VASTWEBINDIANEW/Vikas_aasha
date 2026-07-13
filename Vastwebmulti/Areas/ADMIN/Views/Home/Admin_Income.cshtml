@@ -1,642 +1,488 @@
 @model IEnumerable<Vastwebmulti.Models.admin_income_Result>
+@using System.Linq
 @{
     ViewBag.Title = "Admin_Income";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var reports = Model ?? Enumerable.Empty<Vastwebmulti.Models.admin_income_Result>();
+    var rowCount = reports.Count();
+
+    var frmDate = (Request["txt_frm_date"] ?? "").Trim();
+    var toDate = (Request["txt_to_date"] ?? "").Trim();
+    if (string.IsNullOrEmpty(frmDate)) { frmDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+    if (string.IsNullOrEmpty(toDate)) { toDate = DateTime.Today.ToString("yyyy-MM-dd"); }
+
+    var dateMode = ViewBag.chk != null && ViewBag.chk.ToString() == "post" ? "post" : "get";
+    var ddlType = (Request["ddl_type"] ?? "All").Trim();
+    if (string.IsNullOrEmpty(ddlType)) { ddlType = "All"; }
+
+    var selApinm = (Request["apinm"] ?? "").Trim();
+    var selPortno = (Request["portno"] ?? "").Trim();
+    var selOptnm = (Request["optnm"] ?? "").Trim();
+
+    var apinmBag = ViewBag.apinm as SelectList;
+    var portnoBag = ViewBag.portno as SelectList;
+    var optnmBag = ViewBag.optnm as SelectList;
+
+    var apinmList = apinmBag != null
+        ? new SelectList(apinmBag.Items, apinmBag.DataValueField, apinmBag.DataTextField, string.IsNullOrEmpty(selApinm) ? null : selApinm)
+        : new SelectList(Enumerable.Empty<SelectListItem>());
+    var portnoList = portnoBag != null
+        ? new SelectList(portnoBag.Items, portnoBag.DataValueField, portnoBag.DataTextField, string.IsNullOrEmpty(selPortno) ? null : selPortno)
+        : new SelectList(Enumerable.Empty<SelectListItem>());
+    var optnmList = optnmBag != null
+        ? new SelectList(optnmBag.Items, optnmBag.DataValueField, optnmBag.DataTextField, string.IsNullOrEmpty(selOptnm) ? null : selOptnm)
+        : new SelectList(Enumerable.Empty<SelectListItem>());
+
+    decimal totalPurchase = reports.Sum(a => a.purchase ?? 0m);
+    decimal totalAdminIncome = reports.Sum(a => a.admin_income ?? 0m);
+    decimal totalSuccess = reports.Sum(a => a.total ?? 0m);
 }
-<style>
 
-    /* new css  */
-    .margin-allnone-admin {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=46" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=35" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-admin-income-modern.css?v=7" rel="stylesheet" />
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-    .input-daterange input {
-        width: 125px !important;
-        text-align: end;
-    }
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-radiant-prepay-page saas-ecommerce-history-page saas-security-report-page saas-giftcard-report-page saas-prepaid-card-report-page saas-admin-income-page">
 
-    .responcive-fifty-date {
-        width: auto !important;
-    }
+    <div class="container-fluid vm-opr-page-shell">
 
-    .res_div {
-        width: 50% !important;
-        float: left;
-    }
-
-    /* new css  */
-
-    .datepicker-dropdown.datepicker {
-        margin-top: 75px !important;
-    }
-
-    .bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
-        height: 20px;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: 1px solid #bbb !important;
-        border-radius: 0px !important;
-        height: 32px !important;
-    }
-
-    .table-bordered thead tr th {
-        padding: 5px;
-    }
-
-    .table-bordered tbody tr td p {
-        margin: 0px;
-    }
-
-    .adminincome-admin .page-header-third .col-md-5 {
-        width: auto;
-        float: left;
-    }
-
-    .adminincome-admin .col-md-7.admin-income-page {
-        width: auto;
-        float: right;
-    }
-
-    .adminincome-admin .admin-income-page .col-md-2.responcive-fifty, .adminincome-admin .admin-income-page .responcive-fifty-three {
-        float: left;
-        width: 16%;
-    }
-
-        .adminincome-admin .admin-income-page .col-md-2.responcive-fifty.responcive-fifty-search {
-            padding-right: 0;
-            width: 11%;
+        @{
+            var incomeFormAttrs = new Dictionary<string, object>
+            {
+                { "id", "adminIncomeForm" },
+                { "class", "vm-rpt-filters-panel__form" },
+                { "data-date-mode", dateMode },
+                { "data-frm-date", frmDate },
+                { "data-to-date", toDate }
+            };
         }
+        @using (Html.BeginForm("Admin_Income", "Home", FormMethod.Post, incomeFormAttrs))
+        {
+            <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
 
-    .col-md-3.responcive-fifty.responcive-fifty-date {
-        width: 20%;
-        padding-left: 0 !important;
-    }
+                <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line" style="margin:0 !important;">
 
-    .responcive-fifty {
-        padding-right: 5px !important;
-    }
+                    <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                        <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                        <li>Account</li>
+                        <li>Business By Port/API</li>
+                    </ol>
 
+                    <div class="saas-acc-filter-bar vm-opr-filter-row vm-dmt-filter-row vm-dmt-filter-row--one-line vm-dmt-filter-row--ticket vm-dmt-filter-row--radiant vm-radiant-inline-filters vm-ecomm-filter-row--one-line vm-gift-filter-row--one-line">
 
-    @@media only screen and (max-width:1280px) {
+                        <div class="vm-opr-field vm-dmt-field vm-ai-field--category">
+                            <select class="vm-opr-select vm-dmt-select form-control" id="ddl_type" name="ddl_type" title="Category" onchange="adminIncomeSearchOption()">
+                                <option value="All" @(ddlType == "All" ? "selected" : null)>All Category</option>
+                                <option value="MACHINE" @(ddlType == "MACHINE" ? "selected" : null)>MACHINE</option>
+                                <option value="API" @(ddlType == "API" ? "selected" : null)>API</option>
+                            </select>
+                        </div>
 
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="apiname">
+                            @Html.DropDownList("apinm", apinmList, "Select API", new { id = "apinm", @class = "vm-opr-select vm-dmt-select form-control", title = "API name" })
+                        </div>
 
-    @@media only screen and (max-width:1169px) {
+                        <div class="vm-opr-field vm-dmt-field vm-opr-filter-extra" id="portnoo">
+                            @Html.DropDownList("portno", portnoList, "Port", new { id = "portno", @class = "vm-opr-select vm-dmt-select form-control", title = "Port number" })
+                        </div>
 
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
+                        <div class="vm-opr-field vm-dmt-field vm-ai-field--operator vm-gift-field--operator">
+                            @Html.DropDownList("optnm", optnmList, "Operator", new { id = "optnm", @class = "vm-opr-select vm-dmt-select form-control", title = "Operator" })
+                        </div>
 
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:992px) {
-        .responcive-fifty {
-            width: 50%;
-            float: left;
-            padding: 0 2px !important;
-        }
-
-            .responcive-fifty button {
-                width: 100%;
-                text-align: left;
-            }
-
-
-            .responcive-fifty div {
-                padding-bottom: 0px !important;
-            }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media screen and (max-width:766px) {
-
-        .input-daterange input {
-            width: 100% !important;
-            text-align: end;
-        }
-
-        .adminincome-admin .admin-income-page .col-md-2.responcive-fifty, .adminincome-admin .admin-income-page .responcive-fifty-three {
-            width: 50%;
-            float: left;
-            margin-bottom: 3px;
-        }
-
-        .adminincome-admin .col-md-7.admin-income-page {
-            width: 100%;
-            float: left;
-            margin: 0;
-            padding: 0 15px;
-        }
-
-            .adminincome-admin .col-md-7.admin-income-page .row {
-                margin: 0;
-            }
-
-        .adminincome-admin .admin-income-page .col-md-2.responcive-fifty.responcive-fifty-search {
-            padding-right: 0;
-            width: auto;
-        }
-
-        .adminincome-admin table {
-            border-left: 1px solid var(--border-color) !important;
-        }
-
-        .col-md-3.responcive-fifty.responcive-fifty-date {
-            width: 50% !important;
-            float: left !important;
-            margin-bottom: 3px;
-            padding: 0 2px !important;
-        }
-
-        .newfourdesign-admin .col-md-7.admin-income-page.all-type-third {
-            padding: 0;
-        }
-    }
-
-
-
-    @@media only screen and (max-width:520px) {
-        .admin-income-page .col-md-3, .admin-income-page .col-md-2 {
-            width: 100% !important;
-        }
-
-            .admin-income-page .col-md-2 > div {
-                padding-bottom: 0px !important;
-            }
-
-        .res_div {
-            width: 100% !important;
-            padding: 3px 0 !important;
-        }
-
-        .margin-allnone-admin {
-            display: block;
-        }
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child {
-            border-left: 1px solid var(--border-color);
-        }
-    }
-</style>
-<section class="content fourdesign-section-admin">
-    <div class="container-fluid adminincome-admin">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Business By Port/API</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Account 2&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Business By Port/API</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="card" style="margin-bottom:15px;">
-            <div class="row clearfix page-header-third margin-bottom-third cardbackg-third onlymargin-third newcardclass leftrightpadd-third margin-allnone-admin">
-                <div class="col-md-5 four-noneclass-admin-only res_div" style="padding: 0;">
-
-                    <div class="bread-same-all-page breadsameall-second">
-                        <ul>
-                            <li class="smli">
-                                <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                    Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                                </a>
-                            </li>
-                            <li class="fullbodydycolorbg tmw-total-color-one">
-                                Business BY Port/API
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <div class="res_div">
-                    <div class="web-white-filter pdfexpoer-second pdf-third-design" style="float: right;">
-                        <input type="button" id="btnExport" value="Export" style="margin-left:0px;font-size: 14px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-                        <input type="button" id="btnPDF" value="PDF" style="margin-left:3px;font-size: 14px;float: left; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);background-repeat: no-repeat;background-position: 4px center;padding-left: 19px;">
-
-                    </div>
-                </div>
-
-
-
-            </div>
-        </div>
-
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card page-header-third">
-
-                    <div style="width:100%;float:left;">
-                        <div class="admin-income-page all-type-third">
-                            @using (Html.BeginForm("Admin_income", "Home", FormMethod.Post))
-                            {
-
-
-
-                                <div class="col-md-2 responcive-fifty" style="padding:0px;">
-                                    <div class="padding-bottomo-third" style="">
-                                        <select class="selectpicker form-control" id="ddl_type" name="ddl_type" style="margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" onchange="searchoption()">
-                                            <option value="All">&nbsp;All Category</option>
-                                            <option value="MACHINE">MACHINE</option>
-                                            <option value="API">API</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-2 responcive-fifty" style="padding:0px;padding-left:5px;display:none;" id="apiname">
-                                    <div class="">
-                                        @Html.DropDownList("apinm", ViewBag.apinm as SelectList, "Selct API", new { id = "apinm", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;" })
-                                    </div>
-                                </div>
-                                <div class="col-md-2 responcive-fifty" style="display:none;padding:0px;padding-left:5px;" id="portnoo">
-                                    <div class="">
-                                        @Html.DropDownList("portno", ViewBag.portno as SelectList, "Port", new { id = "portno", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;text-align:center;" })
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3 responcive-fifty responcive-fifty-three" style="padding:0px;">
-                                    <div class="">
-                                        @Html.DropDownList("optnm", ViewBag.optnm as SelectList, "Operator", new { id = "optnm", @class = "selectpicker form-control", data_live_search = "true", @style = "margin-top:0px; padding-left:0px; padding-right:0px;" })
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3 responcive-fifty responcive-fifty-date" style="padding:0px 5px;">
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="custom-date-icon">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #bbb; ", autocomplete = "off" })
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 responcive-fifty responcive-fifty-date" style="padding:0px 5px;">
-                                    <div class="form-group" style="margin-bottom:0px;">
-                                        <div class="input-daterange input-group">
-                                            <div class="custom-date-icon">
-                                                <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                            </div>
-                                            @Html.TextBox("txt_to_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #bbb; ", autocomplete = "off" })
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-
-
-                                <div class="col-md-2 responcive-fifty responcive-fifty-search" style="padding-left:0px;">
-
-                                    <button type="submit" class="btn  waves-effect input-back-second" style="width:100%;  height:32px;border:1px solid #bbb;background:transparent;">
-                                        <i class="fa fa-search" style="top:-1px;font-size:16px;color:black;"></i>&nbsp;<span>Search</span>
-                                    </button>
-
-                                </div>
-
-
-
-
-                            }
+                        <div class="vm-dmt-filter-search-group">
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_frm_date", frmDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "From", title = "From date" })
+                            </div>
+                            <div class="saas-acc-dp-field vm-opr-dp-compact vm-dmt-field--date">
+                                <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                @Html.TextBox("txt_to_date", toDate, new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_to_date", placeholder = "To", title = "To date" })
+                            </div>
+                            <button type="submit" class="saas-acc-btn saas-acc-btn--search saas-acc-report-search-btn vm-opr-toolbar-search vm-radiant-search-btn" title="Search">
+                                <i class="fas fa-search" aria-hidden="true"></i><span>Search</span>
+                            </button>
                         </div>
 
                     </div>
 
-                    <div style="float: left; width: 100%; margin-top: 5px;">
+                </div>
 
-                        <div class="table-responsive tablefourdesign-admin" style="position:inherit;">
-                            <table class="table table-bordered table-striped third-design-table">
-                                <thead style="color:black;position:inherit;background-color:whitesmoke;">
-                                    <tr>
-                                        <th rowspan="2">Port/API&nbsp;Info</th>
-                                        <th rowspan="2">Users</th>
-                                        <th rowspan="2">Operator&nbsp;Name</th>
-                                        <th colspan="2">Purchase</th>
-                                        <th colspan="2">Retailer's</th>
+                <div class="vm-opr-totals-panel vm-dmt-totals-panel" id="adminIncomeTotalsPanel" style="display:none;" aria-hidden="true">
+                    <div class="vm-dmt-totals-head">
+                        <div class="vm-dmt-totals-head__title">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            <span>Business by Port/API totals</span>
+                        </div>
+                        <button type="button" class="vm-dmt-totals-hide-btn" onclick="hideAdminIncomeTotals()" title="Hide totals" aria-label="Hide totals">
+                            <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="vm-opr-totals-grid vm-dmt-totals-grid vm-radiant-totals-grid">
+                        <div class="vm-opr-total-card vm-opr-total-card--success">
+                            <span class="vm-opr-total-card__label">Purchase</span>
+                            <strong class="vm-opr-total-card__value" id="adminIncomeTotalPurchase">@totalPurchase.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--pending">
+                            <span class="vm-opr-total-card__label">Admin Income</span>
+                            <strong class="vm-opr-total-card__value" id="adminIncomeTotalIncome">@totalAdminIncome.ToString("N2")</strong>
+                        </div>
+                        <div class="vm-opr-total-card vm-opr-total-card--failed">
+                            <span class="vm-opr-total-card__label">Total Success</span>
+                            <strong class="vm-opr-total-card__value" id="adminIncomeTotalSuccess">@totalSuccess.ToString("N2")</strong>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        }
 
-                                        <th colspan="2">Distributor's</th>
-                                        <th colspan="2">M/D&nbsp;User's</th>
-                                        <th colspan="2">Api&nbsp;User's</th>
-                                        <th colspan="2">Whitelabel's</th>
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-prepaid-report-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                        <span>Business by Port/API</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="adminIncomeRecordCount">@rowCount</strong>
+                        </span>
+                        <span class="vm-radiant-inline-total" title="Total purchase for current filter">
+                            Total: <strong id="adminIncomeInlineTotal">₹ @totalPurchase.ToString("N2")</strong>
+                        </span>
+                        <div class="vm-dmt-table-actions vm-opr-filter-actions saas-acc-export-group">
+                            <button type="button" class="vm-opr-icon-btn vm-opr-totals-btn vm-dmt-totals-btn vm-gift-totals-btn vm-prepaid-totals-btn vm-ai-totals-btn" onclick="findAdminIncomeTotals()" title="Show totals" aria-expanded="false" aria-controls="adminIncomeTotalsPanel">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="btnExportA" class="saas-acc-btn saas-acc-btn--excel" title="Export Excel">
+                                <i class="fas fa-file-excel" aria-hidden="true"></i> Excel
+                            </button>
+                            <button type="button" id="btnPDFA" class="saas-acc-btn saas-acc-btn--pdf" title="Export PDF">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="vm-opr-table-wrap vm-prepaid-table-wrap">
+                    <div class="table-responsive vm-opr-table-scroll">
+                        <table id="adminIncomeReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Port/API&nbsp;Info</th>
+                                    <th rowspan="2">Users</th>
+                                    <th rowspan="2">Operator&nbsp;Name</th>
+                                    <th colspan="2">Purchase</th>
+                                    <th colspan="2">Retailer's</th>
+                                    <th colspan="2">Distributor's</th>
+                                    <th colspan="2">M/D&nbsp;User's</th>
+                                    <th colspan="2">Api&nbsp;User's</th>
+                                    <th colspan="2">Whitelabel's</th>
+                                    <th colspan="1">Admin</th>
+                                    <th colspan="1">Total&nbsp;Success</th>
+                                </tr>
+                                <tr>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--rate">Rate</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--comm">Commission</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--comm">Commission</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--comm">Commission</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--comm">Commission</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--comm">Commission</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--pct">%</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--income">Income</span></th>
+                                    <th><span class="vm-ai-head-badge vm-ai-head-badge--success">Success + Pending</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    decimal? totalcountinc = 0;
+                                    decimal? retailertotalinc = 0;
+                                    decimal? dlmtotalinc = 0;
+                                    decimal? mdtotalinc = 0;
+                                    decimal? apitotalinc = 0;
+                                    decimal? wltotalinc = 0;
+                                    decimal? admintotalinc = 0;
+                                    decimal? totalpurcahse = 0;
+                                }
+                                <tr class="vm-ai-row-total">
+                                    <td colspan="3" class="vm-ai-text"><strong>Total</strong></td>
+                                    <td colspan="2" class="vm-ai-num">@reports.Sum(a => a.purchase)</td>
+                                    <td colspan="2" class="vm-ai-num">
+                                        @reports.Where(a => a.UserRole == "Retailer" || a.UserRole == "API User").Sum(a => a.remincome)
+                                    </td>
+                                    <td colspan="2" class="vm-ai-num">
+                                        @reports.Where(a => a.UserRole == "Retailer" || a.UserRole == "API User").Sum(a => a.dlmincome)
+                                    </td>
+                                    <td colspan="2" class="vm-ai-num">@reports.Sum(a => a.masterincome)</td>
+                                    <td colspan="2" class="vm-ai-num">@reports.Sum(a => a.apiincome)</td>
+                                    <td colspan="2" class="vm-ai-num">@reports.Sum(a => a.whitelabelincome)</td>
+                                    <td class="vm-ai-num">@reports.Sum(a => a.admin_income)</td>
+                                    <td class="vm-ai-num">@reports.Sum(a => a.total)</td>
+                                </tr>
+                                @foreach (var item in reports)
+                                {
+                                    var isNegative = item.admin_income < 0;
+                                    var rowClass = isNegative ? "vm-ai-row-negative" : "";
 
-                                        <th colspan="1">Admin</th>
-                                        <th colspan="1">Total&nbsp;Success</th>
-
-                                    </tr>
-                                    <tr>
-                                        <th><span style="background: #05c420;color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Rate</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Commission</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Commission</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Commission</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Commission</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Commission</span></th>
-                                        <th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>
-                                        <th><span style="background: var(--main-bg-lcolor);color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Income</span></th>
-                                        @*<th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>*@
-                                        <th><span style="background: #05c420;color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Success + Pending</span></th>
-                                        @*<th><span style="background: #dfd20a;color: #fff;padding: 0px 10px;font-size: 10px;line-height: 10px;">Pending</span></th>*@
-                                        @*<th><span style="background: #a4a0a0;color: #fff;padding: 0px 10px;font-size: 10px;">%</span></th>*@
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @{
-                                        decimal? totalcountinc = 0;
-                                        decimal? retailertotalinc = 0;
-                                        decimal? dlmtotalinc = 0;
-                                        decimal? mdtotalinc = 0;
-                                        decimal? apitotalinc = 0;
-                                        decimal? wltotalinc = 0;
-                                        decimal? admintotalinc = 0;
-                                        decimal? totalpurcahse = 0;
-                                    }
-                                    <tr>
-                                        <td colspan="3"><p style="font-size:15px;">Total</p></td>
-                                        <td colspan="2">@Model.Sum(a => a.purchase)</td>
-
-                                        <td colspan="2">
-                                            @Model.Where(a => a.UserRole == "Retailer" || a.UserRole == "API User").Sum(a => a.remincome)
-                                        </td>
-                                        <td colspan="2">
-                                            @Model.Where(a => a.UserRole == "Retailer" || a.UserRole == "API User").Sum(a => a.dlmincome)
-                                        </td>
-
-                                        <td colspan="2">@Model.Sum(a => a.masterincome)</td>
-                                        <td colspan="2">@Model.Sum(a => a.apiincome)</td>
-                                        <td colspan="2">@Model.Sum(a => a.whitelabelincome)</td>
-
-                                        <td colspan="1">
-                                            @*<p>@admintotalinc</p>*@
-                                            @Model.Sum(a => a.admin_income)
-                                        </td>
-                                        <td colspan="1">@Model.Sum(a => a.total)</td>
-
-                                    </tr>
-                                    @foreach (var item in Model)
+                                    totalpurcahse = Convert.ToDecimal(reports.Sum(a => a.purchase));
+                                    if (item.UserRole == "Retailer" || item.UserRole == "API User")
                                     {
-                                        var color = "#";
-                                        var backcolor = "";
-
-
-                                        if (item.admin_income < 0)
-                                        {
-                                            color = "white";
-                                            backcolor = "red";
-                                        }
-                                        totalpurcahse = Convert.ToDecimal(Model.Sum(a => a.purchase));
-                                        if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                        {
-                                            retailertotalinc = retailertotalinc + item.remincome;
-                                            dlmtotalinc = dlmtotalinc + item.dlmincome; ;
-                                            mdtotalinc = mdtotalinc + item.masterincome;
-                                            apitotalinc = apitotalinc + item.apiincome;
-                                            wltotalinc = wltotalinc + 0;
-                                            totalcountinc = (apitotalinc + wltotalinc + retailertotalinc + dlmtotalinc + mdtotalinc);
-                                            admintotalinc = totalpurcahse - totalcountinc;
-                                        }
-                                        if (item.UserRole == "Whitelabel")
-                                        {
-                                            retailertotalinc = retailertotalinc + 0;
-                                            dlmtotalinc = dlmtotalinc + 0;
-                                            mdtotalinc = mdtotalinc + 0;
-                                            apitotalinc = apitotalinc + 0;
-                                            wltotalinc = wltotalinc + item.whitelabelincome;
-                                            totalcountinc = (apitotalinc + wltotalinc + retailertotalinc + dlmtotalinc + mdtotalinc);
-                                            admintotalinc = totalpurcahse - totalcountinc;
-                                        }
-                                        decimal purper = 0; decimal remper = 0; decimal dlmper = 0;
-                                        decimal mdper = 0; decimal apiper = 0; decimal whiteper = 0;
-                                        if (item.total != 0)
-                                        {
-                                            decimal pur = Convert.ToDecimal(item.purchase);
-                                            decimal rem = Convert.ToDecimal(item.remincome);
-                                            decimal dlm = Convert.ToDecimal(item.dlmincome);
-                                            decimal md = Convert.ToDecimal(item.masterincome);
-                                            decimal api = Convert.ToDecimal(item.apiincome);
-                                            decimal white = Convert.ToDecimal(item.whitelabelincome);
-                                            decimal to = Convert.ToDecimal(item.total);
-                                            decimal dif = Convert.ToDecimal("100");
-                                            purper = (pur * dif) / to;
-                                            remper = (rem * dif) / to;
-                                            dlmper = (dlm * dif) / to;
-                                            mdper = (md * dif) / to;
-                                            apiper = (api * dif) / to;
-                                            whiteper = (white * dif) / to;
-                                        }
-                                        <tr>
-                                            <td style="background-color:@backcolor; color:@color;"><p style="font-size:13px;">@item.type</p></td>
-                                            <td style="background-color:@backcolor; color:@color;"><p style="font-size:13px;">@item.UserRole</p></td>
-
-
-                                            <td style="background-color:@backcolor; color:@color;"><p style="font-size:13px;">@item.optnm</p> </td>
-                                            <td style="background-color:@backcolor; color:@color;">@Html.DisplayFor(modelItem => item.purchase)</td>
-                                            <td>@purper.ToString("0.##") </td>
-                                            <td style="background-color:@backcolor; color:@color;">
-                                                @if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                                {
-                                                    <p>@Html.DisplayFor(modelItem => item.remincome)</p>
-                                                }
-                                                else
-                                                {
-
-                                                    <p>0.00</p>
-                                                }
-
-                                            </td>
-                                            <td>@remper.ToString("0.##") </td>
-
-
-                                            <td style="background-color:@backcolor; color:@color;">
-                                                @if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                                {
-
-                                                    <p>@Html.DisplayFor(modelItem => item.dlmincome)</p>
-                                                }
-                                                else
-                                                {
-                                                    <p>0.00</p>
-
-                                                }
-
-                                            </td>
-                                            <td>@dlmper.ToString("0.##")  </td>
-                                            <td style="background-color:@backcolor; color:@color;">
-                                                @if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                                {
-
-                                                    <p>@Html.DisplayFor(modelItem => item.masterincome)</p>
-                                                }
-                                                else
-                                                {
-                                                    <p>0.00</p>
-
-                                                }
-
-                                            </td>
-                                            <td>@mdper.ToString("0.##") </td>
-                                            <td style="background-color:@backcolor; color:@color;">
-                                                @if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                                {
-
-                                                    <p>@Html.DisplayFor(modelItem => item.apiincome)</p>
-                                                }
-                                                else
-                                                {
-
-                                                    <p>0.00</p>
-
-                                                }
-
-                                            </td>
-                                            <td>@apiper.ToString("0.##") </td>
-                                            <td style="background-color:@backcolor; color:@color;"><p>@item.whitelabelincome</p></td>
-                                            <td>@whiteper.ToString("0.##") </td>
-                                            <td style="background-color:@backcolor; color:@color;">
-                                                @if (item.UserRole == "Retailer" || item.UserRole == "API User")
-                                                {
-                                                    <p>@Html.DisplayFor(modelItem => item.admin_income)</p>
-                                                }
-                                                else
-                                                {
-                                                    decimal purchas = 0;
-                                                    decimal whitelabelinc = 0;
-                                                    decimal admininc = 0;
-
-                                                    purchas = Convert.ToDecimal(item.purchase);
-                                                    whitelabelinc = Convert.ToDecimal(item.whitelabelincome);
-                                                    admininc = purchas - whitelabelinc;
-                                                    <p>@admininc</p>
-                                                }
-
-                                            </td>
-
-                                            <td style="background-color:@backcolor; color:@color;">@Html.DisplayFor(modelItem => item.total)</td>
-
-
-                                        </tr>
+                                        retailertotalinc = retailertotalinc + item.remincome;
+                                        dlmtotalinc = dlmtotalinc + item.dlmincome;
+                                        mdtotalinc = mdtotalinc + item.masterincome;
+                                        apitotalinc = apitotalinc + item.apiincome;
+                                        wltotalinc = wltotalinc + 0;
+                                        totalcountinc = (apitotalinc + wltotalinc + retailertotalinc + dlmtotalinc + mdtotalinc);
+                                        admintotalinc = totalpurcahse - totalcountinc;
                                     }
-                                </tbody>
-                                <tfoot style="background-color:whitesmoke;">
-
-                                </tfoot>
-                            </table>
-                        </div>
+                                    if (item.UserRole == "Whitelabel")
+                                    {
+                                        retailertotalinc = retailertotalinc + 0;
+                                        dlmtotalinc = dlmtotalinc + 0;
+                                        mdtotalinc = mdtotalinc + 0;
+                                        apitotalinc = apitotalinc + 0;
+                                        wltotalinc = wltotalinc + item.whitelabelincome;
+                                        totalcountinc = (apitotalinc + wltotalinc + retailertotalinc + dlmtotalinc + mdtotalinc);
+                                        admintotalinc = totalpurcahse - totalcountinc;
+                                    }
+                                    decimal purper = 0; decimal remper = 0; decimal dlmper = 0;
+                                    decimal mdper = 0; decimal apiper = 0; decimal whiteper = 0;
+                                    if (item.total != 0)
+                                    {
+                                        decimal pur = Convert.ToDecimal(item.purchase);
+                                        decimal rem = Convert.ToDecimal(item.remincome);
+                                        decimal dlm = Convert.ToDecimal(item.dlmincome);
+                                        decimal md = Convert.ToDecimal(item.masterincome);
+                                        decimal api = Convert.ToDecimal(item.apiincome);
+                                        decimal white = Convert.ToDecimal(item.whitelabelincome);
+                                        decimal to = Convert.ToDecimal(item.total);
+                                        decimal dif = Convert.ToDecimal("100");
+                                        purper = (pur * dif) / to;
+                                        remper = (rem * dif) / to;
+                                        dlmper = (dlm * dif) / to;
+                                        mdper = (md * dif) / to;
+                                        apiper = (api * dif) / to;
+                                        whiteper = (white * dif) / to;
+                                    }
+                                    <tr class="@rowClass">
+                                        <td class="vm-ai-text">@item.type</td>
+                                        <td class="vm-ai-text">@item.UserRole</td>
+                                        <td class="vm-ai-text">@item.optnm</td>
+                                        <td class="vm-ai-num">@Html.DisplayFor(modelItem => item.purchase)</td>
+                                        <td class="vm-ai-num">@purper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">
+                                            @if (item.UserRole == "Retailer" || item.UserRole == "API User")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.remincome)
+                                            }
+                                            else
+                                            {
+                                                <text>0.00</text>
+                                            }
+                                        </td>
+                                        <td class="vm-ai-num">@remper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">
+                                            @if (item.UserRole == "Retailer" || item.UserRole == "API User")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.dlmincome)
+                                            }
+                                            else
+                                            {
+                                                <text>0.00</text>
+                                            }
+                                        </td>
+                                        <td class="vm-ai-num">@dlmper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">
+                                            @if (item.UserRole == "Retailer" || item.UserRole == "API User")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.masterincome)
+                                            }
+                                            else
+                                            {
+                                                <text>0.00</text>
+                                            }
+                                        </td>
+                                        <td class="vm-ai-num">@mdper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">
+                                            @if (item.UserRole == "Retailer" || item.UserRole == "API User")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.apiincome)
+                                            }
+                                            else
+                                            {
+                                                <text>0.00</text>
+                                            }
+                                        </td>
+                                        <td class="vm-ai-num">@apiper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">@item.whitelabelincome</td>
+                                        <td class="vm-ai-num">@whiteper.ToString("0.##")</td>
+                                        <td class="vm-ai-num">
+                                            @if (item.UserRole == "Retailer" || item.UserRole == "API User")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.admin_income)
+                                            }
+                                            else
+                                            {
+                                                decimal purchas = Convert.ToDecimal(item.purchase);
+                                                decimal whitelabelinc = Convert.ToDecimal(item.whitelabelincome);
+                                                decimal admininc = purchas - whitelabelinc;
+                                                @admininc
+                                            }
+                                        </td>
+                                        <td class="vm-ai-num">@Html.DisplayFor(modelItem => item.total)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
 
-<script src="~/AdminDesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
 <script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=1"></script>
 <script>
-    $('select').select2();
-</script>
-<script>
+    function hideAdminIncomeTotals() {
+        var $panel = $('#adminIncomeTotalsPanel');
+        var $btn = $('.vm-ai-totals-btn');
+        $panel.hide().attr('aria-hidden', 'true');
+        $btn.attr('aria-expanded', 'false');
+    }
 
-    $(document).ready(function()
-    {
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
+    function findAdminIncomeTotals() {
+        var $panel = $('#adminIncomeTotalsPanel');
+        var $btn = $('.vm-ai-totals-btn');
+        if ($panel.is(':visible')) {
+            hideAdminIncomeTotals();
+            return;
+        }
+        $panel.show().attr('aria-hidden', 'false');
+        $btn.attr('aria-expanded', 'true');
+    }
 
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'print'
-            ]
-        });
-    });
-</script>
-<script type="text/javascript">
-    function searchoption() {
-        var x = document.getElementById("ddl_type").value;
-        if (x == "All") {
-            $('#apinm option').eq(0).prop('selected', true);
-            $('#portno option').eq(0).prop('selected', true);
-            $("#portnoo").css("display", "none");
-            $("#apiname").css("display", "none");
-        }
-        else if (x == "MACHINE") {
-            $('#apinm option').eq(0).prop('selected', true);
-            $('#portno option').eq(0).prop('selected', true);
-            $("#portnoo").css("display", "inline-block");
-            $("#apiname").css("display", "none");
-        }
-        else if (x == "API") {
-            $('#apinm option').eq(0).prop('selected', true);
-            $('#portno option').eq(0).prop('selected', true);
-            $("#portnoo").css("display", "none");
-            $("#apiname").css("display", "inline-block");
+    function adminIncomeToggleFilters(clearValues) {
+        var type = document.getElementById('ddl_type').value;
+        var $api = $('#apiname');
+        var $port = $('#portnoo');
+
+        $api.removeClass('is-visible');
+        $port.removeClass('is-visible');
+
+        if (type === 'MACHINE') {
+            $port.addClass('is-visible');
+        } else if (type === 'API') {
+            $api.addClass('is-visible');
+        } else if (clearValues) {
+            $('#apinm').val('').trigger('change');
+            $('#portno').val('').trigger('change');
         }
     }
+
+    function adminIncomeSearchOption() {
+        adminIncomeToggleFilters(true);
+    }
+
+    function destroyAdminIncomeSelect2($el) {
+        if ($el && $el.length && $el.data('select2')) {
+            $el.select2('destroy');
+        }
+    }
+
+    function applyAdminIncomeSelect2($el) {
+        if (!$el || !$el.length || !$.fn.select2) {
+            return;
+        }
+        destroyAdminIncomeSelect2($el);
+        $el.select2({
+            width: '100%',
+            minimumResultsForSearch: 6
+        });
+    }
+
+    function initAdminIncomeSelect2() {
+        applyAdminIncomeSelect2($('#ddl_type'));
+        applyAdminIncomeSelect2($('#apinm'));
+        applyAdminIncomeSelect2($('#portno'));
+        applyAdminIncomeSelect2($('#optnm'));
+    }
+
+    function initAdminIncomeDatepickers() {
+        if (!window.jQuery || !jQuery.fn || !jQuery.fn.datepicker) {
+            window.setTimeout(initAdminIncomeDatepickers, 50);
+            return;
+        }
+        if (typeof window.initAdminReportDateForm === 'function') {
+            window.initAdminReportDateForm('#adminIncomeForm');
+        }
+    }
+
+    function exportAdminIncomeTable(type) {
+        var table = document.getElementById('adminIncomeReportTable');
+        if (!table) {
+            return;
+        }
+
+        var stamp = new Date().toISOString().slice(0, 10);
+        var title = 'Business By Port/API';
+        var clone = table.cloneNode(true);
+
+        if (type === 'excel') {
+            var excelHtml = '<html><head><meta charset="utf-8"></head><body>' + clone.outerHTML + '</body></html>';
+            var blob = new Blob(['\ufeff', excelHtml], { type: 'application/vnd.ms-excel' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'AdminIncome_' + stamp + '.xls';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            return;
+        }
+
+        if (type === 'pdf') {
+            if (typeof window.openAdminModernReportPdf === 'function') {
+                window.openAdminModernReportPdf({
+                    table: table,
+                    title: title,
+                    subtitle: 'Business performance by Port / API',
+                    fromDate: document.getElementById('txt_frm_date') ? document.getElementById('txt_frm_date').value : '',
+                    toDate: document.getElementById('txt_to_date') ? document.getElementById('txt_to_date').value : '',
+                    orientation: 'landscape',
+                    recordCount: parseInt((document.getElementById('adminIncomeRecordCount') || {}).textContent, 10) || 0
+                });
+            }
+            return;
+        }
+    }
+
     $(document).ready(function () {
-        var x = document.getElementById("ddl_type").value;
-        if (x == "All") {
-            $("#portnoo").css("display", "none");
-            $("#apiname").css("display", "none");
-        }
-        else if (x == "MACHINE") {
-            $("#portnoo").css("display", "inline-block");
-            $("#apiname").css("display", "none");
-        }
-        else if (x == "API") {
-            $("#portnoo").css("display", "none");
-            $("#apiname").css("display", "inline-block");
-        }
+        initAdminIncomeSelect2();
+        initAdminIncomeDatepickers();
+        adminIncomeToggleFilters(false);
+        $('#adminIncomeForm .select2-container').css('width', '100%');
+
+        $('#btnExportA').on('click', function () {
+            exportAdminIncomeTable('excel');
+        });
+
+        $('#btnPDFA').on('click', function () {
+            exportAdminIncomeTable('pdf');
+        });
     });
 </script>
