@@ -1,0 +1,1471 @@
+/* ============================================================
+   admin-email-security-page.css
+   Modern UI for ADMIN/Home/Email_Security (matches Api_user shell)
+   v8 — layout row fix + tab hide/show + modal polish
+   ============================================================ */
+
+@keyframes es-spin { to { transform: rotate(360deg); } }
+
+body.saas-admin-ui .Email_Security_Page .loadermoney {
+    position: fixed;
+    inset: 0;
+    z-index: 199999;
+    background: rgba(248, 250, 252, 0.88) url('../../img/loder.gif') 50% 50% no-repeat;
+}
+
+body.saas-admin-ui .Email_Security_Page .toast-top-right1 {
+    top: 65px;
+    left: auto;
+    right: 16px;
+}
+
+/* ── Toolbar ── */
+body.saas-admin-ui .Email_Security_Page .vm-ft-page-toolbar--premium {
+    margin-bottom: 12px !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-search-wrap.es-toolbar-actions {
+    flex: 1 1 auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-toolbar-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-end !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-toolbar-actions--one-line {
+    width: auto !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-cc-wrap {
+    display: none !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-cc-wrap.is-open {
+    display: inline-flex !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-cc-wrap #tocc {
+    height: 34px !important;
+    width: 220px !important;
+    max-width: 260px !important;
+    min-width: 140px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 9px !important;
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+    background: #fff !important;
+    flex: 1 1 auto !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-tool-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    border: none !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-tool-btn--mail {
+    background: linear-gradient(135deg, #0e7490, #0891b2) !important;
+    box-shadow: 0 2px 8px rgba(8, 145, 178, 0.28) !important;
+    width: 36px !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-tool-btn--save {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.28) !important;
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-tool-btn--cc {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+}
+
+/* ── Left form card ── */
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card {
+    background: #fff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .left-table .es-left-body {
+    height: auto !important;
+    max-height: none !important;
+    background: transparent !important;
+    overflow: visible !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card .form-group {
+    margin-bottom: 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card label,
+body.saas-admin-ui .Email_Security_Page .es-field-label {
+    margin-bottom: 3px !important;
+    font-size: 0.73rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-card .form-control,
+body.saas-admin-ui .Email_Security_Page #divId .form-control,
+body.saas-admin-ui .Email_Security_Page .table-and-remail .form-control {
+    height: 34px !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    padding: 4px 10px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .table-and-remail textarea.form-control {
+    height: auto !important;
+    min-height: 80px !important;
+}
+
+/* Left tabs (reuse Api_user au-tabs look) */
+body.saas-admin-ui .Email_Security_Page .vm-ft-layout-wrap,
+body.saas-admin-ui .Email_Security_Page .vm-ft-layout {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-form-col {
+    padding-right: 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-col {
+    padding-left: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-panel {
+    background: #fff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06) !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-body {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .au-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px 0;
+    border-bottom: 1.5px solid #e2e8f0;
+    list-style: none;
+    margin: 0;
+}
+
+body.saas-admin-ui .Email_Security_Page .au-tab-btn {
+    flex: 1;
+}
+body.saas-admin-ui .Email_Security_Page #top-mail-setting,
+body.saas-admin-ui .Email_Security_Page #top-mail {
+    width: 100% !important;
+    height: 34px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    cursor: pointer;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 0 8px !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #top-mail-setting.active,
+body.saas-admin-ui .Email_Security_Page #top-mail.active {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-pane {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .table-and-remail {
+    display: none;
+}
+
+body.saas-admin-ui .Email_Security_Page fieldset.es-sender-fieldset {
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    margin: 0 !important;
+    padding: 12px 12px 8px !important;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .Email_Security_Page fieldset.es-sender-fieldset legend {
+    width: auto !important;
+    margin: 0 0 0 8px !important;
+    padding: 0 8px !important;
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    border: 0 !important;
+    background: transparent;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-sender-form .form-group {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #divId.es-sender-form .form-control {
+    width: 100% !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EditBtn.es-form-actions {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EditBtn.es-form-actions.is-visible {
+    display: flex !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #AddMBtn.es-form-actions.is-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #divId,
+body.saas-admin-ui .Email_Security_Page #divId tbody,
+body.saas-admin-ui .Email_Security_Page #divId tr,
+body.saas-admin-ui .Email_Security_Page #divId th,
+body.saas-admin-ui .Email_Security_Page #divId td {
+    float: none !important;
+    width: auto !important;
+    display: block !important;
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-form-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    padding: 10px 0 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-btn-primary,
+body.saas-admin-ui .Email_Security_Page #AddMBtn button,
+body.saas-admin-ui .Email_Security_Page #EditBtn button,
+body.saas-admin-ui .Email_Security_Page #start_button {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    border: none !important;
+    height: 36px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    font-size: 0.78rem !important;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #btn,
+body.saas-admin-ui .Email_Security_Page .es-btn-secondary {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    height: 36px !important;
+    padding: 0 14px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .bodys {
+    margin: 0 12px 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid #fde68a !important;
+    background: #fffbeb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .bodys p {
+    margin: 0 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.45 !important;
+    color: #92400e !important;
+}
+
+/* Mail list table */
+body.saas-admin-ui .Email_Security_Page .for-table-one {
+    padding: 0 12px 12px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist {
+    width: 100% !important;
+    margin: 0 !important;
+    border-collapse: collapse !important;
+    font-size: 0.76rem !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist thead th {
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    color: #475569 !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 9px 8px !important;
+    text-align: center !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist tbody td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 8px !important;
+    vertical-align: middle !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist tbody td p {
+    margin: 0 0 2px !important;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist tbody td p span {
+    background: #e2e8f0 !important;
+    color: #334155 !important;
+    border-radius: 999px;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    padding: 1px 6px !important;
+    margin-right: 4px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .onoffswitch {
+    display: inline-flex !important;
+    float: none !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .costom-on,
+body.saas-admin-ui .Email_Security_Page .custom-off {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px;
+    height: 24px !important;
+    padding: 0 8px !important;
+    border-radius: 999px !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .Email_Security_Page .costom-on {
+    background: #dcfce7 !important;
+    color: #166534 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .custom-off {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-action-btn,
+body.saas-admin-ui .Email_Security_Page #maillist tbody td button {
+    height: 28px !important;
+    float: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 10px !important;
+    margin: 0 4px 0 0 !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+    color: #334155 !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .Email_Security_Page #maillist tbody td button:last-child,
+body.saas-admin-ui .Email_Security_Page .es-action-btn--danger {
+    border-color: #fecaca !important;
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.tabs2.es-right-tabs li {
+    gap: 6px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.tabs2.es-right-tabs li i {
+    font-size: 0.72rem;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-toolbar__actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-toolbar__title,
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-toolbar__sub {
+    display: block;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-toolbar__title {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-toolbar__sub {
+    font-size: 0.7rem !important;
+    color: #64748b !important;
+    margin-top: 2px;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-host {
+    max-height: 560px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-table thead th {
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+    color: #475569 !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 9px 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-mail {
+    min-width: 220px;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-mail__email {
+    display: block;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-mail__meta {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-top: 6px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-role-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 22px;
+    padding: 2px 10px !important;
+    border-radius: 999px !important;
+    background: #dbeafe !important;
+    color: #1d4ed8 !important;
+    font-size: 0.65rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    font-size: 0.72rem !important;
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date i {
+    color: #94a3b8 !important;
+    font-size: 0.7rem !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-table tbody td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px 10px !important;
+    vertical-align: top !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-table tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-meta {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-meta i.btn {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-msg p {
+    margin: 0 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ml-form-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    padding-top: 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .remail-footer {
+    margin: 0 !important;
+}
+
+/* ── Right panel ── */
+body.saas-admin-ui .Email_Security_Page .tt-right-table {
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.tabs2 {
+    display: flex !important;
+    gap: 6px !important;
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 10px 12px 0 !important;
+    background: transparent !important;
+    border-bottom: 1.5px solid #e2e8f0 !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.tabs2 li {
+    flex: 1 !important;
+    float: none !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-right: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.tabs2 li.current2 {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border-color: #2563eb !important;
+    border-bottom: 1.5px solid #2563eb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .tt-right-table .tab-content2,
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2 {
+    display: none !important;
+    padding: 12px;
+}
+
+body.saas-admin-ui .Email_Security_Page .tt-right-table .tab-content2.current2,
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body > .tab-content2.current2 {
+    display: block !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-toolbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    background: linear-gradient(180deg, #f8fafc, #f1f5f9) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-toolbar--one-line {
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-toolbar__intro {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-filter-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    flex: 0 0 auto !important;
+    flex-wrap: nowrap !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-toolbar__label {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    white-space: nowrap;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date-field {
+    position: relative !important;
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    width: 170px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date-field .saas-acc-dp-icon {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 2 !important;
+    color: #2563eb !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    pointer-events: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date-field #txt_frm_date,
+body.saas-admin-ui .Email_Security_Page .es-history-date-field .saas-acc-dp-input {
+    height: 34px !important;
+    width: 100% !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 9px !important;
+    background: #fff !important;
+    padding: 0 10px 0 34px !important;
+    font-size: 0.78rem !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-date-field #txt_frm_date:focus,
+body.saas-admin-ui .Email_Security_Page .es-history-date-field .saas-acc-dp-input:focus {
+    border-color: #93c5fd !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-search-btn,
+body.saas-admin-ui .Email_Security_Page #SearchEmailHistory {
+    height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 9px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-history-search-btn i,
+body.saas-admin-ui .Email_Security_Page .es-history-search-btn span,
+body.saas-admin-ui .Email_Security_Page #SearchEmailHistory i,
+body.saas-admin-ui .Email_Security_Page #SearchEmailHistory span {
+    color: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory {
+    float: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    max-height: 560px;
+    overflow: auto;
+}
+
+/* Outbox toolbar + checkboxes */
+body.saas-admin-ui .Email_Security_Page ul.smssetting-top {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    float: none !important;
+    margin: 0 0 10px !important;
+    padding: 8px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.smssetting-top li {
+    float: none !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #SaveAll {
+    height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #SaveAll img {
+    width: 14px;
+    filter: brightness(0) invert(1);
+}
+
+body.saas-admin-ui .Email_Security_Page #SaveAll span {
+    color: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page ul.smssetting-top .for-select-mail {
+    height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #fff !important;
+    color: #334155 !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail {
+    width: 100% !important;
+    float: none !important;
+    height: 560px !important;
+    max-height: 560px !important;
+    overflow: auto !important;
+    overflow-x: hidden !important;
+    padding: 4px 6px 12px !important;
+    background: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .card {
+    background: transparent !important;
+    box-shadow: none !important;
+    margin-bottom: 14px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .algp {
+    margin: 0 0 8px !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    letter-spacing: 0.02em;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail span {
+    font-size: 0.74rem !important;
+    color: #334155 !important;
+    font-weight: 600 !important;
+}
+
+/* Outbox checkbox grid — 2 items per row */
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-left: -4px !important;
+    margin-right: -4px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-md-12,
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-sm-12,
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-xs-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 4px 6px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-md-6,
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-sm-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    padding: 4px 6px !important;
+    box-sizing: border-box !important;
+    margin-bottom: 4px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-md-6 > .row,
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-sm-6 > .row {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 4px 6px !important;
+    margin: 0 !important;
+    min-height: 30px !important;
+    padding: 6px 8px !important;
+    border: 1px solid #e8edf3 !important;
+    border-radius: 8px !important;
+    background: #fafbfc !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-md-6 > .row > [class*="col-"],
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-sm-6 > .row > [class*="col-"] {
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-md-6 > .row > [class*="col-"]:first-child,
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-sm-6 > .row > [class*="col-"]:first-child {
+    flex: 1 1 72px !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox label {
+    margin: 0 !important;
+    padding-left: 24px !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    line-height: 1.3 !important;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox [type="checkbox"].filled-in + label {
+    height: auto !important;
+    min-height: 18px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .tt-right-table [type="checkbox"].filled-in:checked.chk-col-red + label::after,
+body.saas-admin-ui .Email_Security_Page .tt-right-table [type="checkbox"].filled-in:checked + label::after {
+    border: 2px solid #2563eb !important;
+    background-color: #2563eb !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .tt-right-table [type="checkbox"].filled-in:checked + label::before {
+    top: -1px;
+    left: 0;
+}
+
+body.saas-admin-ui .Email_Security_Page .tt-right-table [type="checkbox"].filled-in:checked + label::after,
+body.saas-admin-ui .Email_Security_Page .tt-right-table [type="checkbox"].filled-in:not(:checked) + label::after {
+    width: 18px;
+    height: 18px;
+    top: 0;
+}
+
+/* History partial */
+body.saas-admin-ui .Email_Security_Page .es-history-table,
+body.saas-admin-ui .Email_Security_Page #EmailHistory table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 0.76rem !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory table tbody td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 10px !important;
+    vertical-align: top !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory table tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory .no-data-found-img {
+    text-align: center;
+    padding: 40px 16px;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory .no-data-found-img img {
+    max-width: 160px;
+    opacity: 0.85;
+}
+
+body.saas-admin-ui .Email_Security_Page #EmailHistory .mytext span i.btn {
+    display: none !important;
+}
+
+/* Modal — Bootstrap + modern header */
+body.saas-admin-ui #defaultModal.modal {
+    z-index: 200050 !important;
+}
+
+body.saas-admin-ui .modal-backdrop {
+    z-index: 200040 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal.modal .modal-dialog,
+body.saas-admin-ui #defaultModal.modal .modal-dialog {
+    max-width: 480px;
+    margin: 40px auto;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .modal-content,
+body.saas-admin-ui #defaultModal .modal-content {
+    border: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-header,
+body.saas-admin-ui #defaultModal .es-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #0e7490, #0891b2);
+    color: #fff;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .close,
+body.saas-admin-ui #defaultModal .close {
+    color: #fff !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-size: 1.4rem !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-header__title,
+body.saas-admin-ui #defaultModal .es-modal-header__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .modal-body {
+    padding: 16px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .modal-body,
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-body {
+    padding: 16px !important;
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-body label {
+    display: block !important;
+    margin-bottom: 4px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-body .form-control {
+    height: 36px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 9px !important;
+    font-size: 0.78rem !important;
+    background: #fff !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .es-modal-footer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    padding: 12px 16px !important;
+    border-top: 1px solid #e2e8f0 !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-panel {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .vm-ft-history-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .Email_Security_Page .es-right-tab-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #tab-6:not(.current2) {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #tab-5:not(.current2) {
+    display: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal .modal-footer {
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 12px 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal #MyClose {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    padding: 0 14px !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .Email_Security_Page #defaultModal button[type="submit"] {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    height: 36px !important;
+    padding: 0 16px !important;
+    font-weight: 700 !important;
+}
+
+/* Mobile / tablet */
+@media (max-width: 1199px) {
+    body.saas-admin-ui .Email_Security_Page .vm-ft-form-col,
+    body.saas-admin-ui .Email_Security_Page .vm-ft-history-col {
+        width: 100% !important;
+        float: none !important;
+        margin-bottom: 12px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .fund-transfer-main-admin.vm-ft-history-col {
+        margin-top: 0 !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .for-mail {
+        height: 480px !important;
+        max-height: 480px !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-host {
+        max-height: 480px;
+    }
+}
+
+@media (max-width: 1199px) {
+    body.saas-admin-ui .Email_Security_Page .vm-ft-page-toolbar--premium {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-toolbar-actions {
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-cc-wrap #tocc {
+        width: 180px !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-toolbar--one-line {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-filter-row {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-md-6,
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-sm-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-md-6 > .row > [class*="col-"]:first-child,
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox .col-sm-6 > .row > [class*="col-"]:first-child {
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page ul.smssetting-top {
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .Email_Security_Page .vm-ft-page-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-toolbar-actions {
+        justify-content: stretch !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-cc-wrap {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-cc-wrap.is-open {
+        display: flex !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-cc-wrap #tocc {
+        min-width: 0;
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page ul.smssetting-top {
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page ul.smssetting-top li {
+        flex: 1 1 auto;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .for-mail {
+        height: 420px !important;
+        max-height: 420px !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-md-6,
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox > .row > .col-sm-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .for-mail .demo-checkbox label {
+        white-space: normal !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-host {
+        max-height: 420px;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-filter-row {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-date-field {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 140px !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-toolbar__actions {
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .Email_Security_Page .es-history-toolbar #SearchEmailHistory {
+        flex: 1 1 auto;
+    }
+}
+
+/* ── Email OTP gate overlay (setof=1) — sweetalert-style popup ── */
+body.saas-admin-ui.vm-es-otp-open {
+    overflow: hidden;
+}
+
+body.saas-admin-ui .vm-es-otp-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    box-sizing: border-box;
+}
+
+body.saas-admin-ui .vm-es-otp-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+body.saas-admin-ui .vm-es-otp-shell {
+    position: relative;
+    z-index: 1;
+    width: min(440px, 100%);
+    animation: vmEsOtpIn 0.22s ease;
+}
+
+@keyframes vmEsOtpIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+body.saas-admin-ui .vm-es-otp-card {
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 28px 64px rgba(15, 23, 42, 0.28);
+    overflow: hidden;
+}
+
+body.saas-admin-ui .vm-es-otp-header {
+    padding: 22px 22px 18px;
+    background: linear-gradient(135deg, #0e7490 0%, #0891b2 48%, #06b6d4 100%);
+    color: #fff;
+    text-align: center;
+}
+
+body.saas-admin-ui .vm-es-otp-header__icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+body.saas-admin-ui .vm-es-otp-header__title {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+body.saas-admin-ui .vm-es-otp-header__sub {
+    margin: 8px 0 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+body.saas-admin-ui .vm-es-otp-body {
+    padding: 22px;
+    background: #f8fafc;
+}
+
+body.saas-admin-ui .vm-es-otp-message {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+}
+
+body.saas-admin-ui .vm-es-otp-message--error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .vm-es-otp-field {
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .vm-es-otp-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+body.saas-admin-ui .vm-es-otp-input-wrap {
+    position: relative;
+}
+
+body.saas-admin-ui .vm-es-otp-input-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .vm-es-otp-input {
+    width: 100% !important;
+    height: 42px !important;
+    margin: 0 !important;
+    padding: 0 12px 0 38px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    font-size: 0.88rem !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+}
+
+body.saas-admin-ui .vm-es-otp-input:focus {
+    border-color: #67e8f9 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.18) !important;
+}
+
+body.saas-admin-ui .vm-es-otp-field-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #dc2626;
+}
+
+body.saas-admin-ui .vm-es-otp-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+body.saas-admin-ui .vm-es-otp-btn {
+    flex: 1 1 0;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .vm-es-otp-btn--ghost {
+    background: #fff;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+body.saas-admin-ui .vm-es-otp-btn--ghost:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+body.saas-admin-ui .vm-es-otp-btn--primary {
+    background: linear-gradient(135deg, #0e7490, #0891b2);
+    border-color: #0e7490;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(8, 145, 178, 0.28);
+}
+
+body.saas-admin-ui .vm-es-otp-btn--primary:hover {
+    transform: translateY(-1px);
+}
+
+/* SweetAlert above OTP gate */
+.sweet-alert {
+    z-index: 200080 !important;
+}
+
+.sweet-overlay {
+    z-index: 200070 !important;
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .vm-es-otp-overlay {
+        padding: 12px;
+    }
+
+    body.saas-admin-ui .vm-es-otp-body {
+        padding: 16px;
+    }
+
+    body.saas-admin-ui .vm-es-otp-actions {
+        flex-direction: column;
+    }
+}

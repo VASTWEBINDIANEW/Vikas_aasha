@@ -1,0 +1,45 @@
+@model Vastwebmulti.Models.Email_show_passcode
+@{
+    var otpError = ViewBag.OtpError as string ?? Convert.ToString(TempData["message12"]) ?? "";
+}
+
+<div class="vm-es-otp-overlay" id="emailOtpGate" role="dialog" aria-modal="true" aria-labelledby="emailOtpTitle">
+    <div class="vm-es-otp-backdrop"></div>
+    <div class="vm-es-otp-shell">
+        <div class="vm-es-otp-card">
+            <div class="vm-es-otp-header">
+                <div class="vm-es-otp-header__icon"><i class="fas fa-envelope-open-text" aria-hidden="true"></i></div>
+                <h2 class="vm-es-otp-header__title" id="emailOtpTitle">Email Show Passcode</h2>
+                <p class="vm-es-otp-header__sub">OTP has been sent to your registered email. Enter it below to view protected email content.</p>
+            </div>
+            <div class="vm-es-otp-body">
+                @if (!string.IsNullOrWhiteSpace(otpError))
+                {
+                    <p class="vm-es-otp-message vm-es-otp-message--error" id="emailOtpError">@otpError</p>
+                }
+                @using (Html.BeginForm("mail_check1", "Home", FormMethod.Post, new { id = "emailOtpForm" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="vm-es-otp-field">
+                        <label for="passcode">Enter OTP</label>
+                        <div class="vm-es-otp-input-wrap">
+                            <i class="fas fa-key" aria-hidden="true"></i>
+                            @Html.EditorFor(model => model.passcode, new { htmlAttributes = new { @class = "form-control vm-es-otp-input", placeholder = "Enter 4-digit OTP", autocomplete = "off", maxlength = "6", id = "passcode" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.passcode, "", new { @class = "vm-es-otp-field-error" })
+                    </div>
+
+                    <div class="vm-es-otp-actions">
+                        <a href="@Url.Action("Email_Security", "Home")" class="vm-es-otp-btn vm-es-otp-btn--ghost" id="emailOtpClose">
+                            <i class="fas fa-times" aria-hidden="true"></i> Close
+                        </a>
+                        <button type="submit" class="vm-es-otp-btn vm-es-otp-btn--primary" id="emailOtpSubmit">
+                            <i class="fas fa-check" aria-hidden="true"></i> Verify OTP
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

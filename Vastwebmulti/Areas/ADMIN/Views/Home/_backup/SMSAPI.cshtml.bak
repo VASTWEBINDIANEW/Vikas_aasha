@@ -1,0 +1,1146 @@
+@model Vastwebmulti.Areas.ADMIN.Models.SMSViewModel
+@using Vastwebmulti.Areas.ADMIN.Models;
+@{
+    ViewBag.Title = "SMSAPI";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-sms-api-page.css?v=10" rel="stylesheet" />
+
+<div id="loadermoney" class="loadermoney" style="display:none;"></div>
+
+
+
+<section class="content SMSAPI_Page smsapi-pages saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
+
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>SMS Setting</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap sa-toolbar-actions">
+                <input id="searchSms" type="text" name="myInput" class="sa-search-input" placeholder="Search template..." style="display:none;" />
+            </div>
+        </div>
+
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
+            <div class="col-md-4 col-sm-12 vm-ft-form-col left-rowss">
+                <div class="fund-trasfer-left fund-user-left vm-ft-form-card">
+                    <div class="vm-ft-form-card-header">
+                        <div class="vm-ft-form-card-header__icon"><i class="fas fa-comment-sms"></i></div>
+                        <div>
+                            <span class="vm-ft-form-card-header__title">SMS API</span>
+                            <span class="vm-ft-form-card-header__sub">Priority, send SMS &amp; templates</span>
+                        </div>
+                    </div>
+                    <div class="head-sms">
+                        <ul class="sa-sms-left-tabs tab-seconddesign tab-third-design">
+                            <li class="tab-link2 current2" data-tab="tab-5">SMS PRIORITY</li>
+                            <li class="tab-link2" data-tab="tab-6">SEND SMS</li>
+                            <li class="tab-link2 sa-template-tab" data-tab="tab-7">SET TEMPLATE</li>
+                        </ul>
+                    </div>
+                    <div class="smsapi-first custom-table-responsive padding-top-second padding-topclass-third">
+                        <div class="sams-next ">
+                            <div id="tab-5" class="tab-content2 current2">
+                                <input type="hidden" id="idno" />
+                                <div class="table-responsive tablefourdesign-admin">
+                                    <table class="table table-bordered paid-service-table example-second" style="width: 100%;" id="gridtbl">
+                                        <thead>
+                                            <tr>
+                                                <th>SMS FROM</th>
+                                                <th>API SMS</th>
+                                                <th>SIM SMS</th>
+                                                <th>Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.SMS_PriorityList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.sms
+                                                    </td>
+                                                    <td>
+                                                        @item.smsapi
+                                                    </td>
+                                                    <td>
+                                                        @item.sim
+                                                    </td>
+                                                    <td>
+                                                        <button class="bt btn-default smsbbtn switch-edit-button" onclick="animation('@item.idno','@item.sms','@item.smsapi','@item.sim')">Edit</button>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr style="display:none;">
+                                                    <td>@Html.TextBox("txtsms", "", new { @placeholder = "Enter SMS", @required = "required", @class = "form-control", maxlength = "5", @readonly = true })</td>
+                                                    <td>
+                                                        @Html.DropDownList("smsapi", new List<SelectListItem>
+                                          {
+                                          new SelectListItem{ Text="1",Value="1",},
+                                          new SelectListItem{Text="2",Value="2"}
+                                          }, new { @class = "form-control" })
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("sim", new List<SelectListItem>
+                                       {
+                                       new SelectListItem{ Text="1",Value="1",},
+                                       new SelectListItem{Text="2",Value="2"}
+                                       }, new { @class = "form-control" })
+                                                    </td>
+                                                    <td>
+                                                        <button type="submit" class="btn waves-effect btnssl2233 special-iii switch-edit-button" onclick="return check()" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                            <span>Save</span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- #tab-5 -->
+                            <div id="tab-6" class="tab-content2">
+                                <div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="body paid-service-table sms-page padding-topo-second tabcurrent-seconddesign padding-top-third input-border-third">
+                                            <form>
+                                                <div class="radio-sms">
+                                                    <fieldset>
+                                                        <ul>
+                                                            <li>
+                                                                <input type="radio" value="value1" name="group1" id="byapi1" checked>
+                                                                <label for="byapi1">BY API</label>
+                                                            </li>
+                                                            <li>
+                                                                <input type="radio" value="value2" name="group1" id="bysim1">
+                                                                <label for="bysim1">BY SIM</label>
+                                                            </li>
+                                                        </ul>
+
+                                                    </fieldset>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label for="email_address_2">Select Users</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-group drop">
+                                                            @Html.DropDownList("Userform1", new List<SelectListItem> {
+                                  new SelectListItem { Text = "Master Distributor", Value= "Master" } ,
+                                   new SelectListItem { Text = "Distributor", Value= "Dealer" } ,
+                                 new SelectListItem { Text = "Retailer", Value= "Retailer" },
+                                   new SelectListItem { Text = "API User", Value= "API" },
+                                       new SelectListItem { Text = "Whitelabel", Value= "Whitelabel" },
+                                   },
+                                        "Select User", new { @class = "form-control" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="prtno" class="row" style="margin-bottom:0px; margin-top:0px;display:none; ">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label for="email_address_2">Port No :</label>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <div class="lapuno" style="border:1px solid #dddddd;">
+                                                                @Html.DropDownList("Lapuno", ViewBag.Lapuno as SelectList, "Select Port No", new { @class = "form-control", required = "required" })
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" id="SelectID">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label for="email_address_2">Mobile</label>
+                                                    </div>
+
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            @Html.TextBox("txtmobileNo", "", new { @class = "form-control searchInput", @maxlength = "10" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label for="email_address_2">Message</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-group" style="margin:0;">
+                                                            @Html.TextArea("txtMsgBody", "", new { @class = "form-control searchInput", @placeholder = "Enter Message Here", style = "height:92px" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label style="color:Red; padding-right: 0px; width:23%; padding-left: 5px;">@ViewData["msgdlm"] </label>
+                                                    </div>
+                                                </div>
+                                                <div class="footer-button special-iii button-seconddesign">
+
+                                                    <button type="button" id="btnSendSms" class="btn  waves-effect btnssl enableOnInput fullbodydycolorbg btn-first button-third" style="color:#fff;" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled><span style="color:#fff;">Send Sms</span></button>
+                                                    <button id="btn" type="reset" class="btn  waves-effect btn-second button-third-design">Reset</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- #tab-6 -->
+                            <div id="tab-7" class="tab-content2">
+                                <div class="fund-trasfer-left fund-user-left">
+                                    <div class="width100 float-left tabcurrent-seconddesign input-border-third only-select-third">
+
+                                        <div id="home" class="width100 float-left tab-pane fade active in">
+                                            @using (Ajax.BeginForm("Save_SMS_Templates", "Home",
+                                                new AjaxOptions
+                                                {
+                                                    InsertionMode = InsertionMode.Replace,
+                                                    LoadingElementId = "outer-loader",
+                                                    UpdateTargetId = "tblshowMasterD"
+
+
+                                                    // LoadingElementId = "progress"
+                                                }))
+                                            {
+                                                <div class="fund-transfer-form sa-template-form" id="frmdata">
+
+                                                    <div class="sa-template-form-grid">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <label>
+                                                            Select API
+                                                        </label>
+                                                        <div>
+                                                            <div class="custom-district1">
+                                                                @Html.DropDownList("ddlAPIfill", ViewBag.spsmsmmmsdsd as IEnumerable<SelectListItem>, "Select SMS API", new { @class = "for-select2" })
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <label>
+                                                            Select SMS TYPE
+                                                        </label>
+                                                        <div>
+                                                            <div class="custom-district1">
+                                                                <select id="idst" name="idst" required class="for-select2">
+                                                                    <option value="">Select SMS TYPE</option>
+                                                                    <option value="AADHAR_CARD_DELETE">AADHAR CARD DELETE</option>
+                                                                    <option value="ADMIN_CREATE_NEW_RETAILER">ADMIN_CREATE_NEW_RETAILER</option>
+                                                                    <option value="ADMIN_CREATE_NEW_USERS">ADMIN_CREATE_NEW_USERS</option>
+                                                                    <option value="ADMINAEPSTRANSACTIONFAILED">ADMIN AEPS TRANSACTION FAILED</option>
+                                                                    <option value="ADMINAEPSTRANSACTIONSUCCESS">ADMIN AEPS TRANSACTION SUCCESS</option>
+                                                                    <option value="APIPURCHASE">API PURCHASE</option>
+                                                                    <option value="CHANGE_EMAILID">CHANGE_EMAILID</option>
+                                                                    <option value="CHANGE_MOBILE_NUMBER">CHANGE_MOBILE_NUMBER</option>
+                                                                    <option value="CHARGEBACKOTP">CHARGEBACK OTP</option>
+                                                                    <option value="FUNDTRANSFERBALANCETRANSFER">FUND TRANSFER BALANCE TRANSFER</option>
+                                                                    <option value="FUNDTRANSFERCREDITRECIVEDBYADMIN">FUND TRANSFER CREDIT RECIVEDBY ADMIN</option>
+                                                                    <option value="FUNDTRANSFERMESSAGE_CASH">FUND TRANSFER MESSAGE_CASH</option>
+                                                                    <option value="FUNDTRANSFERMESSAGE_CREDIT">FUND TRANSFER MESSAGE_CREDIT</option>
+                                                                    <option value="IMPSPAYMENTFAILED">IMPSPAYMENTFAILED</option>
+                                                                    <option value="IMPSPAYMENTSUCCESSFULLY">IMPSPAYMENTSUCCESSFULLY</option>
+                                                                    <option value="ManualSMS">Manual SMS</option>
+                                                                    <option value="MONEYTRANSFERMANUALMONEYFAILED">MONEY TRANSFER MANUAL MONEY FAILED</option>
+                                                                    <option value="MONEYTRANSFERMANUALMONEYFAILEDDUETO">MONEY TRANSFER MANUAL MONEY FAILED DUETO</option>
+                                                                    <option value="MONEYTRANSFERMANUALMONEYSUCCESS">MONEY TRANSFER MANUAL MONEY SUCCESS</option>
+                                                                    <option value="NEWEMPLOYEECREATES">NEW EMPLOYEE CREATES</option>
+                                                                    <option value="NEWPASSOWRD_WITHWEBURL">NEW PASSOWRD_WITH WEB URL</option>
+                                                                    <option value="NEWPASSWORDIS">NEW PASS WORD IS</option>
+                                                                    <option value="OTPFOR_AEPS_AADHARPAY">OTP FOR_AEPS_AADHARPAY</option>
+                                                                    <option value="OTPUSERS_EMAILMOBILECHANGES">OTP USERS EMAIL/MOBILE CHANGES</option>
+                                                                    <option value="PANCARD_DELETE">PANCARD DELETE</option>
+                                                                    <option value="PASSCODEOTP">PASSCODEOTP</option>
+                                                                    <option value="PAYBYUPISUCCESS">PAYBYUPISUCCESS</option>
+                                                                    <option value="PaymentConfirmationIMSPSMOBILEOTP">PaymentConfirmationIMSPSMOBILEOTP</option>
+                                                                    <option value="PROFILEUPDATEDSUCCESSFULLY">PROFILE UPDATED SUCCESSFULLY</option>
+                                                                    <option value="PURCHASEORDERRECEIVED">PURCHASE ORDER RECEIVED</option>
+                                                                    <option value="RECHARGECAPPINGLOW">RECHARGECAPPINGLOW</option>
+                                                                    <option value="RECHARGEDEALERIDBLOCK">RECHARGEDEALERIDBLOCK</option>
+                                                                    <option value="RECHARGEDISTRIBUTOROPERATORBLOCK">RECHARGEDISTRIBUTOROPERATORBLOCK</option>
+                                                                    <option value="RECHARGEDISTRIBUTORREMAINBALLOW">RECHARGEDISTRIBUTORREMAINBALLOW</option>
+                                                                    <option value="RECHARGEFAILED">RECHARGEFAILED</option>
+                                                                    <option value="RECHARGEMINIMIUM">RECHARGEMINIMIUM</option>
+                                                                    <option value="RECHARGEOPERATORBLOCK">RECHARGEOPERATORBLOCK</option>
+                                                                    <option value="RECHARGEPENDING">RECHARGEPENDING</option>
+                                                                    <option value="RECHARGERETAILERIDBLOCK">RECHARGERETAILERIDBLOCK</option>
+                                                                    <option value="RECHARGERETAILEROPERATORBLOCK">RECHARGERETAILEROPERATORBLOCK</option>
+                                                                    <option value="RECHARGERETAILERREMAINBALANCELOW">RECHARGERETAILERREMAINBALANCELOW</option>
+                                                                    <option value="RECHARGESUCCESS">RECHARGESUCCESS</option>
+                                                                    <option value="RECHARGETIMEDIFF">RECHARGETIMEDIFF</option>
+                                                                    <option value="Register_MOBILE_SIGNUP">Register_MOBILE_SIGNUP</option>
+                                                                    <option value="REJECTPURCHASEORDER">REJECT PURCHASE ORDER</option>
+                                                                    <option value="RESPNSEMONEYTRANSFERMANUALMONEYFAILEDDUETO">RESPNSEMONEYTRANSFERMANUALMONEYFAILEDDUETO</option>
+                                                                    <option value="RetailerDelete">RetailerDelete</option>
+                                                                    <option value="RETAILERPINCHANGE">RETAILER PIN CHANGE</option>
+                                                                    <option value="RETAILERPINCHANGE">RETAILER PIN CHANGE</option>
+                                                                    <option value="RETAILERTORETAILERFROMFUNDTRANSFER">RETAILERTORETAILERFROMFUNDTRANSFER</option>
+                                                                    <option value="RETAILERTORETAILERTOFUNDTRANSFER">RETAILERTORETAILERTOFUNDTRANSFER</option>
+                                                                    <option value="SECURITYCODEIS">SECURITY CODE IS</option>
+                                                                    <option value="SELF UPI INSERT OTP">SELFUPIINSERTOTP</option>
+                                                                    <option value="SEND_SMS_CREDIT_RECEIVEDBY">SEND_SMS_CREDIT_RECEIVEDBY</option>
+                                                                    <option value="SEND_SMS_CREDIT_TRANSFERREDTO">SEND_SMS_CREDIT_TRANSFERREDTO</option>
+                                                                    <option value="SENDSMSMASTERTODLMFUNDTRANSFERMSGCASH">SEND SMS MASTER TO DLM FUNDTRANSFER MSG CASH</option>
+                                                                    <option value="STATUSSENDSMSDEALER_NEW_RETAILER">STATUS SEND SMS DEALER_NEW_RETAILER</option>
+                                                                    <option value="STATUSSENDSMSMASTER_NEW_DEALER">STATUS SEND SMS MASTER_NEW_DEALER</option>
+                                                                    <option value="TOKENOTPFORIPADDRESS">TOKENOTPFORIPADDRESS</option>
+                                                                    <option value="TRANSACTIONOTP">TRANSACTION OTP</option>
+                                                                    <option value="UPITRANSFERFAILED">UPI TRANSFER FAILED</option>
+                                                                    <option value="UPITRANSFERSUCCESSFULLY">UPI TRANSFER SUCCESSFULLY</option>
+                                                                    <option value="VERYFYPROFILESUSERSOTP">VERYFYPROFILESUSERSOTP</option>
+                                                                    <option value="WALLETUNLOADPROCESSEDSUCCESSFULLY">WALLETUNLOADPROCESSEDSUCCESSFULLY</option>
+                                                                    <option value="ForgetPassOtp">ForgetPassOtp</option>
+                                                                    <option value="EmailSPasscode">EmailSPasscode</option>
+                                                                    <option value="TransResetOtp">TransResetOtp</option>
+                                                                    <option value="SPAsscodeOtp">SPAsscodeOtp</option>
+                                                                    <option value="WRONGPASSWORD">WRONG PASSWORD</option>
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label>Template ID </label>
+                                                        <div>
+                                                            <input type="text" id="txttemplate_id" required name="txttemplate_id" placeholder="Enter Template ID" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label>Templates Formate </label>
+                                                        <div>
+                                                            <textarea id="txttemplateformate" required name="txttemplateformate" rows="4" cols="50" placeholder="Enter Formate of Template"> </textarea>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 button-seconddesign">
+                                                        <label class="errorss"></label>
+                                                        <label class="errorss1"></label>
+                                                        <div>
+                                                            <button type="submit" id="btnnshowmaster" class="fullbodydycolorbg btn-first button-third" style="color:#fff;float:right;padding: 6px 40px;border: 1px solid #bbb;line-height: 24px;">
+                                                                <span style="color:#fff;position:relative;">Save</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                            }
+                                        </div>
+
+
+                                    </div>
+                                    <div id="outer-loader" style="position: absolute;background: rgba(0,0,0,.5);right: 15px;left: 15px;bottom: 0px;top: 0px;display:none;">
+                                        <div id="loader" style="position: absolute; right: 30%; top: 50%; transform: translate(0%, -50%);">
+                                            <div class="loadingio-spinner-ripple-92ar2pfqk5j">
+                                                <div class="ldio-zdyd6mf6t5">
+                                                    <div></div><div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- #tab-7 -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="right_tab1" class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col sms-first-show sa-right-panel sa-right-panel--main is-visible" style="padding-left:0;">
+                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel smsapi-second">
+                    <div class="vm-ft-history-body">
+                        <div class="sa-right-toolbar">
+                            <ul class="sa-sms-right-tabs sa-right-tabs" role="tablist">
+                                <li class="tab-link current" data-tab="tab-1" id="SMS_API_HistoryTab" role="tab">
+                                    <img src="~/img/api_gateway2.png" alt="" />
+                                    <span>API - SMS History</span>
+                                </li>
+                                <li class="tab-link" data-tab="tab-2" id="SMS_SIM_HistoryTab" role="tab">
+                                    <img src="~/img/phone-card-back.svg" alt="" />
+                                    <span>SIM - SMS History</span>
+                                </li>
+                                <li class="tab-link" data-tab="tab-3" role="tab">
+                                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    <span>Manage Outbox</span>
+                                </li>
+                                <li class="tab-link" data-tab="tab-4" id="LoaddataTemp" role="tab">
+                                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                                    <span>API Setting</span>
+                                </li>
+                            </ul>
+                            <button type="button" class="sa-tool-btn sa-right-toolbar__action" data-toggle="modal" data-target="#defaultModal">
+                                <i class="fa fa-plus"></i> API
+                            </button>
+                        </div>
+
+                        <div class="sa-right-tab-body">
+                    <div id="tab-1" class="tab-content current custom-table-responsive padding-top-second">
+                        <div class="sa-history-toolbar">
+                        <ul class="tabinputclass-third">
+
+                            <li class="tabcurrent-seconddesign">
+                                @Html.TextBox("txtmsg", "", new { @class = "form-control API_SMS", onkeyup = "Search_API_His_ByTest()", placeholder = "Search text..." })
+                            </li>
+                            <li>
+                                <div class="sa-history-filter-dates">
+                                    <div class="saas-acc-dp-field sa-date-field">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input txt_frm_date", required = "required", autocomplete = "off", placeholder = "From" })
+                                    </div>
+                                    <div class="saas-acc-dp-field sa-date-field">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input txt_to_date", required = "required", autocomplete = "off", placeholder = "To" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="buttonsearch-second buttonspan-second">
+                                <button type="button" id="btnaa" name="btnaa" class="sa-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                    <i class="fa fa-search"></i>
+                                    <span>Search</span>
+                                </button>
+                            </li>
+
+                            <li class="smsapi-pdf sa-export-group">
+                                <input type="button" id="btnExport2" value="Excel" class="sa-export-btn sa-export-btn--excel">
+                                <input type="button" id="btnPDF2" value="PDF" class="sa-export-btn sa-export-btn--pdf">
+                            </li>
+
+                        </ul>
+                        </div>
+                        <div id="tableapismshistory" class="sa-table-host">
+                            @Html.Partial("_APISMSHISTORY", Model)
+                        </div>
+
+
+                    </div><!-- #tab-1 -->
+
+                    <div id="tab-2" class="tab-content custom-table-responsive padding-top-second">
+                        <div class="sa-history-toolbar">
+                        <ul class="tabinputclass-third">
+                            <li class="tabcurrent-seconddesign">
+
+                                @Html.TextBox("txtmsg", "", new { @class = "form-control SIM_His", onkeyup = "Search_SIM_His_ByTest()", placeholder = "Search text..." })
+                            </li>
+                            <li>
+                                <div class="sa-history-filter-dates">
+                                    <div class="saas-acc-dp-field sa-date-field">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input txt_frm_date", required = "required", autocomplete = "off", placeholder = "From" })
+                                    </div>
+                                    <div class="saas-acc-dp-field sa-date-field">
+                                        <span class="saas-acc-dp-icon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBox("txt_to_date", "", new { @class = "form-control saas-acc-dp-input txt_to_date", required = "required", autocomplete = "off", placeholder = "To" })
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="buttonsearch-second buttonspan-second">
+                                <button type="button" id="btnsimhistory" class="sa-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                    <i class="fa fa-search"></i>
+                                    <span>Search</span>
+                                </button>
+                            </li>
+                            <li class="smsapi-pdf sa-export-group">
+                                <input type="button" id="btnExport3" value="Excel" class="sa-export-btn sa-export-btn--excel">
+                                <input type="button" id="btnPDF3" value="PDF" class="sa-export-btn sa-export-btn--pdf">
+                            </li>
+                        </ul>
+                        </div>
+                        <div id="SIMSMSHISTORYtable" class="sa-table-host">
+                            @Html.Partial("_SIMSMSHISTORY", Model)
+                        </div>
+
+
+                    </div><!--#tab-2-->
+
+                    <div id="tab-3" class="tab-content custom-table-responsive padding-top-second">
+                        @Html.Action("SMS_Setting")
+                    </div><!-- #tab-3 -->
+                    <div id="tab-4" class="tab-content sa-api-setting-panel custom-table-responsive padding-top-second">
+                        <div id="ApiSettings" class="sa-api-settings-host">
+                            @Html.Partial("_APISETTINGS")
+                        </div>
+                    </div><!-- #tab-4 -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="right_tab2" class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col sms-second-show sa-right-panel sa-right-panel--template is-hidden" style="padding-left:0;">
+                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel sa-template-panel">
+                    <div class="vm-ft-history-body">
+                        <div class="sa-template-history-toolbar">
+                            <div class="sa-template-history-toolbar__head">
+                                <span class="sa-template-history-toolbar__title"><i class="fa fa-list-alt"></i> Template History</span>
+                                <span class="sa-template-history-toolbar__sub">Merge, upload or export SMS templates</span>
+                            </div>
+                            <div class="sa-template-history-actions">
+                                @using (Ajax.BeginForm("copypastedeveloper", "Home", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "tblshowMasterD" }, new { @class = "sa-inline-form" }))
+                                {
+                                    <button type="submit" class="sa-tool-btn sa-template-merge-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                        <i class="fa fa-compress"></i> Merge Templates
+                                    </button>
+                                }
+                                <a href="@Url.Action("SMS_TemplateDownload_Formate")" class="sa-export-btn sa-export-btn--excel">Excel Format</a>
+                                @using (Html.BeginForm("UploadExcelfileforsendingsmstemplate", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "sa-template-upload-form" }))
+                                {
+                                    <label class="sa-template-upload-label">
+                                        <input type="file" name="FileUpload" id="FileUpload" class="sa-template-upload-input" accept=".xls,.xlsx" />
+                                        <span class="sa-template-upload-btn">Browse file</span>
+                                    </label>
+                                    <button type="submit" class="sa-search-btn sa-template-upload-submit"><i class="fa fa-upload"></i> Upload</button>
+                                }
+                                <input type="button" id="btnExport1" value="Excel" class="sa-export-btn sa-export-btn--excel" />
+                            </div>
+                        </div>
+                        <div id="tblshowMasterD" class="sa-table-host">
+                            @Html.Partial("_SMS_TEMPLATE_Reports", Model.Sending_SMS_Templates_reports)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!--.row-->
+        </div><!--.vm-ft-layout-wrap-->
+
+    </div>
+</section>
+<!--Add New  Modal-->
+<div class="modal fade sa-modal sa-api-modal saas-admin-modal" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="saAddApiTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header sa-modal-header">
+                <div class="saas-admin-modal-header__text">
+                    <h4 class="saas-admin-modal-title sa-modal-header__title" id="saAddApiTitle"><i class="fas fa-plus-circle"></i> Add SMS API</h4>
+                    <p class="saas-admin-modal-subtitle">Configure SMS gateway URL with mobile, message &amp; template placeholders</p>
+                </div>
+                <button type="button" class="close saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body saas-admin-modal-body sa-modal-body">
+                <div class="sa-modal-field">
+                    <label for="smsapiurl"><i class="fas fa-link"></i> API URL</label>
+                    <input type="text" id="smsapiurl" class="form-control searchInput" placeholder="https://example.com/send?mobile={mobile}&message={message}" required />
+                </div>
+                <div class="sa-modal-field">
+                    <label for="smsapiCheck"><i class="fas fa-wallet"></i> SMS Check Balance URL</label>
+                    <input type="text" id="smsapiCheck" class="form-control searchInput" placeholder="https://example.com/balance" />
+                </div>
+                <div class="sa-modal-field">
+                    <label for="sms_type"><i class="fas fa-layer-group"></i> API Type</label>
+                    <select class="form-control sa-modal-select" id="sms_type" name="sms_type">
+                        <option value="sms">Text SMS</option>
+                        <option value="whatsapp">Whatsapp</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer saas-admin-modal-footer sa-modal-footer">
+                <button type="button" class="btn sa-btn-secondary saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+                <button type="button" onclick="AddSMSAPI()" class="btn sa-btn-primary saas-admin-modal-btn saas-admin-modal-btn--success enableOnInput" id="start_SMSAPI" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled="disabled">
+                    <i class="fas fa-save"></i> Save API
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Edit Modal-->
+<div class="modal fade sa-modal sa-api-modal saas-admin-modal" id="defaultModal1" tabindex="-1" role="dialog" aria-labelledby="saEditApiTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header saas-admin-modal-header sa-modal-header sa-modal-header--edit accent-violet">
+                <div class="saas-admin-modal-header__text">
+                    <h4 class="saas-admin-modal-title sa-modal-header__title" id="saEditApiTitle"><i class="fas fa-pen"></i> Edit API</h4>
+                    <p class="saas-admin-modal-subtitle">Update SMS API name or endpoint URL</p>
+                </div>
+                <button type="button" class="close saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            @using (Html.BeginForm("Edit_SMS_API", "Home", FormMethod.Post, new { id = "saEditApiForm" }))
+            {
+                @Html.HiddenFor(m => m.apiapisms.id)
+                <div class="modal-body saas-admin-modal-body sa-modal-body">
+                    <div class="sa-modal-field">
+                        <label for="apiapisms_smsapi1"><i class="fas fa-link"></i> API Name / URL</label>
+                        @Html.TextBoxFor(m => m.apiapisms.smsapi1, new { @class = "form-control searchInput", placeholder = "Enter SMS API URL", required = "required" })
+                        @Html.ValidationMessageFor(m => m.apiapisms.smsapi1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="modal-footer saas-admin-modal-footer sa-modal-footer">
+                    <button type="button" class="btn sa-btn-secondary saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+                    <button type="button" class="btn sa-btn-primary saas-admin-modal-btn saas-admin-modal-btn--success enableOnInput" id="start_button2" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled="disabled">
+                        <i class="fas fa-save"></i> Save Change
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Jquery Core Js -->
+<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
+<!-- Custom Js -->
+<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
+<!-- Demo Js -->
+<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+<script src="~/AdminDesign/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/AdminDesign/js/demo.js"></script>
+<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+<script src="~/Swalalert/datatablejquery.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+<link href="~/select2/dist/css/select2.css" rel="stylesheet" />
+<script src="~/select2/dist/js/select2.min.js"></script>
+
+<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+
+<script>
+
+    $('#btnSendSms').click(function () {
+        var URL = "";
+        var res = $('input[name=group1]:checked').val();
+        if (res == 'value1') {
+         $.ajax({
+            url: '@Url.Action("Send_API_SMS")',
+            type: 'POST',
+            data: { Userform1: $('#Userform1').val(), txtmobileNo: $('#txtmobileNo').val(), txtMsgBody: $('#txtMsgBody').val() },
+            success: function (response) {
+
+                $('#tableapismshistory').html(response);
+                $('#txtmobileNo').val('');
+                $('#txtMsgBody').val('');
+                saShowMainPanel();
+                saSwitchRightTab('tab-1');
+                }
+        })
+
+        }
+        else if (res == 'value2') {
+              $.ajax({
+            url: '@Url.Action("sim_sms")',
+              type: 'POST',
+              data: { Userform3: $('#Userform1').val(), Lapuno: $('#Lapuno').val(), txtmobilesim: $('#txtmobileNo').val(), txtsim: $('#txtMsgBody').val() },
+            success: function (response) {
+
+                $('#SIMSMSHISTORYtable').html(response);
+                $('#txtmobileNo').val('');
+                $('#txtMsgBody').val('');
+                saShowMainPanel();
+                saSwitchRightTab('tab-2');
+                }
+        })
+        }
+    })
+
+    $('#btnaa').click(function () {
+        $.ajax({
+            url: '@Url.Action("_APISMSHISTORY","Home")',
+            type: 'POST',
+            data: {
+                txtmsg: $('#tab-1 .API_SMS').val(),
+                txt_frm_date: $('#tab-1 .txt_frm_date').first().val(),
+                txt_to_date: $('#tab-1 .txt_to_date').first().val()
+            },
+            success: function (response) {
+                $('#tableapismshistory').html(response);
+            }
+        });
+    });
+
+    $('#btnsimhistory').click(function () {
+        $.ajax({
+            url: '@Url.Action("_SIMSMSHISTORY","Home")',
+            type: 'POST',
+            data: {
+                txtmsg: $('#tab-2 .SIM_His').val(),
+                txt_frm_date: $('#tab-2 .txt_frm_date').first().val(),
+                txt_to_date: $('#tab-2 .txt_to_date').first().val()
+            },
+            success: function (response) {
+                $('#SIMSMSHISTORYtable').html(response);
+            }
+        });
+    });
+
+
+    function Search_API_His_ByTest() {
+
+        var value = $('.API_SMS').val();
+
+
+        var patt = new RegExp(value, "i");
+
+
+
+        $('#APISMSHISTORY').find('tr').each(function () {
+
+            if (!($(this).find('td').text().search(patt) >= 0)) {
+
+                $(this).not('.first-tr').hide();
+
+            }
+
+            if (($(this).find('td').text().search(patt) >= 0)) {
+
+                $(this).show();
+
+            }
+
+        });
+
+    };
+function Search_SIM_His_ByTest() {
+        var value = $('.SIM_His').val();
+
+
+        var patt = new RegExp(value, "i");
+
+
+
+        $('#SIMSMSHISTORY').find('tr').each(function () {
+
+            if (!($(this).find('td').text().search(patt) >= 0)) {
+
+                $(this).not('.first-tr').hide();
+
+            }
+
+            if (($(this).find('td').text().search(patt) >= 0)) {
+
+                $(this).show();
+
+            }
+
+        });
+
+    };
+
+
+ $("input[type='radio']").change(function(){
+
+if($(this).val()=="value2")
+{
+    $("#prtno").show();
+}
+else
+{
+       $("#prtno").hide();
+}
+
+});
+
+</script>
+<script type="text/jscript">
+    function confirm1() {
+        var answer = confirm("ARE YOU SURE?")
+        if (answer)
+            return true;
+        else
+            return false;
+    }
+</script>
+<script>
+    $('#start_button2').click(function () {
+
+        $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Edit_SMS_APIPartial","Home")',
+                data: {id: $("#apiapisms_id").val(),smsapi1: $("#apiapisms_smsapi1").val()},
+             success: function (response) {
+                 saReloadApiSettings(response);
+                  $('#defaultModal1').modal('hide');
+                }
+
+            });
+
+
+    })
+
+</script>
+<script>
+    $(window).on('load', function () {
+        if ($.fn.datepicker) {
+            $('.txt_frm_date, .txt_to_date').datepicker({
+                format: "yyyy-mm-dd",
+                todayHighlight: true,
+                autoclose: true,
+                orientation: "bottom auto"
+            });
+            var val = '@ViewBag.chk';
+            if (val != "post") {
+                $(".txt_frm_date").datepicker("setDate", new Date());
+                $(".txt_to_date").datepicker("setDate", new Date());
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    function saShowMainPanel() {
+        $('#right_tab1').removeClass('is-hidden').addClass('is-visible');
+        $('#right_tab2').removeClass('is-visible').addClass('is-hidden');
+        $('.SMSAPI_Page').removeClass('sa-template-view');
+        $('#searchSms').hide();
+    }
+
+    function saShowTemplatePanel() {
+        $('#right_tab1').removeClass('is-visible').addClass('is-hidden');
+        $('#right_tab2').removeClass('is-hidden').addClass('is-visible');
+        $('.SMSAPI_Page').addClass('sa-template-view');
+        $('#searchSms').show();
+    }
+
+    function saSwitchRightTab(tabId) {
+        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link').removeClass('current');
+        $('.SMSAPI_Page .smsapi-second .sa-right-tab-body > .tab-content').removeClass('current');
+        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link[data-tab="' + tabId + '"]').addClass('current');
+        var $panel = $('.SMSAPI_Page .smsapi-second .sa-right-tab-body > #' + tabId);
+        $panel.addClass('current');
+        if (tabId === 'tab-4') {
+            $('.SMSAPI_Page .sa-right-toolbar__action').addClass('is-visible');
+        } else {
+            $('.SMSAPI_Page .sa-right-toolbar__action').removeClass('is-visible');
+        }
+    }
+
+    function saSwitchLeftTab(tabId) {
+        $('.head-sms .sa-sms-left-tabs li.tab-link2').removeClass('current2');
+        $('.smsapi-first .sams-next > .tab-content2').removeClass('current2');
+        $('.head-sms .sa-sms-left-tabs li.tab-link2[data-tab="' + tabId + '"]').addClass('current2');
+        $('.smsapi-first .sams-next > #' + tabId).addClass('current2');
+
+        if (tabId === 'tab-7') {
+            saShowTemplatePanel();
+        } else {
+            saShowMainPanel();
+        }
+    }
+
+    function saReloadApiSettings(response) {
+        var $parsed = $('<div>').html(response);
+        var inner = $parsed.find('.sa-api-settings-table-wrap').length
+            ? $parsed.html()
+            : ($parsed.find('#ApiSettings').length
+                ? $parsed.find('#ApiSettings').html()
+                : ($parsed.find('#tab-4').length ? $parsed.find('#tab-4').html() : response));
+        $('#ApiSettings').html(inner);
+        saShowMainPanel();
+        saSwitchRightTab('tab-4');
+    }
+
+    $(document).ready(function () {
+        saShowMainPanel();
+        saSwitchRightTab('tab-1');
+
+        $('.head-sms .sa-sms-left-tabs li.tab-link2').on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            saSwitchLeftTab($(this).attr('data-tab'));
+        });
+
+        $('.SMSAPI_Page .smsapi-second .sa-sms-right-tabs > li.tab-link').on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            saSwitchRightTab($(this).attr('data-tab'));
+        });
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        var elem = document.getElementById("Userform1");
+        elem.onchange = function () {
+            var hiddenDiv = document.getElementById("SelectID");
+            hiddenDiv.style.display = (this.value == "") ? "block" : "none";
+        };
+    });
+</script>
+<!--  ==  SMS Priority  ==-->
+<script type="text/javascript">
+    var val1 = "";
+    function animation(id, sms, spisms, sim) {
+      sms=  decodeURIComponent(sms);
+        $("#idno").val(id);
+        $("#txtsms").val(sms);
+        $("#smsapi").val(spisms);
+        $("#sim").val(sim);
+    }
+    function check() {
+        var smsapi = $('#smsapi').val();
+        var sim = $('#sim').val();
+        if (smsapi == sim ) {
+            swal("Opps!", "Not Two Priority Are Same", "error");
+            //alert("Not Two Priority Are Same ");
+            return false;
+
+        }
+        else {
+            //return true;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("edit_smspriority","Home")',
+                data: {idno: $("#idno").val(),txtsms:$("#txtsms").val(),smsapi: $("#smsapi").val(),sim: $("#sim").val()},
+                success: function (response) {
+                    var tblHtml="";
+             $.each(response.SMS_PriorityList,function(a,b){
+
+                       //tblHtml+= "<tr><td>"+b.idno+"</td>";
+                       tblHtml+= "<tr><td>"+b.sms+"</td>";
+                       tblHtml+= "<td>"+b.smsapi+"</td>";
+                 tblHtml += "<td>" + b.sim + "</td>";
+                 tblHtml+="<td><button type='button' class='bt btn-default smsbbtn switch-edit-button' onclick=\"animation('"+b.idno +"','"+encodeURIComponent(b.sms)+"','"+b.smsapi+"','"+b.sim+"')\">Edit</button></td></tr>"
+
+             });
+                    $("#gridtbl > tbody").html(tblHtml);
+
+                }
+
+            });
+        }
+    }
+</script>
+<script>
+    $('.btnssl2233').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        setTimeout(function () {
+            $this.button('reset');
+        }, 2000);
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('button.smsbbtn').click(function () {
+            $(this).closest("tr").next().show();
+            $(this).closest("tr").hide();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".sweet-alert").addClass("fullbodydycolorbg");
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.second-design .example-second').DataTable({
+
+
+            paging: false
+        });
+    });
+
+</script>
+
+<script>
+
+    function DeleteTemplate(idno) {
+
+        $('.clssresetshow').show();
+        $('.clssresetnotshow').hide();
+
+        var showid = "#show-" + idno;
+        var Notshowid = "#Notshow-" + idno;
+
+       $(showid).hide();
+     $(Notshowid).show();
+
+    }
+
+    function ConfirmDeleteTemplate(idno) {
+
+        $('.clssresetshow').show();
+        $('.clssresetnotshow').hide();
+
+        var showid = "#show-" + idno;
+        var Notshowid = "#Notshow-" + idno;
+
+        $(showid).hide();
+        $(Notshowid).show();
+
+
+          $.ajax({
+              url: "@Url.Action("DeleteTemplatebyid")",
+            data: { id: idno },
+            type: 'POST',
+              success: function (result) {
+                  $('#tblshowMasterD').html(result);
+
+            }
+        });
+    }
+
+</script>
+<script>
+
+    $(function () {
+        $('.copy-to-clipboard').click(function () {
+
+            var idno = $(this).data("idss")
+            var txtcurent = "#txt-" + idno;
+            $(txtcurent).focus();
+            $(txtcurent).select();
+            document.execCommand('copy');
+            toastr.success('Copied to clipboard', 'Success')
+            /*  $(".copied").text("Copied to clipboard").show().fadeOut(1200);*/
+        });
+    });
+</script>
+
+
+<script>
+    $("#btnExport1").click(function () {
+        var url = '@Url.Action("Generate_Excel_Setting_SMS_TEMPLATE", "Home")';
+        location.href = url;
+    });
+</script>
+
+<script>
+    $("#btnExport2").click(function () {
+        var txt_frm_date = $('#tab-1 .txt_frm_date').first().val();
+        var txt_to_date = $('#tab-1 .txt_to_date').first().val();
+        var txtmsg = $('#tab-1 .API_SMS').val();
+        var url = '@Url.Action("ExcelSend_API_SMS", "Home")?txt_frm_date=' + encodeURIComponent(txt_frm_date) + '&txt_to_date=' + encodeURIComponent(txt_to_date) + '&txtmsg=' + encodeURIComponent(txtmsg);
+        location.href = url;
+    });
+</script>
+
+<script>
+    $("#btnExport3").click(function () {
+        var txt_frm_date = $('#tab-2 .txt_frm_date').first().val();
+        var txt_to_date = $('#tab-2 .txt_to_date').first().val();
+        var txtmsg = $('#tab-2 .SIM_His').val();
+        var url = '@Url.Action("Excel_SIMSMSHISTORY", "Home")?txt_frm_date=' + encodeURIComponent(txt_frm_date) + '&txt_to_date=' + encodeURIComponent(txt_to_date) + '&txtmsg=' + encodeURIComponent(txtmsg);
+        location.href = url;
+    });
+</script>
+
+<script>
+    $('#searchSms').on('keyup', (e) => {
+
+        var value = e.target.value.toLowerCase();
+        $("#tbldata tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    })
+</script>
+
+<script>
+    var ravi = $.noConflict();
+
+    function saInitTemplateSelect2() {
+        ravi('.smsapi-first select.for-select2').each(function () {
+            var $el = ravi(this);
+            if ($el.hasClass('select2-hidden-accessible')) {
+                return;
+            }
+            $el.select2({ width: '100%' });
+        });
+    }
+
+    function saInitModalApiTypeSelect() {
+        var $modal = ravi('#defaultModal');
+        var $type = ravi('#sms_type');
+        if (!$type.length || !$modal.length) {
+            return;
+        }
+        if ($type.hasClass('select2-hidden-accessible')) {
+            $type.select2('destroy');
+        }
+        $type.select2({
+            dropdownParent: $modal,
+            minimumResultsForSearch: Infinity,
+            width: '100%'
+        });
+    }
+
+    function saDestroyModalApiTypeSelect() {
+        var $type = ravi('#sms_type');
+        if ($type.hasClass('select2-hidden-accessible')) {
+            $type.select2('destroy');
+        }
+    }
+
+    ravi(document).ready(function () {
+        saInitTemplateSelect2();
+    });
+
+    ravi(document).ajaxComplete(function () {
+        saInitTemplateSelect2();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        function saToggleEnableInputs() {
+            var apiUrl = $.trim($('#smsapiurl').val() || '');
+            var editApi = $.trim($('#apiapisms_smsapi1').val() || '');
+            var msg = $.trim($('#txtMsgBody').val() || '');
+            var mobile = $.trim($('#txtmobileNo').val() || '');
+            var userType = $('#Userform1').val();
+
+            $('#start_SMSAPI').prop('disabled', apiUrl === '');
+            $('#start_button2').prop('disabled', editApi === '');
+            $('#btnSendSms').prop('disabled', !(msg && (mobile || userType)));
+        }
+
+        $(document).on('keyup change', '#smsapiurl, #apiapisms_smsapi1, #txtMsgBody, #txtmobileNo, #Userform1', saToggleEnableInputs);
+        saToggleEnableInputs();
+
+        $('#defaultModal').on('shown.bs.modal', function () {
+            saInitModalApiTypeSelect();
+        });
+
+        $('#defaultModal, #defaultModal1').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('#smsapiurl, #smsapiCheck').val('');
+            saDestroyModalApiTypeSelect();
+            $('#sms_type').val('sms');
+            saToggleEnableInputs();
+        });
+
+        $(document).on('click', '#ApiSettings .before-delete', function () {
+            $(this).hide();
+            $(this).next().show();
+        });
+    });
+</script>

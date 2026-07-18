@@ -17154,20 +17154,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     up.ApkLink = txtuploadedlink;
                 }
                 db.SaveChanges();
-                //if (System.IO.File.Exists(pth))
-                //{
-                //    System.IO.File.Delete(pth);
-                //}
-                //using (FileStream fs = System.IO.File.Create(pth))
-                //{
-                //    // Add some text to file    
-                //    Byte[] title = new UTF8Encoding(true).GetBytes(txtuploadedlink);
-                //    fs.Write(title, 0, title.Length);
-                //    fs.Close();
-                //    fs.Dispose();
-                //    byte[] author = new UTF8Encoding(true).GetBytes("Mahesh Chand");
-                //    fs.Write(author, 0, author.Length);
-                //}
+                TempData["success"] = "Play Store Link Saved Successfully.";
             }
             return RedirectToAction("UploadAPK", "Home");
 
@@ -43818,6 +43805,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         // POST : Insert SMS API
 
 
+        [HttpPost]
         public ActionResult copypastedeveloper()
         {
             var smstpiid = db.apisms.Where(x => x.sts == "Y").FirstOrDefault();
@@ -44141,13 +44129,17 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         {
 
             List<string> data = new List<string>();
-            if (FileUpload != null)
+            if (FileUpload != null && FileUpload.ContentLength > 0)
             {
-                // tdata.ExecuteCommand("truncate table OtherCompanyAssets");
-                if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                var ext = Path.GetExtension(FileUpload.FileName).ToLowerInvariant();
+                if (ext == ".xls" || ext == ".xlsx")
                 {
-                    string filename = FileUpload.FileName;
+                    string filename = Path.GetFileName(FileUpload.FileName);
                     string targetpath = Server.MapPath("~/Doc/");
+                    if (!Directory.Exists(targetpath))
+                    {
+                        Directory.CreateDirectory(targetpath);
+                    }
                     FileUpload.SaveAs(targetpath + filename);
                     string pathToExcelFile = targetpath + filename;
                     var connectionString = "";
@@ -44226,30 +44218,19 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                     {
                         System.IO.File.Delete(pathToExcelFile);
                     }
+                    TempData["saSmsUploadMsg"] = "Excel uploaded successfully.";
                     return RedirectToAction("SMSAPI");
-                    // return Json("success", JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    //alert message for invalid file format
-                    data.Add("<ul>");
-                    data.Add("<li>Only Excel file format is allowed</li>");
-                    data.Add("</ul>");
-                    data.ToArray();
-                    TempData["excelldata"] = data;
+                    TempData["saSmsUploadError"] = "Only Excel file format is allowed (.xls or .xlsx).";
                     return RedirectToAction("SMSAPI");
-                    // return Json(data, JsonRequestBehavior.AllowGet);
                 }
             }
             else
             {
-                data.Add("<ul>");
-                if (FileUpload == null) data.Add("<li>Please choose Excel file</li>");
-                data.Add("</ul>");
-                data.ToArray();
-                TempData["excelldata"] = data;
+                TempData["saSmsUploadError"] = "Please choose an Excel file.";
                 return RedirectToAction("SMSAPI");
-                //  return Json(data, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -44257,12 +44238,14 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult SMS_TemplateDownload_Formate()
         {
+            var dataTbl = new DataTable();
+            dataTbl.Columns.Add("Templateid", typeof(string));
+            dataTbl.Columns.Add("SMSAPIID", typeof(string));
+            dataTbl.Columns.Add("SMS_TYPE", typeof(string));
+            dataTbl.Columns.Add("Templates", typeof(string));
+            dataTbl.Rows.Add("SAMPLE123", "https://example.com/send?", "ManualSMS", "Hello {mobile}, your OTP is {otp}");
 
-            var directoryPath = "~/SMSTEMPLIST.xlsx";
-            var fileName = "SMSTEMP_send_sms.xlsx";
-
-            directoryPath = directoryPath.Replace("Vastwebmulti", "");
-            return File(directoryPath, "multipart/form-data", fileName);
+            return BuildStyledSmsTemplateExcel(dataTbl, "SMSTEMP_send_sms.xlsx");
         }
 
 
@@ -44480,56 +44463,48 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult ExcelSend_API_SMS(string txt_frm_date, string txt_to_date, string txtmsg)
         {
-            SMSViewModel vmodel = new SMSViewModel();
+            var dataTbl = BuildApiSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
+            return BuildStyledDataTableExcel(dataTbl, "Send_API_SMS_History.xlsx", "API SMS History", "API SMS History Report");
+        }
+
+        public ActionResult PdfSend_API_SMS(string txt_frm_date, string txt_to_date, string txtmsg)
+        {
+            var dataTbl = BuildApiSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
+            return BuildStyledSmsReportPdf(dataTbl, "API SMS History Report", "Send_API_SMS_History.pdf");
+        }
+
+        private DataTable BuildApiSmsHistoryDataTable(string txt_frm_date, string txt_to_date, string txtmsg)
+        {
             DateTime frm = Convert.ToDateTime(txt_frm_date);
             DateTime to = Convert.ToDateTime(txt_to_date);
             txt_frm_date = frm.ToString("dd-MM-yyyy");
             txt_to_date = to.ToString("dd-MM-yyyy");
-            var userid = User.Identity.GetUserId();
-            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy",
-                            "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
+            string[] formats = new[] { "MM/dd/yyyy", "dd-MMM-yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "dd MMM yyyy" };
             DateTime dt = DateTime.ParseExact(!string.IsNullOrEmpty(txt_frm_date) ? txt_frm_date : DateTime.Now.ToString("yyyy-MM-dd"), formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             DateTime dt1 = DateTime.ParseExact(!string.IsNullOrEmpty(txt_to_date) ? txt_to_date : DateTime.Now.ToString("yyyy-MM-dd"), formats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             DateTime frm_date = Convert.ToDateTime(dt).Date;
             DateTime to_date = Convert.ToDateTime(dt1).AddDays(1);
-            vmodel.sms_api_entryList = db.sms_api_entry.Where(aa => aa.m_date >= frm_date && aa.m_date <= to_date && aa.msg.Contains(txtmsg)).OrderByDescending(aa => aa.idno).ToList();
+            var smsList = db.sms_api_entry.Where(aa => aa.m_date >= frm_date && aa.m_date <= to_date && aa.msg.Contains(txtmsg)).OrderByDescending(aa => aa.idno).ToList();
 
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Date & Time", typeof(string));
             dataTbl.Columns.Add("API Response", typeof(string));
             dataTbl.Columns.Add("Sending Message", typeof(string));
 
-            if (vmodel.sms_api_entryList.Count > 0)
+            foreach (var item in smsList)
             {
-                foreach (var item in vmodel.sms_api_entryList)
+                var msg = item.msg;
+                if (!string.IsNullOrEmpty(msg) && msg.ToUpper().Contains("YOUR NEW PASSWORD"))
                 {
-                    if (item.msg.ToUpper().Contains("YOUR NEW PASSWORD"))
-                    {
-                        item.msg = "New Password **** Successfully Send On Registered Mobile";
-                    }
-                    dataTbl.Rows.Add(item.m_date, item.response, item.msg);
+                    msg = "New Password **** Successfully Send On Registered Mobile";
                 }
+                dataTbl.Rows.Add(
+                    item.m_date.HasValue ? item.m_date.Value.ToString("dd-MM-yyyy hh:mm tt") : string.Empty,
+                    item.response,
+                    msg);
             }
 
-            else
-            {
-                dataTbl.Rows.Add("", "", "");
-            }
-            var grid = new GridView();
-            grid.DataSource = dataTbl;
-            grid.DataBind();
-            Response.ClearContent();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=Send_API_SMS_History.xls");
-            Response.ContentType = "application/ms-excel";
-            Response.Charset = "";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            grid.RenderControl(htw);
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-            return PartialView("_APISMSHISTORY", vmodel);
+            return dataTbl;
         }
 
 
@@ -44872,48 +44847,35 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
 
         public ActionResult Excel_SIMSMSHISTORY(string txt_frm_date, string txt_to_date, string txtmsg)
         {
-            SMSViewModel vmodel = new SMSViewModel();
+            var dataTbl = BuildSimSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
+            return BuildStyledDataTableExcel(dataTbl, "SIM_SMS_HISTORY.xlsx", "SIM SMS History", "SIM SMS History Report");
+        }
+
+        public ActionResult Pdf_SIMSMSHISTORY(string txt_frm_date, string txt_to_date, string txtmsg)
+        {
+            var dataTbl = BuildSimSmsHistoryDataTable(txt_frm_date, txt_to_date, txtmsg);
+            return BuildStyledSmsReportPdf(dataTbl, "SIM SMS History Report", "SIM_SMS_HISTORY.pdf");
+        }
+
+        private DataTable BuildSimSmsHistoryDataTable(string txt_frm_date, string txt_to_date, string txtmsg)
+        {
             string frm_date = Convert.ToDateTime(txt_frm_date).Date.ToString("yyyy-MM-dd");
             string to_date = Convert.ToDateTime(txt_to_date).AddDays(1).ToString("yyyy-MM-dd");
+            var list = db.srs_show_sent_message(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), txtmsg).ToList();
 
-            vmodel.srs_show_sent_message_Result_List = db.srs_show_sent_message(Convert.ToDateTime(frm_date), Convert.ToDateTime(to_date), txtmsg).ToList();
             DataTable dataTbl = new DataTable();
             dataTbl.Columns.Add("Port No", typeof(string));
-            dataTbl.Columns.Add("Reatiler Id", typeof(string));
+            dataTbl.Columns.Add("Retailer Id", typeof(string));
             dataTbl.Columns.Add("Message", typeof(string));
             dataTbl.Columns.Add("Status", typeof(string));
             dataTbl.Columns.Add("Date & Time", typeof(string));
-            if (vmodel.srs_show_sent_message_Result_List.Count() > 0)
-            {
-                foreach (var item in vmodel.srs_show_sent_message_Result_List)
-                {
 
-                    dataTbl.Rows.Add(item.portno, item.senderno, item.msg, item.sts, item.edate);
-                }
-            }
-            else
+            foreach (var item in list)
             {
-                dataTbl.Rows.Add("", "", "", "", "");
+                dataTbl.Rows.Add(item.portno, item.senderno, item.msg, item.sts, item.edate);
             }
 
-
-
-            var grid = new GridView();
-            grid.DataSource = dataTbl;
-            grid.DataBind();
-            Response.ClearContent();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=SIM_SMS_HISTORY.xls");
-            Response.ContentType = "application/ms-excel";
-            Response.Charset = "";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            grid.RenderControl(htw);
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-
-            return PartialView("_SIMSMSHISTORY", vmodel);
+            return dataTbl;
         }
 
         public ActionResult Showsendsms()
@@ -48031,31 +47993,274 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             dataTbl.Columns.Add("Template", typeof(string));
             dataTbl.Columns.Add("Template ID", typeof(string));
             dataTbl.Columns.Add("SMS API", typeof(string));
-
+            dataTbl.Columns.Add("Uploaded", typeof(string));
 
             foreach (var item in result)
             {
-                dataTbl.Rows.Add(item.SMS_TYPE, item.Templates, item.Templateid, item.SMSAPI);
+                var apiUrl = item.SMSAPI ?? string.Empty;
+                var apiDisplay = apiUrl.Contains("?") ? apiUrl.Substring(0, apiUrl.IndexOf("?")) : apiUrl;
+                dataTbl.Rows.Add(item.SMS_TYPE, item.Templates, item.Templateid, apiDisplay, item.UploadBy);
             }
 
-            var grid = new GridView();
-            grid.DataSource = dataTbl;
-            grid.DataBind();
-            Response.ClearContent();
-            Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=SMS_Template_Report.xls");
-            Response.ContentType = "application/ms-excel";
-            Response.Charset = "";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            grid.RenderControl(htw);
-            Response.Output.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
+            return BuildStyledDataTableExcel(dataTbl, "SMS_Template_Report.xlsx", "SMS Templates", "SMS Template Report");
+        }
 
-            return View();
+        private FileContentResult BuildStyledDataTableExcel(DataTable dataTbl, string fileName, string sheetName, string reportTitle)
+        {
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(sheetName);
+                int colCount = Math.Max(dataTbl.Columns.Count, 1);
+                int headerRow = 4;
+                int dataStartRow = headerRow + 1;
+                int lastRow = headerRow + dataTbl.Rows.Count;
 
+                ws.Cell(1, 1).Value = reportTitle ?? sheetName;
+                ws.Range(1, 1, 1, colCount).Merge();
+                var titleRange = ws.Range(1, 1, 1, colCount);
+                titleRange.Style.Font.Bold = true;
+                titleRange.Style.Font.FontSize = 15;
+                titleRange.Style.Font.FontColor = XLColor.White;
+                titleRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#1E3A8A");
+                titleRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                titleRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                titleRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                titleRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#1D4ED8");
+                ws.Row(1).Height = 30;
 
+                ws.Cell(2, 1).Value = "SMS API Report Export";
+                ws.Range(2, 1, 2, colCount).Merge();
+                var subRange = ws.Range(2, 1, 2, colCount);
+                subRange.Style.Font.FontSize = 10;
+                subRange.Style.Font.FontColor = XLColor.FromHtml("#DBEAFE");
+                subRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#2563EB");
+                subRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                subRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                ws.Row(2).Height = 20;
+
+                ws.Cell(3, 1).Value = string.Format("Generated: {0:dd-MMM-yyyy hh:mm tt}   |   Total Records: {1}", DateTime.Now, dataTbl.Rows.Count);
+                ws.Range(3, 1, 3, colCount).Merge();
+                var metaRange = ws.Range(3, 1, 3, colCount);
+                metaRange.Style.Font.FontSize = 9;
+                metaRange.Style.Font.FontColor = XLColor.FromHtml("#475569");
+                metaRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#F8FAFC");
+                metaRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                metaRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                metaRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                metaRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#E2E8F0");
+                ws.Row(3).Height = 18;
+
+                for (int c = 0; c < dataTbl.Columns.Count; c++)
+                {
+                    ws.Cell(headerRow, c + 1).Value = dataTbl.Columns[c].ColumnName;
+                }
+
+                var header = ws.Range(headerRow, 1, headerRow, colCount);
+                header.Style.Font.Bold = true;
+                header.Style.Font.FontSize = 10;
+                header.Style.Font.FontColor = XLColor.White;
+                header.Style.Fill.BackgroundColor = XLColor.FromHtml("#2563EB");
+                header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                header.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                header.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                header.Style.Border.OutsideBorderColor = XLColor.FromHtml("#1D4ED8");
+                header.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                header.Style.Border.InsideBorderColor = XLColor.FromHtml("#1D4ED8");
+                ws.Row(headerRow).Height = 24;
+
+                for (int r = 0; r < dataTbl.Rows.Count; r++)
+                {
+                    for (int c = 0; c < dataTbl.Columns.Count; c++)
+                    {
+                        ws.Cell(dataStartRow + r, c + 1).Value = dataTbl.Rows[r][c]?.ToString() ?? string.Empty;
+                    }
+                }
+
+                if (dataTbl.Rows.Count > 0)
+                {
+                    var dataRange = ws.Range(dataStartRow, 1, lastRow, colCount);
+                    dataRange.Style.Alignment.WrapText = true;
+                    dataRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Top;
+                    dataRange.Style.Font.FontSize = 9;
+                    dataRange.Style.Font.FontColor = XLColor.FromHtml("#334155");
+                    dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    dataRange.Style.Border.OutsideBorderColor = XLColor.FromHtml("#E2E8F0");
+                    dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    dataRange.Style.Border.InsideBorderColor = XLColor.FromHtml("#E2E8F0");
+
+                    for (int r = dataStartRow; r <= lastRow; r++)
+                    {
+                        if ((r - dataStartRow) % 2 == 1)
+                        {
+                            ws.Range(r, 1, r, colCount).Style.Fill.BackgroundColor = XLColor.FromHtml("#F8FAFC");
+                        }
+                    }
+
+                    if (dataTbl.Columns.Contains("Status"))
+                    {
+                        int statusCol = dataTbl.Columns.IndexOf("Status") + 1;
+                        for (int r = dataStartRow; r <= lastRow; r++)
+                        {
+                            var statusVal = (ws.Cell(r, statusCol).GetString() ?? string.Empty).Trim().ToUpperInvariant();
+                            if (statusVal.Contains("SUCCESS") || statusVal.Contains("SENT") || statusVal == "Y")
+                            {
+                                ws.Cell(r, statusCol).Style.Font.FontColor = XLColor.FromHtml("#15803D");
+                                ws.Cell(r, statusCol).Style.Font.Bold = true;
+                            }
+                            else if (statusVal.Contains("FAIL") || statusVal.Contains("PENDING") || statusVal.Contains("PAND"))
+                            {
+                                ws.Cell(r, statusCol).Style.Font.FontColor = XLColor.FromHtml("#B91C1C");
+                                ws.Cell(r, statusCol).Style.Font.Bold = true;
+                            }
+                        }
+                    }
+                }
+
+                ws.Columns().AdjustToContents();
+                for (int c = 1; c <= colCount; c++)
+                {
+                    if (ws.Column(c).Width < 14)
+                    {
+                        ws.Column(c).Width = 14;
+                    }
+                    if (ws.Column(c).Width > 52)
+                    {
+                        ws.Column(c).Width = 52;
+                    }
+                }
+
+                if (dataTbl.Columns.Count >= 2)
+                {
+                    ws.Column(2).Width = Math.Max(ws.Column(2).Width, 24);
+                }
+                if (dataTbl.Columns.Count >= 3)
+                {
+                    ws.Column(3).Width = Math.Max(ws.Column(3).Width, 36);
+                }
+
+                ws.SheetView.FreezeRows(headerRow);
+                if (lastRow > headerRow)
+                {
+                    ws.Range(headerRow, 1, lastRow, colCount).SetAutoFilter();
+                }
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
+        }
+
+        private FileContentResult BuildStyledSmsReportPdf(DataTable dataTbl, string reportTitle, string fileName)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                var doc = new Document(PageSize.A4.Rotate(), 18f, 18f, 18f, 18f);
+                PdfWriter.GetInstance(doc, stream);
+                doc.Open();
+
+                var titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.WHITE);
+                var subtitleFont = FontFactory.GetFont(FontFactory.HELVETICA, 10, new BaseColor(219, 234, 254));
+                var metaFont = FontFactory.GetFont(FontFactory.HELVETICA, 9, new BaseColor(71, 85, 105));
+                var headerFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, BaseColor.WHITE);
+                var cellFont = FontFactory.GetFont(FontFactory.HELVETICA, 8, new BaseColor(51, 65, 85));
+
+                var banner = new PdfPTable(1) { WidthPercentage = 100, SpacingAfter = 8f };
+                var titleCell = new PdfPCell(new Phrase(reportTitle ?? "SMS Report", titleFont))
+                {
+                    BackgroundColor = new BaseColor(30, 58, 138),
+                    Border = Rectangle.NO_BORDER,
+                    PaddingLeft = 12f,
+                    PaddingRight = 12f,
+                    PaddingTop = 10f,
+                    PaddingBottom = 4f
+                };
+                banner.AddCell(titleCell);
+
+                var subtitleCell = new PdfPCell(new Phrase("SMS API Report Export", subtitleFont))
+                {
+                    BackgroundColor = new BaseColor(37, 99, 235),
+                    Border = Rectangle.NO_BORDER,
+                    PaddingLeft = 12f,
+                    PaddingRight = 12f,
+                    PaddingTop = 0f,
+                    PaddingBottom = 10f
+                };
+                banner.AddCell(subtitleCell);
+                doc.Add(banner);
+
+                var meta = new Paragraph(
+                    string.Format("Generated: {0:dd-MMM-yyyy hh:mm tt}    |    Total Records: {1}", DateTime.Now, dataTbl.Rows.Count),
+                    metaFont)
+                {
+                    SpacingAfter = 10f
+                };
+                doc.Add(meta);
+
+                int colCount = Math.Max(dataTbl.Columns.Count, 1);
+                var table = new PdfPTable(colCount) { WidthPercentage = 100f, SpacingBefore = 4f };
+
+                foreach (DataColumn col in dataTbl.Columns)
+                {
+                    table.AddCell(new PdfPCell(new Phrase(col.ColumnName.ToUpperInvariant(), headerFont))
+                    {
+                        BackgroundColor = new BaseColor(37, 99, 235),
+                        BorderColor = new BaseColor(29, 78, 216),
+                        Padding = 6f,
+                        HorizontalAlignment = Element.ALIGN_CENTER
+                    });
+                }
+
+                int rowIndex = 0;
+                foreach (DataRow row in dataTbl.Rows)
+                {
+                    rowIndex++;
+                    var rowBg = rowIndex % 2 == 0 ? new BaseColor(248, 250, 252) : BaseColor.WHITE;
+                    for (int c = 0; c < dataTbl.Columns.Count; c++)
+                    {
+                        var value = row[c]?.ToString() ?? string.Empty;
+                        var font = cellFont;
+                        if (dataTbl.Columns[c].ColumnName.Equals("Status", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var status = value.Trim().ToUpperInvariant();
+                            if (status.Contains("SUCCESS") || status.Contains("SENT") || status == "Y")
+                            {
+                                font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, new BaseColor(21, 128, 61));
+                            }
+                            else if (status.Contains("FAIL") || status.Contains("PENDING") || status.Contains("PAND"))
+                            {
+                                font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8, new BaseColor(185, 28, 28));
+                            }
+                        }
+
+                        table.AddCell(new PdfPCell(new Phrase(value, font))
+                        {
+                            BackgroundColor = rowBg,
+                            BorderColor = new BaseColor(226, 232, 240),
+                            Padding = 5f,
+                            VerticalAlignment = Element.ALIGN_TOP
+                        });
+                    }
+                }
+
+                doc.Add(table);
+
+                var footerFont = FontFactory.GetFont(FontFactory.HELVETICA, 8, new BaseColor(148, 163, 184));
+                doc.Add(new Paragraph("Aasha Digital India — Confidential Report", footerFont)
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingBefore = 12f
+                });
+
+                doc.Close();
+                return File(stream.ToArray(), "application/pdf", fileName);
+            }
+        }
+
+        private FileContentResult BuildStyledSmsTemplateExcel(DataTable dataTbl, string fileName)
+        {
+            return BuildStyledDataTableExcel(dataTbl, fileName, "SMS Templates", "SMS Template Report");
         }
 
 
@@ -48151,11 +48356,15 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         }
 
 
+        [HttpPost]
         public ActionResult DeleteTemplatebyid(int id)
         {
             var tablefordelete = db.Sending_SMS_Templates.Find(id);
-            db.Sending_SMS_Templates.Remove(tablefordelete);
-            db.SaveChanges();
+            if (tablefordelete != null)
+            {
+                db.Sending_SMS_Templates.Remove(tablefordelete);
+                db.SaveChanges();
+            }
             var resultssss = GET_ALL_Template_list();
             return PartialView("_SMS_TEMPLATE_Reports", resultssss);
         }
@@ -48929,11 +49138,13 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else if (setof == "1")
             {
-                return PartialView("mail_check1");
+                ViewBag.ShowEmailOtpGate = true;
+                ViewBag.OtpError = Convert.ToString(TempData["message12"]);
             }
             else if (setof == "yes")
             {
                 TempData["showmassage"] = "yes1";
+                ViewBag.OtpVerified = true;
             }
 
             TempData["1234"] = TempData["showmassage"];

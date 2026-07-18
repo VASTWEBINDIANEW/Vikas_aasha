@@ -1,179 +1,29 @@
 @*@model Vastwebmulti.Areas.ADMIN.Models.SMSSetting*@
 
-@{
-    //ViewBag.Title = "SMS_Setting";
-    //Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
-}
-<style type="text/css">
-    .loadermoney {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 199999;
-        /*background: url('../../images/smsload.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.9);*/
-        background: url('../../img/loder.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.9);
-    }
-
-    [type="checkbox"].filled-in:not(:checked) + label:after {
-        background-color: #f5f5f5;
-        border: 2px solid #dddddd;
-    }
-
-    .smsapi-pages .smsapi-second .tab-content ul li:first-child {
-        width: 34% !important;
-    }
-
-    .tab-content fieldset.for-outbox {
-        margin-top: 0px !important;
-    }
-
-    .for-outbox li {
-        width: 50% !important;
-    }
-
-    .for-outbox ul {
-        padding: 0px !important;
-    }
-
-    .tab-content fieldset.for-outbox [type="radio"] + label {
-        margin-bottom: 0px;
-        margin-top: 2px;
-    }
-
-    .for-outbox [type="radio"]:checked + label::after {
-        background-color: var(--main-bg-lcolor);
-        border-color: var(--main-bg-lcolor);
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    [type="checkbox"].filled-in:checked.chk-col-red + label::after {
-        border: 2px solid var(--main-bg-lcolor);
-        background-color: var(--main-bg-lcolor);
-    }
-
-    ul.smssetting-top li button {
-        border: 1px solid #bbb;
-        height: 32px !important;
-        padding: 0;
-    }
-
-        ul.smssetting-top li button span {
-            top: -1px !important;
-        }
-
-    ul.smssetting-top li {
-        padding-left: 0;
-        margin-right: 0 !important;
-    }
-
-    ul.smssetting-top li {
-        width: 25%;
-        float: right;
-        padding: 0px 10px
-    }
-
-    [type="checkbox"].filled-in:checked + label::before {
-        top: -1px;
-        left: 0px;
-    }
-
-    [type="checkbox"].filled-in:checked + label::after {
-        top: 0;
-        width: 18px;
-        height: 18px;
-    }
-
-    [type="checkbox"].filled-in:not(:checked) + label::after {
-        height: 18px;
-        width: 18px;
-    }
-
-    .smsapi-pages .smsapi-second .tab-content ul li button i {
-        top: 1px;
-        font-size: 20px;
-        left: -3px;
-    }
-
-    .smsapi-pages .smsapi-second ul.tabs li:last-child button {
-        position: absolute;
-        top: 3px;
-        right: 3px;
-        padding: 3px 16px;
-    }
-
-    .smsapi-pages .smsapi-second .tab-content#tab-3 ul li {
-        width: 24% !important;
-        display: inline-block;
-        float: none;
-        padding-right: 0;
-    }
-
-    .for-message .card {
-        background: transparent;
-    }
-
-    .for-message {
-        width: 100%;
-        float: left;
-        background: var(--second-bg-color);
-        padding: 0px 10px;
-    }
-
-    .custom-table-responsive, #EmailHistory {
-        height: 78vh !important;
-    }
-
-    .smssetting-top {
-        padding: 5px 0 0px 0px !important;
-        background: #f5f5f5;
-    }
-</style>
-<style>
-    .for-message table th {
-        text-align: center;
-        padding: 7px 0;
-    }
-
-    .for-message table {
-        margin-top: 15px;
-    }
-</style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-<div id="loadermoney" class="loadermoney" style="display:none;"></div>
-<section class="contents sms-settingpage">
-
-    <div class="row clearfix">
-        <div class="for-message">
+<div class="sa-outbox-host">
+    <div class="for-message">
             <div class="col-md-12 col">
                 <!--User Create-->
                 <div class="card">
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         USER CREATE MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("USERCREATE")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("USERCREATE")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("USERCREATE")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("USERCREATE")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('USERCREATE')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('USERCREATE')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -182,9 +32,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="USERCREATE">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="USERCREATE">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -258,8 +108,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -321,22 +171,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         FUND TRANSFER MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("FUNDTRANSFER")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("FUNDTRANSFER")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("FUNDTRANSFER")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("FUNDTRANSFER")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('FUNDTRANSFER')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('FUNDTRANSFER')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -344,9 +194,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="FUNDTRANSFER">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="FUNDTRANSFER">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -409,8 +259,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -491,22 +341,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         PURCHASE ORDER MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("PURCHASE")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("PURCHASE")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("PURCHASE")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("PURCHASE")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('PURCHASE')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('PURCHASE')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -514,9 +364,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="PURCHASE">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="PURCHASE">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -579,8 +429,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -663,22 +513,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         RECHARGE MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("RECHARGE")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("RECHARGE")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("RECHARGE")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("RECHARGE")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('RECHARGE')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('RECHARGE')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -686,9 +536,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="RECHARGE">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="RECHARGE">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -762,8 +612,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -824,22 +674,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         MONEY TRANSFER MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("MONEYTRANSFER")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("MONEYTRANSFER")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("MONEYTRANSFER")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("MONEYTRANSFER")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('MONEYTRANSFER')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('MONEYTRANSFER')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -848,9 +698,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="MONEYTRANSFER">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="MONEYTRANSFER">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -902,8 +752,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -963,22 +813,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         AEPS MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("AEPSBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("AEPSBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("AEPSBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("AEPSBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('AEPSBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('AEPSBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -987,9 +837,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="AEPSBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="AEPSBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1019,8 +869,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1058,22 +908,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         M-POSS MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("M-POSSBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("M-POSSBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("M-POSSBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("M-POSSBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('M-POSSBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('M-POSSBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1081,9 +931,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="M-POSSBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="M-POSSBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1113,8 +963,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1155,22 +1005,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         PANCARD MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("PANCARDBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("PANCARDBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("PANCARDBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("PANCARDBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('PANCARDBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('PANCARDBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1178,8 +1028,8 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="PANCARDBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
+                        <div class="row sa-outbox-grid" id="PANCARDBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
                                 <table border="1" style="width: 100%;text-align: center">
                                     <tr>
                                         <th>Description</th>
@@ -1220,22 +1070,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         FLIGHT BOOKING MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("FLIGHTBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("FLIGHTBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("FLIGHTBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("FLIGHTBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('FLIGHTBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('FLIGHTBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1244,9 +1094,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="FLIGHTBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="FLIGHTBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1298,8 +1148,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1339,22 +1189,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         BUS BOOKING MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("BUSBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("BUSBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("BUSBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("BUSBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('BUSBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('BUSBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1363,9 +1213,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="BUSBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="BUSBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1395,8 +1245,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1436,22 +1286,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         HOTEL BOOKING MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("HOTELBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("HOTELBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("HOTELBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("HOTELBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('HOTELBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('HOTELBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1460,9 +1310,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="HOTELBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="HOTELBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1492,8 +1342,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1533,22 +1383,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         DTH BOOKING MESSAGE
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("DTHBOOKING")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("DTHBOOKING")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("DTHBOOKING")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("DTHBOOKING")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('DTHBOOKING')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('DTHBOOKING')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1557,9 +1407,9 @@
                             </div>
                         </div>
 
-                        <div class="row" id="DTHBOOKING">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="DTHBOOKING">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1589,8 +1439,8 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-left:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1630,22 +1480,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         Pay BY UPI
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("UPI")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("UPI")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("UPI")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("UPI")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('UPI')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('UPI')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1653,8 +1503,8 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="UPI">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
+                        <div class="row sa-outbox-grid" id="UPI">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
                                 <table border="1" style="width: 100%;text-align: center">
                                     <tr>
                                         <th>Description</th>
@@ -1684,22 +1534,22 @@
                     <div class="demo-checkbox">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 col">
-                                <ul class="smssetting-top" style="background: #c7c7c7">
-                                    <li style=" float: left; padding-top: 9px;">
+                                <ul class="sa-outbox-toolbar">
+                                    <li class="sa-outbox-toolbar__title">
                                         Password Management
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='selectAll("PasswordManagement")' style="background: white;">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='selectAll("PasswordManagement")'>
                                             <i class="far fa-check-square" aria-hidden="true" style="color:var(--main-bg-lcolor);"></i><span>Select All</span>
                                         </button>
                                     </li>
-                                    <li style="margin-right:10px;">
-                                        <button type="button" class="btn  waves-effect for-select-msg" onclick='UnSelectAll("PasswordManagement")' style="background: white;">
+                                    <li>
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--ghost" onclick='UnSelectAll("PasswordManagement")'>
                                             <i class="fa fa-square-o" aria-hidden="true"></i><span>Unselect All</span>
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" class="btn  waves-effect fullbodydycolorbg text-white" onclick="SaveAll('PasswordManagement')">
+                                        <button type="button" class="btn waves-effect sa-outbox-btn sa-outbox-btn--save" onclick="SaveAll('PasswordManagement')">
                                             <img src="~/AdminDesign/images/security.svg" style="width: 15px; margin-top: -3px;" />
                                             <span style="color: white">Save Details</span>
                                         </button>
@@ -1707,9 +1557,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row" id="PasswordManagement">
-                            <div class="col-md-6 col-sm-6 col-xs-3 col" style="padding-right:5px;">
-                                <table border="1" style="width: 100%; text-align: center">
+                        <div class="row sa-outbox-grid" id="PasswordManagement">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col">
+                                <table class="sa-outbox-table">
                                     <tr>
                                         <th>Description</th>
                                         <th>Whatsapp Status</th>
@@ -1784,18 +1634,6 @@
             </div>
         </div>
     </div>
-</section>
-<script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
-
-<!-- Custom Js -->
-<script src="~/AdminDesign/js/pages/forms/basic-form-elements.js"></script>
-<!-- Demo Js -->
-<script src="~/AdminDesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-<script src="~/AdminDesign/js/demo.js"></script>
-<script src="~/AdminDesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-<link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
-<script src="~/Swalalert/sweetalert-dev.js"></script>
 
 <script>
     function ToastrMessage() {

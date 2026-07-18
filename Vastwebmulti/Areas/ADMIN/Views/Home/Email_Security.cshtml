@@ -2,536 +2,106 @@
 @{
     ViewBag.Title = "Email_Security";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+    var showEmailOtpGate = ViewBag.ShowEmailOtpGate != null && Convert.ToBoolean(ViewBag.ShowEmailOtpGate);
+    var otpVerified = ViewBag.OtpVerified != null && Convert.ToBoolean(ViewBag.OtpVerified);
 }
-<style>
-
-
-    /* new css */
-    .bread-same-all-page {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    #showdivv {
-        float: left;
-    }
-
-
-
-
-    /* new css */
-    .modal-backdrop {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 999;
-        background-color: #000;
-    }
-
-    .loadermoney {
-        position: fixed;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 199999;
-        /*background: url('../../images/smsload.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.9);*/
-        background: url('../../img/loder.gif') 50% 50% no-repeat rgba(249, 249, 249, 0.9);
-    }
-
-    .toast-top-right1 {
-        top: 65px;
-        left: 81%;
-    }
-
-    .tmw-email-securty .table-and-remail .dropp::after {
-        top: 8px;
-    }
-
-    table#divId.dataTable tbody tr {
-        background-color: var(--second-bg-color);
-    }
-
-    .tmw-email-securty .mari-table tr {
-        float: none;
-        width: auto;
-        box-sizing: border-box;
-        margin-top: 0px;
-    }
-
-        .tmw-email-securty .mari-table tr th, .tmw-email-securty .mari-table tr td {
-            float: none;
-            width: auto;
-            box-sizing: border-box;
-        }
-
-            .tmw-email-securty .mari-table tr td p {
-                margin: 0px;
-            }
-
-        .tmw-email-securty .mari-table tr th {
-            padding: 5px 3px !important;
-        }
-
-    .tt-right-table .tab-content2 {
-        display: none;
-    }
-
-        .tt-right-table .tab-content2.current2 {
-            display: block;
-        }
-
-    .tt-right-table ul.tabs2 li {
-        color: #222;
-        display: inline-block;
-        padding: 4px 15px;
-        cursor: pointer;
-        float: left;
-        width: 50%;
-        border-right: 3px solid #fff;
-    }
-
-        .tt-right-table ul.tabs2 li.current2 {
-            border-bottom: 4px solid #000;
-        }
-
-    .tt-right-table ul.tabs2 {
-        background: var(--nav-tab-bg);
-        width: 100%;
-        float: left;
-        margin: 0px;
-        text-align: center;
-    }
-
-    .tmw-email-securty .header-top {
-        background: #f5f5f5;
-    }
-
-    ul.smssetting-top {
-        padding: 5px;
-        width: 100%;
-        background: #edebe9;
-    }
-
-        ul.smssetting-top li {
-            width: auto;
-            float: right;
-            padding: 0px 4px;
-        }
-
-            ul.smssetting-top li button {
-                border: 1px solid #bbb;
-                height: 27px !important;
-                background: transparent;
-                width: 100%;
-                padding: 0px 5px;
-                margin-right: -2px
-            }
-
-        ul.smssetting-top #SaveAll img {
-            width: 15px;
-            margin-top: -3px;
-        }
-
-        ul.smssetting-top #SaveAll span {
-            color: #fff;
-        }
-
-        ul.smssetting-top li button i {
-            top: 2px !important;
-        }
-
-    .for-mail {
-        width: 100%;
-        float: left;
-        height: 72vh;
-        background: var(--second-bg-color);
-        overflow: scroll;
-        overflow-x: hidden;
-        padding: 0px 10px;
-    }
-
-        .for-mail .card {
-            background: transparent;
-        }
-
-    .tt-right-table [type="checkbox"].filled-in:checked.chk-col-red + label::after {
-        border: 2px solid var(--main-bg-lcolor);
-        background-color: var(--main-bg-lcolor);
-    }
-
-
-
-    ul.smssetting-top li button span {
-        top: -2px !important;
-        font-size: 12px;
-    }
-
-    ul.smssetting-top li {
-        padding-left: 0;
-        margin-right: 0 !important;
-    }
-
-    .tt-right-table [type="checkbox"].filled-in:checked + label::before {
-        top: -1px;
-        left: 0px;
-    }
-
-    .tt-right-table [type="checkbox"].filled-in:checked + label::after {
-        top: 0;
-        width: 18px;
-        height: 18px;
-    }
-
-    .tt-right-table [type="checkbox"].filled-in:not(:checked) + label::after {
-        height: 18px;
-        width: 18px;
-    }
-
-    .tmw-email-securty .left-table tr td {
-        border: 0px !important;
-        background: transparent;
-        padding: 0px !important;
-    }
-
-        .tmw-email-securty .left-table tr td .form-control {
-            height: 32px;
-        }
-
-    .tmw-email-securty .left-table .for-table-one table tr td {
-        padding: 5px !important;
-    }
-
-    .special-iii .custom-date-icon, .custom-date-icon {
-        position: absolute;
-        left: 0px;
-        z-index: 9;
-        top: 0px !important;
-        background: transparent;
-        height: 24px;
-        width: 30px;
-        border: 1px solid #bbb;
-    }
-
-    .cc_email_se {
-        width: 21%;
-        float: left;
-        display: flex;
-    }
-
-    input#tocc {
-        border: 1px solid #ddd;
-        background-color: #b1a6a638;
-        color: #000;
-    }
-
-    span.cc_email {
-        font-size: 12px;
-        padding-left: 3px;
-        vertical-align: middle;
-        color: #fff;
-        font-weight: 600;
-    }
-
-    #element a {
-        color: #fff !important;
-    }
-
-    .page-header-third .pageheader-second-third {
-        padding: 6px !important;
-    }
-
-    .bread-same-all-page a {
-        font-size: 15px;
-        color: #000;
-        float: left;
-        font-weight: normal;
-        margin-left: 3px;
-    }
-
-    .special-iii .custom-date-icon, .custom-date-icon {
-        position: absolute;
-        left: 0px;
-        z-index: 9;
-        top: 0px !important;
-        background: transparent;
-        height: 27px;
-        width: 30px;
-        border: 1px solid #bbb;
-    }
-
-        .special-iii .custom-date-icon i, .custom-date-icon i {
-            top: 4px !important;
-            position: absolute;
-            left: 8px;
-            background-color: #fff;
-        }
-
-    #SearchEmailHistory {
-        height: 27px;
-    }
-
-
-    @@media only screen and (max-width:1280px) {
-
-        section.content {
-            margin: 75px 0px 0 160px;
-        }
-    }
-
-    @@media only screen and (max-width:1169px) {
-
-        .ls-closed section.content {
-            margin-left: 0px;
-        }
-    }
-
-    @@media only screen and (max-width:1024px) {
-
-        #sidebar-open {
-            top: 29px;
-            left: -147px;
-        }
-    }
-
-    @@media only screen and (max-width:767px) {
-        #sidebar-open {
-            top: -1px;
-            left: -4px;
-        }
-    }
-
-    @@media only screen and (max-width:460px) {
-
-        .bread-same-all-page {
-            display: block;
-        }
-
-        .four-noneclass-admin-only {
-            width: 100%;
-            float: left;
-        }
-
-        .email-left {
-            width: 100%;
-            text-align: center;
-            margin-top: 2px;
-        }
-
-        ul.smssetting-top li {
-            width: 33.3333%;
-            padding: 0;
-        }
-    }
-</style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-modal-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-datepicker.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-modern.css?v=27" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-fund-transfer-mobile.css?v=23" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-master-list-modern.css?v=19" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-api-user-page.css?v=5" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-high-security-gate.css?v=2" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-email-security-page.css?v=8" rel="stylesheet" />
 
 <div id="loadermoney" class="loadermoney" style="display:none;"></div>
-<section class="content tmw-email-securty fourdesign-section-admin">
-    <div class="container-fluid">
+<section class="content Email_Security_Page tmw-email-securty Masterlist-page saas-admin-account-page saas-admin-report-page saas-fund-transfer-page saas-fund-user-page saas-master-list-page saas-fund-transfer-premium">
+    <div class="container-fluid vm-ft-page-shell">
 
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Email Security</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">User's & Account&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Email Security</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-second-third">
-            <div class="bread-same-all-page breadsameall-second">
-                <ul class="four-noneclass-admin-only" style="margin-bottom:0px;">
-                    <li class="smli">
-                        <a href="@Url.Action("Dashboard", "Home")" class="fullbodydycolorbg tmw-total-color-one">
-                            Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                        </a>
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        <a href="@Url.Action("Dashboard", "Home")#setting" class="fullbodydycolorbg tmw-total-color-one">
-                            Basic&nbsp;Setting
-                        </a>&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                    </li>
-                    <li class="fullbodydycolorbg tmw-total-color-one">
-                        Email Setting
-                    </li>
-                </ul>
-
-                <div class="email-left" style="float:right;">
-                    <div class="emai-input-third" style="display:none;" id="showdivv">
-                        <div class="cc_email_se">
-
-                            <input placeholder="CC Email Setting" style="height: 27px; padding: 0px 10px; float: left;" type="email" autocomplete="off" id="tocc" />
-                            <button class="fullbodydycolorbg back-button-third" style="height: 27px;color: #fff;border: 0;padding: 0px 20px;" type="submit" onclick="UpdateCC()">Save</button>
-
-                        </div>
-                    </div>
-
-                    <button type="button" id="btnnshow" class="fullbodydycolorbg back-button-third" style="height: 28px; color: #fff; border: 1px solid rgb(255, 255, 255); padding: 1px 10px; font-size: 18px; text-align: left;float:left; "><span class="cc_email" style="text-transform:uppercase;">CC Email</span></button>
-                    <a href="@Url.Action("mail_check1", "Home")"> <button type="button" class="fullbodydycolorbg back-button-third" style="height: 28px; color: #fff; border: 1px solid rgb(255, 255, 255); padding: 2px 10px; font-size: 18px; text-align: left; "><i class='fas fa-envelope-open-text'></i></button> </a>
-
-                    @* <div id="element" class="btn btn-default show-modal fullbodydycolorbg" style=" height: 28px; width: 100px; color: #fff;  padding: 3px 10px; font-size: 18px; margin-top: -4px; text-align: left;"><a href="@Url.Action("mail_check1", "Home")"><i class="fa-regular fa-envelope-circle-check"></i></a></div>*@
+        <div class="vm-ft-page-toolbar vm-ft-page-toolbar--premium">
+            <div class="vm-ft-page-hero">
+                <ol class="vm-ft-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard","Home")"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Email Setting</li>
+                </ol>
+            </div>
+            <div class="vm-ft-search-wrap es-toolbar-actions es-toolbar-actions--one-line">
+                <div class="es-cc-wrap" id="showdivv">
+                    <input placeholder="CC Email Setting" type="email" autocomplete="off" id="tocc" />
+                    <button class="es-tool-btn es-tool-btn--save" type="button" onclick="UpdateCC()">Save</button>
                 </div>
+                <button type="button" id="btnnshow" class="es-tool-btn es-tool-btn--cc"><i class="fas fa-at"></i> <span class="cc_email">CC Email</span></button>
+                <a href="@Url.Action("mail_check1", "Home")" class="es-tool-btn es-tool-btn--mail" title="Mail check"><i class="fas fa-envelope-open-text"></i></a>
             </div>
         </div>
 
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="row clearfix">
+        <div class="col-md-12 vm-ft-layout-wrap">
+            <div class="row clearfix vm-ft-layout vm-ft-layout--full">
 
-                        <div class="col-md-4  col-xs-12 left-table">
+                        <div class="col-md-4 col-sm-12 vm-ft-form-col left-table">
 
-                            <div class=" page-header-third">
-                                <div class="body" style="height: 640px;background:var(--second-bg-color);overflow:auto;">
+                            <div class="fund-trasfer-left fund-user-left vm-ft-form-card">
+                                <div class="vm-ft-form-card-header">
+                                    <div class="vm-ft-form-card-header__icon"><i class="fas fa-envelope"></i></div>
+                                    <div>
+                                        <span class="vm-ft-form-card-header__title">Email Security</span>
+                                        <span class="vm-ft-form-card-header__sub">Sender setup, bulk mail &amp; SSL</span>
+                                    </div>
+                                </div>
+                                <div class="body es-left-body">
                                     <div class="">
-                                        <div class="header-top fi ">
-                                            <ul class="tab-seconddesign tab-third-design">
-                                                <li>
-                                                    <button id="top-mail-setting" class="active">
-                                                        <span>
-                                                            <i class="fa fa-cog" aria-hidden="true"></i>
-                                                        </span><span>Email Setting</span>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button id="top-mail">
-                                                        <span>
-                                                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                                        </span>
-                                                        <span>Bulk Email</span>
-                                                    </button>
-                                                </li>
-                                            </ul>
-
+                                        <div class="au-tabs">
+                                            <button type="button" id="top-mail-setting" class="au-tab-btn active">
+                                                <i class="fa fa-cog" aria-hidden="true"></i>
+                                                <span>Email Setting</span>
+                                            </button>
+                                            <button type="button" id="top-mail" class="au-tab-btn">
+                                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                                <span>Bulk Email</span>
+                                            </button>
                                         </div>
-                                        <div class="table-and-model tabcurrent-seconddesign input-border-third" style="margin-bottom:5px;">
-                                            <fieldset style="border:1px solid #333;margin: 0px 5px;margin-top:10px;">
-                                                <legend style="margin:0px; padding: 0px 10px;font-size: 16px;width: auto;margin-left: 20px;">Add Sender Email</legend>
-                                                <table id="divId" class="table table-bordered table-hover dataTable js-exportable email-security-left">
-
-                                                    <tbody>
-                                                        <tr style="margin-top:4px;">
-                                                            <th style="margin:0px;">SMTP&nbsp;Host</th>
-                                                            <td><input type="text" id="SMTPHost" class="form-control" placeholder="Enter SMTP Host" required autocomplete="off" /></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th style="margin:0px;">Email&nbsp;ID</th>
-                                                            <td><input type="email" id="EmailID" class="form-control" placeholder="Enter Business Email Id" required autocomplete="off" /></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th style="margin:0px;">Password</th>
-                                                            <td><input type="password" id="Paswrd" class="form-control" placeholder="Enter Mail Password" required autocomplete="off" /></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <th style="margin:0px;">Mail Server Port</th>
-                                                            <td><input type="text" id="Port" class="form-control" placeholder="Enter Mail Server Port" required autocomplete="off" onkeypress="return onlyNumberKey(event)" maxlength="4" /></td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-                                                <div id="AddMBtn" class="button-seconddesign" style="float:right; padding:5px 14px 5px 0px">
-                                                    <button type="button" onclick="BussMail()" class="btn waves-effect bt btnssl special-iii he btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                        <div class="table-and-model tabcurrent-seconddesign input-border-third es-pane" style="margin-bottom:5px;">
+                                            <fieldset class="es-sender-fieldset">
+                                                <legend>Add Sender Email</legend>
+                                                <div id="divId" class="es-sender-form email-security-left">
+                                                    <div class="form-group">
+                                                        <label for="SMTPHost">SMTP Host</label>
+                                                        <input type="text" id="SMTPHost" class="form-control" placeholder="Enter SMTP Host" required autocomplete="off" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="EmailID">Email ID</label>
+                                                        <input type="email" id="EmailID" class="form-control" placeholder="Enter Business Email Id" required autocomplete="off" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="Paswrd">Password</label>
+                                                        <input type="password" id="Paswrd" class="form-control" placeholder="Enter Mail Password" required autocomplete="off" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="Port">Mail Server Port</label>
+                                                        <input type="text" id="Port" class="form-control" placeholder="Enter Mail Server Port" required autocomplete="off" onkeypress="return onlyNumberKey(event)" maxlength="4" />
+                                                    </div>
+                                                </div>
+                                                <div id="AddMBtn" class="es-form-actions button-seconddesign">
+                                                    <button type="button" onclick="BussMail()" class="btn es-btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                                                         <span>Add</span>
                                                     </button>
                                                 </div>
-                                                <div id="EditBtn" class="button-seconddesign" style="float:right; padding:5px 14px 5px 0px; display:none;">
+                                                <div id="EditBtn" class="es-form-actions button-seconddesign">
                                                     <input type="hidden" id="EditBtnidno" />
-                                                    <button type="button" onclick="editSaveMail()" class="btn waves-effect bt btnssl special-iii he btn-first button-third" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                    <button type="button" onclick="resetSenderForm()" class="btn es-btn-secondary">Cancel</button>
+                                                    <button type="button" onclick="editSaveMail()" class="btn es-btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                                                         <span>Update Changes</span>
                                                     </button>
                                                 </div>
 
                                             </fieldset>
-                                            <div class="modals" id="defaultModal" tabindex="-1" role="dialog">
-                                                <div class="modal-dialogs" role="document">
-                                                    <div class="modal-contents email-security-left">
-                                                        @*<div class="modal-header" style="background-color:whitesmoke;">
-                                                                <h4 class="modal-title" id="defaultModalLabel">Update Your Email </h4>
-                                                            </div>*@ @*@using (Html.BeginForm("Edit_Email_Security", "Home", FormMethod.Post))*@
-                                                            @using (Ajax.BeginForm("Edit_Email_Security", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessRequest" }))
-                                                            {
-
-                                                                <div class="modal-body">
-                                                                    <input type="hidden" id="txtidno" name="txtidno" />
-                                                                    <div class="row clearfix">
-                                                                        <div class="col-md-12 col-sm-4 col-xs-12">
-                                                                            <label for="email_address_2">Sender Email ID</label>
-                                                                        </div>
-                                                                        <div class="col-md-12 col-sm-8 col-xs-12">
-                                                                            <div class="form-group">
-                                                                                <div class="">
-                                                                                    <input type="email" id="txtemail" name="txtemail" class="form-control" required="" placeholder="Enter Valid Email-ID" />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row clearfix">
-                                                                        <div class="col-md-12 col-sm-4 col-xs-12">
-                                                                            <label for="email_address_2">Password</label>
-                                                                        </div>
-                                                                        <div class="col-md-12 col-sm-8 col-xs-12">
-                                                                            <div class="form-group">
-                                                                                <div class="">
-                                                                                    @Html.TextBox("txtpass", "", new { @class = "form-control", placeholder = "Enter Password.", required = "required" })
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row clearfix">
-                                                                        <div class="col-md-12 col-sm-4 col-xs-12">
-                                                                            <label for="email_address_2">SMTP Host</label>
-                                                                        </div>
-                                                                        <div class="col-md-12 col-sm-8 col-xs-12">
-                                                                            <div class="form-group">
-                                                                                <div class="">
-                                                                                    @Html.TextBox("txtsmpthost", "", new { @class = "form-control", placeholder = "Enter Smpt Host Name.", required = "required" })
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row clearfix">
-                                                                        <div class="col-md-12 col-sm-4 col-xs-12">
-                                                                            <label for="email_address_2">Mail Server Port</label>
-                                                                        </div>
-                                                                        <div class="col-md-12 col-sm-8 col-xs-12">
-                                                                            <div class="form-group">
-                                                                                <div class="">
-                                                                                    @Html.TextBox("txtport", "", new { @class = "form-control", placeholder = "Enter Port Number.", required = "required" })
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" id="MyClose" class="btn waves-effect bt" data-dismiss="modal" style="float:left;">
-                                                                            <span>Back</span>
-                                                                        </button>
-                                                                        <button type="submit" class="btn waves-effect bt btnssl special-iii he" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                                            <span>Save Change</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div>
-
-                                                                    </div>
-
-                                                                </div>
-                                                            }
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><!--.table-and-model-->
-                                            <div class="table-and-remail tabcurrent-seconddesign input-border-third">
+                                        </div>
+                                            <div class="table-and-remail tabcurrent-seconddesign input-border-third es-pane">
 
                                                 <div class="bodyremail email-security-left">
                                                     @using (Ajax.BeginForm("SendEmail", "Home", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
@@ -592,11 +162,9 @@
                                                             </div>
                                                         </div>
                                                         <div><label>@ViewData["msgdlm"] </label> </div>
-                                                        <div class="form-group remail-footer">
-
-                                                            <button id="btn" type="reset" class="btn  waves-effect bt special-iii h2 button-third-design">Reset</button>
-                                                            <button type="submit" class="btn  waves-effect bt btnssl special-iii h1 fullbodydycolorbg button-third-design" id="start_button" style="color:#fff;margin-left:5px;" onclick="verify()" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled>Send Email</button>
-
+                                                        <div class="form-group remail-footer vm-ml-form-actions">
+                                                            <button id="btn" type="reset" class="btn es-btn-secondary">Reset</button>
+                                                            <button type="submit" class="btn es-btn-primary" id="start_button" onclick="verify()" data-loading-text="<i class='fa fa-spinner fa-spin'></i>" disabled>Send Email</button>
                                                         </div>
                                                     }
                                                 </div>
@@ -684,7 +252,8 @@
                                                                     }
                                                                 </td>
                                                                 <td style="border: 1px solid !important;">
-                                                                    <button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;" onclick="editBussMail(@item.idno)">Edit</button><button style="height: 24px;float: left;padding: 0px 3px;background: #f0f0f0;border: 1px solid #bfbebe;margin-left: 2px;" onclick="delBussMail(@item.idno)">Del</button>
+                                                                    <button type="button" class="es-action-btn" onclick="editBussMail(@item.idno)">Edit</button>
+                                                                    <button type="button" class="es-action-btn es-action-btn--danger" onclick="delBussMail(@item.idno)">Del</button>
                                                                 </td>
 
                                                             </tr>
@@ -698,60 +267,45 @@
                                 </div>
 
                             </div>
+                        </div>
 
-                            <div class="col-md-8  col-xs-12">
-                                <div class="tt-right-table page-header-third">
-                                    <ul class="tabs2 tab-seconddesign tab-third-design">
-                                        <li class="tab-link current2" data-tab="tab-5">
-                                            Sending Email History
-                                        </li>
-                                        <li class="tab-link" data-tab="tab-6" style="border-right:0px;">
-                                            Manage&nbsp;Email&nbsp;Outbox
-                                        </li>
-
-                                    </ul>
-                                    <div class="row clearfix height-margin second-design-tabclass">
-                                        <div id="tab-5" class="tab-content2 current2">
-                                            <div class="header-top global_class backgfull-third">
-
-                                                <div class="header-top-right special-iii" style="width: auto;">
-
-                                                    <ul>
-
-                                                        <li class="form-group">
-                                                            <div class="input-daterange input-group" style="position:relative;">
-                                                                <div class="custom-date-icon">
-                                                                    <i class="fa fa-calendar tmw-total-color-one fullbodydycolorbg " aria-hidden="true"></i>
-                                                                </div>
-                                                                @Html.TextBox("txt_frm_date", "", new { @class = "form-control", required = "required", style = "border:1px solid #bbb;border-left: 0px; background:#fff;height: 27px !important;", autocomplete = "off" })
-
-                                                            </div>
-                                                        </li>
-                                                        <li class="buttonsearch-second">
-                                                            <button type="submit" id="SearchEmailHistory" style="background: #fff; padding: revert;" class="btn waves-effect btnssl2233" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
-                                                                <i class="fa fa-search" style="font-size:12px;color:black;"></i>
-                                                                <span>Search</span>
-                                                            </button>
-                                                        </li>
-                                                    </ul>
+                            <div class="col-md-8 col-sm-12 fund-transfer-main-admin vm-ft-history-col" style="padding-left:0;">
+                                <div class="fund-trasfer-right fund-user-right vm-ft-history-panel tt-right-table">
+                                    <div class="vm-ft-history-body">
+                                        <ul class="tabs2 es-right-tabs" role="tablist">
+                                            <li class="tab-link current2" data-tab="tab-5" role="tab">
+                                                <i class="fas fa-history" aria-hidden="true"></i>
+                                                <span>Sending Email History</span>
+                                            </li>
+                                            <li class="tab-link" data-tab="tab-6" role="tab">
+                                                <i class="fas fa-inbox" aria-hidden="true"></i>
+                                                <span>Manage Email Outbox</span>
+                                            </li>
+                                        </ul>
+                                        <div class="es-right-tab-body">
+                                            <div id="tab-5" class="tab-content2 current2">
+                                                <div class="es-history-toolbar es-history-toolbar--one-line">
+                                                    <div class="es-history-toolbar__intro">
+                                                        <span class="vm-ft-history-toolbar__title">Sending email history</span>
+                                                        <span class="vm-ft-history-toolbar__sub">Filter by date and view sent mail logs</span>
+                                                    </div>
+                                                    <div class="es-history-filter-row">
+                                                        <span class="es-history-toolbar__label">Filter date</span>
+                                                        <div class="saas-acc-dp-field es-history-date-field">
+                                                            <span class="saas-acc-dp-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                            @Html.TextBox("txt_frm_date", "", new { @class = "form-control saas-acc-dp-input", required = "required", autocomplete = "off", id = "txt_frm_date", placeholder = "Select date" })
+                                                        </div>
+                                                        <button type="button" id="SearchEmailHistory" class="es-history-search-btn" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
+                                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                                            <span>Search</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div id="EmailHistory" class="vm-ml-table-host es-history-host">
+                                                    @Html.Partial("_EmailHistory", Model)
                                                 </div>
                                             </div>
-                                            <div id="EmailHistory" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 send-right-mail heights emailhistory-second">
-
-                                                @{
-
-
-                                                    @Html.Partial("_EmailHistory", Model)
-                                                }
-
-
-
-
-
-
-                                            </div>
-                                        </div>
-                                        <div id="tab-6" class="tab-content2 ">
+                                            <div id="tab-6" class="tab-content2">
                                             <div class="sms-settingpage">
                                                 <ul class="smssetting-top backgfull-third lllkggt">
                                                     <li class="button-seconddesign">
@@ -1722,20 +1276,58 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                    </div><!--.row-->
+                                    </div>
                                 </div>
                             </div>
                         </div><!--.row-->
+        </div><!--.vm-ft-layout-wrap-->
 
-
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div><!--.container-fluid-->
         <!--=======    high-security-popup    Start   ==========-->
         <!--============   high-security-popup  End     ==========-->
     </section>
+
+    @if (showEmailOtpGate)
+    {
+        @Html.Partial("~/Areas/ADMIN/Views/Home/_EmailOtpGate.cshtml", new Vastwebmulti.Models.Email_show_passcode())
+    }
+
+    <div class="modal fade es-modal" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="es-modal-header">
+                    <h4 class="es-modal-header__title" id="defaultModalLabel"><i class="fas fa-pen"></i> Update Sender Email</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                @using (Ajax.BeginForm("Edit_Email_Security", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessRequest" }))
+                {
+                    <div class="modal-body es-modal-body">
+                        <input type="hidden" id="txtidno" name="idno" />
+                        <div class="form-group">
+                            <label for="txtemail">Sender Email ID</label>
+                            <input type="email" id="txtemail" name="EmailID" class="form-control" required placeholder="Enter Valid Email-ID" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtpass">Password</label>
+                            <input type="password" id="txtpass" name="Paswrd" class="form-control" placeholder="Enter Password." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtsmpthost">SMTP Host</label>
+                            <input type="text" id="txtsmpthost" name="SMTPHost" class="form-control" placeholder="Enter SMTP Host Name." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtport">Mail Server Port</label>
+                            <input type="text" id="txtport" name="Port" class="form-control" placeholder="Enter Port Number." required="required" />
+                        </div>
+                    </div>
+                    <div class="modal-footer es-modal-footer">
+                        <button type="button" id="MyClose" class="btn es-btn-secondary" data-dismiss="modal">Back</button>
+                        <button type="submit" class="btn es-btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i>">Save Change</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
     @{
         string yes1 = Convert.ToString(TempData["showmassage"]);
     }
@@ -1770,36 +1362,30 @@
     </div>-->
     <script>
         $(document).ready(function () {
-            var show_btn = $('.show-modal');
-            var show_btn = $('.show-modal');
-            //$("#testmodal").modal('show');
-
-            show_btn.click(function () {
-                $("#testmodal").modal('show');
-            })
-        });
-
-
-        <script>
-            $(document).ready(function () {
-                var show_btn = $('.show-modal');
-            var show_btn = $('.show-modal');
-            //$("#testmodal").modal('show');
-
-            show_btn.click(function () {
-                $("#testmodal").modal('show');
-                })
+            $('.show-modal').on('click', function () {
+                $('#testmodal').modal('show');
             });
 
-            $(function () {
-                $('#element').on('click', function (e) {
-                    Custombox.open({
+            $('#element').on('click', function (e) {
+                if (window.Custombox && typeof window.Custombox.open === 'function') {
+                    window.Custombox.open({
                         target: '#testmodal-1',
                         effect: 'fadein'
                     });
-                    e.preventDefault();
-                });
+                }
+                e.preventDefault();
             });
+
+            $('.Email_Security_Page .es-right-tabs > li.tab-link').on('click', function () {
+                var tabId = $(this).attr('data-tab');
+                $('.Email_Security_Page .es-right-tabs > li.tab-link').removeClass('current2');
+                $('.Email_Security_Page .es-right-tab-body > .tab-content2').removeClass('current2');
+                $(this).addClass('current2');
+                if (tabId) {
+                    $('#' + tabId).addClass('current2');
+                }
+            });
+        });
     </script>
     <script>
         function ToastrMessage() {
@@ -1835,23 +1421,20 @@
     </script>
 
     <script>
-    $(document).ready(function () {
-                    var PopupOk = '@ViewBag.chkPopUp';
-        //if (PopupOk != "Ok") {
-        //    $("#Email_Secu_myModal").show();
-        //}
-        $('.input-daterange').datepicker({
-                    format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-        });
-                    var val = '@ViewBag.chk';
-                    if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-                    }
-                });
+    $(window).on('load', function () {
+        if ($.fn.datepicker) {
+            $('#txt_frm_date').datepicker({
+                format: "yyyy-mm-dd",
+                todayHighlight: true,
+                autoclose: true,
+                orientation: "bottom auto"
+            });
+            var val = '@ViewBag.chk';
+            if (val != "post" && $('#txt_frm_date').val() === '') {
+                $("#txt_frm_date").datepicker("setDate", new Date());
+            }
+        }
+    });
     </script>
     <!-- Jquery Core Js -->
     <script src="~/AdminDesign/plugins/jquery/jquery.min.js"></script>
@@ -1862,17 +1445,56 @@
     <script src="~/Swalalert/sweetalert-dev.js"></script>
     <link href="~/Swalalert/sweetalert.css" rel="stylesheet" />
 
+    <script>
+        $(document).ready(function () {
+            @if (showEmailOtpGate)
+            {
+                <text>
+                $('body').addClass('vm-es-otp-open');
+                var otpErr = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.OtpError as string ?? ""));
+                if (otpErr) {
+                    swal({
+                        title: "Invalid OTP",
+                        text: otpErr,
+                        type: "error",
+                        confirmButtonText: "Try again"
+                    });
+                } else {
+                    swal({
+                        title: "OTP Sent",
+                        text: "Please check your email and enter the passcode to continue.",
+                        type: "info",
+                        confirmButtonText: "OK"
+                    });
+                }
+                $('#passcode').trigger('focus');
+                </text>
+            }
+
+            @if (otpVerified)
+            {
+                <text>
+                swal({
+                    title: "Verified!",
+                    text: "Email show passcode verified successfully. Protected email content is now visible.",
+                    type: "success",
+                    confirmButtonText: "Continue"
+                });
+                </text>
+            }
+        });
+    </script>
+
     <!--Edit java script-->
     <script>
         function EditFunction(idno, email, password, smpthost, port) {
-             $(".tmw-email-securty #defaultModal").show();
-                $('.tmw-email-securty .card .left-table .table.dataTable').css('display', 'none');
             $("#txtidno").val(idno);
             $("#txtemail").val(email);
             $("#txtpass").val(password);
             $("#txtsmpthost").val(smpthost);
             $("#txtport").val(port);
-                }
+            openEmailSecurityModal();
+        }
 
                 function EditSSL(id) {
             $.ajax({
@@ -1917,18 +1539,57 @@
     @* Hide Show *@
     <script>
 
-        function SuccessRequest(data) {
-            $("#divId").load(location.href + " #divId");
-
-        $(".tmw-email-securty #defaultModal").hide();
-        $('.tmw-email-securty .card .left-table .table.dataTable').css('display', 'block');
+        function openEmailSecurityModal() {
+            var $modal = $('#defaultModal');
+            function showModal() {
+                if ($modal.length && typeof $.fn.modal === 'function') {
+                    $modal.appendTo('body').modal('show');
+                }
+            }
+            if (typeof $.fn.modal === 'function') {
+                showModal();
+            } else {
+                $(window).on('load', showModal);
+            }
         }
 
+        function closeEmailSecurityModal() {
+            var $modal = $('#defaultModal');
+            if ($modal.length && typeof $modal.modal === 'function') {
+                $modal.modal('hide');
+            }
+        }
+
+        function resetSenderForm() {
+            $('#EditBtnidno').val('');
+            $('#SMTPHost').val('');
+            $('#EmailID').val('');
+            $('#Paswrd').val('');
+            $('#Port').val('');
+            $('#AddMBtn').removeClass('is-hidden');
+            $('#EditBtn').removeClass('is-visible');
+        }
+
+        function SuccessRequest(data) {
+            if (data && data.status === "Success") {
+                GetMailList();
+                ToastrMessage();
+                toastr.success(data.Message || "Email Updated Successfully.");
+            } else if (data && data.Message) {
+                ToastrMessage();
+                toastr.error(data.Message);
+            }
+            closeEmailSecurityModal();
+        }
 
         $(document).ready(function () {
-            $("#MyClose").click(function () {
-                $(".tmw-email-securty #defaultModal").hide();
-                $('.tmw-email-securty .card .left-table .table.dataTable').css('display', 'block');
+            $("#MyClose").on('click', function () {
+                closeEmailSecurityModal();
+            });
+
+            $('#defaultModal').on('hidden.bs.modal', function () {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
             });
         });
 
@@ -1936,36 +1597,35 @@
 
 
     <script>
+        function esInitLeftTabs() {
+            $('.Email_Security_Page .table-and-remail').hide();
+            $('.Email_Security_Page .table-and-model').show();
+            $('.Email_Security_Page .left-table .bodys').show();
+            $('.Email_Security_Page .left-table .for-table-one').show();
+            $('#top-mail-setting').addClass('active');
+            $('#top-mail').removeClass('active');
+        }
+
         $(document).ready(function () {
-            $('#top-mail').click(function () {
-                $(".tmw-email-securty .table-and-remail").show();
-                $(".tmw-email-securty .table-and-model").hide();
-                $(".tmw-email-securty .left-table .bodys").css("display", "none");
-                $(".tmw-email-securty .left-table .for-table-one").css("display", "none");
+            esInitLeftTabs();
 
-
-                $("#top-mail-setting").removeClass("active");
-                $(this).addClass("active");
+            $('#top-mail').on('click', function () {
+                $('.Email_Security_Page .table-and-remail').show();
+                $('.Email_Security_Page .table-and-model').hide();
+                $('.Email_Security_Page .left-table .bodys').hide();
+                $('.Email_Security_Page .left-table .for-table-one').hide();
+                $('#top-mail-setting').removeClass('active');
+                $(this).addClass('active');
             });
-        $('#top-mail-setting').click(function () {
-            $(".tmw-email-securty .table-and-remail").hide();
-        $(".tmw-email-securty .table-and-model").show();
-        $(".tmw-email-securty .left-table .bodys").css("display", "block");
-        $(".tmw-email-securty .left-table .for-table-one").css("display", "block");
-        //$(this).addClass("active");
-        $("#top-mail").removeClass("active");
-        $(this).addClass("active");
-            });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            var elem = document.getElementById("Userform1");
-        elem.onchange = function () {
-                var hiddenDiv = document.getElementById("SelectID");
-        hiddenDiv.style.display = (this.value == "") ? "block" : "none";
-            };
+            $('#top-mail-setting').on('click', function () {
+                $('.Email_Security_Page .table-and-remail').hide();
+                $('.Email_Security_Page .table-and-model').show();
+                $('.Email_Security_Page .left-table .bodys').show();
+                $('.Email_Security_Page .left-table .for-table-one').show();
+                $('#top-mail').removeClass('active');
+                $(this).addClass('active');
+            });
         });
     </script>
 
@@ -2004,27 +1664,49 @@
     </script>
 
     <script>
-        $('#SearchEmailHistory').click(function () {
+        function verify() {
+            var subject = $.trim($('#txtSubject').val() || '');
+            var body = $.trim($('#txtMsgBody').val() || '');
+            var userType = $('#Userform1').val();
+            var email = $.trim($('#txtEmail').val() || '');
 
-        $.ajax({
-            url: '@Url.Action("_EmailHistory","Home")',
-            type: 'POST',
-            data: { txt_frm_date: $('#txt_frm_date').val()},
-            data1: { yes1: $('#yes').val()},
-            success: function (response) {
+            if (!subject) {
+                ToastrMessage();
+                toastr.error('Please enter email subject.');
+                return false;
+            }
+            if (!body) {
+                ToastrMessage();
+                toastr.error('Please enter message description.');
+                return false;
+            }
+            if (!userType && !email) {
+                ToastrMessage();
+                toastr.error('Please select user type or enter email address.');
+                return false;
+            }
+            return true;
+        }
 
-                $('#EmailHistory').html(response);
-
-
+        function refreshEmailHistory() {
+            $.ajax({
+                url: '@Url.Action("_EmailHistory","Home")',
+                type: 'POST',
+                data: {
+                    txt_frm_date: $('#txt_frm_date').val(),
+                    yes1: $('#yes').val()
+                },
+                success: function (response) {
+                    $('#EmailHistory').html(response);
                 }
+            });
+        }
+    </script>
 
-
-
-        })
-   })
-
-
-
+    <script>
+        $('#SearchEmailHistory').on('click', function () {
+            refreshEmailHistory();
+        });
     </script>
 
 
@@ -2037,19 +1719,12 @@
                 toastr.error("Mail not Sending !!!");
             }
 
-        $.ajax({
-            url: '@Url.Action("_EmailHistory","Home")',
-            type: 'POST',
-            data: { txt_frm_date: $('#txt_frm_date').val() },
-            success: function (response) {
-
-                $('#EmailHistory').html(response);
-                $('#txtEmail').val('');
-                $('#txtSubject').val('');
-                $('#txtMsgBody').val('');
-            }
-        });
-    }
+            refreshEmailHistory();
+            $('#txtEmail').val('');
+            $('#txtSubject').val('');
+            $('#txtMsgBody').val('');
+            $('#start_button').prop('disabled', true);
+        }
     function OnFailure(response) {
     }
 
@@ -2074,68 +1749,64 @@
     <script type="text/javascript">
     $(document).ready(function () {
         $("#SaveAll").click(function () {
-            //if ($('#bysim2').is(':checked')) {
-                //alert("it's checked Email");
-                var optCode = []
-                $(".for-mail input:checkbox(:checked)").each(function () {
-                    if ($(this).prop('checked') == true) {
-                        optCode.push($(this).val() + ",Y");
-                    }
-                    if ($(this).prop('checked') == false) {
-                        optCode.push($(this).val() + ",N");
-                    }
-                });
-                var MsgType = "Email's";
-            //}
+            var optCode = [];
+            $(".for-mail input[name='acs1']").each(function () {
+                if ($(this).prop('checked') === true) {
+                    optCode.push($(this).val() + ",Y");
+                } else {
+                    optCode.push($(this).val() + ",N");
+                }
+            });
 
+            if (!optCode.length) {
+                ToastrMessage();
+                toastr.error('No email settings found to save.');
+                return false;
+            }
+
+            var MsgType = "Email's";
             document.getElementById("loadermoney").style.display = "block";
 
             $.ajax({
-                         type: "POST",
-                         url: '@Url.Action("SMSSettingSave", "Home")',
-                         data: { 'ch': optCode, MsgType: MsgType },
-                         cache: false,
-                         dataType: 'json',
-                         async: true,
-                         success: function (data) {
-                             var pp = data.status;
-                             var mm = data.Message;
+                type: "POST",
+                url: '@Url.Action("SMSSettingSave", "Home")',
+                data: { ch: optCode, MsgType: MsgType },
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    document.getElementById("loadermoney").style.display = "none";
+                    var pp = data.status;
+                    var mm = data.Message;
 
-                             if (pp == "Success") {
-                                 document.getElementById("loadermoney").style.display = "none";
-
-                                 $.ajax({
-                                     type: "GET",
-                                     url: '@Url.Action("Check_UnchekSMS_Setting", "Home")',
-                                     cache: false,
-                                     dataType: 'html',
-                                     async: true,
-                                     success: function (data) {
-                                         var obj = JSON.parse(data);
-                                         for (var item in obj) {
-                                             var sts = obj[item].Status;
-                                             var name = obj[item].ServiceName;
-                                             if (sts == "Y") {
-                                                 $("#" + name + "").prop("checked", true);
-                                             }
-                                         }
-                                     }
-                                 });
-
-                                 ToastrMessage();
-                                 toastr.success(mm);
-                             }
-
-                             else {
-                                 ToastrMessage();
-                                 toastr.error(mm);
-                             }
-
-                         }
-                     });
-            return true;
-
-             $(".sweet-alert").css('background', '@PageData["globalCol"]');
+                    if (pp == "Success") {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("Check_UnchekEMAIL_Setting", "Home")',
+                            cache: false,
+                            dataType: 'html',
+                            success: function (resp) {
+                                var obj = JSON.parse(resp);
+                                for (var item in obj) {
+                                    var sts = obj[item].Status;
+                                    var name = obj[item].ServiceName;
+                                    $("#" + name).prop("checked", sts == "Y");
+                                }
+                            }
+                        });
+                        ToastrMessage();
+                        toastr.success(mm);
+                    } else {
+                        ToastrMessage();
+                        toastr.error(mm || 'Something went wrong.');
+                    }
+                },
+                error: function () {
+                    document.getElementById("loadermoney").style.display = "none";
+                    ToastrMessage();
+                    toastr.error('Unable to save email settings.');
+                }
+            });
+            return false;
         });
 
         });
@@ -2153,9 +1824,7 @@
                     for (var item in obj) {
                         var sts = obj[item].Status;
                         var name = obj[item].ServiceName;
-                        if (sts == "Y") {
-                            $("#" + name + "").prop("checked", true);
-                        }
+                        $("#" + name).prop("checked", sts == "Y");
                     }
                 }
             });
@@ -2186,9 +1855,8 @@
                         mdtblHtml += "<tr><td style ='border: 1px solid !important;'><p><span style='background: #bbb; font-size: 10px; padding: 0px 5px; margin-right: 2px;'>" + i + "</span>" + b.Smpthost + "</p><p>" + b.Email + "</p></td>";
                      /*   mdtblHtml += "<td style ='border: 1px solid !important;'>********</td>";*/
                         mdtblHtml += "<td style ='border: 1px solid !important;'>" + btnOnOff + "</td>";
-                        mdtblHtml += "<td style ='border: 1px solid !important;'><button style='height: 24px; float: left; padding: 0px 3px; background: #f0f0f0; border: 1px solid #bfbebe; margin - left: 2px;' onclick=editBussMail('" + b.idno + "')>Edit</button><button style='height: 24px; float: left; padding: 0px 3px; background: #f0f0f0; border: 1px solid #bfbebe; margin - left: 2px;' onclick=delBussMail('" + b.idno + "')>Del</button></td>";
-                        "</td>";
-                        "</tr>";
+                        mdtblHtml += "<td style ='border: 1px solid !important;'><button type='button' class='es-action-btn' onclick=\"editBussMail('" + b.idno + "')\">Edit</button><button type='button' class='es-action-btn es-action-btn--danger' onclick=\"delBussMail('" + b.idno + "')\">Del</button></td>";
+                        mdtblHtml += "</tr>";
                         i++;
                     });
 
@@ -2199,11 +1867,22 @@
 
 
     function BussMail() {
-            $.ajax({
+        var smtp = $.trim($('#SMTPHost').val() || '');
+        var email = $.trim($('#EmailID').val() || '');
+        var pass = $.trim($('#Paswrd').val() || '');
+        var port = $.trim($('#Port').val() || '');
+
+        if (!smtp || !email || !pass || !port) {
+            ToastrMessage();
+            toastr.error('Please fill all sender email fields.');
+            return;
+        }
+
+        $.ajax({
             url: '@Url.Action("Email_Security", "Home")',
             type: 'POST',
-            data: { SMTPHost: $('#SMTPHost').val(), EmailID: $('#EmailID').val(), Paswrd: $('#Paswrd').val(), Port: $('#Port').val() },
-                success: function (data) {
+            data: { SMTPHost: smtp, EmailID: email, Paswrd: pass, Port: port },
+            success: function (data) {
                     if (data.status == "Success") {
 
                         GetMailList();
@@ -2215,10 +1894,7 @@
                         toastr.error(data.Message);
                     }
 
-                    $('#SMTPHost').val('');
-                    $('#EmailID').val('');
-                    $('#Paswrd').val('');
-                    $('#Port').val('');
+                    resetSenderForm();
             }
         });
     }
@@ -2285,19 +1961,24 @@
                     $('#Paswrd').val(data.Password);
                     $('#Port').val(data.Port);
 
-                    $('#AddMBtn').css('display', 'none');
-                    $('#EditBtn').css('display', 'block');
+                    $('#AddMBtn').addClass('is-hidden');
+                    $('#EditBtn').addClass('is-visible');
             }
         });
     }
 
     function editSaveMail() {
-            $.ajax({
+        if (!$('#EditBtnidno').val()) {
+            ToastrMessage();
+            toastr.error('No sender email selected for update.');
+            return;
+        }
 
+        $.ajax({
             url: '@Url.Action("Edit_Email_Security", "Home")',
             type: 'POST',
-                data: { idno: $('#EditBtnidno').val(), SMTPHost: $('#SMTPHost').val(), EmailID: $('#EmailID').val(), Paswrd: $('#Paswrd').val(), Port: $('#Port').val() },
-                success: function (data) {
+            data: { idno: $('#EditBtnidno').val(), SMTPHost: $('#SMTPHost').val(), EmailID: $('#EmailID').val(), Paswrd: $('#Paswrd').val(), Port: $('#Port').val() },
+            success: function (data) {
 
                     if (data.status == "Success") {
 
@@ -2316,8 +1997,7 @@
                     $('#Paswrd').val('');
                     $('#Port').val('');
 
-                    $('#AddMBtn').css('display', 'block');
-                    $('#EditBtn').css('display', 'none');
+                    resetSenderForm();
             }
         });
     }
@@ -2334,21 +2014,24 @@
         }
 
         function UpdateCC() {
+            var ccMail = $.trim($("#tocc").val() || '');
+            if (!ccMail) {
+                ToastrMessage();
+                toastr.error('Please enter CC email address.');
+                return;
+            }
 
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateCC", "Home")',
-                data: { CCmail: $("#tocc").val() },
+                data: { CCmail: ccMail },
                 cache: false,
                 dataType: 'json',
-                cache: false,
                 success: function (data) {
                     if (data == "Success") {
                         toastr.success("Your CC mail is Update Successfully.")
                         $("#tocc").val('')
-
-                        $("#showdivv").css('display', 'none');
-                        $("#btnnshow").css('display', 'block');
+                        $("#showdivv").removeClass('is-open');
                     }
                     else {
                         toastr.error(data);
@@ -2356,8 +2039,38 @@
                 }
             });
         }
-        $("#btnnshow").click(function () {
-            $("#showdivv").css('display', 'block');
-            $("#btnnshow").css('display', 'none');
+        $(document).ready(function () {
+            if ($('#Userform1').length) {
+                var hiddenDiv = document.getElementById("SelectID");
+                if (hiddenDiv) {
+                    hiddenDiv.style.display = ($('#Userform1').val() === "") ? "block" : "none";
+                }
+            }
+
+            $("#btnnshow").on('click', function () {
+                $("#showdivv").toggleClass('is-open');
+                if ($("#showdivv").hasClass('is-open')) {
+                    $("#tocc").trigger('focus');
+                }
+            });
+
+            $('#txtSubject, #txtMsgBody, #txtEmail').on('keyup change', esToggleSendEmailBtn);
+            $('#Userform1').on('change', function () {
+                var hiddenDiv = document.getElementById("SelectID");
+                if (hiddenDiv) {
+                    hiddenDiv.style.display = (this.value === "") ? "block" : "none";
+                }
+                esToggleSendEmailBtn();
+            });
+            esToggleSendEmailBtn();
         });
+
+        function esToggleSendEmailBtn() {
+            var subject = $.trim($('#txtSubject').val() || '');
+            var body = $.trim($('#txtMsgBody').val() || '');
+            var userType = $('#Userform1').val();
+            var email = $.trim($('#txtEmail').val() || '');
+            var canSend = subject && body && (userType || email);
+            $('#start_button').prop('disabled', !canSend);
+        }
     </script>

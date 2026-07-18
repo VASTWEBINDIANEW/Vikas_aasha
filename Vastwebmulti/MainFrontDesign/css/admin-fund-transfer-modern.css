@@ -1409,3 +1409,1073 @@ body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal.ecomm-pop-body,
 body.saas-admin-ui .modal.fund-tr-history.vm-ft-detail-modal .ecomm-pop-body {
     padding: 0 !important;
 }
+
+/* —— Upload APK page (reuse fund-transfer shell) —— */
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-toolbar {
+    width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-toolbar .vm-ft-page-hero {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-page-search {
+    flex: 0 1 360px;
+    max-width: 420px;
+    min-width: 200px;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-page-search input#txtApkSearch {
+    width: 100% !important;
+    height: 36px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 0.84rem !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+    float: none !important;
+    margin: 0 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-page-search input#txtApkSearch:focus {
+    border-color: var(--ft-accent) !important;
+    box-shadow: 0 0 0 3px var(--ft-accent-glow) !important;
+    outline: none !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-layout.vm-ft-layout--split-equal {
+    align-items: flex-start !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-col {
+    flex: 0 0 calc(50% - 6px) !important;
+    max-width: calc(50% - 6px) !important;
+    width: calc(50% - 6px) !important;
+    padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-col .fund-trasfer-left.vm-ft-form-card {
+    height: auto !important;
+    min-height: 0 !important;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-layout-wrap {
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .fund-transfer-form {
+    flex: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .tabcurrent-seconddesign {
+    display: block !important;
+    flex: none !important;
+    padding: 12px 12px 14px !important;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-form-card-header__icon--wl {
+    background: linear-gradient(135deg, #0f766e, #14b8a6 55%, #06b6d4) !important;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.35) !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form {
+    padding-bottom: 0 !important;
+    display: block;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-section {
+    margin-bottom: 10px !important;
+    padding: 12px 12px 8px !important;
+    border: 1px dashed var(--ft-border);
+    border-radius: var(--ft-radius-sm);
+    background: linear-gradient(180deg, #f8fafc, #fff);
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-section:last-child {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-section__title {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #475569;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form label {
+    margin-bottom: 6px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-form .col-md-12.col-sm-12.col-xs-12 {
+    margin-bottom: 10px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-actions {
+    border-top: 1px dashed #e2e8f0 !important;
+    padding: 10px 0 2px !important;
+    margin-top: 8px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-actions > div {
+    justify-content: flex-end !important;
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-actions .fullbodydycolorbg,
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-actions .btn-first {
+    min-width: 130px;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .fund-transfer-form input[type="file"],
+body.saas-admin-ui .saas-upload-apk-page .fund-transfer-form .vm-ft-apk-file {
+    height: auto !important;
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+    margin-top: 4px !important;
+    background: #fff !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-search-row__field {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-search-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 38px;
+    padding: 10px 18px !important;
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-panel {
+    border-top: 1px solid var(--ft-border);
+    background: #fff;
+    display: block;
+    margin-top: 6px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-search-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-col--empty {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--ft-border);
+    background: linear-gradient(180deg, #f8fafc, #fff);
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-panel__title {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--ft-text);
+    letter-spacing: 0.02em;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-action-btn.fullbodydycolorbg,
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-action-btn.btn-first,
+body.saas-admin-ui .saas-upload-apk-page a.vm-ft-apk-action-btn.fullbodydycolorbg {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 4px 12px var(--ft-accent-glow) !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-action-btn.fullbodydycolorbg:hover,
+body.saas-admin-ui .saas-upload-apk-page a.vm-ft-apk-action-btn.fullbodydycolorbg:hover {
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px var(--ft-accent-glow) !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-table-wrap {
+    padding: 10px 12px 12px !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table {
+    width: 100% !important;
+    min-width: 520px;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    font-size: 0.78rem;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm);
+    overflow: hidden;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table thead th {
+    background: linear-gradient(180deg, #f1f5f9, #e2e8f0) !important;
+    color: #334155 !important;
+    font-weight: 800 !important;
+    padding: 10px 10px !important;
+    border: none !important;
+    border-bottom: 2px solid #cbd5e1 !important;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table tbody td {
+    padding: 10px !important;
+    border: none !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    vertical-align: middle !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table tbody tr:nth-child(even) td {
+    background: #f8fafc !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-status-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-value {
+    margin: 0 !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-value--ok {
+    color: #059669 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-value--bad {
+    color: #dc2626 !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-link-input {
+    width: 100% !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    background: #f8fafc !important;
+    padding: 7px 10px !important;
+    font-size: 0.78rem !important;
+    color: #334155 !important;
+    height: auto !important;
+    min-height: 34px !important;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-apk-action-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none !important;
+    white-space: normal !important;
+    text-align: center;
+    max-width: 100%;
+    padding: 10px 14px !important;
+    margin-top: 0 !important;
+    font-size: 0.74rem !important;
+    line-height: 1.3 !important;
+    cursor: pointer;
+    word-break: break-word;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-copy-link-btn {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-copy-link-btn .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    max-width: 220px;
+    background-color: #0f172a;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 3;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 0.68rem;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .saas-upload-apk-page .vm-ft-copy-link-btn:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* —— Cash Deposit Charge page —— */
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-toolbar {
+    width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-toolbar .vm-ft-page-hero {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-page-search {
+    flex: 0 1 360px;
+    max-width: 420px;
+    min-width: 200px;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-page-search input#txtCdcSearch {
+    width: 100% !important;
+    height: 36px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 0 12px 0 38px !important;
+    font-size: 0.84rem !important;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.1a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cdc-left-body,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cdc-right-body {
+    padding: 12px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left.vm-ft-form-card,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right.vm-ft-history-panel {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cdc-main-tabs {
+    margin: 12px 12px 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content3 {
+    display: none;
+    padding-top: 8px;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content3.current3 {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-right-tabs {
+    margin: 0 12px !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-right-tabs > li {
+    flex: 1 1 auto;
+    list-style: none;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-right-tabs > li > a.vm-ft-role-tab {
+    display: block;
+    text-align: center;
+    padding: 10px 8px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-right-head {
+    border-bottom: 1px solid var(--ft-border);
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset {
+    border: 1px dashed var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 12px 10px 10px !important;
+    margin: 0 0 12px !important;
+    background: linear-gradient(180deg, #f8fafc, #fff);
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset legend {
+    width: auto;
+    margin-bottom: 0;
+    padding: 0 6px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #475569;
+    border: none;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .bank-name ul.tabs2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    list-style: none;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .bank-name ul.tabs2 li {
+    list-style: none;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content2 {
+    display: none;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content2.current2 {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab .nav-pills > li > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #475569 !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab .nav-pills > li > a::before {
+    content: '';
+    border: 2px solid #cbd5e1;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab .nav-pills > li.active > a::before {
+    background: var(--ft-accent);
+    border-color: var(--ft-accent);
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab .nav-pills > li.active > a {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+    color: #1d4ed8 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab-first #btnsubmit1,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab-first #btnsubmit,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab-first #btnsubmit2,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab-first #btnsubmit3,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cash-charg-tab-first #btnsubmit4 {
+    position: static !important;
+    float: none !important;
+    margin-top: 8px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .button-seconddesign {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px !important;
+    padding-top: 10px !important;
+    border-top: 1px dashed var(--ft-border) !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .button-seconddesign .fieldset-save,
+body.saas-admin-ui .saas-cash-deposit-charge-page .button-seconddesign .fullbodydycolorbg.btn-first {
+    position: static !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page input.form-control,
+body.saas-admin-ui .saas-cash-deposit-charge-page select.form-control,
+body.saas-admin-ui .saas-cash-deposit-charge-page .select2-container--default .select2-selection--single {
+    min-height: 38px !important;
+    height: 38px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder .row,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder1 .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+    margin: 0 0 10px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder .col-md-6,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder1 .col-md-8,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder .col-md-3,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder1 .col-md-4 {
+    float: none !important;
+    width: auto !important;
+    flex: 1 1 180px;
+    max-width: 100%;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder input.btn-default,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder1 input.btn-default,
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder input[type="button"].btn-default {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 10px 16px !important;
+    font-weight: 700 !important;
+    min-height: 38px;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #EditPurchageOrder input[type="button"].btn-default {
+    background: #fff !important;
+    color: #475569 !important;
+    border: 1px solid var(--ft-border) !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #First button,
+body.saas-admin-ui .saas-cash-deposit-charge-page #Second button {
+    border-radius: var(--ft-radius-sm) !important;
+    padding: 8px 16px !important;
+    font-weight: 700 !important;
+    border: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #First button {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #Second button {
+    background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .table-responsive-cashdeposit,
+body.saas-admin-ui .saas-cash-deposit-charge-page #remcash1 {
+    max-height: 360px;
+    overflow: auto;
+    margin-top: 8px;
+    border: 1px solid var(--ft-border);
+    border-radius: var(--ft-radius-sm);
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #remcash,
+body.saas-admin-ui .saas-cash-deposit-charge-page #dlmcash,
+body.saas-admin-ui .saas-cash-deposit-charge-page #farziidhye,
+body.saas-admin-ui .saas-cash-deposit-charge-page #apicash,
+body.saas-admin-ui .saas-cash-deposit-charge-page #whitecash {
+    margin-top: 8px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 0 0 10px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .unload-item.item-one,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .unload-item.item-two {
+    flex: 1 1 160px;
+    min-width: 140px;
+    max-width: 100%;
+    float: none !important;
+    width: auto !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .unload-item.special-iii.item-three {
+    flex: 1 1 100%;
+    width: 100% !important;
+    float: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .item-three .leftt {
+    flex: 1 1 280px;
+    min-width: 0;
+    float: none !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .rightt.buttonsearch-second {
+    flex: 0 0 auto;
+    width: auto !important;
+    float: none !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .rightt.buttonsearch-second button {
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--ft-radius-sm) !important;
+    min-height: 38px;
+    padding: 0 16px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .white-l-search-nine {
+    flex: 0 0 auto;
+    float: none !important;
+    width: auto !important;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .web-white-filter button {
+    border-radius: var(--ft-radius-sm) !important;
+    min-height: 38px;
+    padding: 0 12px 0 24px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-search-hidden {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #remcash table tbody tr th,
+body.saas-admin-ui .saas-cash-deposit-charge-page #Distributor table tbody tr th,
+body.saas-admin-ui .saas-cash-deposit-charge-page #Master table tbody tr th,
+body.saas-admin-ui .saas-cash-deposit-charge-page #API table tbody tr th,
+body.saas-admin-ui .saas-cash-deposit-charge-page #WhiteLabel table tbody tr th {
+    padding: 8px 10px !important;
+}
+
+/* Cash Deposit Charge — override legacy Dashcustom / old layout */
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-layout-wrap,
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-page-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-layout.vm-ft-layout--full {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-form-col {
+    flex: 0 0 var(--vm-split-nav-flex, calc(32% - 6px)) !important;
+    max-width: var(--vm-split-nav-flex, calc(32% - 6px)) !important;
+    width: var(--vm-split-nav-flex, calc(32% - 6px)) !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-col {
+    flex: 0 0 var(--vm-split-main-flex, calc(68% - 6px)) !important;
+    max-width: var(--vm-split-main-flex, calc(68% - 6px)) !important;
+    width: var(--vm-split-main-flex, calc(68% - 6px)) !important;
+    min-width: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-layout .col-md-4,
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-layout .col-md-8 {
+    float: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-form-col,
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-col {
+    float: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left.vm-ft-form-card {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    width: 100% !important;
+    float: none !important;
+    background: var(--ft-surface) !important;
+    border: 1px solid var(--ft-border) !important;
+    overflow: visible !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right.vm-ft-history-panel {
+    height: auto !important;
+    min-height: 520px !important;
+    max-height: none !important;
+    width: 100% !important;
+    float: none !important;
+    overflow: hidden !important;
+    background: var(--ft-surface) !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3.cdc-main-tabs {
+    float: none !important;
+    width: 100% !important;
+    margin: 12px 12px 0 !important;
+    background: transparent !important;
+    display: flex !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3 li,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3.cdc-main-tabs > li {
+    float: none !important;
+    width: auto !important;
+    flex: 1 1 0 !important;
+    color: inherit !important;
+    border-right: none !important;
+    padding: 0 !important;
+    display: list-item !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3 li.current3,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left ul.tabs3 li.active {
+    background: transparent !important;
+    color: inherit !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left .tab-content3,
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content3 {
+    float: none !important;
+    width: 100% !important;
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left .tab-content3.current3,
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content3.current3 {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left .tab-content2,
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content2 {
+    float: none !important;
+    width: 100% !important;
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-left .tab-content2.current2,
+body.saas-admin-ui .saas-cash-deposit-charge-page .tab-content2.current2 {
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right .three-page-same,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right #RetailerSearchList,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right #WAdminSearchList,
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right #RetailerPOSSearchList {
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-body.cdc-right-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 12px 12px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-body .cdc-wallet-panel {
+    display: none !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-body .cdc-wallet-panel.cdc-panel-active {
+    display: flex !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-history-body .cdc-wallet-panel > .col-md-12 {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    float: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page #RetailerSearchList,
+body.saas-admin-ui .saas-cash-deposit-charge-page #WAdminSearchList,
+body.saas-admin-ui .saas-cash-deposit-charge-page #RetailerPOSSearchList {
+    flex: 1 1 auto !important;
+    overflow: auto !important;
+    min-height: 260px !important;
+    margin-top: 8px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .ca-dipo-right ul.just-bottom li.acttt {
+    border-bottom: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .row.clearfix {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin: 0 0 8px !important;
+    width: 100% !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .unload-item.item-one {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .col-md-6,
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .col-md-4,
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .col-md-8,
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .col-md-12 {
+    float: none !important;
+    flex: 1 1 calc(50% - 5px) !important;
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .col-md-12 {
+    flex: 1 1 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .row .row {
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset label {
+    display: block !important;
+    margin-bottom: 5px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .form-group,
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .form-line {
+    margin-bottom: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .button-seconddesign {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-end !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .button-seconddesign > .col-md-4 {
+    flex: 1 1 calc(50% - 5px) !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page fieldset .button-seconddesign .fieldset-save {
+    flex: 1 1 100% !important;
+    justify-content: flex-end !important;
+    margin-left: auto !important;
+    max-width: 160px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cdc-left-body .padd-lr-5,
+body.saas-admin-ui .saas-cash-deposit-charge-page .cdc-left-body .input-border-third {
+    padding: 0 !important;
+    border: none !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .bank-name ul.tabs2 li {
+    float: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 12px !important;
+    border: 1px solid var(--ft-border) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .bank-name ul.tabs2 li.current2 {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .input-daterange {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .input-daterange .form-control {
+    flex: 1 1 120px !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .vm-ft-export-group {
+    display: inline-flex !important;
+    gap: 6px !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .vm-ft-export-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 38px !important;
+    padding: 0 14px 0 28px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: var(--ft-radius-sm) !important;
+    background-color: #fff !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .vm-ft-export-btn--excel {
+    background: url(../../images/reportimage/xls.png) no-repeat 8px center #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .cashdeposit-pdfexl .vm-ft-export-btn--pdf {
+    background: url(../../images/reportimage/pdf.png) no-repeat 8px center #fff !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters.vm-ft-history-filters-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-end !important;
+    gap: 8px !important;
+    width: 100% !important;
+    padding: 0 0 10px !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-ft-history-field {
+    flex: 1 1 160px !important;
+    min-width: 140px !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-dmt-filter-search-group.vm-ft-date-search-group {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-ft-date-search-group .saas-acc-dp-field {
+    flex: 1 1 128px !important;
+    min-width: 128px !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-ft-date-search-group .saas-acc-dp-icon {
+    position: absolute !important;
+    top: 50% !important;
+    left: 10px !important;
+    transform: translateY(-50%) !important;
+    z-index: 3 !important;
+    color: #3b82f6 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-ft-date-search-group .saas-acc-dp-input {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 8px 10px 8px 34px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 9px !important;
+    background: #f8fafc !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    box-sizing: border-box !important;
+}
+
+body.saas-admin-ui .saas-cash-deposit-charge-page .vm-ft-cdc-filters .vm-ft-date-search-group .vm-ft-search-btn {
+    flex: 0 0 auto !important;
+    min-width: 104px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+}

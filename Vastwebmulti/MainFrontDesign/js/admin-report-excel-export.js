@@ -47,6 +47,9 @@
 
     function isEmptyRow(row) {
         var i;
+        if (row.querySelector('.no-data-found-img, img[src*="NoDatall"]')) {
+            return true;
+        }
         for (i = 0; i < EMPTY_ROW_CLASSES.length; i++) {
             if (row.classList.contains(EMPTY_ROW_CLASSES[i])) {
                 return true;
@@ -111,6 +114,71 @@
         return count;
     }
 
+    function getMetaColSpans(colCount, fieldCount) {
+        var spans = [];
+        var base;
+        var remainder;
+        var i;
+
+        fieldCount = fieldCount || 4;
+        colCount = Math.max(colCount, fieldCount);
+        base = Math.floor(colCount / fieldCount);
+        remainder = colCount % fieldCount;
+
+        for (i = 0; i < fieldCount; i++) {
+            spans.push(base + (i < remainder ? 1 : 0));
+        }
+
+        return spans;
+    }
+
+    function buildExcelColgroupHtml(colCount, headers) {
+        var html = '<colgroup>';
+        var i;
+        var w;
+        var label;
+
+        for (i = 0; i < colCount; i++) {
+            label = headers && headers[i] ? String(headers[i]).toLowerCase() : '';
+            if (label.indexOf('message') >= 0 || label.indexOf('template') >= 0 || label.indexOf('response') >= 0 || label.indexOf('api') >= 0) {
+                w = 260;
+            } else if (label.indexOf('date') >= 0 || label.indexOf('time') >= 0) {
+                w = 150;
+            } else if (i === 0) {
+                w = 130;
+            } else {
+                w = 120;
+            }
+            html += '<col width="' + w + '" style="width:' + w + 'px;mso-width-source:userset;" />';
+        }
+
+        html += '</colgroup>';
+        return html;
+    }
+
+    function getExcelTableWidth(colCount, headers) {
+        var total = 0;
+        var i;
+        var w;
+        var label;
+
+        for (i = 0; i < colCount; i++) {
+            label = headers && headers[i] ? String(headers[i]).toLowerCase() : '';
+            if (label.indexOf('message') >= 0 || label.indexOf('template') >= 0 || label.indexOf('response') >= 0 || label.indexOf('api') >= 0) {
+                w = 260;
+            } else if (label.indexOf('date') >= 0 || label.indexOf('time') >= 0) {
+                w = 150;
+            } else if (i === 0) {
+                w = 130;
+            } else {
+                w = 120;
+            }
+            total += w;
+        }
+
+        return Math.max(total, 720);
+    }
+
     function buildExcelDocumentHtml(options, data) {
         var title = options.title || 'Report';
         var subtitle = options.subtitle || 'AashaDigitalIndia24 — Admin Report';
@@ -119,9 +187,9 @@
         var generatedAt = options.generatedAt || formatGeneratedAt();
         var rowCount = typeof options.recordCount === 'number' ? options.recordCount : countDataRows(data.rows);
         var sheetName = options.sheetName || 'Report';
-        var colCount = data.headers.length || 1;
-        var metaSpan = Math.max(1, Math.ceil(colCount / 4));
-        var metaSpanLast = Math.max(1, colCount - (metaSpan * 3));
+        var colCount = Math.max(data.headers.length || 1, 4);
+        var metaSpans = getMetaColSpans(colCount, 4);
+        var tableWidth = getExcelTableWidth(colCount, data.headers);
         var i;
         var r;
         var c;
@@ -129,6 +197,12 @@
         var cellStyle;
         var rowBg;
         var html;
+        var metaFields = [
+            { label: 'From Date', value: fromDate },
+            { label: 'To Date', value: toDate },
+            { label: 'Generated', value: generatedAt },
+            { label: 'Records', value: String(rowCount) }
+        ];
 
         var heroStyle = 'background-color:#1e3a8a;color:#ffffff;font-size:18px;font-weight:bold;padding:14px 16px;font-family:Segoe UI,Arial,Helvetica,sans-serif;';
         var brandStyle = 'display:block;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.9;margin-bottom:4px;font-weight:normal;';
@@ -149,19 +223,20 @@
             + '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->'
             + '</head><body>';
 
-        html += '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:8px;">';
+        html += '<table border="0" cellpadding="0" cellspacing="0" width="' + tableWidth + '" style="border-collapse:collapse;table-layout:fixed;width:' + tableWidth + 'px;">';
+        html += buildExcelColgroupHtml(colCount, data.headers);
+
         html += '<tr><td colspan="' + colCount + '" bgcolor="#1e3a8a" style="' + heroStyle + '">'
             + '<span style="' + brandStyle + '">AashaDigitalIndia24</span>'
             + escapeHtml(title)
             + '<br/><span style="' + subStyle + '">' + escapeHtml(subtitle) + '</span></td></tr>';
-        html += '<tr bgcolor="#f8fafc">';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">From Date</span><span style="' + metaValueStyle + '">' + escapeHtml(fromDate) + '</span></td>';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">To Date</span><span style="' + metaValueStyle + '">' + escapeHtml(toDate) + '</span></td>';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Generated</span><span style="' + metaValueStyle + '">' + escapeHtml(generatedAt) + '</span></td>';
-        html += '<td colspan="' + metaSpanLast + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Records</span><span style="' + metaValueStyle + '">' + rowCount + '</span></td>';
-        html += '</tr></table>';
 
-        html += '<table border="1" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">';
+        html += '<tr bgcolor="#f8fafc">';
+        for (i = 0; i < metaFields.length; i++) {
+            html += '<td colspan="' + metaSpans[i] + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">' + metaFields[i].label + '</span><span style="' + metaValueStyle + '">' + escapeHtml(metaFields[i].value) + '</span></td>';
+        }
+        html += '</tr>';
+
         if (data.headers.length) {
             html += '<tr>';
             for (i = 0; i < data.headers.length; i++) {
@@ -171,7 +246,7 @@
         }
 
         if (!data.rows.length) {
-            html += '<tr><td colspan="' + colCount + '" bgcolor="#f8fafc" style="padding:28px 16px;text-align:center;color:#64748b;font-size:12px;font-weight:bold;background-color:#f8fafc;">No data found.</td></tr>';
+            html += '<tr><td colspan="' + colCount + '" bgcolor="#f8fafc" style="padding:28px 16px;text-align:center;color:#64748b;font-size:12px;font-weight:bold;background-color:#f8fafc;border:1px solid #e2e8f0;">No data found.</td></tr>';
         } else {
             dataRowIndex = 0;
             for (r = 0; r < data.rows.length; r++) {
@@ -194,9 +269,7 @@
                 dataRowIndex++;
             }
         }
-        html += '</table>';
 
-        html += '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:10px;">';
         html += '<tr><td colspan="' + colCount + '" style="' + footerStyle + '">'
             + '<strong style="color:#334155;">Confidential</strong> — For internal business use only. &mdash; '
             + escapeHtml(title) + ' &mdash; ' + escapeHtml(generatedAt) + '</td></tr>';
@@ -371,10 +444,16 @@
         var sheetName = options.sheetName || 'Report';
         var isGray = options.theme === 'gray';
         var leafCount = countLeafColumns(sourceTable);
-        var colCount = leafCount;
-        var metaSpan = Math.max(1, Math.ceil(colCount / 4));
-        var metaSpanLast = Math.max(1, colCount - (metaSpan * 3));
+        var colCount = Math.max(leafCount, 4);
+        var metaSpans = getMetaColSpans(colCount, 4);
         var tableClone = styleClonedTableForExcel(sourceTable.cloneNode(true), options.theme);
+        var headerLabels = [];
+        var headerCells = sourceTable.querySelectorAll('thead th');
+        var theadHtml = '';
+        var tbodyHtml = '';
+        var theadNode = tableClone.querySelector('thead');
+        var tbodyNode = tableClone.querySelector('tbody');
+        var tableWidth;
         var heroBg = isGray ? '#E2E8F0' : '#1e3a8a';
         var heroColor = isGray ? '#0F172A' : '#ffffff';
         var heroStyle = 'background-color:' + heroBg + ';color:' + heroColor + ';font-size:18px;font-weight:bold;padding:14px 16px;font-family:Arial,Helvetica,sans-serif;border:1px solid #CBD5E1;';
@@ -384,7 +463,26 @@
         var metaLabelStyle = 'display:block;font-size:9px;font-weight:bold;text-transform:uppercase;color:#64748B;margin-bottom:3px;';
         var metaValueStyle = 'font-size:12px;font-weight:bold;color:#0F172A;';
         var footerStyle = 'padding:12px;border-top:1px dashed #CBD5E1;color:#94A3B8;font-size:9px;text-align:center;font-family:Arial,Helvetica,sans-serif;';
+        var metaFields = [
+            { label: 'From Date', value: fromDate },
+            { label: 'To Date', value: toDate },
+            { label: 'Generated', value: generatedAt },
+            { label: 'Records', value: String(rowCount) }
+        ];
         var html;
+        var i;
+
+        for (i = 0; i < headerCells.length; i++) {
+            headerLabels.push(getCellText(headerCells[i]));
+        }
+        tableWidth = getExcelTableWidth(colCount, headerLabels);
+
+        if (theadNode) {
+            theadHtml = theadNode.innerHTML;
+        }
+        if (tbodyNode) {
+            tbodyHtml = tbodyNode.innerHTML;
+        }
 
         html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">'
             + '<head><meta charset="utf-8">'
@@ -398,21 +496,29 @@
             + '</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->'
             + '</head><body>';
 
-        html += '<table border="0" cellpadding="0" cellspacing="0" width="' + (Math.max(colCount * 110 + 70, 1200)) + '" style="border-collapse:collapse;margin-bottom:10px;">';
+        html += '<table border="0" cellpadding="0" cellspacing="0" width="' + tableWidth + '" style="border-collapse:collapse;table-layout:fixed;width:' + tableWidth + 'px;">';
+        html += buildExcelColgroupHtml(colCount, headerLabels);
+
         html += '<tr><td colspan="' + colCount + '" bgcolor="' + heroBg + '" style="' + heroStyle + '">'
             + '<span style="' + brandStyle + '">AashaDigitalIndia24</span>'
             + escapeHtml(title)
             + '<br/><span style="' + subStyle + '">' + escapeHtml(subtitle) + '</span></td></tr>';
+
         html += '<tr bgcolor="#F8FAFC">';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Date</span><span style="' + metaValueStyle + '">' + escapeHtml(fromDate) + '</span></td>';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Report Date</span><span style="' + metaValueStyle + '">' + escapeHtml(toDate) + '</span></td>';
-        html += '<td colspan="' + metaSpan + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Generated</span><span style="' + metaValueStyle + '">' + escapeHtml(generatedAt) + '</span></td>';
-        html += '<td colspan="' + metaSpanLast + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">Records</span><span style="' + metaValueStyle + '">' + rowCount + '</span></td>';
-        html += '</tr></table>';
+        for (i = 0; i < metaFields.length; i++) {
+            html += '<td colspan="' + metaSpans[i] + '" style="' + metaCellStyle + '"><span style="' + metaLabelStyle + '">' + metaFields[i].label + '</span><span style="' + metaValueStyle + '">' + escapeHtml(metaFields[i].value) + '</span></td>';
+        }
+        html += '</tr>';
 
-        html += tableClone.outerHTML;
+        if (theadHtml) {
+            html += '<thead>' + theadHtml + '</thead>';
+        }
+        if (tbodyHtml) {
+            html += '<tbody>' + tbodyHtml + '</tbody>';
+        } else {
+            html += '<tbody><tr><td colspan="' + colCount + '" bgcolor="#F8FAFC" style="padding:24px 16px;text-align:center;color:#64748B;font-size:12px;font-weight:bold;background-color:#F8FAFC;border:1px solid #E2E8F0;">No data found.</td></tr></tbody>';
+        }
 
-        html += '<table border="0" cellpadding="0" cellspacing="0" width="' + (Math.max(colCount * 110 + 70, 1200)) + '" style="border-collapse:collapse;margin-top:10px;">';
         html += '<tr><td colspan="' + colCount + '" style="' + footerStyle + '">'
             + '<strong style="color:#334155;">Confidential</strong> — For internal business use only. &mdash; '
             + escapeHtml(title) + ' &mdash; ' + escapeHtml(generatedAt) + '</td></tr>';

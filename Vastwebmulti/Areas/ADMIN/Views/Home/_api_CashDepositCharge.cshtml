@@ -1,42 +1,42 @@
 @model Vastwebmulti.Areas.ADMIN.Models.CashDepositeAndBank_Info_VM
 @using (Ajax.BeginForm("_api_CashDepositCharge", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "success3", OnFailure = "failed3", UpdateTargetId = "apicash" }))
 {
-    <input id="btnsubmit3" type="submit" value="Save Now" class="btn btn-default" style="display:none;width:20%;" />
-    <div id="tblApi">
-        <table class="table table-responsive table-bordered example-second">
+    <div class="cdc-deposit-save-bar">
+        <button id="btnsubmit3" type="submit" class="ne-btn-submit cdc-btn-save"><i class="fas fa-save" aria-hidden="true"></i><span>Save Now</span></button>
+    </div>
+    <div id="tblApi" class="cdc-deposit-table-host">
+        <table class="table table-bordered cdc-deposit-table example-second">
             <thead>
-                <tr style="background: #c7c7c7;">
+                <tr>
                     <th>User ID</th>
                     <th>Payment&nbsp;Type</th>
-                    <th>Charge &nbsp;(%)</th>
+                    <th>Charge&nbsp;(%)</th>
                 </tr>
             </thead>
             @if (Model.creditchargeapi != null)
             {
-                <tbody id="tbodyshowapi">
+                <tbody id="tbodyshowapi" class="cdc-deposit-view">
                     @foreach (var item in Model.creditchargeapi)
                     {
                         <tr>
-                            <th>@item.userid</th>
-                            <th>@item.ctype</th>
-                            <th>@item.Charge</th>
+                            <td>@item.userid</td>
+                            <td>@item.ctype</td>
+                            <td class="cdc-deposit-charge-val">@item.Charge</td>
                         </tr>
                     }
                 </tbody>
-                <tbody id="tbodyeditapi" style="display:none;">
+                <tbody id="tbodyeditapi" class="cdc-deposit-edit" style="display:none;">
                     @for (int i = 0; i < Model.creditchargeapi.Count; i++)
                     {
                         <tr>
                             @Html.HiddenFor(a => a.creditchargeapi[i].userinfo)
-                            <td>
-                                @Html.DisplayFor(a => a.creditchargeapi[i].userid)
-                            </td>
+                            <td>@Html.DisplayFor(a => a.creditchargeapi[i].userid)</td>
                             <td>
                                 @Html.HiddenFor(a => a.creditchargeapi[i].ctype)
                                 @Html.DisplayFor(a => a.creditchargeapi[i].ctype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.creditchargeapi[i].Charge, new { htmlAttributes = new { @style = "width:100%" } })
+                                @Html.EditorFor(a => a.creditchargeapi[i].Charge, new { htmlAttributes = new { @class = "form-control cdc-cell-input" } })
                                 @Html.ValidationMessageFor(a => a.creditchargeapi[i].Charge)
                             </td>
                         </tr>
@@ -46,18 +46,3 @@
         </table>
     </div>
 }
-
-
-
-
-
-
-<script>
-
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-
-</script>

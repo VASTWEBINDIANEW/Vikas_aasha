@@ -1,115 +1,48 @@
 @model Vastwebmulti.Areas.ADMIN.Models.CashDepositeAndBank_Info_VM
-<style>
-    .wallet-bank-input input[readonly="readonly"] {
-        background: #f5f5f5;
-    }
-  
-</style>
 @if (Model.msg != "DONE")
 {
-    <label style="color:red;">@Model.msg</label>
+    <div class="cdc-slab-msg cdc-slab-msg--error">@Model.msg</div>
 }
-<table class="table table-bordered wallet-bank-input" style="margin: 0px 1%;width: 98%;">
+<table class="table table-bordered wallet-bank-input cdc-slab-table">
     <thead>
         <tr>
-            
-            @*<th>Retailer</th>*@
             <th>Min&nbsp;Amt</th>
             <th>Max&nbsp;Amt</th>
-            <th>IMPS Fee</th>
-            <th>NEFT Fee</th>
-            <th>DEL</th>
+            <th>IMPS&nbsp;Fee</th>
+            <th>NEFT&nbsp;Fee</th>
+            <th class="cdc-col-actions">Del</th>
         </tr>
     </thead>
     <tbody>
-        @{ int i = 1;}
-        @if (Model.WulChargeList.Count > 0)
+        @if (Model.WulChargeList != null && Model.WulChargeList.Count > 0)
         {
             foreach (var item in Model.WulChargeList.OrderBy(x => x.AmtFromTatkal))
             {
                 <tr>
                     <td style="display:none;"><input type="text" value="@item.Idno" readonly="readonly" /></td>
                     <td style="display:none;"><input type="text" value="@item.UserRole" readonly="readonly" /></td>
-                    @*<td style="display:none;"><input type="text" value="@item.userid" readonly="readonly" /></td>*@
-                   
-                    @*<td><input type="text" value="@item.userid" readonly="readonly" /></td>*@
                     <td><input type="text" value="@item.AmtFromTatkal" readonly="readonly" /></td>
                     <td><input type="text" value="@item.AmtToTatkal" readonly="readonly" /></td>
                     <td><input type="text" value="@item.chargeTatkal" readonly="readonly" /></td>
                     <td><input type="text" value="@item.chargeTatkalNEFT" readonly="readonly" /></td>
-                    <td>
-                        @*<button type="submit" id="EditChrg" onclick="EditChrg('@item.Idno','@item.UserRole')" class="wallet-edit   waves-effect bt btnssl special-iii" style="background:transparent;border:1px solid #bbb;padding:2px;">
-                                <img src="~/AdminDesign/images/edit.svg" style="width:16px;" />
-                            </button>*@
-                        <button type="submit" class="waves-effect bt btnssl  special-iii deleteCharged1" style="background:transparent;border:1px solid transparent;padding:2px;margin-left: 4px;">
-                            <img src="~/MainFrontDesign/images/delete.svg" style="width:16px;">
-                        </button>
-                        <button type="submit" onclick="DeleteChrg('@item.Idno','@item.UserRole')" class="fullbodydycolorbg waves-effect bt btnssl special-iii deleteCharge" style="background:transparent;border:1px solid #bbb;padding:2px;margin-left: 4px;color:#fff;display:none;">
-                            Sure?
-                        </button>
+                    <td class="cdc-table-actions">
+                        <div class="cdc-table-actions__group">
+                            <button type="button" class="cdc-table-action cdc-table-action--delete deleteCharged1" title="Delete row" aria-label="Delete row">
+                                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" onclick="DeleteChrg('@item.Idno','@item.UserRole')" class="cdc-table-action cdc-table-action--confirm deleteCharge" title="Confirm delete" aria-label="Confirm delete">
+                                <i class="fas fa-check" aria-hidden="true"></i><span>Sure?</span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
-                i++;
             }
+        }
+        else
+        {
+            <tr class="cdc-empty-row">
+                <td colspan="5">No charge slabs found.</td>
+            </tr>
         }
     </tbody>
 </table>
-<script>
-    function DeleteChrg(Idno, UserRole) {
-            var url = '@Url.Action("DeleteWalletToBankSlab", "Home")';
-            $.ajax({
-                url: url,
-                data: { id: Idno, Role: UserRole },
-                cache: false,
-                type: "GET",
-                success: function (data) {
-                    if (UserRole === "Retailer") {
-                        $.ajax({
-                        url: '@Url.Action("_WalletToBankSlabList","Home")',
-                        type: 'POST',
-                            data: { Role: "Retailer", RetailerId: $("#RetailerId").val() },
-                        success: function (response) {
-                        $('#RemTbl').html(response);
-                        }
-                    });
-                    }
-                    else if (UserRole === "WhiteLabel") {
-                        $.ajax({
-                        url: '@Url.Action("_WalletToBankSlabList","Home")',
-                        type: 'POST',
-                        data: { Role: "WhiteLabel" },
-                        success: function (response) {
-                        $('#WhiteTbl').html(response);
-                        }
-                    });
-                    }
-                    else if (UserRole === "Seller") {
-                        $.ajax({
-                        url: '@Url.Action("_WalletToBankSlabList","Home")',
-                        type: 'POST',
-                        data: { Role: "Seller" },
-                        success: function (response) {
-                        $('#SellerTbl').html(response);
-                        }
-                    });
-                   }
-                }
-            });
-        }
-</script>
-<script>
-    $('.wallet-edit').click(function () {
-        $(this).closest('tr').find('input').removeAttr('readonly');
-        $(this).closest('tr').find('.wallet-save').css('display', 'block');
-        $(this).css('display', 'none');
-    });
-</script>
-<script>
-    $('.deleteCharged1').click(function () {
-        $(this).hide();
-        $(this).next('.deleteCharge').show();
-    });
-    $('#EditChrg').click(function () {
-        $(this).next('.deleteCharged1').hide();
-    });
-</script>
