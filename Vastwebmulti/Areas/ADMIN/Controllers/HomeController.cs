@@ -48170,7 +48170,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var titleCell = new PdfPCell(new Phrase(reportTitle ?? "SMS Report", titleFont))
                 {
                     BackgroundColor = new BaseColor(30, 58, 138),
-                    Border = Rectangle.NO_BORDER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
                     PaddingLeft = 12f,
                     PaddingRight = 12f,
                     PaddingTop = 10f,
@@ -48181,7 +48181,7 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
                 var subtitleCell = new PdfPCell(new Phrase("SMS API Report Export", subtitleFont))
                 {
                     BackgroundColor = new BaseColor(37, 99, 235),
-                    Border = Rectangle.NO_BORDER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
                     PaddingLeft = 12f,
                     PaddingRight = 12f,
                     PaddingTop = 0f,
