@@ -1,0 +1,566 @@
+/* ADMIN — Postpaid Utility Slab (extends prepaid slab shell) */
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page {
+    --postpaid-utility-accent: #0ea5e9;
+    --postpaid-utility-accent-soft: #e0f2fe;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-card__title i.fa-bolt {
+    color: var(--postpaid-utility-accent);
+}
+
+/* Timing action buttons */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.15;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-align: left;
+    white-space: normal;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__icon {
+    position: static;
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 0.72rem;
+    transform: none;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__title {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__sub {
+    display: block;
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.92;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+/* Action row — medium icon/text spacing */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-btn-edit {
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-btn-edit img {
+    margin-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-slab-action-btn {
+    gap: 10px !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-slab-action-btn i {
+    margin-right: 0 !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn--pm9 {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    border-color: #b91c1c;
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.25);
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn--pm6 {
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    border-color: #c2410c;
+    box-shadow: 0 2px 10px rgba(234, 88, 12, 0.25);
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn:hover {
+    transform: translateY(-1px);
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-popover {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 6;
+    min-width: 120px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #334155;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-wrap:hover .vm-postpaid-timing-popover {
+    display: block;
+}
+
+/* Operator type filter in table header — override legacy Dashcustom .slab-table rules */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table thead th.vm-postpaid-optype-head {
+    display: table-cell !important;
+    min-width: 168px !important;
+    width: 168px !important;
+    max-width: none !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    padding: 10px 8px !important;
+    white-space: normal !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-head__label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #334155;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-filter {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    position: relative;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-filter::after,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .utility-slab-select::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table .utility-slab-select,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table span.for-slab-b {
+    width: 100% !important;
+    float: none !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-select,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-filter select,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .utility-slab-select select.form-control {
+    display: block !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 32px 0 10px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    background-color: #fff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M2 4l4 4 4-4'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    line-height: 1.2 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-select:hover,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-filter select:hover {
+    border-color: #93c5fd !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-select:focus,
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-optype-filter select:focus {
+    outline: none !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14) !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table thead th.table-select {
+    display: table-cell !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-reduce-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 34px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #fdba74;
+    background: linear-gradient(180deg, #fff7ed, #ffedd5);
+    color: #9a3412;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-reduce-btn:hover {
+    background: #ffedd5;
+    border-color: #fb923c;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-reduce-row th {
+    background: #fffbeb !important;
+}
+
+/* Export buttons — SMSAPI style */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-export-group {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 14px 0 10px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid transparent !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn:hover {
+    transform: translateY(-1px) !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 6px !important;
+    font-size: 0.82rem !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn--excel {
+    background: linear-gradient(135deg, #059669 0%, #16a34a 52%, #22c55e 100%) !important;
+    border-color: #15803d !important;
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(22, 163, 74, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn--excel i {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn--pdf {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 52%, #f87171 100%) !important;
+    border-color: #b91c1c !important;
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.28) !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .sa-export-btn--pdf i {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+/* Utility charge table toggles */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-charge-table .vm-commission-hold-btn,
+body.saas-admin-ui .vm-postpaid-modal .vm-commission-hold-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    line-height: 1;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-commission-hold-btn.costom-on,
+body.saas-admin-ui .vm-postpaid-modal .vm-commission-hold-btn.costom-on {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-commission-hold-btn.custom-off,
+body.saas-admin-ui .vm-postpaid-modal .vm-commission-hold-btn.custom-off {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #64748b !important;
+}
+
+/* Extra info modal toolbar */
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-inputs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-field {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-field__badge {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 0.68rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-field input {
+    width: 100%;
+    height: 38px;
+    padding: 0 10px 0 32px;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-postpaid-utility-slab-page.content {
+        margin-left: 0 !important;
+        padding-top: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-card__head {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-card__title {
+        font-size: 0.88rem;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-tab-bar {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        padding: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-tab {
+        flex: none !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        min-height: 52px;
+        padding: 8px 10px;
+        font-size: 0.74rem;
+        align-items: flex-start;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-slab-actions {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-btn-edit {
+        grid-column: 1 / -1;
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-slab-action-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        flex: none;
+        text-align: center;
+        white-space: normal;
+        line-height: 1.25;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-wrap {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn {
+        width: 100%;
+        min-height: 44px;
+        justify-content: flex-start;
+        padding: 10px 12px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-export-group {
+        grid-column: 1 / -1;
+        width: 100%;
+        justify-content: stretch;
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-export-group .sa-export-btn {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: center !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table-scroll {
+        width: calc(100% - 20px) !important;
+        max-width: calc(100% - 20px) !important;
+        margin: 10px 10px 12px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .slab-master-block,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter {
+        margin: 10px 10px 0;
+        padding: 10px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__item,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__item--select,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__item--control {
+        flex: 1 1 calc(50% - 4px);
+        min-width: calc(50% - 4px);
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__retailer {
+        flex: 1 1 100%;
+        min-width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__retailer .vm-prepaid-user-filter__item {
+        flex: 1 1 calc(50% - 4px);
+        min-width: calc(50% - 4px);
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table thead th.vm-postpaid-optype-head {
+        min-width: 150px !important;
+        width: 150px !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-inputs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-tab {
+        flex: none !important;
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table thead th,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-pg-slab-table tbody td {
+        padding: 6px 8px !important;
+        font-size: 0.72rem !important;
+        min-width: 64px;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__item,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-user-filter__item--select {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .select2-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-prepaid-extra-bulk-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__title,
+    body.saas-admin-ui .saas-postpaid-utility-slab-page .vm-postpaid-timing-btn__sub {
+        white-space: normal;
+    }
+}

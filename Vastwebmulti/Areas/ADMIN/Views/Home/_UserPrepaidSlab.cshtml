@@ -2,43 +2,9 @@
 @using (Ajax.BeginForm("_UserPrepaidSlab", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
 
-    <style>
-        span.rangeone_123 {
-            font-size: 12px !important;
-            font-weight: bold;
-            color: var(--main-bg-lcolor) !important;
-            border-bottom: 1px solid var(--main-bg-lcolor) !important;
-            border-width: thin;
-            padding-bottom: 3px;
-        }
-
-        #pragrap_1 p {
-            font-size: 9px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .aoow-commision {
-            height: 36px !important;
-            background: #f5f5f5 !important;
-            padding: 0 5px;
-        }
-
-        .commision-model h5#exampleModalLabel {
-            float: left;
-            text-transform: capitalize;
-        }
-
-        .commision-model .modal-footer {
-            padding: 0 10px 10px;
-        }
-
-
-
-    </style>
-    <input id="btnsubmituser" type="submit" name="Button" value="Update For Existing Users" class="btn  waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn  waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn  waves-effect" style="display:none;" />
+    <input id="btnsubmituser" type="submit" name="Button" value="Update For Existing Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
 
     @Html.HiddenFor(m => m.role)
     <div class="row clearfix" style="margin-right:0px;">
@@ -46,89 +12,68 @@
             @*<div class="col-md-2">
                     <label for="email_address_2" style="padding-top:14px;padding-left:137px;"><i class="fa fa-users" style="font-size:25px; color:#607d8b ;"></i></label>
                 </div>*@
-            <div class="slab-master-block">
-                <div class="slab-master-block-left">
-                    <div id="allshow" class="row">
-                        <div class="col-md-12" style="padding-right:20px;">
-                            <div class="custom-district-img">
-                                <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                            </div>
-                            @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "form-control for-select2", @onchange = "ddlUserIdChange()" })
-                        </div>
-                    </div>
-                    <div id="retailerdrop" class="row" style="display:none;">
-
-                        <div class="col-md-6" style="padding-right:0px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
-                                @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "form-control for-select2", @onchange = "ddlretailerid()" })
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="padding-left:5px;padding-right:20px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
-                                @Html.DropDownList("ddlUserIdrem", Model.RetailerId, "All Retailer", new { @class = "form-control for-select2", @onchange = "ddlUserIdChangerem()" })
-
-                            </div>
-                        </div>
-
-                    </div>
+            <div class="slab-master-block vm-prepaid-user-filter vm-prepaid-user-filter--inline">
+                <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
+                    <p>If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
                 </div>
-                <div class="slab-master-block-right">
-                    <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
-                        <p>  If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide vm-prepaid-user-filter__row" style="display: block;">
+                    <div id="allshow" class="vm-prepaid-user-filter__item vm-prepaid-user-filter__item--select">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-users"></i></span>
+                            @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChange()" })
+                        </div>
                     </div>
-                    <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide" style="display: block;">
-                        <div class="row clearfix">
-
-                            <div class="col-md-3 col-sm-3 col-xs-3 col-3">
-                                <span class="master-slab-right-icon" style="border-left: 0px;">
-                                    <img src="~/AdminDesign/images/user.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Name" value="@Model.Name">
-
+                    <div id="retailerdrop" class="vm-prepaid-user-filter__retailer" style="display:none;">
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
+                                @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "for-select2 form-control", @onchange = "ddlretailerid()" })
                             </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3 col-3">
-                                <span class="master-slab-right-icon" style="border-left: 0px;">
-                                    <img src="~/AdminDesign/images/number.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone">
-
+                        </div>
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-store"></i></span>
+                                @Html.DropDownList("ddlUserIdrem", Model.RetailerId, "All Retailer", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChangerem()" })
                             </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3 col-3">
-                                <span class="master-slab-right-icon" style="border-left: 0px;">
-                                    <img src="~/AdminDesign/images/email.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email">
-
-                            </div>
-                            @if (Model.Materuser != null)
+                        </div>
+                    </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user"></i></span>
+                            <input class="form-control" type="text" placeholder="User Name" value="@Model.Name" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email" readonly="readonly" />
+                        </div>
+                    </div>
+                    @if (Model.Materuser != null)
+                    {
+                        <div class="vm-prepaid-user-filter__item vm-prepaid-user-filter__item--control">
+                            @if (Model.allow == false)
                             {
-                                <div class="col-md-3 col-sm-3 col-xs-3 col-3">
-                                    @if (Model.allow == false)
-                                    {
-                                        <div class="aoow-commision" style="border: 1px solid var(--main-bg-lcolor)">
-                                            <span id="adminoff" onclick="checkcomm('off')" class="securtyoff-show" style="height: 18px; width: 18px; float: left; background: red; margin: 8px 7px 5px 0;"></span>
-                                            <span style="color:var(--main-bg-lcolor);margin-top: 4px; font-size: 10px; display: inline-block;"><strong strong style="display: block;font-size: 14px;line-height: 16px;">Default Slab Setting</strong>Slab Cantrol By Admin Only</span>
-                                        </div>
-
-                                    }
-                                    else
-                                    {
-                                        <div class="aoow-commision" style="border: 1px solid green">
-                                            <span id="adminon" onclick="checkcomm('on')" class="securtyon-show" style="height: 18px; width: 18px; float: left; background: #28a745e6; margin: 8px 7px 5px 0;"></span>
-                                            <span style="margin-top: 5px; color: green; font-size: 8px; display: inline-block;"><strong style="display: block;font-size: 14px;line-height: 16px;">Slab Setting By MD</strong>Slab Cantrol By Master Distributor</span>
-                                        </div>
-                                    }
-
+                                <div class="vm-prepaid-md-control is-admin aoow-commision">
+                                    <span id="adminoff" onclick="checkcomm('off')" class="vm-prepaid-md-control__dot vm-prepaid-md-control__dot--off" role="button" tabindex="0"></span>
+                                    <span class="vm-prepaid-md-control__text"><strong>Default Slab Setting</strong>Slab Control By Admin Only</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="vm-prepaid-md-control is-md aoow-commision">
+                                    <span id="adminon" onclick="checkcomm('on')" class="vm-prepaid-md-control__dot vm-prepaid-md-control__dot--on" role="button" tabindex="0"></span>
+                                    <span class="vm-prepaid-md-control__text"><strong>Slab Setting By MD</strong>Slab Control By Master Distributor</span>
                                 </div>
                             }
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
             @*@if (Model.RetailerId != null)
@@ -150,14 +95,13 @@
                 }*@
         </div>
     </div>
-    <table class="table table-bordered slab-table third-design-table" id="pragrap_1">
-        <thead class="navbar" style="position: initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-prepaid-slab-table-wrap">
+    <table class="table table-bordered vm-pg-slab-table slab-table third-design-table" id="pragrap_1">
+        <thead>
             <tr>
-                <th rowspan="3" style="text-align:center">User&nbsp;ID</th>
-                <th rowspan="3" style="text-align:center">Operator&nbsp;Name</th>
+                <th rowspan="2" style="text-align:center">User&nbsp;ID</th>
+                <th rowspan="2" style="text-align:center">Operator&nbsp;Name</th>
                 <th colspan="3" style="text-align:center">Commission&nbsp;(%) <br /><small id="user_desc" class="font-10"></small></th>
-                @*<th>Status</th>*@
-
             </tr>
             <tr>
                 @{
@@ -166,13 +110,13 @@
                     var rangee1 = range1 + 1;
                     var rangee = range2 + 1;
                 }
-                <th style="text-align:center;"><span class="rangeone_123">Range One</span><p>1 To @range1</p></th>
-                <th style="text-align:center;"><span class="rangeone_123">Range Two</span><p>@rangee1 To @range2</p></th>
-                <th style="text-align:center;"><span class="rangeone_123">Range Three</span><p>@rangee and Above</p></th>
+                <th class="vm-prepaid-range-head"><p class="vm-prepaid-range-label"><span class="vm-prepaid-range-badge">1</span> 1 To @range1</p></th>
+                <th class="vm-prepaid-range-head"><p class="vm-prepaid-range-label"><span class="vm-prepaid-range-badge">2</span> @rangee1 To @range2</p></th>
+                <th class="vm-prepaid-range-head"><p class="vm-prepaid-range-label"><span class="vm-prepaid-range-badge">3</span> @rangee and Above</p></th>
             </tr>
         </thead>
 
-        <tbody id="tbodyshow">
+        <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
             <!--Master User-->
             @if (Model.Materuser != null)
             {
@@ -360,7 +304,7 @@
             <!--End Whitelabel-->
 
         </tbody>
-        <tbody id="tbodyedit" style="display:none;">
+        <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
             <!--Master User-->
             @if (Model.Materuser != null)
             {
@@ -377,15 +321,15 @@
                             @Html.DisplayFor(a => a.Materuser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Materuser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Materuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Materuser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Materuser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Materuser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Materuser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Materuser[i].comm2)
                         </td>
 
@@ -409,15 +353,15 @@
                             @Html.DisplayFor(a => a.Dealeruser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Dealeruser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Dealeruser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Dealeruser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Dealeruser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Dealeruser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Dealeruser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Dealeruser[i].comm2)
                         </td>
 
@@ -441,15 +385,15 @@
                             @Html.DisplayFor(a => a.Retaileruser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Retaileruser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Retaileruser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Retaileruser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Retaileruser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Retaileruser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Retaileruser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Retaileruser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Retaileruser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Retaileruser[i].comm2)
                         </td>
                     </tr>
@@ -472,15 +416,15 @@
                             @Html.DisplayFor(a => a.dlmremuser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.dlmremuser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.dlmremuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.dlmremuser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.dlmremuser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.dlmremuser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.dlmremuser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.dlmremuser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.dlmremuser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.dlmremuser[i].comm2)
                         </td>
                     </tr>
@@ -503,15 +447,15 @@
                             @Html.DisplayFor(a => a.APIuser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.APIuser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.APIuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.APIuser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.APIuser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.APIuser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.APIuser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.APIuser[i].comm2)
                         </td>
                     </tr>
@@ -534,15 +478,15 @@
                             @Html.DisplayFor(a => a.Whitelabeluser[i].OperatorName)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Whitelabeluser[i].comm, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Whitelabeluser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Whitelabeluser[i].comm1, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Whitelabeluser[i].comm1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm1)
                         </td>
                         <td>
-                            @Html.EditorFor(a => a.Whitelabeluser[i].comm2, new { htmlAttributes = new { @style = "width:100%" } })
+                            @Html.EditorFor(a => a.Whitelabeluser[i].comm2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                             @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm2)
                         </td>
 
@@ -552,7 +496,7 @@
             <!--End Whitelabel-->
 
         </tbody>
-        <tbody id="tbodyeditAll" style="display:none;">
+        <tbody id="tbodyeditAll" class="vm-pg-slab-tbody--hidden">
             <!--Master User Update-->
             @if (Model.Materuser != null)
             {
@@ -766,40 +710,45 @@
 
         </tbody>
     </table>
+    </div>
 }
 <!-- The Modal -->
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-
+<div class="modal fade saas-admin-modal vm-prepaid-modal vm-prepaid-modal--md" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered saas-admin-modal-dialog" role="document">
         <div class="modal-content commision-model">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><span id="txtvalheader"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header saas-admin-modal-header accent-amber">
+                <div class="saas-admin-modal-head-main">
+                    <div class="saas-admin-modal-icon"><i class="fas fa-user-shield" aria-hidden="true"></i></div>
+                    <div class="saas-admin-modal-title-wrap">
+                        <h5 class="modal-title saas-admin-modal-title" id="exampleModalLabel"><span id="txtvalheader"></span></h5>
+                        <p class="saas-admin-modal-subtitle">Master distributor slab control setting</p>
+                    </div>
+                </div>
+                <button type="button" class="saas-admin-modal-close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
             </div>
-            <div class="modal-body">
-                <p>1. All The Commision is Handal using Master And Distrubor. </p>
-                <p>2. Retailer And Distritutor not Allow by Admin. </p>
+            <div class="modal-body saas-admin-modal-body">
+                <div class="vm-prepaid-md-modal-note">
+                    <p><i class="fas fa-info-circle" aria-hidden="true"></i> All commission is handled using Master and Distributor hierarchy.</p>
+                    <p><i class="fas fa-shield-alt" aria-hidden="true"></i> Retailer and Distributor slab changes may be restricted by admin policy.</p>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer saas-admin-modal-footer">
                 @using (Ajax.BeginForm("_UserPrepaidSlab_master", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1M", OnFailure = "onfailed1M", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
                 {
                     @Html.Hidden("txtmaster")
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary fullbodydycolorbg">Save changes</button>
+                    <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+                        <i class="fas fa-times" aria-hidden="true"></i> Close
+                    </button>
+                    <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+                    </button>
                 }
             </div>
         </div>
     </div>
 </div>
 
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script>
-    $('.for-select2').select2();
-</script>
 <script>
     checkcomm = (e) => {
         var userid = $('#ddlUserId').val();
@@ -812,9 +761,13 @@
 </script>
 <script>
         function OnSuccess1(data) {
-            $('#btnsubmituser').hide();
-            $('#btnsubmitusercommon').hide();
-            $('#btnEdit').show();
+            if (typeof resetSlabViewMode === 'function') {
+                resetSlabViewMode();
+            } else {
+                $('#btnsubmituser').hide();
+                $('#btnsubmitusercommon').hide();
+                $('#btnEdit').show();
+            }
             var chk = '@Model.role';
             if (chk == "Retailer") {
                 $('#retailerdrop').show();
@@ -831,9 +784,13 @@
 </script>
 <script>
         function OnSuccess1M(data) {
-            $('#btnsubmituser').hide();
-            $('#btnsubmitusercommon').hide();
-            $('#btnEdit').show();
+            if (typeof resetSlabViewMode === 'function') {
+                resetSlabViewMode();
+            } else {
+                $('#btnsubmituser').hide();
+                $('#btnsubmitusercommon').hide();
+                $('#btnEdit').show();
+            }
             $('.modal-backdrop.in').hide();
            // $('#exampleModal').modal('hide');
             var chk = '@Model.role';
@@ -846,24 +803,4 @@
                 $('#allshow').show();
             }
         }
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
-
 </script>

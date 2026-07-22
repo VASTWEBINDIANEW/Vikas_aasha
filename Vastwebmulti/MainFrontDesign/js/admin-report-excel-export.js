@@ -58,6 +58,17 @@
         return false;
     }
 
+    function sanitizeExportText(value) {
+        if (value == null) {
+            return '';
+        }
+        return String(value)
+            .replace(/\u2014/g, '-')
+            .replace(/\u2013/g, '-')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
     function getCellText(cell) {
         if (!cell) {
             return '';
@@ -180,10 +191,10 @@
     }
 
     function buildExcelDocumentHtml(options, data) {
-        var title = options.title || 'Report';
-        var subtitle = options.subtitle || 'AashaDigitalIndia24 — Admin Report';
-        var fromDate = options.fromDate || '—';
-        var toDate = options.toDate || '—';
+        var title = sanitizeExportText(options.title || 'Report');
+        var subtitle = sanitizeExportText(options.subtitle || 'AashaDigitalIndia24 - Admin Report');
+        var fromDate = sanitizeExportText(options.fromDate || '-');
+        var toDate = sanitizeExportText(options.toDate || '-');
         var generatedAt = options.generatedAt || formatGeneratedAt();
         var rowCount = typeof options.recordCount === 'number' ? options.recordCount : countDataRows(data.rows);
         var sheetName = options.sheetName || 'Report';
@@ -227,7 +238,7 @@
         html += buildExcelColgroupHtml(colCount, data.headers);
 
         html += '<tr><td colspan="' + colCount + '" bgcolor="#1e3a8a" style="' + heroStyle + '">'
-            + '<span style="' + brandStyle + '">AashaDigitalIndia24</span>'
+            + '<span style="' + brandStyle + '">&#9889; AashaDigitalIndia24</span>'
             + escapeHtml(title)
             + '<br/><span style="' + subStyle + '">' + escapeHtml(subtitle) + '</span></td></tr>';
 
@@ -271,8 +282,8 @@
         }
 
         html += '<tr><td colspan="' + colCount + '" style="' + footerStyle + '">'
-            + '<strong style="color:#334155;">Confidential</strong> — For internal business use only. &mdash; '
-            + escapeHtml(title) + ' &mdash; ' + escapeHtml(generatedAt) + '</td></tr>';
+            + '<strong style="color:#334155;">Confidential</strong> - For internal business use only. - '
+            + escapeHtml(title) + ' - ' + escapeHtml(generatedAt) + '</td></tr>';
         html += '</table></body></html>';
 
         return html;
@@ -435,10 +446,10 @@
     }
 
     function buildExcelCloneDocumentHtml(options, sourceTable) {
-        var title = options.title || 'Report';
-        var subtitle = options.subtitle || 'AashaDigitalIndia24 — Admin Report';
-        var fromDate = options.fromDate || '—';
-        var toDate = options.toDate || '—';
+        var title = sanitizeExportText(options.title || 'Report');
+        var subtitle = sanitizeExportText(options.subtitle || 'AashaDigitalIndia24 - Admin Report');
+        var fromDate = sanitizeExportText(options.fromDate || '-');
+        var toDate = sanitizeExportText(options.toDate || '-');
         var generatedAt = options.generatedAt || formatGeneratedAt();
         var rowCount = typeof options.recordCount === 'number' ? options.recordCount : 0;
         var sheetName = options.sheetName || 'Report';
@@ -520,8 +531,8 @@
         }
 
         html += '<tr><td colspan="' + colCount + '" style="' + footerStyle + '">'
-            + '<strong style="color:#334155;">Confidential</strong> — For internal business use only. &mdash; '
-            + escapeHtml(title) + ' &mdash; ' + escapeHtml(generatedAt) + '</td></tr>';
+            + '<strong style="color:#334155;">Confidential</strong> - For internal business use only. - '
+            + escapeHtml(title) + ' - ' + escapeHtml(generatedAt) + '</td></tr>';
         html += '</table></body></html>';
 
         return html;
@@ -531,12 +542,15 @@
         options = options || {};
 
         var sourceTable = options.table;
-        if (!sourceTable) {
+        var exportData = options.data || null;
+        if (!sourceTable && !exportData) {
             return false;
         }
 
         var excelHtml;
-        if (options.mode === 'clone') {
+        if (exportData) {
+            excelHtml = buildExcelDocumentHtml(options, exportData);
+        } else if (options.mode === 'clone') {
             excelHtml = buildExcelCloneDocumentHtml(options, sourceTable);
         } else {
             excelHtml = buildExcelDocumentHtml(options, collectTableData(sourceTable));

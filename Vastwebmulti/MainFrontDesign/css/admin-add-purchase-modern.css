@@ -2905,65 +2905,167 @@ body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body .vm-ml-table-host .
 
 @media (max-width: 1199px) {
     body.saas-admin-ui .Cash_Deposit_Charge_Page {
-        --cdc-panel-height: min(700px, 52vh);
-        --cdc-panel-height-right: min(700px, 58vh);
+        --cdc-panel-height: 700px;
+        --cdc-panel-height-right: 700px;
     }
 
-    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-form-col {
-        height: var(--cdc-panel-height) !important;
-        max-height: var(--cdc-panel-height) !important;
-        min-height: 320px !important;
-    }
-
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-form-col,
     body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-history-col {
-        height: var(--cdc-panel-height-right) !important;
-        max-height: var(--cdc-panel-height-right) !important;
-        min-height: 360px !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
     }
 
     body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-trasfer-left.vm-ft-form-card,
     body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-trasfer-right.vm-ft-history-panel,
     body.saas-admin-ui .Cash_Deposit_Charge_Page.cas-hdeposi-tcharge-page .fund-trasfer-left,
     body.saas-admin-ui .Cash_Deposit_Charge_Page.cas-hdeposi-tcharge-page .fund-trasfer-right {
-        height: 100% !important;
+        height: auto !important;
         min-height: 0 !important;
-        max-height: 100% !important;
+        max-height: min(var(--cdc-panel-height), 85vh) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
     }
 
-    body.saas-admin-ui .Cash_Deposit_Charge_Page .tab-content2.current2 .fund-transfer-form.cdc-charge-form {
-        flex: 1 1 auto !important;
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-trasfer-right.vm-ft-history-panel,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page.cas-hdeposi-tcharge-page .fund-trasfer-right {
+        max-height: min(var(--cdc-panel-height-right), 88vh) !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-body.tabcurrent-seconddesign {
+        display: block !important;
+        flex: 0 0 auto !important;
+        padding: 4px 6px 6px !important;
+        overflow: visible !important;
         min-height: 0 !important;
+        background: transparent !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-body {
+        flex: 0 0 auto !important;
         overflow: visible !important;
     }
 
-    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-body.tabcurrent-seconddesign,
-    body.saas-admin-ui .Cash_Deposit_Charge_Page #tab3-1.tab-pane.active,
-    body.saas-admin-ui .Cash_Deposit_Charge_Page #tab3-2.tab-pane.active {
-        flex: 1 1 auto !important;
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-panel.ap-tab-panel:not(.active) {
+        display: none !important;
+        height: 0 !important;
         min-height: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
+        margin: 0 !important;
+        padding: 0 !important;
         overflow: hidden !important;
+        visibility: hidden !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-panel.ap-tab-panel.active,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-left-panel.ap-tab-panel.active.in {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        flex: none !important;
+        overflow: visible !important;
+        visibility: visible !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page #tab3-1 .tab-content2:not(.current2) {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        visibility: hidden !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .tab-content2.tabcurrent-seconddesign,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .tab-content2.current-tab-seconddesign {
+        display: block !important;
+        flex: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .tab-content2.current2 .fund-transfer-form.cdc-charge-form {
+        flex: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        padding: 0 2px 4px !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body.vm-ft-history-body {
+        flex: 0 0 auto !important;
+        overflow: visible !important;
+        min-height: 0 !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body > .cdc-tab-panel.ap-tab-panel:not(.active):not(.current3) {
+        display: none !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body > .cdc-tab-panel.ap-tab-panel.active,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body > .cdc-tab-panel.ap-tab-panel.current3 {
+        flex: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body .vm-ft-table-wrap.ap-panel-body {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-layout.vm-ft-layout--full {
+        gap: 8px !important;
+        align-items: flex-start !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-transfer-main-admin.vm-ft-history-col {
+        margin-top: 0 !important;
     }
 }
 
 @media (max-width: 767px) {
-    body.saas-admin-ui .Cash_Deposit_Charge_Page {
-        --cdc-panel-height: min(700px, 48vh);
-        --cdc-panel-height-right: min(700px, 52vh);
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-trasfer-left.vm-ft-form-card,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .fund-trasfer-right.vm-ft-history-panel {
+        max-height: none !important;
     }
 
-    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-form-col {
-        min-height: 280px !important;
+    body.saas-admin-ui .Cash_Deposit_Charge_Page #cdc-main-tabs.cdc-main-segment.ap-segment-bar {
+        margin: 4px 6px 4px !important;
     }
 
-    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-history-col {
-        min-height: 300px !important;
+    body.saas-admin-ui .Cash_Deposit_Charge_Page #cdc-unload-segment.ap-segment-bar,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page #cdc-cash-segment.cdc-cash-segment.ap-segment-bar {
+        margin: 2px 4px 6px !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .bank-name {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-charge-fieldset {
+        margin: 0 0 6px !important;
     }
 
     body.saas-admin-ui .Cash_Deposit_Charge_Page #remcash1,
     body.saas-admin-ui .Cash_Deposit_Charge_Page #WhiteTbl {
         max-height: none !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-right-body > #ap-right-tabs {
+        margin: 2px 4px 0 !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .cdc-filter-toolbar {
+        margin-bottom: 0 !important;
     }
 }
 

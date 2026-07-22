@@ -1,0 +1,356 @@
+/* ADMIN — Prepaid Slab page modals (rendered outside .saas-prepaid-slab-page) */
+
+body.saas-admin-ui .vm-prepaid-modal .saas-admin-modal-dialog {
+    max-width: 520px;
+    width: calc(100% - 24px);
+}
+
+body.saas-admin-ui .vm-prepaid-modal--slip .saas-admin-modal-dialog {
+    max-width: 560px;
+}
+
+body.saas-admin-ui .vm-prepaid-modal--md .saas-admin-modal-dialog {
+    max-width: 480px;
+}
+
+/* Range cards */
+body.saas-admin-ui .vm-prepaid-range-cards {
+    display: grid;
+    gap: 14px;
+}
+
+body.saas-admin-ui .vm-prepaid-range-card {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .vm-prepaid-range-card__field label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body.saas-admin-ui .vm-prepaid-range-card__value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .vm-prepaid-range-card__value::before {
+    content: "₹";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+body.saas-admin-ui .vm-prepaid-range-card__field small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #94a3b8;
+    line-height: 1.35;
+}
+
+body.saas-admin-ui .vm-prepaid-modal-input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .vm-prepaid-modal-input:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+body.saas-admin-ui .vm-prepaid-range-card__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+body.saas-admin-ui .vm-prepaid-range-edit-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid #bfdbfe;
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+    color: #1d4ed8;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .vm-prepaid-range-edit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18);
+}
+
+body.saas-admin-ui .vm-prepaid-range-edit-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+body.saas-admin-ui .vm-prepaid-modal-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .vm-prepaid-modal-note::before {
+    content: "\f05a";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: #ea580c;
+    flex: 0 0 auto;
+    margin-top: 1px;
+}
+
+body.saas-admin-ui .vm-prepaid-modal-note.is-hidden {
+    display: none;
+}
+
+/* Slip modal */
+body.saas-admin-ui .vm-prepaid-slip-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-chip:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-chip--block {
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-chip--block:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    margin: 0;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item.is-checked,
+body.saas-admin-ui .vm-prepaid-slip-item:has(input:checked) {
+    border-color: #93c5fd;
+    background: linear-gradient(180deg, #eff6ff 0%, #f8fbff 100%);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    flex: 0 0 34px;
+    transition: background 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item.is-checked .vm-prepaid-slip-item__icon,
+body.saas-admin-ui .vm-prepaid-slip-item:has(input:checked) .vm-prepaid-slip-item__icon {
+    background: #2563eb;
+    color: #fff;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item label,
+body.saas-admin-ui .vm-prepaid-slip-item > span:not(.vm-prepaid-slip-item__icon):not(.vm-prepaid-slip-item__tick) {
+    margin: 0;
+    padding: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    flex: 1;
+    line-height: 1.3;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item__tick {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 0.62rem;
+    flex: 0 0 22px;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .vm-prepaid-slip-item.is-checked .vm-prepaid-slip-item__tick,
+body.saas-admin-ui .vm-prepaid-slip-item:has(input:checked) .vm-prepaid-slip-item__tick {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+}
+
+/* MD control modal */
+body.saas-admin-ui .vm-prepaid-md-modal-note p {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 0 10px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    line-height: 1.45;
+}
+
+body.saas-admin-ui .vm-prepaid-md-modal-note p:last-child {
+    margin-bottom: 0;
+}
+
+body.saas-admin-ui .vm-prepaid-md-modal-note i {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #ffedd5;
+    color: #ea580c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    font-size: 0.82rem;
+}
+
+@media (max-width: 767px) {
+    body.saas-admin-ui .vm-prepaid-modal .saas-admin-modal-dialog {
+        margin: auto auto 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        min-height: auto;
+    }
+
+    body.saas-admin-ui .vm-prepaid-modal .modal-content {
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 92vh;
+    }
+
+    body.saas-admin-ui .vm-prepaid-range-card {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .vm-prepaid-slip-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .vm-prepaid-modal .saas-admin-modal-footer {
+        flex-direction: column;
+    }
+
+    body.saas-admin-ui .vm-prepaid-modal .saas-admin-modal-footer .saas-admin-modal-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -14,7 +14,61 @@
     }
 
     function formatPrintDate(value) {
-        return value ? escapeHtml(value) : '—';
+        return value ? escapeHtml(String(value).replace(/\u2014/g, '-').replace(/\u2013/g, '-')) : '-';
+    }
+
+    function sanitizeExportText(value) {
+        if (value == null) {
+            return '';
+        }
+        return String(value)
+            .replace(/\u2014/g, '-')
+            .replace(/\u2013/g, '-')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function isNumericExportValue(value) {
+        return /^-?\d+(?:\.\d+)?$/.test(String(value || '').replace(/,/g, '').trim());
+    }
+
+    function buildTableHtmlFromData(data) {
+        var html = '<table><thead><tr>';
+        var i;
+        var r;
+        var c;
+        var align;
+
+        for (i = 0; i < data.headers.length; i++) {
+            html += '<th>' + escapeHtml(data.headers[i]) + '</th>';
+        }
+        html += '</tr></thead><tbody>';
+
+        if (!data.rows.length) {
+            html += '<tr><td colspan="' + Math.max(data.headers.length, 1) + '" style="text-align:center;padding:24px;color:#64748b;">No data found.</td></tr>';
+        } else {
+            for (r = 0; r < data.rows.length; r++) {
+                html += '<tr>';
+                for (c = 0; c < data.rows[r].cells.length; c++) {
+                    align = isNumericExportValue(data.rows[r].cells[c]) ? 'right' : 'left';
+                    html += '<td style="text-align:' + align + ';">' + escapeHtml(data.rows[r].cells[c]) + '</td>';
+                }
+                html += '</tr>';
+            }
+        }
+
+        html += '</tbody></table>';
+        return html;
+    }
+
+    function getPdfMetaIcon(type) {
+        var icons = {
+            from: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 2v3M16 2v3M4 9h16M5 5h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>',
+            to: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 2v3M16 2v3M4 9h16M5 5h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/><path d="M8 13h8" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>',
+            generated: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#2563eb" stroke-width="2"/><path d="M12 7v5l3 2" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>',
+            records: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>'
+        };
+        return icons[type] || icons.records;
     }
 
     function formatGeneratedAt() {
@@ -119,12 +173,14 @@
             + 'html, body { margin: 0; padding: 0; background: #eef2f7; color: #0f172a; font-family: "Segoe UI", Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }'
             + '.pdf-shell { max-width: 100%; margin: 0 auto; padding: 14px; }'
             + '.pdf-header { ' + headerBg + ' border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }'
-            + '.pdf-header__brand { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; ' + brandColor + ' }'
+            + '.pdf-header__brand { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; ' + brandColor + ' }'
+            + '.pdf-header__brand svg { flex: 0 0 auto; }'
             + '.pdf-header__title { font-size: 20px; font-weight: 800; line-height: 1.2; margin: 0 0 4px; }'
             + '.pdf-header__subtitle { font-size: 11px; margin: 0; ' + subtitleColor + ' }'
             + '.pdf-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }'
             + '.pdf-meta__card { flex: 1 1 140px; background: #fff; border: 1px solid #dbe4f0; border-radius: 10px; padding: 8px 10px; }'
-            + '.pdf-meta__label { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin-bottom: 2px; font-weight: 700; }'
+            + '.pdf-meta__label { display: flex; align-items: center; gap: 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin-bottom: 4px; font-weight: 700; }'
+            + '.pdf-meta__label svg { flex: 0 0 auto; }'
             + '.pdf-meta__value { font-size: 12px; font-weight: 700; color: #0f172a; }'
             + '.pdf-table-wrap { background: #fff; border: 1px solid #dbe4f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06); }'
             + '.pdf-table-wrap table { width: 100%; border-collapse: collapse; table-layout: auto; font-size: ' + tableFontSize + '; }'
@@ -152,17 +208,26 @@
         options = options || {};
 
         var sourceTable = options.table;
-        if (!sourceTable) {
+        var exportData = options.data || null;
+        if (!sourceTable && !exportData) {
             return false;
         }
 
-        var title = options.title || 'Report';
-        var subtitle = options.subtitle || 'AashaDigitalIndia24 — Admin Report';
-        var fromDate = options.fromDate || '';
-        var toDate = options.toDate || '';
+        var title = sanitizeExportText(options.title || 'Report');
+        var subtitle = sanitizeExportText(options.subtitle || 'AashaDigitalIndia24 - Admin Report');
+        var fromDate = sanitizeExportText(options.fromDate || '-');
+        var toDate = sanitizeExportText(options.toDate || '-');
         var orientation = options.orientation === 'landscape' ? 'landscape' : 'portrait';
-        var clone = prepareTableClone(sourceTable);
-        var rowCount = typeof options.recordCount === 'number' ? options.recordCount : countDataRows(clone);
+        var cloneHtml;
+        var rowCount;
+
+        if (exportData) {
+            cloneHtml = buildTableHtmlFromData(exportData);
+            rowCount = typeof options.recordCount === 'number' ? options.recordCount : exportData.rows.length;
+        } else {
+            cloneHtml = prepareTableClone(sourceTable).outerHTML;
+            rowCount = typeof options.recordCount === 'number' ? options.recordCount : countDataRows(prepareTableClone(sourceTable));
+        }
         var recordLabel = options.recordLabel || (rowCount + ' record' + (rowCount === 1 ? '' : 's'));
         var printWin = window.open('', '_blank');
 
@@ -178,17 +243,17 @@
             + '<style>' + styles + '</style></head><body>'
             + '<div class="pdf-shell">'
             + '<header class="pdf-header">'
-            + '<div class="pdf-header__brand">AashaDigitalIndia24</div>'
+            + '<div class="pdf-header__brand"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>AashaDigitalIndia24</div>'
             + '<h1 class="pdf-header__title">' + escapeHtml(title) + '</h1>'
             + '<p class="pdf-header__subtitle">' + escapeHtml(subtitle) + '</p>'
             + '</header>'
             + '<div class="pdf-meta">'
-            + '<div class="pdf-meta__card"><span class="pdf-meta__label">From Date</span><span class="pdf-meta__value">' + formatPrintDate(fromDate) + '</span></div>'
-            + '<div class="pdf-meta__card"><span class="pdf-meta__label">To Date</span><span class="pdf-meta__value">' + formatPrintDate(toDate) + '</span></div>'
-            + '<div class="pdf-meta__card"><span class="pdf-meta__label">Generated</span><span class="pdf-meta__value">' + escapeHtml(formatGeneratedAt()) + '</span></div>'
-            + '<div class="pdf-meta__card"><span class="pdf-meta__label">Records</span><span class="pdf-meta__value">' + escapeHtml(recordLabel) + '</span></div>'
+            + '<div class="pdf-meta__card"><span class="pdf-meta__label">' + getPdfMetaIcon('from') + 'From Date</span><span class="pdf-meta__value">' + formatPrintDate(fromDate) + '</span></div>'
+            + '<div class="pdf-meta__card"><span class="pdf-meta__label">' + getPdfMetaIcon('to') + 'To Date</span><span class="pdf-meta__value">' + formatPrintDate(toDate) + '</span></div>'
+            + '<div class="pdf-meta__card"><span class="pdf-meta__label">' + getPdfMetaIcon('generated') + 'Generated</span><span class="pdf-meta__value">' + escapeHtml(formatGeneratedAt()) + '</span></div>'
+            + '<div class="pdf-meta__card"><span class="pdf-meta__label">' + getPdfMetaIcon('records') + 'Records</span><span class="pdf-meta__value">' + escapeHtml(recordLabel) + '</span></div>'
             + '</div>'
-            + '<div class="pdf-table-wrap">' + clone.outerHTML + '</div>'
+            + '<div class="pdf-table-wrap">' + cloneHtml + '</div>'
             + '<footer class="pdf-footer">'
             + '<span><strong>Confidential</strong> — For internal business use only.</span>'
             + '<span>Printed via Admin Portal</span>'

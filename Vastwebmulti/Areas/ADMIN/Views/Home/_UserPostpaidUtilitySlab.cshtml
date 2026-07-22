@@ -2,98 +2,76 @@
 @model Vastwebmulti.Areas.ADMIN.Models.PostpaidUtilitySlab
 @using (Ajax.BeginForm("_UserPostpaidUtilitySlab", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmituser" type="submit" value="Update For Existing Users" class="btn btnsubmituser-custom   waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn btnsubmitusercommon-custom   waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn btnsubmitusercommondlmrem"-custom   waves-effect" style="display:none;" />
+    <input id="btnsubmituser" type="submit" value="Update For Existing Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
 
     @Html.HiddenFor(m => m.role)
     <div class="row clearfix" style="margin-right:0px;">
         <div class="col-md-12">
-            <div class="slab-master-block">
-                <div class="slab-master-block-left">
-                    <div id="allshow" class="row">
-                        <div class="col-md-12" style="padding-right:20px;">
-                            <div class="custom-district-img">
-                                <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                            </div>
+            <div class="slab-master-block vm-prepaid-user-filter vm-prepaid-user-filter--inline">
+                <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
+                    <p>If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                </div>
+                <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide vm-prepaid-user-filter__row" style="display: block;">
+                    <div id="allshow" class="vm-prepaid-user-filter__item vm-prepaid-user-filter__item--select">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-users"></i></span>
                             @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChange()" })
                         </div>
                     </div>
-                    <div id="retailerdrop" class="row" style="display:none;">
-                        <div class="col-md-6" style="padding-right:0px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
-                                @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "form-control for-select2", @onchange = "ddlretailerid()" })
+                    <div id="retailerdrop" class="vm-prepaid-user-filter__retailer" style="display:none;">
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
+                                @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "for-select2 form-control", @onchange = "ddlretailerid()" })
                             </div>
                         </div>
-                        <div class="col-md-6" style="padding-left:5px;padding-right:20px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
-                                @Html.DropDownList("ddlUserIdrem", Model.RetailerId, "All Retailer", new { @class = "form-control for-select2", @onchange = "ddlUserIdChangerem()" })
-
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-store"></i></span>
+                                @Html.DropDownList("ddlUserIdrem", Model.RetailerId, "All Retailer", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChangerem()" })
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="slab-master-block-right" >
-                    <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
-                        <p>  If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user"></i></span>
+                            <input class="form-control" type="text" placeholder="User Name" value="@Model.Name" readonly="readonly" />
+                        </div>
                     </div>
-                    <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide" style="display: block;">
-                        <div class="row clearfix">
-
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon">
-                                    <img src="~/AdminDesign/images/user.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Name" value="@Model.Name">
-
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/number.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone">
-
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/email.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email">
-
-                            </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email" readonly="readonly" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="slab-table">
-        <table class="table table-bordered third-design-table">
-            <thead class="navbar" style="position:initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-prepaid-slab-table-wrap">
+        <table id="postpaidUtilitySlabTable" class="table table-bordered vm-pg-slab-table third-design-table slab-table">
+            <thead>
                 <tr>
                     <th>User&nbsp;ID</th>
                     <th>Operator&nbsp;Name</th>
-                    <th class="table-select thdesign-secondcl">
-
-
-                        <span class="for-slab-b">
-                            <span>Operator&nbsp;Type</span>
-                            <div class="utility-slab-select">
-                                @Html.DropDownList("ddlOPttype1", Model.OPttype.Distinct(), new { @class = "form-control", @onchange = "ddlopttypeChange1()" })
-                            </div>
-                        </span>
-
+                    <th class="vm-postpaid-optype-head">
+                        <span class="vm-postpaid-optype-head__label">Operator&nbsp;Type</span>
+                        <div class="vm-postpaid-optype-filter">
+                            @Html.DropDownList("ddlOPttype1", Model.OPttype.Distinct(), new { @class = "form-control vm-postpaid-optype-select", @onchange = "ddlopttypeChange1()" })
+                        </div>
                     </th>
                     <th>Commission</th>
                 </tr>
             </thead>
-            <tbody id="tbodyshow">
+            <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
                 <!--Master User-->
                 @if (Model.Materuser != null)
                 {
@@ -250,7 +228,7 @@
                 <!--End Whitelabel-->
 
             </tbody>
-            <tbody id="tbodyedit" style="display:none;">
+            <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
                 <!--Master User-->
                 @if (Model.Materuser != null)
                 {
@@ -261,7 +239,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="masterreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="master1" placeholder="Master Comm" />
+                            <input type="text" id="master1" placeholder="Master Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.Materuser.Count; i++)
@@ -280,7 +258,7 @@
                                 @Html.DisplayFor(a => a.Materuser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.Materuser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "master1" } })
+                                @Html.EditorFor(a => a.Materuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input master1" } })
                                 @Html.ValidationMessageFor(a => a.Materuser[i].comm)
                             </td>
                         </tr>
@@ -297,7 +275,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="Dealerreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="dealer1" placeholder="Dealer Comm" />
+                            <input type="text" id="dealer1" placeholder="Dealer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.Dealeruser.Count; i++)
@@ -316,7 +294,7 @@
                                 @Html.DisplayFor(a => a.Dealeruser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.Dealeruser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "dealer1" } })
+                                @Html.EditorFor(a => a.Dealeruser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input dealer1" } })
                                 @Html.ValidationMessageFor(a => a.Dealeruser[i].comm)
                             </td>
                         </tr>
@@ -333,7 +311,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="Retailerreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="Retailer1" placeholder="Retailer Comm" />
+                            <input type="text" id="Retailer1" placeholder="Retailer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.Retaileruser.Count; i++)
@@ -352,7 +330,7 @@
                                 @Html.DisplayFor(a => a.Retaileruser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.Retaileruser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "Retailer1" } })
+                                @Html.EditorFor(a => a.Retaileruser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input Retailer1" } })
                                 @Html.ValidationMessageFor(a => a.Retaileruser[i].comm)
                             </td>
                         </tr>
@@ -369,7 +347,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="dlmremreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="dlmrem1" placeholder="Retailer Comm" />
+                            <input type="text" id="dlmrem1" placeholder="Retailer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.dlmremuser.Count; i++)
@@ -388,7 +366,7 @@
                                 @Html.DisplayFor(a => a.dlmremuser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.dlmremuser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "dlmrem1" } })
+                                @Html.EditorFor(a => a.dlmremuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input dlmrem1" } })
                                 @Html.ValidationMessageFor(a => a.dlmremuser[i].comm)
                             </td>
                         </tr>
@@ -405,7 +383,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="apireplace()" />
                         </td>
                         <td>
-                            <input type="text" id="api1" placeholder="Api Comm" />
+                            <input type="text" id="api1" placeholder="Api Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.APIuser.Count; i++)
@@ -424,7 +402,7 @@
                                 @Html.DisplayFor(a => a.APIuser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.APIuser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "api1" } })
+                                @Html.EditorFor(a => a.APIuser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input api1" } })
                                 @Html.ValidationMessageFor(a => a.APIuser[i].comm)
                             </td>
                         </tr>
@@ -441,7 +419,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="whitereplace()" />
                         </td>
                         <td>
-                            <input type="text" id="white1" placeholder="Whitelabel Comm" />
+                            <input type="text" id="white1" placeholder="Whitelabel Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.Whitelabeluser.Count; i++)
@@ -460,7 +438,7 @@
                                 @Html.DisplayFor(a => a.Whitelabeluser[i].opttype)
                             </td>
                             <td>
-                                @Html.EditorFor(a => a.Whitelabeluser[i].comm, new { htmlAttributes = new { @style = "width:100%",@class= "white1" } })
+                                @Html.EditorFor(a => a.Whitelabeluser[i].comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input white1" } })
                                 @Html.ValidationMessageFor(a => a.Whitelabeluser[i].comm)
                             </td>
                         </tr>
@@ -469,7 +447,7 @@
                 <!--End Whitelabel-->
 
             </tbody>
-            <tbody id="tbodyeditAll" style="display:none;">
+            <tbody id="tbodyeditAll" class="vm-pg-slab-tbody--hidden">
                 <!--Master User Update-->
                 @if (Model.Materuser != null)
                 {
@@ -480,7 +458,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="masterallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="masterall1" placeholder="Master Comm" />
+                            <input type="text" id="masterall1" placeholder="Master Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.UpdateMaster.Count; i++)
@@ -504,7 +482,7 @@
 
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.UpdateMaster[i].comm, new { @style = "width:100%", @class = "masterall1" })
+                                @Html.TextBoxFor(a => a.UpdateMaster[i].comm, new { @class = "vm-pg-slab-cell-input masterall1" })
                                 @Html.ValidationMessageFor(a => a.UpdateMaster[i].comm)
                             </td>
                         </tr>
@@ -521,7 +499,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="Dealerallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="dealerall1" placeholder="Dealer Comm" />
+                            <input type="text" id="dealerall1" placeholder="Dealer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.UpdateDealer.Count; i++)
@@ -545,7 +523,7 @@
 
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.UpdateDealer[i].comm, new { @style = "width:100%", @class = "dealerall1" })
+                                @Html.TextBoxFor(a => a.UpdateDealer[i].comm, new { @class = "vm-pg-slab-cell-input dealerall1" })
                                 @Html.ValidationMessageFor(a => a.UpdateDealer[i].comm)
                             </td>
                         </tr>
@@ -562,7 +540,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="Retailerallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="Retailerall1" placeholder="Retailer Comm" />
+                            <input type="text" id="Retailerall1" placeholder="Retailer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.UpdateRetailer.Count; i++)
@@ -586,7 +564,7 @@
 
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.UpdateRetailer[i].comm, new { @style = "width:100%", @class = "Retailerall1" })
+                                @Html.TextBoxFor(a => a.UpdateRetailer[i].comm, new { @class = "vm-pg-slab-cell-input Retailerall1" })
                                 @Html.ValidationMessageFor(a => a.UpdateRetailer[i].comm)
                             </td>
                         </tr>
@@ -603,7 +581,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="dlmRetailerallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="DLMRetailerall1" placeholder="Retailer Comm" />
+                            <input type="text" id="DLMRetailerall1" placeholder="Retailer Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.Updatedlmrem.Count; i++)
@@ -627,7 +605,7 @@
 
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.Updatedlmrem[i].comm, new { @style = "width:100%", @class = "DLMRetailerall1" })
+                                @Html.TextBoxFor(a => a.Updatedlmrem[i].comm, new { @class = "vm-pg-slab-cell-input DLMRetailerall1" })
                                 @Html.ValidationMessageFor(a => a.Updatedlmrem[i].comm)
                             </td>
                         </tr>
@@ -644,7 +622,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="apiallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="apiall1" placeholder="API Comm" />
+                            <input type="text" id="apiall1" placeholder="API Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.UpdateAPI.Count; i++)
@@ -668,7 +646,7 @@
 
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.UpdateAPI[i].comm, new { @style = "width:100%", @class = "apiall1" })
+                                @Html.TextBoxFor(a => a.UpdateAPI[i].comm, new { @class = "vm-pg-slab-cell-input apiall1" })
                                 @Html.ValidationMessageFor(a => a.UpdateAPI[i].comm)
                             </td>
                         </tr>
@@ -685,7 +663,7 @@
                             <input type="button" value="Replace" class="btn btn-default" onclick="Whiteallreplace()" />
                         </td>
                         <td>
-                            <input type="text" id="whiteall1" placeholder="WhiteLabel Comm" />
+                            <input type="text" id="whiteall1" placeholder="WhiteLabel Comm" class="vm-pg-slab-cell-input" />
                         </td>
                     </tr>
                     for (int i = 0; i < Model.UpdateWhitelabel.Count; i++)
@@ -707,7 +685,7 @@
                                 @Html.DisplayFor(a => a.UpdateWhitelabel[i].opttype)
                             </td>
                             <td>
-                                @Html.TextBoxFor(a => a.UpdateWhitelabel[i].comm, new { @style = "width:100%",@class= "whiteall1" })
+                                @Html.TextBoxFor(a => a.UpdateWhitelabel[i].comm, new { @class = "vm-pg-slab-cell-input whiteall1" })
                                 @Html.ValidationMessageFor(a => a.UpdateWhitelabel[i].comm)
                             </td>
                         </tr>
@@ -718,18 +696,15 @@
         </table>
     </div>
 }
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script>
-    $('.for-select2').select2();
-
-
-</script>
 <script>
         function OnSuccess1(data) {
-            $('#btnsubmituser').hide();
-            $('#btnsubmitusercommon').hide();
-            $('#btnEdit').show();
+            if (typeof resetSlabViewMode === 'function') {
+                resetSlabViewMode();
+            } else {
+                $('#btnsubmituser').hide();
+                $('#btnsubmitusercommon').hide();
+                $('#btnEdit').show();
+            }
             var chk = '@Model.role';
             if (chk == "Retailer") {
                 $('#retailerdrop').show();
@@ -743,22 +718,4 @@
         function onfailed(error) {
             alert(error.responseText);
         }
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

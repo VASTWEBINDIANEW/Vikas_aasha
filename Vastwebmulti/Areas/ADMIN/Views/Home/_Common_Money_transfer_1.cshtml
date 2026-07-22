@@ -5,13 +5,13 @@
 
 
 
-    <input id="btnsubmit" type="submit" value="Save Data" class="btn  waves-effect" style="display:none;" />
-    <div class="">
-        <table class="table table-bordered slab-table example-second thpadding-second third-design-table">
-            <thead class="navbar" style="position:initial;">
+    <input id="btnsubmit" type="submit" value="Save Data" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+        <table id="dmt1SlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table example-second thpadding-second">
+            <thead>
                 <tr>
                     <th rowspan="2">User&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(?)</th>
+                    <th rowspan="2">Verify&nbsp;<br />Charge&nbsp;(&#8377;)</th>
                     <th colspan="2" style="text-align:center">Charge&nbsp;100&nbsp;>&nbsp;1K</th>
                     <th colspan="2" style="text-align:center">Charge&nbsp;1001&nbsp;>&nbsp;2K</th>
                     <th colspan="2" style="text-align:center">Charge&nbsp;2001&nbsp;>&nbsp;3K</th>
@@ -141,13 +141,13 @@
                         Charge
                     </td>
                     <td>Active</td>
-                    <td>(?)</td>
+                    <td>(&#8377;)</td>
                     <td>(%)</td>
-                    <td>Max(?)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                 </tr>
             </thead>
-            <tbody id="tbodyshow">
+            <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
                 @foreach (var item in Model.common)
                 {
                     var usertype = item.usertype;
@@ -190,7 +190,7 @@
                     }
                     else
                     {
-                        active26 = "(?)";
+                        active26 = "(&#8377;)";
                     }
                     var active1 = item.Type_1000;
                     if (active1 == "Per")
@@ -199,7 +199,7 @@
                     }
                     else
                     {
-                        active1 = "(?)";
+                        active1 = "(&#8377;)";
                     }
                     var active2 = item.Type_2000;
                     if (active2 == "Per")
@@ -208,7 +208,7 @@
                     }
                     else
                     {
-                        active2 = "(?)";
+                        active2 = "(&#8377;)";
                     }
                     var active3 = item.Type_3000;
                     if (active3 == "Per")
@@ -217,7 +217,7 @@
                     }
                     else
                     {
-                        active3 = "(?)";
+                        active3 = "(&#8377;)";
                     }
                     var active4 = item.Type_4000;
                     if (active4 == "Per")
@@ -226,7 +226,7 @@
                     }
                     else
                     {
-                        active4 = "(?)";
+                        active4 = "(&#8377;)";
                     }
                     var active5 = item.Type_5000;
                     if (active5 == "Per")
@@ -235,7 +235,7 @@
                     }
                     else
                     {
-                        active5 = "(?)";
+                        active5 = "(&#8377;)";
                     }
                     var active6 = item.Type_6000;
                     if (active6 == "Per")
@@ -244,7 +244,7 @@
                     }
                     else
                     {
-                        active6 = "(?)";
+                        active6 = "(&#8377;)";
                     }
                     var active7 = item.Type_7000;
                     if (active7 == "Per")
@@ -253,7 +253,7 @@
                     }
                     else
                     {
-                        active7 = "(?)";
+                        active7 = "(&#8377;)";
                     }
                     var active8 = item.Type_8000;
                     if (active8 == "Per")
@@ -262,7 +262,7 @@
                     }
                     else
                     {
-                        active8 = "(?)";
+                        active8 = "(&#8377;)";
                     }
                     var active9 = item.Type_9000;
                     if (active9 == "Per")
@@ -271,7 +271,7 @@
                     }
                     else
                     {
-                        active9 = "(?)";
+                        active9 = "(&#8377;)";
                     }
                     var active10 = item.Type_10000;
                     if (active10 == "Per")
@@ -280,7 +280,7 @@
                     }
                     else
                     {
-                        active10 = "(?)";
+                        active10 = "(&#8377;)";
                     }
                     var active11 = item.Type_11000;
                     if (active11 == "Per")
@@ -289,7 +289,7 @@
                     }
                     else
                     {
-                        active11 = "(?)";
+                        active11 = "(&#8377;)";
                     }
                     var active12 = item.Type_12000;
                     if (active12 == "Per")
@@ -298,7 +298,7 @@
                     }
                     else
                     {
-                        active12 = "(?)";
+                        active12 = "(&#8377;)";
                     }
                     var active13 = item.Type_13000;
                     if (active13 == "Per")
@@ -307,7 +307,7 @@
                     }
                     else
                     {
-                        active13 = "(?)";
+                        active13 = "(&#8377;)";
                     }
                     var active14 = item.Type_14000;
                     if (active14 == "Per")
@@ -316,7 +316,7 @@
                     }
                     else
                     {
-                        active14 = "(?)";
+                        active14 = "(&#8377;)";
                     }
                     var active15 = item.Type_15000;
                     if (active15 == "Per")
@@ -325,7 +325,7 @@
                     }
                     else
                     {
-                        active15 = "(?)";
+                        active15 = "(&#8377;)";
                     }
                     var active16 = item.Type_16000;
                     if (active16 == "Per")
@@ -334,7 +334,7 @@
                     }
                     else
                     {
-                        active16 = "(?)";
+                        active16 = "(&#8377;)";
                     }
                     var active17 = item.Type_17000;
                     if (active17 == "Per")
@@ -343,7 +343,7 @@
                     }
                     else
                     {
-                        active17 = "(?)";
+                        active17 = "(&#8377;)";
                     }
                     var active18 = item.Type_18000;
                     if (active18 == "Per")
@@ -352,7 +352,7 @@
                     }
                     else
                     {
-                        active18 = "(?)";
+                        active18 = "(&#8377;)";
                     }
                     var active19 = item.Type_19000;
                     if (active19 == "Per")
@@ -361,7 +361,7 @@
                     }
                     else
                     {
-                        active19 = "(?)";
+                        active19 = "(&#8377;)";
                     }
                     var active20 = item.Type_20000;
                     if (active20 == "Per")
@@ -370,7 +370,7 @@
                     }
                     else
                     {
-                        active20 = "(?)";
+                        active20 = "(&#8377;)";
                     }
                     var active21 = item.Type_21000;
                     if (active21 == "Per")
@@ -379,7 +379,7 @@
                     }
                     else
                     {
-                        active21 = "(?)";
+                        active21 = "(&#8377;)";
                     }
                     var active22 = item.Type_22000;
                     if (active22 == "Per")
@@ -388,7 +388,7 @@
                     }
                     else
                     {
-                        active22 = "(?)";
+                        active22 = "(&#8377;)";
                     }
                     var active23 = item.Type_23000;
                     if (active23 == "Per")
@@ -397,7 +397,7 @@
                     }
                     else
                     {
-                        active23 = "(?)";
+                        active23 = "(&#8377;)";
                     }
                     var active24 = item.Type_24000;
                     if (active24 == "Per")
@@ -406,7 +406,7 @@
                     }
                     else
                     {
-                        active24 = "(?)";
+                        active24 = "(&#8377;)";
                     }
                     var active25 = item.Type_25000;
                     if (active25 == "Per")
@@ -415,7 +415,7 @@
                     }
                     else
                     {
-                        active25 = "(?)";
+                        active25 = "(&#8377;)";
                     }
 
 
@@ -423,59 +423,59 @@
                         <td>@usertype</td>
                         <td>@item.verify_comm</td>
                         <td>@item.comm_1000</td>
-                        <td>@active1</td>
+                        <td>@Html.Raw(active1)</td>
                         <td>@item.comm_2000</td>
-                        <td>@active2</td>
+                        <td>@Html.Raw(active2)</td>
                         <td>@item.comm_3000</td>
-                        <td>@active3</td>
+                        <td>@Html.Raw(active3)</td>
                         <td>@item.comm_4000</td>
-                        <td>@active4</td>
+                        <td>@Html.Raw(active4)</td>
                         <td>@item.comm_5000</td>
-                        <td>@active5</td>
+                        <td>@Html.Raw(active5)</td>
                         <td>@item.comm_6000</td>
-                        <td>@active6</td>
+                        <td>@Html.Raw(active6)</td>
                         <td>@item.comm_7000</td>
-                        <td>@active7</td>
+                        <td>@Html.Raw(active7)</td>
                         <td>@item.comm_8000</td>
-                        <td>@active8</td>
+                        <td>@Html.Raw(active8)</td>
                         <td>@item.comm_9000</td>
-                        <td>@active9</td>
+                        <td>@Html.Raw(active9)</td>
                         <td>@item.comm_10000</td>
-                        <td>@active10</td>
+                        <td>@Html.Raw(active10)</td>
                         <td>@item.comm_11000</td>
-                        <td>@active11</td>
+                        <td>@Html.Raw(active11)</td>
                         <td>@item.comm_12000</td>
-                        <td>@active12</td>
+                        <td>@Html.Raw(active12)</td>
                         <td>@item.comm_13000</td>
-                        <td>@active13</td>
+                        <td>@Html.Raw(active13)</td>
                         <td>@item.comm_14000</td>
-                        <td>@active14</td>
+                        <td>@Html.Raw(active14)</td>
                         <td>@item.comm_15000</td>
-                        <td>@active15</td>
+                        <td>@Html.Raw(active15)</td>
                         <td>@item.comm_16000</td>
-                        <td>@active16</td>
+                        <td>@Html.Raw(active16)</td>
                         <td>@item.comm_17000</td>
-                        <td>@active17</td>
+                        <td>@Html.Raw(active17)</td>
                         <td>@item.comm_18000</td>
-                        <td>@active18</td>
+                        <td>@Html.Raw(active18)</td>
                         <td>@item.comm_19000</td>
-                        <td>@active19</td>
+                        <td>@Html.Raw(active19)</td>
                         <td>@item.comm_20000</td>
-                        <td>@active20</td>
+                        <td>@Html.Raw(active20)</td>
                         <td>@item.comm_21000</td>
-                        <td>@active21</td>
+                        <td>@Html.Raw(active21)</td>
                         <td>@item.comm_22000</td>
-                        <td>@active22</td>
+                        <td>@Html.Raw(active22)</td>
                         <td>@item.comm_23000</td>
-                        <td>@active23</td>
+                        <td>@Html.Raw(active23)</td>
                         <td>@item.comm_24000</td>
-                        <td>@active24</td>
+                        <td>@Html.Raw(active24)</td>
                         <td>@item.comm_25000</td>
-                        <td>@active25</td>
+                        <td>@Html.Raw(active25)</td>
                         <td>@item.comm_26000</td>
                         <td>@item.per_26000</td>
                         <td>@item.maxrs_26000</td>
-                        <td>@active26</td>
+                        <td>@Html.Raw(active26)</td>
 
 
                         @*<td>@item.comm_27000</td>
@@ -509,7 +509,7 @@
                 }
 
             </tbody>
-            <tbody id="tbodyedit" style="display:none;">
+            <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
                 @for (int i = 0; i < Model.common.Count; i++)
                 {
                     var usertype = Model.common[i].usertype;
@@ -992,39 +992,12 @@
 }
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        } else {
+            $('#btnsubmit').hide();
+            $('#btnEdit').show();
+        }
     }
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>
 

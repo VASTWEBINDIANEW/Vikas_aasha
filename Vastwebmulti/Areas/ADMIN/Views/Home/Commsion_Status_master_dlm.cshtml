@@ -1,642 +1,439 @@
-@model  Vastwebmulti.Areas.ADMIN.Models.CommonstatusMaster_dlm_list
+@model Vastwebmulti.Areas.ADMIN.Models.CommonstatusMaster_dlm_list
+@using System.Linq
 @{
-    ViewBag.Title = "Commsion_Status_master_dlm";
+    ViewBag.Title = "Commission Hold Status";
     Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
+
+    var statusRows = Model?.Common_status_master_dlmlist ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.Common_status_master_dlm_cls>();
+    var reportRows = Model?.Common_status_master_dlm_Transferlist ?? Enumerable.Empty<Vastwebmulti.Areas.ADMIN.Models.Common_status_master_dlm_Transfer_cls>();
+    var statusCount = statusRows.Count();
+    var reportCount = reportRows.Count();
+    var showReportOnLoad = reportCount > 0 && statusCount == 0;
 }
 
-<style type="text/css">
-
-    @@keyframes ldio-zdyd6mf6t5 {
-        0% {
-            top: 96px;
-            left: 96px;
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-
-        100% {
-            top: 18px;
-            left: 18px;
-            width: 156px;
-            height: 156px;
-            opacity: 0;
-        }
-    }
-
-    .ldio-zdyd6mf6t5 div {
-        position: absolute;
-        border-width: 4px;
-        border-style: solid;
-        opacity: 1;
-        border-radius: 50%;
-        animation: ldio-zdyd6mf6t5 1s cubic-bezier(0,0.2,0.8,1) infinite;
-    }
-
-        .ldio-zdyd6mf6t5 div:nth-child(1) {
-            border-color: #e90c59
-        }
-
-        .ldio-zdyd6mf6t5 div:nth-child(2) {
-            border-color: #46dff0;
-            animation-delay: -0.5s;
-        }
-
-    .loadingio-spinner-ripple-92ar2pfqk5j {
-        width: 200px;
-        height: 200px;
-        display: inline-block;
-        overflow: hidden;
-        background: transparent;
-    }
-
-    .ldio-zdyd6mf6t5 {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform: translateZ(0) scale(1);
-        backface-visibility: hidden;
-        transform-origin: 0 0; /* see note above */
-    }
-
-        .ldio-zdyd6mf6t5 div {
-            box-sizing: content-box;
-        }
-
-    #Retailershowinformation .col-md-12, #showinformation .col-md-12, #DIstribotorshowinformation .col-md-12,
-    #APIUSERshowinformation .col-md-12, #WLUSERshowinformation .col-md-12 {
-        border-bottom: 1px solid #bbb;
-        margin: 0px 3% !important;
-        width: 94%;
-        margin-bottom: 6px !important;
-        padding: 0px !important;
-        padding-bottom: 10px !important;
-    }
-
-        #Retailershowinformation .col-md-12 label:last-child, #showinformation .col-md-12 label:last-child, #DIstribotorshowinformation .col-md-12 label:last-child,
-        #APIUSERshowinformation .col-md-12 label:last-child, #WLUSERshowinformation .col-md-12 label:last-child {
-            text-align: right;
-            font-weight: 800;
-        }
-
-        #Retailershowinformation button, #showinformation .col-md-12 button, #DIstribotorshowinformation .col-md-12 button,
-        #APIUSERshowinformation .col-md-12 button, #WLUSERshowinformation .col-md-12 button {
-            margin-top: 20px !important;
-        }
-
-    .table-bordered thead tr th {padding: 5px;}
-
-    .fund-trasfer-left .errorss {
-        color: #fff;background: green;width: 100%;
-    }
-
-    .fund-trasfer-left .errorss1 {color: #fff;background: red;width: 100%;}
-
-</style>
-<style>
-    .select2-selection.select2-selection--single {
-        border-radius: 0px !important;height: 32px !important;
-    }
-
-    .fund-t-dalear input {
-        border: 1px solid #bbb;height: 32px;padding: 0px 5px;width: 100%;padding-left: 40px;
-    }
-
-    .custom-district1 {position: relative;}
-
-        .custom-district1::before {
-            content: '';
-            border-color: #888 transparent transparent transparent;
-            border-style: solid;
-            border-width: 5px 4px 0 4px;
-            position: absolute;
-            right: 8px;
-            top: 13px;
-        }
-
-    .fund-t-dalear button {
-        height: 32px;border: 1px solid #c7c2c2;background: #fff;padding: 0px 20px
-    }
-
-    .for-change-fund {
-        margin: 0px;width: 100%;
-    }
-
-        .for-change-fund select {
-            width: 220px !important;height: 30px;
-        }
-
-        .for-change-fund .select2.select2-container.select2-container--default {
-            width: 150px !important;text-align: left;
-        }
-
-    .fund-fistory {
-        float: left;margin-top: 0px;font-size: 18px;font-weight: 600;text-transform: uppercase;
-    }
-
-        .fund-fistory sub {
-            position: absolute;bottom: 4px !important;top: 24px;line-height: 8px;left: 11px;font-size: 9px;
-        }
-
-    .nav-tabs li.active .for-change-fund .fa {
-        float: left;font-size: 44px;transform: rotate(-90deg);margin-left: 5px;
-        color: var(--main-bg-lcolor) !important;margin-top: -2px;line-height: 36px;
-    }
-    .fund-trasfer-left .errorss {color: #fff;font-weight: 400;width: 100%;}
-    .fund-trasfer-right .tab-content {height: 80vh;}
-
-    input[type="password"] {
-        background-color: transparent;border: 1px solid var(--main-bg-lcolor);box-shadow: none;
-    }
-
-    .fund-transfer-main-admin ul li a .custom-district1 select {
-        width: 100%;float: left;
-    }
-
-    .fund-transfer-main-admin ul li a {width: 100%;float: left;}
-
-    .newfourdesign-admin .for-change-fund .select2.select2-container.select2-container--default {
-        width: 140px !important;text-align: left;background: #fff;
-    }
-
-    .newfourdesign-admin .fund-trasfer-left .nav-tabs li.active a, .fund-trasfer-left .nav-tabs li.active a {
-        background: var(--fullbodybg-four) !important;
-    }
-    .reportandstatus {
-        float: right;border: 1px solid #aaa;height: 32px;padding: 0 10px;margin-right: 5px;color: #555;
-    }
-    .masterdealer select {height: 32px;border-color: #aaa;}
-    .masterdealer select {padding-left: 1px;}
-
-    @@media screen and (max-width:1366px) {
-        .fund-transfer-main-admin ul li a {width: 100%;float: left;padding-left: 0px !important;}
-
-        .fund-transfer-main-admin ul li:nth-child(3) {width: 35% !important;float: left !important;}
-
-            .fund-transfer-main-admin ul li:nth-child(3) .row {margin: 0;}
-
-            .fund-transfer-main-admin ul li:nth-child(3) .for-un {margin-left: 0px !important;}
-
-            .fund-transfer-main-admin ul li:nth-child(3) .for-un .col-md-5 {padding-right: 2px;}
-    }
-
-    @@media screen and (max-width:766px) {
-        .fund-transfer-main-admin ul.nav.nav-tabs li {
-            width: 100% !important;float: left;padding: 0px;
-        }
-
-        .fund-transfer-main-admin .fund-trasfer-right .nav-tabs li:nth-child(3) {
-            width: 100% !important;position: static;
-        }
-
-            .fund-transfer-main-admin .fund-trasfer-right .nav-tabs li:nth-child(3) .col-md-5 {
-                float: left;width: 50%;
-            }
-
-            .fund-transfer-main-admin .fund-trasfer-right .nav-tabs li:nth-child(3) .col-md-2.li-left-in {
-                float: left;width: auto;margin-top: 5px
-            }
-
-        .fund-transfer-main-admin ul.nav.nav-tabs li a {
-            padding-right: 0px !important;margin-right: 0px !important;
-        }
-
-        .fund-transfer-main-admin .fund-trasfer-right .nav-tabs li:nth-child(4) {
-            position: absolute;bottom: 9px;right: 0;width: auto !important;margin-top: 0px !important;
-        }
-    }
-
-    @@media only screen and (min-width:481px) and (max-width:991px) {
-        .fund-transfer-form {height: auto;}
-
-        .fund-trasfer-right ul.nav-tabs li, .fund-trasfer-right .nav-tabs li:first-child {
-            width: 100% !important;float: left;
-        }
-
-            .fund-trasfer-right .nav-tabs li:first-child span, .fund-trasfer-right .nav-tabs li:nth-child(2) .li-left-in {
-                width: 50% !important;text-align: left;float: left;
-            }
-
-                .fund-trasfer-right .nav-tabs li:nth-child(2) .li-left-in button {
-                    width: 97%;margin-top: 10px;
-                }
-
-        #masterdrop span, #dealerdrop span, #retailerdrop span, #apidrop span, #whitedrop span {
-            width: 100% !important;
-        }
-
-        #masterdrop, #dealerdrop, #retailerdrop, #apidrop, #whitedrop {
-            width: 50%;float: left;
-        }
-
-        .fund-trasfer-right .nav-tabs li:first-child a {
-            padding-right: 0px !important;margin: 0px;
-        }
-
-        .fund-trasfer-right ul {
-            padding: 10px 10px;float: left;width: 100%;position: relative;
-        }
-
-        .fund-trasfer-right .nav-tabs li:nth-child(2) {padding: 0px 10px;}
-
-        .fund-trasfer-right .nav-tabs li:nth-child(3) {
-            width: 50% !important;position: absolute;bottom: 10px;left: 51%;
-        }
-
-        .fund-trasfer-left .col-md-12.col-sm-12.col-xs-12 {
-            width: 50%;float: left;
-        }
-    }
-
-    @@media only screen and (max-width:480px) {
-        .fund-transfer-form {
-            height: auto;margin-bottom: 15px;
-        }
-
-        .fund-trasfer-right .nav-tabs li:first-child {
-            width: 100% !important;
-        }
-
-        .fund-trasfer-right .nav-tabs li:nth-child(2) {
-            width: 100% !important;
-        }
-
-        .for-un .fund-t-dalear .col-md-5 {
-            width: 50%;float: left;
-        }
-
-        .for-un .fund-t-dalear .col-md-2 {
-            width: 45%;float: left;margin-top: 3px;
-        }
-
-            .for-un .fund-t-dalear .col-md-2 button {width: 100%;}
-
-        .for-un .fund-t-dalear {padding: 0px 15px;}
-
-        #masterdrop, #dealerdrop, #retailerdrop, #apidrop, #whitedrop {
-            float: right;
-        }
-
-        .fund-trasfer-right ul {
-            position: relative;padding-bottom: 5px;
-        }
-
-        .for-export {
-            position: absolute !important;bottom: 6px;right: 5px;
-        }
-
-        .fund-trasfer-right .nav-tabs li:first-child a {padding-right: 5px !important;}
-
-        .table-responsive > .table-bordered > thead > tr > th:first-child {border-left: 1px solid var(--border-color);}
-
-        .table-responsive > .table-bordered > thead > tr > th:last-child {border-right: 1px solid var(--border-color);}
-
-        .fund-tr-history .modal-dialog {
-            width: 95%;margin-right: 2% !important;
-        }
-        .search-after-third.focused {margin-top: 2px;}
-    }
-
-    @@media screen and (max-width:420px){
-        .bread-same-all-page.breadsameall-second{margin-bottom:10px;}
-    }
-
-</style>
-
-
-
-
-<section class="content">
-    <div class="container-fluid" style="height:inherit !important;min-height:inherit !important;">
-
-        <!--Four-Design-Admin-page-Header-Section-Start-->
-        <div class="page-title-box-fourde-admin">
-            <h3>Fund Transfer</h3>
-            <ul>
-                <li><a href="@Url.Action("Dashboard","Home")" style="color:var(--fullbodybg-four);">Home&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Report's&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a></li>
-                <li><a href="javascript:void(0);">Commsion Status Master dlm</a></li>
-            </ul>
-        </div>
-        <!--Four-Design-Admin-page-Header-Section-End-->
-
-        <div class="page-header-third pageheader-margin-third second-header-third four-noneclass-admin-only">
-            <div class="bread-same-all-page breadsameall-second">
-                <div class="col-md-6" style="padding: 0px;width:auto;float:left;">
-                    <ul>
-                        <li class="smli">
-                            <a href="@Url.Action("Dashboard","Home")" class="fullbodydycolorbg tmw-total-color-one">
-                                Dashboard&nbsp;<img src="~/ashok-images/rightaeps.svg" alt="right-arrow" style="width:12px;margin-top:-2px;" />
-                            </a>
-                        </li>
-
-                        <li class="fullbodydycolorbg tmw-total-color-one">
-                            Commsion Status Master dlm
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-2" style="width:auto;float:right;padding-right:0px;">
-
-                    <div class="white-l-search-nine pdfexpoer-second">
-
-                        <div class="web-white-filter fil pdf-third-design" style="float: right;margin-right: 0px;">
-                            <input onclick="excel()" type="button" id="btnExport" value="Export" style="margin-left:0px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/xls.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 20px;">
-                            <input onclick="PDF()" type="button" id="btnPDF" value="PDF" style="margin-left:2px; padding: 0px 4px;height:32px;border:1px solid #b1a6a638;background:#b1a6a638;background-image: url(../../images/reportimage/pdf.png);
-                                background-repeat: no-repeat;
-                                background-position: 4px center;
-                                padding-left: 19px;">
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-page-responsive.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-report-filters-unified.css?v=3" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-operator-report-modern.css?v=33" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-money-transfer-report-modern.css?v=26" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-ticket-report-modern.css?v=44" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-flight-travel-report-mobile.css?v=29" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-commission-status-modern.css?v=8" rel="stylesheet" />
+
+<section class="content saas-admin-account-page saas-admin-report-page saas-operator-report-page saas-dmt-report-page saas-ticket-report-page saas-prepaid-card-report-page saas-commission-status-page">
+
+    <div class="container-fluid vm-opr-page-shell">
+
+        <div class="saas-acc-toolbar saas-acc-toolbar--stacked vm-opr-toolbar-unified vm-radiant-toolbar-shell">
+
+            <div class="saas-acc-toolbar-top vm-opr-toolbar-head vm-dmt-toolbar-head vm-dmt-toolbar-head--one-line vm-radiant-toolbar-one-line vm-ecomm-toolbar-one-line vm-gift-toolbar-one-line">
+
+                <ol class="saas-acc-breadcrumb vm-dmt-breadcrumb vm-radiant-breadcrumb">
+                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                    <li>Basic Setting</li>
+                    <li>Commission Hold Status</li>
+                </ol>
+
+                <div class="saas-acc-filter-bar vm-commission-filter-bar">
+
+                    <div class="vm-commission-filter-bar__search">
+                        <div class="vm-commission-search-field">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input class="form-control vm-commission-search-input" type="text" value="" id="myInput" placeholder="Search..." name="myInput" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div class="vm-commission-filter-bar__right">
+                        <div class="vm-opr-field vm-dmt-field vm-commission-field--role">
+                            <select class="vm-opr-select vm-dmt-select form-control" id="ddlusers" name="ddlusers">
+                                <option value="master">Master Distributor</option>
+                                <option value="dealer">Distributor</option>
+                            </select>
                         </div>
 
-                    </div>
-                </div>
-                <div class="col-md-6 tablesearch-second" style="padding: 0px;margin-bottom:15px;width:30%;float:right;">
-                    <div class="search-after-third">
-                        <input class="form-control marginbottom-respon-third" type="text" value="" id="myInput" placeholder="Search.." name="myInput" style="float: right;height:32px;border:1px solid;width:100%;border: 1px solid #aaa;padding: 0 5px;">
+                        <button type="button" class="vm-commission-view-toggle" id="btnshowhidmaster_dlmComm" value="Report">
+                            @(showReportOnLoad ? "Show Status" : "Show Report")
+                        </button>
+
+                        <div class="vm-commission-filter-bar__actions sa-export-group vm-commission-export-group">
+                            <button type="button" id="btnExport" class="sa-export-btn sa-export-btn--excel" title="Export Excel">
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i><span>Excel</span>
+                            </button>
+                            <button type="button" id="btnPDF" class="sa-export-btn sa-export-btn--pdf" title="Export PDF">
+                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i><span>PDF</span>
+                            </button>
+                        </div>
                     </div>
 
                 </div>
-                <button class="reportandstatus" type="button" id="btnshowhidmaster_dlmComm" value="Report">Show Report</button>
-                <div class="masterdealer" style="float:right;padding-right:5px;">
-                    <select class="form-control" id="ddlusers" name="ddlusers">
-                        <option value="master">Master Distributor</option>
-                        <option value="dealer">Distributor</option>
-                    </select>
-                </div>
-
 
             </div>
+
         </div>
 
-    </div>
+        <div class="vm-opr-main-card vm-security-report-main-card vm-gift-report-main-card vm-prepaid-report-main-card vm-commission-status-main-card">
+            <div class="vm-opr-table-panel vm-security-report-table-panel vm-gift-report-table-panel vm-prepaid-report-table-panel">
+                <div class="vm-opr-table-panel__head vm-dmt-table-panel__head vm-security-report-table-head">
+                    <div class="vm-opr-table-panel__title">
+                        <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                        <span id="commissionPanelTitle">@(showReportOnLoad ? "Commission transfer report" : "Commission hold status")</span>
+                    </div>
+                    <div class="vm-dmt-table-panel__right">
+                        <span class="vm-commission-mode-badge" id="commissionModeBadge">
+                            <i class="fas fa-layer-group" aria-hidden="true"></i>
+                            <span id="commissionModeText">@(showReportOnLoad ? "Report view" : "Status view")</span>
+                        </span>
+                        <span class="vm-radiant-record-badge" title="Total records">
+                            Records: <strong id="commissionRecordCount">@(showReportOnLoad ? reportCount : statusCount)</strong>
+                        </span>
+                    </div>
+                </div>
 
-    <div class="col-md-12 fund-transfer-main-admin">
-        <div class="fund-trasfer-right">
+                <div class="vm-opr-table-wrap vm-prepaid-table-wrap vm-commission-table-wrap">
+                    <div class="vm-commission-scroll-hint" aria-hidden="true">
+                        <i class="fas fa-arrows-alt-h" aria-hidden="true"></i>
+                        <span>Swipe left/right to see all columns</span>
+                    </div>
+                    <div id="commissionStatusLoading" class="vm-commission-table-loading" style="display:none;" aria-hidden="true">
+                        <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        <span>Loading...</span>
+                    </div>
 
-            <div id="tab-1" class="width100 float-left tab-content current" style="padding:0px;">
-
-
-                @if (Model != null && Model.Common_status_master_dlmlist != null)
-                {
-                    <div id="tblshowMasterD" class=" table-responsive tableseconddes-admin" style="width:100%;">
-                        <table class="table table-bordered table-striped table-hover third-design-table">
+                    <div id="tblshowMasterD" class="table-responsive vm-opr-table-scroll" style="@(showReportOnLoad ? "display:none;" : "")">
+                        <table id="commissionStatusTable" class="table vm-opr-data-table" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Role</th>
-                                    <th> Name</th>
-                                    <th> Firm</th>
-                                    <th>Commision Hold</th>
+                                    <th>Name</th>
+                                    <th>Firm</th>
+                                    <th>Commission Hold</th>
                                     <th>Last Update Time</th>
-
-
                                 </tr>
                             </thead>
                             <tbody id="body">
-                                @foreach (var item in Model.Common_status_master_dlmlist)
+                                @if (statusRows.Any())
                                 {
-                                    <tr class="tr">
-                                        <td>@item.Role</td>
-                                        <td>@item.Name</td>
-                                        <td>@item.Frmname</td>
-                                        <td>
-                                            @if (item.Comm_Status == "Y")
-                                            {
-                                                <span class="onoffswitch costom-on-second" style="float: left;border:0px;">
-                                                    <button class="costom-on clscall" id="btnsts_@item.idno" value="ON" onclick="changestats('@item.idno', '@item.Role','N')" style="border:1px solid #aaa4a4;">ON</button>
-                                                </span>
-
-                                            }
-                                            else
-                                            {
-                                                <span class="onoffswitch costom-off-second" style="float: left;border:0px;">
-                                                    <button class="custom-off clscall" id="btnsts_@item.idno" onclick="changestats('@item.idno', '@item.Role','Y')" value="OFF" style="border:1px solid #aaa4a4;">OFF</button>
-                                                </span>
-                                            }
-
-
-
-
+                                    foreach (var item in statusRows)
+                                    {
+                                        <tr class="tr">
+                                            <td>@item.Role</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Frmname</td>
+                                            <td class="vm-commission-hold-cell">
+                                                @if (item.Comm_Status == "Y")
+                                                {
+                                                    <button type="button" class="vm-commission-hold-btn costom-on clscall" id="btnsts_@item.idno" value="ON" onclick="changestats('@item.idno', '@item.Role','N')">ON</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="vm-commission-hold-btn custom-off clscall" id="btnsts_@item.idno" value="OFF" onclick="changestats('@item.idno', '@item.Role','Y')">OFF</button>
+                                                }
+                                            </td>
+                                            <td>@item.updatetime</td>
+                                        </tr>
+                                    }
+                                }
+                                else if (!showReportOnLoad)
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="5" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                                            <span>No commission hold records found.</span>
                                         </td>
-                                        <td>@item.updatetime</td>
-
                                     </tr>
                                 }
                             </tbody>
                         </table>
-
-
-
-
-
-
                     </div>
 
-                }
-
-              
-            <div id="tblshowmaster_dlm_comm_reports" class=" table-responsive tableseconddes-admin" style="width:100%;">
-                @if (Model != null && Model.Common_status_master_dlm_Transferlist != null)
-                {
-
-                    <table class="table table-bordered table-striped table-hover third-design-table">
-                        <thead>
-                            <tr>
-                                <th>Role</th>
-                                <th> Name</th>
-                                <th> Firm</th>
-                                <th> Mobile</th>
-                                <th>Pre Balance</th>
-                                <th>Total  Comm. Recived</th>
-                                <th> Post Balance</th>
-                                <th> Admin  Pre bal</th>
-                                <th>Admin Post bal</th>
-                                <th>Hold Comm date</th>
-                                <th>Hold Comm Transfer date</th>
-
-
-                            </tr>
-                        </thead>
-                        <tbody id="bodyss">
-                            @foreach (var item in Model.Common_status_master_dlm_Transferlist)
-                            {
-                                <tr class="tr">
-                                    <td>@item.Role</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Frmname</td>
-                                    <td> @item.mobile </td>
-                                    <td> @item.master_remain_pre </td>
-                                    <td> @item.totalcomm </td>
-                                    <td> @item.master_remain </td>
-                                    <td> @item.admin_prebal </td>
-                                    <td>@item.admin_postbal</td>
-                                    <td>@item.Hold_date</td>
-                                    <td>@item.trasnferdate</td>
-
+                    <div id="tblshowmaster_dlm_comm_reports" class="table-responsive vm-opr-table-scroll" style="@(showReportOnLoad ? "" : "display:none;")">
+                        <table id="commissionReportTable" class="table vm-opr-data-table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Name</th>
+                                    <th>Firm</th>
+                                    <th>Mobile</th>
+                                    <th>Pre Balance</th>
+                                    <th>Total Comm. Received</th>
+                                    <th>Post Balance</th>
+                                    <th>Admin Pre Bal</th>
+                                    <th>Admin Post Bal</th>
+                                    <th>Hold Comm Date</th>
+                                    <th>Hold Comm Transfer Date</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-
-
-
-                }
-
-
+                            </thead>
+                            <tbody id="bodyss">
+                                @if (reportRows.Any())
+                                {
+                                    foreach (var item in reportRows)
+                                    {
+                                        <tr class="tr">
+                                            <td>@item.Role</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Frmname</td>
+                                            <td>@item.mobile</td>
+                                            <td>@item.master_remain_pre</td>
+                                            <td>@item.totalcomm</td>
+                                            <td>@item.master_remain</td>
+                                            <td>@item.admin_prebal</td>
+                                            <td>@item.admin_postbal</td>
+                                            <td>@item.Hold_date</td>
+                                            <td>@item.trasnferdate</td>
+                                        </tr>
+                                    }
+                                }
+                                else if (showReportOnLoad)
+                                {
+                                    <tr class="vm-opr-table-empty-row">
+                                        <td colspan="11" class="vm-opr-table-empty vm-dmt-table-empty">
+                                            <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
+                                            <span>No commission transfer records found.</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-              
-
-                </div>
-
+            </div>
         </div>
+
     </div>
-
 </section>
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
+
+<script src="~/MainFrontDesign/js/admin-report-pdf-export.js?v=3"></script>
+<script src="~/MainFrontDesign/js/admin-report-excel-export.js?v=4"></script>
 
 <script>
-    $(document).ready(function()
-    {
+    var btnshowhidmastertext = '@(showReportOnLoad ? "ShowStatus" : "Report")';
 
-        $('.input-daterange').datepicker({
-            format: "yyyy-mm-dd",
-            todayHighlight: true,
-            autoclose: true,
-            orientation: "bottom auto",
-
-        });
-        var val = '@ViewBag.chk';
-        if (val != "post") {
-            $("#txt_frm_date").datepicker("setDate", new Date());
-            $("#txt_to_date").datepicker("setDate", new Date());
-        }
-
-    })
-
-
-
-</script>
-<script>
-    var btnshowhidmastertext = "Report";
-    $('#btnshowhidmaster_dlmComm').click(function () {
-        var btntextvalue = $('#btnshowhidmaster_dlmComm').text();
-        var role = $('#ddlusers').val();
-        
-        var urlsss = '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + role + '&btntextvalue=' + btnshowhidmastertext ;
-
-        if (btnshowhidmastertext == "ShowStatus") {
-               $('#tblshowmaster_dlm_comm_reports').hide()
-
-               $("#tblshowMasterD").load(urlsss + " #tblshowMasterD");
-               $('#btnshowhidmaster_dlmComm').text("Show Report")
-               btnshowhidmastertext = "Report";
-            $('#tblshowMasterD').show()
-            $('#tblshowmaster_dlm_comm_reports').empty()
-
-          }
-           else {
-
-
-               $("#tblshowmaster_dlm_comm_reports").load(urlsss + " #tblshowmaster_dlm_comm_reports");
-            $('#btnshowhidmaster_dlmComm').text("Show Status")
-            btnshowhidmastertext = "ShowStatus";
-               $('#tblshowMasterD').hide()
-               $('#tblshowmaster_dlm_comm_reports').show()
-           
-            $('#tblshowMasterD').empty()
-           }
-
-
-    })
-
-    function changestats(idno, role,csts) {
-
-         $.ajax({
-            url: "@Url.Action("Commsion_Status_master_dlm_change")",
-            type: "GET",
-             data: { idno: idno, userwise: role, sts: csts },
-
-             success: function (result) {
-                 
-                 if (result == "success") {
-
-                     var urlsss = '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + role + '&btntextvalue=ShowStatus' ;
-
-
-                // var urlsss = '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + role;
-
-                     $("#tblshowMasterD").load(urlsss + " #tblshowMasterD");
-             }
-
-                // $("#" + tabID).html(result);
-            }
-        });
-
-
+    function showCommissionLoading() {
+        $('#commissionStatusLoading').show().attr('aria-hidden', 'false');
     }
 
+    function hideCommissionLoading() {
+        $('#commissionStatusLoading').hide().attr('aria-hidden', 'true');
+    }
 
-    $('#ddlusers').change(function () {
-        var btntextvalue = $('#btnshowhidmaster_dlmComm').text();
-        var role = $('#ddlusers').val();
-        var urlsss = '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + role + '&btntextvalue=' + btnshowhidmastertext ;
+    function getVisibleCommissionRowsSelector() {
+        return $('#tblshowMasterD').is(':visible') ? '#body .tr:not(.vm-opr-table-empty-row)' : '#bodyss .tr:not(.vm-opr-table-empty-row)';
+    }
 
-        if (btnshowhidmastertext == "ShowStatus") {
-            $('#tblshowmaster_dlm_comm_reports').hide()
+    function refreshCommissionSummary() {
+        var $rows = $(getVisibleCommissionRowsSelector()).filter(':visible');
+        $('#commissionRecordCount').text($rows.length);
+    }
 
-            $("#tblshowMasterD").load(urlsss + " #tblshowMasterD");
-
-            $('#tblshowMasterD').show()
+    function updateCommissionViewLabels(isReportView) {
+        if (isReportView) {
+            $('#commissionPanelTitle').text('Commission transfer report');
+            $('#commissionModeText').text('Report view');
+        } else {
+            $('#commissionPanelTitle').text('Commission hold status');
+            $('#commissionModeText').text('Status view');
         }
-        else {
+    }
 
-
-            $("#tblshowmaster_dlm_comm_reports").load(urlsss + " #tblshowmaster_dlm_comm_reports");
-
-            $('#tblshowMasterD').hide()
-            $('#tblshowmaster_dlm_comm_reports').show()
-
-        }
-
-
-
-
-
-
-          @*$.ajax({
-        url:"@Url.Action("Commsion_Status_master_dlm_userwise")",
-              type: "GET",
-              data: { userwise: $('#ddlusers').val() },
-        dataType: "html",
-             success: function (result) {
-                 
-                 var url = '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + $('#ddlusers').val();
-
-        $("#body").empty().load(url + " #body");
-
-           // $("#" + tabID).html(result);
-        }
-   });*@
-
-
-
-    })
-</script>
-<script>
-    $(document).ready(function () {
-        $("#myInput").on("keyup", function () {
-
-            var value = $(this).val().toLowerCase();
-            $("#body .tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
+    function filterCommissionRows() {
+        var value = ($('#myInput').val() || '').toLowerCase();
+        var selector = $('#tblshowMasterD').is(':visible') ? '#body .tr' : '#bodyss .tr';
+        $(selector).filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
+        refreshCommissionSummary();
+    }
+
+    function getCommissionExportTable() {
+        var isReportView = $('#tblshowmaster_dlm_comm_reports').is(':visible');
+        return document.getElementById(isReportView ? 'commissionReportTable' : 'commissionStatusTable');
+    }
+
+    function getCommissionExportMeta() {
+        var isReportView = $('#tblshowmaster_dlm_comm_reports').is(':visible');
+        var role = $('#ddlusers option:selected').text() || '—';
+
+        return {
+            isReportView: isReportView,
+            title: isReportView ? 'Commission Transfer Report' : 'Commission Hold Status',
+            subtitle: isReportView
+                ? ('Commission transfer history for ' + role)
+                : ('Commission hold ON/OFF status for ' + role),
+            filePrefix: isReportView ? 'Commission_Transfer_Report' : 'Commission_Hold_Status',
+            sheetName: isReportView ? 'Transfer Report' : 'Hold Status'
+        };
+    }
+
+    function countCommissionExportRows(table) {
+        if (!table) {
+            return 0;
+        }
+
+        var rows = table.querySelectorAll('tbody tr');
+        var count = 0;
+        var i;
+
+        for (i = 0; i < rows.length; i++) {
+            if (rows[i].classList.contains('vm-opr-table-empty-row')) {
+                continue;
+            }
+            count++;
+        }
+
+        return count;
+    }
+
+    function exportCommissionExcel() {
+        var table = getCommissionExportTable();
+        var meta = getCommissionExportMeta();
+        var rowCount = countCommissionExportRows(table);
+
+        if (!table || typeof window.openAdminModernReportExcel !== 'function') {
+            return;
+        }
+
+        if (rowCount === 0) {
+            alert('No data available to export.');
+            return;
+        }
+
+        window.openAdminModernReportExcel({
+            table: table,
+            title: meta.title,
+            subtitle: meta.subtitle,
+            fromDate: '—',
+            toDate: '—',
+            recordCount: rowCount,
+            filePrefix: meta.filePrefix,
+            sheetName: meta.sheetName
+        });
+    }
+
+    function exportCommissionPdf() {
+        var table = getCommissionExportTable();
+        var meta = getCommissionExportMeta();
+        var rowCount = countCommissionExportRows(table);
+
+        if (!table || typeof window.openAdminModernReportPdf !== 'function') {
+            return;
+        }
+
+        if (rowCount === 0) {
+            alert('No data available to export.');
+            return;
+        }
+
+        window.openAdminModernReportPdf({
+            table: table,
+            title: meta.title,
+            subtitle: meta.subtitle,
+            fromDate: '—',
+            toDate: '—',
+            orientation: meta.isReportView ? 'landscape' : 'portrait',
+            recordCount: rowCount,
+            recordLabel: rowCount + ' record' + (rowCount === 1 ? '' : 's')
+        });
+    }
+
+    function buildCommissionUrl(role, dataMode) {
+        return '@Url.Action("Commsion_Status_master_dlm_userwise", "Home")?userwise=' + encodeURIComponent(role) + '&btntextvalue=' + encodeURIComponent(dataMode);
+    }
+
+    function onCommissionRoleChange() {
+        var role = $('#ddlusers').val();
+        if (!role) {
+            return;
+        }
+
+        // Purane page jaisa: dropdown change par report table open hoti hai
+        reloadCommissionReportTable(buildCommissionUrl(role, 'Report'));
+        btnshowhidmastertext = 'ShowStatus';
+        $('#btnshowhidmaster_dlmComm').text('Show Status');
+    }
+
+    function showCommissionStatusView(role) {
+        reloadCommissionStatusTable(buildCommissionUrl(role, 'ShowStatus'));
+        btnshowhidmastertext = 'Report';
+        $('#btnshowhidmaster_dlmComm').text('Show Report');
+    }
+
+    function showCommissionReportView(role) {
+        reloadCommissionReportTable(buildCommissionUrl(role, 'Report'));
+        btnshowhidmastertext = 'ShowStatus';
+        $('#btnshowhidmaster_dlmComm').text('Show Status');
+    }
+
+    function reloadCommissionStatusTable(url) {
+        showCommissionLoading();
+        $('#tblshowmaster_dlm_comm_reports').hide();
+        $('#tblshowMasterD').load(url + ' #tblshowMasterD', function (response, status) {
+            hideCommissionLoading();
+            if (status === 'error') {
+                alert('Unable to load commission hold status.');
+                return;
+            }
+            $('#tblshowMasterD').show();
+            updateCommissionViewLabels(false);
+            $('#myInput').val('');
+            filterCommissionRows();
+            refreshCommissionSummary();
+        });
+    }
+
+    function reloadCommissionReportTable(url) {
+        showCommissionLoading();
+        $('#tblshowMasterD').hide();
+        $('#tblshowmaster_dlm_comm_reports').load(url + ' #tblshowmaster_dlm_comm_reports', function (response, status) {
+            hideCommissionLoading();
+            if (status === 'error') {
+                alert('Unable to load commission report.');
+                return;
+            }
+            $('#tblshowmaster_dlm_comm_reports').show();
+            updateCommissionViewLabels(true);
+            $('#myInput').val('');
+            filterCommissionRows();
+            refreshCommissionSummary();
+        });
+    }
+
+    $('#btnshowhidmaster_dlmComm').click(function () {
+        var role = $('#ddlusers').val();
+
+        if (btnshowhidmastertext === 'ShowStatus') {
+            showCommissionStatusView(role);
+        } else {
+            showCommissionReportView(role);
+        }
+    });
+
+    function changestats(idno, role, csts) {
+        showCommissionLoading();
+        $.ajax({
+            url: '@Url.Action("Commsion_Status_master_dlm_change", "Home")',
+            type: 'GET',
+            data: { idno: idno, userwise: role, sts: csts },
+            success: function (result) {
+                if (result === 'success') {
+                    showCommissionStatusView(role);
+                } else {
+                    hideCommissionLoading();
+                }
+            },
+            error: function () {
+                hideCommissionLoading();
+                alert('Unable to update commission hold status.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#ddlusers').on('change', onCommissionRoleChange);
+        refreshCommissionSummary();
+
+        $('#myInput').on('keyup', filterCommissionRows);
+
+        $('#btnExport').on('click', exportCommissionExcel);
+        $('#btnPDF').on('click', exportCommissionPdf);
     });
 </script>
-
-
-
-

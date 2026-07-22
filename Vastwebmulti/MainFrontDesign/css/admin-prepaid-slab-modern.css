@@ -1,0 +1,756 @@
+/* ADMIN — Prepaid / DTH Slab Setting */
+
+body.saas-admin-ui .saas-prepaid-slab-page {
+    --prepaid-slab-accent: #2563eb;
+    --prepaid-slab-accent-soft: #dbeafe;
+    --prepaid-slab-border: #e2e8f0;
+    --prepaid-slab-muted: #64748b;
+    --prepaid-slab-text: #0f172a;
+}
+
+/* Layout shell: category sidebar + main */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-shell {
+    display: grid;
+    grid-template-columns: minmax(170px, 210px) minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-main {
+    min-width: 0;
+}
+
+/* Category sidebar */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav {
+    border: 1px solid var(--prepaid-slab-border);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+    position: sticky;
+    top: 78px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__title {
+    margin: 0;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--prepaid-slab-text);
+    border-bottom: 1px solid #eef2f6;
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list li {
+    margin: 0 0 4px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--prepaid-slab-muted);
+    text-decoration: none !important;
+    border: 1px solid transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list a:hover {
+    color: var(--prepaid-slab-accent);
+    background: #eff6ff;
+    border-color: var(--prepaid-slab-accent-soft);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list li.active a,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list a.active {
+    color: var(--prepaid-slab-accent);
+    background: var(--prepaid-slab-accent-soft);
+    border-color: #bfdbfe;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list a::before {
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 0.65rem;
+    opacity: 0.5;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list li.active a::before,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav__list a.active::before {
+    opacity: 1;
+}
+
+/* Secondary action row */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    background: #fff;
+    color: #334155;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn i {
+    color: var(--prepaid-slab-accent);
+    font-size: 0.85rem;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn:hover {
+    border-color: var(--prepaid-slab-accent-soft);
+    background: #eff6ff;
+    color: var(--prepaid-slab-accent);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn--hold {
+    display: none;
+    text-decoration: none !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn--hold.is-visible {
+    display: inline-flex;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-action-btn--hold span {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--prepaid-slab-muted);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-table-wrap {
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll.vm-prepaid-slab-table-wrap {
+    margin: 12px 16px 16px;
+}
+
+/* Sticky operator / user column while scrolling wide table */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th:first-child,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    box-shadow: 2px 0 8px rgba(15, 23, 42, 0.06);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th:first-child {
+    z-index: 5;
+    background: #cfd9e6 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody td:first-child {
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody tr:nth-child(even) td:first-child {
+    background: #f8fafc !important;
+}
+
+/* Scroll hint on touch devices */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll::after {
+    content: "Swipe horizontally for all columns \2192";
+    display: block;
+    padding: 6px 10px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-align: center;
+    background: #f8fafc;
+    border-top: 1px solid #eef2f6;
+}
+
+@media (min-width: 992px) {
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll::after {
+        display: none;
+    }
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab-bar {
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th small.font-10,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th .font-10 {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.58rem !important;
+    font-weight: 600;
+    color: #64748b !important;
+    line-height: 1.3;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    font-size: 0.62rem !important;
+    font-weight: 800;
+    color: #fff !important;
+    background: #0f172a;
+    border: none;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-label {
+    margin: 0;
+    font-size: 0.62rem !important;
+    font-weight: 700;
+    color: #475569;
+    line-height: 1.25;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-head {
+    text-align: center !important;
+    white-space: normal !important;
+    min-width: 72px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-title {
+    display: inline-block;
+    font-size: 0.68rem !important;
+    font-weight: 800;
+    color: var(--prepaid-slab-accent) !important;
+    border-bottom: 1px solid var(--prepaid-slab-accent-soft);
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-title + p {
+    margin: 4px 0 0;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:nth-child(2) th,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:nth-child(3) th {
+    background: #eef2f7 !important;
+    font-size: 0.64rem !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:first-child th {
+    background: #dbe4ef !important;
+    font-size: 0.68rem !important;
+    white-space: normal !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:first-child th[rowspan] {
+    background: #cfd9e6 !important;
+    min-width: 120px;
+}
+
+/* MD slab control toggle */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #dbe2ea;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control.is-admin {
+    border-color: var(--prepaid-slab-accent);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control.is-md {
+    border-color: #22c55e;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex: 0 0 14px;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control__dot--off {
+    background: #ef4444;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control__dot--on {
+    background: #22c55e;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control__text {
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control__text strong {
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control.is-admin .vm-prepaid-md-control__text {
+    color: var(--prepaid-slab-accent);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-md-control.is-md .vm-prepaid-md-control__text {
+    color: #15803d;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-master-detail .row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Kill legacy dark category sidebar styles */
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav.slab-first-tab {
+    background: #fff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav h2.borderbottom-second,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .vm-slab-category-nav__title {
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%) !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    text-align: left !important;
+    padding: 12px 14px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs > li > a {
+    color: #64748b !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a:hover,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a:focus {
+    background: #dbeafe !important;
+    color: #2563eb !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page #loadermoney {
+    position: fixed;
+    inset: 0;
+    z-index: 999998;
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(2px);
+}
+
+/* Reset legacy sidebar styles inside modern shell */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-shell .slab-first-tab {
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: block !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .borderbottom-second {
+    border: none;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs {
+    border: none;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li a::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a:hover,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav .nav-tabs li.active a:focus {
+    background: #dbeafe !important;
+    color: #2563eb !important;
+    border-radius: 10px !important;
+    border: 1px solid #bfdbfe !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table input.vm-pg-slab-cell-input {
+    min-width: 52px !important;
+    max-width: 76px !important;
+    width: 68px !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-shell {
+        grid-template-columns: 1fr;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav {
+        position: static;
+    }
+}
+
+/* ── Legacy kill: category sidebar + slab tabs + table ── */
+body.saas-admin-ui .saas-prepaid-slab-page #custnav.slab-first-tab,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-slab-category-nav.slab-first-tab,
+body.saas-admin-ui .saas-prepaid-slab-page .col-md-2.slab-first-tab {
+    background: #fff !important;
+    padding: 0 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab h2,
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .borderbottom-second {
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%) !important;
+    color: #0f172a !important;
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    text-align: left !important;
+    padding: 12px 14px !important;
+    margin: 0 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab ul li {
+    width: 100% !important;
+    background: transparent !important;
+    margin-top: 0 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .nav-tabs > li > a {
+    color: #64748b !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    border: none !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .nav-tabs li a::before {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .nav-tabs li.active a,
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .nav-tabs li.active a:hover,
+body.saas-admin-ui .saas-prepaid-slab-page .slab-first-tab .nav-tabs li.active a:focus {
+    background: #dbeafe !important;
+    color: #2563eb !important;
+    border-radius: 10px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header-second a,
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header-second button,
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header a,
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header button {
+    width: auto !important;
+    height: auto !important;
+    padding: 8px 12px !important;
+    float: none !important;
+    font-size: inherit !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header a p,
+body.saas-admin-ui .saas-prepaid-slab-page .all-slab-header button p {
+    display: none !important;
+}
+
+/* Role slab tabs — icon cards */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab-bar {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 8px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 56px !important;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.88rem !important;
+    flex: 0 0 34px;
+    transition: background 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab__sub {
+    display: block;
+    font-size: 0.62rem !important;
+    font-weight: 600 !important;
+    color: #94a3b8 !important;
+    line-height: 1.2;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--active {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--active::after {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    font-size: 0.58rem;
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--active .vm-pg-slab-tab__icon {
+    background: #1d4ed8 !important;
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--active .vm-pg-slab-tab__icon i {
+    color: #ffffff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--active .vm-pg-slab-tab__sub {
+    color: #3b82f6 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab--inactive:hover .vm-pg-slab-tab__icon {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+/* User filter — single inline row */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter {
+    margin: 12px 16px 0;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(15, 23, 42, 0.04);
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter--inline.slab-master-block {
+    display: block !important;
+    grid-template-columns: none !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__row {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    margin: 0 !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item {
+    flex: 1 1 0;
+    min-width: 128px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--select {
+    flex: 1.1 1 145px;
+    min-width: 140px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--control {
+    flex: 1.25 1 185px;
+    min-width: 170px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__retailer {
+    display: none;
+    flex: 2.2 1 280px;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 260px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__retailer.show-retailer,
+body.saas-admin-ui .saas-prepaid-slab-page #retailerdrop.show-retailer {
+    display: flex !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__retailer .vm-prepaid-user-filter__item {
+    flex: 1 1 0;
+    min-width: 120px;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .vm-pg-slab-field {
+    height: 100%;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .vm-pg-slab-field input.form-control,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .vm-pg-slab-field .select2-container--default .select2-selection--single {
+    min-height: 40px !important;
+    height: 40px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .vm-pg-slab-field .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 38px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .vm-prepaid-md-control {
+    min-height: 40px;
+    height: 100%;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter .slab-master-message {
+    margin-bottom: 8px;
+}
+
+/* Modern commission table */
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table-scroll {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+    overflow: hidden;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead td {
+    background: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #475569 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-weight: 700 !important;
+    font-size: 0.68rem !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:first-child th {
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%) !important;
+    color: #1e40af !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:nth-child(2) th,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:nth-child(3) th {
+    background: #fff !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead tr:first-child th[rowspan],
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th:first-child {
+    background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+    color: #0f172a !important;
+    z-index: 6;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody td {
+    border-color: #eef2f6 !important;
+    font-size: 0.76rem !important;
+    padding: 10px 12px !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody tr:hover td {
+    background: #f8fbff !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-range-badge {
+    background: #2563eb !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table tbody td:first-child,
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-table thead th:first-child {
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-edit-cell {
+    padding: 6px 8px !important;
+}
+
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-detail-grid,
+    body.saas-admin-ui .saas-prepaid-slab-page .slab-master-detail .row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-pg-slab-tab {
+        min-height: 52px !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__row {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item,
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--select,
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--control {
+        flex: 1 1 calc(50% - 4px);
+        min-width: calc(50% - 4px);
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__retailer {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item,
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--select,
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-user-filter__item--control {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+}

@@ -1,0 +1,682 @@
+/* ADMIN — Commission Status Master / Distributor (Hold Setting) */
+
+body.saas-admin-ui .saas-commission-status-page {
+    --commission-status-filter-role-width: 190px;
+    --commission-status-search-width: 240px;
+}
+
+/* Toolbar — search left, controls right */
+body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__search {
+    flex: 0 1 var(--commission-status-search-width);
+    width: var(--commission-status-search-width);
+    min-width: 160px;
+    max-width: var(--commission-status-search-width);
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1 1 auto;
+    margin-left: auto;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: 0;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role {
+    flex: 0 0 var(--commission-status-filter-role-width) !important;
+    width: var(--commission-status-filter-role-width) !important;
+    min-width: var(--commission-status-filter-role-width) !important;
+    max-width: var(--commission-status-filter-role-width) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role select.form-control {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 28px 0 10px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M2 4l4 4 4-4'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    cursor: pointer;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role .select2-container {
+    display: none !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-opr-table-panel__title i.fa-hand-holding-usd {
+    color: #2563eb;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-view-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid #bfdbfe;
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+    color: #1d4ed8;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-view-toggle:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1e40af;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-field {
+    position: relative;
+    width: 100%;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-field i {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-input,
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-field input.form-control {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 12px 0 32px !important;
+    border: 1px solid #dbe2ea !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    background-image: none !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-input:focus,
+body.saas-admin-ui .saas-commission-status-page .vm-commission-search-field input.form-control:focus {
+    outline: none !important;
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__actions .saas-acc-btn {
+    min-height: 38px;
+    padding: 0 12px;
+    white-space: nowrap;
+}
+
+/* Modern export buttons — same as SMSAPI page */
+body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group,
+body.saas-admin-ui .saas-commission-status-page .sa-export-group.vm-commission-export-group {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: 0 !important;
+    padding: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 14px 0 10px !important;
+    border-radius: 9px !important;
+    border: 1.5px solid transparent !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    color: #334155 !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn:hover {
+    transform: translateY(-1px) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn:active {
+    transform: translateY(0) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn:focus-visible {
+    outline: 2px solid #93c5fd !important;
+    outline-offset: 2px !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 6px !important;
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn span {
+    font-weight: 700 !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--excel {
+    background: linear-gradient(135deg, #059669 0%, #16a34a 52%, #22c55e 100%) !important;
+    border-color: #15803d !important;
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(22, 163, 74, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--excel i {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--excel:hover {
+    background: linear-gradient(135deg, #047857 0%, #15803d 52%, #16a34a 100%) !important;
+    border-color: #166534 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.34) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--pdf {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 52%, #f87171 100%) !important;
+    border-color: #b91c1c !important;
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--pdf i {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .sa-export-btn--pdf:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #dc2626 52%, #ef4444 100%) !important;
+    border-color: #991b1b !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.34) !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-table-wrap {
+    position: relative;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-table-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #2563eb;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-commission-status-page #commissionStatusTable.vm-opr-data-table,
+body.saas-admin-ui .saas-commission-status-page #commissionReportTable.vm-opr-data-table {
+    width: 100% !important;
+    min-width: 980px !important;
+    table-layout: auto !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page #commissionReportTable.vm-opr-data-table {
+    min-width: 1280px !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page #commissionStatusTable thead th,
+body.saas-admin-ui .saas-commission-status-page #commissionStatusTable tbody td,
+body.saas-admin-ui .saas-commission-status-page #commissionReportTable thead th,
+body.saas-admin-ui .saas-commission-status-page #commissionReportTable tbody td {
+    white-space: nowrap;
+    font-size: 0.76rem;
+    vertical-align: middle;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-cell {
+    text-align: center !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn.costom-on,
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn.clscall.costom-on {
+    background: linear-gradient(135deg, #059669, #10b981) !important;
+    border-color: #059669 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.22);
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn.custom-off {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #64748b !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn.custom-off:hover {
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    color: #b91c1c !important;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+/* Scroll hint — mobile/tablet only */
+body.saas-admin-ui .saas-commission-status-page .vm-commission-scroll-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0 0 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    color: #64748b;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+body.saas-admin-ui .saas-commission-status-page .vm-commission-scroll-hint i {
+    color: #2563eb;
+    font-size: 0.78rem;
+}
+
+/* ── Tablet + Mobile toolbar fix (override saas-dmt-report-page flex-grow gap) ── */
+@media (max-width: 991px) {
+    body.saas-admin-ui .saas-commission-status-page.saas-dmt-report-page .vm-dmt-toolbar-head--one-line,
+    body.saas-admin-ui .saas-commission-status-page.saas-dmt-report-page .saas-acc-toolbar--stacked .vm-dmt-toolbar-head--one-line,
+    body.saas-admin-ui .saas-commission-status-page .vm-ecomm-toolbar-one-line,
+    body.saas-admin-ui .saas-commission-status-page .vm-gift-toolbar-one-line {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-page-shell {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-toolbar-unified {
+        padding: 8px 10px 10px !important;
+        margin-bottom: 10px !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+
+    /* Breadcrumb upar — neeche nahi */
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-toolbar-unified .vm-dmt-breadcrumb,
+    body.saas-admin-ui .saas-commission-status-page .vm-radiant-breadcrumb {
+        order: 1 !important;
+        flex: 0 0 auto !important;
+        flex-grow: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 0 0 6px !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        flex-wrap: wrap;
+        gap: 4px 6px;
+        font-size: 0.72rem;
+        line-height: 1.35;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar {
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        flex-grow: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__search {
+        flex: 0 0 auto !important;
+        flex-grow: 0 !important;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__right {
+        flex: 0 0 auto !important;
+        flex-grow: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        width: 100%;
+        margin-left: 0;
+        justify-content: stretch;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role {
+        flex: 1 1 calc(50% - 4px) !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-view-toggle {
+        flex: 1 1 calc(50% - 4px);
+        min-height: 42px;
+        width: auto !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group {
+        flex: 0 0 auto !important;
+        flex-grow: 0 !important;
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group .sa-export-btn {
+        flex: 1 1 0;
+        justify-content: center;
+        min-height: 42px;
+        height: 42px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-status-main-card {
+        margin-top: 8px !important;
+        clear: both !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-table-panel__head,
+    body.saas-admin-ui .saas-commission-status-page .vm-dmt-table-panel__head {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-dmt-table-panel__right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: flex-start !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-scroll-hint {
+        display: flex;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-table-wrap .table-responsive.vm-opr-table-scroll {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+        padding: 0 0 8px;
+        border: none;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-table-wrap .vm-opr-table-scroll::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-table-wrap .vm-opr-table-scroll::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 999px;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable.vm-opr-data-table {
+        min-width: 720px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable.vm-opr-data-table {
+        min-width: 1100px !important;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-page-shell {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-toolbar-unified {
+        padding: 6px 8px 8px !important;
+        margin-bottom: 8px !important;
+        border-radius: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-toolbar-unified .vm-dmt-breadcrumb li:first-child {
+        display: none !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-status-main-card {
+        border-radius: 12px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-table-panel {
+        padding: 8px 6px 10px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-table-panel__title {
+        font-size: 0.82rem;
+        line-height: 1.35;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-filter-bar__right {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role,
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-view-toggle {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-field--role select.form-control,
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-search-input,
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-search-field input.form-control,
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-view-toggle {
+        min-height: 44px !important;
+        height: 44px !important;
+        font-size: 0.84rem !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group .sa-export-btn {
+        flex: 1 1 calc(50% - 4px);
+        min-height: 44px;
+        height: 44px !important;
+        font-size: 0.8rem;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-dmt-table-panel__right {
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-mode-badge,
+    body.saas-admin-ui .saas-commission-status-page .vm-radiant-record-badge {
+        flex: 1 1 auto;
+        width: auto !important;
+        min-height: 32px;
+        font-size: 0.72rem;
+        justify-content: center;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-hold-btn {
+        min-width: 64px;
+        min-height: 36px;
+        padding: 0 14px;
+        font-size: 0.76rem !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable thead th,
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable tbody td,
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable thead th,
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable tbody td {
+        padding: 10px 8px !important;
+        font-size: 0.74rem;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable tbody td:nth-child(2),
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable tbody td:nth-child(3),
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable tbody td:nth-child(2),
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable tbody td:nth-child(3) {
+        white-space: normal;
+        min-width: 100px;
+        max-width: 140px;
+    }
+}
+
+/* ── Small mobile ── */
+@media (max-width: 575px) {
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-toolbar-unified .vm-dmt-breadcrumb,
+    body.saas-admin-ui .saas-commission-status-page .vm-radiant-breadcrumb {
+        font-size: 0.66rem;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-opr-table-panel__title span {
+        word-break: break-word;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-scroll-hint {
+        font-size: 0.68rem;
+        padding: 6px 8px;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionStatusTable.vm-opr-data-table {
+        min-width: 640px !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page #commissionReportTable.vm-opr-data-table {
+        min-width: 980px !important;
+    }
+}
+
+@media (max-width: 399px) {
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group {
+        flex-direction: column;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-export-group .sa-export-btn {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-dmt-table-panel__right {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.saas-admin-ui .saas-commission-status-page .vm-commission-mode-badge,
+    body.saas-admin-ui .saas-commission-status-page .vm-radiant-record-badge {
+        width: 100%;
+    }
+}

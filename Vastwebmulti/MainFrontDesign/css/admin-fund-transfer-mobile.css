@@ -847,3 +847,34 @@
         min-height: 34px !important;
     }
 }
+
+/* Cash Deposit Charge — mobile layout (no empty flex gaps) */
+@media (max-width: 1199px) {
+    body.saas-admin-ui .Cash_Deposit_Charge_Page.saas-fund-transfer-page .tabcurrent-seconddesign.cdc-left-body {
+        display: block !important;
+        flex: none !important;
+        padding: 4px 6px 6px !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page.saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane:not(.active):not(.in) {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        visibility: hidden !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page.saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page.saas-fund-transfer-page .tabcurrent-seconddesign .tab-pane.active.in {
+        display: block !important;
+        flex: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        visibility: visible !important;
+    }
+
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-form-col,
+    body.saas-admin-ui .Cash_Deposit_Charge_Page .vm-ft-history-col {
+        height: auto !important;
+    }
+}

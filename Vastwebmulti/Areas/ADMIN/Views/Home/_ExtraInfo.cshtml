@@ -1,26 +1,24 @@
 @model Vastwebmulti.Areas.ADMIN.Models.PostpaidUtilitySlab
 @using (Ajax.BeginForm("_ExtraInfo", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccessExtra", UpdateTargetId = "divEditFormEXTRA", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <style>
-        input.move1, .move2, .move3, .move4, .move5 {
-            border: 1px solid #ddd;
-            padding: 4px;
-        }
-    </style>
-    <div class="" style=" height: auto; display: flow-root; background: rgb(255 255 255 / 95%); padding: 5px; box-shadow: 0px 0px 5px -2px; border-radius: 4px; margin: 7px -1px;">
-        <div class="orm11" style="float: left; width: 35%; ">
-            <input type="button" value="Replace Table Data" style="width: 100% !important; background: #fbb773 !important; color: #000; " onclick="Replaceall()" class="btn btn-default" />
-        </div>
-        <div class="orm22" style=" float: right; width: 12%;">
-            <button type="button" class="btn btn-default" style="width: 100%;" data-dismiss="modal">Close</button>
-        </div>
-        <div class="orm11" style="float: left; width: 20%;">
-            <input type="submit" value="Save Data" class="btn btn-default" style="background: var(--main-bg-lcolor) !important;color:#fff;" />
-        </div>
-        </div>
+    <div class="vm-postpaid-modal-toolbar">
+        <button type="button" onclick="Replaceall()" class="saas-admin-modal-btn saas-admin-modal-btn--warning vm-postpaid-modal-btn--replace">
+            <i class="fas fa-sync-alt" aria-hidden="true"></i>
+            <span>Replace Table Data</span>
+        </button>
+        <button type="submit" class="saas-admin-modal-btn saas-admin-modal-btn--success">
+            <i class="fas fa-save" aria-hidden="true"></i>
+            <span>Save Data</span>
+        </button>
+        <button type="button" class="saas-admin-modal-btn saas-admin-modal-btn--ghost" data-dismiss="modal">
+            <i class="fas fa-times" aria-hidden="true"></i>
+            <span>Close</span>
+        </button>
+    </div>
 
-        <table id="tblEntAttributes" class="table table-bordered ">
-            <thead class="navbar" style="position:initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-prepaid-slab-table-wrap">
+        <table id="tblEntAttributes" class="table table-bordered vm-pg-slab-table">
+            <thead>
                 <tr>
                     <th>Operator Name</th>
                     <th>0 to 1500(%)</th>
@@ -38,30 +36,30 @@
                         <td>
                             @Html.DisplayFor(a => a.Extra[i].operator_Name)
                         </td>
-                        <td>
-                            @Html.EditorFor(a => a.Extra[i].move1, new { htmlAttributes = new { @style = "width:100%", @class = "move1" } })
+                        <td class="vm-pg-slab-edit-cell">
+                            @Html.EditorFor(a => a.Extra[i].move1, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input move1" } })
                             @Html.ValidationMessageFor(a => a.Extra[i].move1)
                         </td>
-                        <td>
-                            @Html.EditorFor(a => a.Extra[i].move2, new { htmlAttributes = new { @style = "width:100%", @class = "move2" } })
+                        <td class="vm-pg-slab-edit-cell">
+                            @Html.EditorFor(a => a.Extra[i].move2, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input move2" } })
                             @Html.ValidationMessageFor(a => a.Extra[i].move2)
                         </td>
-                        <td>
-                            @Html.EditorFor(a => a.Extra[i].move3, new { htmlAttributes = new { @style = "width:100%", @class = "move3" } })
+                        <td class="vm-pg-slab-edit-cell">
+                            @Html.EditorFor(a => a.Extra[i].move3, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input move3" } })
                             @Html.ValidationMessageFor(a => a.Extra[i].move3)
                         </td>
-                        <td>
-                            @Html.EditorFor(a => a.Extra[i].move4, new { htmlAttributes = new { @style = "width:100%", @class = "move4" } })
+                        <td class="vm-pg-slab-edit-cell">
+                            @Html.EditorFor(a => a.Extra[i].move4, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input move4" } })
                             @Html.ValidationMessageFor(a => a.Extra[i].move4)
                         </td>
-                        <td>
-                            @Html.EditorFor(a => a.Extra[i].move5, new { htmlAttributes = new { @style = "width:100%", @class = "move5" } })
+                        <td class="vm-pg-slab-edit-cell">
+                            @Html.EditorFor(a => a.Extra[i].move5, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input move5" } })
                             @Html.ValidationMessageFor(a => a.Extra[i].move5)
                         </td>
                         @*<td>@item.retailercomm</td>*@
                     </tr>
-
                 }
             </tbody>
         </table>
-        }
+    </div>
+}
