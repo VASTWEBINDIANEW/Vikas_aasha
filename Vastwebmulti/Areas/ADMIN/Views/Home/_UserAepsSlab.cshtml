@@ -1,84 +1,67 @@
 @model Vastwebmulti.Areas.ADMIN.Models.AEPSCommonModel
 @using (Ajax.BeginForm("_UserAepsSlab", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess1", OnFailure = "onfailed", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmituser" type="submit" value="Update For Existing Users" class="btn  waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn  waves-effect" style="display:none;" />
-    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn  waves-effect" style="display:none;" />
+    <input id="btnsubmituser" type="submit" value="Update For Existing Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommon" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <input id="btnsubmitusercommondlmrem" type="submit" name="Button" value="Update Existing & New Users" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
 
-    @Html.HiddenFor(m => m.role)
+    @Html.HiddenFor(m => m.role, new { id = "role" })
     <div class="row clearfix" style="margin-right:0px;">
         <div class="col-md-12">
-            <div class="slab-master-block">
-                <div class="slab-master-block-left">
-                    <div id="allshow" class="row">
-                        <div class="col-md-12" style="padding-right:20px;">
-                            <div class="custom-district-img">
-                                <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                            </div>
+            <div class="slab-master-block vm-prepaid-user-filter vm-prepaid-user-filter--inline">
+                <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
+                    <p>If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                </div>
+                <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide vm-prepaid-user-filter__row" style="display: block;">
+                    <div id="allshow" class="vm-prepaid-user-filter__item vm-prepaid-user-filter__item--select">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-users"></i></span>
                             @Html.DropDownList("ddlUserId", Model.UserId, "All Users", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChange()" })
                         </div>
                     </div>
-                    <div id="retailerdrop" class="row" style="display:none;">
-                        <div class="col-md-6"  style="padding-right:0px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
+                    <div id="retailerdrop" class="vm-prepaid-user-filter__retailer" style="display:none;">
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
                                 @Html.DropDownList("ddldealer", Model.UserId, "All Distributor", new { @class = "for-select2 form-control", @onchange = "ddlretailerid()" })
                             </div>
                         </div>
-                        <div class="col-md-6" style="padding-left:5px;padding-right:20px;">
-                            <div>
-                                <div class="custom-district-img">
-                                    <img src="~/AdminDesign/images/slab-user.svg" style="width:18px;">
-                                </div>
+                        <div class="vm-prepaid-user-filter__item">
+                            <div class="vm-pg-slab-field">
+                                <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-store"></i></span>
                                 @Html.DropDownList("ddlUserIdrem", Model.Retailerid, "All Retailer", new { @class = "for-select2 form-control", @onchange = "ddlUserIdChangerem()" })
-
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="slab-master-block-right">
-                    <div id="slab-master-message" class="slab-master-message slab-master-message-show" style="display: none;">
-                        <p>  If you edit the slabs of all the master distributors, you are given a data view of the common slabs.</p>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-user"></i></span>
+                            <input class="form-control" type="text" placeholder="User Name" value="@Model.Name" readonly="readonly" />
+                        </div>
                     </div>
-                    <div id="slab-master-detail" class="slab-master-detail slab-master-detail-hide" style="display: block;">
-                        <div class="row clearfix">
-
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon">
-                                    <img src="~/AdminDesign/images/user.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Name" value="@Model.Name">
-
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/number.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone">
-
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                                <span class="master-slab-right-icon" style="border-left: 1px solid #bbb;">
-                                    <img src="~/AdminDesign/images/email.svg">
-                                </span>
-                                <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email">
-
-                            </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-phone-alt"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Number" value="@Model.Phone" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="vm-prepaid-user-filter__item">
+                        <div class="vm-pg-slab-field">
+                            <span class="vm-pg-slab-field__icon" aria-hidden="true"><i class="fas fa-envelope"></i></span>
+                            <input class="form-control" type="text" placeholder="User Registered Mail" value="@Model.Email" readonly="readonly" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="slab-table">
-        <table class="table table-bordered third-design-table">
-            <thead class="navbar" style="position:initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+        <table id="aepsUserSlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table">
+            <thead>
                 <tr>
                     <th rowspan="2">USER'S<br /> <span style="font-size:10px; color:green;">User&nbsp;ID&</span></th>
                     <th rowspan="2">CHARGE'S<br /> <span style="font-size:10px; color:green;">Aadhar&nbsp;Pay&nbsp;(%)</span></th>
-                    <th rowspan="2">CHARGE'S<br /> <span style="font-size:10px; color:green;">Mini&nbsp;Statement&nbsp;(?)</span></th>
+                    <th rowspan="2">CHARGE'S<br /> <span style="font-size:10px; color:green;">Mini&nbsp;Statement&nbsp;(&#8377;)</span></th>
                     <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">301&nbsp;to&nbsp;999</span></th>
                     <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">1000&nbsp;to&nbsp;1499</span></th>
                     <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">1500&nbsp;to&nbsp;1999</span></th>
@@ -91,40 +74,40 @@
                 </tr>
                 <tr>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                     <td>(%)</td>
-                    <td>(?)</td>
-                    <td>Max(?)</td>
+                    <td>(&#8377;)</td>
+                    <td>Max(&#8377;)</td>
                     <td>Active</td>
                 </tr>
             </thead>
-            <tbody id="tbodyshow">
+            <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -140,7 +123,7 @@
                         else
                         {
                             color11 = "green";
-                            active1 = "(?)";
+                            active1 = "(&#8377;)";
                         }
                         var active2 = Model.Materuser[i].Type_1000_1499;
                         var color2 = ""; var color21 = "";
@@ -152,7 +135,7 @@
                         else
                         {
                             color21 = "green";
-                            active2 = "(?)";
+                            active2 = "(&#8377;)";
                         }
                         var active3 = Model.Materuser[i].Type_1500_1999;
                         var color3 = ""; var color31 = "";
@@ -164,7 +147,7 @@
                         else
                         {
                             color31 = "green";
-                            active3 = "(?)";
+                            active3 = "(&#8377;)";
                         }
                         var active4 = Model.Materuser[i].Type_2000_2499;
                         var color4 = ""; var color41 = "";
@@ -176,7 +159,7 @@
                         else
                         {
                             color41 = "green";
-                            active4 = "(?)";
+                            active4 = "(&#8377;)";
                         }
                         var active5 = Model.Materuser[i].Type_2500_2999;
                         var color5 = ""; var color51 = "";
@@ -188,7 +171,7 @@
                         else
                         {
                             color51 = "green";
-                            active5 = "(?)";
+                            active5 = "(&#8377;)";
                         }
                         var active6 = Model.Materuser[i].Type_3000_3499;
                         var color6 = ""; var color61 = "";
@@ -200,7 +183,7 @@
                         else
                         {
                             color61 = "green";
-                            active6 = "(?)";
+                            active6 = "(&#8377;)";
                         }
                         var active7 = Model.Materuser[i].Type_3500_5000;
                         var color7 = ""; var color71 = "";
@@ -212,7 +195,7 @@
                         else
                         {
                             color71 = "green";
-                            active7 = "(?)";
+                            active7 = "(&#8377;)";
                         }
                         var active8 = Model.Materuser[i].Type_5001_10000;
                         var color8 = ""; var color81 = "";
@@ -224,7 +207,7 @@
                         else
                         {
                             color81 = "green";
-                            active8 = "(?)";
+                            active8 = "(&#8377;)";
                         }
 
                         @Html.HiddenFor(a => a.Materuser[i].idno)
@@ -245,35 +228,35 @@
                             <td style="color:@color1">@Model.Materuser[i].per_500_999</td>
                             <td style="color:@color11">@Model.Materuser[i].rs_500_999</td>
                             <td style="color:@color1">@Model.Materuser[i].maxrs_500_999</td>
-                            <td>@active1</td>
+                            <td>@Html.Raw(active1)</td>
                             <td style="color:@color2;">@Model.Materuser[i].per_1000_1499</td>
                             <td style="color:@color21;">@Model.Materuser[i].rs_1000_1499</td>
                             <td style="color:@color2;">@Model.Materuser[i].maxrs_1000_1499</td>
-                            <td>@active2</td>
+                            <td>@Html.Raw(active2)</td>
                             <td style="color:@color3">@Model.Materuser[i].per_1500_1999</td>
                             <td style="color:@color31">@Model.Materuser[i].rs_1500_1999</td>
                             <td style="color:@color3">@Model.Materuser[i].maxrs_1500_1999</td>
-                            <td>@active3</td>
+                            <td>@Html.Raw(active3)</td>
                             <td style="color:@color4">@Model.Materuser[i].per_2000_2499</td>
                             <td style="color:@color41">@Model.Materuser[i].rs_2000_2499</td>
                             <td style="color:@color4">@Model.Materuser[i].maxrs_2000_2499</td>
-                            <td>@active4</td>
+                            <td>@Html.Raw(active4)</td>
                             <td style="color:@color5">@Model.Materuser[i].per_2500_2999</td>
                             <td style="color:@color51">@Model.Materuser[i].rs_2500_2999</td>
                             <td style="color:@color5">@Model.Materuser[i].maxrs_2500_2999</td>
-                            <td>@active5</td>
+                            <td>@Html.Raw(active5)</td>
                             <td style="color:@color6">@Model.Materuser[i].per_3000_3499</td>
                             <td style="color:@color61">@Model.Materuser[i].rs_3000_3499</td>
                             <td style="color:@color6">@Model.Materuser[i].maxrs_3000_3499</td>
-                            <td>@active6</td>
+                            <td>@Html.Raw(active6)</td>
                             <td style="color:@color7">@Model.Materuser[i].per_3500_5000</td>
                             <td style="color:@color71">@Model.Materuser[i].rs_3500_5000</td>
                             <td style="color:@color7">@Model.Materuser[i].maxrs_3500_5000</td>
-                            <td>@active7</td>
+                            <td>@Html.Raw(active7)</td>
                             <td style="color:@color8">@Model.Materuser[i].per_5001_10000</td>
                             <td style="color:@color81">@Model.Materuser[i].rs_5001_10000</td>
                             <td style="color:@color8">@Model.Materuser[i].maxrs_5001_10000</td>
-                            <td>@active8</td>
+                            <td>@Html.Raw(active8)</td>
                         </tr>
 
                     }
@@ -294,7 +277,7 @@
                         else
                         {
                             color11 = "green";
-                            active1 = "(?)";
+                            active1 = "(&#8377;)";
                         }
                         var active2 = Model.Dealeruser[i].Type_1000_1499;
                         var color2 = ""; var color21 = "";
@@ -306,7 +289,7 @@
                         else
                         {
                             color21 = "green";
-                            active2 = "(?)";
+                            active2 = "(&#8377;)";
                         }
                         var active3 = Model.Dealeruser[i].Type_1500_1999;
                         var color3 = ""; var color31 = "";
@@ -318,7 +301,7 @@
                         else
                         {
                             color31 = "green";
-                            active3 = "(?)";
+                            active3 = "(&#8377;)";
                         }
                         var active4 = Model.Dealeruser[i].Type_2000_2499;
                         var color4 = ""; var color41 = "";
@@ -330,7 +313,7 @@
                         else
                         {
                             color41 = "green";
-                            active4 = "(?)";
+                            active4 = "(&#8377;)";
                         }
                         var active5 = Model.Dealeruser[i].Type_2500_2999;
                         var color5 = ""; var color51 = "";
@@ -342,7 +325,7 @@
                         else
                         {
                             color51 = "green";
-                            active5 = "(?)";
+                            active5 = "(&#8377;)";
                         }
                         var active6 = Model.Dealeruser[i].Type_3000_3499;
                         var color6 = ""; var color61 = "";
@@ -354,7 +337,7 @@
                         else
                         {
                             color61 = "green";
-                            active6 = "(?)";
+                            active6 = "(&#8377;)";
                         }
                         var active7 = Model.Dealeruser[i].Type_3500_5000;
                         var color7 = ""; var color71 = "";
@@ -366,7 +349,7 @@
                         else
                         {
                             color71 = "green";
-                            active7 = "(?)";
+                            active7 = "(&#8377;)";
                         }
                         var active8 = Model.Dealeruser[i].Type_5001_10000;
                         var color8 = ""; var color81 = "";
@@ -378,7 +361,7 @@
                         else
                         {
                             color81 = "green";
-                            active8 = "(?)";
+                            active8 = "(&#8377;)";
                         }
 
                         @Html.HiddenFor(a => a.Dealeruser[i].idno)
@@ -399,35 +382,35 @@
                             <td style="color:@color1">@Model.Dealeruser[i].per_500_999</td>
                             <td style="color:@color11">@Model.Dealeruser[i].rs_500_999</td>
                             <td style="color:@color1">@Model.Dealeruser[i].maxrs_500_999</td>
-                            <td>@active1</td>
+                            <td>@Html.Raw(active1)</td>
                             <td style="color:@color2;">@Model.Dealeruser[i].per_1000_1499</td>
                             <td style="color:@color21;">@Model.Dealeruser[i].rs_1000_1499</td>
                             <td style="color:@color2;">@Model.Dealeruser[i].maxrs_1000_1499</td>
-                            <td>@active2</td>
+                            <td>@Html.Raw(active2)</td>
                             <td style="color:@color3">@Model.Dealeruser[i].per_1500_1999</td>
                             <td style="color:@color31">@Model.Dealeruser[i].rs_1500_1999</td>
                             <td style="color:@color3">@Model.Dealeruser[i].maxrs_1500_1999</td>
-                            <td>@active3</td>
+                            <td>@Html.Raw(active3)</td>
                             <td style="color:@color4">@Model.Dealeruser[i].per_2000_2499</td>
                             <td style="color:@color41">@Model.Dealeruser[i].rs_2000_2499</td>
                             <td style="color:@color4">@Model.Dealeruser[i].maxrs_2000_2499</td>
-                            <td>@active4</td>
+                            <td>@Html.Raw(active4)</td>
                             <td style="color:@color5">@Model.Dealeruser[i].per_2500_2999</td>
                             <td style="color:@color51">@Model.Dealeruser[i].rs_2500_2999</td>
                             <td style="color:@color5">@Model.Dealeruser[i].maxrs_2500_2999</td>
-                            <td>@active5</td>
+                            <td>@Html.Raw(active5)</td>
                             <td style="color:@color6">@Model.Dealeruser[i].per_3000_3499</td>
                             <td style="color:@color61">@Model.Dealeruser[i].rs_3000_3499</td>
                             <td style="color:@color6">@Model.Dealeruser[i].maxrs_3000_3499</td>
-                            <td>@active6</td>
+                            <td>@Html.Raw(active6)</td>
                             <td style="color:@color7">@Model.Dealeruser[i].per_3500_5000</td>
                             <td style="color:@color71">@Model.Dealeruser[i].rs_3500_5000</td>
                             <td style="color:@color7">@Model.Dealeruser[i].maxrs_3500_5000</td>
-                            <td>@active7</td>
+                            <td>@Html.Raw(active7)</td>
                             <td style="color:@color8">@Model.Dealeruser[i].per_5001_10000</td>
                             <td style="color:@color81">@Model.Dealeruser[i].rs_5001_10000</td>
                             <td style="color:@color8">@Model.Dealeruser[i].maxrs_5001_10000</td>
-                            <td>@active8</td>
+                            <td>@Html.Raw(active8)</td>
                         </tr>
 
                     }
@@ -448,7 +431,7 @@
                         else
                         {
                             color11 = "green";
-                            active1 = "(?)";
+                            active1 = "(&#8377;)";
                         }
                         var active2 = Model.Retaileruser[i].Type_1000_1499;
                         var color2 = ""; var color21 = "";
@@ -460,7 +443,7 @@
                         else
                         {
                             color21 = "green";
-                            active2 = "(?)";
+                            active2 = "(&#8377;)";
                         }
                         var active3 = Model.Retaileruser[i].Type_1500_1999;
                         var color3 = ""; var color31 = "";
@@ -472,7 +455,7 @@
                         else
                         {
                             color31 = "green";
-                            active3 = "(?)";
+                            active3 = "(&#8377;)";
                         }
                         var active4 = Model.Retaileruser[i].Type_2000_2499;
                         var color4 = ""; var color41 = "";
@@ -484,7 +467,7 @@
                         else
                         {
                             color41 = "green";
-                            active4 = "(?)";
+                            active4 = "(&#8377;)";
                         }
                         var active5 = Model.Retaileruser[i].Type_2500_2999;
                         var color5 = ""; var color51 = "";
@@ -496,7 +479,7 @@
                         else
                         {
                             color51 = "green";
-                            active5 = "(?)";
+                            active5 = "(&#8377;)";
                         }
                         var active6 = Model.Retaileruser[i].Type_3000_3499;
                         var color6 = ""; var color61 = "";
@@ -508,7 +491,7 @@
                         else
                         {
                             color61 = "green";
-                            active6 = "(?)";
+                            active6 = "(&#8377;)";
                         }
                         var active7 = Model.Retaileruser[i].Type_3500_5000;
                         var color7 = ""; var color71 = "";
@@ -520,7 +503,7 @@
                         else
                         {
                             color71 = "green";
-                            active7 = "(?)";
+                            active7 = "(&#8377;)";
                         }
                         var active8 = Model.Retaileruser[i].Type_5001_10000;
                         var color8 = ""; var color81 = "";
@@ -532,7 +515,7 @@
                         else
                         {
                             color81 = "green";
-                            active8 = "(?)";
+                            active8 = "(&#8377;)";
                         }
 
                         @Html.HiddenFor(a => a.Retaileruser[i].idno)
@@ -553,35 +536,35 @@
                             <td style="color:@color1">@Model.Retaileruser[i].per_500_999</td>
                             <td style="color:@color11">@Model.Retaileruser[i].rs_500_999</td>
                             <td style="color:@color1">@Model.Retaileruser[i].maxrs_500_999</td>
-                            <td>@active1</td>
+                            <td>@Html.Raw(active1)</td>
                             <td style="color:@color2;">@Model.Retaileruser[i].per_1000_1499</td>
                             <td style="color:@color21;">@Model.Retaileruser[i].rs_1000_1499</td>
                             <td style="color:@color2;">@Model.Retaileruser[i].maxrs_1000_1499</td>
-                            <td>@active2</td>
+                            <td>@Html.Raw(active2)</td>
                             <td style="color:@color3">@Model.Retaileruser[i].per_1500_1999</td>
                             <td style="color:@color31">@Model.Retaileruser[i].rs_1500_1999</td>
                             <td style="color:@color3">@Model.Retaileruser[i].maxrs_1500_1999</td>
-                            <td>@active3</td>
+                            <td>@Html.Raw(active3)</td>
                             <td style="color:@color4">@Model.Retaileruser[i].per_2000_2499</td>
                             <td style="color:@color41">@Model.Retaileruser[i].rs_2000_2499</td>
                             <td style="color:@color4">@Model.Retaileruser[i].maxrs_2000_2499</td>
-                            <td>@active4</td>
+                            <td>@Html.Raw(active4)</td>
                             <td style="color:@color5">@Model.Retaileruser[i].per_2500_2999</td>
                             <td style="color:@color51">@Model.Retaileruser[i].rs_2500_2999</td>
                             <td style="color:@color5">@Model.Retaileruser[i].maxrs_2500_2999</td>
-                            <td>@active5</td>
+                            <td>@Html.Raw(active5)</td>
                             <td style="color:@color6">@Model.Retaileruser[i].per_3000_3499</td>
                             <td style="color:@color61">@Model.Retaileruser[i].rs_3000_3499</td>
                             <td style="color:@color6">@Model.Retaileruser[i].maxrs_3000_3499</td>
-                            <td>@active6</td>
+                            <td>@Html.Raw(active6)</td>
                             <td style="color:@color7">@Model.Retaileruser[i].per_3500_5000</td>
                             <td style="color:@color71">@Model.Retaileruser[i].rs_3500_5000</td>
                             <td style="color:@color7">@Model.Retaileruser[i].maxrs_3500_5000</td>
-                            <td>@active7</td>
+                            <td>@Html.Raw(active7)</td>
                             <td style="color:@color8">@Model.Retaileruser[i].per_5001_10000</td>
                             <td style="color:@color81">@Model.Retaileruser[i].rs_5001_10000</td>
                             <td style="color:@color8">@Model.Retaileruser[i].maxrs_5001_10000</td>
-                            <td>@active8</td>
+                            <td>@Html.Raw(active8)</td>
                         </tr>
 
                     }
@@ -602,7 +585,7 @@
                         else
                         {
                             color11 = "green";
-                            active1 = "(?)";
+                            active1 = "(&#8377;)";
                         }
                         var active2 = Model.Whitelabeluser[i].Type_1000_1499;
                         var color2 = ""; var color21 = "";
@@ -614,7 +597,7 @@
                         else
                         {
                             color21 = "green";
-                            active2 = "(?)";
+                            active2 = "(&#8377;)";
                         }
                         var active3 = Model.Whitelabeluser[i].Type_1500_1999;
                         var color3 = ""; var color31 = "";
@@ -626,7 +609,7 @@
                         else
                         {
                             color31 = "green";
-                            active3 = "(?)";
+                            active3 = "(&#8377;)";
                         }
                         var active4 = Model.Whitelabeluser[i].Type_2000_2499;
                         var color4 = ""; var color41 = "";
@@ -638,7 +621,7 @@
                         else
                         {
                             color41 = "green";
-                            active4 = "(?)";
+                            active4 = "(&#8377;)";
                         }
                         var active5 = Model.Whitelabeluser[i].Type_2500_2999;
                         var color5 = ""; var color51 = "";
@@ -650,7 +633,7 @@
                         else
                         {
                             color51 = "green";
-                            active5 = "(?)";
+                            active5 = "(&#8377;)";
                         }
                         var active6 = Model.Whitelabeluser[i].Type_3000_3499;
                         var color6 = ""; var color61 = "";
@@ -662,7 +645,7 @@
                         else
                         {
                             color61 = "green";
-                            active6 = "(?)";
+                            active6 = "(&#8377;)";
                         }
                         var active7 = Model.Whitelabeluser[i].Type_3500_5000;
                         var color7 = ""; var color71 = "";
@@ -674,7 +657,7 @@
                         else
                         {
                             color71 = "green";
-                            active7 = "(?)";
+                            active7 = "(&#8377;)";
                         }
                         var active8 = Model.Whitelabeluser[i].Type_5001_10000;
                         var color8 = ""; var color81 = "";
@@ -686,7 +669,7 @@
                         else
                         {
                             color81 = "green";
-                            active8 = "(?)";
+                            active8 = "(&#8377;)";
                         }
 
                         @Html.HiddenFor(a => a.Whitelabeluser[i].idno)
@@ -707,42 +690,42 @@
                             <td style="color:@color1">@Model.Whitelabeluser[i].per_500_999</td>
                             <td style="color:@color11">@Model.Whitelabeluser[i].rs_500_999</td>
                             <td style="color:@color1">@Model.Whitelabeluser[i].maxrs_500_999</td>
-                            <td>@active1</td>
+                            <td>@Html.Raw(active1)</td>
                             <td style="color:@color2;">@Model.Whitelabeluser[i].per_1000_1499</td>
                             <td style="color:@color21;">@Model.Whitelabeluser[i].rs_1000_1499</td>
                             <td style="color:@color2;">@Model.Whitelabeluser[i].maxrs_1000_1499</td>
-                            <td>@active2</td>
+                            <td>@Html.Raw(active2)</td>
                             <td style="color:@color3">@Model.Whitelabeluser[i].per_1500_1999</td>
                             <td style="color:@color31">@Model.Whitelabeluser[i].rs_1500_1999</td>
                             <td style="color:@color3">@Model.Whitelabeluser[i].maxrs_1500_1999</td>
-                            <td>@active3</td>
+                            <td>@Html.Raw(active3)</td>
                             <td style="color:@color4">@Model.Whitelabeluser[i].per_2000_2499</td>
                             <td style="color:@color41">@Model.Whitelabeluser[i].rs_2000_2499</td>
                             <td style="color:@color4">@Model.Whitelabeluser[i].maxrs_2000_2499</td>
-                            <td>@active4</td>
+                            <td>@Html.Raw(active4)</td>
                             <td style="color:@color5">@Model.Whitelabeluser[i].per_2500_2999</td>
                             <td style="color:@color51">@Model.Whitelabeluser[i].rs_2500_2999</td>
                             <td style="color:@color5">@Model.Whitelabeluser[i].maxrs_2500_2999</td>
-                            <td>@active5</td>
+                            <td>@Html.Raw(active5)</td>
                             <td style="color:@color6">@Model.Whitelabeluser[i].per_3000_3499</td>
                             <td style="color:@color61">@Model.Whitelabeluser[i].rs_3000_3499</td>
                             <td style="color:@color6">@Model.Whitelabeluser[i].maxrs_3000_3499</td>
-                            <td>@active6</td>
+                            <td>@Html.Raw(active6)</td>
                             <td style="color:@color7">@Model.Whitelabeluser[i].per_3500_5000</td>
                             <td style="color:@color71">@Model.Whitelabeluser[i].rs_3500_5000</td>
                             <td style="color:@color7">@Model.Whitelabeluser[i].maxrs_3500_5000</td>
-                            <td>@active7</td>
+                            <td>@Html.Raw(active7)</td>
                             <td style="color:@color8">@Model.Whitelabeluser[i].per_5001_10000</td>
                             <td style="color:@color81">@Model.Whitelabeluser[i].rs_5001_10000</td>
                             <td style="color:@color8">@Model.Whitelabeluser[i].maxrs_5001_10000</td>
-                            <td>@active8</td>
+                            <td>@Html.Raw(active8)</td>
                         </tr>
 
                     }
                 }
                 <!--End Whitelabel-->
             </tbody>
-            <tbody id="tbodyedit" style="display:none;">
+            <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -1476,7 +1459,7 @@
                 }
                 <!--End Whitelabel-->
             </tbody>
-            <tbody id="tbodyeditAll" style="display:none;">
+            <tbody id="tbodyeditAll" class="vm-pg-slab-tbody--hidden">
                 <!--Master-->
                 @if (Model.Materuser != null)
                 {
@@ -2189,47 +2172,39 @@
         </table>
     </div>
 }
-<link href="~/MainFrontDesign/select2/dist/css/select2.min.css" rel="stylesheet" />
-<script src="~/MainFrontDesign/select2/dist/js/select2.full.min.js"></script>
-<script>
-    $('.for-select2').select2();
-
-
-</script>
 <script>
     function OnSuccess1(data) {
-        $('#btnsubmituser').hide();
-        $('#btnsubmitusercommon').hide();
-        $('#btnEdit').show();
-         var chk = '@Model.role';
-            if (chk == "Retailer") {
-                $('#retailerdrop').show();
-                $('#allshow').hide();
-            }
-            else {
-                $('#retailerdrop').hide();
-                $('#allshow').show();
-            }
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        } else {
+            $('#btnsubmituser').hide();
+            $('#btnsubmitusercommon').hide();
+            $('#btnEdit').show();
+        }
+        var chk = '@Model.role';
+        if (chk == "Retailer") {
+            showRetailerDrop();
+        } else {
+            showAllUsersDrop();
+        }
+        if (typeof initPgSlabPartialUi === 'function') {
+            initPgSlabPartialUi();
+        }
     }
     function onfailed(error) {
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        } else {
+            $('#btnsubmituser').hide();
+            $('#btnsubmitusercommon').hide();
+            $('#btnEdit').show();
+        }
+        var chk = '@Model.role';
+        if (chk == "Retailer") {
+            showRetailerDrop();
+        } else {
+            showAllUsersDrop();
+        }
         alert(error.responseText);
     }
-</script>
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

@@ -1,10 +1,11 @@
 @model Vastwebmulti.Areas.ADMIN.Models.SecuritySlab
 @using (Ajax.BeginForm("_Security_comm", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmit" type="submit" value="Save Now" class="btn  waves-effect" style="display:none;" />
-    
-        <table id="updatecolm" class="table table-bordered slab-table example-second third-design-table" style="margin-top: 15px;">
-            <thead class="navbar" style="position:initial;">
+    <input id="btnsubmit" type="submit" value="Save Now" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-prepaid-slab-table-wrap">
+        <table id="securitySlabTable" class="table table-bordered vm-pg-slab-table third-design-table slab-table example-second">
+            <thead>
                 <tr>
                     <th>Operator&nbsp;Name</th>
                     <th>Master&nbsp;(M/D)&nbsp;%</th>
@@ -14,7 +15,7 @@
                     <th>Purchase&nbsp;%</th>
                 </tr>
             </thead>
-            <tbody id="tbodyshow">
+            <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
                 @foreach (var item in Model.common)
                 {
                     <tr>
@@ -27,74 +28,45 @@
                     </tr>
                 }
             </tbody>
-            <tbody id="tbodyedit" style="display:none;">
+            <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
                 @for (int i = 0; i < Model.common.Count; i++)
                 {
                 <tr>
                     @Html.HiddenFor(a => a.common[i].idno)
-                    <td>
-                        @Html.DisplayFor(a => a.common[i].OperatorName)
-                    </td>
-                    <td>
-                        @Html.EditorFor(a => a.common[i].mastercomm, new { htmlAttributes = new { @style = "width:100%" } })
+                    <td>@Html.DisplayFor(a => a.common[i].OperatorName)</td>
+                    <td class="vm-pg-slab-edit-cell">
+                        @Html.EditorFor(a => a.common[i].mastercomm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                         @Html.ValidationMessageFor(a => a.common[i].mastercomm)
                     </td>
-                    <td>
-                        @Html.EditorFor(a => a.common[i].dlmcomm, new { htmlAttributes = new { @style = "width:100%" } })
+                    <td class="vm-pg-slab-edit-cell">
+                        @Html.EditorFor(a => a.common[i].dlmcomm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                         @Html.ValidationMessageFor(a => a.common[i].dlmcomm)
                     </td>
-                    <td>
-                        @Html.EditorFor(a => a.common[i].dlm_rem_comm, new { htmlAttributes = new { @style = "width:100%" } })
+                    <td class="vm-pg-slab-edit-cell">
+                        @Html.EditorFor(a => a.common[i].dlm_rem_comm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                         @Html.ValidationMessageFor(a => a.common[i].dlm_rem_comm)
                     </td>
-                    <td>
-                        @Html.EditorFor(a => a.common[i].whitelabelcomm, new { htmlAttributes = new { @style = "width:100%" } })
+                    <td class="vm-pg-slab-edit-cell">
+                        @Html.EditorFor(a => a.common[i].whitelabelcomm, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                         @Html.ValidationMessageFor(a => a.common[i].whitelabelcomm)
                     </td>
-                    <td>
-                        @Html.EditorFor(a => a.common[i].purchase, new { htmlAttributes = new { @style = "width:100%" } })
+                    <td class="vm-pg-slab-edit-cell">
+                        @Html.EditorFor(a => a.common[i].purchase, new { htmlAttributes = new { @class = "vm-pg-slab-cell-input" } })
                         @Html.ValidationMessageFor(a => a.common[i].purchase)
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
-   
+    </div>
 }
 
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        $('#btnsubmit').hide().removeClass('is-visible');
+        $('#btnEdit').show().removeClass('is-hidden');
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        }
     }
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

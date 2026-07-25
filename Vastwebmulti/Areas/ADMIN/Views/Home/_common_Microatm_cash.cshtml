@@ -1,9 +1,10 @@
 @model Vastwebmulti.Areas.ADMIN.Models.MicroatmcashCommonModel
 @using (Ajax.BeginForm("_common_Microatm_cash", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmit" type="submit" value="Save Data" class="btn  waves-effect" style="display:none;" />
-    <table class="table table-bordered slab-table example-second third-design-table" style="margin-top:15px;">
-        <thead class="navbar" style="position:initial; ">
+    <input id="btnsubmit" type="submit" value="Save Data" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+    <table id="microAtmCashSlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table example-second thpadding-second">
+        <thead>
             <tr>
                 <th rowspan="2">USER'S <br /> <span style="font-size:10px; color:green;">Type&nbsp;Of&nbsp;Users</span></th>
                 <th colspan="4" style="text-align:center">Cash&nbsp;&&nbsp;POS<br /> <span style="font-size:12px; color:green;">300&nbsp;to&nbsp;1000</span></th>
@@ -19,48 +20,48 @@
             </tr>
             <tr>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
             </tr>
         </thead>
-        <tbody id="tbodyshow">
+        <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
             @foreach (var item in Model.common)
             {
                 var active1 = item.cash_0_1000_Type;
@@ -73,7 +74,7 @@
                 else
                 {
                     color11 = "green";
-                    active1 = "(?)";
+                    active1 = "(&#8377;)";
                 }
                 var active2 = item.cash_1001_2000_Type;
                 var color2 = ""; var color21 = "";
@@ -85,7 +86,7 @@
                 else
                 {
                     color21 = "green";
-                    active2 = "(?)";
+                    active2 = "(&#8377;)";
                 }
                 var active3 = item.mtm_500_1000_Type;
                 var color3 = ""; var color31 = "";
@@ -97,7 +98,7 @@
                 else
                 {
                     color31 = "green";
-                    active3 = "(?)";
+                    active3 = "(&#8377;)";
                 }
                 var active4 = item.mtm_1001_1499_Type;
                 var color4 = ""; var color41 = "";
@@ -109,7 +110,7 @@
                 else
                 {
                     color41 = "green";
-                    active4 = "(?)";
+                    active4 = "(&#8377;)";
                 }
                 var active5 = item.mtm_1500_1999_Type;
                 var color5 = ""; var color51 = "";
@@ -121,7 +122,7 @@
                 else
                 {
                     color51 = "green";
-                    active5 = "(?)";
+                    active5 = "(&#8377;)";
                 }
                 var active6 = item.mtm_2000_2499_Type;
                 var color6 = ""; var color61 = "";
@@ -133,7 +134,7 @@
                 else
                 {
                     color61 = "green";
-                    active6 = "(?)";
+                    active6 = "(&#8377;)";
                 }
                 var active7 = item.mtm_2500_2999_Type;
                 var color7 = ""; var color71 = "";
@@ -145,7 +146,7 @@
                 else
                 {
                     color71 = "green";
-                    active7 = "(?)";
+                    active7 = "(&#8377;)";
                 }
                 var active8 = item.mtm_3000_3499_Type;
                 var color8 = ""; var color81 = "";
@@ -157,7 +158,7 @@
                 else
                 {
                     color81 = "green";
-                    active8 = "(?)";
+                    active8 = "(&#8377;)";
                 }
                 var active9 = item.mtm_3500_5000_Type;
                 var color9 = ""; var color91 = "";
@@ -169,7 +170,7 @@
                 else
                 {
                     color91 = "green";
-                    active9 = "(?)";
+                    active9 = "(&#8377;)";
                 }
                 var active10 = item.mtm_5001_10000_Type;
                 var color10 = ""; var color101 = "";
@@ -181,56 +182,56 @@
                 else
                 {
                     color101 = "green";
-                    active10 = "(?)";
+                    active10 = "(&#8377;)";
                 }
             <tr>
                 <td>@item.users</td>
                 <td style="color:@color1">@item.cash_0_1000_per</td>
                 <td style="color:@color11">@item.cash_0_1000_rs</td>
                 <td style="color:@color1">@item.cash_0_1000_maxrs</td>
-                <td>@active1</td>
+                <td>@Html.Raw(active1)</td>
                 <td style="color:@color2">@item.cash_1001_2000_per</td>
                 <td style="color:@color21">@item.cash_1001_2000_rs</td>
                 <td style="color:@color2">@item.cash_1001_2000_maxrs</td>
-                <td>@active2</td>
+                <td>@Html.Raw(active2)</td>
                 <td style="color:@color3">@item.mtm_500_1000_per</td>
                 <td style="color:@color31">@item.mtm_500_1000_rs</td>
                 <td style="color:@color3">@item.mtm_500_1000_maxrs</td>
-                <td>@active3</td>
+                <td>@Html.Raw(active3)</td>
                 <td style="color:@color4;">@item.mtm_1001_1499_per</td>
                 <td style="color:@color41;">@item.mtm_1001_1499_rs</td>
                 <td style="color:@color4;">@item.mtm_1001_1499_maxrs</td>
-                <td>@active4</td>
+                <td>@Html.Raw(active4)</td>
                 <td style="color:@color5">@item.mtm_1500_1999_per</td>
                 <td style="color:@color51">@item.mtm_1500_1999_rs</td>
                 <td style="color:@color5">@item.mtm_1500_1999_maxrs</td>
-                <td>@active5</td>
+                <td>@Html.Raw(active5)</td>
 
                 <td style="color:@color6">@item.mtm_2000_2499_per</td>
                 <td style="color:@color61">@item.mtm_2000_2499_rs</td>
                 <td style="color:@color6">@item.mtm_2000_2499_maxrs</td>
-                <td>@active6</td>
+                <td>@Html.Raw(active6)</td>
                 <td style="color:@color7">@item.mtm_2500_2999_per</td>
                 <td style="color:@color71">@item.mtm_2500_2999_rs</td>
                 <td style="color:@color7">@item.mtm_2500_2999_maxrs</td>
-                <td>@active7</td>
+                <td>@Html.Raw(active7)</td>
                 <td style="color:@color8">@item.mtm_3000_3499_per</td>
                 <td style="color:@color81">@item.mtm_3000_3499_rs</td>
                 <td style="color:@color8">@item.mtm_3000_3499_maxrs</td>
-                <td>@active8</td>
+                <td>@Html.Raw(active8)</td>
                 <td style="color:@color9">@item.mtm_3500_5000_per</td>
                 <td style="color:@color91">@item.mtm_3500_5000_rs</td>
                 <td style="color:@color9">@item.mtm_3500_5000_maxrs</td>
-                <td>@active9</td>
+                <td>@Html.Raw(active9)</td>
                 <td style="color:@color10">@item.mtm_5001_10000_per</td>
                 <td style="color:@color101">@item.mtm_5001_10000_rs</td>
                 <td style="color:@color10">@item.mtm_5001_10000_maxrs</td>
-                <td>@active10</td>
+                <td>@Html.Raw(active10)</td>
             </tr>
             }
 
         </tbody>
-        <tbody id="tbodyedit" style="display:none;">
+        <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
             @for (int i = 0; i < Model.common.Count; i++)
             {
             <tr>
@@ -437,41 +438,14 @@
 
         </tbody>
     </table>
+    </div>
 }
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        $('#btnsubmit').hide().removeClass('is-visible');
+        $('#btnEdit').show().removeClass('is-hidden');
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        }
     }
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

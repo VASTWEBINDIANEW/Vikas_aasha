@@ -1,149 +1,184 @@
-
+@model IEnumerable<Vastwebmulti.Models.PanAadharVerificationCharge>
 @{
-    ViewBag.Title = "AadharPanVerificationCharge";
+    ViewBag.Title = "Pan & Aadhar Verification Charges";
+    Layout = "~/Areas/ADMIN/Views/Shared/_Layout.cshtml";
 }
 
+<link href="~/MainFrontDesign/css/admin-account-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-settings-page-modern.css" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-payment-gateway-slab-modern.css?v=10" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-prepaid-slab-modern.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-prepaid-slab-mobile.css?v=8" rel="stylesheet" />
+<link href="~/MainFrontDesign/css/admin-dmt2-slab-modern.css?v=14" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
 <style>
-  /* new css */
-
-
-  /* new css */
-
-
-
-    .moneytransferslab-admin .admin-slabcardclass button:nth-child(8) {
-        width: 17% !important;
+    #div_Loader {
+        background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 999999;
     }
 
-    .moneytransferslab-admin .admin-slabcardclass button .uptotransction {
-        margin-left: 6px;
+    .ldio-gs56nt525f > div {
+        transform-origin: 100px 100px;
+        animation: ldio-gs56nt525f 0.2s infinite linear;
     }
-    .moneytransferslab-admin .admin-slabcardclass button:nth-child(8) {
-        width: 13% !important;
-    }
-    #ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
+
+        .ldio-gs56nt525f > div div {
+            position: absolute;
+            width: 22px;
+            height: 152px;
+            background: var(--main-bg-lcolor);
+            left: 100px;
+            top: 100px;
+            transform: translate(-50%,-50%);
+        }
+
+            .ldio-gs56nt525f > div div:nth-child(1) {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+            }
+
+            .ldio-gs56nt525f > div div:nth-child(6) {
+                width: 80px;
+                height: 80px;
+                background: #fff;
+                border-radius: 50%;
+            }
+
+            .ldio-gs56nt525f > div div:nth-child(3) {
+                transform: translate(-50%,-50%) rotate(45deg)
+            }
+
+            .ldio-gs56nt525f > div div:nth-child(4) {
+                transform: translate(-50%,-50%) rotate(90deg)
+            }
+
+            .ldio-gs56nt525f > div div:nth-child(5) {
+                transform: translate(-50%,-50%) rotate(135deg)
+            }
+
+    .loadingio-spinner-gear-94vo528ab8 {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
         overflow: hidden;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-content: stretch;
-        justify-content: space-between;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
     }
 
-        #ul li a {
-            display: initial !important;
-        }
-    @@media screen and (max-width:766px) {
-        .moneytransferslab-admin .admin-slabcardclass a, .moneytransferslab-admin .admin-slabcardclass button {
-            width: 25% !important;
-            float: left !important;
-        }
-
-            .moneytransferslab-admin .admin-slabcardclass button:nth-child(8), .moneytransferslab-admin .admin-slabcardclass button:nth-child(9) {
-                width: 48% !important;
-                float: left !important;
-                margin-top: 12px;
-            }
-    }
-    @@media screen and (max-width:1366px) {
-        .slab-buttonadminch button.valuechangebuttonadmin {
-            width: 13.5% !important;
-        }
-
-        .moneytransferslab-admin .admin-slabcardclass button:nth-child(8) {
-            width: 17% !important;
-        }
-
-        .moneytransferslab-admin .admin-slabcardclass button .uptotransction {
-            margin-left: 6px;
-        }
+    .ldio-gs56nt525f {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform: translateZ(0) scale(1);
+        backface-visibility: hidden;
+        transform-origin: 0 0;
     }
 
-    @@media screen and (max-width:766px) {
-        .moneytransferslab-admin .admin-slabcardclass a, .moneytransferslab-admin .admin-slabcardclass button {
-            width: 25% !important;
-            float: left !important;
+        .ldio-gs56nt525f div {
+            box-sizing: content-box;
         }
 
-            .moneytransferslab-admin .admin-slabcardclass button:nth-child(8), .moneytransferslab-admin .admin-slabcardclass button:nth-child(9) {
-                width: 48% !important;
-                float: left !important;
-                margin-top: 12px;
-            }
+    @@keyframes ldio-gs56nt525f {
+        0% { transform: rotate(0deg) }
+        50% { transform: rotate(22.5deg) }
+        100% { transform: rotate(45deg) }
     }
-
-    @@media only screen and (max-width:480px) {
-        .slab-first-tab {
-            width: 100% !important;
-        }
-        .col-md-10.slab-first-tab-content {
-            width: 100% !important;
-        }
-
-
-
-
-    }   
 </style>
 
-<section class="content fourdesign-section-admin">
+<section class="content saas-admin-account-page saas-admin-settings-page saas-pg-slab-page saas-prepaid-slab-page saas-dmt2-slab-page">
     <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-md-12">
-                @Html.Partial("_Slab_Menu")
-                <div class="col-md-10 slab-first-tab-content">
-                    <div class="row clearfix">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 moneytransferslab-admin">
-                            <div class="page-header-third">
-                                @Html.Partial("_slab_Financal")
-                            </div>
-                            <div class="card admin-slabcardclass">
-                                <div class="page-header-third">
-                                    <h2 style=" margin-top: 6px;">Pan & Aadhar Verification Charges</h2>
 
-                                    <table class="table table-bordered example-second third-design-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Pan Charge</th>
-                                                <th>Aadhar Charge</th>
-                                                <th>Type</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model)
-                                            {
-                                                <tr id="details">
-                                                    <td>@item.idno</td>
-                                                    <td>@item.PanCharge</td>
-                                                    <td>@item.AadharCharge</td>
-                                                    <td>@item.Type</td>
-                                                    <td>
-                                                        <a style="border-radius: 4px; background-color: #f4f4f4;" href="#" onclick="Edit()" class="btn ">Edit</a>
-                                                    </td>
-                                                </tr>
-                                                <tr id="SaveChange" style="display: none;">
-                                                    <td>@item.idno</td>
-                                                    <td>
-                                                        <input class="form-control" id="PanCharge" name="PanCharge" type="number" value="@item.PanCharge">
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-control" id="AadharCharge" name="AadharCharge" type="number" value="@item.AadharCharge">
-                                                    </td>
-                                                    <td>@item.Type</td>
-                                                    <td>
-                                                        <a style="border-radius: 4px; background-color: #f4f4f4;" href="#" onclick="Save()" class="btn ">Save</a>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+        <div class="saas-acc-toolbar">
+            <ol class="saas-acc-breadcrumb">
+                <li><a href="@Url.Action("Dashboard", "Home")"><i class="fas fa-home" aria-hidden="true"></i> Dashboard</a></li>
+                <li><a href="javascript:void(0);">Basic Setting</a></li>
+                <li>Pan &amp; Aadhar Verification Charges</li>
+            </ol>
+        </div>
+
+        <div class="vm-prepaid-slab-shell">
+            @Html.Partial("_Slab_Menu")
+
+            <div class="vm-prepaid-slab-main">
+                <div class="vm-dmt2-fin-nav-wrap">
+                    @Html.Partial("_slab_Financal")
+                </div>
+
+                <div class="vm-pg-slab-card">
+                    <div class="vm-pg-slab-card__head">
+                        <h3 class="vm-pg-slab-card__title">
+                            <i class="fas fa-id-card" aria-hidden="true"></i>
+                            Pan &amp; Aadhar Verification Charges
+                        </h3>
+                        <div class="vm-pg-slab-card__actions">
+                            <div class="vm-dmt2-slab-toolbar vm-prepaid-slab-actions">
+                                <div class="vm-dmt2-slab-toolbar__primary">
+                                    <button id="btnEdit" type="button" class="vm-pg-slab-btn-edit" onclick="showApvEditMode()">
+                                        <img src="~/AdminDesign/images/edit.svg" alt="" />
+                                        <span>Edit Slab</span>
+                                    </button>
+                                    <button id="btnSave" type="button" class="vm-pg-slab-save-btn" style="display:none;" onclick="saveApvCharges()">
+                                        <span>Save</span>
+                                    </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="vm-pg-slab-body">
+                        <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+                            <table id="apvChargeTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Pan Charge (&#8377;)</th>
+                                        <th>Aadhar Charge (&#8377;)</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.idno</td>
+                                                <td>@item.PanCharge</td>
+                                                <td>@item.AadharCharge</td>
+                                                <td>@item.Type</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.idno</td>
+                                                <td>
+                                                    <input class="form-control vm-pg-slab-cell-input" id="PanCharge" name="PanCharge" type="number" value="@item.PanCharge" />
+                                                </td>
+                                                <td>
+                                                    <input class="form-control vm-pg-slab-cell-input" id="AadharCharge" name="AadharCharge" type="number" value="@item.AadharCharge" />
+                                                </td>
+                                                <td>@item.Type</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -151,36 +186,79 @@
         </div>
     </div>
 </section>
+
+<div id="div_Loader" style="display:none;">
+    <div class="loadingio-spinner-gear-94vo528ab8">
+        <div class="ldio-gs56nt525f">
+            <div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+</div>
+
 <script>
-    function Edit() {
-        document.getElementById("details").style.display = 'none';
-        document.getElementById("SaveChange").style.display = 'contents';
+    function resetApvViewMode() {
+        $('#tbodyshow').removeClass('vm-pg-slab-tbody--hidden').addClass('vm-pg-slab-tbody--view');
+        $('#tbodyedit').addClass('vm-pg-slab-tbody--hidden').removeClass('vm-pg-slab-tbody--edit');
+        $('#btnEdit').show();
+        $('#btnSave').hide();
     }
-    function Save() {
-        let PanCharge = document.getElementById("PanCharge").value;
-        let AadharCharge = document.getElementById("AadharCharge").value;
-    
-        if (PanCharge === "" || PanCharge === null || AadharCharge === "" || AadharCharge === null) {
-            alert("Both PanCharge and AadharCharge are required.");
+
+    function showApvEditMode() {
+        $('#tbodyshow').addClass('vm-pg-slab-tbody--hidden').removeClass('vm-pg-slab-tbody--view');
+        $('#tbodyedit').removeClass('vm-pg-slab-tbody--hidden').addClass('vm-pg-slab-tbody--edit');
+        $('#btnEdit').hide();
+        $('#btnSave').show();
+    }
+
+    function saveApvCharges() {
+        var panCharge = $('#PanCharge').val();
+        var aadharCharge = $('#AadharCharge').val();
+
+        if (panCharge === '' || panCharge === null || aadharCharge === '' || aadharCharge === null) {
+            alert('Both Pan Charge and Aadhar Charge are required.');
             return;
         }
-        else if (PanCharge < 0 || AadharCharge < 0) {
-            alert("Both PanCharge and AadharCharge cannot be negative.");
+
+        if (parseFloat(panCharge) < 0 || parseFloat(aadharCharge) < 0) {
+            alert('Both Pan Charge and Aadhar Charge cannot be negative.');
             return;
         }
-    
+
+        $('#div_Loader').show();
+
         $.ajax({
             url: '@Url.Action("AepsAadharpayChargeSet", "Home")',
             method: 'POST',
-            data: { PanCharge: PanCharge, AadharCharge: AadharCharge },
-            success: (data) => {
+            data: { PanCharge: panCharge, AadharCharge: aadharCharge },
+            success: function () {
                 window.location.reload();
             },
-            error: (xhr, status, error) => {
-                console.error("AJAX Error:", error);
-                alert("Failed to update charges. Please try again.");
+            error: function (xhr, status, error) {
+                $('#div_Loader').hide();
+                console.error('AJAX Error:', error);
+                alert('Failed to update charges. Please try again.');
             }
         });
     }
-</script>
 
+    function bindPgSlabTableHover() {
+        $(document).off('mouseenter.pgslab mouseleave.pgslab', '.saas-dmt2-slab-page .third-design-table tbody td');
+        $(document).on('mouseenter.pgslab', '.saas-dmt2-slab-page .third-design-table tbody td', function () {
+            var colIndex = $(this).parent().children().index($(this)) + 1;
+            var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+            $('.saas-dmt2-slab-page .third-design-table td:nth-child(' + colIndex + ')').css({ background: 'var(--main-bg-rcolor, #2563eb)', color: '#fff' });
+            $('.saas-dmt2-slab-page .third-design-table tbody tr:nth-child(' + rowIndex + ')').css('background', 'var(--main-bg-rcolor, #2563eb)');
+        });
+        $(document).on('mouseleave.pgslab', '.saas-dmt2-slab-page .third-design-table tbody td', function () {
+            var colIndex = $(this).parent().children().index($(this)) + 1;
+            var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
+            $('.saas-dmt2-slab-page .third-design-table td:nth-child(' + colIndex + ')').css({ background: '', color: '' });
+            $('.saas-dmt2-slab-page .third-design-table tbody tr:nth-child(' + rowIndex + ')').css('background', '');
+        });
+    }
+
+    $(document).ready(function () {
+        bindPgSlabTableHover();
+        resetApvViewMode();
+    });
+</script>

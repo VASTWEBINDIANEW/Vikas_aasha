@@ -1,128 +1,29 @@
-<style>
-    /* Financial slab nav — all items as pill buttons */
-    #vmFinSlabNav.vm-dmt2-fin-nav {
-        margin-bottom: 10px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        background: #fff !important;
-        background-image: none !important;
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04) !important;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 10px 12px;
-        color: inherit !important;
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__list {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 8px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__list li {
-        float: none;
-        margin: 0;
-        flex: 0 0 auto;
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__link {
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        min-height: 36px;
-        padding: 8px 14px !important;
-        border-radius: 999px !important;
-        border: 1px solid #dbe2ea !important;
-        background: #fff !important;
-        color: #334155 !important;
-        font-size: 0.74rem;
-        font-weight: 700;
-        line-height: 1.2;
-        text-decoration: none !important;
-        white-space: nowrap;
-        position: initial;
-        float: none !important;
-        width: auto !important;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__link::before {
-        display: none !important;
-        content: none !important;
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__link:hover {
-        color: #2563eb !important;
-        border-color: #93c5fd !important;
-        background: #eff6ff !important;
-        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
-        transform: translateY(-1px);
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__link.is-active,
-    #vmFinSlabNav .vm-dmt2-fin-nav__link.activee {
-        color: #fff !important;
-        background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
-        border-color: #1d4ed8 !important;
-        box-shadow: 0 3px 10px rgba(37, 99, 235, 0.28);
-    }
-
-    #vmFinSlabNav .vm-dmt2-fin-nav__link.is-active:hover,
-    #vmFinSlabNav .vm-dmt2-fin-nav__link.activee:hover {
-        color: #fff !important;
-        background: linear-gradient(135deg, #1e40af, #1d4ed8) !important;
-        transform: translateY(-1px);
-    }
-
-    @@media (max-width: 991px) {
-        #vmFinSlabNav .vm-dmt2-fin-nav__list {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        #vmFinSlabNav .vm-dmt2-fin-nav__list li {
-            width: 100%;
-        }
-
-        #vmFinSlabNav .vm-dmt2-fin-nav__link {
-            width: 100% !important;
-            min-height: 40px;
-            white-space: normal;
-            text-align: center;
-        }
-    }
-
-    @@media (max-width: 480px) {
-        #vmFinSlabNav .vm-dmt2-fin-nav__list {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
+<link href="~/MainFrontDesign/css/admin-fin-slab-nav-modern.css?v=2" rel="stylesheet" />
 <nav class="vm-dmt2-fin-nav" id="vmFinSlabNav" aria-label="Financial slab navigation">
+    <div class="vm-dmt2-fin-nav__head">
+        <span class="vm-dmt2-fin-nav__head-icon" aria-hidden="true"><i class="fas fa-coins"></i></span>
+        <div class="vm-dmt2-fin-nav__head-copy">
+            <strong>Financial Slab Menu</strong>
+            <span>Pay-out, DMT, wallet &amp; related commission settings</span>
+        </div>
+    </div>
     <ul class="vm-dmt2-fin-nav__list">
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Money_Transfer_Slab_DMT2","Home")">Pay Out (Slab1)</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Money_Transfer_Slab_DMT1","Home")">Pay Out (Slab2)</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Money_Transfer_Slab_UPI","Home")">Pay Out UPI</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("dmtSlab","Home")">DMT</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("DmtSlabPPI","Home")">DMT PPI</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("WalleTransferSlab","Home")">Wallet&nbsp;Transfer</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting","Home")">Pan&nbsp;Card</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting_manual","Home")">Pan&nbsp;Card&nbsp;Manual</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AepsSlab","Home")">AEPS&nbsp;Comm</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("CreditCard","Home")">Credit&nbsp;Card</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("WalleTransferSlab","Home")">Wallet Transfer</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting","Home")">Pan Card</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Pancard_Slab_Setting_manual","Home")">Pan Card Manual</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AepsSlab","Home")">AEPS Comm</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("CreditCard","Home")">Credit Card</a></li>
         <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("M_Poss","Home")">M-Poss</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Micro_Atm","Home")">VM30&nbsp;Sale(m-pos)</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("MIcroatm_Cash_Slab","Home")">VM30&nbsp;Micro-ATM</a></li>
-        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AadharPanVerificationCharge","Home")">Aadhar & Pan Verification Charge</a></li>
-        @*  <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("CashDepositSlab","Home")">Cash&nbsp;Deposit</a></li>*@
-        @*    <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("PaytmWalletTransferSlab","Home")">Paytm&nbsp;Transfer </a></li>*@
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("Micro_Atm","Home")">VM30 Sale (m-pos)</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("MIcroatm_Cash_Slab","Home")">VM30 Micro-ATM</a></li>
+        <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("AadharPanVerificationCharge","Home")">Aadhar &amp; Pan Verification</a></li>
+        @*  <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("CashDepositSlab","Home")">Cash Deposit</a></li>*@
+        @*    <li><a class="vm-dmt2-fin-nav__link" href="@Url.Action("PaytmWalletTransferSlab","Home")">Paytm Transfer </a></li>*@
     </ul>
 </nav>
 <script>

@@ -74,8 +74,8 @@
         font-size: 0.62rem;
     }
 
-    /* Action buttons — 2 column grid */
-    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-actions {
+    /* Action buttons — 2 column grid (exclude DMT slab toolbar) */
+    body.saas-admin-ui .saas-prepaid-slab-page .vm-prepaid-slab-actions:not(.vm-dmt2-slab-toolbar) {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 8px;
@@ -220,6 +220,45 @@
     body.saas-admin-ui .saas-prepaid-slab-page .select2-container {
         width: 100% !important;
         max-width: 100% !important;
+    }
+
+    /* DMT1/DMT2 — limit toolbar: full-width stack, no side-by-side cards */
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page .vm-pg-slab-card__actions {
+        overflow-x: hidden !important;
+        min-width: 0 !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page .vm-dmt2-slab-toolbar.vm-prepaid-slab-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: unset !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page #updatediv.vm-dmt2-limit-cards {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page .vm-dmt2-limit-card {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page .vm-dmt2-limit-card__pills {
+        flex-wrap: nowrap !important;
+    }
+
+    body.saas-admin-ui .saas-prepaid-slab-page.saas-dmt2-slab-page .vm-dmt2-limit-pill {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
     }
 }
 

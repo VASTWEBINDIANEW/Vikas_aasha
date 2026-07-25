@@ -2,68 +2,63 @@
 @model Vastwebmulti.Areas.ADMIN.Models.IRCTCSlabModel
 @using (Ajax.BeginForm("_Common_IRCTC", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmit" type="submit" value="Save Data" class="btn  waves-effect" style="display:none;" />
-    <table class="table table-bordered slab-table example-second thpadding-second third-design-table" style="margin-top:15px;">
-        <thead class="navbar" style="position:initial;">
+    <input id="btnsubmit" type="submit" value="Save Data" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+    <table id="irctcSlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table example-second">
+        <thead>
             <tr>
-                <th>Retailer&nbsp;Token(?)</th>
-                <th>Renewal&nbsp;Token(?)</th>
-                @*<th>Token&nbsp;comm(?)</th>*@
-                <th>M/D&nbsp;Comm(?)</th>
-               <th>DLM&nbsp;Comm(?)</th>
-              
+                <th>Retailer&nbsp;Token(&#8377;)</th>
+                <th>Renewal&nbsp;Token(&#8377;)</th>
+                <th>M/D&nbsp;Comm(&#8377;)</th>
+                <th>DLM&nbsp;Comm(&#8377;)</th>
             </tr>
         </thead>
-        <tbody id="tbodyshow">
+        <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
             @foreach (var item in Model.common)
             {
                 <tr>
                     <td>@item.tokenvalue</td>
                     <td>@item.retailertoken</td>
-                    @*<td>@item.dlmremtokenvalue</td>*@
                     <td>@item.mdtokencomm</td>
                     <td>@item.dlmtokencomm</td>
-                   
                 </tr>
             }
-
         </tbody>
-        <tbody id="tbodyedit" style="display:none;">
+        <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
             @for (int i = 0; i < Model.common.Count; i++)
             {
             <tr>
                 @Html.HiddenFor(a => a.common[i].idno)
                 <td>
-                    @Html.EditorFor(a => a.common[i].tokenvalue, new { htmlAttributes = new { @style = "width:100%" } })
+                    @Html.EditorFor(a => a.common[i].tokenvalue, new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
                     @Html.ValidationMessageFor(a => a.common[i].tokenvalue)
                 </td>
                 <td>
-                    @Html.EditorFor(a => a.common[i].retailertoken, new { htmlAttributes = new { @style = "width:100%" } })
+                    @Html.EditorFor(a => a.common[i].retailertoken, new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
                     @Html.ValidationMessageFor(a => a.common[i].retailertoken)
                 </td>
-                @*<td>
-                    @Html.EditorFor(a => a.common[i].dlmremtokenvalue, new { htmlAttributes = new { @style = "width:100%" } })
-                    @Html.ValidationMessageFor(a => a.common[i].dlmremtokenvalue)
-                </td>*@
                 <td>
-                    @Html.EditorFor(a => a.common[i].mdtokencomm, new { htmlAttributes = new { @style = "width:100%" } })
+                    @Html.EditorFor(a => a.common[i].mdtokencomm, new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
                     @Html.ValidationMessageFor(a => a.common[i].mdtokencomm)
                 </td>
                 <td>
-                    @Html.EditorFor(a => a.common[i].dlmtokencomm, new { htmlAttributes = new { @style = "width:100%" } })
+                    @Html.EditorFor(a => a.common[i].dlmtokencomm, new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
                     @Html.ValidationMessageFor(a => a.common[i].dlmtokencomm)
                 </td>
-
             </tr>
             }
-
         </tbody>
     </table>
+    </div>
 }
 
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        $('#btnsubmit').hide().removeClass('is-visible');
+        $('#btnEdit').show().removeClass('is-hidden');
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        }
     }
 </script>

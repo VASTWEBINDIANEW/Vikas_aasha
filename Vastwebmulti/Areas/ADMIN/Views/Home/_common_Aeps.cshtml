@@ -1,13 +1,14 @@
 @model Vastwebmulti.Areas.ADMIN.Models.AEPSCommonModel
 @using (Ajax.BeginForm("_common_aeps", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmit" type="submit" value="Save Data" class="btn  waves-effect" style="display:none;" />
-    <table class="table table-bordered slab-table example-second third-design-table" style="margin-top:15px;">
-        <thead class="navbar" style="position:initial; ">
+    <input id="btnsubmit" type="submit" value="Save Data" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+        <table id="aepsSlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table example-second thpadding-second">
+        <thead>
             <tr>
                 <th rowspan="2">USER'S <br /> <span style="font-size:10px; color:green;">Type&nbsp;Of&nbsp;Users</span></th>
                 <th rowspan="2">CHARGE'S <br /> <span style="font-size:10px; color:green;">Aadhar&nbsp;Pay&nbsp;(%)</span></th>
-                <th rowspan="2">CHARGE'S<br /> <span style="font-size:10px; color:green;">Mini&nbsp;Statement&nbsp;(?)</span></th>
+                <th rowspan="2">CHARGE'S<br /> <span style="font-size:10px; color:green;">Mini&nbsp;Statement&nbsp;(&#8377;)</span></th>
                 <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">301&nbsp;to&nbsp;999</span></th>
                 <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">1000&nbsp;to&nbsp;1499</span></th>
                 <th colspan="4" style="text-align:center">AEPS&nbsp;COMM<br /> <span style="font-size:12px; color:green;">1500&nbsp;to&nbsp;1999</span></th>
@@ -19,40 +20,40 @@
             </tr>
             <tr>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
                 <td>(%)</td>
-                <td>(?)</td>
-                <td>Max(?)</td>
+                <td>(&#8377;)</td>
+                <td>Max(&#8377;)</td>
                 <td>Active</td>
             </tr>
         </thead>
-        <tbody id="tbodyshow">
+        <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
             @foreach (var item in Model.common)
             {
                 var active1 = item.Type_500_999;
@@ -65,7 +66,7 @@
                 else
                 {
                     color11 = "green";
-                    active1 = "(?)";
+                    active1 = "(&#8377;)";
                 }
                 var active2 = item.Type_1000_1499;
                 var color2 = ""; var color21 = "";
@@ -77,7 +78,7 @@
                 else
                 {
                     color21 = "green";
-                    active2 = "(?)";
+                    active2 = "(&#8377;)";
                 }
                 var active3 = item.Type_1500_1999;
                 var color3 = ""; var color31 = "";
@@ -89,7 +90,7 @@
                 else
                 {
                     color31 = "green";
-                    active3 = "(?)";
+                    active3 = "(&#8377;)";
                 }
                 var active4 = item.Type_2000_2499;
                 var color4 = ""; var color41 = "";
@@ -101,7 +102,7 @@
                 else
                 {
                     color41 = "green";
-                    active4 = "(?)";
+                    active4 = "(&#8377;)";
                 }
                 var active5 = item.Type_2500_2999;
                 var color5 = ""; var color51 = "";
@@ -113,7 +114,7 @@
                 else
                 {
                     color51 = "green";
-                    active5 = "(?)";
+                    active5 = "(&#8377;)";
                 }
                 var active6 = item.Type_3000_3499;
                 var color6 = ""; var color61 = "";
@@ -125,7 +126,7 @@
                 else
                 {
                     color61 = "green";
-                    active6 = "(?)";
+                    active6 = "(&#8377;)";
                 }
                 var active7 = item.Type_3500_5000;
                 var color7 = ""; var color71 = "";
@@ -137,7 +138,7 @@
                 else
                 {
                     color71 = "green";
-                    active7 = "(?)";
+                    active7 = "(&#8377;)";
                 }
                 var active8 = item.Type_5001_10000;
                 var color8 = ""; var color81 = "";
@@ -149,7 +150,7 @@
                 else
                 {
                     color81 = "green";
-                    active8 = "(?)";
+                    active8 = "(&#8377;)";
                 }
             <tr>
                 <td>@item.usertype</td>
@@ -158,40 +159,40 @@
                 <td style="color:@color1">@item.per_500_999</td>
                 <td style="color:@color11">@item.rs_500_999</td>
                 <td style="color:@color1">@item.maxrs_500_999</td>
-                <td>@active1</td>
+                <td>@Html.Raw(active1)</td>
                 <td style="color:@color2;">@item.per_1000_1499</td>
                 <td style="color:@color21;">@item.rs_1000_1499</td>
                 <td style="color:@color2;">@item.maxrs_1000_1499</td>
-                <td>@active2</td>
+                <td>@Html.Raw(active2)</td>
                 <td style="color:@color3">@item.per_1500_1999</td>
                 <td style="color:@color31">@item.rs_1500_1999</td>
                 <td style="color:@color3">@item.maxrs_1500_1999</td>
-                <td>@active3</td>
+                <td>@Html.Raw(active3)</td>
                 <td style="color:@color4">@item.per_2000_2499</td>
                 <td style="color:@color41">@item.rs_2000_2499</td>
                 <td style="color:@color4">@item.maxrs_2000_2499</td>
-                <td>@active4</td>
+                <td>@Html.Raw(active4)</td>
                 <td style="color:@color5">@item.per_2500_2999</td>
                 <td style="color:@color51">@item.rs_2500_2999</td>
                 <td style="color:@color5">@item.maxrs_2500_2999</td>
-                <td>@active5</td>
+                <td>@Html.Raw(active5)</td>
                 <td style="color:@color6">@item.per_3000_3499</td>
                 <td style="color:@color61">@item.rs_3000_3499</td>
                 <td style="color:@color6">@item.maxrs_3000_3499</td>
-                <td>@active6</td>
+                <td>@Html.Raw(active6)</td>
                 <td style="color:@color7">@item.per_3500_5000</td>
                 <td style="color:@color71">@item.rs_3500_5000</td>
                 <td style="color:@color7">@item.maxrs_3500_5000</td>
-                <td>@active7</td>
+                <td>@Html.Raw(active7)</td>
                 <td style="color:@color8">@item.per_5001_10000</td>
                 <td style="color:@color81">@item.rs_5001_10000</td>
                 <td style="color:@color8">@item.maxrs_5001_10000</td>
-                <td>@active8</td>
+                <td>@Html.Raw(active8)</td>
             </tr>
             }
 
         </tbody>
-        <tbody id="tbodyedit" style="display:none;">
+        <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
             @for (int i = 0; i < Model.common.Count; i++)
             {
             <tr>
@@ -368,38 +369,18 @@
 
         </tbody>
     </table>
+    </div>
 }
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        } else {
+            $('#btnsubmit').hide();
+            $('#btnEdit').show();
+        }
+        if (typeof initPgSlabPartialUi === 'function') {
+            initPgSlabPartialUi();
+        }
     }
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-            paging: false
-        });
-    });
-
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

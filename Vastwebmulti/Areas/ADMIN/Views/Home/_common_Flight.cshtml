@@ -1,11 +1,11 @@
 @model Vastwebmulti.Areas.ADMIN.Models.FlightSlab
 @using (Ajax.BeginForm("_common_Flight", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", UpdateTargetId = "divEditFormComm", LoadingElementId = "div_Loader", InsertionMode = InsertionMode.Replace }))
 {
-    <input id="btnsubmit" type="submit" value="Save Data" class="btn  waves-effect" style="display:none;" />
+    <input id="btnsubmit" type="submit" value="Save Data" class="btn waves-effect vm-pg-slab-save-btn" style="display:none;" />
 
-
-    <table class="table table-bordered slab-table example-second third-design-table" style="margin-top:15px;">
-        <thead class="navbar" style="position:initial;">
+    <div class="vm-pg-slab-table-scroll saas-acc-table-wrap vm-dmt2-slab-table-scroll vm-prepaid-slab-table-wrap">
+    <table id="flightSlabTable" class="table table-bordered vm-pg-slab-table vm-dmt2-slab-table third-design-table slab-table example-second">
+        <thead>
             <tr>
                 <th>User&nbsp;&&nbsp;Purchase</th>
                 <th>Flight&nbsp;Type</th>
@@ -16,7 +16,7 @@
                 @*<th>Gst</th>*@
             </tr>
         </thead>
-        <tbody id="tbodyshow">
+        <tbody id="tbodyshow" class="vm-pg-slab-tbody--view">
             @foreach (var item in Model.common)
             {
                 var type = "% Share"; var jj = " - Offered Fare MarkUP";
@@ -41,7 +41,7 @@
             }
 
         </tbody>
-        <tbody id="tbodyedit" style="display:none;">
+        <tbody id="tbodyedit" class="vm-pg-slab-tbody--hidden">
             @for (int i = 0; i < Model.common.Count; i++)
             {
                 var type = "% Share"; var jj = " - Offered Fare MarkUP";
@@ -114,43 +114,15 @@
 
         </tbody>
     </table>
+    </div>
 }
 
 <script>
     function OnSuccess() {
-        $('#btnsubmit').hide();
-        $('#btnEdit').show();
+        $('#btnsubmit').hide().removeClass('is-visible');
+        $('#btnEdit').show().removeClass('is-hidden');
+        if (typeof resetSlabViewMode === 'function') {
+            resetSlabViewMode();
+        }
     }
-</script>
-
-
-
-<script>
-    $(document).ready(function () {
-        $('.second-design .example-second').DataTable({
-
-
-            paging: false
-        });
-    });
-
-</script>
-
-
-<script>
-    $('.third-design .third-design-table tbody td').mouseenter(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'var(--main-bg-rcolor)');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#fff');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'var(--main-bg-rcolor)');
-    });
-
-    $('.third-design .third-design-table tbody td').mouseleave(function () {
-        var colIndex = $(this).parent().children().index($(this)) + 1;
-        var rowIndex = $(this).parent().parent().children().index($(this).parent()) + 1;
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('background', 'transparent');
-        $(".third-design-table td:nth-child(" + colIndex + ")").css('color', '#333');
-        $(".third-design-table tbody tr:nth-child(" + rowIndex + ")").css('background', 'transparent');
-    });
 </script>

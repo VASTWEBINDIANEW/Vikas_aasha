@@ -63872,6 +63872,10 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             }
             else
             {
+                var perlimit = db.transtion_limit.SingleOrDefault().Perlimit;
+                var permonth = db.transtion_limit.SingleOrDefault().Permonth;
+                ViewBag.permonth = permonth;
+                ViewBag.perlimit = perlimit;
                 var commslab = db.wallet_imps_common_comm.ToList();
                 WalletTransfer model = new WalletTransfer();
                 model.common = commslab;
@@ -75424,6 +75428,12 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
         #region DMT PPI
         public ActionResult DmtSlabPPI()
         {
+            var perlimit = db.transtion_limit.SingleOrDefault().Perlimit;
+            var permonth = db.transtion_limit.SingleOrDefault().Permonth;
+            ViewBag.permonth = permonth;
+            ViewBag.perlimit = perlimit;
+            var infochk = db.DMT_Ekyc_Charge.SingleOrDefault().Charge;
+            ViewBag.Charge = infochk;
             var commslab = db.PPI_common_comm_new.ToList();
             DMTSlabModelPPI model = new DMTSlabModelPPI();
             model.commonnew = commslab;
@@ -77049,12 +77059,16 @@ namespace Vastwebmulti.Areas.ADMIN.Controllers
             var infochk = db.DMT_Ekyc_Charge.SingleOrDefault().Charge;
             return Json(infochk, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Update_Dlm_slab(decimal txtcharge)
+        public ActionResult Update_Dlm_slab(decimal txtcharge, string returnAction)
         {
             var chkinfo = db.DMT_Ekyc_Charge.SingleOrDefault();
             chkinfo.Charge = txtcharge;
             db.SaveChanges();
-            return RedirectToAction("dmtSlab");
+            if (string.IsNullOrWhiteSpace(returnAction))
+            {
+                returnAction = "dmtSlab";
+            }
+            return RedirectToAction(returnAction);
         }
         public ActionResult fixchargeupdate()
         {
